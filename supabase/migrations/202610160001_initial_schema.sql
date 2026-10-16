@@ -687,17 +687,10 @@ for delete to authenticated using (public.is_admin());
 drop policy if exists location_history_select_scope on public.establishment_location_history;
 create policy location_history_select_scope on public.establishment_location_history
 for select to authenticated using (public.can_access_establishment(establishment_id));
+-- Historial de solo lectura desde la API: solo el trigger SECURITY DEFINER inserta.
 drop policy if exists location_history_insert_scope on public.establishment_location_history;
-create policy location_history_insert_scope on public.establishment_location_history
-for insert to authenticated with check (
-  public.can_access_establishment(establishment_id) and changed_by = (select auth.uid())
-);
 drop policy if exists location_history_update_admin on public.establishment_location_history;
-create policy location_history_update_admin on public.establishment_location_history
-for update to authenticated using (public.is_admin()) with check (public.is_admin());
 drop policy if exists location_history_delete_admin on public.establishment_location_history;
-create policy location_history_delete_admin on public.establishment_location_history
-for delete to authenticated using (public.is_admin());
 
 -- Auditoría e importación: solo admin puede consultar o gestionar desde el cliente.
 -- Las escrituras en audit_log se realizan exclusivamente mediante triggers de servidor.
@@ -721,7 +714,7 @@ grant select on public.provinces, public.profiles, public.user_provinces,
 grant insert, update, delete on public.provinces, public.profiles, public.user_provinces,
   public.municipalities, public.categories, public.establishments,
   public.permit_applications, public.permit_grants, public.followups,
-  public.establishment_location_reviews, public.establishment_location_history,
+  public.establishment_location_reviews,
   public.import_batches, public.import_records to authenticated;
 -- No se concede acceso directo a la secuencia de auditoría; el trigger escribe como función de servidor.
 
