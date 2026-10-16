@@ -104,11 +104,11 @@ for (const [block, defaultCategory] of definitions) {
     let row;
     if (block === "CENTERS") row = {
       source_block:block, source_index:index+1, source_id:v.id ?? "", name:v.name ?? "",
-      category:v.tipo ?? defaultCategory, municipality:"", address:v.street ?? "",
+      category:v.tipo ?? defaultCategory, municipality:v.town ?? "", address:v.street ?? "",
       review_flag:v.conf === true ? "true" : v.conf === false ? "false" : "", source_note:v.extra ?? ""
     };
     else if (block === "PROV") row = {
-      source_block:block, source_index:index+1, source_id:"", name:(v[0] === "L" ? "Consultorio " : "CS ") + String(v[1] ?? "").replace(/ - /g, " "),
+      source_block:block, source_index:index+1, source_id:"", name:(v[0] === "L" ? "Consultorio " : "CS ") + String(v[1] ?? ""),
       category:v[0] === "L" ? "Consultorio" : "Centro de salud", municipality:v[2] ?? "",
       address:v[3] ?? "", review_flag:v[4] ?? "", source_note:""
     };
