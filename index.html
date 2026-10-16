@@ -147,6 +147,8 @@
   #pnBody tbody tr[data-k]:hover { background: var(--ok-bg); }
   #pnBody tr.tot td { font-weight: 700; }
   .pn-note { font-size: 11px; color: var(--muted); margin-top: 8px; }
+  .chipbtn { justify-self: start; font: inherit; font-size: 12px; padding: 4px 10px; border-radius: 999px; border: 1px solid #f5d27a; background: #fff3d6; color: #8a5a00; cursor: pointer; }
+  .chipbtn[aria-pressed="true"] { background: #8a5a00; color: #fff; }
   dialog h2 { margin: 0; font-size: 16px; }
   dialog label { display: grid; gap: 3px; font-size: 12px; color: var(--muted); }
   dialog input, dialog select { font: inherit; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--fg); width: 100%; }
@@ -212,6 +214,7 @@
       </div>
       <div class="bar" aria-hidden="true"><i id="prog"></i></div>
       <div class="status" id="status" role="status">Preparando…</div>
+      <button id="revBtn" type="button" class="chipbtn" aria-pressed="false">Por revisar (0)</button>
     </div>
     <ul id="list"></ul>
   </aside>
@@ -369,7 +372,7 @@ let smallChains = new Set();
 const chainOf = (c) => { const k = rawChain(c); return smallChains.has(k) ? "Independientes (rótulo único)" : k; };
 
 /* Estado del permiso por punto (se guarda en localStorage, clave = nombre del punto). */
-const ESTADOS = [["sin", "Sin solicitar", "#ffffff"], ["solicitado", "Solicitado", "#fbbf24"], ["concedido", "Concedido", "#22c55e"], ["denegado", "Denegado", "#111827"]];
+const ESTADOS = [["sin", "Sin solicitar", "#ffffff"], ["solicitado", "Solicitado", "#fbbf24"], ["concedido", "Concedido", "#22c55e"], ["denegado", "Denegado", "#111827"], ["caducado", "Caducado", "#94a3b8"]];
 const PERM_KEY = "permisos-captacion-granada-v1";
 let permits = {};
 try { permits = JSON.parse(localStorage.getItem(PERM_KEY) || "{}"); } catch (e) { permits = {}; }
@@ -385,12 +388,26 @@ const isVig = (h) => (!h.desde || h.desde <= today()) && (!h.hasta || h.hasta >=
 const histOf = (c) => ((permits[c.name] && permits[c.name].historial) || []).slice().sort((a, b) => (b.desde || "").localeCompare(a.desde || ""));
 const vigente = (c) => histOf(c).find(isVig);
 const histTxt = (h) => fmtD(h.desde) + " – " + fmtD(h.hasta) + (h.captadores ? " · " + h.captadores + " captador" + (h.captadores === 1 ? "" : "es") : "");
+/* Estado efectivo: la vigencia manda sobre el estado manual. */
+const estadoOf = (c) => {
+  const m = permOf(c).estado;
+  if (vigente(c)) return "concedido";
+  if (histOf(c).length && (m === "sin" || m === "concedido")) return "caducado";
+  return m;
+};
+const seguimientoDue = (c) => { const d = permOf(c).seguimiento; return d && d <= today() ? d : ""; };
+const REV_KEY = "puntos-revisados-granada-v1";
+let reviewed = new Set(loadJSON(REV_KEY, []));
+const saveReviewed = () => { try { localStorage.setItem(REV_KEY, JSON.stringify([...reviewed])); } catch (e) {} };
+const DUPS = new Set(["Alcampo – Pol. La Puchilla, Av. de Salobreña, s/n", "Alcampo – pol. ind. La Puchilla, Av. de Salobreña, s/n"]);
+const isApprox = (c) => !!(cache[c.id] && cache[c.id].approx) && !reviewed.has(c.name);
+const isRev = (c) => !reviewed.has(c.name) && (!!(cache[c.id] && cache[c.id].approx) || DUPS.has(c.name) || !c.conf);
 const estadoInfo = (k) => ESTADOS.find((e) => e[0] === k) || ESTADOS[0];
 
 const addrOf = (c) => (c.street ? c.street + ", " : "") + (c.town || "Granada");
 
 function makeIcon(c) {
-  const e = estadoInfo(permOf(c).estado);
+  const e = estadoInfo(estadoOf(c));
   return L.divIcon({
     className: "",
     html: '<div class="pin" style="background:' + colorOf(c) + ";border-color:" + e[2] + (e[0] === "sin" ? "" : ";border-width:3px") + '"><b>' + c.id + "</b></div>",
@@ -409,17 +426,24 @@ function popupFor(c, pos) {
     (pos && pos.lat != null ? '<br><a class="how" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=' + pos.lat + "," + pos.lon + '">Cómo llegar</a>' : "") +
     '<div class="pform"><div><span style="font-size:11px;color:#5b726c">Valoración para captación</span><div class="stars" role="radiogroup" aria-label="Valoración de 1 a 5 estrellas">' +
     [1, 2, 3, 4, 5].map((n) => '<button type="button" data-n="' + n + '" aria-label="' + n + ' estrellas">★</button>').join("") + '<span class="sv"></span></div></div>' +
+    '<div class="ef" style="font-size:12px"></div>' +
     '<label>Estado del permiso<select class="f-estado">' +
-    ESTADOS.map((e) => '<option value="' + e[0] + '"' + (e[0] === p.estado ? " selected" : "") + ">" + e[1] + "</option>").join("") +
+    ESTADOS.filter((e) => e[0] !== "caducado").map((e) => '<option value="' + e[0] + '"' + (e[0] === p.estado ? " selected" : "") + ">" + e[1] + "</option>").join("") +
     '</select></label><label>Fecha de solicitud<input class="f-fecha" type="date" value="' + esc(p.fecha || "") + '"></label>' +
-    '<label>Contacto (nombre, teléfono, email)<input class="f-contacto" type="text" value="' + esc(p.contacto || "") + '"></label>' +
+    '<label>Próximo seguimiento<input class="f-seg" type="date" value="' + esc(p.seguimiento || "") + '"></label><label>Contacto (nombre, teléfono, email)<input class="f-contacto" type="text" value="' + esc(p.contacto || "") + '"></label>' +
     '<label>Notas<textarea class="f-notas">' + esc(p.notas || "") + '</textarea></label>' +
     '<div class="hist"><h4>Concesiones (historial)</h4><ul class="h-list"></ul><div class="row3"><label>Desde<input class="h-desde" type="date"></label><label>Hasta<input class="h-hasta" type="date"></label><label>Captadores<input class="h-n" type="number" min="1" step="1" placeholder="nº"></label></div><button type="button" class="h-add">Añadir concesión al historial</button><div class="h-msg" style="font-size:11px;color:#b3261e;min-height:13px"></div></div>' +
+    (isRev(c) ? '<button type="button" class="f-rev" style="background:#fff;color:#0b7a68">Marcar ubicación/datos como revisados</button>' : "") +
     '<button type="button" class="f-save">Guardar permiso</button><button type="button" class="f-del danger">' + (c.custom ? "Eliminar punto" : "Quitar del mapa") + '</button><div class="saved"></div></div>';
   L.DomEvent.disableClickPropagation(el);
   L.DomEvent.disableScrollPropagation(el);
   let val = p.valoracion || 0;
   let hist = (p.historial || []).slice();
+  const paintEf = () => {
+    const ef = estadoOf(c), i = estadoInfo(ef), vg = vigente(c);
+    el.querySelector(".ef").innerHTML = 'Estado actual: <b style="background:' + i[2] + ';color:' + (ef === "sin" || ef === "denegado" ? "#111" : "#111") + ';padding:1px 6px;border-radius:4px;border:1px solid #cfdcd8">' + esc(i[1]) + "</b>" +
+      (vg ? " · hasta " + fmtD(vg.hasta) + (vg.captadores ? " · " + vg.captadores + " captadores" : "") : (ef === "caducado" ? " · la última concesión ha vencido" : ""));
+  };
   const paintHist = () => {
     const ul = el.querySelector(".h-list");
     const sorted = hist.map((h, i) => [h, i]).sort((a, b) => (b[0].desde || "").localeCompare(a[0].desde || ""));
@@ -439,17 +463,18 @@ function popupFor(c, pos) {
   const commit = () => {
     const v = {
       estado: el.querySelector(".f-estado").value, fecha: el.querySelector(".f-fecha").value,
-      contacto: el.querySelector(".f-contacto").value.trim(), notas: el.querySelector(".f-notas").value.trim(), valoracion: val, historial: hist
+      contacto: el.querySelector(".f-contacto").value.trim(), notas: el.querySelector(".f-notas").value.trim(), valoracion: val, historial: hist, seguimiento: el.querySelector(".f-seg").value
     };
-    if (v.estado === "sin" && !v.fecha && !v.contacto && !v.notas && !v.valoracion && !hist.length) delete permits[c.name]; else permits[c.name] = v;
+    if (v.estado === "sin" && !v.fecha && !v.contacto && !v.notas && !v.valoracion && !hist.length && !v.seguimiento) delete permits[c.name]; else permits[c.name] = v;
     savePermits();
     if (markers[c.id]) markers[c.id].setIcon(makeIcon(c));
     refreshSelects();
     renderList();
+    paintEf();
     el.querySelector(".saved").textContent = "Guardado";
   };
   el.querySelectorAll(".stars button").forEach((b) => b.addEventListener("click", () => { val = val === +b.dataset.n ? 0 : +b.dataset.n; paint(); commit(); }));
-  paint(); paintHist();
+  paint(); paintHist(); paintEf();
   el.querySelector(".h-add").addEventListener("click", () => {
     const d = el.querySelector(".h-desde").value, h = el.querySelector(".h-hasta").value, n = parseInt(el.querySelector(".h-n").value, 10) || 0, msg = el.querySelector(".h-msg");
     msg.textContent = "";
@@ -461,6 +486,8 @@ function popupFor(c, pos) {
   });
   el.querySelector(".f-save").addEventListener("click", commit);
   let armed = false;
+  const rv = el.querySelector(".f-rev");
+  if (rv) rv.addEventListener("click", () => { reviewed.add(c.name); saveReviewed(); rv.remove(); refreshSelects(); renderList(); el.querySelector(".saved").textContent = "Marcado como revisado"; });
   const del = el.querySelector(".f-del");
   del.addEventListener("click", () => {
     if (!armed) { armed = true; del.textContent = "¿Seguro? Pulsa otra vez"; return; }
@@ -496,7 +523,7 @@ function renderList() {
   ul.innerHTML = "";
   const order = $("#orden").value === "val" ? [...CENTERS].sort((a, b) => rate(b) - rate(a) || a.id - b.id) : CENTERS;
   order.forEach((c) => {
-    const visible = !isOut(c) && matchTipo(c, tipo) && (!ch || chainOf(c) === ch) && (!est || permOf(c).estado === est) && okVal(c) &&
+    const visible = !isOut(c) && matchTipo(c, tipo) && (!ch || chainOf(c) === ch) && (!est || estadoOf(c) === est) && (!onlyRev || isRev(c)) && okVal(c) &&
       (!q || (c.name + " " + c.street + " " + (c.town || "Granada")).toLowerCase().includes(q));
     if (markers[c.id]) {
       const on = cluster.hasLayer(markers[c.id]);
@@ -513,9 +540,11 @@ function renderList() {
       esc(addrOf(c)) + "</span><br>" +
       '<span class="tag">' + esc(c.tipo + (c.sub ? " · " + c.sub : "")) + "</span>" +
       (permOf(c).valoracion ? '<span class="tag" style="background:#fff3d6;color:#8a5a00">' + stars(permOf(c).valoracion) + "</span>" : "") +
-      (permOf(c).estado !== "sin" ? '<span class="tag" style="background:' + estadoInfo(permOf(c).estado)[2] + ';color:' + (permOf(c).estado === "concedido" || permOf(c).estado === "solicitado" ? "#111" : "#fff") + '">' + estadoInfo(permOf(c).estado)[1] + (permOf(c).fecha && permOf(c).estado !== "concedido" ? " · " + esc(fmtD(permOf(c).fecha)) : "") + "</span>" : "") +
+      (estadoOf(c) !== "sin" ? '<span class="tag" style="background:' + estadoInfo(estadoOf(c))[2] + ';color:' + (["concedido", "solicitado", "caducado"].includes(estadoOf(c)) ? "#111" : "#fff") + '">' + estadoInfo(estadoOf(c))[1] + (permOf(c).fecha && estadoOf(c) !== "concedido" && estadoOf(c) !== "caducado" ? " · " + esc(fmtD(permOf(c).fecha)) : "") + "</span>" : "") +
+      (seguimientoDue(c) ? '<span class="tag warn">Seguimiento ' + (seguimientoDue(c) === today() ? "hoy" : "atrasado " + esc(fmtD(seguimientoDue(c)))) + "</span>" : "") +
+      (DUPS.has(c.name) && !reviewed.has(c.name) ? '<span class="tag warn">Posible duplicado</span>' : "") +
       (vigente(c) ? '<span class="tag" style="background:#dcfce7;color:#14532d">Vigente hasta ' + fmtD(vigente(c).hasta) + (vigente(c).captadores ? " · " + vigente(c).captadores + " capt." : "") + "</span>" : "") +
-      (cache[c.id] && cache[c.id].approx ? '<span class="tag warn">Ubicación aproximada</span>' : "") +
+      (isApprox(c) ? '<span class="tag warn">Ubicación aproximada</span>' : "") +
       (c.conf ? "" : '<span class="tag warn">Por confirmar</span>') +
       (cache[c.id] ? "" : '<span class="tag warn">Sin ubicar</span>') + "</div>";
     li.addEventListener("click", () => highlight(c.id, true));
@@ -587,14 +616,15 @@ async function locateAll() {
   tick();
 }
 
-let fitTimer;
+let fitTimer, onlyRev = false;
 const refilter = () => { renderList(); clearTimeout(fitTimer); fitTimer = setTimeout(() => { touched = false; fitAll(); }, 200); };
 $("#q").addEventListener("input", refilter);
 $("#tipo").addEventListener("change", refilter);
 $("#cadena").addEventListener("change", refilter);
+$("#revBtn").addEventListener("click", () => { onlyRev = !onlyRev; $("#revBtn").setAttribute("aria-pressed", onlyRev); refilter(); });
 $("#copy").addEventListener("click", async () => {
   const out = CENTERS.map((c) => ({
-    id: c.id, nombre: c.name, tipo: c.tipo, direccion: addrOf(c), direccion_confirmada: c.conf && !c.prov, ubicacion_aproximada: !!(cache[c.id] && cache[c.id].approx), lat: cache[c.id] ? cache[c.id].lat : null, lon: cache[c.id] ? cache[c.id].lon : null
+    id: c.id, nombre: c.name, tipo: c.tipo, direccion: addrOf(c), direccion_confirmada: c.conf && !c.prov, ubicacion_aproximada: isApprox(c), lat: cache[c.id] ? cache[c.id].lat : null, lon: cache[c.id] ? cache[c.id].lon : null
   }));
   const txt = JSON.stringify(out, null, 2);
   try { await navigator.clipboard.writeText(txt); $("#status").textContent = "JSON copiado al portapapeles."; }
@@ -616,7 +646,7 @@ function refreshSelects() {
   $("#tipo").innerHTML = '<option value="">Categoría: todas</option>' +
     TIPOS.map(([i, t]) => '<option value="' + t + '">' + i + " · " + t + " (" + vis.filter((c) => c.tipo === t).length + ")</option>").join("");
   $("#permiso").innerHTML = '<option value="">Permiso: todos</option>' +
-    ESTADOS.map(([k, t]) => '<option value="' + k + '">' + t + " (" + vis.filter((c) => permOf(c).estado === k).length + ")</option>").join("");
+    ESTADOS.map(([k, t]) => '<option value="' + k + '">' + t + " (" + vis.filter((c) => estadoOf(c) === k).length + ")</option>").join("");
   const vv = $("#valor").value, ov = $("#orden").value;
   $("#valor").innerHTML = '<option value="">Valoración: todas</option><option value="5">★★★★★ (5)</option><option value="4">★★★★☆ o más</option><option value="3">★★★☆☆ o más</option><option value="sin">Sin valorar</option>';
   $("#orden").innerHTML = '<option value="">Orden: normal</option><option value="val">Mejor valorados</option>';
@@ -634,6 +664,7 @@ function refreshSelects() {
   const nr = CENTERS.filter(isOut).length;
   $("#restore").textContent = "Restaurar puntos quitados (" + nr + ")";
   $("#restore").disabled = !nr;
+  $("#revBtn").textContent = (onlyRev ? "Mostrando solo " : "") + "Por revisar (" + vis.filter(isRev).length + ")";
 }
 refreshSelects();
 
@@ -660,7 +691,7 @@ const download = (name, text, type) => {
   const stat = (items) => {
     const r = { n: items.length, sol: 0, con: 0, den: 0, vig: 0, capt: 0 };
     items.forEach((c) => {
-      const e = permOf(c).estado; if (e === "solicitado") r.sol++; else if (e === "concedido") r.con++; else if (e === "denegado") r.den++;
+      const e = estadoOf(c); if (e === "solicitado") r.sol++; else if (e === "concedido") r.con++; else if (e === "denegado") r.den++;
       const v = histOf(c).filter(isVig); if (v.length) { r.vig++; r.capt += Math.max(...v.map((h) => h.captadores || 0)); }
     });
     return r;
@@ -709,14 +740,14 @@ const download = (name, text, type) => {
 })();
 $("#csv").addEventListener("click", () => {
   const q = (v) => '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
-  const head = ["id", "categoria", "subtipo", "nombre", "direccion", "municipio", "lat", "lon", "ubicacion_aproximada", "origen", "valoracion", "estado_permiso", "fecha_solicitud", "contacto", "notas", "concesion_vigente", "historial_concesiones"];
+  const head = ["id", "categoria", "subtipo", "nombre", "direccion", "municipio", "lat", "lon", "ubicacion_aproximada", "origen", "valoracion", "estado_permiso", "fecha_solicitud", "proximo_seguimiento", "contacto", "notas", "concesion_vigente", "historial_concesiones"];
   const rows = CENTERS.filter((c) => !isOut(c)).map((c) => {
     const p = permOf(c), pos = cache[c.id] || {};
-    return [c.id, c.tipo, c.sub || "", c.name, c.street, c.town || "Granada", pos.lat || "", pos.lon || "", pos.approx ? "sí" : "", c.custom ? "agregado" : "base", p.valoracion || "", estadoInfo(p.estado)[1], p.fecha, p.contacto, p.notas, vigente(c) ? histTxt(vigente(c)) : "", histOf(c).map(histTxt).join(" | ")].map(q).join(";");
+    return [c.id, c.tipo, c.sub || "", c.name, c.street, c.town || "Granada", pos.lat || "", pos.lon || "", isApprox(c) ? "sí" : "", c.custom ? "agregado" : "base", p.valoracion || "", estadoInfo(estadoOf(c))[1], p.fecha, p.seguimiento || "", p.contacto, p.notas, vigente(c) ? histTxt(vigente(c)) : "", histOf(c).map(histTxt).join(" | ")].map(q).join(";");
   });
   download("permisos-captacion-granada.csv", "\ufeff" + head.join(";") + "\r\n" + rows.join("\r\n"), "text/csv;charset=utf-8");
 });
-$("#bak").addEventListener("click", () => download("copia-mapa-recursos-granada.json", JSON.stringify({ version: 2, permisos: permits, puntos_propios: customs, quitados: [...removed] }, null, 2), "application/json"));
+$("#bak").addEventListener("click", () => download("copia-mapa-recursos-granada.json", JSON.stringify({ version: 2, permisos: permits, puntos_propios: customs, quitados: [...removed], revisados: [...reviewed] }, null, 2), "application/json"));
 $("#imp").addEventListener("click", () => $("#impf").click());
 $("#impf").addEventListener("change", async (e) => {
   const f = e.target.files[0]; if (!f) return;
@@ -730,7 +761,8 @@ $("#impf").addEventListener("change", async (e) => {
     const names = new Set([...CENTERS.map((c) => c.name), ...customs.map((x) => x.name)]);
     Object.keys(pm || {}).forEach((k) => { if (names.has(k) && pm[k] && pm[k].estado) { permits[k] = pm[k]; n++; } });
     (d.quitados || []).forEach((k) => { if (names.has(k)) removed.add(k); });
-    savePermits(); saveRemoved();
+    (d.revisados || []).forEach((k) => { if (names.has(k)) reviewed.add(k); });
+    savePermits(); saveRemoved(); saveReviewed();
     try { localStorage.setItem(CUSTOM_KEY, JSON.stringify(customs)); } catch (err) {}
     if (addedC) { location.reload(); return; }
     refreshSelects();
