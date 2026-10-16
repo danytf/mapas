@@ -207,6 +207,9 @@
         <select id="valor" aria-label="Filtrar por valoración"></select>
         <select id="orden" aria-label="Ordenar la lista"></select>
       </div>
+      <div class="row" style="grid-template-columns:1fr">
+        <select id="cadena" aria-label="Filtrar por cadena"></select>
+      </div>
       <div class="bar" aria-hidden="true"><i id="prog"></i></div>
       <div class="status" id="status" role="status">Preparando…</div>
     </div>
@@ -361,6 +364,9 @@ const TIPOS = [
 ];
 const colorOf = (c) => (TIPOS.find((t) => t[1] === c.tipo) || [0, 0, "#0b7a68"])[2];
 const matchTipo = (c, t) => !t || c.tipo === t;
+const rawChain = (c) => c.tipo === "Carrefour" ? "Carrefour" : c.tipo === "Supermercado" ? c.name.split(" – ")[0].trim() : "";
+let smallChains = new Set();
+const chainOf = (c) => { const k = rawChain(c); return smallChains.has(k) ? "Independientes (rótulo único)" : k; };
 
 /* Estado del permiso por punto (se guarda en localStorage, clave = nombre del punto). */
 const ESTADOS = [["sin", "Sin solicitar", "#ffffff"], ["solicitado", "Solicitado", "#fbbf24"], ["concedido", "Concedido", "#22c55e"], ["denegado", "Denegado", "#111827"]];
@@ -483,14 +489,14 @@ function renderList() {
   const q = $("#q").value.trim().toLowerCase();
   const tipo = $("#tipo").value;
   const est = $("#permiso").value;
-  const vf = $("#valor").value;
+  const vf = $("#valor").value, ch = $("#cadena").value;
   const rate = (c) => permOf(c).valoracion || 0;
   const okVal = (c) => !vf || (vf === "sin" ? !rate(c) : rate(c) >= +vf);
   const ul = $("#list");
   ul.innerHTML = "";
   const order = $("#orden").value === "val" ? [...CENTERS].sort((a, b) => rate(b) - rate(a) || a.id - b.id) : CENTERS;
   order.forEach((c) => {
-    const visible = !isOut(c) && matchTipo(c, tipo) && (!est || permOf(c).estado === est) && okVal(c) &&
+    const visible = !isOut(c) && matchTipo(c, tipo) && (!ch || chainOf(c) === ch) && (!est || permOf(c).estado === est) && okVal(c) &&
       (!q || (c.name + " " + c.street + " " + (c.town || "Granada")).toLowerCase().includes(q));
     if (markers[c.id]) {
       const on = cluster.hasLayer(markers[c.id]);
@@ -585,6 +591,7 @@ let fitTimer;
 const refilter = () => { renderList(); clearTimeout(fitTimer); fitTimer = setTimeout(() => { touched = false; fitAll(); }, 200); };
 $("#q").addEventListener("input", refilter);
 $("#tipo").addEventListener("change", refilter);
+$("#cadena").addEventListener("change", refilter);
 $("#copy").addEventListener("click", async () => {
   const out = CENTERS.map((c) => ({
     id: c.id, nombre: c.name, tipo: c.tipo, direccion: addrOf(c), direccion_confirmada: c.conf && !c.prov, ubicacion_aproximada: !!(cache[c.id] && cache[c.id].approx), lat: cache[c.id] ? cache[c.id].lat : null, lon: cache[c.id] ? cache[c.id].lon : null
@@ -613,6 +620,12 @@ function refreshSelects() {
   const vv = $("#valor").value, ov = $("#orden").value;
   $("#valor").innerHTML = '<option value="">Valoración: todas</option><option value="5">★★★★★ (5)</option><option value="4">★★★★☆ o más</option><option value="3">★★★☆☆ o más</option><option value="sin">Sin valorar</option>';
   $("#orden").innerHTML = '<option value="">Orden: normal</option><option value="val">Mejor valorados</option>';
+  const cv = $("#cadena").value, cnt = {};
+  const raw = {}; vis.forEach((c) => { const k = rawChain(c); if (k) raw[k] = (raw[k] || 0) + 1; });
+  smallChains = new Set(Object.keys(raw).filter((k) => raw[k] < 2));
+  vis.forEach((c) => { const k = chainOf(c); if (k) cnt[k] = (cnt[k] || 0) + 1; });
+  $("#cadena").innerHTML = '<option value="">Cadena: todas</option>' + Object.entries(cnt).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([k, n]) => '<option value="' + esc(k) + '">' + esc(k) + " (" + n + ")</option>").join("");
+  $("#cadena").value = cv;
   $("#tipo").value = tv; $("#permiso").value = pv; $("#valor").value = vv; $("#orden").value = ov;
   $("#lgBody").innerHTML = "<h4>Color: categoría</h4>" +
     TIPOS.filter(([i, t]) => vis.some((c) => c.tipo === t)).map(([i, t, col]) => '<div class="it"><i style="background:' + col + '"></i>' + t + "</div>").join("") +
@@ -688,7 +701,7 @@ const download = (name, text, type) => {
     const tr = e.target.closest("tr[data-k]"); if (!tr) return;
     const k = tr.dataset.k;
     if (tr.dataset.kind === "pt") { const c = CENTERS.find((x) => String(x.id) === k); if (c) focusPoint(c); return; }
-    $("#tipo").value = tr.dataset.kind === "tipo" ? k : ""; $("#q").value = tr.dataset.kind === "town" ? k : ""; $("#permiso").value = ""; $("#valor").value = "";
+    $("#tipo").value = tr.dataset.kind === "tipo" ? k : ""; $("#q").value = tr.dataset.kind === "town" ? k : ""; $("#permiso").value = ""; $("#valor").value = ""; $("#cadena").value = "";
     dlg.close(); refilter();
   });
   $("#panelBtn").addEventListener("click", () => { render(); dlg.showModal(); });
@@ -753,7 +766,7 @@ function addCustom(rec, pos) {
   CENTERS.push(c);
   cache[c.id] = { lat: p.lat, lon: p.lon };
   makeMarker(c); refreshSelects(); renderList();
-  $("#tipo").value = ""; $("#permiso").value = ""; renderList();
+  $("#tipo").value = ""; $("#permiso").value = ""; $("#cadena").value = ""; renderList();
   touched = true;
   cluster.zoomToShowLayer(markers[c.id], () => { map.flyTo(markers[c.id].getLatLng(), Math.max(map.getZoom(), 16), { duration: 0.6 }); markers[c.id].openPopup(); });
   highlight(c.id, false);
