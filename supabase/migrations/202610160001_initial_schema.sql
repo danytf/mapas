@@ -358,6 +358,189 @@ begin
 end;
 $$;
 
+-- Integridad relacional reforzada en la base de datos (no depende del frontend).
+create or replace function public.validate_permit_grant_application()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $
+declare
+  parent_establishment_id uuid;
+begin
+  if new.application_id is not null then
+    select pa.establishment_id into parent_establishment_id
+    from public.permit_applications pa
+    where pa.id = new.application_id;
+
+    if parent_establishment_id is null or parent_establishment_id <> new.establishment_id then
+      raise exception 'La solicitud asociada debe pertenecer al mismo establecimiento que la concesión'
+        using errcode = '23514';
+    end if;
+  end if;
+  return new;
+end;
+$;
+
+drop trigger if exists validate_permit_grant_application on public.permit_grants;
+create trigger validate_permit_grant_application
+before insert or update of establishment_id, application_id on public.permit_grants
+for each row execute procedure public.validate_permit_grant_application();
+
+create or replace function public.validate_followup_targets()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $
+declare
+  parent_establishment_id uuid;
+begin
+  if new.application_id is not null then
+    select pa.establishment_id into parent_establishment_id
+    from public.permit_applications pa
+    where pa.id = new.application_id;
+
+    if parent_establishment_id is null or parent_establishment_id <> new.establishment_id then
+      raise exception 'La solicitud del seguimiento debe pertenecer al mismo establecimiento'
+        using errcode = '23514';
+    end if;
+  end if;
+
+  if new.grant_id is not null then
+    select pg.establishment_id into parent_establishment_id
+    from public.permit_grants pg
+    where pg.id = new.grant_id;
+
+    if parent_establishment_id is null or parent_establishment_id <> new.establishment_id then
+      raise exception 'La concesión del seguimiento debe pertenecer al mismo establecimiento'
+        using errcode = '23514';
+    end if;
+  end if;
+  return new;
+end;
+$;
+
+drop trigger if exists validate_followup_targets on public.followups;
+create trigger validate_followup_targets
+before insert or update of establishment_id, application_id, grant_id on public.followups
+for each row execute procedure public.validate_followup_targets();
+
+-- Historial automático de ubicación. La función se ejecuta con privilegios de
+-- servidor para que RLS no impida escribir la traza; solo guarda cambios reales.
+create or replace function public.record_establishment_location_history()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $
+begin
+  if old.latitude is distinct from new.latitude
+     or old.longitude is distinct from new.longitude
+     or old.address is distinct from new.address then
+    insert into public.establishment_location_history (
+      establishment_id, old_latitude, old_longitude, old_address,
+      new_latitude, new_longitude, new_address, change_reason, changed_by
+    ) values (
+      new.id, old.latitude, old.longitude, old.address,
+      new.latitude, new.longitude, new.address,
+      'Actualización de coordenadas o dirección',
+      coalesce(new.updated_by, (select auth.uid()))
+    );
+  end if;
+  return new;
+end;
+$;
+
+drop trigger if exists establishment_location_history_on_update on public.establishments;
+create trigger establishment_location_history_on_update
+after update of latitude, longitude, address on public.establishments
+for each row execute procedure public.record_establishment_location_history();
+
+-- Auditoría de servidor: registra operación, entidad, ámbito y nombres de campos
+-- cambiados; no copia notas, teléfonos, contactos ni otros valores potencialmente sensibles.
+create or replace function public.write_audit_log()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $
+declare
+  old_data jsonb := '{}'::jsonb;
+  new_data jsonb := '{}'::jsonb;
+  row_data jsonb;
+  field_name text;
+  changed_fields jsonb := '[]'::jsonb;
+  entity_id uuid;
+  entity_establishment_id uuid;
+  entity_province_id uuid;
+  audit_action text := lower(tg_op);
+begin
+  if tg_op <> 'INSERT' then old_data := to_jsonb(old); end if;
+  if tg_op <> 'DELETE' then new_data := to_jsonb(new); end if;
+  row_data := case when tg_op = 'DELETE' then old_data else new_data end;
+
+  entity_id := nullif(row_data ->> 'id', '')::uuid;
+  entity_establishment_id := nullif(row_data ->> 'establishment_id', '')::uuid;
+  entity_province_id := nullif(row_data ->> 'province_id', '')::uuid;
+
+  if entity_province_id is null and entity_establishment_id is not null then
+    select e.province_id into entity_province_id
+    from public.establishments e where e.id = entity_establishment_id;
+  end if;
+
+  if tg_op = 'INSERT' then
+    select coalesce(jsonb_agg(k), '[]'::jsonb) into changed_fields
+    from jsonb_object_keys(new_data) as keys(k)
+    where k not in ('created_at', 'updated_at');
+  elsif tg_op = 'DELETE' then
+    select coalesce(jsonb_agg(k), '[]'::jsonb) into changed_fields
+    from jsonb_object_keys(old_data) as keys(k)
+    where k not in ('created_at', 'updated_at');
+  else
+    for field_name in select jsonb_object_keys(new_data)
+    loop
+      if field_name not in ('updated_at')
+         and old_data -> field_name is distinct from new_data -> field_name then
+        changed_fields := changed_fields || jsonb_build_array(field_name);
+      end if;
+    end loop;
+  end if;
+
+  insert into public.audit_log (actor_id, action, table_name, record_id, province_id, details)
+  values (
+    (select auth.uid()),
+    audit_action,
+    tg_table_name,
+    entity_id,
+    entity_province_id,
+    jsonb_build_object('changed_fields', changed_fields)
+  );
+  return case when tg_op = 'DELETE' then old else new end;
+end;
+$;
+
+revoke all on function public.validate_permit_grant_application() from public;
+revoke all on function public.validate_followup_targets() from public;
+revoke all on function public.record_establishment_location_history() from public;
+revoke all on function public.write_audit_log() from public;
+
+do $
+declare t text;
+begin
+  foreach t in array array[
+    'establishments','permit_applications','permit_grants','followups',
+    'establishment_location_reviews','user_provinces','profiles'
+  ] loop
+    execute format('drop trigger if exists audit_row_change on public.%I', t);
+    execute format(
+      'create trigger audit_row_change after insert or update or delete on public.%I for each row execute procedure public.write_audit_log()',
+      t
+    );
+  end loop;
+end;
+$;
+
 -- Activar RLS en todas las tablas expuestas por la API.
 alter table public.provinces enable row level security;
 alter table public.profiles enable row level security;
@@ -517,7 +700,7 @@ create policy location_history_delete_admin on public.establishment_location_his
 for delete to authenticated using (public.is_admin());
 
 -- Auditoría e importación: solo admin puede consultar o gestionar desde el cliente.
--- La escritura de audit_log se reservará a funciones/triggers de servidor en la siguiente iteración.
+-- Las escrituras en audit_log se realizan exclusivamente mediante triggers de servidor.
 drop policy if exists audit_log_admin_read on public.audit_log;
 create policy audit_log_admin_read on public.audit_log
 for select to authenticated using (public.is_admin());
