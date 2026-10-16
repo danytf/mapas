@@ -564,7 +564,8 @@ let reviewed = new Set(loadJSON(REV_KEY, []));
 const saveReviewed = () => { try { localStorage.setItem(REV_KEY, JSON.stringify([...reviewed])); } catch (e) {} };
 const LOC_KEY = "ubicaciones-corregidas-granada-v1";
 let corr = loadJSON(LOC_KEY, {});
-const saveCorr = () => { try { localStorage.setItem(LOC_KEY, JSON.stringify(corr)); } catch (e) {} };
+const saveCorr = () => { try { const v = JSON.stringify(corr); localStorage.setItem(LOC_KEY, v); return localStorage.getItem(LOC_KEY) === v; } catch (e) { return false; } };
+const NOSAVE = "Aplicado, pero este navegador no permite guardar. Abre el mapa en https://danytf.github.io/mapas/ (no desde la vista previa) o pulsa Guardar copia.";
 CENTERS.forEach((c) => { const q = corr[c.name]; if (q && !c.custom) cache[c.id] = { lat: q[0], lon: q[1] }; });
 const DUPS = new Set([]);
 const isApprox = (c) => !!(cache[c.id] && cache[c.id].approx) && !reviewed.has(c.name);
@@ -676,8 +677,8 @@ function popupFor(c, pos) {
     const apply = (txt) => {
       const r = parseCoords(txt);
       if (!r) { msg.textContent = "No reconozco las coordenadas. Ejemplo: 37.1773, -3.5986"; return; }
-      setLoc(c, r[0], r[1]);
-      logrosToast("Ubicación guardada y revisada: " + r[0].toFixed(6) + ", " + r[1].toFixed(6));
+      const ok = setLoc(c, r[0], r[1]);
+      logrosToast(ok ? "Ubicación guardada y revisada: " + r[0].toFixed(6) + ", " + r[1].toFixed(6) : NOSAVE);
       const mk = markers[c.id]; if (mk) cluster.zoomToShowLayer(mk, () => mk.openPopup());
     };
     inp.addEventListener("paste", (e) => { const t = (e.clipboardData || window.clipboardData).getData("text"); e.preventDefault(); inp.value = t; apply(t); });
@@ -712,12 +713,14 @@ function parseCoords(t) {
   return la >= 36.5 && la <= 38.3 && lo >= -4.6 && lo <= -2.2 ? [la, lo] : null;
 }
 function setLoc(c, lat, lon) {
+  let saveOk = true;
   cache[c.id] = { lat, lon };
   if (c.custom) { const p = customs.find((x) => x.name === c.name); if (p) { p.lat = lat; p.lon = lon; p.approx = undefined; try { localStorage.setItem(CUSTOM_KEY, JSON.stringify(customs)); } catch (e) {} } }
-  else { corr[c.name] = [+lat.toFixed(6), +lon.toFixed(6)]; saveCorr(); }
+  else { corr[c.name] = [+lat.toFixed(6), +lon.toFixed(6)]; saveOk = saveCorr(); }
   reviewed.add(c.name); saveReviewed();
   if (markers[c.id]) markers[c.id].setLatLng([lat, lon]);
   refreshSelects(); renderList();
+  return saveOk;
 }
 let moving = null;
 function endMove(save) {
@@ -732,7 +735,7 @@ function startMove(c) {
   map.closePopup(); cluster.removeLayer(m); m.addTo(map); m.dragging.enable();
   moving = { c, m };
   logrosToast("Arrastra el pin hasta el local y suéltalo. Se guarda solo.");
-  m.once("dragend", () => { const p = m.getLatLng(); setLoc(c, p.lat, p.lng); endMove(); logrosToast("Ubicación guardada: " + p.lat.toFixed(6) + ", " + p.lng.toFixed(6)); });
+  m.once("dragend", () => { const p = m.getLatLng(); const ok = setLoc(c, p.lat, p.lng); endMove(); logrosToast(ok ? "Ubicación guardada: " + p.lat.toFixed(6) + ", " + p.lng.toFixed(6) : NOSAVE); });
 }
 function makeMarker(c) {
   const pos = cache[c.id];
