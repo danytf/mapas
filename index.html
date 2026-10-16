@@ -260,6 +260,57 @@
   .lg.l0 b, .lg.l0 .pr { opacity: .65; }
   .lg .bar { grid-column: 2; height: 4px; border-radius: 2px; background: var(--line); overflow: hidden; }
   .lg .bar i { display: block; height: 100%; background: var(--accent); }
+  .kstrip .k.gam { min-width: 150px; max-width: 200px; position: relative; overflow: hidden; border-color: #5b4a1a; background: linear-gradient(135deg, #1f2a3b, #2a2412); }
+  .kstrip .k.gam span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #e8d9a8; }
+  .kstrip .k.gam .xpb { display: block; height: 4px; border-radius: 2px; background: #3a3320; margin-top: 3px; overflow: hidden; }
+  .kstrip .k.gam .xpb u { display: block; height: 100%; background: linear-gradient(90deg, #f5c542, #ffe28a); transition: width .6s ease; }
+  #dlgGam { width: min(560px, 94vw); max-height: 90vh; overflow-y: auto; }
+  #dlgGam .gh { display: flex; gap: 18px; align-items: center; margin-bottom: 12px; }
+  #dlgGam .gring { width: 104px; height: 104px; flex: none; transform: rotate(-90deg); }
+  #dlgGam .gring text { transform: rotate(90deg); transform-origin: 50px 50px; font-size: 34px; font-weight: 700; fill: var(--fg); }
+  #dlgGam .gr0, #dlgGam .gr1 { fill: none; stroke-width: 8; }
+  #dlgGam .gr0 { stroke: var(--line); }
+  #dlgGam .gr1 { stroke: #e0a800; stroke-linecap: round; transition: stroke-dashoffset .8s ease; }
+  #dlgGam h3 { margin: 0 0 2px; font-size: 20px; letter-spacing: -.02em; }
+  #dlgGam .gh p { margin: 0 0 6px; font-size: 13px; color: var(--muted); }
+  #dlgGam .chip { display: inline-block; padding: 3px 10px; border-radius: 999px; background: var(--line); font-size: 11.5px; font-weight: 600; color: var(--muted); }
+  #dlgGam .chip.on { background: #fff1c2; color: #8a5a00; }
+  #dlgGam h4 { margin: 16px 0 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  #dlgGam .dots { display: flex; gap: 5px; }
+  #dlgGam .dots i { flex: 1; height: 6px; border-radius: 3px; background: var(--line); }
+  #dlgGam .dots i.p { background: #e0a800; }
+  #dlgGam .dots i.c { background: linear-gradient(90deg, #e0a800, var(--line)); }
+  #dlgGam ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+  #dlgGam .ms li { display: grid; grid-template-columns: 22px 1fr auto auto; gap: 2px 10px; align-items: center; padding: 9px 11px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); font-size: 13px; }
+  #dlgGam .ms .ck { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--line-2); display: grid; place-items: center; font-size: 12px; font-weight: 700; color: #fff; grid-row: span 2; }
+  #dlgGam .ms li.ok .ck { background: #22a15a; border-color: #22a15a; }
+  #dlgGam .ms li.ok .mt { text-decoration: line-through; opacity: .7; }
+  #dlgGam .ms .mp { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  #dlgGam .ms .mx { white-space: nowrap; font-size: 12px; font-weight: 700; color: #8a5a00; }
+  #dlgGam .ms .mb { grid-column: 2 / 5; height: 4px; border-radius: 2px; background: var(--line); overflow: hidden; }
+  #dlgGam .ms .mb i { display: block; height: 100%; background: var(--accent); }
+  #dlgGam .lgl li { display: flex; gap: 10px; font-size: 12.5px; padding: 4px 0; border-bottom: 1px solid var(--line); }
+  #dlgGam .lgl li span { color: var(--muted); min-width: 70px; }
+  #dlgGam .lgl li b { margin-left: auto; color: #8a5a00; }
+  #dlgGam .how { margin-top: 12px; font-size: 12px; color: var(--muted); }
+  #dlgGam .how summary { cursor: pointer; }
+  #dlgGam .snd { display: block; margin-top: 12px; font-size: 12.5px; }
+  #confetti { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; }
+  #xpfly { position: fixed; left: 50%; bottom: 84px; transform: translateX(-50%); display: grid; gap: 6px; justify-items: center; pointer-events: none; z-index: 9998; }
+  #xpfly div { background: #1f2a3b; color: #fff; border: 1px solid #e0a800; padding: 7px 14px; border-radius: 999px; font-size: 13px; box-shadow: 0 6px 20px rgba(15,23,34,.35); animation: xpfly 2.6s ease forwards; }
+  #xpfly b { color: #ffd966; }
+  #xpfly i { color: #ffd966; font-style: normal; font-weight: 700; }
+  @keyframes xpfly { 0% { opacity: 0; transform: translateY(14px) scale(.9); } 12% { opacity: 1; transform: translateY(0) scale(1.05); } 20% { transform: scale(1); } 80% { opacity: 1; } 100% { opacity: 0; transform: translateY(-34px); } }
+  #lvlUp { position: fixed; inset: 0; z-index: 10000; display: grid; place-items: center; background: rgba(15,23,34,.62); animation: lufade .3s ease; }
+  #lvlUp .lu { background: var(--panel); color: var(--fg); border-radius: 18px; padding: 28px 40px 24px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,.5); border-top: 5px solid #e0a800; animation: lupop .55s cubic-bezier(.2,1.4,.4,1); }
+  #lvlUp .lu-ring { width: 96px; height: 96px; margin: 0 auto 10px; border-radius: 50%; display: grid; place-items: center; background: radial-gradient(circle at 35% 30%, #ffe28a, #e0a800); box-shadow: 0 0 0 6px rgba(224,168,0,.25), 0 0 40px rgba(224,168,0,.6); }
+  #lvlUp .lu-ring span { font-size: 44px; font-weight: 800; color: #5a3b00; }
+  #lvlUp h2 { margin: 0; font-size: 28px; letter-spacing: -.02em; }
+  #lvlUp p { margin: 4px 0 16px; font-size: 16px; color: var(--muted); font-weight: 600; }
+  #lvlUp .lu-ok { height: 38px; padding: 0 26px; border-radius: 999px; border: 0; background: var(--accent); color: var(--accent-fg); font-weight: 650; cursor: pointer; }
+  @keyframes lufade { from { opacity: 0; } }
+  @keyframes lupop { from { transform: scale(.6); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { #xpfly div, #lvlUp, #lvlUp .lu { animation: none; } }
   .lg-note { font-size: 11.5px; color: var(--muted); margin: 12px 0 0; }
   details.loc { margin: 8px 0 4px; border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; font-size: 12px; }
   details.loc summary { cursor: pointer; font-weight: 600; color: var(--fg); }
@@ -333,6 +384,7 @@
     <div id="menuPanel" role="menu" hidden>
       <div class="mh">Informes</div>
       <button id="panelBtn" type="button" role="menuitem">Panel resumen</button>
+      <button id="gamBtn" type="button" role="menuitem">Mi progreso</button>
       <button id="logrosBtn" type="button" role="menuitem">Logros</button>
       <div class="mh">Puntos</div>
       <button id="add" type="button" role="menuitem">Agregar punto</button>
@@ -379,6 +431,10 @@
   <div class="lg-h"><h2 id="lgT">Logros</h2><span id="lgSum"></span><button type="button" id="lgClose" aria-label="Cerrar">Cerrar</button></div>
   <div id="lgGrid" class="lg-grid"></div>
   <p class="lg-note">Las insignias se calculan con tus datos y, una vez conseguidas, no se pierden. La racha cuenta los días en que abres el mapa sin seguimientos pendientes.</p>
+</dialog>
+<dialog id="dlgGam" aria-labelledby="gamT">
+  <div class="lg-h"><h2 id="gamT">Mi progreso</h2><span></span><button type="button" id="gamLogros">Insignias</button><button type="button" id="gamClose" aria-label="Cerrar">Cerrar</button></div>
+  <div id="gamBody"></div>
 </dialog>
 <dialog id="dlgPanel">
   <div class="pn-head"><h2>Panel resumen</h2><button type="button" id="pnClose" aria-label="Cerrar">&times;</button></div>
@@ -694,6 +750,7 @@ function popupFor(c, pos) {
       estado: el.querySelector(".f-estado").value, fecha: el.querySelector(".f-fecha").value,
       contacto: el.querySelector(".f-contacto").value.trim(), notas: el.querySelector(".f-notas").value.trim(), valoracion: val, historial: hist, seguimiento: el.querySelector(".f-seg").value
     };
+    const prevP = permits[c.name];
     if (v.estado === "sin" && !v.fecha && !v.contacto && !v.notas && !v.valoracion && !hist.length && !v.seguimiento) delete permits[c.name]; else permits[c.name] = v;
     savePermits();
     if (markers[c.id]) markers[c.id].setIcon(makeIcon(c));
@@ -701,6 +758,7 @@ function popupFor(c, pos) {
     renderList();
     paintEf();
     el.querySelector(".saved").textContent = "Guardado";
+    gamPermit(c, prevP);
   };
   el.querySelectorAll(".stars button").forEach((b) => b.addEventListener("click", () => { val = val === +b.dataset.n ? 0 : +b.dataset.n; paint(); commit(); }));
   paint(); paintHist(); paintEf();
@@ -733,7 +791,7 @@ function popupFor(c, pos) {
     el.querySelector(".l-mv").addEventListener("click", () => startMove(c));
   }
   const rv = el.querySelector(".f-rev");
-  if (rv) rv.addEventListener("click", () => { reviewed.add(c.name); saveReviewed(); rv.remove(); refreshSelects(); renderList(); el.querySelector(".saved").textContent = "Marcado como revisado"; });
+  if (rv) rv.addEventListener("click", () => { reviewed.add(c.name); saveReviewed(); rv.remove(); refreshSelects(); renderList(); el.querySelector(".saved").textContent = "Marcado como revisado"; gamRev(c); });
   const del = el.querySelector(".f-del");
   del.addEventListener("click", () => {
     if (!armed) { armed = true; del.textContent = "¿Seguro? Pulsa otra vez"; return; }
@@ -763,6 +821,7 @@ function setLoc(c, lat, lon) {
   reviewed.add(c.name); saveReviewed();
   if (markers[c.id]) markers[c.id].setLatLng([lat, lon]);
   refreshSelects(); renderList();
+  gamRev(c);
   return saveOk;
 }
 let moving = null;
@@ -791,6 +850,7 @@ function makeMarker(c) {
 }
 
 function setEstado(c, k) {
+  const prevP = permits[c.name];
   const p = Object.assign({ estado: "sin", fecha: "", contacto: "", notas: "", valoracion: 0, historial: [] }, permits[c.name] || {});
   p.estado = k;
   if (k === "solicitado" && !p.fecha) p.fecha = today();
@@ -801,6 +861,7 @@ function setEstado(c, k) {
   if (markers[c.id]) markers[c.id].setIcon(makeIcon(c));
   const ul = $("#list"), st = ul.scrollTop;
   refreshSelects(); renderList(); ul.scrollTop = st;
+  gamPermit(c, prevP);
 }
 const qsel = (c) => {
   const m = permOf(c).estado, ef = estadoOf(c);
@@ -1023,12 +1084,225 @@ function checkLogros() {
     if (b.lv > prev) { logros.n[b.id] = b.lv; logros.f[b.id] = t; if (!LOG_FIRST) nuevos.push(b); }
   });
   saveLogros();
+  gamBadges(nuevos);
   if (nuevos.length) logrosToast("Insignia conseguida: " + nuevos.map((b) => b.name + (b.max > 1 ? " (" + LV_NAMES[b.lv] + ")" : "")).join(", "));
   const tot = Object.keys(logros.n).filter((k) => logros.n[k] > 0).length;
   const lk = document.getElementById("logrosK"); if (lk) lk.querySelector("b").textContent = tot;
   const mb = document.getElementById("logrosBtn"); if (mb) mb.textContent = "Logros (" + tot + " / 12)";
   return tot;
 }
+
+/* Gamificación: experiencia (XP), niveles, misiones y celebraciones. Cada acción da XP una sola vez (clave única), así que repetirla no suma. */
+const GAM_KEY = "gamificacion-granada-v1";
+const GAM_FIRST = (() => { try { return localStorage.getItem(GAM_KEY) === null; } catch (e) { return true; } })();
+let gam = Object.assign({ aw: {}, day: {}, dm: {}, wm: {}, lvl: 1, sound: true, log: [] }, loadJSON(GAM_KEY, {}));
+let gamReady = false;
+const saveGam = () => { try { localStorage.setItem(GAM_KEY, JSON.stringify(gam)); return true; } catch (e) { return false; } };
+const RANGOS = [["Explorador", 0], ["Rastreador", 100], ["Gestor", 300], ["Negociador", 600], ["Estratega", 1000], ["Embajador", 1600], ["Maestro de Zona", 2400], ["Capitán del Territorio", 3500], ["Gran Maestre", 5000], ["Leyenda del Territorio", 7000]];
+const xpTotal = () => Object.values(gam.aw).reduce((a, v) => a + v, 0);
+const lvOfXp = (x) => { let l = 0; RANGOS.forEach((r, i) => { if (x >= r[1]) l = i; }); return l; };
+const gamMult = () => { const n = logros.racha.n; return n >= 30 ? 2 : n >= 7 ? 1.5 : n >= 3 ? 1.25 : 1; };
+const dayAct = (d) => gam.day[d] || (gam.day[d] = { sol: 0, con: 0, seg: 0, prog: 0, rev: 0, add: 0, ctc: 0, val: 0, xp: 0, towns: [] });
+const mondayOf = (d) => { const t = new Date(d + "T12:00:00"); t.setDate(t.getDate() - ((t.getDay() + 6) % 7)); return t.toISOString().slice(0, 10); };
+const hashS = (s) => { let h = 7; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; };
+
+function award(key, base, kind, opt) {
+  opt = opt || {};
+  if (Object.prototype.hasOwnProperty.call(gam.aw, key)) return 0;
+  const pts = opt.silent || opt.raw ? base : Math.round(base * gamMult());
+  gam.aw[key] = pts;
+  if (!opt.silent) {
+    const a = dayAct(today());
+    if (kind) a[kind] = (a[kind] || 0) + 1;
+    if (opt.town && a.towns.indexOf(opt.town) < 0) a.towns.push(opt.town);
+    a.xp += pts;
+    gam.log.unshift({ t: today(), x: opt.label || "", p: pts }); gam.log.length = Math.min(gam.log.length, 25);
+  }
+  return pts;
+}
+
+/* Misiones */
+const MIS_D = [
+  { id: "sol2", t: "Solicita 2 permisos", k: "sol", n: 2 }, { id: "sol1", t: "Solicita 1 permiso", k: "sol", n: 1 },
+  { id: "seg1", t: "Haz o programa 1 seguimiento", k: "seg+prog", n: 1 },
+  { id: "rev2", t: "Revisa 2 ubicaciones", k: "rev", n: 2, need: "rev" },
+  { id: "add1", t: "Añade 1 punto nuevo", k: "add", n: 1 },
+  { id: "ctc2", t: "Anota el contacto de 2 permisos", k: "ctc", n: 2 },
+  { id: "val3", t: "Valora 3 puntos", k: "val", n: 3 },
+  { id: "xp60", t: "Gana 60 XP hoy", k: "xp", n: 60 }
+];
+const MIS_W = [
+  { id: "sol8", t: "Solicita 8 permisos esta semana", k: "sol", n: 8 }, { id: "con2", t: "Consigue 2 permisos concedidos", k: "con", n: 2 },
+  { id: "towns3", t: "Consigue permisos en 3 municipios distintos", k: "towns", n: 3 }, { id: "xp400", t: "Gana 400 XP esta semana", k: "xp", n: 400 },
+  { id: "dias4", t: "Suma XP en 4 días distintos", k: "dias", n: 4 }
+];
+function misProg(m, wk) {
+  const mw = mondayOf(today());
+  const days = wk ? Object.keys(gam.day).filter((d) => mondayOf(d) === mw) : [today()];
+  const sum = (k) => days.reduce((a, d) => a + ((gam.day[d] || {})[k] || 0), 0);
+  if (m.k === "towns") return new Set(days.reduce((a, d) => a.concat((gam.day[d] || {}).towns || []), [])).size;
+  if (m.k === "dias") return days.filter((d) => ((gam.day[d] || {}).xp || 0) > 0).length;
+  return m.k.split("+").reduce((a, k) => a + sum(k), 0);
+}
+function misToday() {
+  const t = today();
+  if (!gam.dm[t]) {
+    const pend = CENTERS.filter((c) => !isOut(c) && isRev(c)).length;
+    const pool = MIS_D.filter((m) => !m.need || pend > 0).map((m) => [hashS(t + m.id), m]).sort((a, b) => a[0] - b[0]).map((x) => x[1]);
+    const pick = [], ks = new Set();
+    pool.forEach((m) => { const g = m.k.split("+")[0]; if (pick.length < 3 && !ks.has(g)) { pick.push(m.id); ks.add(g); } });
+    gam.dm[t] = pick;
+    Object.keys(gam.dm).sort().slice(0, -14).forEach((k) => delete gam.dm[k]);
+  }
+  return gam.dm[t].map((id) => MIS_D.find((m) => m.id === id)).filter(Boolean);
+}
+function misWeek() {
+  const w = mondayOf(today());
+  if (!gam.wm[w]) { gam.wm[w] = MIS_W[hashS(w) % MIS_W.length].id; Object.keys(gam.wm).sort().slice(0, -8).forEach((k) => delete gam.wm[k]); }
+  return MIS_W.find((m) => m.id === gam.wm[w]);
+}
+function checkMissions() {
+  let bonus = 0; const done = [], t = today();
+  const ms = misToday();
+  ms.forEach((m) => { if (misProg(m) >= m.n) { const g = award("mis:" + m.id + ":" + t, 30, null, { raw: true, label: "Misión: " + m.t }); if (g) { bonus += g; done.push(m.t); } } });
+  if (ms.length && ms.every((m) => misProg(m) >= m.n)) { const g = award("misall:" + t, 50, null, { raw: true, label: "Día perfecto" }); if (g) { bonus += g; done.push("Día perfecto"); } }
+  const w = misWeek();
+  if (w && misProg(w, true) >= w.n) { const g = award("wk:" + w.id + ":" + mondayOf(t), 150, null, { raw: true, label: "Reto semanal: " + w.t }); if (g) { bonus += g; done.push("Reto semanal"); } }
+  return { bonus, done };
+}
+
+/* Efectos: confeti, XP flotante y sonido */
+function confetti(n) {
+  if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  let cv = document.getElementById("confetti");
+  if (!cv) { cv = document.createElement("canvas"); cv.id = "confetti"; cv.setAttribute("aria-hidden", "true"); document.body.appendChild(cv); }
+  cancelAnimationFrame(cv._r);
+  cv.width = innerWidth; cv.height = innerHeight;
+  const ctx = cv.getContext("2d"), cols = ["#22c55e", "#fbbf24", "#ef4444", "#3b82f6", "#a855f7", "#f97316"];
+  const ps = Array.from({ length: n }, () => ({ x: innerWidth / 2 + (Math.random() - .5) * innerWidth * .3, y: innerHeight * .78, vx: (Math.random() - .5) * 15, vy: -(9 + Math.random() * 13), g: .35 + Math.random() * .15, s: 6 + Math.random() * 6, r: Math.random() * 6, vr: (Math.random() - .5) * .4, c: cols[(Math.random() * cols.length) | 0] }));
+  let f = 0;
+  (function step() {
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    ps.forEach((p) => { p.vy += p.g; p.vx *= .99; p.x += p.vx; p.y += p.vy; p.r += p.vr; ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.fillStyle = p.c; ctx.globalAlpha = Math.max(0, 1 - f / 120); ctx.fillRect(-p.s / 2, -p.s / 3, p.s, p.s * .6); ctx.restore(); });
+    if (++f < 120) cv._r = requestAnimationFrame(step); else ctx.clearRect(0, 0, cv.width, cv.height);
+  })();
+}
+function xpPop(pts, label) {
+  let box = document.getElementById("xpfly");
+  if (!box) { box = document.createElement("div"); box.id = "xpfly"; box.setAttribute("aria-hidden", "true"); document.body.appendChild(box); }
+  const e = document.createElement("div"); const m = gamMult();
+  e.innerHTML = "<b>+" + pts + " XP</b>" + (label ? " · " + esc(label) : "") + (m > 1 ? " <i>×" + String(m).replace(".", ",") + "</i>" : "");
+  box.appendChild(e); while (box.children.length > 3) box.firstChild.remove(); setTimeout(() => e.remove(), 2600);
+}
+let _ac;
+function sfx(kind) {
+  if (!gam.sound) return;
+  try {
+    _ac = _ac || new (window.AudioContext || window.webkitAudioContext)();
+    const seq = { tick: [[880, 0, .07]], big: [[523, 0, .1], [659, .09, .1], [784, .18, .2]], mission: [[587, 0, .1], [740, .1, .1], [880, .2, .1], [1175, .3, .24]], level: [[392, 0, .12], [523, .12, .12], [659, .24, .12], [784, .36, .12], [1047, .48, .45]] }[kind] || [];
+    seq.forEach(([f, t, d]) => { const o = _ac.createOscillator(), g = _ac.createGain(), t0 = _ac.currentTime + t; o.type = "triangle"; o.frequency.value = f; g.gain.setValueAtTime(.0001, t0); g.gain.exponentialRampToValueAtTime(.08, t0 + .02); g.gain.exponentialRampToValueAtTime(.0001, t0 + d); o.connect(g); g.connect(_ac.destination); o.start(t0); o.stop(t0 + d + .02); });
+  } catch (e) {}
+}
+function levelUp(lv) {
+  const r = RANGOS[lv - 1][0];
+  let o = document.getElementById("lvlUp");
+  if (o) o.remove();
+  o = document.createElement("div"); o.id = "lvlUp"; o.setAttribute("role", "alertdialog"); o.setAttribute("aria-label", "Has subido de nivel");
+  o.innerHTML = '<div class="lu"><div class="lu-ring"><span>' + lv + '</span></div><h2>¡Nivel ' + lv + '!</h2><p>' + esc(r) + '</p><button type="button" class="lu-ok">Seguir</button></div>';
+  document.body.appendChild(o);
+  const close = () => o.remove();
+  o.querySelector(".lu-ok").addEventListener("click", close); o.addEventListener("click", (ev) => { if (ev.target === o) close(); });
+  setTimeout(close, 7000);
+  o.querySelector(".lu-ok").focus();
+  confetti(220); sfx("level");
+}
+
+/* Eventos que dan XP */
+function gamAfter(gained, label, big, mission) {
+  if (!gamReady) return;
+  const m = checkMissions();
+  saveGam();
+  if (gained > 0) xpPop(gained, label);
+  const lv = lvOfXp(xpTotal()) + 1;
+  if (lv > gam.lvl) { gam.lvl = lv; saveGam(); levelUp(lv); }
+  else if (m.done.length) { logrosToast("Completado: " + m.done.join(" · ") + " (+" + m.bonus + " XP)"); confetti(110); sfx("mission"); }
+  else if (big) { confetti(70); sfx("big"); }
+  else if (gained > 0) sfx("tick");
+  gamTile();
+}
+function gamPermit(c, prev) {
+  if (!gamReady) return;
+  const p = permits[c.name] || {}, name = c.name, est = p.estado || "sin", pv = prev || {}, t = today();
+  let g = 0, big = false, lab = "";
+  const add = (k, pts, kind, label, opt) => { const r = award(k, pts, kind, Object.assign({ label }, opt || {})); if (r) { g += r; lab = lab || label; } return r; };
+  if (est !== "sin") add("sol:" + name, 10, "sol", "Permiso solicitado");
+  if (est === "concedido" && add("con:" + name, 50, "con", "Permiso concedido", { town: c.town || "Granada" })) big = true;
+  if (est !== "sin" && p.contacto) add("ctc:" + name, 8, "ctc", "Contacto anotado");
+  if (p.valoracion > 0) add("val:" + name, 5, "val", "Punto valorado");
+  const o = pv.seguimiento || "", n = p.seguimiento || "";
+  if (o && o <= t && n !== o && est !== "sin") add("seg:" + name + ":" + o, 15, "seg", "Seguimiento realizado");
+  else if (n && n !== o && n > t && dayAct(t).prog < 3) add("prog:" + name + ":" + n, 5, "prog", "Seguimiento programado");
+  gamAfter(g, lab, big);
+}
+function gamRev(c) { if (!gamReady) return; const g = award("rev:" + c.name, 10, "rev", { label: "Ubicación revisada" }); gamAfter(g, "Ubicación revisada"); }
+function gamAdd(c) { if (!gamReady) return; const g = award("add:" + c.name, 20, "add", { label: "Punto nuevo" }); gamAfter(g, "Punto nuevo", true); }
+function gamBadges(nuevos) { if (!gamReady || !nuevos.length) return; let g = 0; nuevos.forEach((b) => { g += award("bdg:" + b.id + ":" + b.lv, b.max === 1 ? 100 : [0, 50, 100, 200][b.lv], null, { raw: true, label: "Insignia: " + b.name }); }); gamAfter(g, "Insignia", true); }
+
+/* Reparte en silencio el XP de lo que ya existe (primera vez, copias importadas) */
+function seedXP() {
+  const sl = { silent: true };
+  CENTERS.forEach((c) => {
+    const p = permits[c.name]; if (!p || isOut(c)) return;
+    if (p.estado && p.estado !== "sin") award("sol:" + c.name, 10, null, sl);
+    if (p.estado === "concedido") award("con:" + c.name, 50, null, sl);
+    if (p.estado && p.estado !== "sin" && p.contacto) award("ctc:" + c.name, 8, null, sl);
+    if (p.valoracion > 0) award("val:" + c.name, 5, null, sl);
+  });
+  reviewed.forEach((k) => award("rev:" + k, 3, null, sl));
+  customs.forEach((p) => award("add:" + p.name, 20, null, sl));
+  gam.lvl = Math.max(gam.lvl, lvOfXp(xpTotal()) + 1);
+  saveGam();
+}
+
+/* Interfaz: ficha del nivel en la barra y panel de progreso */
+function gamInfo() {
+  const x = xpTotal(), i = lvOfXp(x), a = RANGOS[i][1], b = RANGOS[i + 1] ? RANGOS[i + 1][1] : null;
+  return { x, i, a, b, pct: b ? Math.round(100 * (x - a) / (b - a)) : 100, name: RANGOS[i][0] };
+}
+function gamTileHTML() {
+  const g = gamInfo();
+  return '<button type="button" id="gamK" class="k gam" title="Ver mi progreso"><b>Nv ' + (g.i + 1) + '</b><span>' + esc(g.name) + " · " + g.x + ' XP</span><i class="xpb"><u style="width:' + g.pct + '%"></u></i></button>';
+}
+function gamMenu() { const b = document.getElementById("gamBtn"), g = gamInfo(); if (b) b.textContent = "Mi progreso (Nv " + (g.i + 1) + " · " + g.x + " XP)"; }
+function gamTile() {
+  gamMenu();
+  const k = document.getElementById("gamK"); if (!k) return;
+  const w = document.createElement("div"); w.innerHTML = gamTileHTML(); const n = w.firstChild;
+  n.addEventListener("click", openGam); k.replaceWith(n);
+  if (document.getElementById("dlgGam").open) openGam();
+}
+function openGam() {
+  const g = gamInfo(), C = 2 * Math.PI * 44, mult = gamMult();
+  const mrow = (m, wk) => { const v = Math.min(misProg(m, wk), m.n), ok = v >= m.n; return '<li class="' + (ok ? "ok" : "") + '"><span class="ck">' + (ok ? "✓" : "") + '</span><span class="mt">' + esc(m.t) + '</span><span class="mp">' + v + " / " + m.n + '</span><span class="mx">+' + (wk ? 150 : 30) + ' XP</span><span class="mb"><i style="width:' + Math.round(100 * v / m.n) + '%"></i></span></li>'; };
+  const wk = misWeek();
+  document.getElementById("gamBody").innerHTML =
+    '<div class="gh"><svg viewBox="0 0 100 100" class="gring" aria-hidden="true"><circle cx="50" cy="50" r="44" class="gr0"/><circle cx="50" cy="50" r="44" class="gr1" style="stroke-dasharray:' + C.toFixed(1) + ";stroke-dashoffset:" + (C * (1 - g.pct / 100)).toFixed(1) + '"/><text x="50" y="56" text-anchor="middle">' + (g.i + 1) + '</text></svg>' +
+    '<div><h3>' + esc(g.name) + '</h3><p>' + g.x + " XP" + (g.b ? " · faltan " + (g.b - g.x) + " para " + esc(RANGOS[g.i + 1][0]) : " · nivel máximo") + '</p>' +
+    '<p class="chip' + (mult > 1 ? " on" : "") + '">' + (mult > 1 ? "Racha de " + logros.racha.n + " días: XP ×" + String(mult).replace(".", ",") : "Racha ×1: con 3 días seguidos sin seguimientos atrasados sube a ×1,25") + "</p></div></div>" +
+    '<div class="dots">' + RANGOS.map((r, i) => '<i class="' + (i < g.i ? "p" : i === g.i ? "c" : "") + '" title="' + esc(r[0]) + " · " + r[1] + ' XP"></i>').join("") + "</div>" +
+    "<h4>Misiones de hoy</h4><ul class=\"ms\">" + misToday().map((m) => mrow(m, false)).join("") + "</ul>" +
+    "<h4>Reto de la semana</h4><ul class=\"ms\">" + (wk ? mrow(wk, true) : "") + "</ul>" +
+    "<h4>Actividad reciente</h4><ul class=\"lgl\">" + (gam.log.length ? gam.log.slice(0, 8).map((e) => "<li><span>" + esc(fmtD(e.t)) + "</span>" + esc(e.x) + "<b>+" + e.p + "</b></li>").join("") : "<li>Aún sin actividad. Solicita un permiso para empezar.</li>") + "</ul>" +
+    '<details class="how"><summary>Cómo se gana XP</summary><p>Solicitar un permiso 10 · Permiso concedido 50 · Seguimiento realizado 15 · Seguimiento programado 5 (máx. 3 al día) · Contacto anotado 8 · Punto valorado 5 · Ubicación revisada 10 · Punto nuevo 20 · Insignia 50 / 100 / 200 · Misión 30 · Día perfecto 50 · Reto semanal 150. Cada acción cuenta una sola vez por punto, y la racha multiplica lo que ganas.</p></details>' +
+    '<label class="snd"><input type="checkbox" id="gamSnd"' + (gam.sound ? " checked" : "") + "> Sonidos</label>";
+  document.getElementById("gamSnd").addEventListener("change", (e) => { gam.sound = e.target.checked; saveGam(); if (gam.sound) sfx("tick"); });
+  const d = document.getElementById("dlgGam"); if (!d.open) d.showModal();
+}
+document.getElementById("gamBtn").addEventListener("click", openGam);
+document.getElementById("gamClose").addEventListener("click", () => document.getElementById("dlgGam").close());
+document.getElementById("gamLogros").addEventListener("click", () => { document.getElementById("dlgGam").close(); openLogros(); });
+seedXP();
+gamReady = true;
 
 function refreshSelects() {
   const vis = CENTERS.filter((c) => !isOut(c));
@@ -1062,8 +1336,10 @@ function refreshSelects() {
       '<div class="k"><b>' + con + "</b><span>Permisos vigentes</span></div>" +
       '<div class="k"><b>' + capt + "</b><span>Captadores hoy</span></div>" +
       '<button type="button" id="segBtn" class="k' + (seg ? " hot" : "") + '" aria-pressed="' + onlySeg + '" title="Mostrar solo los seguimientos de hoy o atrasados"><b>' + seg + "</b><span>Seguimientos</span></button>" +
+      gamTileHTML() +
       '<button type="button" id="logrosK" class="k" title="Ver mis insignias"><b>' + Object.keys(logros.n).filter((k) => logros.n[k] > 0).length + "</b><span>Insignias</span></button>";
     $("#logrosK").addEventListener("click", openLogros);
+    $("#gamK").addEventListener("click", openGam); gamMenu();
     $("#segBtn").addEventListener("click", () => { onlySeg = !onlySeg; $("#segBtn").setAttribute("aria-pressed", onlySeg); refilter(); });
   }
   checkLogros();
@@ -1167,7 +1443,7 @@ $("#csv").addEventListener("click", () => {
   });
   download("permisos-captacion-granada.csv", "\ufeff" + head.join(";") + "\r\n" + rows.join("\r\n"), "text/csv;charset=utf-8");
 });
-$("#bak").addEventListener("click", () => download("copia-mapa-recursos-granada.json", JSON.stringify({ version: 2, permisos: permits, puntos_propios: customs, quitados: [...removed], revisados: [...reviewed], ubicaciones: corr, logros }, null, 2), "application/json"));
+$("#bak").addEventListener("click", () => download("copia-mapa-recursos-granada.json", JSON.stringify({ version: 2, permisos: permits, puntos_propios: customs, quitados: [...removed], revisados: [...reviewed], ubicaciones: corr, logros, gamificacion: gam }, null, 2), "application/json"));
 $("#imp").addEventListener("click", () => $("#impf").click());
 $("#impf").addEventListener("change", async (e) => {
   const f = e.target.files[0]; if (!f) return;
@@ -1185,6 +1461,8 @@ $("#impf").addEventListener("change", async (e) => {
     Object.keys(d.ubicaciones || {}).forEach((k) => { const q = d.ubicaciones[k]; if (names.has(k) && Array.isArray(q) && q.length === 2) corr[k] = q; }); saveCorr();
     if (d.logros && d.logros.n) { Object.keys(d.logros.n).forEach((k) => { if ((d.logros.n[k] || 0) > (logros.n[k] || 0)) { logros.n[k] = d.logros.n[k]; logros.f[k] = (d.logros.f || {})[k] || today(); } }); const dr = d.logros.racha || {}; logros.racha.mejor = Math.max(logros.racha.mejor, dr.mejor || 0); saveLogros(); }
     savePermits(); saveRemoved(); saveReviewed();
+    if (d.gamificacion && d.gamificacion.aw) { const G = d.gamificacion; ["aw", "day", "dm", "wm"].forEach((f) => Object.keys(G[f] || {}).forEach((k) => { if (!gam[f][k]) gam[f][k] = G[f][k]; })); }
+    seedXP();
     try { localStorage.setItem(CUSTOM_KEY, JSON.stringify(customs)); } catch (err) {}
     CENTERS.forEach((c) => { const q = corr[c.name]; if (q && !c.custom) { cache[c.id] = { lat: q[0], lon: q[1] }; if (markers[c.id]) markers[c.id].setLatLng(q); } });
     if (addedC) { location.reload(); return; }
@@ -1223,6 +1501,7 @@ function addCustom(rec, pos) {
   makeMarker(c); refreshSelects(); renderList();
   $("#tipo").value = ""; $("#permiso").value = ""; $("#cadena").value = ""; renderList();
   touched = true;
+  gamAdd(c);
   cluster.zoomToShowLayer(markers[c.id], () => { map.flyTo(markers[c.id].getLatLng(), Math.max(map.getZoom(), 16), { duration: 0.6 }); markers[c.id].openPopup(); });
   highlight(c.id, false);
 }
