@@ -378,7 +378,7 @@ function popupFor(c, pos) {
     [1, 2, 3, 4, 5].map((n) => '<button type="button" data-n="' + n + '" aria-label="' + n + ' estrellas">★</button>').join("") + '<span class="sv"></span></div></div>' +
     '<label>Estado del permiso<select class="f-estado">' +
     ESTADOS.map((e) => '<option value="' + e[0] + '"' + (e[0] === p.estado ? " selected" : "") + ">" + e[1] + "</option>").join("") +
-    '</select></label><label>Fecha<input class="f-fecha" type="date" value="' + esc(p.fecha || "") + '"></label>' +
+    '</select></label><label>Fecha de solicitud<input class="f-fecha" type="date" value="' + esc(p.fecha || "") + '"></label>' +
     '<label>Contacto (nombre, teléfono, email)<input class="f-contacto" type="text" value="' + esc(p.contacto || "") + '"></label>' +
     '<label>Notas<textarea class="f-notas">' + esc(p.notas || "") + '</textarea></label>' +
     '<div class="hist"><h4>Concesiones (historial)</h4><ul class="h-list"></ul><div class="row3"><label>Desde<input class="h-desde" type="date"></label><label>Hasta<input class="h-hasta" type="date"></label><label>Captadores<input class="h-n" type="number" min="1" step="1" placeholder="nº"></label></div><button type="button" class="h-add">Añadir concesión al historial</button><div class="h-msg" style="font-size:11px;color:#b3261e;min-height:13px"></div></div>' +
@@ -480,7 +480,7 @@ function renderList() {
       esc(addrOf(c)) + "</span><br>" +
       '<span class="tag">' + esc(c.tipo + (c.sub ? " · " + c.sub : "")) + "</span>" +
       (permOf(c).valoracion ? '<span class="tag" style="background:#fff3d6;color:#8a5a00">' + stars(permOf(c).valoracion) + "</span>" : "") +
-      (permOf(c).estado !== "sin" ? '<span class="tag" style="background:' + estadoInfo(permOf(c).estado)[2] + ';color:' + (permOf(c).estado === "concedido" || permOf(c).estado === "solicitado" ? "#111" : "#fff") + '">' + estadoInfo(permOf(c).estado)[1] + (permOf(c).fecha ? " · " + esc(permOf(c).fecha) : "") + "</span>" : "") +
+      (permOf(c).estado !== "sin" ? '<span class="tag" style="background:' + estadoInfo(permOf(c).estado)[2] + ';color:' + (permOf(c).estado === "concedido" || permOf(c).estado === "solicitado" ? "#111" : "#fff") + '">' + estadoInfo(permOf(c).estado)[1] + (permOf(c).fecha && permOf(c).estado !== "concedido" ? " · " + esc(fmtD(permOf(c).fecha)) : "") + "</span>" : "") +
       (vigente(c) ? '<span class="tag" style="background:#dcfce7;color:#14532d">Vigente hasta ' + fmtD(vigente(c).hasta) + (vigente(c).captadores ? " · " + vigente(c).captadores + " capt." : "") + "</span>" : "") +
       (cache[c.id] && cache[c.id].approx ? '<span class="tag warn">Ubicación aproximada</span>' : "") +
       (c.conf ? "" : '<span class="tag warn">Por confirmar</span>') +
@@ -615,7 +615,7 @@ const download = (name, text, type) => {
 };
 $("#csv").addEventListener("click", () => {
   const q = (v) => '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
-  const head = ["id", "categoria", "subtipo", "nombre", "direccion", "municipio", "lat", "lon", "ubicacion_aproximada", "origen", "valoracion", "estado_permiso", "fecha", "contacto", "notas", "concesion_vigente", "historial_concesiones"];
+  const head = ["id", "categoria", "subtipo", "nombre", "direccion", "municipio", "lat", "lon", "ubicacion_aproximada", "origen", "valoracion", "estado_permiso", "fecha_solicitud", "contacto", "notas", "concesion_vigente", "historial_concesiones"];
   const rows = CENTERS.filter((c) => !isOut(c)).map((c) => {
     const p = permOf(c), pos = cache[c.id] || {};
     return [c.id, c.tipo, c.sub || "", c.name, c.street, c.town || "Granada", pos.lat || "", pos.lon || "", pos.approx ? "sí" : "", c.custom ? "agregado" : "base", p.valoracion || "", estadoInfo(p.estado)[1], p.fecha, p.contacto, p.notas, vigente(c) ? histTxt(vigente(c)) : "", histOf(c).map(histTxt).join(" | ")].map(q).join(";");
