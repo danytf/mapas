@@ -37,7 +37,7 @@
   }
   header {
     padding: 12px 16px; background: var(--panel); border-bottom: 1px solid var(--line);
-    display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px;
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; position: relative; z-index: 2000;
   }
   h1 { font-size: 18px; margin: 0; letter-spacing: -0.01em; }
   header p { margin: 0; color: var(--muted); font-size: 13px; }
@@ -96,6 +96,15 @@
   .pform textarea { resize: vertical; min-height: 44px; }
   .pform button { padding: 6px 10px; background: #0b7a68; color: #fff; border-color: #0b7a68; }
   .pform .saved { font-size: 11px; color: #0b7a68; min-height: 14px; }
+  .menu { position: relative; margin-left: auto; align-self: center; }
+  #menuPanel {
+    position: absolute; right: 0; top: calc(100% + 6px); z-index: 1000; min-width: 230px;
+    display: grid; gap: 4px; padding: 6px; background: var(--panel);
+    border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 6px 20px rgba(0,0,0,.25);
+  }
+  #menuPanel[hidden] { display: none; }
+  #menuPanel button { text-align: left; border: 0; background: transparent; }
+  #menuPanel button:hover { background: var(--ok-bg); }
   .legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12px; color: var(--muted); }
   .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; }
   .leaflet-popup-content { font: 13px/1.4 system-ui, sans-serif; color: #17302b; }
@@ -113,6 +122,16 @@
 <body>
 <header>
   <h1>Mapa del Responsable de Gestión de Recursos</h1>
+  <div class="menu">
+    <button id="menuBtn" type="button" aria-haspopup="true" aria-expanded="false">Opciones ▾</button>
+    <div id="menuPanel" role="menu" hidden>
+      <button id="csv" type="button" role="menuitem">Exportar CSV</button>
+      <button id="bak" type="button" role="menuitem">Copia permisos</button>
+      <button id="imp" type="button" role="menuitem">Cargar copia</button>
+      <button id="copy" type="button" role="menuitem">Copiar JSON con coordenadas</button>
+      <input id="impf" type="file" accept="application/json,.json" hidden>
+    </div>
+  </div>
 </header>
 <main>
   <aside>
@@ -127,13 +146,6 @@
       <div class="legend" aria-label="Leyenda"></div>
       <div class="bar" aria-hidden="true"><i id="prog"></i></div>
       <div class="status" id="status" role="status">Preparando…</div>
-      <div class="row">
-        <button id="csv" type="button" class="primary">Exportar CSV</button>
-        <button id="bak" type="button">Copia permisos</button>
-        <button id="imp" type="button">Cargar copia</button>
-      </div>
-      <input id="impf" type="file" accept="application/json,.json" hidden>
-      <button id="copy" type="button">Copiar JSON con coordenadas</button>
     </div>
     <ul id="list"></ul>
   </aside>
@@ -431,7 +443,7 @@ $("#copy").addEventListener("click", async () => {
 function refreshSelects() {
   const n = (t) => CENTERS.filter((c) => c.tipo === t).length;
   const tv = $("#tipo").value, pv = $("#permiso").value;
-  $("#tipo").innerHTML = '<option value="">Todos los tipos (' + CENTERS.length + ")</option>" +
+  $("#tipo").innerHTML = '<option value="">Todos los tipos</option>' +
     TIPOS.map(([i, t]) => '<option value="' + t + '">' + i + " · " + t + " (" + n(t) + ")</option>").join("");
   $("#permiso").innerHTML = '<option value="">Todos los estados de permiso</option>' +
     ESTADOS.map(([k, t]) => '<option value="' + k + '">' + t + " (" + CENTERS.filter((c) => permOf(c).estado === k).length + ")</option>").join("");
@@ -442,6 +454,14 @@ $(".legend").innerHTML = TIPOS.filter(([i, t]) => CENTERS.some((c) => c.tipo ===
   ESTADOS.slice(1).map(([k, t, col]) => '<span><i style="background:#fff;border:3px solid ' + col + ';width:6px;height:6px"></i>' + t + "</span>").join("");
 
 $("#permiso").addEventListener("change", renderList);
+(() => {
+  const btn = $("#menuBtn"), panel = $("#menuPanel");
+  const set = (open) => { panel.hidden = !open; btn.setAttribute("aria-expanded", open); };
+  btn.addEventListener("click", (e) => { e.stopPropagation(); set(panel.hidden); });
+  panel.addEventListener("click", () => set(false));
+  document.addEventListener("click", (e) => { if (!panel.contains(e.target)) set(false); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") set(false); });
+})();
 const download = (name, text, type) => {
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([text], { type }));
