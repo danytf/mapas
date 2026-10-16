@@ -18,6 +18,8 @@ Fuente: `index.html` de `audit/fase-1-app-actual`, SHA `4a002c76a78f87e1c6bfc1a0
 
 Los recuentos son estructurales, no prueban que existan 791 ubicaciones únicas ni que todas las coordenadas sean correctas. `REVIEWED_BASE` es una lista heterogénea, no evidencia suficiente para marcar automáticamente registros como verificados.
 
+Una comprobación adicional del enlazado literal detectó **791/791 coincidencias exactas por clave de nombre** entre las filas de los seis bloques y `PRECOMPUTED`. Esto solo confirma que cada clave existe, no que el punto corresponda a la dirección correcta. La extracción también identifica 33 registros sin municipio explícito y 4 sin dirección explícita, que deben revisarse.
+
 ## Alcance y limitaciones
 
 - El catálogo inspeccionado se centra en Granada y su provincia; no constituye una base nacional.
