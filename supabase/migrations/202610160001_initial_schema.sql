@@ -432,7 +432,7 @@ returns trigger
 language plpgsql
 security definer
 set search_path = ''
-as $
+as $$
 begin
   if new.establishment_id is distinct from old.establishment_id then
     if exists (
@@ -450,7 +450,7 @@ begin
   end if;
   return new;
 end;
-$;
+$$;
 
 drop trigger if exists prevent_application_reassignment_conflicts on public.permit_applications;
 create trigger prevent_application_reassignment_conflicts
@@ -462,7 +462,7 @@ returns trigger
 language plpgsql
 security definer
 set search_path = ''
-as $
+as $$
 begin
   if new.establishment_id is distinct from old.establishment_id and exists (
     select 1 from public.followups f
@@ -474,7 +474,7 @@ begin
   end if;
   return new;
 end;
-$;
+$$;
 
 drop trigger if exists prevent_grant_reassignment_conflicts on public.permit_grants;
 create trigger prevent_grant_reassignment_conflicts
