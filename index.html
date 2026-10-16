@@ -678,7 +678,7 @@ let smallChains = new Set();
 const chainOf = (c) => { const k = rawChain(c); return smallChains.has(k) ? "Independientes (rótulo único)" : k; };
 
 /* Estado del permiso por punto (se guarda en localStorage, clave = nombre del punto). */
-const ESTADOS = [["sin", "Sin solicitar", "#ffffff"], ["solicitado", "Solicitado", "#fbbf24"], ["concedido", "Concedido", "#22c55e"], ["denegado", "Denegado", "#111827"], ["caducado", "Caducado", "#94a3b8"]];
+const ESTADOS = [["sin", "Sin solicitar", "#ffffff"], ["solicitado", "Solicitado", "#fbbf24"], ["concedido", "Concedido", "#22c55e"], ["denegado", "Denegado", "#111827"], ["caducado", "Caducado", "#94a3b8"], ["cancelado", "Cancelado", "#ef4444"]];
 const PERM_KEY = "permisos-captacion-granada-v1";
 let permits = {};
 try { permits = JSON.parse(localStorage.getItem(PERM_KEY) || "{}"); } catch (e) { permits = {}; }
@@ -692,7 +692,8 @@ const fmtD = (d) => (d ? d.split("-").reverse().join("/") : "…");
 const today = () => new Date().toISOString().slice(0, 10);
 const isVig = (h) => (!h.desde || h.desde <= today()) && (!h.hasta || h.hasta >= today());
 const histOf = (c) => ((permits[c.name] && permits[c.name].historial) || []).slice().sort((a, b) => (b.desde || "").localeCompare(a.desde || ""));
-const vigente = (c) => histOf(c).find(isVig);
+const vigs = (c) => permOf(c).estado === "cancelado" ? [] : histOf(c).filter(isVig);
+const vigente = (c) => permOf(c).estado === "cancelado" ? undefined : histOf(c).find(isVig);
 const histTxt = (h) => fmtD(h.desde) + " – " + fmtD(h.hasta) + (h.ong ? " · " + h.ong : "") + (h.captadores ? " · " + h.captadores + " captador" + (h.captadores === 1 ? "" : "es") : "");
 const hasSol = (p) => !!(p && p.solicitud && (p.solicitud.desde || p.solicitud.hasta || p.solicitud.ong || p.solicitud.captadores));
 const solTxt = (c) => { const q = permOf(c).solicitud; if (!hasSol(permOf(c))) return ""; return [(q.desde || q.hasta) ? fmtD(q.desde) + " – " + fmtD(q.hasta) : "", q.ong, q.captadores ? q.captadores + " capt." : ""].filter(Boolean).join(" · "); };
@@ -700,6 +701,7 @@ const futura = (c) => histOf(c).filter((h) => h.desde && h.desde > today()).pop(
 /* Estado efectivo: la vigencia manda sobre el estado manual. */
 const estadoOf = (c) => {
   const m = permOf(c).estado;
+  if (m === "cancelado") return "cancelado"; /* permiso concedido que se canceló: manda sobre las fechas */
   if (vigente(c)) return "concedido";
   if (futura(c) && (m === "sin" || m === "concedido")) return "concedido";
   if (histOf(c).length && m === "concedido") return "sin"; /* concesión ya terminada: vuelve a sin permiso (el historial se conserva) */
@@ -801,7 +803,7 @@ function popupFor(c, pos) {
     blocks();
   });
   const paintEf = () => {
-    const ef = estadoOf(c), i = estadoInfo(ef), vg = vigente(c);
+    const ef = estadoOf(c), i = estadoInfo(ef), vg = ef === "concedido" ? vigente(c) : null;
     el.querySelector(".ef").innerHTML = 'Estado actual: <b style="background:' + i[2] + ';color:' + (ef === "sin" || ef === "denegado" ? "#111" : "#111") + ';padding:1px 6px;border-radius:4px;border:1px solid #cfdcd8">' + esc(i[1]) + "</b>" +
       (vg ? " · hasta " + fmtD(vg.hasta) + (vg.ong ? " · " + esc(vg.ong) : "") + (vg.captadores ? " · " + vg.captadores + " captadores" : "") : (futura(c) ? " · concedido del " + esc(fmtD(futura(c).desde)) + " al " + esc(fmtD(futura(c).hasta)) : (ef === "caducado" ? " · solicitud sin respuesta: las fechas pedidas ya pasaron" : "")));
   };
@@ -1559,7 +1561,7 @@ function refreshSelects() {
   $("#restore").disabled = !nr;
   {
     const con = vis.filter((c) => estadoOf(c) === "concedido").length;
-    const capt = vis.reduce((a, c) => a + Math.max(0, ...histOf(c).filter(isVig).map((h) => +h.captadores || 0)), 0);
+    const capt = vis.reduce((a, c) => a + Math.max(0, ...vigs(c).map((h) => +h.captadores || 0)), 0);
     const seg = vis.filter(seguimientoDue).length;
     $("#kstrip").innerHTML = '<div class="k"><b>' + vis.length + "</b><span>Puntos</span></div>" +
       '<div class="k"><b>' + con + "</b><span>Permisos vigentes</span></div>" +
@@ -1603,7 +1605,7 @@ const download = (name, text, type) => {
     const r = { n: items.length, sol: 0, con: 0, den: 0, vig: 0, capt: 0 };
     items.forEach((c) => {
       const e = estadoOf(c); if (e === "solicitado") r.sol++; else if (e === "concedido") r.con++; else if (e === "denegado") r.den++;
-      const v = histOf(c).filter(isVig); if (v.length) { r.vig++; r.capt += Math.max(...v.map((h) => h.captadores || 0)); }
+      const v = vigs(c); if (v.length) { r.vig++; r.capt += Math.max(...v.map((h) => h.captadores || 0)); }
     });
     return r;
   };
