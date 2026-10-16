@@ -105,6 +105,15 @@
   #menuPanel[hidden] { display: none; }
   #menuPanel button { text-align: left; border: 0; background: transparent; }
   #menuPanel button:hover { background: var(--ok-bg); }
+  dialog { border: 1px solid var(--line); border-radius: 10px; background: var(--panel); color: var(--fg); padding: 16px; width: min(420px, 92vw); }
+  dialog::backdrop { background: rgba(0,0,0,.4); }
+  dialog form { display: grid; gap: 10px; }
+  dialog h2 { margin: 0; font-size: 16px; }
+  dialog label { display: grid; gap: 3px; font-size: 12px; color: var(--muted); }
+  dialog input, dialog select { font: inherit; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--fg); width: 100%; }
+  dialog .msg { font-size: 12px; color: var(--warn); min-height: 16px; }
+  .pform button.danger { background: #fff; color: #b3261e; border-color: #b3261e; }
+  .placing #map { cursor: crosshair; }
   .legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12px; color: var(--muted); }
   .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; }
   .leaflet-popup-content { font: 13px/1.4 system-ui, sans-serif; color: #17302b; }
@@ -126,7 +135,9 @@
     <button id="menuBtn" type="button" aria-haspopup="true" aria-expanded="false">Opciones ▾</button>
     <div id="menuPanel" role="menu" hidden>
       <button id="csv" type="button" role="menuitem">Exportar CSV</button>
-      <button id="bak" type="button" role="menuitem">Copia permisos</button>
+      <button id="add" type="button" role="menuitem">Añadir punto</button>
+      <button id="restore" type="button" role="menuitem">Restaurar puntos quitados (0)</button>
+      <button id="bak" type="button" role="menuitem">Guardar copia</button>
       <button id="imp" type="button" role="menuitem">Cargar copia</button>
       <button id="copy" type="button" role="menuitem">Copiar JSON con coordenadas</button>
       <input id="impf" type="file" accept="application/json,.json" hidden>
@@ -154,6 +165,21 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<dialog id="dlg">
+  <form method="dialog" id="addForm">
+    <h2>Añadir punto</h2>
+    <label>Nombre<input id="n-name" required placeholder="Ej.: Hospital Nuestra Señora de la Salud"></label>
+    <label>Categoría<select id="n-tipo"></select></label>
+    <label>Dirección (calle y número)<input id="n-street" placeholder="Opcional si lo colocas con un clic"></label>
+    <label>Municipio<input id="n-town" value="Granada"></label>
+    <div class="msg" id="n-msg"></div>
+    <div class="row">
+      <button type="button" id="n-geo" class="primary">Ubicar por dirección</button>
+      <button type="button" id="n-click">Colocar en el mapa</button>
+      <button type="button" id="n-cancel">Cancelar</button>
+    </div>
+  </form>
+</dialog>
 <script>
 /* Fuentes: listado de zonas básicas del Distrito Granada (SAS) y Guía de Recursos del Ayuntamiento de Granada.
    conf=false marca direcciones tomadas de otros directorios, pendientes de contrastar. */
@@ -232,6 +258,10 @@ SUPER.forEach(([name, town, street, extra]) => {
   CENTERS.push({ id: 0, name, tipo: name.startsWith("Carrefour") ? "Carrefour" : "Supermercado", town, street, conf: true, extra: extra ? "Rótulo en Google: " + extra : "" });
 });
 
+const CUSTOM_KEY = "puntos-propios-granada-v1", REMOVED_KEY = "puntos-quitados-granada-v1";
+const loadJSON = (k, d) => { try { return JSON.parse(localStorage.getItem(k) || "") || d; } catch (e) { return d; } };
+let customs = loadJSON(CUSTOM_KEY, []);
+customs.forEach((p) => CENTERS.push({ id: 0, name: p.name, tipo: p.tipo, sub: p.sub || "", town: p.town, street: p.street, conf: true, custom: true, extra: "Punto añadido manualmente" }));
 CENTERS.forEach((c, i) => { c.id = i + 1; });
 
 /* Posiciones precalculadas (OpenStreetMap/Nominatim). [lat, lon, 1 = aproximada: centro del municipio]. */
@@ -243,6 +273,7 @@ let cache = {};
 try { cache = JSON.parse(localStorage.getItem(CACHE_KEY) || "{}"); } catch (e) { cache = {}; }
 
 CENTERS.forEach((c) => { const q = PRECOMPUTED[c.name]; if (q) cache[c.id] = { lat: q[0], lon: q[1], approx: q[2] === 1 || undefined }; });
+CENTERS.forEach((c) => { if (c.custom) { const p = customs.find((x) => x.name === c.name); cache[c.id] = { lat: p.lat, lon: p.lon, approx: p.approx || undefined }; } });
 const saveCache = () => { try { localStorage.setItem(CACHE_KEY, JSON.stringify(cache)); } catch (e) {} };
 
 const map = L.map("map", { zoomControl: true }).setView([37.1773, -3.5986], 13);
@@ -276,6 +307,9 @@ const PERM_KEY = "permisos-captacion-granada-v1";
 let permits = {};
 try { permits = JSON.parse(localStorage.getItem(PERM_KEY) || "{}"); } catch (e) { permits = {}; }
 const savePermits = () => { try { localStorage.setItem(PERM_KEY, JSON.stringify(permits)); } catch (e) {} };
+let removed = new Set(loadJSON(REMOVED_KEY, []));
+const saveRemoved = () => { try { localStorage.setItem(REMOVED_KEY, JSON.stringify([...removed])); } catch (e) {} };
+const isOut = (c) => removed.has(c.name);
 const permOf = (c) => permits[c.name] || { estado: "sin", fecha: "", contacto: "", notas: "" };
 const estadoInfo = (k) => ESTADOS.find((e) => e[0] === k) || ESTADOS[0];
 
@@ -303,7 +337,7 @@ function popupFor(c, pos) {
     '</select></label><label>Fecha<input class="f-fecha" type="date" value="' + esc(p.fecha || "") + '"></label>' +
     '<label>Contacto (nombre, teléfono, email)<input class="f-contacto" type="text" value="' + esc(p.contacto || "") + '"></label>' +
     '<label>Notas<textarea class="f-notas">' + esc(p.notas || "") + '</textarea></label>' +
-    '<button type="button" class="f-save">Guardar permiso</button><div class="saved"></div></div>';
+    '<button type="button" class="f-save">Guardar permiso</button><button type="button" class="f-del danger">' + (c.custom ? "Eliminar punto" : "Quitar del mapa") + '</button><div class="saved"></div></div>';
   L.DomEvent.disableClickPropagation(el);
   L.DomEvent.disableScrollPropagation(el);
   el.querySelector(".f-save").addEventListener("click", () => {
@@ -318,12 +352,24 @@ function popupFor(c, pos) {
     renderList();
     el.querySelector(".saved").textContent = "Guardado";
   });
+  let armed = false;
+  const del = el.querySelector(".f-del");
+  del.addEventListener("click", () => {
+    if (!armed) { armed = true; del.textContent = "¿Seguro? Pulsa otra vez"; return; }
+    if (c.custom) {
+      customs = customs.filter((x) => x.name !== c.name);
+      try { localStorage.setItem(CUSTOM_KEY, JSON.stringify(customs)); } catch (e) {}
+      location.reload();
+    } else {
+      removed.add(c.name); saveRemoved(); map.closePopup(); refreshSelects(); renderList();
+    }
+  });
   return el;
 }
 
 function makeMarker(c) {
   const pos = cache[c.id];
-  if (!pos || markers[c.id]) return;
+  if (!pos || markers[c.id] || isOut(c)) return;
   const m = L.marker([pos.lat, pos.lon], { icon: makeIcon(c), title: c.name });
   cluster.addLayer(m);
   m.bindPopup(() => popupFor(c, pos), { minWidth: 230 });
@@ -338,7 +384,7 @@ function renderList() {
   const ul = $("#list");
   ul.innerHTML = "";
   CENTERS.forEach((c) => {
-    const visible = matchTipo(c, tipo) && (!est || permOf(c).estado === est) &&
+    const visible = !isOut(c) && matchTipo(c, tipo) && (!est || permOf(c).estado === est) &&
       (!q || (c.name + " " + c.street + " " + (c.town || "Granada")).toLowerCase().includes(q));
     if (markers[c.id]) {
       const on = cluster.hasLayer(markers[c.id]);
@@ -389,7 +435,7 @@ async function nominatim(q, vb) {
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function locateAll() {
-  const pending = CENTERS.filter((c) => !cache[c.id]);
+  const pending = CENTERS.filter((c) => !cache[c.id] && !isOut(c));
   let done = CENTERS.length - pending.length;
   const tick = () => {
     $("#prog").style.width = Math.round((done / CENTERS.length) * 100) + "%";
@@ -441,17 +487,20 @@ $("#copy").addEventListener("click", async () => {
 });
 
 function refreshSelects() {
-  const n = (t) => CENTERS.filter((c) => c.tipo === t).length;
+  const vis = CENTERS.filter((c) => !isOut(c));
   const tv = $("#tipo").value, pv = $("#permiso").value;
   $("#tipo").innerHTML = '<option value="">Todos los tipos</option>' +
-    TIPOS.map(([i, t]) => '<option value="' + t + '">' + i + " · " + t + " (" + n(t) + ")</option>").join("");
+    TIPOS.map(([i, t]) => '<option value="' + t + '">' + i + " · " + t + " (" + vis.filter((c) => c.tipo === t).length + ")</option>").join("");
   $("#permiso").innerHTML = '<option value="">Todos los estados de permiso</option>' +
-    ESTADOS.map(([k, t]) => '<option value="' + k + '">' + t + " (" + CENTERS.filter((c) => permOf(c).estado === k).length + ")</option>").join("");
+    ESTADOS.map(([k, t]) => '<option value="' + k + '">' + t + " (" + vis.filter((c) => permOf(c).estado === k).length + ")</option>").join("");
   $("#tipo").value = tv; $("#permiso").value = pv;
+  $(".legend").innerHTML = TIPOS.filter(([i, t]) => vis.some((c) => c.tipo === t)).map(([i, t, col]) => '<span><i style="background:' + col + '"></i>' + t + "</span>").join("") +
+    ESTADOS.slice(1).map(([k, t, col]) => '<span><i style="background:#fff;border:3px solid ' + col + ';width:6px;height:6px"></i>' + t + "</span>").join("");
+  const nr = CENTERS.filter(isOut).length;
+  $("#restore").textContent = "Restaurar puntos quitados (" + nr + ")";
+  $("#restore").disabled = !nr;
 }
 refreshSelects();
-$(".legend").innerHTML = TIPOS.filter(([i, t]) => CENTERS.some((c) => c.tipo === t)).map(([i, t, col]) => '<span><i style="background:' + col + '"></i>' + t + "</span>").join("") +
-  ESTADOS.slice(1).map(([k, t, col]) => '<span><i style="background:#fff;border:3px solid ' + col + ';width:6px;height:6px"></i>' + t + "</span>").join("");
 
 $("#permiso").addEventListener("change", renderList);
 (() => {
@@ -469,28 +518,89 @@ const download = (name, text, type) => {
 };
 $("#csv").addEventListener("click", () => {
   const q = (v) => '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
-  const head = ["id", "categoria", "subtipo", "nombre", "direccion", "municipio", "lat", "lon", "ubicacion_aproximada", "estado_permiso", "fecha", "contacto", "notas"];
-  const rows = CENTERS.map((c) => {
+  const head = ["id", "categoria", "subtipo", "nombre", "direccion", "municipio", "lat", "lon", "ubicacion_aproximada", "origen", "estado_permiso", "fecha", "contacto", "notas"];
+  const rows = CENTERS.filter((c) => !isOut(c)).map((c) => {
     const p = permOf(c), pos = cache[c.id] || {};
-    return [c.id, c.tipo, c.sub || "", c.name, c.street, c.town || "Granada", pos.lat || "", pos.lon || "", pos.approx ? "sí" : "", estadoInfo(p.estado)[1], p.fecha, p.contacto, p.notas].map(q).join(";");
+    return [c.id, c.tipo, c.sub || "", c.name, c.street, c.town || "Granada", pos.lat || "", pos.lon || "", pos.approx ? "sí" : "", c.custom ? "añadido" : "base", estadoInfo(p.estado)[1], p.fecha, p.contacto, p.notas].map(q).join(";");
   });
   download("permisos-captacion-granada.csv", "\ufeff" + head.join(";") + "\r\n" + rows.join("\r\n"), "text/csv;charset=utf-8");
 });
-$("#bak").addEventListener("click", () => download("copia-permisos-granada.json", JSON.stringify(permits, null, 2), "application/json"));
+$("#bak").addEventListener("click", () => download("copia-mapa-recursos-granada.json", JSON.stringify({ version: 2, permisos: permits, puntos_propios: customs, quitados: [...removed] }, null, 2), "application/json"));
 $("#imp").addEventListener("click", () => $("#impf").click());
 $("#impf").addEventListener("change", async (e) => {
   const f = e.target.files[0]; if (!f) return;
   try {
     const d = JSON.parse(await f.text());
-    const names = new Set(CENTERS.map((c) => c.name));
-    let n = 0;
-    Object.keys(d).forEach((k) => { if (names.has(k) && d[k] && estadoInfo(d[k].estado)) { permits[k] = d[k]; n++; } });
-    savePermits(); refreshSelects();
+    const pm = d.version === 2 ? d.permisos : d;
+    let n = 0, addedC = 0;
+    (d.puntos_propios || []).forEach((p) => {
+      if (p && p.name && typeof p.lat === "number" && !customs.some((x) => x.name === p.name) && !CENTERS.some((c) => c.name === p.name)) { customs.push(p); addedC++; }
+    });
+    const names = new Set([...CENTERS.map((c) => c.name), ...customs.map((x) => x.name)]);
+    Object.keys(pm || {}).forEach((k) => { if (names.has(k) && pm[k] && pm[k].estado) { permits[k] = pm[k]; n++; } });
+    (d.quitados || []).forEach((k) => { if (names.has(k)) removed.add(k); });
+    savePermits(); saveRemoved();
+    try { localStorage.setItem(CUSTOM_KEY, JSON.stringify(customs)); } catch (err) {}
+    if (addedC) { location.reload(); return; }
+    refreshSelects();
     Object.keys(markers).forEach((id) => markers[id].setIcon(makeIcon(CENTERS[id - 1])));
     renderList();
     $("#status").textContent = n + " permisos cargados.";
   } catch (err) { $("#status").textContent = "Archivo no válido: " + err.message; }
   e.target.value = "";
+});
+
+/* Restaurar puntos quitados */
+$("#restore").addEventListener("click", () => {
+  removed = new Set(); saveRemoved();
+  CENTERS.forEach(makeMarker);
+  refreshSelects(); renderList();
+});
+
+/* Añadir punto nuevo */
+const dlg = $("#dlg");
+$("#n-tipo").innerHTML = TIPOS.map(([i, t]) => '<option value="' + t + '">' + i + " · " + t + "</option>").join("");
+const nmsg = (t) => { $("#n-msg").textContent = t; };
+function readForm() {
+  const name = $("#n-name").value.trim(), town = $("#n-town").value.trim() || "Granada", street = $("#n-street").value.trim();
+  if (!name) { nmsg("Escribe un nombre."); return null; }
+  if (CENTERS.some((c) => c.name.toLowerCase() === name.toLowerCase())) { nmsg("Ya existe un punto con ese nombre."); return null; }
+  return { name, tipo: $("#n-tipo").value, town, street };
+}
+function addCustom(rec, pos) {
+  const p = { ...rec, lat: pos.lat, lon: pos.lon };
+  customs.push(p);
+  try { localStorage.setItem(CUSTOM_KEY, JSON.stringify(customs)); } catch (e) {}
+  const c = { id: CENTERS.length + 1, name: p.name, tipo: p.tipo, sub: "", town: p.town, street: p.street, conf: true, custom: true, extra: "Punto añadido manualmente" };
+  CENTERS.push(c);
+  cache[c.id] = { lat: p.lat, lon: p.lon };
+  makeMarker(c); refreshSelects(); renderList();
+  $("#tipo").value = ""; $("#permiso").value = ""; renderList();
+  touched = true;
+  cluster.zoomToShowLayer(markers[c.id], () => { map.flyTo(markers[c.id].getLatLng(), Math.max(map.getZoom(), 16), { duration: 0.6 }); markers[c.id].openPopup(); });
+  highlight(c.id, false);
+}
+$("#add").addEventListener("click", () => { nmsg(""); $("#addForm").reset(); $("#n-town").value = "Granada"; dlg.showModal(); });
+$("#n-cancel").addEventListener("click", () => dlg.close());
+$("#n-geo").addEventListener("click", async () => {
+  const rec = readForm(); if (!rec) return;
+  if (!rec.street) { nmsg("Sin dirección no se puede buscar: indica la calle o usa “Colocar en el mapa”."); return; }
+  nmsg("Buscando…");
+  try {
+    const pos = await nominatim(rec.street + ", " + rec.town);
+    if (!pos) { nmsg("No se ha encontrado esa dirección. Prueba a cambiarla o usa “Colocar en el mapa”."); return; }
+    dlg.close(); addCustom(rec, pos);
+  } catch (e) { nmsg("No se pudo consultar OpenStreetMap (" + e.message + ")."); }
+});
+$("#n-click").addEventListener("click", () => {
+  const rec = readForm(); if (!rec) return;
+  dlg.close();
+  document.body.classList.add("placing");
+  $("#status").textContent = "Haz clic en el mapa donde está “" + rec.name + "” (Escape para cancelar).";
+  const stop = () => { document.body.classList.remove("placing"); map.off("click", onClick); document.removeEventListener("keydown", onKey); };
+  const onClick = (ev) => { stop(); $("#status").textContent = "Punto añadido."; addCustom(rec, { lat: ev.latlng.lat, lon: ev.latlng.lng }); };
+  const onKey = (ev) => { if (ev.key === "Escape") { stop(); $("#status").textContent = "Cancelado."; } };
+  map.on("click", onClick); document.addEventListener("keydown", onKey);
 });
 
 renderList();
