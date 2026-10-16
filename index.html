@@ -754,7 +754,7 @@ function popupFor(c, pos) {
     '<label>Notas<textarea class="f-notas">' + esc(p.notas || "") + '</textarea></label>' +
     '<div class="hist"><h4>Concesiones (historial)</h4><ul class="h-list"></ul><div class="row3"><label>Desde<input class="h-desde" type="date"></label><label>Hasta<input class="h-hasta" type="date"></label><label>Captadores<input class="h-n" type="number" min="1" step="1" placeholder="nº"></label></div><label>ONG<input class="h-ong" type="text" list="ongList" placeholder="AECC, Cruz Roja…" autocomplete="off"></label><button type="button" class="h-add">Añadir concesión al historial</button><button type="button" class="h-cancel" hidden>Cancelar edición</button><div class="h-msg" style="font-size:11px;color:#b3261e;min-height:13px"></div></div>' +
     (isRev(c) ? '<button type="button" class="f-rev" style="background:#fff;color:#c8102e">Aceptar ubicación (marcar como revisada)</button>' : "") +
-    '<button type="button" class="f-save">Guardar permiso</button><button type="button" class="f-del danger">' + (c.custom ? "Eliminar punto" : "Quitar del mapa") + '</button><div class="saved"></div></div>';
+    '<button type="button" class="f-save">Guardar cambios</button><button type="button" class="f-del danger">' + (c.custom ? "Eliminar punto" : "Quitar del mapa") + '</button><div class="saved"></div></div>';
   const pf = el.querySelector(".pform");
   const put = (n, t) => { if (n) n.setAttribute("data-tab", t); };
   put(pf.firstElementChild, "p"); put(el.querySelector(".ef"), "p");
