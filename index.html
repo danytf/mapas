@@ -452,6 +452,9 @@
       <div class="row" id="cadRow" style="grid-template-columns:1fr;display:none">
         <select id="cadena" aria-label="Filtrar por cadena"></select>
       </div>
+      <div class="row" id="subRow" style="grid-template-columns:1fr;display:none">
+        <select id="subtipo" aria-label="Filtrar por tipo de entidad"></select>
+      </div>
       <div class="bar" aria-hidden="true"><i id="prog"></i></div>
       <div class="status" id="status" role="status">Preparando…</div>
       <button id="revBtn" type="button" class="chipbtn" aria-pressed="false">Por revisar (0)</button>
@@ -912,6 +915,10 @@ function renderList() {
   const cadOn = $("#tipo").value === "Supermercado";
   $("#cadRow").style.display = cadOn ? "" : "none";
   if (!cadOn && $("#cadena").value) $("#cadena").value = "";
+  const subOn = $("#tipo").value === "Entidad oficial";
+  $("#subRow").style.display = subOn ? "" : "none";
+  if (!subOn && $("#subtipo").value) $("#subtipo").value = "";
+  const sb = $("#subtipo").value;
   const vf = $("#valor").value, ch = $("#cadena").value;
   const rate = (c) => permOf(c).valoracion || 0;
   const okVal = (c) => !vf || (vf === "sin" ? !rate(c) : rate(c) >= +vf);
@@ -919,7 +926,7 @@ function renderList() {
   ul.innerHTML = "";
   const order = $("#orden").value === "val" ? [...CENTERS].sort((a, b) => rate(b) - rate(a) || a.id - b.id) : CENTERS;
   order.forEach((c) => {
-    const visible = !isOut(c) && matchTipo(c, tipo) && (!ch || chainOf(c) === ch) && (!est || estadoOf(c) === est) && (!onlyRev || isRev(c)) && (!onlySeg || seguimientoDue(c)) && okVal(c) &&
+    const visible = !isOut(c) && matchTipo(c, tipo) && (!ch || chainOf(c) === ch) && (!sb || c.sub === sb) && (!est || estadoOf(c) === est) && (!onlyRev || isRev(c)) && (!onlySeg || seguimientoDue(c)) && okVal(c) &&
       (!q || (c.name + " " + c.street + " " + (c.town || "Granada")).toLowerCase().includes(q));
     if (markers[c.id]) {
       const on = cluster.hasLayer(markers[c.id]);
@@ -1035,6 +1042,7 @@ const refilter = () => { renderList(); clearTimeout(fitTimer); fitTimer = setTim
 $("#q").addEventListener("input", refilter);
 $("#tipo").addEventListener("change", refilter);
 $("#cadena").addEventListener("change", refilter);
+$("#subtipo").addEventListener("change", refilter);
 $("#revBtn").addEventListener("click", () => { onlyRev = !onlyRev; $("#revBtn").setAttribute("aria-pressed", onlyRev); refilter(); });
 $("#copy").addEventListener("click", async () => {
   const out = CENTERS.map((c) => ({
@@ -1482,6 +1490,10 @@ function refreshSelects() {
   vis.forEach((c) => { if (c.tipo !== "Supermercado") return; const k = chainOf(c); if (k) cnt[k] = (cnt[k] || 0) + 1; });
   $("#cadena").innerHTML = '<option value="">Cadena: todas</option>' + Object.entries(cnt).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([k, n]) => '<option value="' + esc(k) + '">' + esc(k === "Dani" ? "Supermercados Dani" : k) + " (" + n + ")</option>").join("");
   $("#cadena").value = cv;
+  const sv = $("#subtipo").value, sc = {};
+  vis.forEach((c) => { if (c.tipo === "Entidad oficial" && c.sub) sc[c.sub] = (sc[c.sub] || 0) + 1; });
+  $("#subtipo").innerHTML = '<option value="">Tipo de entidad: todas</option>' + Object.entries(sc).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([k, n]) => '<option value="' + esc(k) + '">' + esc(k) + " (" + n + ")</option>").join("");
+  $("#subtipo").value = sv;
   $("#tipo").value = tv; $("#permiso").value = pv; $("#valor").value = vv; $("#orden").value = ov;
   $("#lgBody").innerHTML = "<h4>Color: categoría</h4>" +
     TIPOS.filter(([i, t]) => vis.some((c) => c.tipo === t)).map(([i, t, col]) => '<div class="it"><i class="gi" style="background:' + col + '">' + glyphOf({ tipo: t }) + "</i>" + t + "</div>").join("") +
