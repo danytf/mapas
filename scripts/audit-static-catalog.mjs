@@ -47,16 +47,16 @@ function stripComments(text) {
   let out = "", quote = "", escaped = false, lineComment = false, blockComment = false;
   for (let i = 0; i < text.length; i++) {
     const c = text[i], next = text[i + 1];
-    if (lineComment) { if (c === "\\n") { lineComment = false; out += c; } else out += " "; continue; }
+    if (lineComment) { if (c === "\n") { lineComment = false; out += c; } else out += " "; continue; }
     if (blockComment) {
       if (c === "*" && next === "/") { blockComment = false; out += "  "; i++; }
-      else out += c === "\\n" ? "\\n" : " ";
+      else out += c === "\n" ? "\n" : " ";
       continue;
     }
     if (quote) {
       out += c;
       if (escaped) { escaped = false; continue; }
-      if (c === "\\\\") { escaped = true; continue; }
+      if (c === "\\") { escaped = true; continue; }
       if (c === quote) quote = "";
       continue;
     }
