@@ -100,6 +100,7 @@
   .pform .stars button { padding: 0 1px; border: 0; background: none; color: #c4cfcc; font-size: 24px; line-height: 1; cursor: pointer; }
   .pform .stars button.on { color: #f5a623; }
   .pform .stars .sv { font-size: 11px; color: #5b726c; margin-left: 6px; }
+  a.how { display: inline-block; margin-top: 4px; font-size: 12px; font-weight: 600; color: #0b7a68; }
   .pform .hist { border-top: 1px solid #cfdcd8; padding-top: 6px; display: grid; gap: 4px; }
   .pform .hist h4 { margin: 0; font-size: 12px; color: #17302b; }
   .pform .hist ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 3px; max-height: 110px; overflow: auto; }
@@ -399,6 +400,7 @@ function popupFor(c, pos) {
     (c.extra ? "<br><em>" + esc(c.extra) + "</em>" : "") +
     (c.prov ? "<br><em>El catálogo oficial no incluye la calle" + (pos.approx ? "; posición aproximada (centro del municipio)" : "") + "</em>" : "") +
     (c.conf ? "" : "<br><em>Dirección por confirmar</em>") +
+    (pos && pos.lat != null ? '<br><a class="how" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=' + pos.lat + "," + pos.lon + '">Cómo llegar</a>' : "") +
     '<div class="pform"><div><span style="font-size:11px;color:#5b726c">Valoración para captación</span><div class="stars" role="radiogroup" aria-label="Valoración de 1 a 5 estrellas">' +
     [1, 2, 3, 4, 5].map((n) => '<button type="button" data-n="' + n + '" aria-label="' + n + ' estrellas">★</button>').join("") + '<span class="sv"></span></div></div>' +
     '<label>Estado del permiso<select class="f-estado">' +
