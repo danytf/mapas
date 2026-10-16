@@ -43,15 +43,40 @@ function literalFor(name) {
   throw new Error(name + ": literal sin cerrar");
 }
 
+function stripComments(text) {
+  let out = "", quote = "", escaped = false, lineComment = false, blockComment = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i], next = text[i + 1];
+    if (lineComment) { if (c === "\\n") { lineComment = false; out += c; } else out += " "; continue; }
+    if (blockComment) {
+      if (c === "*" && next === "/") { blockComment = false; out += "  "; i++; }
+      else out += c === "\\n" ? "\\n" : " ";
+      continue;
+    }
+    if (quote) {
+      out += c;
+      if (escaped) { escaped = false; continue; }
+      if (c === "\\\\") { escaped = true; continue; }
+      if (c === quote) quote = "";
+      continue;
+    }
+    if (c === '"' || c === "'") { quote = c; out += c; continue; }
+    if (c === "/" && next === "/") { lineComment = true; out += "  "; i++; continue; }
+    if (c === "/" && next === "*") { blockComment = true; out += "  "; i++; continue; }
+    out += c;
+  }
+  return out;
+}
+
 function parseArray(name) {
-  const text = literalFor(name);
+  const text = stripComments(literalFor(name));
   // Estos seis bloques son arrays de datos literales con strings/números/booleanos.
   const json = name === "CENTERS"
     ? text.replace(/(^|[,{]\s*)(id|name|tipo|street|conf|extra)\s*:/gm, '$1"$2":')
     : text;
   return JSON.parse(json);
 }
-function parseObject(name) { return JSON.parse(literalFor(name)); }
+function parseObject(name) { return JSON.parse(stripComments(literalFor(name))); }
 function csv(value) {
   const s = value == null ? "" : String(value);
   return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
