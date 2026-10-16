@@ -127,6 +127,25 @@
   dialog { border: 1px solid var(--line); border-radius: 10px; background: var(--panel); color: var(--fg); padding: 16px; width: min(420px, 92vw); }
   dialog::backdrop { background: rgba(0,0,0,.4); }
   dialog form { display: grid; gap: 10px; }
+  #dlgPanel { width: min(860px, 96vw); max-height: 90vh; overflow: auto; }
+  .pn-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  #pnClose { font-size: 22px; line-height: 1; padding: 0 10px; background: transparent; border: 0; color: var(--muted); cursor: pointer; }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin-bottom: 14px; }
+  .kpi { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; background: var(--bg); }
+  .kpi b { display: block; font-size: 22px; line-height: 1.1; }
+  .kpi span { font-size: 11px; color: var(--muted); }
+  .kpi.hl { background: #dcfce7; border-color: #86efac; color: #14532d; }
+  .kpi.al { background: #fff3d6; border-color: #f5d27a; color: #8a5a00; }
+  #pnBody h3 { font-size: 13px; margin: 14px 0 6px; }
+  .pn-scroll { max-height: 260px; overflow: auto; border: 1px solid var(--line); border-radius: 8px; }
+  #pnBody table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  #pnBody th, #pnBody td { padding: 5px 8px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  #pnBody th:first-child, #pnBody td:first-child { text-align: left; white-space: normal; }
+  #pnBody thead th { position: sticky; top: 0; background: var(--panel); font-weight: 600; color: var(--muted); }
+  #pnBody tbody tr[data-k] { cursor: pointer; }
+  #pnBody tbody tr[data-k]:hover { background: var(--ok-bg); }
+  #pnBody tr.tot td { font-weight: 700; }
+  .pn-note { font-size: 11px; color: var(--muted); margin-top: 8px; }
   dialog h2 { margin: 0; font-size: 16px; }
   dialog label { display: grid; gap: 3px; font-size: 12px; color: var(--muted); }
   dialog input, dialog select { font: inherit; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--fg); width: 100%; }
@@ -160,6 +179,8 @@
   <div class="menu">
     <button id="menuBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Menú" title="Menú"><span></span><span></span><span></span></button>
     <div id="menuPanel" role="menu" hidden>
+      <div class="mh">Informes</div>
+      <button id="panelBtn" type="button" role="menuitem">Panel resumen</button>
       <div class="mh">Puntos</div>
       <button id="add" type="button" role="menuitem">Agregar punto</button>
       <button id="restore" type="button" role="menuitem">Restaurar puntos quitados (0)</button>
@@ -195,6 +216,10 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<dialog id="dlgPanel">
+  <div class="pn-head"><h2>Panel resumen</h2><button type="button" id="pnClose" aria-label="Cerrar">&times;</button></div>
+  <div id="pnBody"></div>
+</dialog>
 <dialog id="dlg">
   <form method="dialog" id="addForm">
     <h2>Agregar punto</h2>
@@ -613,6 +638,60 @@ const download = (name, text, type) => {
   a.href = URL.createObjectURL(new Blob([text], { type }));
   a.download = name; document.body.appendChild(a); a.click(); a.remove();
 };
+/* Panel resumen */
+(() => {
+  const dlg = $("#dlgPanel"), body = $("#pnBody");
+  const focusPoint = (c) => { dlg.close(); if (markers[c.id]) cluster.zoomToShowLayer(markers[c.id], () => markers[c.id].openPopup()); };
+  const stat = (items) => {
+    const r = { n: items.length, sol: 0, con: 0, den: 0, vig: 0, capt: 0 };
+    items.forEach((c) => {
+      const e = permOf(c).estado; if (e === "solicitado") r.sol++; else if (e === "concedido") r.con++; else if (e === "denegado") r.den++;
+      const v = histOf(c).filter(isVig); if (v.length) { r.vig++; r.capt += Math.max(...v.map((h) => h.captadores || 0)); }
+    });
+    return r;
+  };
+  const rowsHtml = (map, kind) => map.map(([k, r]) => '<tr data-kind="' + kind + '" data-k="' + esc(k) + '"><td>' + esc(k) + "</td><td>" + r.n + "</td><td>" + r.sol + "</td><td>" + r.con + "</td><td>" + r.den + "</td><td>" + r.vig + "</td><td>" + r.capt + "</td></tr>").join("");
+  const thead = (first) => "<thead><tr><th>" + first + "</th><th>Puntos</th><th>Solicitados</th><th>Concedidos</th><th>Denegados</th><th>Con vigencia hoy</th><th>Captadores hoy</th></tr></thead>";
+  const render = () => {
+    const all = CENTERS.filter((c) => !isOut(c));
+    const t = stat(all);
+    const limit = new Date(); limit.setDate(limit.getDate() + 30); const lim = limit.toISOString().slice(0, 10);
+    const soon = [], expired = [];
+    all.forEach((c) => {
+      const hs = histOf(c), v = hs.filter(isVig);
+      if (v.length) { const end = v.map((h) => h.hasta).filter(Boolean).sort().pop(); if (end && end <= lim && !v.some((h) => !h.hasta || h.hasta > lim)) soon.push([c, end, Math.max(...v.map((h) => h.captadores || 0))]); }
+      else if (hs.length && hs.every((h) => h.hasta && h.hasta < today())) expired.push(c);
+    });
+    soon.sort((a, b) => a[1].localeCompare(b[1]));
+    const byTipo = TIPOS.map(([, n]) => [n, stat(all.filter((c) => c.tipo === n))]).filter(([, r]) => r.n);
+    const towns = {}; all.forEach((c) => { const k = c.town || "Granada"; (towns[k] = towns[k] || []).push(c); });
+    const byTown = Object.entries(towns).map(([k, v]) => [k, stat(v)]).sort((a, b) => b[1].capt - a[1].capt || b[1].vig - a[1].vig || b[1].con - a[1].con || b[1].n - a[1].n || a[0].localeCompare(b[0]));
+    body.innerHTML =
+      '<div class="kpis">' +
+      '<div class="kpi"><b>' + t.n + "</b><span>Puntos en el mapa</span></div>" +
+      '<div class="kpi"><b>' + t.sol + "</b><span>Solicitados (pendientes)</span></div>" +
+      '<div class="kpi"><b>' + t.con + "</b><span>Concedidos</span></div>" +
+      '<div class="kpi"><b>' + t.den + "</b><span>Denegados</span></div>" +
+      '<div class="kpi hl"><b>' + t.vig + "</b><span>Con concesión vigente hoy</span></div>" +
+      '<div class="kpi hl"><b>' + t.capt + "</b><span>Captadores que se pueden enviar hoy</span></div>" +
+      '<div class="kpi al"><b>' + soon.length + "</b><span>Caducan en 30 días</span></div>" +
+      '<div class="kpi"><b>' + expired.length + "</b><span>Concesión caducada</span></div></div>" +
+      (soon.length ? "<h3>Caducan en los próximos 30 días</h3><div class=\"pn-scroll\"><table><thead><tr><th>Punto</th><th>Hasta</th><th>Captadores</th></tr></thead><tbody>" +
+        soon.map(([c, end, n]) => '<tr data-kind="pt" data-k="' + c.id + '"><td>' + esc(c.name) + " · " + esc(c.town || "Granada") + "</td><td>" + fmtD(end) + "</td><td>" + n + "</td></tr>").join("") + "</tbody></table></div>" : "") +
+      "<h3>Por categoría</h3><div class=\"pn-scroll\"><table>" + thead("Categoría") + "<tbody>" + rowsHtml(byTipo, "tipo") + '<tr class="tot"><td>Total</td><td>' + t.n + "</td><td>" + t.sol + "</td><td>" + t.con + "</td><td>" + t.den + "</td><td>" + t.vig + "</td><td>" + t.capt + "</td></tr></tbody></table></div>" +
+      "<h3>Por municipio</h3><div class=\"pn-scroll\"><table>" + thead("Municipio") + "<tbody>" + rowsHtml(byTown, "town") + "</tbody></table></div>" +
+      '<div class="pn-note">Pulsa una fila para filtrar el mapa por esa categoría o municipio. «Concedidos» sigue el estado marcado a mano; «vigencia» y «captadores» salen del historial de concesiones.</div>';
+  };
+  body.addEventListener("click", (e) => {
+    const tr = e.target.closest("tr[data-k]"); if (!tr) return;
+    const k = tr.dataset.k;
+    if (tr.dataset.kind === "pt") { const c = CENTERS.find((x) => String(x.id) === k); if (c) focusPoint(c); return; }
+    $("#tipo").value = tr.dataset.kind === "tipo" ? k : ""; $("#q").value = tr.dataset.kind === "town" ? k : ""; $("#permiso").value = ""; $("#valor").value = "";
+    dlg.close(); refilter();
+  });
+  $("#panelBtn").addEventListener("click", () => { render(); dlg.showModal(); });
+  $("#pnClose").addEventListener("click", () => dlg.close());
+})();
 $("#csv").addEventListener("click", () => {
   const q = (v) => '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
   const head = ["id", "categoria", "subtipo", "nombre", "direccion", "municipio", "lat", "lon", "ubicacion_aproximada", "origen", "valoracion", "estado_permiso", "fecha_solicitud", "contacto", "notas", "concesion_vigente", "historial_concesiones"];
