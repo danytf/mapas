@@ -1,0 +1,40 @@
+name: Audit static catalog
+
+on:
+  push:
+    branches:
+      - main
+      - audit/**
+      - architecture/**
+    paths:
+      - "index.html"
+      - "scripts/audit-static-catalog.mjs"
+      - ".github/workflows/audit-static-catalog.yml"
+  pull_request:
+    paths:
+      - "index.html"
+      - "scripts/audit-static-catalog.mjs"
+      - ".github/workflows/audit-static-catalog.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Parse and audit static catalog
+        run: node scripts/audit-static-catalog.mjs index.html catalog-audit-output
+      - name: Upload audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: static-catalog-audit
+          path: catalog-audit-output/
+          if-no-files-found: error
