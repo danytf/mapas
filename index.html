@@ -449,7 +449,7 @@
         <select id="valor" aria-label="Filtrar por valoración"></select>
         <select id="orden" aria-label="Ordenar la lista"></select>
       </div>
-      <div class="row" style="grid-template-columns:1fr">
+      <div class="row" id="cadRow" style="grid-template-columns:1fr;display:none">
         <select id="cadena" aria-label="Filtrar por cadena"></select>
       </div>
       <div class="bar" aria-hidden="true"><i id="prog"></i></div>
@@ -909,6 +909,9 @@ function renderList() {
   const q = $("#q").value.trim().toLowerCase();
   const tipo = $("#tipo").value;
   const est = $("#permiso").value;
+  const cadOn = $("#tipo").value === "Supermercado";
+  $("#cadRow").style.display = cadOn ? "" : "none";
+  if (!cadOn && $("#cadena").value) $("#cadena").value = "";
   const vf = $("#valor").value, ch = $("#cadena").value;
   const rate = (c) => permOf(c).valoracion || 0;
   const okVal = (c) => !vf || (vf === "sin" ? !rate(c) : rate(c) >= +vf);
@@ -1414,7 +1417,7 @@ function albumData() {
 }
 function albumGo(k, t) {
   ["#permiso", "#valor", "#cadena", "#q", "#tipo"].forEach((x) => { $(x).value = ""; });
-  if (t === "Supermercado" || t === "Carrefour") $("#cadena").value = k; else if (t === "Gimnasios") { $("#tipo").value = "Gimnasios"; $("#q").value = k; } else $("#tipo").value = t;
+  if (t === "Supermercado") { $("#tipo").value = "Supermercado"; $("#cadena").value = k; } else if (t === "Gimnasios") { $("#tipo").value = "Gimnasios"; $("#q").value = k; } else $("#tipo").value = t;
   document.getElementById("dlgGam").close(); refilter();
 }
 function tabAlb() {
@@ -1476,7 +1479,7 @@ function refreshSelects() {
   const cv = $("#cadena").value, cnt = {};
   const raw = {}; vis.forEach((c) => { const k = rawChain(c); if (k) raw[k] = (raw[k] || 0) + 1; });
   smallChains = new Set(Object.keys(raw).filter((k) => raw[k] < 2));
-  vis.forEach((c) => { const k = chainOf(c); if (k) cnt[k] = (cnt[k] || 0) + 1; });
+  vis.forEach((c) => { if (c.tipo !== "Supermercado") return; const k = chainOf(c); if (k) cnt[k] = (cnt[k] || 0) + 1; });
   $("#cadena").innerHTML = '<option value="">Cadena: todas</option>' + Object.entries(cnt).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([k, n]) => '<option value="' + esc(k) + '">' + esc(k === "Dani" ? "Supermercados Dani" : k) + " (" + n + ")</option>").join("");
   $("#cadena").value = cv;
   $("#tipo").value = tv; $("#permiso").value = pv; $("#valor").value = vv; $("#orden").value = ov;
