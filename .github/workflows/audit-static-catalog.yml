@@ -30,6 +30,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Check audit script syntax
+        run: node --check scripts/audit-static-catalog.mjs
       - name: Parse and audit static catalog
         run: node scripts/audit-static-catalog.mjs index.html catalog-audit-output
       - name: Upload audit report
