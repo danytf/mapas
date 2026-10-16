@@ -72,7 +72,7 @@ function parseArray(name) {
   const text = stripComments(literalFor(name));
   // Estos seis bloques son arrays de datos literales con strings/números/booleanos.
   const json = name === "CENTERS"
-    ? text.replace(/(^|[,{]\s*)(id|name|tipo|street|conf|extra)\s*:/gm, '$1"$2":')
+    ? text.replace(/(^|[,{]\s*)([A-Za-z_$][\w$]*)\s*:/gm, '$1"$2":')
     : text;
   return JSON.parse(json);
 }
