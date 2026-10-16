@@ -46,6 +46,7 @@ No importar archivos de navegador, copias JSON/CSV de las pruebas antiguas ni re
 - Cambiar latitud, longitud o dirección de un establecimiento genera automáticamente una fila en establishment_location_history; cambios en otros campos no deben crearla.
 - Insertar, modificar o borrar registros en las entidades auditadas genera una fila en audit_log con actor, operación, tabla, ámbito provincial y nombres de campos, sin copiar valores de contacto/notas.
 - Un usuario autenticado no puede insertar, actualizar ni borrar directamente filas de audit_log, ni consumir su secuencia desde la API.
+- Un usuario autenticado, incluido el administrador, no puede insertar, modificar ni borrar directamente el historial de ubicación desde la API; las nuevas entradas deben proceder del trigger de servidor.
 - Las actualizaciones simultáneas no deben sobrescribir silenciosamente cambios de otro usuario.
 - La importación repetida de un mismo lote no debe crear establecimientos duplicados.
 - Una coordenada aproximada nunca debe presentarse como verificada sin una revisión explícita.
@@ -57,6 +58,7 @@ La migración incorpora triggers de base de datos para:
 2. Rechazar seguimientos cuya solicitud o concesión pertenezca a otro establecimiento.
 3. Registrar cambios efectivos de latitud, longitud o dirección en el historial de ubicación.
 4. Escribir auditoría de servidor para establecimientos, solicitudes, concesiones, seguimientos, revisiones de ubicación, asignaciones provinciales y perfiles. El registro guarda nombres de campos cambiados, no sus valores potencialmente sensibles.
+5. Mantener el historial de ubicación como solo lectura para los clientes; las inserciones las hace el trigger de servidor.
 
 Estos controles están **implementados en el archivo SQL, pero aún no están validados mediante ejecución en PostgreSQL/Supabase**. Antes de producción siguen pendientes:
 
