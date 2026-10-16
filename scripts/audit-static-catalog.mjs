@@ -153,6 +153,8 @@ for (const row of rows) {
   row.longitude = longitude ?? "";
   row.coordinate_key_match = pair ? "exact" : "missing";
   row.coordinate_extra_values = Array.isArray(pair) && pair.length > 2 ? JSON.stringify(pair.slice(2)) : "";
+  row.source_approximation_flag = Array.isArray(pair) && pair[2] === 1 ? "yes" : "no";
+  row.unrecognized_coordinate_metadata = Array.isArray(pair) && pair.length > 2 && !(pair.length === 3 && pair[2] === 1) ? "yes" : "no";
   row.coordinate_source_type = !hasCoordinatePair || latitude === null || longitude === null
     ? "invalid_or_missing"
     : typeof pair[0] === "number" && typeof pair[1] === "number" ? "number"
@@ -182,12 +184,12 @@ for (const row of rows) {
   if (!String(row.address).trim()) missing.push("missing_address");
   if (row.coordinate_key_match !== "exact") missing.push("missing_coordinate_match");
   if (row.coordinate_valid_range !== "yes") missing.push("invalid_or_missing_coordinate");
-  if (row.coordinate_extra_values) missing.push("coordinate_extra_values_for_review");
+  if (row.unrecognized_coordinate_metadata === "yes") missing.push("unrecognized_coordinate_metadata");
   if (missing.length) issues.push({source_block:row.source_block, source_index:row.source_index, source_key:row.source_key, issues:missing.join("; ")});
 }
 
 fs.mkdirSync(outputDir, {recursive:true});
-const columns = ["source_block","source_index","source_id","source_key","name","category","municipality","address","latitude","longitude","coordinate_key_match","coordinate_extra_values","coordinate_source_type","coordinate_valid_range","review_flag","source_note"];
+const columns = ["source_block","source_index","source_id","source_key","name","category","municipality","address","latitude","longitude","coordinate_key_match","coordinate_extra_values","source_approximation_flag","unrecognized_coordinate_metadata","coordinate_source_type","coordinate_valid_range","review_flag","source_note"];
 writeCsv(path.join(outputDir,"catalog-audit.csv"), rows, columns);
 writeCsv(path.join(outputDir,"duplicate-names.csv"), duplicates, ["normalized_name","count","source_rows","names"]);
 writeCsv(path.join(outputDir,"rows-with-issues.csv"), issues, ["source_block","source_index","source_key","issues"]);
@@ -201,7 +203,7 @@ const summary = {
   invalid_or_missing_coordinates:rows.filter(r => r.coordinate_valid_range !== "yes").length,
   numeric_string_coordinates:rows.filter(r => r.coordinate_source_type === "numeric_string").length,
   mixed_type_coordinates:rows.filter(r => r.coordinate_source_type === "mixed").length,
-  rows_with_extra_coordinate_values:rows.filter(r => r.coordinate_extra_values !== "").length,
+  source_approximation_flagged_coordinates:rows.filter(r => r.source_approximation_flag === "yes").length,\n  rows_with_unrecognized_coordinate_metadata:rows.filter(r => r.unrecognized_coordinate_metadata === "yes").length,
   missing_municipality:rows.filter(r => !String(r.municipality).trim()).length,
   missing_address:rows.filter(r => !String(r.address).trim()).length,
   normalized_duplicate_name_groups:duplicates.length,
