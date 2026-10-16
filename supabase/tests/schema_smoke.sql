@@ -1,3 +1,14 @@
+do $$
+begin
+  if (select count(*) from public.provinces) <> 52 then
+    raise exception 'FALLO: el seed no ha cargado las 52 provincias/códigos territoriales esperados';
+  end if;
+  if (select count(*) from public.categories) <> 16 then
+    raise exception 'FALLO: el seed no ha cargado las 16 categorías de referencia esperadas';
+  end if;
+end;
+$$;
+
 -- Smoke tests against vanilla PostgreSQL with a minimal Supabase Auth shim.
 -- All IDs and data are fictitious and deterministic. This file does not touch production.
 
@@ -11,8 +22,8 @@ set role = 'admin'
 where id = '00000000-0000-4000-8000-0000000000a1';
 
 insert into public.provinces (id, code, name) values
-  ('00000000-0000-4000-8000-000000000001', '01', 'Smoke Province A'),
-  ('00000000-0000-4000-8000-000000000002', '02', 'Smoke Province B');
+  ('00000000-0000-4000-8000-000000000001', '98', 'Smoke Province A'),
+  ('00000000-0000-4000-8000-000000000002', '99', 'Smoke Province B');
 
 insert into public.categories (id, code, name)
 values ('00000000-0000-4000-8000-000000000003', 'smoke_category', 'Smoke Category');
