@@ -90,6 +90,12 @@
     display: grid; place-items: center;
   }
   .pin b { transform: rotate(45deg); color: #fff; font: 600 11px system-ui, sans-serif; }
+  .pform { display: grid; gap: 5px; margin-top: 8px; padding-top: 8px; border-top: 1px solid #cfdcd8; }
+  .pform label { font-size: 11px; color: #5b726c; display: grid; gap: 2px; }
+  .pform select, .pform input, .pform textarea { font: inherit; padding: 4px 6px; border: 1px solid #b9ccc7; border-radius: 4px; width: 100%; background: #fff; color: #17302b; }
+  .pform textarea { resize: vertical; min-height: 44px; }
+  .pform button { padding: 6px 10px; background: #0b7a68; color: #fff; border-color: #0b7a68; }
+  .pform .saved { font-size: 11px; color: #0b7a68; min-height: 14px; }
   .legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12px; color: var(--muted); }
   .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; }
   .leaflet-popup-content { font: 13px/1.4 system-ui, sans-serif; color: #17302b; }
@@ -118,13 +124,21 @@
         </select>
         <button id="fit" type="button">Ver todos</button>
       </div>
+      <select id="permiso" aria-label="Filtrar por estado del permiso"></select>
       <div class="legend" aria-label="Leyenda"></div>
       <div class="bar" aria-hidden="true"><i id="prog"></i></div>
       <div class="status" id="status" role="status">Preparando…</div>
-      <button id="copy" type="button" class="primary">Copiar JSON con coordenadas</button>
+      <div class="row">
+        <button id="csv" type="button" class="primary">Exportar CSV</button>
+        <button id="bak" type="button">Copia permisos</button>
+        <button id="imp" type="button">Cargar copia</button>
+      </div>
+      <input id="impf" type="file" accept="application/json,.json" hidden>
+      <button id="copy" type="button">Copiar JSON con coordenadas</button>
     </div>
     <ul id="list"></ul>
     <div class="note">
+      Los permisos (estado, fecha, contacto y notas) se guardan en este navegador. Usa “Copia permisos” para guardarlos en un archivo y “Cargar copia” para recuperarlos en otro navegador u ordenador.<br>
       “Por confirmar”: la dirección procede de directorios no oficiales y no coincide con el listado del SAS o del Ayuntamiento.
       Fuera de la capital el catálogo oficial no trae calle: la dirección de los centros de salud procede de Google; si no se localiza, se coloca en el centro del municipio (“Ubicación aproximada”).
       Las posiciones están precalculadas con Nominatim (OpenStreetMap) y van incluidas en la página; solo se consulta si se añade un centro nuevo.
@@ -251,24 +265,63 @@ const TIPOS = [
 const colorOf = (c) => (TIPOS.find((t) => t[1] === c.tipo) || [0, 0, "#0b7a68"])[2];
 const matchTipo = (c, t) => !t || c.tipo === t;
 
+/* Estado del permiso por punto (se guarda en localStorage, clave = nombre del punto). */
+const ESTADOS = [["sin", "Sin solicitar", "#ffffff"], ["solicitado", "Solicitado", "#fbbf24"], ["concedido", "Concedido", "#22c55e"], ["denegado", "Denegado", "#111827"]];
+const PERM_KEY = "permisos-captacion-granada-v1";
+let permits = {};
+try { permits = JSON.parse(localStorage.getItem(PERM_KEY) || "{}"); } catch (e) { permits = {}; }
+const savePermits = () => { try { localStorage.setItem(PERM_KEY, JSON.stringify(permits)); } catch (e) {} };
+const permOf = (c) => permits[c.name] || { estado: "sin", fecha: "", contacto: "", notas: "" };
+const estadoInfo = (k) => ESTADOS.find((e) => e[0] === k) || ESTADOS[0];
+
 const addrOf = (c) => (c.street ? c.street + ", " : "") + (c.town || "Granada");
+
+function makeIcon(c) {
+  const e = estadoInfo(permOf(c).estado);
+  return L.divIcon({
+    className: "",
+    html: '<div class="pin" style="background:' + colorOf(c) + ";border-color:" + e[2] + (e[0] === "sin" ? "" : ";border-width:3px") + '"><b>' + c.id + "</b></div>",
+    iconSize: [26, 26], iconAnchor: [13, 26], popupAnchor: [0, -24]
+  });
+}
+
+function popupFor(c, pos) {
+  const p = permOf(c);
+  const el = document.createElement("div");
+  el.innerHTML =
+    "<strong>" + esc(c.name) + "</strong><br>" + esc(addrOf(c)) + (c.sub ? "<br>" + esc(c.tipo + " · " + c.sub) : "") +
+    (c.extra ? "<br><em>" + esc(c.extra) + "</em>" : "") +
+    (c.prov ? "<br><em>El catálogo oficial no incluye la calle" + (pos.approx ? "; posición aproximada (centro del municipio)" : "") + "</em>" : "") +
+    (c.conf ? "" : "<br><em>Dirección por confirmar</em>") +
+    '<div class="pform"><label>Estado del permiso<select class="f-estado">' +
+    ESTADOS.map((e) => '<option value="' + e[0] + '"' + (e[0] === p.estado ? " selected" : "") + ">" + e[1] + "</option>").join("") +
+    '</select></label><label>Fecha<input class="f-fecha" type="date" value="' + esc(p.fecha || "") + '"></label>' +
+    '<label>Contacto (nombre, teléfono, email)<input class="f-contacto" type="text" value="' + esc(p.contacto || "") + '"></label>' +
+    '<label>Notas<textarea class="f-notas">' + esc(p.notas || "") + '</textarea></label>' +
+    '<button type="button" class="f-save">Guardar permiso</button><div class="saved"></div></div>';
+  L.DomEvent.disableClickPropagation(el);
+  L.DomEvent.disableScrollPropagation(el);
+  el.querySelector(".f-save").addEventListener("click", () => {
+    const v = {
+      estado: el.querySelector(".f-estado").value, fecha: el.querySelector(".f-fecha").value,
+      contacto: el.querySelector(".f-contacto").value.trim(), notas: el.querySelector(".f-notas").value.trim()
+    };
+    if (v.estado === "sin" && !v.fecha && !v.contacto && !v.notas) delete permits[c.name]; else permits[c.name] = v;
+    savePermits();
+    if (markers[c.id]) markers[c.id].setIcon(makeIcon(c));
+    refreshSelects();
+    renderList();
+    el.querySelector(".saved").textContent = "Guardado";
+  });
+  return el;
+}
 
 function makeMarker(c) {
   const pos = cache[c.id];
   if (!pos || markers[c.id]) return;
-  const icon = L.divIcon({
-    className: "",
-    html: '<div class="pin" style="background:' + colorOf(c) + '"><b>' + c.id + "</b></div>",
-    iconSize: [26, 26], iconAnchor: [13, 26], popupAnchor: [0, -24]
-  });
-  const m = L.marker([pos.lat, pos.lon], { icon, title: c.name });
+  const m = L.marker([pos.lat, pos.lon], { icon: makeIcon(c), title: c.name });
   cluster.addLayer(m);
-  m.bindPopup(
-    "<strong>" + esc(c.name) + "</strong><br>" + esc(addrOf(c)) + (c.sub ? "<br>" + esc(c.tipo + " · " + c.sub) : "") +
-    (c.extra ? "<br><em>" + esc(c.extra) + "</em>" : "") +
-    (c.prov ? "<br><em>El catálogo oficial no incluye la calle" + (pos.approx ? "; posición aproximada (centro del municipio)" : "") + "</em>" : "") +
-    (c.conf ? "" : "<br><em>Dirección por confirmar</em>")
-  );
+  m.bindPopup(() => popupFor(c, pos), { minWidth: 230 });
   m.on("click", () => highlight(c.id, false));
   markers[c.id] = m;
 }
@@ -276,10 +329,11 @@ function makeMarker(c) {
 function renderList() {
   const q = $("#q").value.trim().toLowerCase();
   const tipo = $("#tipo").value;
+  const est = $("#permiso").value;
   const ul = $("#list");
   ul.innerHTML = "";
   CENTERS.forEach((c) => {
-    const visible = matchTipo(c, tipo) &&
+    const visible = matchTipo(c, tipo) && (!est || permOf(c).estado === est) &&
       (!q || (c.name + " " + c.street + " " + (c.town || "Granada")).toLowerCase().includes(q));
     if (markers[c.id]) {
       const on = cluster.hasLayer(markers[c.id]);
@@ -295,6 +349,7 @@ function renderList() {
       '<div class="num">' + c.id + "</div><div><strong>" + esc(c.name) + '</strong><span class="addr">' +
       esc(addrOf(c)) + "</span><br>" +
       '<span class="tag">' + esc(c.tipo + (c.sub ? " · " + c.sub : "")) + "</span>" +
+      (permOf(c).estado !== "sin" ? '<span class="tag" style="background:' + estadoInfo(permOf(c).estado)[2] + ';color:' + (permOf(c).estado === "concedido" || permOf(c).estado === "solicitado" ? "#111" : "#fff") + '">' + estadoInfo(permOf(c).estado)[1] + (permOf(c).fecha ? " · " + esc(permOf(c).fecha) : "") + "</span>" : "") +
       (cache[c.id] && cache[c.id].approx ? '<span class="tag warn">Ubicación aproximada</span>' : "") +
       (c.conf ? "" : '<span class="tag warn">Por confirmar</span>') +
       (cache[c.id] ? "" : '<span class="tag warn">Sin ubicar</span>') + "</div>";
@@ -380,12 +435,50 @@ $("#copy").addEventListener("click", async () => {
   catch (e) { prompt("Copia el JSON:", txt); }
 });
 
-(() => {
+function refreshSelects() {
   const n = (t) => CENTERS.filter((c) => c.tipo === t).length;
+  const tv = $("#tipo").value, pv = $("#permiso").value;
   $("#tipo").innerHTML = '<option value="">Todos los tipos (' + CENTERS.length + ")</option>" +
     TIPOS.map(([i, t]) => '<option value="' + t + '">' + i + " · " + t + " (" + n(t) + ")</option>").join("");
-  $(".legend").innerHTML = TIPOS.filter(([i, t]) => n(t)).map(([i, t, col]) => '<span><i style="background:' + col + '"></i>' + t + "</span>").join("");
-})();
+  $("#permiso").innerHTML = '<option value="">Todos los estados de permiso</option>' +
+    ESTADOS.map(([k, t]) => '<option value="' + k + '">' + t + " (" + CENTERS.filter((c) => permOf(c).estado === k).length + ")</option>").join("");
+  $("#tipo").value = tv; $("#permiso").value = pv;
+}
+refreshSelects();
+$(".legend").innerHTML = TIPOS.filter(([i, t]) => CENTERS.some((c) => c.tipo === t)).map(([i, t, col]) => '<span><i style="background:' + col + '"></i>' + t + "</span>").join("") +
+  ESTADOS.slice(1).map(([k, t, col]) => '<span><i style="background:#fff;border:3px solid ' + col + ';width:6px;height:6px"></i>' + t + "</span>").join("");
+
+$("#permiso").addEventListener("change", renderList);
+const download = (name, text, type) => {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([text], { type }));
+  a.download = name; document.body.appendChild(a); a.click(); a.remove();
+};
+$("#csv").addEventListener("click", () => {
+  const q = (v) => '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
+  const head = ["id", "categoria", "subtipo", "nombre", "direccion", "municipio", "lat", "lon", "ubicacion_aproximada", "estado_permiso", "fecha", "contacto", "notas"];
+  const rows = CENTERS.map((c) => {
+    const p = permOf(c), pos = cache[c.id] || {};
+    return [c.id, c.tipo, c.sub || "", c.name, c.street, c.town || "Granada", pos.lat || "", pos.lon || "", pos.approx ? "sí" : "", estadoInfo(p.estado)[1], p.fecha, p.contacto, p.notas].map(q).join(";");
+  });
+  download("permisos-captacion-granada.csv", "\ufeff" + head.join(";") + "\r\n" + rows.join("\r\n"), "text/csv;charset=utf-8");
+});
+$("#bak").addEventListener("click", () => download("copia-permisos-granada.json", JSON.stringify(permits, null, 2), "application/json"));
+$("#imp").addEventListener("click", () => $("#impf").click());
+$("#impf").addEventListener("change", async (e) => {
+  const f = e.target.files[0]; if (!f) return;
+  try {
+    const d = JSON.parse(await f.text());
+    const names = new Set(CENTERS.map((c) => c.name));
+    let n = 0;
+    Object.keys(d).forEach((k) => { if (names.has(k) && d[k] && estadoInfo(d[k].estado)) { permits[k] = d[k]; n++; } });
+    savePermits(); refreshSelects();
+    Object.keys(markers).forEach((id) => markers[id].setIcon(makeIcon(CENTERS[id - 1])));
+    renderList();
+    $("#status").textContent = n + " permisos cargados.";
+  } catch (err) { $("#status").textContent = "Archivo no válido: " + err.message; }
+  e.target.value = "";
+});
 
 renderList();
 locateAll().then(renderList);
