@@ -36,6 +36,6 @@ El script ya se ha ejecutado correctamente en [GitHub Actions](https://github.co
 
 El siguiente paso es ejecutar el script sobre una copia exacta del archivo fuente, revisar los CSV/JSON y corregir discrepancias manualmente. Solo después debe prepararse un lote de importación reproducible con checksum e informe de incidencias.
 
-**Validación del esquema:** la migración SQL y los smoke tests de PostgreSQL 16 han pasado en [GitHub Actions](https://github.com/danytf/mapas/actions/runs/38974728631), con una capa mínima de compatibilidad para Supabase Auth. No equivale todavía a una validación dentro de un proyecto Supabase real.
+**Catálogos de referencia:** se ha añadido [`supabase/seed/reference_catalog.sql`](../supabase/seed/reference_catalog.sql) con 52 códigos territoriales y 16 categorías normalizadas. La carga del seed, la migración y los smoke tests de PostgreSQL 16 han pasado en [GitHub Actions](https://github.com/danytf/mapas/actions/runs/38974877511), con una capa mínima de compatibilidad para Supabase Auth. No equivale todavía a una validación dentro de un proyecto Supabase real.
 
 **Estado:** inventario preliminar. No hay CSV/semilla de negocio aprobada ni carga en Supabase. `main` y la app publicada permanecen sin cambios.
