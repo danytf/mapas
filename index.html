@@ -100,6 +100,13 @@
   .pform .stars button { padding: 0 1px; border: 0; background: none; color: #c4cfcc; font-size: 24px; line-height: 1; cursor: pointer; }
   .pform .stars button.on { color: #f5a623; }
   .pform .stars .sv { font-size: 11px; color: #5b726c; margin-left: 6px; }
+  .pform .hist { border-top: 1px solid #cfdcd8; padding-top: 6px; display: grid; gap: 4px; }
+  .pform .hist h4 { margin: 0; font-size: 12px; color: #17302b; }
+  .pform .hist ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 3px; max-height: 110px; overflow: auto; }
+  .pform .hist li { display: flex; justify-content: space-between; align-items: center; gap: 6px; font-size: 11.5px; background: #f1f6f5; border-radius: 4px; padding: 3px 6px; }
+  .pform .hist li.vig { background: #dcfce7; }
+  .pform .hist li button { padding: 0 6px; background: #fff; color: #b3261e; border-color: #b3261e; font-size: 11px; }
+  .pform .hist .row3 { display: grid; grid-template-columns: 1fr 1fr 74px; gap: 4px; }
   .pform .saved { font-size: 11px; color: #0b7a68; min-height: 14px; }
   .logo { height: 36px; width: auto; align-self: center; display: block; }
   header h1 { flex: 1; min-width: 0; }
@@ -340,6 +347,12 @@ const saveRemoved = () => { try { localStorage.setItem(REMOVED_KEY, JSON.stringi
 const isOut = (c) => removed.has(c.name);
 const permOf = (c) => permits[c.name] || { estado: "sin", fecha: "", contacto: "", notas: "", valoracion: 0 };
 const stars = (n) => "★".repeat(n) + "☆".repeat(5 - n);
+const fmtD = (d) => (d ? d.split("-").reverse().join("/") : "…");
+const today = () => new Date().toISOString().slice(0, 10);
+const isVig = (h) => (!h.desde || h.desde <= today()) && (!h.hasta || h.hasta >= today());
+const histOf = (c) => ((permits[c.name] && permits[c.name].historial) || []).slice().sort((a, b) => (b.desde || "").localeCompare(a.desde || ""));
+const vigente = (c) => histOf(c).find(isVig);
+const histTxt = (h) => fmtD(h.desde) + " – " + fmtD(h.hasta) + (h.captadores ? " · " + h.captadores + " captador" + (h.captadores === 1 ? "" : "es") : "");
 const estadoInfo = (k) => ESTADOS.find((e) => e[0] === k) || ESTADOS[0];
 
 const addrOf = (c) => (c.street ? c.street + ", " : "") + (c.town || "Granada");
@@ -368,10 +381,24 @@ function popupFor(c, pos) {
     '</select></label><label>Fecha<input class="f-fecha" type="date" value="' + esc(p.fecha || "") + '"></label>' +
     '<label>Contacto (nombre, teléfono, email)<input class="f-contacto" type="text" value="' + esc(p.contacto || "") + '"></label>' +
     '<label>Notas<textarea class="f-notas">' + esc(p.notas || "") + '</textarea></label>' +
+    '<div class="hist"><h4>Concesiones (historial)</h4><ul class="h-list"></ul><div class="row3"><label>Desde<input class="h-desde" type="date"></label><label>Hasta<input class="h-hasta" type="date"></label><label>Captadores<input class="h-n" type="number" min="1" step="1" placeholder="nº"></label></div><button type="button" class="h-add">Añadir concesión al historial</button><div class="h-msg" style="font-size:11px;color:#b3261e;min-height:13px"></div></div>' +
     '<button type="button" class="f-save">Guardar permiso</button><button type="button" class="f-del danger">' + (c.custom ? "Eliminar punto" : "Quitar del mapa") + '</button><div class="saved"></div></div>';
   L.DomEvent.disableClickPropagation(el);
   L.DomEvent.disableScrollPropagation(el);
   let val = p.valoracion || 0;
+  let hist = (p.historial || []).slice();
+  const paintHist = () => {
+    const ul = el.querySelector(".h-list");
+    const sorted = hist.map((h, i) => [h, i]).sort((a, b) => (b[0].desde || "").localeCompare(a[0].desde || ""));
+    ul.innerHTML = sorted.length ? "" : '<li style="background:none;color:#5b726c">Sin concesiones registradas</li>';
+    sorted.forEach(([h, i]) => {
+      const li = document.createElement("li"); if (isVig(h)) li.className = "vig";
+      li.innerHTML = "<span>" + esc(histTxt(h)) + (isVig(h) ? " · vigente" : "") + "</span>";
+      const b = document.createElement("button"); b.type = "button"; b.textContent = "Quitar"; b.title = "Quitar esta concesión del historial";
+      b.addEventListener("click", () => { hist.splice(i, 1); paintHist(); commit(); });
+      li.appendChild(b); ul.appendChild(li);
+    });
+  };
   const paint = () => {
     el.querySelectorAll(".stars button").forEach((b) => b.classList.toggle("on", +b.dataset.n <= val));
     el.querySelector(".sv").textContent = val ? val + " de 5" : "sin valorar";
@@ -379,9 +406,9 @@ function popupFor(c, pos) {
   const commit = () => {
     const v = {
       estado: el.querySelector(".f-estado").value, fecha: el.querySelector(".f-fecha").value,
-      contacto: el.querySelector(".f-contacto").value.trim(), notas: el.querySelector(".f-notas").value.trim(), valoracion: val
+      contacto: el.querySelector(".f-contacto").value.trim(), notas: el.querySelector(".f-notas").value.trim(), valoracion: val, historial: hist
     };
-    if (v.estado === "sin" && !v.fecha && !v.contacto && !v.notas && !v.valoracion) delete permits[c.name]; else permits[c.name] = v;
+    if (v.estado === "sin" && !v.fecha && !v.contacto && !v.notas && !v.valoracion && !hist.length) delete permits[c.name]; else permits[c.name] = v;
     savePermits();
     if (markers[c.id]) markers[c.id].setIcon(makeIcon(c));
     refreshSelects();
@@ -389,7 +416,16 @@ function popupFor(c, pos) {
     el.querySelector(".saved").textContent = "Guardado";
   };
   el.querySelectorAll(".stars button").forEach((b) => b.addEventListener("click", () => { val = val === +b.dataset.n ? 0 : +b.dataset.n; paint(); commit(); }));
-  paint();
+  paint(); paintHist();
+  el.querySelector(".h-add").addEventListener("click", () => {
+    const d = el.querySelector(".h-desde").value, h = el.querySelector(".h-hasta").value, n = parseInt(el.querySelector(".h-n").value, 10) || 0, msg = el.querySelector(".h-msg");
+    msg.textContent = "";
+    if (!d && !h) { msg.textContent = "Indica al menos la fecha de inicio o la de fin."; return; }
+    if (d && h && d > h) { msg.textContent = "La fecha de inicio es posterior a la de fin."; return; }
+    hist.push({ desde: d, hasta: h, captadores: n });
+    ["h-desde", "h-hasta", "h-n"].forEach((k) => { el.querySelector("." + k).value = ""; });
+    paintHist(); commit();
+  });
   el.querySelector(".f-save").addEventListener("click", commit);
   let armed = false;
   const del = el.querySelector(".f-del");
@@ -445,6 +481,7 @@ function renderList() {
       '<span class="tag">' + esc(c.tipo + (c.sub ? " · " + c.sub : "")) + "</span>" +
       (permOf(c).valoracion ? '<span class="tag" style="background:#fff3d6;color:#8a5a00">' + stars(permOf(c).valoracion) + "</span>" : "") +
       (permOf(c).estado !== "sin" ? '<span class="tag" style="background:' + estadoInfo(permOf(c).estado)[2] + ';color:' + (permOf(c).estado === "concedido" || permOf(c).estado === "solicitado" ? "#111" : "#fff") + '">' + estadoInfo(permOf(c).estado)[1] + (permOf(c).fecha ? " · " + esc(permOf(c).fecha) : "") + "</span>" : "") +
+      (vigente(c) ? '<span class="tag" style="background:#dcfce7;color:#14532d">Vigente hasta ' + fmtD(vigente(c).hasta) + (vigente(c).captadores ? " · " + vigente(c).captadores + " capt." : "") + "</span>" : "") +
       (cache[c.id] && cache[c.id].approx ? '<span class="tag warn">Ubicación aproximada</span>' : "") +
       (c.conf ? "" : '<span class="tag warn">Por confirmar</span>') +
       (cache[c.id] ? "" : '<span class="tag warn">Sin ubicar</span>') + "</div>";
@@ -578,10 +615,10 @@ const download = (name, text, type) => {
 };
 $("#csv").addEventListener("click", () => {
   const q = (v) => '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
-  const head = ["id", "categoria", "subtipo", "nombre", "direccion", "municipio", "lat", "lon", "ubicacion_aproximada", "origen", "valoracion", "estado_permiso", "fecha", "contacto", "notas"];
+  const head = ["id", "categoria", "subtipo", "nombre", "direccion", "municipio", "lat", "lon", "ubicacion_aproximada", "origen", "valoracion", "estado_permiso", "fecha", "contacto", "notas", "concesion_vigente", "historial_concesiones"];
   const rows = CENTERS.filter((c) => !isOut(c)).map((c) => {
     const p = permOf(c), pos = cache[c.id] || {};
-    return [c.id, c.tipo, c.sub || "", c.name, c.street, c.town || "Granada", pos.lat || "", pos.lon || "", pos.approx ? "sí" : "", c.custom ? "agregado" : "base", p.valoracion || "", estadoInfo(p.estado)[1], p.fecha, p.contacto, p.notas].map(q).join(";");
+    return [c.id, c.tipo, c.sub || "", c.name, c.street, c.town || "Granada", pos.lat || "", pos.lon || "", pos.approx ? "sí" : "", c.custom ? "agregado" : "base", p.valoracion || "", estadoInfo(p.estado)[1], p.fecha, p.contacto, p.notas, vigente(c) ? histTxt(vigente(c)) : "", histOf(c).map(histTxt).join(" | ")].map(q).join(";");
   });
   download("permisos-captacion-granada.csv", "\ufeff" + head.join(";") + "\r\n" + rows.join("\r\n"), "text/csv;charset=utf-8");
 });
