@@ -364,7 +364,7 @@ returns trigger
 language plpgsql
 security definer
 set search_path = ''
-as $
+as $$
 declare
   parent_establishment_id uuid;
 begin
@@ -380,7 +380,7 @@ begin
   end if;
   return new;
 end;
-$;
+$$;
 
 drop trigger if exists validate_permit_grant_application on public.permit_grants;
 create trigger validate_permit_grant_application
@@ -392,7 +392,7 @@ returns trigger
 language plpgsql
 security definer
 set search_path = ''
-as $
+as $$
 declare
   parent_establishment_id uuid;
 begin
@@ -419,7 +419,7 @@ begin
   end if;
   return new;
 end;
-$;
+$$;
 
 drop trigger if exists validate_followup_targets on public.followups;
 create trigger validate_followup_targets
@@ -433,7 +433,7 @@ returns trigger
 language plpgsql
 security definer
 set search_path = ''
-as $
+as $$
 begin
   if old.latitude is distinct from new.latitude
      or old.longitude is distinct from new.longitude
@@ -450,7 +450,7 @@ begin
   end if;
   return new;
 end;
-$;
+$$;
 
 drop trigger if exists establishment_location_history_on_update on public.establishments;
 create trigger establishment_location_history_on_update
@@ -464,7 +464,7 @@ returns trigger
 language plpgsql
 security definer
 set search_path = ''
-as $
+as $$
 declare
   old_data jsonb := '{}'::jsonb;
   new_data jsonb := '{}'::jsonb;
@@ -516,7 +516,10 @@ begin
     entity_province_id,
     jsonb_build_object('changed_fields', changed_fields)
   );
-  return case when tg_op = 'DELETE' then old else new end;
+  if tg_op = 'DELETE' then
+    return old;
+  end if;
+  return new;
 end;
 $;
 
@@ -525,7 +528,7 @@ revoke all on function public.validate_followup_targets() from public;
 revoke all on function public.record_establishment_location_history() from public;
 revoke all on function public.write_audit_log() from public;
 
-do $
+do $$
 declare t text;
 begin
   foreach t in array array[
@@ -539,7 +542,7 @@ begin
     );
   end loop;
 end;
-$;
+$$;
 
 -- Activar RLS en todas las tablas expuestas por la API.
 alter table public.provinces enable row level security;
