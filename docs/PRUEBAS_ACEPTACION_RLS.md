@@ -50,7 +50,7 @@ No importar archivos de navegador, copias JSON/CSV de las pruebas antiguas ni re
 - Un usuario autenticado, incluido el administrador, no puede insertar, modificar ni borrar directamente el historial de ubicación desde la API; las nuevas entradas deben proceder del trigger de servidor.
 - Las actualizaciones simultáneas no deben sobrescribir silenciosamente cambios de otro usuario.
 - La importación repetida de un mismo lote no debe crear establecimientos duplicados.
-- Una coordenada aproximada nunca debe presentarse como verificada sin una revisión explícita.
+- Una coordenada marcada como aproximada en el catálogo fuente debe importarse con `location_precision = 'approximate'`; nunca debe presentarse como verificada sin revisión explícita.
 
 ## 4. Controles incorporados y riesgos por validar
 
