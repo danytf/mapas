@@ -1067,7 +1067,10 @@ function refreshSelects() {
     $("#segBtn").addEventListener("click", () => { onlySeg = !onlySeg; $("#segBtn").setAttribute("aria-pressed", onlySeg); refilter(); });
   }
   checkLogros();
-  $("#revBtn").textContent = (onlyRev ? "Mostrando solo " : "") + "Por revisar (" + vis.filter(isRev).length + ")";
+  const nRev = vis.filter(isRev).length;
+  $("#revBtn").style.display = nRev ? "" : "none";
+  if (!nRev && onlyRev) { onlyRev = false; $("#revBtn").setAttribute("aria-pressed", "false"); setTimeout(refilter, 0); }
+  $("#revBtn").textContent = (onlyRev ? "Mostrando solo " : "") + "Por revisar (" + nRev + ")";
 }
 refreshSelects();
 
