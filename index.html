@@ -294,7 +294,43 @@
   #dlgGam .lgl li b { margin-left: auto; color: #8a5a00; }
   #dlgGam .how { margin-top: 12px; font-size: 12px; color: var(--muted); }
   #dlgGam .how summary { cursor: pointer; }
-  #dlgGam .snd { display: block; margin-top: 12px; font-size: 12.5px; }
+  #dlgGam .snd { display: flex; align-items: flex-start; gap: 8px; margin: 12px 0 0; font-size: 12.5px; font-weight: 500; color: var(--fg); }
+  #dlgGam .snd input { width: 16px; height: 16px; flex: none; margin: 1px 0 0; padding: 0; accent-color: var(--accent); }
+  #dlgGam .gtabs { display: flex; gap: 4px; margin-bottom: 14px; border-bottom: 1px solid var(--line); }
+  #dlgGam .gtabs button { flex: 1; height: 36px; border: 0; border-bottom: 3px solid transparent; background: none; font: inherit; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; }
+  #dlgGam .gtabs button[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--accent); }
+  #dlgGam .tr-h p, #dlgGam .al-h { margin: 0 0 6px; font-size: 14px; }
+  #dlgGam .tr-h .bar { display: block; height: 8px; border-radius: 4px; background: var(--line); overflow: hidden; }
+  #dlgGam .tr-h .bar i { display: block; height: 100%; background: linear-gradient(90deg, #22a15a, #e0a800); }
+  #dlgGam .tr-h small { display: block; margin: 5px 0 8px; color: var(--muted); font-size: 12px; }
+  #dlgGam .trq { width: 100%; margin: 8px 0; }
+  #dlgGam .trl { max-height: 46vh; overflow-y: auto; gap: 0; }
+  #dlgGam .trl li { display: grid; grid-template-columns: 14px 1fr auto 56px; gap: 10px; align-items: center; padding: 7px 4px; border-bottom: 1px solid var(--line); font-size: 13px; cursor: pointer; }
+  #dlgGam .trl li:hover, #dlgGam .trl li:focus { background: var(--line); outline: 0; }
+  #dlgGam .trl i { width: 11px; height: 11px; border-radius: 50%; background: #64748b; opacity: .5; }
+  #dlgGam .trl .s1 i { background: #fbbf24; opacity: 1; } #dlgGam .trl .s2 i { background: #22c55e; opacity: 1; } #dlgGam .trl .s3 i { background: #e0a800; opacity: 1; box-shadow: 0 0 0 3px rgba(224,168,0,.3); }
+  #dlgGam .trl span { font-size: 11.5px; color: var(--muted); }
+  #dlgGam .trl em { font-style: normal; text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+  #dlgGam .alg { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+  #dlgGam .alc { display: grid; gap: 4px; text-align: left; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); color: var(--fg); font: inherit; cursor: pointer; height: auto; }
+  #dlgGam .alc:hover { border-color: var(--line-2); }
+  #dlgGam .alc b { font-size: 13px; } #dlgGam .alc span { font-size: 11.5px; color: var(--muted); }
+  #dlgGam .alc.full { border-color: #e0a800; background: linear-gradient(135deg, var(--panel), #fff6d6); }
+  #dlgGam .alc.full b::after { content: " ★"; color: #e0a800; }
+  #dlgGam .alc .sg { display: flex; height: 5px; border-radius: 3px; background: var(--line); overflow: hidden; }
+  #dlgGam .alc .sg i.g { background: #22a15a; } #dlgGam .alc .sg i.a { background: #fbbf24; }
+  #dlgGam .wkb { display: flex; gap: 6px; margin-bottom: 10px; }
+  #dlgGam .wkb button { height: 30px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line-2); background: var(--panel); color: var(--fg); font: inherit; font-size: 12.5px; cursor: pointer; }
+  #dlgGam .wkb button[aria-pressed="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+  #dlgGam .wk-t { margin: 0 0 8px; font-size: 14px; }
+  #dlgGam .wbars { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; height: 110px; margin-bottom: 12px; }
+  #dlgGam .wbars div { display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 4px; }
+  #dlgGam .wbars i { width: 100%; min-height: 3px; border-radius: 5px 5px 0 0; background: linear-gradient(180deg, #f5c542, #c8102e); }
+  #dlgGam .wbars span { font-size: 11px; color: var(--muted); }
+  #dlgGam .wkl li { display: grid; grid-template-columns: 1fr auto 58px; gap: 10px; padding: 8px 2px; border-bottom: 1px solid var(--line); font-size: 13px; }
+  #dlgGam .wkl b { font-variant-numeric: tabular-nums; }
+  #dlgGam em { font-style: normal; font-size: 12px; color: var(--muted); }
+  #dlgGam em.up { color: #1b8a4b; font-weight: 700; } #dlgGam em.dn { color: #b42318; font-weight: 700; }
   #confetti { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; }
   #xpfly { position: fixed; left: 50%; bottom: 84px; transform: translateX(-50%); display: grid; gap: 6px; justify-items: center; pointer-events: none; z-index: 9998; }
   #xpfly div { background: #1f2a3b; color: #fff; border: 1px solid #e0a800; padding: 7px 14px; border-radius: 999px; font-size: 13px; box-shadow: 0 6px 20px rgba(15,23,34,.35); animation: xpfly 2.6s ease forwards; }
@@ -1027,6 +1063,10 @@ const ICO = {
   sanitario: '<path d="M12 5.5v13M5.5 12h13"/>', institucional: '<path d="M4 9l8-4 8 4M6 10v7M10 10v7M14 10v7M18 10v7M4 19h16"/>',
   aldia: '<circle cx="12" cy="12" r="7.5"/><path d="M12 8v4.3l3 1.7"/>', racha: '<path d="M13 3l-7 11h5l-1 7 7-11h-5z"/>',
   despliegue: '<circle cx="9" cy="9" r="2.5"/><circle cx="16" cy="10" r="2"/><path d="M4.5 18c.5-3 2.3-4.5 4.5-4.5s4 1.5 4.5 4.5M14 14.5c2.5-.5 4.5.8 5.500 3.5"/>',
+  amplio: '<circle cx="12" cy="12" r="8"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>', album: '<rect x="5" y="4.5" width="14" height="15" rx="2"/><path d="M9 9h6M9 13h6"/>',
+  despensa: '<path d="M5 8h14l-1.4 10H6.4zM9 8a3 3 0 016 0"/>', grandes: '<path d="M4 19V8l8-3 8 3v11M4 19h16M9 19v-5h6v5"/>', gimnasio: '<path d="M4 10v4M7 8v8M17 8v8M20 10v4M7 12h10"/>',
+  constancia: '<path d="M5 18l4-5 3 3 6-8"/><path d="M15 8h3v3"/>', misionero: '<path d="M6 20V5M6 5h11l-2.5 3.5L17 12H6"/>', perfecto: '<path d="M12 4l7 8-7 8-7-8z"/>',
+  semana: '<rect x="5" y="6" width="14" height="13" rx="2"/><path d="M5 10h14M9 4v4M15 4v4"/>', ascenso: '<path d="M12 19V6M6.5 11.5L12 6l5.5 5.5"/>',
   cartografo: '<path d="M4 6.5l5-2 6 2 5-2v13l-5 2-6-2-5 2zM9 4.5v13M15 6.5v13"/>', cero: '<circle cx="12" cy="12" r="7.5"/><path d="M8.5 12.2l2.5 2.5 4.5-5"/>'
 };
 function logrosCalc() {
@@ -1052,6 +1092,11 @@ function logrosCalc() {
   const carto = reviewed.size + customs.length;
   const pend = vis.filter(isRev).length;
   const cLv = pend === 0 ? 3 : pend <= 5 ? 2 : pend <= 20 ? 1 : 0;
+  const ts = townStats(), albs = albumData(), ak = (pre) => Object.keys(gam.aw).filter((k) => k.indexOf(pre) === 0).length;
+  const supC = vis.filter((c) => (c.tipo === "Supermercado" || c.tipo === "Carrefour") && estadoOf(c) === "concedido").length;
+  const gymC = vis.filter((c) => c.tipo === "Gimnasios" && estadoOf(c) === "concedido").length;
+  const bigC = new Set(con.filter((c) => BIGT.indexOf(c.tipo) >= 0).map((c) => c.tipo)).size;
+  const actD = Object.keys(gam.day).filter((d) => (gam.day[d].xp || 0) > 0).length;
   return [
     { id: "permiso", name: "Primer permiso", d: "Consigue tu primer permiso concedido.", ...bin(con.length >= 1, con.length ? "Conseguido" : "Aún sin permisos concedidos") },
     { id: "gestor", name: "Gestor", d: "Permisos vigentes a la vez: 5, 15 y 30.", ...tier(con.length, [5, 15, 30], "permisos") },
@@ -1064,7 +1109,17 @@ function logrosCalc() {
     { id: "racha", name: "Racha", d: "Días seguidos abriendo el mapa sin seguimientos pendientes: 7 y 30.", lv: lvOf(logros.racha.mejor, [7, 30]), max: 2, txt: "Racha actual " + logros.racha.n + " · mejor " + logros.racha.mejor + " días" },
     { id: "despliegue", name: "Despliegue", d: "Captadores acumulados en el historial de vigencias: 10, 50 y 100.", ...tier(capt, [10, 50, 100], "captadores") },
     { id: "cartografo", name: "Cartógrafo", d: "Puntos revisados o añadidos por ti: 1, 10 y 25.", ...tier(carto, [1, 10, 25], "puntos") },
-    { id: "cero", name: "Cero pendientes", d: "Puntos por revisar: 20 o menos, 5 o menos y ninguno.", lv: cLv, max: 3, txt: pend === 0 ? "Sin pendientes" : pend + " por revisar" }
+    { id: "cero", name: "Cero pendientes", d: "Puntos por revisar: 20 o menos, 5 o menos y ninguno.", lv: cLv, max: 3, txt: pend === 0 ? "Sin pendientes" : pend + " por revisar" },
+    { id: "amplio", name: "Frente amplio", d: "Municipios con algún permiso solicitado o concedido: 10, 25 y 50.", ...tier(ts.filter((o) => o.st >= 1).length, [10, 25, 50], "municipios") },
+    { id: "album", name: "Coleccionista", d: "Álbumes (cadenas y marcas) con al menos un permiso: 3, 6 y 12.", ...tier(albs.filter((o) => o.con > 0).length, [3, 6, 12], "álbumes") },
+    { id: "despensa", name: "Despensa", d: "Supermercados con permiso: 5, 15 y 40.", ...tier(supC, [5, 15, 40], "supermercados") },
+    { id: "grandes", name: "Grandes superficies", d: "Marcas grandes con permiso: IKEA, Leroy Merlin, Decathlon, MediaMarkt, El Corte Inglés y Carrefour (2, 4 y 6).", ...tier(bigC, [2, 4, 6], "marcas") },
+    { id: "gimnasio", name: "Gimnasio", d: "Gimnasios con permiso: 3, 10 y 25.", ...tier(gymC, [3, 10, 25], "gimnasios") },
+    { id: "constancia", name: "Constancia", d: "Días con actividad en el mapa: 5, 20 y 60.", ...tier(actD, [5, 20, 60], "días") },
+    { id: "misionero", name: "Misionero", d: "Misiones diarias completadas: 5, 25 y 100.", ...tier(ak("mis:"), [5, 25, 100], "misiones") },
+    { id: "perfecto", name: "Día perfecto", d: "Días con las 3 misiones completadas: 1, 5 y 15.", ...tier(ak("misall:"), [1, 5, 15], "días") },
+    { id: "semana", name: "Semana redonda", d: "Retos semanales completados: 1, 4 y 12.", ...tier(ak("wk:"), [1, 4, 12], "retos") },
+    { id: "ascenso", name: "Ascenso", d: "Nivel alcanzado: 5, 8 y 10.", ...tier(lvOfXp(xpTotal()) + 1, [5, 8, 10], "nivel") }
   ];
 }
 function logrosToast(msg) {
@@ -1088,14 +1143,14 @@ function checkLogros() {
   if (nuevos.length) logrosToast("Insignia conseguida: " + nuevos.map((b) => b.name + (b.max > 1 ? " (" + LV_NAMES[b.lv] + ")" : "")).join(", "));
   const tot = Object.keys(logros.n).filter((k) => logros.n[k] > 0).length;
   const lk = document.getElementById("logrosK"); if (lk) lk.querySelector("b").textContent = tot;
-  const mb = document.getElementById("logrosBtn"); if (mb) mb.textContent = "Logros (" + tot + " / 12)";
+  const mb = document.getElementById("logrosBtn"); if (mb) mb.textContent = "Logros (" + tot + " / " + logrosCalc().length + ")";
   return tot;
 }
 
 /* Gamificación: experiencia (XP), niveles, misiones y celebraciones. Cada acción da XP una sola vez (clave única), así que repetirla no suma. */
 const GAM_KEY = "gamificacion-granada-v1";
 const GAM_FIRST = (() => { try { return localStorage.getItem(GAM_KEY) === null; } catch (e) { return true; } })();
-let gam = Object.assign({ aw: {}, day: {}, dm: {}, wm: {}, lvl: 1, sound: true, log: [] }, loadJSON(GAM_KEY, {}));
+let gam = Object.assign({ aw: {}, day: {}, dm: {}, wm: {}, lvl: 1, sound: true, log: [], fog: true, wsum: "" }, loadJSON(GAM_KEY, {}));
 let gamReady = false;
 const saveGam = () => { try { localStorage.setItem(GAM_KEY, JSON.stringify(gam)); return true; } catch (e) { return false; } };
 const RANGOS = [["Explorador", 0], ["Rastreador", 100], ["Gestor", 300], ["Negociador", 600], ["Estratega", 1000], ["Embajador", 1600], ["Maestro de Zona", 2400], ["Capitán del Territorio", 3500], ["Gran Maestre", 5000], ["Leyenda del Territorio", 7000]];
@@ -1273,7 +1328,7 @@ function gamTileHTML() {
   const g = gamInfo();
   return '<button type="button" id="gamK" class="k gam" title="Ver mi progreso"><b>Nv ' + (g.i + 1) + '</b><span>' + esc(g.name) + " · " + g.x + ' XP</span><i class="xpb"><u style="width:' + g.pct + '%"></u></i></button>';
 }
-function gamMenu() { const b = document.getElementById("gamBtn"), g = gamInfo(); if (b) b.textContent = "Mi progreso (Nv " + (g.i + 1) + " · " + g.x + " XP)"; }
+function gamMenu() { const b = document.getElementById("gamBtn"), g = gamInfo(); if (b) b.textContent = "Mi progreso (Nv " + (g.i + 1) + " · " + g.x + " XP)"; fogDraw(); }
 function gamTile() {
   gamMenu();
   const k = document.getElementById("gamK"); if (!k) return;
@@ -1281,12 +1336,11 @@ function gamTile() {
   n.addEventListener("click", openGam); k.replaceWith(n);
   if (document.getElementById("dlgGam").open) openGam();
 }
-function openGam() {
+function tabProg() {
   const g = gamInfo(), C = 2 * Math.PI * 44, mult = gamMult();
   const mrow = (m, wk) => { const v = Math.min(misProg(m, wk), m.n), ok = v >= m.n; return '<li class="' + (ok ? "ok" : "") + '"><span class="ck">' + (ok ? "✓" : "") + '</span><span class="mt">' + esc(m.t) + '</span><span class="mp">' + v + " / " + m.n + '</span><span class="mx">+' + (wk ? 150 : 30) + ' XP</span><span class="mb"><i style="width:' + Math.round(100 * v / m.n) + '%"></i></span></li>'; };
   const wk = misWeek();
-  document.getElementById("gamBody").innerHTML =
-    '<div class="gh"><svg viewBox="0 0 100 100" class="gring" aria-hidden="true"><circle cx="50" cy="50" r="44" class="gr0"/><circle cx="50" cy="50" r="44" class="gr1" style="stroke-dasharray:' + C.toFixed(1) + ";stroke-dashoffset:" + (C * (1 - g.pct / 100)).toFixed(1) + '"/><text x="50" y="56" text-anchor="middle">' + (g.i + 1) + '</text></svg>' +
+  return '<div class="gh"><svg viewBox="0 0 100 100" class="gring" aria-hidden="true"><circle cx="50" cy="50" r="44" class="gr0"/><circle cx="50" cy="50" r="44" class="gr1" style="stroke-dasharray:' + C.toFixed(1) + ";stroke-dashoffset:" + (C * (1 - g.pct / 100)).toFixed(1) + '"/><text x="50" y="56" text-anchor="middle">' + (g.i + 1) + '</text></svg>' +
     '<div><h3>' + esc(g.name) + '</h3><p>' + g.x + " XP" + (g.b ? " · faltan " + (g.b - g.x) + " para " + esc(RANGOS[g.i + 1][0]) : " · nivel máximo") + '</p>' +
     '<p class="chip' + (mult > 1 ? " on" : "") + '">' + (mult > 1 ? "Racha de " + logros.racha.n + " días: XP ×" + String(mult).replace(".", ",") : "Racha ×1: con 3 días seguidos sin seguimientos atrasados sube a ×1,25") + "</p></div></div>" +
     '<div class="dots">' + RANGOS.map((r, i) => '<i class="' + (i < g.i ? "p" : i === g.i ? "c" : "") + '" title="' + esc(r[0]) + " · " + r[1] + ' XP"></i>').join("") + "</div>" +
@@ -1295,14 +1349,119 @@ function openGam() {
     "<h4>Actividad reciente</h4><ul class=\"lgl\">" + (gam.log.length ? gam.log.slice(0, 8).map((e) => "<li><span>" + esc(fmtD(e.t)) + "</span>" + esc(e.x) + "<b>+" + e.p + "</b></li>").join("") : "<li>Aún sin actividad. Solicita un permiso para empezar.</li>") + "</ul>" +
     '<details class="how"><summary>Cómo se gana XP</summary><p>Solicitar un permiso 10 · Permiso concedido 50 · Seguimiento realizado 15 · Seguimiento programado 5 (máx. 3 al día) · Contacto anotado 8 · Punto valorado 5 · Ubicación revisada 10 · Punto nuevo 20 · Insignia 50 / 100 / 200 · Misión 30 · Día perfecto 50 · Reto semanal 150. Cada acción cuenta una sola vez por punto, y la racha multiplica lo que ganas.</p></details>' +
     '<label class="snd"><input type="checkbox" id="gamSnd"' + (gam.sound ? " checked" : "") + "> Sonidos</label>";
-  document.getElementById("gamSnd").addEventListener("change", (e) => { gam.sound = e.target.checked; saveGam(); if (gam.sound) sfx("tick"); });
+}
+
+/* Territorio, álbum y resumen semanal */
+let gamTab = "prog", gamWkOff = 0, gamTq = "";
+const ST_NAMES = ["Sin explorar", "En marcha", "Conquistado", "Dominado"];
+function townStats() {
+  const m = {};
+  CENTERS.forEach((c) => {
+    if (isOut(c)) return;
+    const t = c.town || "Granada", o = m[t] || (m[t] = { t, n: 0, con: 0, sol: 0, pts: [] }), e = estadoOf(c);
+    o.n++; if (e === "concedido") o.con++; else if (e === "solicitado") o.sol++;
+    const q = cache[c.id]; if (q && q.lat) o.pts.push([q.lat, q.lon]);
+  });
+  return Object.values(m).map((o) => { o.st = o.con === 0 ? (o.sol ? 1 : 0) : (o.n >= 3 && o.con / o.n >= .5 ? 3 : 2); return o; });
+}
+let fogLayer = null, fogSig = "";
+function fogDraw() {
+  if (!gam.fog) { if (fogLayer) { map.removeLayer(fogLayer); fogLayer = null; fogSig = ""; } return; }
+  const ts = townStats(), sig = ts.map((o) => o.t + o.st + o.pts.length).join("|");
+  if (fogLayer && sig === fogSig) return;
+  fogSig = sig;
+  if (fogLayer) map.removeLayer(fogLayer);
+  fogLayer = L.layerGroup();
+  const COL = ["#64748b", "#fbbf24", "#22c55e", "#e0a800"];
+  ts.forEach((o) => {
+    if (!o.pts.length) return;
+    const la = o.pts.reduce((a, q) => a + q[0], 0) / o.pts.length, lo = o.pts.reduce((a, q) => a + q[1], 0) / o.pts.length;
+    const ds = o.pts.map((q) => map.distance([la, lo], q)).sort((a, b) => a - b), r = Math.min(7000, Math.max(1100, 1.2 * ds[Math.floor(.9 * (ds.length - 1))]));
+    L.circle([la, lo], { radius: r, color: COL[o.st], weight: o.st ? 2 : 1, opacity: o.st ? .8 : .25, fillColor: COL[o.st], fillOpacity: [.1, .2, .26, .34][o.st], interactive: false }).addTo(fogLayer);
+  });
+  fogLayer.addTo(map);
+}
+function focusTown(t) {
+  const pts = CENTERS.filter((c) => !isOut(c) && (c.town || "Granada") === t && cache[c.id] && cache[c.id].lat).map((c) => [cache[c.id].lat, cache[c.id].lon]);
+  document.getElementById("dlgGam").close();
+  if (pts.length) map.fitBounds(L.latLngBounds(pts), { padding: [60, 60], maxZoom: 15 });
+}
+function tabTerr() {
+  const ts = townStats(), N = ts.length || 1, c2 = ts.filter((o) => o.st >= 2).length, c1 = ts.filter((o) => o.st === 1).length, c3 = ts.filter((o) => o.st === 3).length;
+  return '<div class="tr-h"><p><b>' + c2 + "</b> de " + ts.length + ' municipios conquistados</p><span class="bar"><i style="width:' + Math.round(100 * c2 / N) + '%"></i></span><small>' + c1 + " en marcha · " + c3 + " dominados (la mitad o más de sus puntos con permiso)</small></div>" +
+    '<label class="snd"><input type="checkbox" id="fogChk"' + (gam.fog ? " checked" : "") + "> Mostrar la conquista en el mapa: gris sin explorar, ámbar en marcha, verde conquistado, dorado dominado</label>" +
+    '<input type="search" id="trQ" class="trq" placeholder="Buscar municipio" value="' + esc(gamTq) + '"><ul class="trl" id="trList"></ul>';
+}
+function trFill() {
+  const ul = document.getElementById("trList"); if (!ul) return;
+  const q = gamTq.toLowerCase();
+  const rows = townStats().filter((o) => !q || o.t.toLowerCase().indexOf(q) >= 0).sort((a, b) => b.st - a.st || b.con - a.con || b.n - a.n || a.t.localeCompare(b.t));
+  ul.innerHTML = rows.map((o) => '<li data-t="' + esc(o.t) + '" class="s' + o.st + '" tabindex="0"><i></i><b>' + esc(o.t) + "</b><span>" + ST_NAMES[o.st] + '</span><em>' + o.con + " / " + o.n + "</em></li>").join("") || "<li>Sin resultados</li>";
+  ul.onclick = (e) => { const li = e.target.closest("li[data-t]"); if (li) focusTown(li.dataset.t); };
+  ul.onkeydown = (e) => { if (e.key === "Enter") { const li = e.target.closest("li[data-t]"); if (li) focusTown(li.dataset.t); } };
+}
+const BIGT = ["IKEA", "Leroy Merlin", "Decathlon", "MediaMarkt", "El Corte Inglés", "Carrefour"];
+const albumKey = (c) => BIGT.indexOf(c.tipo) >= 0 ? c.tipo : c.tipo === "Supermercado" ? chainOf(c) : c.tipo === "Gimnasios" ? c.name.split(" – ")[0].trim() : "";
+function albumData() {
+  const g = {};
+  CENTERS.forEach((c) => {
+    if (isOut(c)) return;
+    const k = albumKey(c); if (!k) return;
+    const o = g[k] || (g[k] = { k, t: c.tipo, n: 0, con: 0, sol: 0 }), e = estadoOf(c);
+    o.n++; if (e === "concedido") o.con++; else if (e === "solicitado") o.sol++;
+  });
+  return Object.values(g).filter((o) => o.n >= 2);
+}
+function albumGo(k, t) {
+  ["#permiso", "#valor", "#cadena", "#q", "#tipo"].forEach((x) => { $(x).value = ""; });
+  if (t === "Supermercado" || t === "Carrefour") $("#cadena").value = k; else if (t === "Gimnasios") { $("#tipo").value = "Gimnasios"; $("#q").value = k; } else $("#tipo").value = t;
+  document.getElementById("dlgGam").close(); refilter();
+}
+function tabAlb() {
+  const al = albumData(), sec = [["Supermercados", (o) => o.t === "Supermercado" || o.t === "Carrefour"], ["Grandes superficies", (o) => BIGT.indexOf(o.t) >= 0 && o.t !== "Carrefour"], ["Gimnasios", (o) => o.t === "Gimnasios"]];
+  const done = al.filter((o) => o.con === o.n).length;
+  return '<p class="al-h"><b>' + done + "</b> de " + al.length + " álbumes completos. Un álbum se completa con permiso en todos los puntos de la cadena.</p>" + sec.map(([name, f]) => {
+    const it = al.filter(f).sort((a, b) => (b.con === b.n) - (a.con === a.n) || b.con / b.n - a.con / a.n || b.n - a.n);
+    return it.length ? "<h4>" + name + '</h4><div class="alg">' + it.map((o) => '<button type="button" class="alc' + (o.con === o.n ? " full" : "") + '" data-k="' + esc(o.k) + '" data-t="' + esc(o.t) + '"><b>' + esc(o.k === "Dani" ? "Supermercados Dani" : o.k) + "</b><span>" + o.con + " / " + o.n + (o.con === o.n ? " · Completo" : o.sol ? " · " + o.sol + " solicitados" : "") + '</span><span class="sg"><i class="g" style="width:' + Math.round(100 * o.con / o.n) + '%"></i><i class="a" style="width:' + Math.round(100 * o.sol / o.n) + '%"></i></span></button>').join("") + "</div>" : "";
+  }).join("");
+}
+function weekData(off) {
+  const mon = new Date(mondayOf(today()) + "T12:00:00"); mon.setDate(mon.getDate() - 7 * off);
+  const days = Array.from({ length: 7 }, (_, i) => { const d = new Date(mon); d.setDate(mon.getDate() + i); return d.toISOString().slice(0, 10); });
+  const sum = (k) => days.reduce((a, d) => a + ((gam.day[d] || {})[k] || 0), 0);
+  return { days, sol: sum("sol"), con: sum("con"), seg: sum("seg") + sum("prog"), rev: sum("rev") + sum("add"), xp: sum("xp"), act: days.filter((d) => ((gam.day[d] || {}).xp || 0) > 0).length, towns: new Set(days.reduce((a, d) => a.concat((gam.day[d] || {}).towns || []), [])).size };
+}
+function tabSem() {
+  const w = weekData(gamWkOff), p = weekData(gamWkOff + 1), mx = Math.max(1, ...w.days.map((d) => (gam.day[d] || {}).xp || 0));
+  const dl = (a, b) => (a > b ? '<em class="up">▲ ' + (a - b) + "</em>" : a < b ? '<em class="dn">▼ ' + (b - a) + "</em>" : "<em>=</em>");
+  const row = (t, k) => "<li><span>" + t + "</span><b>" + w[k] + "</b>" + dl(w[k], p[k]) + "</li>";
+  const best = w.days.reduce((a, d) => (((gam.day[d] || {}).xp || 0) > ((gam.day[a] || {}).xp || 0) ? d : a), w.days[0]);
+  return '<div class="wkb"><button type="button" data-o="0" aria-pressed="' + (gamWkOff === 0) + '">Esta semana</button><button type="button" data-o="1" aria-pressed="' + (gamWkOff === 1) + '">Semana pasada</button></div>' +
+    '<p class="wk-t">' + fmtD(w.days[0]) + " – " + fmtD(w.days[6]) + ' · <b>' + w.xp + " XP</b>" + (w.xp || p.xp ? " " + dl(w.xp, p.xp) : "") + "</p>" +
+    '<div class="wbars">' + w.days.map((d, i) => '<div title="' + fmtD(d) + ": " + ((gam.day[d] || {}).xp || 0) + ' XP"><i style="height:' + Math.round(100 * ((gam.day[d] || {}).xp || 0) / mx) + '%"></i><span>' + "LMXJVSD"[i] + "</span></div>").join("") + "</div>" +
+    '<ul class="wkl">' + row("Permisos solicitados", "sol") + row("Permisos concedidos", "con") + row("Seguimientos hechos o programados", "seg") + row("Ubicaciones revisadas y puntos nuevos", "rev") + row("Municipios con permiso nuevo", "towns") + row("Días con actividad", "act") + "</ul>" +
+    '<p class="how">' + (w.xp ? "Mejor día: " + fmtD(best) + " con " + ((gam.day[best] || {}).xp || 0) + " XP. " : "Aún sin actividad esta semana. ") + "Las flechas comparan con la semana anterior.</p>";
+}
+function openGam(tab) {
+  if (typeof tab === "string") gamTab = tab;
+  const body = { prog: tabProg, terr: tabTerr, alb: tabAlb, sem: tabSem }[gamTab]();
+  const el = document.getElementById("gamBody");
+  el.innerHTML = '<div class="gtabs" role="tablist">' + [["prog", "Progreso"], ["terr", "Territorio"], ["alb", "Álbum"], ["sem", "Semana"]].map(([k, t]) => '<button type="button" role="tab" data-k="' + k + '" aria-selected="' + (k === gamTab) + '">' + t + "</button>").join("") + "</div>" + body;
+  el.querySelectorAll(".gtabs button").forEach((b) => b.addEventListener("click", () => openGam(b.dataset.k)));
+  const snd = document.getElementById("gamSnd"); if (snd) snd.addEventListener("change", (e) => { gam.sound = e.target.checked; saveGam(); if (gam.sound) sfx("tick"); });
+  const fc = document.getElementById("fogChk"); if (fc) fc.addEventListener("change", (e) => { gam.fog = e.target.checked; saveGam(); fogDraw(); });
+  const tq = document.getElementById("trQ"); if (tq) { trFill(); tq.addEventListener("input", () => { gamTq = tq.value; trFill(); }); }
+  el.querySelectorAll(".alc").forEach((b) => b.addEventListener("click", () => albumGo(b.dataset.k, b.dataset.t)));
+  el.querySelectorAll(".wkb button").forEach((b) => b.addEventListener("click", () => { gamWkOff = +b.dataset.o; openGam(); }));
   const d = document.getElementById("dlgGam"); if (!d.open) d.showModal();
 }
+
 document.getElementById("gamBtn").addEventListener("click", openGam);
 document.getElementById("gamClose").addEventListener("click", () => document.getElementById("dlgGam").close());
 document.getElementById("gamLogros").addEventListener("click", () => { document.getElementById("dlgGam").close(); openLogros(); });
 seedXP();
 gamReady = true;
+(() => { const w = mondayOf(today()); if (gam.wsum !== w) { const prevW = weekData(1).xp; if (gam.wsum && prevW > 0) logrosToast("Resumen de la semana pasada: " + prevW + " XP. Míralo en Mi progreso, pestaña Semana."); gam.wsum = w; saveGam(); } })();
 
 function refreshSelects() {
   const vis = CENTERS.filter((c) => !isOut(c));
