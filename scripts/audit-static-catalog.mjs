@@ -139,14 +139,24 @@ for (const [block, defaultCategory] of definitions) {
 
 const coordinates = parseObject("PRECOMPUTED");
 const coordinateKeys = new Set(Object.keys(coordinates));
+function finiteCoordinate(value) {
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value === "string" && value.trim() !== "" && Number.isFinite(Number(value))) return Number(value);
+  return null;
+}
 for (const row of rows) {
   const pair = coordinates[row.source_key];
-  row.latitude = Array.isArray(pair) ? pair[0] : "";
-  row.longitude = Array.isArray(pair) ? pair[1] : "";
+  const latitude = Array.isArray(pair) && pair.length === 2 ? finiteCoordinate(pair[0]) : null;
+  const longitude = Array.isArray(pair) && pair.length === 2 ? finiteCoordinate(pair[1]) : null;
+  row.latitude = latitude ?? "";
+  row.longitude = longitude ?? "";
   row.coordinate_key_match = pair ? "exact" : "missing";
-  row.coordinate_valid_range = Array.isArray(pair) && pair.length === 2 &&
-    Number.isFinite(pair[0]) && Number.isFinite(pair[1]) &&
-    pair[0] >= -90 && pair[0] <= 90 && pair[1] >= -180 && pair[1] <= 180 ? "yes" : "no";
+  row.coordinate_source_type = !Array.isArray(pair) || pair.length !== 2 || latitude === null || longitude === null
+    ? "invalid_or_missing"
+    : typeof pair[0] === "number" && typeof pair[1] === "number" ? "number"
+    : typeof pair[0] === "string" && typeof pair[1] === "string" ? "numeric_string" : "mixed";
+  row.coordinate_valid_range = latitude !== null && longitude !== null &&
+    latitude >= -90 && latitude <= 90 && longitude >= -180 && longitude <= 180 ? "yes" : "no";
 }
 const nameGroups = new Map();
 for (const row of rows) {
@@ -174,7 +184,7 @@ for (const row of rows) {
 }
 
 fs.mkdirSync(outputDir, {recursive:true});
-const columns = ["source_block","source_index","source_id","source_key","name","category","municipality","address","latitude","longitude","coordinate_key_match","coordinate_valid_range","review_flag","source_note"];
+const columns = ["source_block","source_index","source_id","source_key","name","category","municipality","address","latitude","longitude","coordinate_key_match","coordinate_source_type","coordinate_valid_range","review_flag","source_note"];
 writeCsv(path.join(outputDir,"catalog-audit.csv"), rows, columns);
 writeCsv(path.join(outputDir,"duplicate-names.csv"), duplicates, ["normalized_name","count","source_rows","names"]);
 writeCsv(path.join(outputDir,"rows-with-issues.csv"), issues, ["source_block","source_index","source_key","issues"]);
@@ -185,7 +195,7 @@ const summary = {
   total_rows:rows.length, precomputed_coordinate_keys:coordinateKeys.size,
   exact_coordinate_matches:rows.filter(r => r.coordinate_key_match === "exact").length,
   missing_coordinate_matches:rows.filter(r => r.coordinate_key_match !== "exact").length,
-  invalid_or_missing_coordinates:rows.filter(r => r.coordinate_valid_range !== "yes").length,
+  invalid_or_missing_coordinates:rows.filter(r => r.coordinate_valid_range !== "yes").length,\n  numeric_string_coordinates:rows.filter(r => r.coordinate_source_type === "numeric_string").length,\n  mixed_type_coordinates:rows.filter(r => r.coordinate_source_type === "mixed").length,
   missing_municipality:rows.filter(r => !String(r.municipality).trim()).length,
   missing_address:rows.filter(r => !String(r.address).trim()).length,
   normalized_duplicate_name_groups:duplicates.length,
