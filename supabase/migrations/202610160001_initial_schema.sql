@@ -426,6 +426,61 @@ create trigger validate_followup_targets
 before insert or update of establishment_id, application_id, grant_id on public.followups
 for each row execute procedure public.validate_followup_targets();
 
+-- Evitar que un cambio posterior en el registro padre rompa relaciones ya válidas.
+create or replace function public.prevent_application_reassignment_conflicts()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $
+begin
+  if new.establishment_id is distinct from old.establishment_id then
+    if exists (
+      select 1 from public.permit_grants pg
+      where pg.application_id = old.id
+        and pg.establishment_id <> new.establishment_id
+    ) or exists (
+      select 1 from public.followups f
+      where f.application_id = old.id
+        and f.establishment_id <> new.establishment_id
+    ) then
+      raise exception 'No se puede mover la solicitud: existen concesiones o seguimientos vinculados al establecimiento original'
+        using errcode = '23514';
+    end if;
+  end if;
+  return new;
+end;
+$;
+
+drop trigger if exists prevent_application_reassignment_conflicts on public.permit_applications;
+create trigger prevent_application_reassignment_conflicts
+before update of establishment_id on public.permit_applications
+for each row execute procedure public.prevent_application_reassignment_conflicts();
+
+create or replace function public.prevent_grant_reassignment_conflicts()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $
+begin
+  if new.establishment_id is distinct from old.establishment_id and exists (
+    select 1 from public.followups f
+    where f.grant_id = old.id
+      and f.establishment_id <> new.establishment_id
+  ) then
+    raise exception 'No se puede mover la concesión: existen seguimientos vinculados al establecimiento original'
+      using errcode = '23514';
+  end if;
+  return new;
+end;
+$;
+
+drop trigger if exists prevent_grant_reassignment_conflicts on public.permit_grants;
+create trigger prevent_grant_reassignment_conflicts
+before update of establishment_id on public.permit_grants
+for each row execute procedure public.prevent_grant_reassignment_conflicts();
+
 -- Historial automático de ubicación. La función se ejecuta con privilegios de
 -- servidor para que RLS no impida escribir la traza; solo guarda cambios reales.
 create or replace function public.record_establishment_location_history()
@@ -524,6 +579,8 @@ end;
 $$;
 
 revoke all on function public.validate_permit_grant_application() from public;
+revoke all on function public.prevent_application_reassignment_conflicts() from public;
+revoke all on function public.prevent_grant_reassignment_conflicts() from public;
 revoke all on function public.validate_followup_targets() from public;
 revoke all on function public.record_establishment_location_history() from public;
 revoke all on function public.write_audit_log() from public;
