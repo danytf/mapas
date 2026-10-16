@@ -257,6 +257,39 @@
   .wk-nav button, .wk-nav input { height: 30px; border: 1px solid var(--line-2); border-radius: 8px; background: var(--panel); color: var(--fg); font: inherit; font-size: 13px; padding: 0 10px; cursor: pointer; }
   .wk-nav input[type=date] { width: 150px; flex: none; }
   .wk-nav button:hover { border-color: var(--muted); }
+  .wk-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); }
+  .wkg { min-width: 720px; }
+  .wkr { display: grid; grid-template-columns: 150px repeat(7, minmax(74px, 1fr)); align-items: stretch; position: relative; }
+  .wkr > .d { border-left: 1px solid var(--line); min-height: 34px; grid-row: 1; }
+  .wkr > .d.we { background: rgba(120, 130, 150, .07); }
+  .wkr > .d.today { background: var(--ok-soft); }
+  .wkr.hd > div { padding: 9px 4px 8px; text-align: center; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--line-2); }
+  .wkr.hd > div b { display: block; font-size: 17px; letter-spacing: 0; text-transform: none; color: var(--fg); font-weight: 650; }
+  .wkr.hd > div.today { background: var(--ok-soft); color: var(--ok); }
+  .wkr.hd > div.today b { color: var(--ok); }
+  .wkr .wk-n { grid-row: 1; padding: 7px 10px; font-size: 12px; line-height: 1.25; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
+  .wkr .wk-n small { color: var(--muted); font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .wkr .wk-n span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .wkr.og { background: var(--bg); border-top: 1px solid var(--line-2); }
+  .wkr.og .wk-n { font-weight: 700; font-size: 13px; }
+  .wkr.og > .d { display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; font-variant-numeric: tabular-nums; color: var(--ok); }
+  .wkr.og > .d.z { color: var(--muted); font-weight: 400; }
+  .wkr.tot { border-top: 0; }
+  .wkr.it { border-top: 1px solid var(--line); }
+  .wkr.it > .d { min-height: 44px; }
+  .wk-bar { grid-row: 1; align-self: center; margin: 5px 3px; height: 30px; padding: 0 10px; border: 0; border-radius: 8px; font: inherit; font-size: 12px; font-weight: 600; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 1px 2px rgba(20, 27, 38, .18); z-index: 1; }
+  .wk-bar:hover { filter: brightness(.95); transform: translateY(-1px); }
+  .wk-bar.cl { border-top-left-radius: 2px; border-bottom-left-radius: 2px; margin-left: 0; }
+  .wk-bar.cr { border-top-right-radius: 2px; border-bottom-right-radius: 2px; margin-right: 0; }
+  .wk-bar em { font-style: normal; background: none; padding: 0; color: inherit; }
+  .wk-bar .nn { text-decoration: none; margin-left: auto; background: rgba(255, 255, 255, .55); color: #141b26; border-radius: 999px; padding: 1px 8px; font-size: 11px; }
+  .wk-bar.s-concedido { background: #22c55e; color: #052e16; }
+  .wk-bar.s-solicitado { background: repeating-linear-gradient(135deg, #fde68a 0 8px, #fbbf24 8px 16px); color: #5b3a00; }
+  .wk-bar.s-caducado { background: #cbd5e1; color: #334155; }
+  .wk-bar.s-denegado { background: #1f2937; color: #fff; }
+  .wk-bar.s-cancelado { background: #ef4444; color: #fff; text-decoration: line-through; }
+  .wk-leg { display: flex; gap: 12px; flex-wrap: wrap; font-size: 11.5px; color: var(--muted); margin-top: 8px; }
+  .wk-leg i { display: inline-block; width: 12px; height: 12px; border-radius: 4px; margin-right: 5px; vertical-align: -2px; }
   .wk-sub { font-size: 12px; color: var(--muted); margin: 8px 0 4px; }
   .wk-ong { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0 10px; }
   .wk-ong span { font-size: 12px; background: var(--ok-bg); border-radius: 999px; padding: 3px 10px; }
@@ -1648,18 +1681,30 @@ const download = (name, text, type) => {
       '<div class="kpi hl"><b>' + sum(con) + "</b><span>Captadores concedidos</span></div>" +
       '<div class="kpi al"><b>' + sol.size + "</b><span>Puntos solicitados</span></div>" +
       '<div class="kpi al"><b>' + sum(sol) + "</b><span>Captadores solicitados</span></div></div>" +
-      '<div class="wk-sub">Sin respuesta: ' + cnt("caducado") + " · Denegados: " + cnt("denegado") + " · Cancelados: " + cnt("cancelado") + "</div>" +
-      (Object.keys(ongs).length ? '<div class="wk-ong">' + Object.entries(ongs).sort((x, y) => y[1].n - x[1].n).map(([k, v]) => "<span><b>" + esc(k) + "</b> · " + v.pts.size + " punto" + (v.pts.size === 1 ? "" : "s") + " · " + v.n + " capt.</span>").join("") + "</div>" : "");
+      '<div class="wk-sub">Sin respuesta: ' + cnt("caducado") + " · Denegados: " + cnt("denegado") + " · Cancelados: " + cnt("cancelado") + "</div>";
     if (!items.length) h += '<div class="pn-note">Ningún permiso con fechas en esta semana.</div>';
     else {
-      h += '<div class="pn-scroll"><table><thead><tr><th>Punto</th><th>ONG</th><th>Fechas</th><th>Captadores</th></tr></thead><tbody>';
-      WK_ORDEN.forEach((e) => {
-        const g = items.filter((i) => i.e === e).sort((x, y) => (x.c.town || "Granada").localeCompare(y.c.town || "Granada") || x.c.name.localeCompare(y.c.name) || (x.desde || "").localeCompare(y.desde || ""));
-        if (!g.length) return;
-        h += '<tr class="wk-g"><td colspan="4"><i style="background:' + estadoInfo(e)[2] + '"></i>' + esc(estadoInfo(e)[1]) + " (" + g.length + ")</td></tr>";
-        g.forEach((i) => { h += '<tr data-kind="pt" data-k="' + i.c.id + '"><td>' + esc(i.c.name) + " · " + esc(i.c.town || "Granada") + "</td><td>" + esc(i.ong || "—") + "</td><td>" + fmtD(i.desde) + " – " + fmtD(i.hasta) + "</td><td>" + (i.n || "—") + "</td></tr>"; });
+      const DN = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"], days = DN.map((n, k) => addD(a, k));
+      const cls = (k) => (k >= 5 ? " we" : "") + (days[k] === t ? " today" : "");
+      const cells = () => days.map((_, k) => '<i class="d' + cls(k) + '"></i>').join("");
+      const perDay = (arr) => days.map((d) => { const m = new Map(); arr.filter((i) => i.e === "concedido" && (!i.desde || i.desde <= d) && (!i.hasta || i.hasta >= d)).forEach((i) => m.set(i.c.id, Math.max(m.get(i.c.id) || 0, i.n))); return sum(m); });
+      const numCells = (arr) => perDay(arr).map((v, k) => '<div class="d' + cls(k) + (v ? "" : " z") + '">' + (v || "·") + "</div>").join("");
+      h += '<div class="wk-scroll"><div class="wkg">' +
+        '<div class="wkr hd"><div></div>' + days.map((d, k) => "<div" + (days[k] === t ? ' class="today"' : "") + ">" + DN[k] + "<b>" + (+d.slice(8)) + "</b></div>").join("") + "</div>" +
+        '<div class="wkr og tot"><div class="wk-n"><span>Captadores por día</span><small>concedidos, todas las ONG</small></div>' + numCells(items) + "</div>";
+      const byOng = {}; items.forEach((i) => { const k = i.ong || "Sin ONG"; (byOng[k] = byOng[k] || []).push(i); });
+      Object.keys(byOng).sort((x, y) => (x === "Sin ONG") - (y === "Sin ONG") || x.localeCompare(y)).forEach((k) => {
+        const arr = byOng[k], pts = new Set(arr.map((i) => i.c.id)).size;
+        h += '<div class="wkr og"><div class="wk-n"><span>' + esc(k) + "</span><small>" + pts + " punto" + (pts === 1 ? "" : "s") + "</small></div>" + numCells(arr) + "</div>";
+        arr.slice().sort((x, y) => WK_ORDEN.indexOf(x.e) - WK_ORDEN.indexOf(y.e) || (x.desde || "").localeCompare(y.desde || "") || x.c.name.localeCompare(y.c.name)).forEach((i) => {
+          const s0 = Math.max(0, i.desde && i.desde > a ? days.indexOf(i.desde) : 0), e0 = Math.min(6, i.hasta && i.hasta < b ? days.indexOf(i.hasta) : 6);
+          const clipL = i.desde && i.desde < a, clipR = i.hasta && i.hasta > b;
+          const tip = i.c.name + " (" + (i.c.town || "Granada") + ")\n" + estadoInfo(i.e)[1] + " · " + fmtD(i.desde) + " – " + fmtD(i.hasta) + (i.ong ? " · " + i.ong : "") + (i.n ? " · " + i.n + " captadores" : "");
+          h += '<div class="wkr it"><div class="wk-n"><span>' + esc(i.c.name) + "</span><small>" + esc(i.c.town || "Granada") + "</small></div>" + cells() +
+            '<button type="button" class="wk-bar s-' + i.e + (clipL ? " cl" : "") + (clipR ? " cr" : "") + '" data-pt="' + i.c.id + '" style="grid-column:' + (s0 + 2) + " / " + (e0 + 3) + '" title="' + esc(tip) + '"><em>' + (e0 - s0 >= 1 ? esc(estadoInfo(i.e)[1]) : "") + "</em>" + (i.n ? '<em class="nn">' + i.n + "</em>" : "") + "</button></div>";
+        });
       });
-      h += "</tbody></table></div>";
+      h += "</div></div>" + '<div class="wk-leg">' + WK_ORDEN.map((e) => '<span><i style="background:' + estadoInfo(e)[2] + '"></i>' + esc(estadoInfo(e)[1]) + "</span>").join("") + "<span>Pulsa una barra para abrir el punto</span></div>";
     }
     box.innerHTML = h;
   };
@@ -1696,6 +1741,8 @@ const download = (name, text, type) => {
     wkRender();
   };
   body.addEventListener("click", (e) => {
+    const bar = e.target.closest("[data-pt]");
+    if (bar) { const c = CENTERS.find((x) => String(x.id) === bar.dataset.pt); if (c) focusPoint(c); return; }
     const wb = e.target.closest("[data-wk]");
     if (wb) { wk = wb.dataset.wk === "0" ? mondayOf(today()) : addD(wk, 7 * +wb.dataset.wk); wkRender(); return; }
     const tr = e.target.closest("tr[data-k]"); if (!tr) return;
