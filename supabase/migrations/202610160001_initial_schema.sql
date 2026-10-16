@@ -364,7 +364,7 @@ returns trigger
 language plpgsql
 security definer
 set search_path = ''
-as $
+as $$
 declare
   municipality_province_id uuid;
 begin
@@ -380,7 +380,7 @@ begin
   end if;
   return new;
 end;
-$;
+$$;
 
 drop trigger if exists validate_establishment_municipality_province on public.establishments;
 create trigger validate_establishment_municipality_province
@@ -392,7 +392,7 @@ returns trigger
 language plpgsql
 security definer
 set search_path = ''
-as $
+as $$
 begin
   if new.province_id is distinct from old.province_id and exists (
     select 1 from public.establishments e
@@ -404,7 +404,7 @@ begin
   end if;
   return new;
 end;
-$;
+$$;
 
 drop trigger if exists prevent_municipality_reassignment_conflicts on public.municipalities;
 create trigger prevent_municipality_reassignment_conflicts
