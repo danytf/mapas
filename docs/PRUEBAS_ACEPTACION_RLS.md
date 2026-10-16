@@ -41,22 +41,35 @@ No importar archivos de navegador, copias JSON/CSV de las pruebas antiguas ni re
 - Usuario A no puede alterar `role`, `is_active` o asignaciones mediante llamadas directas a la API.
 - Un usuario autenticado sin perfil activo o sin asignaciones no ve datos operativos.
 - Un usuario desactivado deja de tener acceso operativo aunque conserve sesión hasta que esta se renueve o revalide.
-- No se puede asociar una concesión con una solicitud perteneciente a otro establecimiento.
-- No se puede asociar un seguimiento a una solicitud o concesión de un establecimiento diferente.
+- No se puede asociar una concesión con una solicitud perteneciente a otro establecimiento; el trigger debe rechazarlo incluso en una llamada directa a la API.
+- No se puede asociar un seguimiento a una solicitud o concesión de un establecimiento diferente; el trigger debe rechazarlo incluso en una llamada directa a la API.
+- Cambiar latitud, longitud o dirección de un establecimiento genera automáticamente una fila en establishment_location_history; cambios en otros campos no deben crearla.
+- Insertar, modificar o borrar registros en las entidades auditadas genera una fila en audit_log con actor, operación, tabla, ámbito provincial y nombres de campos, sin copiar valores de contacto/notas.
+- Un usuario autenticado no puede insertar, actualizar ni borrar directamente filas de audit_log, ni consumir su secuencia desde la API.
 - Las actualizaciones simultáneas no deben sobrescribir silenciosamente cambios de otro usuario.
 - La importación repetida de un mismo lote no debe crear establecimientos duplicados.
 - Una coordenada aproximada nunca debe presentarse como verificada sin una revisión explícita.
 
-## 4. Riesgos de diseño pendientes antes de producción
+## 4. Controles incorporados y riesgos por validar
 
-1. **Consistencia entre relaciones:** el esquema inicial aplica el ámbito RLS a través del establecimiento, pero necesita validaciones adicionales para garantizar que `application_id` y `grant_id` pertenezcan al mismo establecimiento que el seguimiento/concesión correspondiente. Añadir restricciones o triggers de integridad antes de habilitar estas escrituras en producción.
-2. **Auditoría:** la tabla `audit_log` no permite escritura desde el rol `authenticated`. La siguiente iteración debe añadir triggers o funciones de servidor para registrar cambios de forma no manipulable por el cliente.
-3. **Historial de ubicación:** el esquema dispone de una tabla de historial, pero aún falta automatizar su escritura en cada cambio de coordenadas/dirección.
-4. **Perfil desactivado:** probar el comportamiento de sesiones ya abiertas tras desactivar un perfil y definir la revocación/revalidación necesaria.
-5. **Campos de actualización:** las políticas de algunas tablas requieren que `updated_by` sea el usuario actual. La capa de datos debe rellenarlo explícitamente; probar que un cliente no pueda suplantar a otro actor.
-6. **Catálogos:** las tablas de provincias y categorías nacen vacías. Preparar semillas de referencia verificadas, separadas de los datos de negocio.
-7. **Roles SQL:** revisar los privilegios efectivos por tabla/secuencia en el proyecto real y comprobar que no haya políticas adicionales heredadas del proyecto.
-8. **Pruebas automatizadas:** trasladar la matriz a tests de integración contra Supabase local/CI antes de conectar el frontend.
+La migración incorpora triggers de base de datos para:
+1. Rechazar concesiones cuya solicitud pertenezca a otro establecimiento.
+2. Rechazar seguimientos cuya solicitud o concesión pertenezca a otro establecimiento.
+3. Registrar cambios efectivos de latitud, longitud o dirección en el historial de ubicación.
+4. Escribir auditoría de servidor para establecimientos, solicitudes, concesiones, seguimientos, revisiones de ubicación, asignaciones provinciales y perfiles. El registro guarda nombres de campos cambiados, no sus valores potencialmente sensibles.
+
+Estos controles están **implementados en el archivo SQL, pero aún no están validados mediante ejecución en PostgreSQL/Supabase**. Antes de producción siguen pendientes:
+
+1. **Aplicación real:** ejecutar la migración en un proyecto Supabase de desarrollo limpio y resolver cualquier error de sintaxis, permisos o comportamiento de triggers.
+2. **Pruebas RLS:** ejecutar toda la matriz de aislamiento con usuarios A/B y administrador, incluyendo accesos directos por UUID y cambios de provincia.
+3. **Auditoría e historial:** comprobar que los triggers escriben incluso con RLS activo, que el actor es correcto y que no se filtran valores sensibles.
+4. **Perfil desactivado:** probar sesiones ya abiertas tras desactivar un perfil y definir la revalidación/revocación necesaria.
+5. **Campos de actualización:** confirmar que la capa de datos rellena updated_by con el usuario autenticado y que no puede suplantarse otro actor.
+6. **Privilegios efectivos:** revisar roles, tablas, secuencias y políticas del proyecto real para detectar permisos heredados o adicionales.
+7. **Pruebas automatizadas:** trasladar esta matriz a tests de integración contra Supabase local/CI.
+8. **Catálogos:** preparar semillas verificadas de provincias, municipios y categorías, separadas de los datos de negocio.
+
+audit_log no concede escritura directa al rol authenticated; la escritura se realiza mediante triggers de servidor. Las funciones de trigger tienen search_path vacío y no se exponen como operaciones RPC.
 
 ## 5. Criterio de salida
 
