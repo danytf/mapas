@@ -260,6 +260,13 @@
   .lg .bar { grid-column: 2; height: 4px; border-radius: 2px; background: var(--line); overflow: hidden; }
   .lg .bar i { display: block; height: 100%; background: var(--accent); }
   .lg-note { font-size: 11.5px; color: var(--muted); margin: 12px 0 0; }
+  details.loc { margin: 8px 0 4px; border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; font-size: 12px; }
+  details.loc summary { cursor: pointer; font-weight: 600; color: var(--fg); }
+  .loc .lrow { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0 6px; }
+  .loc .lb { font: inherit; font-size: 11.5px; font-weight: 600; padding: 5px 9px; border: 1px solid var(--line-2); border-radius: 7px; background: var(--panel); color: var(--fg); cursor: pointer; text-decoration: none; height: auto; }
+  .loc .lb:hover { border-color: var(--accent); color: var(--accent); }
+  .loc .l-in { width: 100%; font: inherit; font-size: 12px; padding: 6px 8px; border: 1px solid var(--line-2); border-radius: 7px; background: var(--panel); color: var(--fg); box-sizing: border-box; }
+  .loc .lmsg { font-size: 11.5px; color: var(--muted); min-height: 14px; margin-top: 4px; }
   dialog h2 { margin: 0; font-size: 18px; font-weight: 680; letter-spacing: -.015em; }
   dialog label { display: grid; gap: 4px; font-size: 12px; font-weight: 560; color: var(--muted); }
   dialog input, dialog select { font: inherit; font-weight: 400; height: 38px; padding: 0 12px; border: 1px solid var(--line-2); border-radius: 8px; background: var(--panel); color: var(--fg); width: 100%; }
@@ -555,6 +562,10 @@ const seguimientoDue = (c) => { const d = permOf(c).seguimiento; return d && d <
 const REV_KEY = "puntos-revisados-granada-v1";
 let reviewed = new Set(loadJSON(REV_KEY, []));
 const saveReviewed = () => { try { localStorage.setItem(REV_KEY, JSON.stringify([...reviewed])); } catch (e) {} };
+const LOC_KEY = "ubicaciones-corregidas-granada-v1";
+let corr = loadJSON(LOC_KEY, {});
+const saveCorr = () => { try { localStorage.setItem(LOC_KEY, JSON.stringify(corr)); } catch (e) {} };
+CENTERS.forEach((c) => { const q = corr[c.name]; if (q && !c.custom) cache[c.id] = { lat: q[0], lon: q[1] }; });
 const DUPS = new Set([]);
 const isApprox = (c) => !!(cache[c.id] && cache[c.id].approx) && !reviewed.has(c.name);
 const isRev = (c) => !reviewed.has(c.name) && (!!(cache[c.id] && cache[c.id].approx) || DUPS.has(c.name) || !c.conf);
@@ -580,6 +591,7 @@ function popupFor(c, pos) {
     (c.prov ? "<br><em>El catálogo oficial no incluye la calle" + (pos.approx ? "; posición aproximada (centro del municipio)" : "") + "</em>" : "") +
     (c.conf ? "" : "<br><em>Dirección por confirmar</em>") +
     (pos && pos.lat != null ? '<br><a class="how" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=' + pos.lat + "," + pos.lon + '">Cómo llegar</a>' : "") +
+    '<details class="loc"' + (isRev(c) ? " open" : "") + '><summary>Ubicación' + (isRev(c) ? " (por revisar)" : "") + '</summary><div class="lrow"><a class="lb l-gm" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(c.name.replace(/ – .*$/, "") + " " + addrOf(c) + " España") + '">Abrir en Google Maps</a><button type="button" class="lb l-mv">Mover pin</button><button type="button" class="lb l-cp">Copiar coordenadas</button></div><input class="l-in" type="text" placeholder="Pega aquí las coordenadas de Google Maps" aria-label="Coordenadas de Google Maps"><div class="lmsg" role="status"></div></details>' +
     '<div class="pform"><div><span style="font-size:11px;color:#5b726c">Valoración para captación</span><div class="stars" role="radiogroup" aria-label="Valoración de 1 a 5 estrellas">' +
     [1, 2, 3, 4, 5].map((n) => '<button type="button" data-n="' + n + '" aria-label="' + n + ' estrellas">★</button>').join("") + '<span class="sv"></span></div></div>' +
     '<div class="ef" style="font-size:12px"></div>' +
@@ -589,7 +601,7 @@ function popupFor(c, pos) {
     '<label>Próximo seguimiento<input class="f-seg" type="date" value="' + esc(p.seguimiento || "") + '"></label><label>Contacto (nombre, teléfono, email)<input class="f-contacto" type="text" value="' + esc(p.contacto || "") + '"></label>' +
     '<label>Notas<textarea class="f-notas">' + esc(p.notas || "") + '</textarea></label>' +
     '<div class="hist"><h4>Concesiones (historial)</h4><ul class="h-list"></ul><div class="row3"><label>Desde<input class="h-desde" type="date"></label><label>Hasta<input class="h-hasta" type="date"></label><label>Captadores<input class="h-n" type="number" min="1" step="1" placeholder="nº"></label></div><button type="button" class="h-add">Añadir concesión al historial</button><div class="h-msg" style="font-size:11px;color:#b3261e;min-height:13px"></div></div>' +
-    (isRev(c) ? '<button type="button" class="f-rev" style="background:#fff;color:#c8102e">Marcar ubicación/datos como revisados</button>' : "") +
+    (isRev(c) ? '<button type="button" class="f-rev" style="background:#fff;color:#c8102e">Aceptar ubicación (marcar como revisada)</button>' : "") +
     '<button type="button" class="f-save">Guardar permiso</button><button type="button" class="f-del danger">' + (c.custom ? "Eliminar punto" : "Quitar del mapa") + '</button><div class="saved"></div></div>';
   const pf = el.querySelector(".pform");
   const put = (n, t) => { if (n) n.setAttribute("data-tab", t); };
@@ -659,6 +671,23 @@ function popupFor(c, pos) {
   });
   el.querySelector(".f-save").addEventListener("click", commit);
   let armed = false;
+  {
+    const msg = el.querySelector(".lmsg"), inp = el.querySelector(".l-in");
+    const apply = (txt) => {
+      const r = parseCoords(txt);
+      if (!r) { msg.textContent = "No reconozco las coordenadas. Ejemplo: 37.1773, -3.5986"; return; }
+      setLoc(c, r[0], r[1]);
+      logrosToast("Ubicación guardada y revisada: " + r[0].toFixed(6) + ", " + r[1].toFixed(6));
+      const mk = markers[c.id]; if (mk) cluster.zoomToShowLayer(mk, () => mk.openPopup());
+    };
+    inp.addEventListener("paste", (e) => { const t = (e.clipboardData || window.clipboardData).getData("text"); e.preventDefault(); inp.value = t; apply(t); });
+    inp.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); apply(inp.value); } });
+    el.querySelector(".l-cp").addEventListener("click", async () => {
+      const q = cache[c.id]; if (!q) return; const t = q.lat.toFixed(6) + ", " + q.lon.toFixed(6);
+      try { await navigator.clipboard.writeText(t); msg.textContent = "Copiado: " + t; } catch (e) { inp.value = t; inp.select(); msg.textContent = "Copia con Ctrl+C: " + t; }
+    });
+    el.querySelector(".l-mv").addEventListener("click", () => startMove(c));
+  }
   const rv = el.querySelector(".f-rev");
   if (rv) rv.addEventListener("click", () => { reviewed.add(c.name); saveReviewed(); rv.remove(); refreshSelects(); renderList(); el.querySelector(".saved").textContent = "Marcado como revisado"; });
   const del = el.querySelector(".f-del");
@@ -675,12 +704,42 @@ function popupFor(c, pos) {
   return el;
 }
 
+function parseCoords(t) {
+  t = String(t || "").trim();
+  let m = t.match(/@(-?\d{1,2}\.\d+),(-?\d{1,3}\.\d+)/) || t.match(/!3d(-?\d{1,2}\.\d+)!4d(-?\d{1,3}\.\d+)/) || t.match(/(-?\d{1,2}\.\d+)\s*[,;\s]\s*(-?\d{1,3}\.\d+)/);
+  if (!m) return null;
+  const la = +m[1], lo = +m[2];
+  return la >= 36.5 && la <= 38.3 && lo >= -4.6 && lo <= -2.2 ? [la, lo] : null;
+}
+function setLoc(c, lat, lon) {
+  cache[c.id] = { lat, lon };
+  if (c.custom) { const p = customs.find((x) => x.name === c.name); if (p) { p.lat = lat; p.lon = lon; p.approx = undefined; try { localStorage.setItem(CUSTOM_KEY, JSON.stringify(customs)); } catch (e) {} } }
+  else { corr[c.name] = [+lat.toFixed(6), +lon.toFixed(6)]; saveCorr(); }
+  reviewed.add(c.name); saveReviewed();
+  if (markers[c.id]) markers[c.id].setLatLng([lat, lon]);
+  refreshSelects(); renderList();
+}
+let moving = null;
+function endMove(save) {
+  if (!moving) return;
+  const { c, m } = moving; moving = null;
+  m.dragging.disable(); map.removeLayer(m); cluster.addLayer(m);
+  const t = document.getElementById("toast"); if (t) t.classList.remove("on");
+}
+function startMove(c) {
+  const m = markers[c.id]; if (!m) return;
+  if (moving) endMove();
+  map.closePopup(); cluster.removeLayer(m); m.addTo(map); m.dragging.enable();
+  moving = { c, m };
+  logrosToast("Arrastra el pin hasta el local y suéltalo. Se guarda solo.");
+  m.once("dragend", () => { const p = m.getLatLng(); setLoc(c, p.lat, p.lng); endMove(); logrosToast("Ubicación guardada: " + p.lat.toFixed(6) + ", " + p.lng.toFixed(6)); });
+}
 function makeMarker(c) {
   const pos = cache[c.id];
   if (!pos || markers[c.id] || isOut(c)) return;
   const m = L.marker([pos.lat, pos.lon], { icon: makeIcon(c), title: c.name, cat: colorOf(c) });
   cluster.addLayer(m);
-  m.bindPopup(() => popupFor(c, pos), { minWidth: 230 });
+  m.bindPopup(() => popupFor(c, cache[c.id]), { minWidth: 230 });
   m.on("click", () => highlight(c.id, false));
   markers[c.id] = m;
 }
@@ -1059,7 +1118,7 @@ $("#csv").addEventListener("click", () => {
   });
   download("permisos-captacion-granada.csv", "\ufeff" + head.join(";") + "\r\n" + rows.join("\r\n"), "text/csv;charset=utf-8");
 });
-$("#bak").addEventListener("click", () => download("copia-mapa-recursos-granada.json", JSON.stringify({ version: 2, permisos: permits, puntos_propios: customs, quitados: [...removed], revisados: [...reviewed], logros }, null, 2), "application/json"));
+$("#bak").addEventListener("click", () => download("copia-mapa-recursos-granada.json", JSON.stringify({ version: 2, permisos: permits, puntos_propios: customs, quitados: [...removed], revisados: [...reviewed], ubicaciones: corr, logros }, null, 2), "application/json"));
 $("#imp").addEventListener("click", () => $("#impf").click());
 $("#impf").addEventListener("change", async (e) => {
   const f = e.target.files[0]; if (!f) return;
@@ -1074,9 +1133,11 @@ $("#impf").addEventListener("change", async (e) => {
     Object.keys(pm || {}).forEach((k) => { if (names.has(k) && pm[k] && pm[k].estado) { permits[k] = pm[k]; n++; } });
     (d.quitados || []).forEach((k) => { if (names.has(k)) removed.add(k); });
     (d.revisados || []).forEach((k) => { if (names.has(k)) reviewed.add(k); });
+    Object.keys(d.ubicaciones || {}).forEach((k) => { const q = d.ubicaciones[k]; if (names.has(k) && Array.isArray(q) && q.length === 2) corr[k] = q; }); saveCorr();
     if (d.logros && d.logros.n) { Object.keys(d.logros.n).forEach((k) => { if ((d.logros.n[k] || 0) > (logros.n[k] || 0)) { logros.n[k] = d.logros.n[k]; logros.f[k] = (d.logros.f || {})[k] || today(); } }); const dr = d.logros.racha || {}; logros.racha.mejor = Math.max(logros.racha.mejor, dr.mejor || 0); saveLogros(); }
     savePermits(); saveRemoved(); saveReviewed();
     try { localStorage.setItem(CUSTOM_KEY, JSON.stringify(customs)); } catch (err) {}
+    CENTERS.forEach((c) => { const q = corr[c.name]; if (q && !c.custom) { cache[c.id] = { lat: q[0], lon: q[1] }; if (markers[c.id]) markers[c.id].setLatLng(q); } });
     if (addedC) { location.reload(); return; }
     refreshSelects();
     Object.keys(markers).forEach((id) => markers[id].setIcon(makeIcon(CENTERS[id - 1])));
