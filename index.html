@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Centros sanitarios y comerciales de Granada</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
+<style>
+  /* Layout: lista lateral + mapa; en móvil la lista pasa debajo del mapa. */
+  :root {
+    --bg: #f4f6f5;
+    --panel: #ffffff;
+    --fg: #17302b;
+    --muted: #5d716c;
+    --line: #d7e0dd;
+    --accent: #0b7a68;
+    --accent-fg: #ffffff;
+    --warn: #a35a00;
+    --warn-bg: #fdf0d9;
+    --ok-bg: #e2f2ee;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1a18; --panel: #16231f; --fg: #e4efec; --muted: #94aaa4;
+      --line: #28403a; --accent: #3fc3aa; --accent-fg: #06201b;
+      --warn: #f0b562; --warn-bg: #3a2c12; --ok-bg: #173a33;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--bg); color: var(--fg);
+    font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    display: flex; flex-direction: column;
+  }
+  header {
+    padding: 12px 16px; background: var(--panel); border-bottom: 1px solid var(--line);
+    display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px;
+  }
+  h1 { font-size: 18px; margin: 0; letter-spacing: -0.01em; }
+  header p { margin: 0; color: var(--muted); font-size: 13px; }
+  main { flex: 1; min-height: 0; display: grid; grid-template-columns: 360px 1fr; }
+  aside {
+    background: var(--panel); border-right: 1px solid var(--line);
+    display: flex; flex-direction: column; min-height: 0; min-width: 0;
+  }
+  .tools { padding: 12px 16px; display: grid; gap: 8px; border-bottom: 1px solid var(--line); }
+  .tools input[type=search], .tools select {
+    width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px;
+    background: var(--bg); color: var(--fg); font: inherit;
+  }
+  .row { display: flex; gap: 8px; }
+  .row > * { flex: 1; min-width: 0; }
+  button {
+    font: inherit; padding: 8px 10px; border-radius: 6px; cursor: pointer;
+    border: 1px solid var(--line); background: var(--bg); color: var(--fg);
+  }
+  button.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+  button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visible {
+    outline: 2px solid var(--accent); outline-offset: 2px;
+  }
+  .status { font-size: 12px; color: var(--muted); }
+  .bar { height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .3s; }
+  ul { list-style: none; margin: 0; padding: 0; overflow-y: auto; flex: 1; }
+  li {
+    display: grid; grid-template-columns: 28px 1fr; gap: 10px;
+    padding: 10px 16px; border-bottom: 1px solid var(--line); cursor: pointer;
+  }
+  li:hover, li.active { background: var(--ok-bg); }
+  .num {
+    width: 24px; height: 24px; border-radius: 50%; background: var(--accent); color: var(--accent-fg);
+    font-weight: 600; font-size: 12px; display: grid; place-items: center;
+    font-variant-numeric: tabular-nums;
+  }
+  li.unplaced .num { background: var(--muted); }
+  li strong { display: block; font-weight: 600; }
+  li span.addr { color: var(--muted); font-size: 13px; }
+  .tag {
+    display: inline-block; margin-top: 4px; margin-right: 4px; padding: 1px 7px; border-radius: 10px;
+    font-size: 11px; background: var(--ok-bg); color: var(--accent);
+  }
+  .tag.warn { background: var(--warn-bg); color: var(--warn); }
+  #map { min-height: 0; min-width: 0; }
+  .pin {
+    width: 26px; height: 26px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
+    background: #0b7a68; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.45);
+    display: grid; place-items: center;
+  }
+  .pin b { transform: rotate(45deg); color: #fff; font: 600 11px system-ui, sans-serif; }
+  .pin.cons { background: #7a4fb5; }
+  .pin.hpub { background: #c0392b; }
+  .pin.hpriv { background: #d9730d; }
+  .pin.cc { background: #2b6cb0; }
+  li.t-cc .num { background: #2b6cb0; color: #fff; }
+  li.t-hpub .num { background: #c0392b; color: #fff; }
+  li.t-hpriv .num { background: #d9730d; color: #fff; }
+  li.t-cons .num { background: #7a4fb5; color: #fff; }
+  .legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12px; color: var(--muted); }
+  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; }
+  .leaflet-popup-content { font: 13px/1.4 system-ui, sans-serif; color: #17302b; }
+  .leaflet-popup-content strong { font-size: 14px; }
+  .note { padding: 10px 16px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--line); }
+  @media (max-width: 760px) {
+    body { height: auto; min-height: 100%; }
+    main { grid-template-columns: 1fr; grid-template-rows: 55vh auto; }
+    #map { order: -1; }
+    aside { border-right: 0; }
+    ul { overflow: visible; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Centros sanitarios y comerciales de Granada</h1>
+  <p>Centros de salud y consultorios (catálogo del Ministerio de Sanidad), hospitales y centros comerciales · ciudad y provincia de Granada</p>
+</header>
+<main>
+  <aside>
+    <div class="tools">
+      <input id="q" type="search" placeholder="Buscar por nombre o calle" aria-label="Buscar centro">
+      <div class="row">
+        <select id="tipo" aria-label="Filtrar por tipo">
+          <option value="">Todos los tipos</option>
+          <option value="Centro de salud">Centros de salud</option>
+          <option value="Consultorio">Consultorios</option>
+          <option value="Hospital">Todos los hospitales</option>
+          <option value="Hospital público">Hospitales públicos</option>
+          <option value="Hospital privado">Hospitales privados</option>
+          <option value="Centro comercial">Centros comerciales</option>
+        </select>
+        <button id="fit" type="button">Ver todos</button>
+      </div>
+      <div class="legend" aria-label="Leyenda">
+        <span><i style="background:#0b7a68"></i>Centro de salud</span>
+        <span><i style="background:#7a4fb5"></i>Consultorio</span>
+        <span><i style="background:#c0392b"></i>Hospital público</span>
+        <span><i style="background:#d9730d"></i>Hospital privado</span>
+        <span><i style="background:#2b6cb0"></i>Centro comercial</span>
+      </div>
+      <div class="bar" aria-hidden="true"><i id="prog"></i></div>
+      <div class="status" id="status" role="status">Preparando…</div>
+      <button id="copy" type="button" class="primary">Copiar JSON con coordenadas</button>
+    </div>
+    <ul id="list"></ul>
+    <div class="note">
+      “Por confirmar”: la dirección procede de directorios no oficiales y no coincide con el listado del SAS o del Ayuntamiento.
+      Fuera de la capital el catálogo oficial no trae calle: se busca por nombre y, si no aparece, se coloca en el centro del municipio (“Ubicación aproximada”).
+      La primera carga geolocaliza ~350 puntos (unos 8-15 minutos, 1 consulta por segundo); después queda guardado en este navegador.
+      Las posiciones las calcula Nominatim (OpenStreetMap) al abrir la página y se guardan en este navegador.
+    </div>
+  </aside>
+  <div id="map" aria-label="Mapa de centros sanitarios"></div>
+</main>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script>
+/* Fuentes: listado de zonas básicas del Distrito Granada (SAS) y Guía de Recursos del Ayuntamiento de Granada.
+   conf=false marca direcciones tomadas de otros directorios, pendientes de contrastar. */
+const CENTERS = [
+  { id: 1,  name: "CS Albaicín",                      tipo: "Centro de salud", street: "Plaza San Nicolás 7",                  conf: true  },
+  { id: 2,  name: "CS Albayda-La Cruz",               tipo: "Centro de salud", street: "Avenida de Juventudes Musicales",      conf: false },
+  { id: 3,  name: "CS Almanjáyar",                    tipo: "Centro de salud", street: "Calle Pintor Joaquín Capulino Jáuregui 4", conf: false },
+  { id: 4,  name: "CS Barriada de la Juventud-Rosaleda", tipo: "Centro de salud", street: "Calle Bérchules 2",                 conf: false, extra: "Inaugurado en junio de 2026" },
+  { id: 5,  name: "CS Bola de Oro",                   tipo: "Centro de salud", street: "Calle Cerro de los Machos",            conf: true  },
+  { id: 6,  name: "CS Cartuja",                       tipo: "Centro de salud", street: "Calle Casería del Cerro",              conf: true  },
+  { id: 7,  name: "CS Casería de Montijo",            tipo: "Centro de salud", street: "Avenida Juan Pablo II 2",              conf: true, extra: "El Ayuntamiento la sitúa en Carretera de Jaén" },
+  { id: 8,  name: "CS Doctor Salvador Caballero",     tipo: "Centro de salud", street: "Calle Doctor Azpitarte 6",             conf: true  },
+  { id: 9,  name: "CS Figares",                       tipo: "Centro de salud", street: "Calle Joaquín Blume 1",                conf: false },
+  { id: 10, name: "CS Fortuny (Velutti)",             tipo: "Centro de salud", street: "Calle Navarrete 35",                   conf: false },
+  { id: 11, name: "CS Góngora",                       tipo: "Centro de salud", street: "Calle Poeta Manuel de Góngora 9",      conf: true  },
+  { id: 12, name: "CS Gran Capitán",                  tipo: "Centro de salud", street: "Calle Gran Capitán 10",                conf: true, extra: "Centro de urgencias de referencia" },
+  { id: 13, name: "CS La Caleta",                     tipo: "Centro de salud", street: "Avenida del Sur 11",                   conf: true  },
+  { id: 14, name: "CS La Chana",                      tipo: "Centro de salud", street: "Calle Virgen de la Consolación",       conf: true  },
+  { id: 15, name: "CS Las Flores",                    tipo: "Centro de salud", street: "Calle Profesor García Gómez 8",        conf: true  },
+  { id: 16, name: "CS Realejo",                       tipo: "Centro de salud", street: "Plaza Campo del Príncipe",             conf: true  },
+  { id: 17, name: "CS Zaidín Centro-Este",            tipo: "Centro de salud", street: "Avenida de América 14",                conf: true  },
+  { id: 18, name: "CS Zaidín Sur",                    tipo: "Centro de salud", street: "Calle Poeta Gracián 7",                conf: true  },
+  { id: 19, name: "CS Mirasierra",                    tipo: "Centro de salud", street: "Camino Bajo de Huétor",                conf: true, extra: "Fuera del listado del distrito; aparece en la guía del Ayuntamiento" },
+  { id: 20, name: "Consultorio Carretera de la Sierra", tipo: "Consultorio",   street: "Calle Laguna de la Caldera 2",         conf: true  },
+  { id: 21, name: "Consultorio Cerrillo de Maracena", tipo: "Consultorio",     street: "Calle Pozo",                           conf: false },
+  /* Hospitales: catálogo del Ministerio de Sanidad (Granada capital) + guías de hospitales privados. */
+  { id: 22, name: "H.U. Virgen de las Nieves",        tipo: "Hospital público", street: "Avenida de las Fuerzas Armadas 2",    conf: true, extra: "Incluye el Hospital Materno-Infantil, en el mismo recinto", q2: "Hospital Universitario Virgen de las Nieves, Granada" },
+  { id: 23, name: "H.U. San Cecilio",                 tipo: "Hospital público", street: "Avenida de la Investigación",         conf: true, extra: "Parque Tecnológico de la Salud", q2: "Hospital Universitario San Cecilio, Granada" },
+  { id: 24, name: "Hospital de Neurotraumatología y Rehabilitación", tipo: "Hospital público", street: "Carretera de Jaén", conf: true, extra: "Forma parte del H.U. Virgen de las Nieves", q2: "Hospital de Neurotraumatología y Rehabilitación, Granada" },
+  { id: 25, name: "Hospital HLA Inmaculada",          tipo: "Hospital privado", street: "Calle Doctor Alejandro Otero 8",      conf: true  },
+  { id: 26, name: "Hospital Vithas Granada",          tipo: "Hospital privado", street: "Avenida Santa María de la Alhambra",  conf: true, q2: "Hospital Vithas Granada" },
+  { id: 27, name: "Hospital San Rafael",              tipo: "Hospital privado", street: "Calle San Juan de Dios 19",           conf: true  },
+  { id: 28, name: "Hospital Doctor Olóriz",           tipo: "Hospital privado", street: "Avenida Doctor Olóriz 16",            conf: false, extra: "Aparece en el catálogo del Ministerio sin indicar dependencia; se clasifica como privado por confirmar" },
+  /* Centros comerciales dentro del término municipal de Granada. */
+  { id: 29, name: "Centro Comercial Neptuno",   tipo: "Centro comercial", street: "Calle Arabial 45",           conf: true  },
+  { id: 30, name: "Serrallo Plaza",             tipo: "Centro comercial", street: "Paseo Laguna de Cameros 1",  conf: false, q2: "Serrallo Plaza, Granada" },
+  { id: 31, name: "Alcampo Granada",            tipo: "Centro comercial", street: "Carretera de Jaén",          conf: false, extra: "Hipermercado con galería comercial", q2: "Alcampo, Carretera de Jaén, Granada" },
+  { id: 32, name: "Carrefour Granada",          tipo: "Centro comercial", street: "Carretera de Armilla",       conf: false, extra: "Hipermercado con galería comercial; la dirección menciona Armilla, comprobar si cae dentro de Granada", q2: "Carrefour, Carretera de Armilla, Granada" },
+  /* Resto de la provincia (town = municipio). Hospitales: catálogo del Ministerio de Sanidad. */
+  { id: 33, name: "Hospital Santa Ana",                  tipo: "Hospital público", town: "Motril", street: "Avenida Enrique Martín Cuevas", conf: true },
+  { id: 34, name: "Hospital de Baza",                    tipo: "Hospital público", town: "Baza",   street: "Carretera de Murcia km 1,6",    conf: true },
+  { id: 35, name: "Hospital de Alta Resolución de Guadix", tipo: "Hospital público", town: "Guadix", street: "Avenida Mariana Pineda",      conf: true },
+  { id: 36, name: "Hospital de Alta Resolución de Loja", tipo: "Hospital público", town: "Loja",   street: "Avenida Tierno Galván",        conf: true },
+  { id: 37, name: "Nevada Shopping",                     tipo: "Centro comercial", town: "Armilla", street: "Avenida de las Palmeras 75",  conf: true, extra: "Fuera del término de Granada capital, pegado a la ciudad" }
+];
+
+/* Resto de la provincia: Catálogo de Centros de Atención Primaria del Ministerio de Sanidad (331 centros en total;
+   los de la capital ya están arriba). Formato: [C = centro de salud, L = consultorio, nombre, municipio]. El catálogo no incluye calle. */
+const PROV = [["C","Albolote","Albolote"],["C","Alfacar","Alfacar"],["C","Alhama de Granada","Alhama de Granada"],["C","Armilla","Armilla"],["C","Atarfe","Atarfe"],["C","Cenes de la Vega","Cenes de la Vega"],["C","Churriana de la Vega","Churriana de la Vega"],["C","Huétor - Tájar","Huétor Tájar"],["C","Íllora","Íllora"],["C","Iznalloz","Iznalloz"],["C","Huétor Vega","Huétor Vega"],["C","La Zubia","La Zubia"],["C","Loja","Loja"],["C","Maracena","Maracena"],["C","Montefrío","Montefrío"],["C","Peligros","Peligros"],["C","Pinos Puente","Pinos Puente"],["C","Santa Fe","Santa Fe"],["C","Dúrcal","Dúrcal"],["C","Baza","Baza"],["C","Benamaurel","Benamaurel"],["C","Guadix","Guadix"],["C","Huéscar","Huéscar"],["C","Alquife","Alquife"],["C","Pedro Martínez","Pedro Martínez"],["C","Purullena","Purullena"],["C","Albuñol","Albuñol"],["C","Almuñécar","Almuñécar"],["C","Cádiar","Cádiar"],["C","Motril - Este","Motril"],["C","Motril - San Antonio","Motril"],["C","Motril - Centro","Motril"],["C","Órgiva","Órgiva"],["C","Salobreña","Salobreña"],["C","Ugíjar","Ugíjar"],["L","Beas de Granada","Beas de Granada"],["L","El Fargue","Granada"],["L","Parque Nueva Granada","Granada"],["L","Huétor - Santillán","Huétor de Santillán"],["L","Jun","Jun"],["L","Calicasas","Calicasas"],["L","Cerro Cauro","Cauro"],["L","El Chaparral","El Chaparral"],["L","Colomera","Colomera"],["L","Deifontes","Deifontes"],["L","Cogollos Vega","Cogollos de la Vega"],["L","Güevéjar","Güevéjar"],["L","Nívar","Nívar"],["L","Víznar","Víznar"],["L","El Almendral","El Almendral"],["L","Arenas del Rey","Arenas del Rey"],["L","Buenavista","Buenavista"],["L","Cacín","Cacín"],["L","Fornes","Fornes"],["L","Játar","Játar"],["L","Jayena","Jayena"],["L","Pantano los Bermejales","Pantano de los Bermejales"],["L","Santa Cruz del Comercio","Santa Cruz del Comercio"],["L","Turro","El Turro"],["L","Valenzuela","Valenzuela"],["L","Ventas de Zafarraya","Ventas de Zafarraya"],["L","Zafarraya","Zafarraya"],["L","Alhendín","Alhendín"],["L","Dílar","Dílar"],["L","Otura","Villa de Otura"],["L","Sierra Elvira","Sierra Elvira"],["L","Dúdar","Dúdar"],["L","Güéjar - Sierra","Güéjar Sierra"],["L","Pinos - Genil","Pinos Genil"],["L","Quéntar","Quéntar"],["L","Tocón (Quéntar)","Tocón"],["L","Ácula","Ácula"],["L","Agrón","Agrón"],["L","Ambroz-Belicena","Ambroz"],["L","Belicena","Belicena"],["L","Cúllar - Vega","Cúllar Vega"],["L","Escúzar","Escúzar"],["L","Gabia la Chica - las Gabias - ","Gabia Chica"],["L","Gabia la Grande - las Gabias - ","Gabia Grande"],["L","Híjar - las Gabias - ","Híjar"],["L","La Malahá","La Malahá"],["L","Purchil","Purchil"],["L","Ventas de Huelma","Ventas de Huelma"],["L","Loreto","Loreto"],["L","Moraleda de Zafayona","Moraleda de Zafayona"],["L","Los Olivos","Moraleda de Zafayona"],["L","Salar","Salar"],["L","Venta Nueva","Venta Nueva"],["L","Villanueva Mesía","Villanueva Mesía"],["L","Alomartes","Alomartes"],["L","Bracaná","Brácana"],["L","Escoznar","Íllora"],["L","Obéilar","Obéilar"],["L","Tocón","Tocón"],["L","Benalúa de las Villas","Benalúa de las Villas"],["L","Bogarre","Bogarre"],["L","Campotéjar","Campotéjar"],["L","Dehesas Viejas","Dehesas Viejas"],["L","Domingo Pérez","Domingo Pérez de Granada"],["L","Gobernador","Gobernador"],["L","Guadahortuna","Guadahortuna"],["L","Montejícar","Montejícar"],["L","Montillana","Montillana"],["L","Píñar","Píñar"],["L","Torre - Cardela","Torre-Cardela"],["L","Trujillos","Trujillos"],["L","Cájar","Cájar"],["L","Bellavista","Cájar"],["L","Gójar","Gójar"],["L","Monachil","Monachil"],["L","Barrio Monachil","Monachil"],["L","Ogíjares","Ogíjares"],["L","Sierra Nevada","Sierra Nevada"],["L","La Fábrica","La Fábrica"],["L","Fuente Camacho","Fuente Camacho"],["L","Cuesta de la Palma","La Palma"],["L","Riofrío","Riofrío"],["L","Ventorros de Balerma","Ventorros de Balerma"],["L","Ventorros de la Laguna","Ventorros de la Laguna"],["L","Ventorros de San José","Ventorros de San José"],["L","Zagra","Zagra"],["L","Algarinejo","Algarinejo"],["L","La Viña","La Carrera de la Viña"],["L","Fuentes de Cesna","Fuentes de Cesna"],["L","Pulianas","Pulianas"],["L","Casanueva","Casanueva"],["L","Fuensanta","Fuensanta"],["L","Limones","Limones"],["L","Moclín","Moclín"],["L","Olivares","Moclín"],["L","Puerto Lope","Puerto Lope"],["L","Tiena","Tiena"],["L","Tózar","Tózar"],["L","Trasmulas","Trasmulas"],["L","Valderrubio","Valderrubio"],["L","Zujaira","Zujaira"],["L","Castillo de Tajarja","Castillo de Tajarja"],["L","Chauchina","Chauchina"],["L","Chimeneas","Chimeneas"],["L","Cijuela","Cijuela"],["L","Fuente Vaqueros","Fuente Vaqueros"],["L","El Jau","El Jau"],["L","Láchar","Láchar"],["L","Pedro Ruiz","Pedro Ruiz"],["L","Peñuelas","Peñuelas"],["L","Romilla","Romilla"],["L","Romilla la Nueva","Romilla la Nueva"],["L","El Pinar-Acebuches","Acebuches"],["L","Acequias","Acequias"],["L","Albuñuelas","Albuñuelas"],["L","Beznar","Béznar"],["L","Chite","Chite"],["L","Cónchar (Villamena)","Cónchar"],["L","Cozvijar (Villamena)","Cozvíjar"],["L","Ízbor el Pinar","Ízbor"],["L","Melegís (el Valle)","Melegís"],["L","Murchas","Murchas"],["L","Nigüelas","Nigüelas"],["L","Padul","Padul"],["L","Pinos del Valle (el Pinar)","Pinos del Valle"],["L","Réstabal (el Valle)","Restábal"],["L","Saleres (el Valle)","Saleres"],["L","Talará (Lecrin)","Talará"],["L","El Baúl","Baúl"],["L","Barriada de Santiago","Baza"],["L","Cuevas de Baza","Baza"],["L","Caniles","Caniles"],["L","Cuevas del Campo","Cuevas del Campo"],["L","Cúllar","Cúllar"],["L","Freila","Freila"],["L","El Margen","El Margen"],["L","Venta del Peral","Venta del Peral"],["L","Venta Quemada","Venta Quemada"],["L","Las Vertientes","Las Vertientes"],["L","Zújar","Zújar"],["L","Las Almontaras","Almontaras"],["L","Campo Cámara","Campo Cámara"],["L","Los Carriones","Los Carriones"],["L","Castilléjar","Castilléjar"],["L","Castril","Castril"],["L","Cortes de Baza","Cortes de Baza"],["L","Las Cucharetas","Las Cucharetas"],["L","Fátima","Fátima"],["L","Los Laneros","Los Laneros"],["L","Los Olivos","El Olivar"],["L","La Teja","La Teja"],["L","Albuñán","Albuñán"],["L","Alcudia","Alcudia de Guadix"],["L","Bácor - Olivar - Guadix","Bácor-Olivar"],["L","Belerda","Belerda"],["L","Charches","Charches"],["L","Cogollos de Guadix","Cogollos de Guadix"],["L","Esfiliana","Esfiliana"],["L","La Estación (Guadix)","Estación de Guadix"],["L","Cenascuras","Gor"],["L","Gor","Gor"],["L","Gorafe","Gorafe"],["L","Barriada de Andalucía","Guadix"],["L","Las Cuevas","Guadix"],["L","Hernán Valle","Hernán-Valle"],["L","Las Juntas","Las Juntas"],["L","Paulenca","Paulenca"],["L","Las Viñas","Las Viñas"],["L","Almaciles","Almaciles"],["L","La Alquería","La Alquería"],["L","Galera","Galera"],["L","Orce","Orce"],["L","Puebla de Don Fadrique","Puebla de Don Fadrique"],["L","Aldeire","Aldeire"],["L","La Calahorra","La Calahorra"],["L","Dólar","Dólar"],["L","Ferreira","Ferreira"],["L","Huéneja","Huéneja"],["L","La Huertezuela","La Huertezuela"],["L","Jérez del Marquesado","Jérez del Marquesado"],["L","Lanteira","Lanteira"],["L","Alamedilla","Alamedilla"],["L","Alicún de Ortega","Alicún de Ortega"],["L","Dehesas de Guadix","Dehesas de Guadix"],["L","Huélago","Huélago"],["L","Laborcillas","Laborcillas"],["L","Moreda","Moreda"],["L","Villanueva de las Torres","Villanueva de las Torres"],["L","Los Baños","Los Baños"],["L","Beas de Guadix","Beas de Guadix"],["L","Bejarín","El Bejarín"],["L","Benalúa de Guadix","Benalúa"],["L","Cortes","Cortes"],["L","Darro","Darro"],["L","Diezma","Diezma"],["L","Fonelas","Fonelas"],["L","Graena","Graena"],["L","Lopera","Lopera"],["L","Lugros","Lugros"],["L","Marchal","Marchal"],["L","La Peza","La Peza"],["L","Polícar","Polícar"],["L","Sillar Baja","Sillar Baja"],["L","Los Villares","Los Villares"],["L","Albondón","Albondón"],["L","Alfornón","Alfornón"],["L","Los Castillas","Los Castillas"],["L","Melicena","Melicena"],["L","El Pozuelo","El Pozuelo"],["L","La Rábita","La Rábita"],["L","Sorvilán","Sorvilán"],["L","Los Marinos","Almuñécar"],["L","El Castillo","Almuñécar"],["L","La Herradura","La Herradura"],["L","Jete","Jete"],["L","Torrecuevas","Jete"],["L","Lentejí","Lentegí"],["L","Otívar","Otívar"],["L","Bérchules","Bérchules"],["L","Cástaras","Cástaras"],["L","Cojáyar","Cojáyar"],["L","Juviles","Juviles"],["L","Lobras","Lobras"],["L","Mecina Bombarón","Mecina Bombarón"],["L","Murtas","Murtas"],["L","Nieles","Nieles"],["L","Tímar","Tímar"],["L","Turón","Turón"],["L","Yátor","Yátor"],["L","Yegen","Yegen"],["L","Calahonda","Calahonda"],["L","Carchuna","Carchuna"],["L","Los Carlos","Los Carlos"],["L","Castell de Ferro","Castell de Ferro"],["L","Gualchos","Gualchos"],["L","Lújar","Lújar"],["L","La Mamola","La Mamola"],["L","Polopos","Polopos"],["L","El Puntalón","Puntalón"],["L","Torrenueva","Torrenueva Costa"],["L","Varadero - Santa Adela","El Varadero"],["L","Vélez - Benaudalla","Vélez de Benaudalla"],["L","Alcázar","Alcázar"],["L","Almegíjar","Almegíjar"],["L","Bubión","Bubión"],["L","Busquístar","Busquístar"],["L","Cáñar","Cáñar"],["L","Capileira","Capileira"],["L","Carataunas","Carataunas"],["L","Ferreirola","Ferreirola"],["L","Lanjarón","Lanjarón"],["L","Mecina Fondales","Mecina Fondales"],["L","Notáez","Notáez"],["L","Pampaneira","Pampaneira"],["L","Pitres","Pitres"],["L","Pórtugos","Pórtugos"],["L","Rubite","Rubite"],["L","Soportújar","Soportújar"],["L","Tablones","Los Tablones"],["L","Torvizcón","Torvizcón"],["L","Trevélez","Trevélez"],["L","Caleta - la Guardia","La Caleta-Guardia"],["L","Guájar Alto","Guájar Alto"],["L","Guájar Faragüit","Guájar Faragüit"],["L","Guájar Fondón","Guájar Fondón"],["L","Itrabo","Ítrabo"],["L","Lobres","Lobres"],["L","Molvízar","Molvízar"],["L","Cherín","Cherín"],["L","Jorairátar","Jorairátar"],["L","Laroles","Laroles"],["L","Mairena","Mairena"],["L","Mecina Alfahar","Mecina Alfahar"],["L","Nechite","Nechite"],["L","Picena","Picena"],["L","Válor","Válor"]];
+(() => {
+  let id = 38;
+  PROV.forEach(([t, name, town]) => {
+    const cs = t === "C";
+    CENTERS.push({
+      id: id++, name: (cs ? "CS " : "Consultorio ") + name, tipo: cs ? "Centro de salud" : "Consultorio",
+      town, street: "", conf: true, prov: true,
+      q1: (cs ? "Centro de Salud " : "Consultorio ") + name.replace(/ - /g, " ") + ", " + town
+    });
+  });
+})();
+
+const CACHE_KEY = "cs-granada-geo-v1";
+const VIEWBOX = "-4.40,38.10,-2.50,36.65"; // provincia de Granada: izquierda, arriba, derecha, abajo
+const $ = (s) => document.querySelector(s);
+let cache = {};
+try { cache = JSON.parse(localStorage.getItem(CACHE_KEY) || "{}"); } catch (e) { cache = {}; }
+const saveCache = () => { try { localStorage.setItem(CACHE_KEY, JSON.stringify(cache)); } catch (e) {} };
+
+const map = L.map("map", { zoomControl: true }).setView([37.1773, -3.5986], 13);
+const esri = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {
+  maxZoom: 19, attribution: "Tiles © Esri — Source: Esri, HERE, Garmin, OpenStreetMap contributors"
+}).addTo(map);
+const osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  maxZoom: 19, attribution: "© OpenStreetMap contributors"
+});
+L.control.layers({ "Esri calles": esri, "OpenStreetMap (solo si sirves la página por http)": osm }, null, { position: "topright" }).addTo(map);
+
+const markers = {};
+const cluster = L.markerClusterGroup({ maxClusterRadius: 38, showCoverageOnHover: false, disableClusteringAtZoom: 17 }).addTo(map);
+let touched = false;
+map.on("dragstart", () => { touched = true; });
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+function typeClass(c) {
+  return c.tipo === "Consultorio" ? "cons" : c.tipo === "Hospital público" ? "hpub" : c.tipo === "Hospital privado" ? "hpriv" : c.tipo === "Centro comercial" ? "cc" : "";
+}
+const matchTipo = (c, t) => !t || c.tipo === t || (t === "Hospital" && c.tipo.startsWith("Hospital"));
+
+const addrOf = (c) => (c.street ? c.street + ", " : "") + (c.town || "Granada");
+
+function makeMarker(c) {
+  const pos = cache[c.id];
+  if (!pos || markers[c.id]) return;
+  const icon = L.divIcon({
+    className: "",
+    html: '<div class="pin ' + typeClass(c) + '"><b>' + c.id + "</b></div>",
+    iconSize: [26, 26], iconAnchor: [13, 26], popupAnchor: [0, -24]
+  });
+  const m = L.marker([pos.lat, pos.lon], { icon, title: c.name });
+  cluster.addLayer(m);
+  m.bindPopup(
+    "<strong>" + esc(c.name) + "</strong><br>" + esc(addrOf(c)) +
+    (c.extra ? "<br><em>" + esc(c.extra) + "</em>" : "") +
+    (c.prov ? "<br><em>El catálogo oficial no incluye la calle" + (pos.approx ? "; posición aproximada (centro del municipio)" : "") + "</em>" : "") +
+    (c.conf ? "" : "<br><em>Dirección por confirmar</em>")
+  );
+  m.on("click", () => highlight(c.id, false));
+  markers[c.id] = m;
+}
+
+function renderList() {
+  const q = $("#q").value.trim().toLowerCase();
+  const tipo = $("#tipo").value;
+  const ul = $("#list");
+  ul.innerHTML = "";
+  CENTERS.forEach((c) => {
+    const visible = matchTipo(c, tipo) &&
+      (!q || (c.name + " " + c.street + " " + (c.town || "Granada")).toLowerCase().includes(q));
+    if (markers[c.id]) {
+      const on = cluster.hasLayer(markers[c.id]);
+      if (visible && !on) cluster.addLayer(markers[c.id]);
+      if (!visible && on) cluster.removeLayer(markers[c.id]);
+    }
+    if (!visible) return;
+    const li = document.createElement("li");
+    li.tabIndex = 0;
+    li.dataset.id = c.id;
+    if (!cache[c.id]) li.classList.add("unplaced");
+    const tc = typeClass(c);
+    if (tc) li.classList.add("t-" + tc);
+    li.innerHTML =
+      '<div class="num">' + c.id + "</div><div><strong>" + esc(c.name) + '</strong><span class="addr">' +
+      esc(addrOf(c)) + "</span><br>" +
+      '<span class="tag">' + esc(c.tipo) + "</span>" +
+      (cache[c.id] && cache[c.id].approx ? '<span class="tag warn">Ubicación aproximada</span>' : "") +
+      (c.conf ? "" : '<span class="tag warn">Por confirmar</span>') +
+      (cache[c.id] ? "" : '<span class="tag warn">Sin ubicar</span>') + "</div>";
+    li.addEventListener("click", () => highlight(c.id, true));
+    li.addEventListener("keydown", (e) => { if (e.key === "Enter") highlight(c.id, true); });
+    ul.appendChild(li);
+  });
+}
+
+function highlight(id, fly) {
+  document.querySelectorAll("li.active").forEach((n) => n.classList.remove("active"));
+  const li = document.querySelector('li[data-id="' + id + '"]');
+  if (li) { li.classList.add("active"); li.scrollIntoView({ block: "nearest" }); }
+  const m = markers[id];
+  if (m && fly) { touched = true; cluster.zoomToShowLayer(m, () => { map.flyTo(m.getLatLng(), Math.max(map.getZoom(), 16), { duration: 0.6 }); m.openPopup(); }); }
+}
+
+function fitAll() {
+  const pts = Object.values(markers).filter((m) => cluster.hasLayer(m)).map((m) => m.getLatLng());
+  if (pts.length) map.fitBounds(L.latLngBounds(pts).pad(0.12));
+}
+
+async function nominatim(q, vb) {
+  const url = "https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=es" +
+    "&viewbox=" + (vb || VIEWBOX) + "&bounded=1&q=" + encodeURIComponent(q);
+  const r = await fetch(url, { headers: { "Accept-Language": "es" } });
+  if (!r.ok) throw new Error("HTTP " + r.status);
+  const j = await r.json();
+  return j.length ? { lat: parseFloat(j[0].lat), lon: parseFloat(j[0].lon) } : null;
+}
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+async function locateAll() {
+  const pending = CENTERS.filter((c) => !cache[c.id]);
+  let done = CENTERS.length - pending.length;
+  const tick = () => {
+    $("#prog").style.width = Math.round((done / CENTERS.length) * 100) + "%";
+    const placed = CENTERS.filter((c) => cache[c.id]).length;
+    $("#status").textContent = placed + " de " + CENTERS.length + " ubicados" +
+      (done < CENTERS.length ? " · buscando posiciones…" : "");
+  };
+  tick();
+  CENTERS.forEach(makeMarker);
+  fitAll();
+  for (const c of pending) {
+    try {
+      let pos;
+      if (c.prov) {
+        // 1) centro del municipio (una consulta por municipio, en caché); 2) búsqueda por nombre dentro de ~4 km; 3) si no, el centro.
+        const k = "t:" + c.town;
+        if (!cache[k]) { const t = await nominatim(c.town + ", Granada"); if (t) cache[k] = t; await sleep(1100); }
+        const t = cache[k];
+        if (t) {
+          const d = 0.04, vb = [t.lon - d, t.lat + d, t.lon + d, t.lat - d].join(",");
+          pos = await nominatim(c.q1, vb);
+          if (!pos) pos = { lat: t.lat, lon: t.lon, approx: true };
+        }
+      } else {
+        pos = await nominatim(c.street + ", " + (c.town || "Granada"));
+        if (!pos) { await sleep(1100); pos = await nominatim(c.q2 || (c.name.replace(/^CS /, "Centro de Salud ") + ", Granada")); }
+      }
+      if (pos) { cache[c.id] = pos; saveCache(); makeMarker(c); }
+    } catch (e) {
+      $("#status").textContent = "No se pudo consultar OpenStreetMap (" + e.message + "). Recarga más tarde.";
+    }
+    done++; tick(); if (done % 10 === 0 || done === CENTERS.length) renderList(); if (!touched && done % 10 === 0) fitAll();
+    await sleep(1100); // límite de uso de Nominatim: 1 petición por segundo
+  }
+  tick();
+}
+
+$("#q").addEventListener("input", renderList);
+$("#tipo").addEventListener("change", renderList);
+$("#fit").addEventListener("click", () => { touched = false; fitAll(); });
+$("#copy").addEventListener("click", async () => {
+  const out = CENTERS.map((c) => ({
+    id: c.id, nombre: c.name, tipo: c.tipo, direccion: addrOf(c), direccion_confirmada: c.conf && !c.prov, ubicacion_aproximada: !!(cache[c.id] && cache[c.id].approx), lat: cache[c.id] ? cache[c.id].lat : null, lon: cache[c.id] ? cache[c.id].lon : null
+  }));
+  const txt = JSON.stringify(out, null, 2);
+  try { await navigator.clipboard.writeText(txt); $("#status").textContent = "JSON copiado al portapapeles."; }
+  catch (e) { prompt("Copia el JSON:", txt); }
+});
+
+renderList();
+locateAll().then(renderList);
+</script>
+</body>
+</html>
