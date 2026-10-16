@@ -122,8 +122,12 @@
   dialog .msg { font-size: 12px; color: var(--warn); min-height: 16px; }
   .pform button.danger { background: #fff; color: #b3261e; border-color: #b3261e; }
   .placing #map { cursor: crosshair; }
-  .legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12px; color: var(--muted); }
-  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; vertical-align: -1px; }
+  .legend-box { background: var(--panel); color: var(--fg); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; font-size: 12px; max-width: 230px; box-shadow: 0 1px 5px rgba(0,0,0,.3); }
+  .legend-box summary { cursor: pointer; font-weight: 600; }
+  .legend-box h4 { margin: 8px 0 3px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+  .legend-box div.it { display: flex; align-items: center; gap: 6px; line-height: 1.5; }
+  .legend-box i { display: inline-block; width: 11px; height: 11px; border-radius: 50%; flex: none; }
+  .legend-box i.ring { background: #9aa8a4; border: 3px solid; width: 15px; height: 15px; }
   .leaflet-popup-content { font: 13px/1.4 system-ui, sans-serif; color: #17302b; }
   .leaflet-popup-content strong { font-size: 14px; }
   .note { padding: 10px 16px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--line); }
@@ -163,12 +167,9 @@
     <div class="tools">
       <input id="q" type="search" placeholder="Buscar por nombre o calle" aria-label="Buscar centro">
       <div class="row">
-        <select id="tipo" aria-label="Filtrar por tipo">
-        </select>
-        <button id="fit" type="button">Ver todos</button>
+        <select id="tipo" aria-label="Filtrar por categoría"></select>
+        <select id="permiso" aria-label="Filtrar por estado del permiso"></select>
       </div>
-      <select id="permiso" aria-label="Filtrar por estado del permiso"></select>
-      <div class="legend" aria-label="Leyenda"></div>
       <div class="bar" aria-hidden="true"><i id="prog"></i></div>
       <div class="status" id="status" role="status">Preparando…</div>
     </div>
@@ -411,7 +412,7 @@ function renderList() {
     li.dataset.id = c.id;
     if (!cache[c.id]) li.classList.add("unplaced");
     li.innerHTML =
-      '<div class="num">' + c.id + "</div><div><strong>" + esc(c.name) + '</strong><span class="addr">' +
+      '<div class="num" style="background:' + colorOf(c) + ';color:#fff">' + c.id + "</div><div><strong>" + esc(c.name) + '</strong><span class="addr">' +
       esc(addrOf(c)) + "</span><br>" +
       '<span class="tag">' + esc(c.tipo + (c.sub ? " · " + c.sub : "")) + "</span>" +
       (permOf(c).estado !== "sin" ? '<span class="tag" style="background:' + estadoInfo(permOf(c).estado)[2] + ';color:' + (permOf(c).estado === "concedido" || permOf(c).estado === "solicitado" ? "#111" : "#fff") + '">' + estadoInfo(permOf(c).estado)[1] + (permOf(c).fecha ? " · " + esc(permOf(c).fecha) : "") + "</span>" : "") +
@@ -488,9 +489,10 @@ async function locateAll() {
   tick();
 }
 
-$("#q").addEventListener("input", renderList);
-$("#tipo").addEventListener("change", renderList);
-$("#fit").addEventListener("click", () => { touched = false; fitAll(); });
+let fitTimer;
+const refilter = () => { renderList(); clearTimeout(fitTimer); fitTimer = setTimeout(() => { touched = false; fitAll(); }, 200); };
+$("#q").addEventListener("input", refilter);
+$("#tipo").addEventListener("change", refilter);
 $("#copy").addEventListener("click", async () => {
   const out = CENTERS.map((c) => ({
     id: c.id, nombre: c.name, tipo: c.tipo, direccion: addrOf(c), direccion_confirmada: c.conf && !c.prov, ubicacion_aproximada: !!(cache[c.id] && cache[c.id].approx), lat: cache[c.id] ? cache[c.id].lat : null, lon: cache[c.id] ? cache[c.id].lon : null
@@ -500,23 +502,34 @@ $("#copy").addEventListener("click", async () => {
   catch (e) { prompt("Copia el JSON:", txt); }
 });
 
+const lg = L.control({ position: "bottomleft" });
+lg.onAdd = () => {
+  const d = L.DomUtil.create("div", "legend-box");
+  d.innerHTML = '<details' + (window.innerWidth > 760 ? " open" : "") + '><summary>Leyenda</summary><div id="lgBody"></div></details>';
+  L.DomEvent.disableClickPropagation(d); L.DomEvent.disableScrollPropagation(d);
+  return d;
+};
+lg.addTo(map);
+
 function refreshSelects() {
   const vis = CENTERS.filter((c) => !isOut(c));
   const tv = $("#tipo").value, pv = $("#permiso").value;
-  $("#tipo").innerHTML = '<option value="">Todos los tipos</option>' +
+  $("#tipo").innerHTML = '<option value="">Categoría: todas</option>' +
     TIPOS.map(([i, t]) => '<option value="' + t + '">' + i + " · " + t + " (" + vis.filter((c) => c.tipo === t).length + ")</option>").join("");
-  $("#permiso").innerHTML = '<option value="">Todos los estados de permiso</option>' +
+  $("#permiso").innerHTML = '<option value="">Permiso: todos</option>' +
     ESTADOS.map(([k, t]) => '<option value="' + k + '">' + t + " (" + vis.filter((c) => permOf(c).estado === k).length + ")</option>").join("");
   $("#tipo").value = tv; $("#permiso").value = pv;
-  $(".legend").innerHTML = TIPOS.filter(([i, t]) => vis.some((c) => c.tipo === t)).map(([i, t, col]) => '<span><i style="background:' + col + '"></i>' + t + "</span>").join("") +
-    ESTADOS.slice(1).map(([k, t, col]) => '<span><i style="background:#fff;border:3px solid ' + col + ';width:6px;height:6px"></i>' + t + "</span>").join("");
+  $("#lgBody").innerHTML = "<h4>Color: categoría</h4>" +
+    TIPOS.filter(([i, t]) => vis.some((c) => c.tipo === t)).map(([i, t, col]) => '<div class="it"><i style="background:' + col + '"></i>' + t + "</div>").join("") +
+    "<h4>Borde: permiso</h4>" +
+    ESTADOS.map(([k, t, col]) => '<div class="it"><i class="ring" style="border-color:' + (k === "sin" ? "#ffffff;box-shadow:0 0 0 1px #9aa8a4" : col) + '"></i>' + t + "</div>").join("");
   const nr = CENTERS.filter(isOut).length;
   $("#restore").textContent = "Restaurar puntos quitados (" + nr + ")";
   $("#restore").disabled = !nr;
 }
 refreshSelects();
 
-$("#permiso").addEventListener("change", renderList);
+$("#permiso").addEventListener("change", refilter);
 (() => {
   const btn = $("#menuBtn"), panel = $("#menuPanel");
   const set = (open) => { panel.hidden = !open; btn.setAttribute("aria-expanded", open); };
