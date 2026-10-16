@@ -2,7 +2,7 @@
 
 **Objetivo:** comprobar que la base de datos impone los permisos aunque alguien invoque la API directamente, sin depender de los controles visuales de la aplicación.
 
-Este plan acompaña a `supabase/migrations/202610160001_initial_schema.sql`. La migración y las pruebas smoke se ejecutan automáticamente en GitHub Actions contra PostgreSQL 16 con una capa mínima de compatibilidad de `auth.uid()` y `auth.users`. Esto valida sintaxis, triggers, integridad y un primer escenario de RLS, pero **no sustituye** las pruebas en un proyecto Supabase real. No se han creado credenciales ni se ha aplicado la migración a ningún proyecto Supabase.
+Este plan acompaña a `supabase/migrations/202610160001_initial_schema.sql`. La migración, la semilla de referencia y las pruebas smoke se ejecutan automáticamente en [GitHub Actions](https://github.com/danytf/mapas/actions/runs/38974877511) contra PostgreSQL 16 con una capa mínima de compatibilidad de `auth.uid()` y `auth.users`. La ejecución comprueba la carga de 52 códigos territoriales y 16 categorías, además de sintaxis, triggers, integridad y un primer escenario de RLS. Esto **no sustituye** las pruebas en un proyecto Supabase real. No se han creado credenciales ni se ha aplicado la migración a ningún proyecto Supabase.
 
 ## 1. Preparación de un entorno de desarrollo
 
