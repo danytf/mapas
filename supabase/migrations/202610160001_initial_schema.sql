@@ -723,7 +723,7 @@ grant insert, update, delete on public.provinces, public.profiles, public.user_p
   public.permit_applications, public.permit_grants, public.followups,
   public.establishment_location_reviews, public.establishment_location_history,
   public.import_batches, public.import_records to authenticated;
-grant usage, select on sequence public.audit_log_id_seq to authenticated;
+-- No se concede acceso directo a la secuencia de auditoría; el trigger escribe como función de servidor.
 
 commit;
 
