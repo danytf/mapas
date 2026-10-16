@@ -240,6 +240,26 @@
   .chipbtn { justify-self: start; height: 28px; font-size: 12px; padding: 0 12px; border-radius: 999px; border: 1px solid transparent; background: var(--warn-bg); color: var(--warn); cursor: pointer; }
   .chipbtn:hover { border-color: var(--warn); background: var(--warn-bg); }
   .chipbtn[aria-pressed="true"] { background: var(--warn); color: var(--panel); }
+  #toast { position: fixed; left: 50%; bottom: 22px; transform: translate(-50%, 24px); background: var(--ink); color: #fff; padding: 11px 18px; border-radius: 10px; font-size: 13.5px; font-weight: 560; box-shadow: 0 10px 30px rgba(15,23,34,.4); border-left: 4px solid #e0a800; opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; z-index: 2000; max-width: 92vw; }
+  #toast.on { opacity: 1; transform: translate(-50%, 0); }
+  #dlgLogros { width: min(760px, 94vw); max-height: 88vh; overflow-y: auto; }
+  .lg-h { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .lg-h h2 { flex: 1; }
+  #lgSum { font-size: 13px; color: var(--muted); font-weight: 560; }
+  .lg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); gap: 10px; }
+  .lg { display: grid; grid-template-columns: 52px 1fr; gap: 4px 12px; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); align-items: center; }
+  .lg .md { grid-row: span 3; width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: var(--line); color: var(--muted); border: 3px solid var(--line-2); }
+  .lg .md svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .lg.l1 .md { background: #f3e1cf; color: #8a4f1f; border-color: #b9773a; }
+  .lg.l2 .md { background: #e6ebf1; color: #475569; border-color: #94a3b8; }
+  .lg.l3 .md { background: #fff1c2; color: #8a5a00; border-color: #e0a800; }
+  .lg b { font-size: 14px; letter-spacing: -.01em; }
+  .lg .ds { font-size: 11.5px; color: var(--muted); line-height: 1.35; }
+  .lg .pr { font-size: 11.5px; font-weight: 600; color: var(--fg); }
+  .lg.l0 b, .lg.l0 .pr { opacity: .65; }
+  .lg .bar { grid-column: 2; height: 4px; border-radius: 2px; background: var(--line); overflow: hidden; }
+  .lg .bar i { display: block; height: 100%; background: var(--accent); }
+  .lg-note { font-size: 11.5px; color: var(--muted); margin: 12px 0 0; }
   dialog h2 { margin: 0; font-size: 18px; font-weight: 680; letter-spacing: -.015em; }
   dialog label { display: grid; gap: 4px; font-size: 12px; font-weight: 560; color: var(--muted); }
   dialog input, dialog select { font: inherit; font-weight: 400; height: 38px; padding: 0 12px; border: 1px solid var(--line-2); border-radius: 8px; background: var(--panel); color: var(--fg); width: 100%; }
@@ -279,6 +299,7 @@
     <div id="menuPanel" role="menu" hidden>
       <div class="mh">Informes</div>
       <button id="panelBtn" type="button" role="menuitem">Panel resumen</button>
+      <button id="logrosBtn" type="button" role="menuitem">Logros</button>
       <div class="mh">Puntos</div>
       <button id="add" type="button" role="menuitem">Agregar punto</button>
       <button id="restore" type="button" role="menuitem">Restaurar puntos quitados (0)</button>
@@ -318,6 +339,11 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<dialog id="dlgLogros" aria-labelledby="lgT">
+  <div class="lg-h"><h2 id="lgT">Logros</h2><span id="lgSum"></span><button type="button" id="lgClose" aria-label="Cerrar">Cerrar</button></div>
+  <div id="lgGrid" class="lg-grid"></div>
+  <p class="lg-note">Las insignias se calculan con tus datos y, una vez conseguidas, no se pierden. La racha cuenta los días en que abres el mapa sin seguimientos pendientes.</p>
+</dialog>
 <dialog id="dlgPanel">
   <div class="pn-head"><h2>Panel resumen</h2><button type="button" id="pnClose" aria-label="Cerrar">&times;</button></div>
   <div id="pnBody"></div>
@@ -823,6 +849,82 @@ lg.onAdd = () => {
 };
 lg.addTo(map);
 
+/* Logros (insignias): se calculan con los datos; el nivel conseguido no se pierde. */
+const LOG_KEY = "logros-granada-v1";
+const LOG_FIRST = (() => { try { return localStorage.getItem(LOG_KEY) === null; } catch (e) { return true; } })();
+let logros = Object.assign({ n: {}, f: {}, racha: { dia: "", n: 0, mejor: 0 } }, loadJSON(LOG_KEY, {}));
+const saveLogros = () => { try { localStorage.setItem(LOG_KEY, JSON.stringify(logros)); } catch (e) {} };
+const LV_NAMES = ["", "Bronce", "Plata", "Oro"];
+const ICO = {
+  permiso: '<path d="M6 12.5l4 4 8-9"/>', gestor: '<path d="M5 19V9l7-4 7 4v10M9 19v-5h6v5"/>', verde: '<path d="M12 21s-6.5-5.8-6.5-11a6.5 6.5 0 0113 0c0 5.2-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/>',
+  triple: '<path d="M12 4l2.3 5 5.4.6-4 3.7 1.1 5.3L12 15.8 7.2 18.6l1.1-5.3-4-3.7 5.4-.6z"/>', cadena: '<path d="M9.5 14.5l5-5M8 11l-2 2a3.5 3.5 0 005 5l2-2M16 13l2-2a3.5 3.5 0 00-5-5l-2 2"/>',
+  sanitario: '<path d="M12 5.5v13M5.5 12h13"/>', institucional: '<path d="M4 9l8-4 8 4M6 10v7M10 10v7M14 10v7M18 10v7M4 19h16"/>',
+  aldia: '<circle cx="12" cy="12" r="7.5"/><path d="M12 8v4.3l3 1.7"/>', racha: '<path d="M13 3l-7 11h5l-1 7 7-11h-5z"/>',
+  despliegue: '<circle cx="9" cy="9" r="2.5"/><circle cx="16" cy="10" r="2"/><path d="M4.5 18c.5-3 2.3-4.5 4.5-4.5s4 1.5 4.5 4.5M14 14.5c2.5-.5 4.5.8 5.500 3.5"/>',
+  cartografo: '<path d="M4 6.5l5-2 6 2 5-2v13l-5 2-6-2-5 2zM9 4.5v13M15 6.5v13"/>', cero: '<circle cx="12" cy="12" r="7.5"/><path d="M8.5 12.2l2.5 2.5 4.5-5"/>'
+};
+function logrosCalc() {
+  const vis = CENTERS.filter((c) => !isOut(c));
+  const con = vis.filter((c) => estadoOf(c) === "concedido");
+  const lvOf = (v, ts) => ts.filter((t) => v >= t).length;
+  const tier = (v, ts, unit) => { const lv = lvOf(v, ts); return { lv, max: ts.length, txt: lv >= ts.length ? v + " " + unit : v + " / " + ts[lv] + " " + unit }; };
+  const bin = (ok, txt) => ({ lv: ok ? 1 : 0, max: 1, txt });
+  const towns = new Set(con.map((c) => c.town || "Granada"));
+  const cats = ["Hospital", "Centro de salud", "Supermercado", "Centro comercial", "Entidad oficial"];
+  const catsOk = cats.filter((t) => con.some((c) => c.tipo === t));
+  const grp = {}; vis.forEach((c) => { const k = rawChain(c); if (k) (grp[k] = grp[k] || []).push(c); });
+  const full = Object.keys(grp).filter((k) => grp[k].length >= 3 && grp[k].every((c) => estadoOf(c) === "concedido"));
+  const closeChain = Object.keys(grp).filter((k) => grp[k].length >= 3).map((k) => [k, grp[k].filter((c) => estadoOf(c) === "concedido").length, grp[k].length]).sort((a, b) => (a[2] - a[1]) - (b[2] - b[1]))[0];
+  const san = vis.filter((c) => c.tipo === "Hospital" || c.tipo === "Centro de salud");
+  const sanOk = san.filter((c) => estadoOf(c) === "concedido").length, pct = san.length ? sanOk / san.length : 0;
+  const sanLv = pct >= 1 ? 3 : pct >= .5 ? 2 : pct >= .25 ? 1 : 0;
+  const insts = [["Seguridad Social", /^Seguridad Social/], ["AEAT", /^AEAT/], ["DGT", /^DGT/], ["Juzgados", /^Juzgados/]];
+  const instOk = insts.filter(([, re]) => con.some((c) => re.test(c.name)));
+  const used = Object.values(permits).filter((p) => p && p.estado && p.estado !== "sin").length;
+  const due = vis.filter(seguimientoDue).length;
+  const capt = vis.reduce((a, c) => a + histOf(c).reduce((s, h) => s + (+h.captadores || 0), 0), 0);
+  const carto = reviewed.size + customs.length;
+  const pend = vis.filter(isRev).length;
+  const cLv = pend === 0 ? 3 : pend <= 5 ? 2 : pend <= 20 ? 1 : 0;
+  return [
+    { id: "permiso", name: "Primer permiso", d: "Consigue tu primer permiso concedido.", ...bin(con.length >= 1, con.length ? "Conseguido" : "Aún sin permisos concedidos") },
+    { id: "gestor", name: "Gestor", d: "Permisos vigentes a la vez: 5, 15 y 30.", ...tier(con.length, [5, 15, 30], "permisos") },
+    { id: "verde", name: "Mapa verde", d: "Municipios con permiso: 5, 15 y 30.", ...tier(towns.size, [5, 15, 30], "municipios") },
+    { id: "triple", name: "Triple A", d: "Permiso en las 5 categorías del mapa: hospital, centro de salud, supermercado, centro comercial y entidad oficial.", ...bin(catsOk.length === 5, catsOk.length + " / 5 categorías") },
+    { id: "cadena", name: "Cadena completa", d: "Permiso en todos los puntos de una cadena (mínimo 3 puntos).", ...bin(full.length > 0, full.length ? full.join(", ") : closeChain ? "Más cerca: " + closeChain[0] + " " + closeChain[1] + " / " + closeChain[2] : "Sin cadenas con 3 puntos") },
+    { id: "sanitario", name: "Sanitario", d: "Hospitales y centros de salud con permiso: 25 %, 50 % y 100 %.", lv: sanLv, max: 3, txt: sanOk + " / " + san.length + " (" + Math.round(pct * 100) + " %)" },
+    { id: "institucional", name: "Institucional", d: "Permiso en Seguridad Social, AEAT, DGT y juzgados.", ...bin(instOk.length === 4, instOk.length + " / 4 organismos") },
+    { id: "aldia", name: "Al día", d: "Ningún seguimiento pendiente o atrasado.", ...bin(due === 0 && used > 0, due ? due + " seguimientos pendientes" : used ? "Al día" : "Aún sin permisos en curso") },
+    { id: "racha", name: "Racha", d: "Días seguidos abriendo el mapa sin seguimientos pendientes: 7 y 30.", lv: lvOf(logros.racha.mejor, [7, 30]), max: 2, txt: "Racha actual " + logros.racha.n + " · mejor " + logros.racha.mejor + " días" },
+    { id: "despliegue", name: "Despliegue", d: "Captadores acumulados en el historial de vigencias: 10, 50 y 100.", ...tier(capt, [10, 50, 100], "captadores") },
+    { id: "cartografo", name: "Cartógrafo", d: "Puntos revisados o añadidos por ti: 1, 10 y 25.", ...tier(carto, [1, 10, 25], "puntos") },
+    { id: "cero", name: "Cero pendientes", d: "Puntos por revisar: 20 o menos, 5 o menos y ninguno.", lv: cLv, max: 3, txt: pend === 0 ? "Sin pendientes" : pend + " por revisar" }
+  ];
+}
+function logrosToast(msg) {
+  let t = document.getElementById("toast");
+  if (!t) { t = document.createElement("div"); t.id = "toast"; t.setAttribute("role", "status"); document.body.appendChild(t); }
+  t.textContent = msg; t.classList.add("on"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("on"), 5200);
+}
+function checkLogros() {
+  const vis = CENTERS.filter((c) => !isOut(c));
+  const due = vis.filter(seguimientoDue).length, used = Object.values(permits).filter((p) => p && p.estado && p.estado !== "sin").length;
+  const r = logros.racha, t = today(), ayer = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+  if (due === 0 && used > 0) { if (r.dia !== t) { r.n = r.dia === ayer ? r.n + 1 : 1; r.dia = t; } } else if (due > 0 && r.n) { r.n = 0; r.dia = ""; }
+  r.mejor = Math.max(r.mejor, r.n);
+  const nuevos = [];
+  logrosCalc().forEach((b) => {
+    const prev = logros.n[b.id] || 0;
+    if (b.lv > prev) { logros.n[b.id] = b.lv; logros.f[b.id] = t; if (!LOG_FIRST) nuevos.push(b); }
+  });
+  saveLogros();
+  if (nuevos.length) logrosToast("Insignia conseguida: " + nuevos.map((b) => b.name + (b.max > 1 ? " (" + LV_NAMES[b.lv] + ")" : "")).join(", "));
+  const tot = Object.keys(logros.n).filter((k) => logros.n[k] > 0).length;
+  const lk = document.getElementById("logrosK"); if (lk) lk.querySelector("b").textContent = tot;
+  const mb = document.getElementById("logrosBtn"); if (mb) mb.textContent = "Logros (" + tot + " / 12)";
+  return tot;
+}
+
 function refreshSelects() {
   const vis = CENTERS.filter((c) => !isOut(c));
   const tv = $("#tipo").value, pv = $("#permiso").value;
@@ -854,9 +956,12 @@ function refreshSelects() {
     $("#kstrip").innerHTML = '<div class="k"><b>' + vis.length + "</b><span>Puntos</span></div>" +
       '<div class="k"><b>' + con + "</b><span>Permisos vigentes</span></div>" +
       '<div class="k"><b>' + capt + "</b><span>Captadores hoy</span></div>" +
-      '<button type="button" id="segBtn" class="k' + (seg ? " hot" : "") + '" aria-pressed="' + onlySeg + '" title="Mostrar solo los seguimientos de hoy o atrasados"><b>' + seg + "</b><span>Seguimientos</span></button>";
+      '<button type="button" id="segBtn" class="k' + (seg ? " hot" : "") + '" aria-pressed="' + onlySeg + '" title="Mostrar solo los seguimientos de hoy o atrasados"><b>' + seg + "</b><span>Seguimientos</span></button>" +
+      '<button type="button" id="logrosK" class="k" title="Ver mis insignias"><b>' + Object.keys(logros.n).filter((k) => logros.n[k] > 0).length + "</b><span>Insignias</span></button>";
+    $("#logrosK").addEventListener("click", openLogros);
     $("#segBtn").addEventListener("click", () => { onlySeg = !onlySeg; $("#segBtn").setAttribute("aria-pressed", onlySeg); refilter(); });
   }
+  checkLogros();
   $("#revBtn").textContent = (onlyRev ? "Mostrando solo " : "") + "Por revisar (" + vis.filter(isRev).length + ")";
 }
 refreshSelects();
@@ -931,6 +1036,20 @@ const download = (name, text, type) => {
   $("#panelBtn").addEventListener("click", () => { render(); dlg.showModal(); });
   $("#pnClose").addEventListener("click", () => dlg.close());
 })();
+
+function openLogros() {
+  const bs = logrosCalc();
+  const tot = Object.keys(logros.n).filter((k) => logros.n[k] > 0).length;
+  document.getElementById("lgSum").textContent = tot + " de " + bs.length + " conseguidas";
+  document.getElementById("lgGrid").innerHTML = bs.map((b) => {
+    const lv = Math.max(logros.n[b.id] || 0, b.lv);
+    const pct = Math.round(100 * Math.min(1, (b.lv) / b.max));
+    return '<div class="lg l' + (b.max === 1 && lv ? 3 : lv) + '"><span class="md"><svg viewBox="0 0 24 24" aria-hidden="true">' + (ICO[b.id] || "") + "</svg></span><b>" + esc(b.name) + (lv && b.max > 1 ? " · " + LV_NAMES[lv] : "") + '</b><span class="ds">' + esc(b.d) + '</span><span class="pr">' + esc(b.txt) + (logros.f[b.id] && lv ? " · " + fmtD(logros.f[b.id]) : "") + '</span><span class="bar"><i style="width:' + (lv >= b.max ? 100 : pct) + '%"></i></span></div>';
+  }).join("");
+  document.getElementById("dlgLogros").showModal();
+}
+document.getElementById("logrosBtn").addEventListener("click", openLogros);
+document.getElementById("lgClose").addEventListener("click", () => document.getElementById("dlgLogros").close());
 $("#csv").addEventListener("click", () => {
   const q = (v) => '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
   const head = ["id", "categoria", "subtipo", "nombre", "direccion", "municipio", "lat", "lon", "ubicacion_aproximada", "origen", "valoracion", "estado_permiso", "fecha_solicitud", "proximo_seguimiento", "contacto", "notas", "concesion_vigente", "historial_concesiones"];
@@ -940,7 +1059,7 @@ $("#csv").addEventListener("click", () => {
   });
   download("permisos-captacion-granada.csv", "\ufeff" + head.join(";") + "\r\n" + rows.join("\r\n"), "text/csv;charset=utf-8");
 });
-$("#bak").addEventListener("click", () => download("copia-mapa-recursos-granada.json", JSON.stringify({ version: 2, permisos: permits, puntos_propios: customs, quitados: [...removed], revisados: [...reviewed] }, null, 2), "application/json"));
+$("#bak").addEventListener("click", () => download("copia-mapa-recursos-granada.json", JSON.stringify({ version: 2, permisos: permits, puntos_propios: customs, quitados: [...removed], revisados: [...reviewed], logros }, null, 2), "application/json"));
 $("#imp").addEventListener("click", () => $("#impf").click());
 $("#impf").addEventListener("change", async (e) => {
   const f = e.target.files[0]; if (!f) return;
@@ -955,6 +1074,7 @@ $("#impf").addEventListener("change", async (e) => {
     Object.keys(pm || {}).forEach((k) => { if (names.has(k) && pm[k] && pm[k].estado) { permits[k] = pm[k]; n++; } });
     (d.quitados || []).forEach((k) => { if (names.has(k)) removed.add(k); });
     (d.revisados || []).forEach((k) => { if (names.has(k)) reviewed.add(k); });
+    if (d.logros && d.logros.n) { Object.keys(d.logros.n).forEach((k) => { if ((d.logros.n[k] || 0) > (logros.n[k] || 0)) { logros.n[k] = d.logros.n[k]; logros.f[k] = (d.logros.f || {})[k] || today(); } }); const dr = d.logros.racha || {}; logros.racha.mejor = Math.max(logros.racha.mejor, dr.mejor || 0); saveLogros(); }
     savePermits(); saveRemoved(); saveReviewed();
     try { localStorage.setItem(CUSTOM_KEY, JSON.stringify(customs)); } catch (err) {}
     if (addedC) { location.reload(); return; }
