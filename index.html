@@ -149,7 +149,7 @@
   /* Popup */
   .leaflet-popup-content-wrapper { border-radius: 14px; box-shadow: var(--shadow); padding: 2px; }
   .leaflet-popup-content { margin: 14px 16px; font: 13px/1.45 var(--font); color: #141b26; }
-  .leaflet-popup-content { max-height: min(620px, 74vh); overflow-y: auto; scrollbar-width: thin; padding-right: 4px; }
+  .leaflet-popup-content { max-height: min(780px, 88vh); overflow-y: auto; scrollbar-width: thin; padding-right: 4px; }
   .leaflet-popup-content strong { font-size: 15px; font-weight: 650; letter-spacing: -.01em; line-height: 1.25; display: block; }
   .leaflet-popup-close-button { top: 8px !important; right: 8px !important; }
   .pform { display: grid; gap: 7px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #e2e6ec; }
@@ -169,11 +169,12 @@
   .pform .ef { padding: 6px 8px; background: #f3f5f8; border-radius: 7px; }
   .pform .hist { border-top: 1px solid #e2e6ec; padding-top: 8px; display: grid; gap: 5px; }
   .pform .hist h4 { margin: 0; font-size: 12px; color: #141b26; }
-  .pform .hist ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 3px; max-height: 110px; overflow: auto; }
-  .pform .hist li { display: flex; justify-content: space-between; align-items: center; gap: 6px; font-size: 11.5px; background: #f3f5f8; border-radius: 6px; padding: 4px 8px; border: 0; cursor: default; }
+  .pform .hist ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; max-height: none; overflow: visible; }
+  .pform .hist li { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 4px 6px; font-size: 11.5px; background: #f3f5f8; border-radius: 6px; padding: 4px 8px; border: 0; cursor: default; }
   .pform .hist li::before { display: none; }
   .pform .hist li:hover { background: #f3f5f8; }
   .pform .hist li.vig { background: #dcfce7; }
+  .pform .hist li > span { flex: 1 1 100%; overflow-wrap: anywhere; }
   .pform .hist li button { height: 22px; padding: 0 7px; background: #fff; color: #b3261e; border-color: #b3261e; font-size: 11px; }
   .pform .hist .row3 { display: grid; grid-template-columns: 1fr 1fr 74px; gap: 5px; }
   .pform .blk { display: grid; gap: 6px; padding: 8px; border: 1px solid #e2e6ec; border-radius: 8px; background: #fafbfc; }
@@ -932,7 +933,7 @@ function makeMarker(c) {
   if (!pos || markers[c.id] || isOut(c)) return;
   const m = L.marker([pos.lat, pos.lon], { icon: makeIcon(c), title: c.name, cat: colorOf(c) });
   cluster.addLayer(m);
-  m.bindPopup(() => popupFor(c, cache[c.id]), { minWidth: 230 });
+  m.bindPopup(() => popupFor(c, cache[c.id]), { minWidth: 330, maxWidth: 380 });
   m.on("click", () => highlight(c.id, false));
   markers[c.id] = m;
 }
