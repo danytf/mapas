@@ -358,6 +358,59 @@ begin
 end;
 $$;
 
+-- Un establecimiento no puede declarar un municipio de otra provincia.
+create or replace function public.validate_establishment_municipality_province()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $
+declare
+  municipality_province_id uuid;
+begin
+  if new.municipality_id is not null then
+    select m.province_id into municipality_province_id
+    from public.municipalities m
+    where m.id = new.municipality_id;
+
+    if municipality_province_id is null or municipality_province_id <> new.province_id then
+      raise exception 'El municipio debe pertenecer a la misma provincia que el establecimiento'
+        using errcode = '23514';
+    end if;
+  end if;
+  return new;
+end;
+$;
+
+drop trigger if exists validate_establishment_municipality_province on public.establishments;
+create trigger validate_establishment_municipality_province
+before insert or update of province_id, municipality_id on public.establishments
+for each row execute procedure public.validate_establishment_municipality_province();
+
+create or replace function public.prevent_municipality_reassignment_conflicts()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $
+begin
+  if new.province_id is distinct from old.province_id and exists (
+    select 1 from public.establishments e
+    where e.municipality_id = old.id
+      and e.province_id <> new.province_id
+  ) then
+    raise exception 'No se puede mover el municipio: existen establecimientos vinculados a su provincia original'
+      using errcode = '23514';
+  end if;
+  return new;
+end;
+$;
+
+drop trigger if exists prevent_municipality_reassignment_conflicts on public.municipalities;
+create trigger prevent_municipality_reassignment_conflicts
+before update of province_id on public.municipalities
+for each row execute procedure public.prevent_municipality_reassignment_conflicts();
+
 -- Integridad relacional reforzada en la base de datos (no depende del frontend).
 create or replace function public.validate_permit_grant_application()
 returns trigger
@@ -578,6 +631,8 @@ begin
 end;
 $$;
 
+revoke all on function public.validate_establishment_municipality_province() from public;
+revoke all on function public.prevent_municipality_reassignment_conflicts() from public;
 revoke all on function public.validate_permit_grant_application() from public;
 revoke all on function public.prevent_application_reassignment_conflicts() from public;
 revoke all on function public.prevent_grant_reassignment_conflicts() from public;
