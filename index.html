@@ -1617,7 +1617,7 @@ const download = (name, text, type) => {
     const limit = new Date(); limit.setDate(limit.getDate() + 30); const lim = limit.toISOString().slice(0, 10);
     const soon = [], expired = [];
     all.forEach((c) => {
-      const hs = histOf(c), v = hs.filter(isVig);
+      const hs = histOf(c), v = vigs(c);
       if (v.length) { const end = v.map((h) => h.hasta).filter(Boolean).sort().pop(); if (end && end <= lim && !v.some((h) => !h.hasta || h.hasta > lim)) soon.push([c, end, Math.max(...v.map((h) => h.captadores || 0))]); }
       else if (estadoOf(c) === "caducado") expired.push(c);
     });
