@@ -9,6 +9,7 @@ on:
     paths:
       - "supabase/migrations/**"
       - "supabase/tests/**"
+      - "supabase/seed/**"
       - ".github/workflows/schema-smoke.yml"
   pull_request:
     paths:
@@ -68,5 +69,7 @@ jobs:
           SQL
       - name: Apply schema migration
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/202610160001_initial_schema.sql
+      - name: Load reference catalogs
+        run: psql -v ON_ERROR_STOP=1 -f supabase/seed/reference_catalog.sql
       - name: Run schema, trigger, and RLS smoke tests
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/schema_smoke.sql
