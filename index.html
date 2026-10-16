@@ -1479,7 +1479,7 @@ function refreshSelects() {
   const tv = $("#tipo").value, pv = $("#permiso").value;
   $("#tipo").innerHTML = '<option value="">Categoría: todas</option>' +
     TIPOS.map(([i, t]) => '<option value="' + t + '">' + i + " · " + t + " (" + vis.filter((c) => c.tipo === t).length + ")</option>").join("");
-  $("#permiso").innerHTML = '<option value="">Permiso: todos</option>' +
+  $("#permiso").innerHTML = '<option value="">Estado: todos</option>' +
     ESTADOS.map(([k, t]) => '<option value="' + k + '">' + t + " (" + vis.filter((c) => estadoOf(c) === k).length + ")</option>").join("");
   const vv = $("#valor").value, ov = $("#orden").value;
   $("#valor").innerHTML = '<option value="">Valoración: todas</option><option value="5">★★★★★ (5)</option><option value="4">★★★★☆ o más</option><option value="3">★★★☆☆ o más</option><option value="sin">Sin valorar</option>';
