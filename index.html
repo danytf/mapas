@@ -176,6 +176,10 @@
   .pform .hist li.vig { background: #dcfce7; }
   .pform .hist li > span { flex: 1 1 100%; overflow-wrap: anywhere; }
   .pform .hist li button { height: 22px; padding: 0 7px; background: #fff; color: #b3261e; border-color: #b3261e; font-size: 11px; }
+  .pform .hist .hint { font-size: 11px; color: #5b726c; margin: 0 0 4px; }
+  .pform .hist details.aform { margin: 6px 0 2px; }
+  .pform .hist details.aform > summary { cursor: pointer; font-size: 12px; font-weight: 600; color: #8a1020; padding: 3px 0; }
+  .pform .hist details.aform[open] > summary { margin-bottom: 4px; }
   .pform .hist .row3 { display: grid; grid-template-columns: 1fr 1fr 74px; gap: 5px; }
   .pform .blk { display: grid; gap: 6px; padding: 8px; border: 1px solid #e2e6ec; border-radius: 8px; background: #fafbfc; }
   .pform .blk.off { display: none !important; }
@@ -695,18 +699,23 @@ const histOf = (c) => ((permits[c.name] && permits[c.name].historial) || []).sli
 const vigs = (c) => permOf(c).estado === "cancelado" ? [] : histOf(c).filter(isVig);
 const vigente = (c) => permOf(c).estado === "cancelado" ? undefined : histOf(c).find(isVig);
 const histTxt = (h) => fmtD(h.desde) + " – " + fmtD(h.hasta) + (h.ong ? " · " + h.ong : "") + (h.captadores ? " · " + h.captadores + " captador" + (h.captadores === 1 ? "" : "es") : "");
-const hasSol = (p) => !!(p && p.solicitud && (p.solicitud.desde || p.solicitud.hasta || p.solicitud.ong || p.solicitud.captadores));
-const solTxt = (c) => { const q = permOf(c).solicitud; if (!hasSol(permOf(c))) return ""; return [(q.desde || q.hasta) ? fmtD(q.desde) + " – " + fmtD(q.hasta) : "", q.ong, q.captadores ? q.captadores + " capt." : ""].filter(Boolean).join(" · "); };
+const solsOf = (p) => (p && Array.isArray(p.solicitudes)) ? p.solicitudes : (p && p.solicitud && (p.solicitud.desde || p.solicitud.hasta || p.solicitud.ong || p.solicitud.captadores) ? [p.solicitud] : []);
+const hasSol = (p) => solsOf(p).length > 0;
+const solValid = (q) => !q.res && (!q.hasta || q.hasta >= today());
+const solRange = (q) => [(q.desde || q.hasta) ? fmtD(q.desde) + " – " + fmtD(q.hasta) : "", q.ong, q.captadores ? q.captadores + " capt." : ""].filter(Boolean).join(" · ");
+const solTxt = (c) => solsOf(permOf(c)).filter(solValid).map(solRange).filter(Boolean).join(" | ");
 const futura = (c) => histOf(c).filter((h) => h.desde && h.desde > today()).pop();
-/* Estado efectivo: la vigencia manda sobre el estado manual. */
+/* Estado efectivo: la vigencia manda sobre el estado manual; varias solicitudes por punto. */
 const estadoOf = (c) => {
-  const m = permOf(c).estado;
+  const p = permOf(c), m = p.estado, sols = solsOf(p), pend = sols.filter((q) => !q.res);
   if (m === "cancelado") return "cancelado"; /* permiso concedido que se canceló: manda sobre las fechas */
   if (vigente(c)) return "concedido";
-  if (futura(c) && (m === "sin" || m === "concedido")) return "concedido";
+  if (m === "denegado") return m;
+  if (futura(c) && (m === "sin" || m === "concedido" || m === "solicitado")) return "concedido";
+  if (pend.some(solValid)) return "solicitado";
+  if (pend.length && (m === "sin" || m === "solicitado" || m === "concedido")) return "caducado"; /* solicitudes sin respuesta cuyas fechas ya pasaron */
+  if (m === "solicitado" && sols.length) return "denegado";
   if (histOf(c).length && m === "concedido") return "sin"; /* concesión ya terminada: vuelve a sin permiso (el historial se conserva) */
-  const q = permOf(c).solicitud;
-  if (m === "solicitado" && q && q.hasta && q.hasta < today()) return "caducado"; /* solicitud sin respuesta cuyas fechas ya pasaron */
   return m;
 };
 const seguimientoDue = (c) => { const d = permOf(c).seguimiento; return d && d <= today() ? d : ""; };
@@ -752,17 +761,15 @@ function popupFor(c, pos) {
     '<label>Estado del permiso<select class="f-estado">' +
     ESTADOS.filter((e) => e[0] !== "caducado").map((e) => '<option value="' + e[0] + '"' + (e[0] === p.estado ? " selected" : "") + ">" + e[1] + "</option>").join("") +
     '</select></label><label>Fecha en que se solicitó<input class="f-fecha" type="date" value="' + esc(p.fecha || "") + '"></label>' +
-    '<div class="blk s-blk"><h4>Solicitud</h4><label>ONG<input class="s-ong" type="text" list="ongList" placeholder="AECC, Cruz Roja…" autocomplete="off"></label><div class="hint">Fechas solicitadas</div><div class="row2"><label>Desde<input class="s-desde" type="date"></label><label>Hasta<input class="s-hasta" type="date"></label></div><label>Captadores<input class="s-n" type="number" min="1" step="1" placeholder="nº"></label></div>' +
-    '<div class="blk c-blk"><h4>Concesión</h4><div class="hint">Se rellena con la solicitud; cámbialo si te conceden otras fechas u otro número de captadores.</div><label>ONG<input class="c-ong" type="text" list="ongList" placeholder="AECC, Cruz Roja…" autocomplete="off"></label><div class="hint">Fechas concedidas</div><div class="row2"><label>Desde<input class="c-desde" type="date"></label><label>Hasta<input class="c-hasta" type="date"></label></div><label>Captadores<input class="c-n" type="number" min="1" step="1" placeholder="nº"></label></div>' +
     '<label>Próximo seguimiento<input class="f-seg" type="date" value="' + esc(p.seguimiento || "") + '"></label><label>Contacto (nombre, teléfono, email)<input class="f-contacto" type="text" value="' + esc(p.contacto || "") + '"></label>' +
     '<label>Notas<textarea class="f-notas">' + esc(p.notas || "") + '</textarea></label>' +
-    '<div class="hist"><h4>Concesiones (historial)</h4><ul class="h-list"></ul><div class="row3"><label>Desde<input class="h-desde" type="date"></label><label>Hasta<input class="h-hasta" type="date"></label><label>Captadores<input class="h-n" type="number" min="1" step="1" placeholder="nº"></label></div><label>ONG<input class="h-ong" type="text" list="ongList" placeholder="AECC, Cruz Roja…" autocomplete="off"></label><button type="button" class="h-add">Añadir concesión al historial</button><button type="button" class="h-cancel" hidden>Cancelar edición</button><div class="h-msg" style="font-size:11px;color:#b3261e;min-height:13px"></div></div>' +
+    '<div class="hist"><h4>Solicitudes</h4><div class="hint">Un mismo punto puede tener varias solicitudes, cada una con sus fechas.</div><ul class="s-list"></ul><details class="aform s-form"><summary>Añadir solicitud</summary><div class="row3"><label>Desde<input class="s-desde" type="date"></label><label>Hasta<input class="s-hasta" type="date"></label><label>Captadores<input class="s-n" type="number" min="1" step="1" placeholder="nº"></label></div><label>ONG<input class="s-ong" type="text" list="ongList" placeholder="AECC, Cruz Roja…" autocomplete="off"></label><button type="button" class="s-add">Añadir solicitud</button><button type="button" class="s-cancel" hidden>Cancelar edición</button></details><div class="s-msg" style="font-size:11px;color:#b3261e;min-height:13px"></div><h4 style="margin-top:10px">Concesiones (historial)</h4><ul class="h-list"></ul><details class="aform h-form"><summary>Añadir concesión</summary><div class="row3"><label>Desde<input class="h-desde" type="date"></label><label>Hasta<input class="h-hasta" type="date"></label><label>Captadores<input class="h-n" type="number" min="1" step="1" placeholder="nº"></label></div><label>ONG<input class="h-ong" type="text" list="ongList" placeholder="AECC, Cruz Roja…" autocomplete="off"></label><button type="button" class="h-add">Añadir concesión al historial</button><button type="button" class="h-cancel" hidden>Cancelar edición</button></details><div class="h-msg" style="font-size:11px;color:#b3261e;min-height:13px"></div></div>' +
     (isRev(c) ? '<button type="button" class="f-rev" style="background:#fff;color:#c8102e">Aceptar ubicación (marcar como revisada)</button>' : "") +
     '<button type="button" class="f-save">Guardar cambios</button><button type="button" class="f-del danger">' + (c.custom ? "Eliminar punto" : "Quitar del mapa") + '</button><div class="saved"></div></div>';
   const pf = el.querySelector(".pform");
   const put = (n, t) => { if (n) n.setAttribute("data-tab", t); };
   put(pf.firstElementChild, "p"); put(el.querySelector(".ef"), "p");
-  ["f-estado", "f-fecha", "f-seg"].forEach((k) => put(el.querySelector("." + k).closest("label"), "p")); put(el.querySelector(".s-blk"), "p"); put(el.querySelector(".c-blk"), "p");
+  ["f-estado", "f-fecha", "f-seg"].forEach((k) => put(el.querySelector("." + k).closest("label"), "p"));
   ["f-contacto", "f-notas"].forEach((k) => put(el.querySelector("." + k).closest("label"), "n"));
   put(el.querySelector(".hist"), "h");
   const tb = document.createElement("div"); tb.className = "ptabs"; tb.setAttribute("role", "tablist");
@@ -780,32 +787,19 @@ function popupFor(c, pos) {
   L.DomEvent.disableScrollPropagation(el);
   let val = p.valoracion || 0;
   let hist = (p.historial || []).slice().map((h) => Object.assign({}, h));
-  let editH = -1, concIdx = -1;
+  let editH = -1, editS = -1;
+  let sols = solsOf(p).map((x) => Object.assign({}, x));
   const q = (k) => el.querySelector("." + k);
-  const sol0 = Object.assign({ desde: "", hasta: "", ong: "", captadores: "" }, p.solicitud || {});
-  q("s-ong").value = sol0.ong || ""; q("s-n").value = sol0.captadores || ""; q("s-desde").value = sol0.desde || ""; q("s-hasta").value = sol0.hasta || "";
   const ongList = document.getElementById("ongList") || document.body.appendChild(Object.assign(document.createElement("datalist"), { id: "ongList" }));
-  ongList.innerHTML = [...new Set(["AECC", "Cruz Roja", "WWF", "FJC", "FPM", "FEC", "Aldeas Infantiles"].concat(Object.values(permits).reduce((a, x) => a.concat([x && x.solicitud && x.solicitud.ong].concat(((x && x.historial) || []).map((h) => h.ong))), []).filter(Boolean)))].map((o) => '<option value="' + esc(o) + '"></option>').join("");
+  ongList.innerHTML = [...new Set(["AECC", "Cruz Roja", "WWF", "FJC", "FPM", "FEC", "Aldeas Infantiles"].concat(Object.values(permits).reduce((a, x) => a.concat(solsOf(x).map((z) => z.ong), ((x && x.historial) || []).map((h) => h.ong)), []).filter(Boolean)))].map((o) => '<option value="' + esc(o) + '"></option>').join("");
   const resetH = () => { editH = -1; ["h-desde", "h-hasta", "h-n", "h-ong"].forEach((k) => { q(k).value = ""; }); q("h-add").textContent = "Añadir concesión al historial"; q("h-cancel").hidden = true; };
-  const fillConc = () => {
-    const e = q("f-estado").value;
-    let i = hist.findIndex(isVig);
-    if (i < 0) hist.forEach((h, j) => { if (h.desde && h.desde > today() && (i < 0 || h.desde > hist[i].desde)) i = j; });
-    if (i >= 0 && e === "concedido" && (estadoOf(c) === "concedido")) { concIdx = i; const h = hist[i]; q("c-ong").value = h.ong || ""; q("c-n").value = h.captadores || ""; q("c-desde").value = h.desde || ""; q("c-hasta").value = h.hasta || ""; }
-    else { concIdx = -1; q("c-ong").value = q("s-ong").value; q("c-n").value = q("s-n").value; q("c-desde").value = q("s-desde").value; q("c-hasta").value = q("s-hasta").value; }
-  };
-  const blocks = () => { const e = q("f-estado").value; q("s-blk").classList.toggle("off", e === "sin"); q("c-blk").classList.toggle("off", e !== "concedido"); };
-  fillConc(); blocks();
   q("f-estado").addEventListener("change", () => {
-    const e = q("f-estado").value;
-    if (e === "solicitado" && !q("f-fecha").value) q("f-fecha").value = today();
-    if (e === "concedido" && !(q("c-desde").value || q("c-hasta").value)) fillConc();
-    blocks();
+    if (q("f-estado").value === "solicitado" && !q("f-fecha").value) q("f-fecha").value = today();
   });
   const paintEf = () => {
     const ef = estadoOf(c), i = estadoInfo(ef), vg = ef === "concedido" ? vigente(c) : null;
     el.querySelector(".ef").innerHTML = 'Estado actual: <b style="background:' + i[2] + ';color:' + (ef === "sin" || ef === "denegado" ? "#111" : "#111") + ';padding:1px 6px;border-radius:4px;border:1px solid #cfdcd8">' + esc(i[1]) + "</b>" +
-      (vg ? " · hasta " + fmtD(vg.hasta) + (vg.ong ? " · " + esc(vg.ong) : "") + (vg.captadores ? " · " + vg.captadores + " captadores" : "") : (futura(c) ? " · concedido del " + esc(fmtD(futura(c).desde)) + " al " + esc(fmtD(futura(c).hasta)) : (ef === "caducado" ? " · solicitud sin respuesta: las fechas pedidas ya pasaron" : "")));
+      (vg ? " · hasta " + fmtD(vg.hasta) + (vg.ong ? " · " + esc(vg.ong) : "") + (vg.captadores ? " · " + vg.captadores + " captadores" : "") : (futura(c) ? " · concedido del " + esc(fmtD(futura(c).desde)) + " al " + esc(fmtD(futura(c).hasta)) : (ef === "caducado" ? " · solicitudes sin respuesta: las fechas pedidas ya pasaron" : (ef === "solicitado" ? " · " + sols.filter(solValid).length + " solicitud" + (sols.filter(solValid).length === 1 ? "" : "es") + " pendiente" + (sols.filter(solValid).length === 1 ? "" : "s") : ""))));
   };
   const paintHist = () => {
     const ul = el.querySelector(".h-list");
@@ -815,10 +809,33 @@ function popupFor(c, pos) {
       const li = document.createElement("li"); if (isVig(h)) li.className = "vig";
       li.innerHTML = "<span>" + esc(histTxt(h)) + (isVig(h) ? " · vigente" : "") + "</span>";
       const eb = document.createElement("button"); eb.type = "button"; eb.textContent = "Editar"; eb.title = "Cambiar fechas, ONG o captadores de esta concesión"; eb.style.cssText = "color:#14532d;border-color:#14532d;margin-left:auto";
-      eb.addEventListener("click", () => { editH = i; el.querySelector(".h-desde").value = h.desde || ""; el.querySelector(".h-hasta").value = h.hasta || ""; el.querySelector(".h-n").value = h.captadores || ""; el.querySelector(".h-ong").value = h.ong || ""; el.querySelector(".h-add").textContent = "Guardar cambios de la concesión"; el.querySelector(".h-cancel").hidden = false; });
+      eb.addEventListener("click", () => { editH = i; el.querySelector(".h-desde").value = h.desde || ""; el.querySelector(".h-hasta").value = h.hasta || ""; el.querySelector(".h-n").value = h.captadores || ""; el.querySelector(".h-ong").value = h.ong || ""; el.querySelector(".h-add").textContent = "Guardar cambios de la concesión"; el.querySelector(".h-cancel").hidden = false; el.querySelector(".h-form").open = true; });
       const b = document.createElement("button"); b.type = "button"; b.textContent = "Quitar"; b.title = "Quitar esta concesión del historial";
-      b.addEventListener("click", () => { hist.splice(i, 1); if (editH === i) resetH(); concIdx = -1; paintHist(); commit(); });
+      b.addEventListener("click", () => setTimeout(() => { hist.splice(i, 1); if (editH === i) resetH(); paintHist(); commit(); }, 0));
       li.appendChild(eb); li.appendChild(b); ul.appendChild(li);
+    });
+  };
+  const resetS = () => { editS = -1; ["s-desde", "s-hasta", "s-n", "s-ong"].forEach((k) => { q(k).value = ""; }); q("s-add").textContent = "Añadir solicitud"; q("s-cancel").hidden = true; };
+  const paintSols = () => {
+    const ul = el.querySelector(".s-list");
+    const sorted = sols.map((x, i) => [x, i]).sort((a, b) => (b[0].desde || "").localeCompare(a[0].desde || ""));
+    ul.innerHTML = sorted.length ? "" : '<li style="background:none;color:#5b726c">Sin solicitudes registradas</li>';
+    sorted.forEach(([x, i]) => {
+      const st = x.res === "denegada" ? "denegada" : (solValid(x) ? "pendiente" : "caducada");
+      const li = document.createElement("li"); if (st !== "pendiente") li.style.opacity = ".7";
+      li.innerHTML = "<span>" + esc(solRange(x) || "Sin datos") + " · <b>" + st + "</b></span>";
+      const mk = (t, title, css, fn) => { const b = document.createElement("button"); b.type = "button"; b.textContent = t; b.title = title; if (css) b.style.cssText = css; b.addEventListener("click", () => setTimeout(fn, 0)); li.appendChild(b); return b; }; /* se rehace la lista fuera del clic para que Leaflet no cierre la ficha */
+      if (!x.res) mk("Conceder", "Pasar esta solicitud a concesión con las mismas fechas", "color:#14532d;border-color:#14532d;margin-left:auto", () => {
+        hist.push({ desde: x.desde || "", hasta: x.hasta || "", captadores: x.captadores || 0, ong: x.ong || "" });
+        sols.splice(i, 1); if (editS === i) resetS();
+        if (["sin", "solicitado"].includes(q("f-estado").value)) q("f-estado").value = "concedido";
+        paintSols(); paintHist(); commit();
+        el.querySelector(".s-msg").style.color = "#14532d"; el.querySelector(".s-msg").textContent = "Concedida. Si te dieron otras fechas o captadores, usa Editar en Concesiones.";
+      });
+      if (!x.res) mk("Denegar", "Marcar esta solicitud como denegada", "color:#7a2a00;border-color:#7a2a00", () => { x.res = "denegada"; paintSols(); commit(); });
+      mk("Editar", "Cambiar fechas, ONG o captadores de esta solicitud", "color:#14532d;border-color:#14532d", () => { editS = i; q("s-desde").value = x.desde || ""; q("s-hasta").value = x.hasta || ""; q("s-n").value = x.captadores || ""; q("s-ong").value = x.ong || ""; q("s-add").textContent = "Guardar cambios de la solicitud"; q("s-cancel").hidden = false; q("s-add").closest("details").open = true; });
+      mk("Quitar", "Quitar esta solicitud", "", () => { sols.splice(i, 1); if (editS === i) resetS(); paintSols(); commit(); });
+      ul.appendChild(li);
     });
   };
   const paint = () => {
@@ -826,42 +843,45 @@ function popupFor(c, pos) {
     el.querySelector(".sv").textContent = val ? val + " de 5" : "sin valorar";
   };
   const commit = () => {
-    const sg = { desde: q("s-desde").value, hasta: q("s-hasta").value, ong: q("s-ong").value.trim(), captadores: parseInt(q("s-n").value, 10) || 0 };
-    const cg = { desde: q("c-desde").value, hasta: q("c-hasta").value, ong: q("c-ong").value.trim(), captadores: parseInt(q("c-n").value, 10) || 0 };
-    const sm = el.querySelector(".saved");
-    if (sg.desde && sg.hasta && sg.desde > sg.hasta) { sm.style.color = "#b3261e"; sm.textContent = "En la solicitud, la fecha de inicio es posterior a la de fin."; return; }
-    if (q("f-estado").value === "concedido" && cg.desde && cg.hasta && cg.desde > cg.hasta) { sm.style.color = "#b3261e"; sm.textContent = "En la concesión, la fecha de inicio es posterior a la de fin."; return; }
-    sm.style.color = "";
-    if (q("f-estado").value === "concedido" && (cg.desde || cg.hasta)) {
-      if (concIdx >= 0 && hist[concIdx]) hist[concIdx] = cg; else { hist.push(cg); concIdx = hist.length - 1; }
-      paintHist();
-    }
+    const sm = el.querySelector(".saved"); sm.style.color = "";
     const v = {
       estado: el.querySelector(".f-estado").value, fecha: el.querySelector(".f-fecha").value,
       contacto: el.querySelector(".f-contacto").value.trim(), notas: el.querySelector(".f-notas").value.trim(), valoracion: val, historial: hist, seguimiento: el.querySelector(".f-seg").value
     };
-    if (sg.desde || sg.hasta || sg.ong || sg.captadores) v.solicitud = sg;
+    if (sols.length) v.solicitudes = sols;
     const prevP = permits[c.name];
-    if (v.estado === "sin" && !v.fecha && !v.contacto && !v.notas && !v.valoracion && !hist.length && !v.seguimiento && !v.solicitud) delete permits[c.name]; else permits[c.name] = v;
+    if (v.estado === "sin" && !v.fecha && !v.contacto && !v.notas && !v.valoracion && !hist.length && !v.seguimiento && !sols.length) delete permits[c.name]; else permits[c.name] = v;
     savePermits();
     if (markers[c.id]) markers[c.id].setIcon(makeIcon(c));
     refreshSelects();
     renderList();
     paintEf();
-    const falta = v.estado === "solicitado" ? [!(sg.desde || sg.hasta) && "fechas", !sg.ong && "ONG", !sg.captadores && "captadores"].filter(Boolean) : [];
-    sm.textContent = falta.length ? "Guardado. Falta indicar en la solicitud: " + falta.join(", ") + "." : "Guardado";
-    blocks();
+    sm.textContent = v.estado === "solicitado" && !sols.length ? "Guardado. Añade las fechas, ONG y captadores en la pestaña Historial." : "Guardado";
     gamPermit(c, prevP);
   };
   el.querySelectorAll(".stars button").forEach((b) => b.addEventListener("click", () => { val = val === +b.dataset.n ? 0 : +b.dataset.n; paint(); commit(); }));
-  paint(); paintHist(); paintEf();
+  paint(); paintHist(); paintSols(); paintEf();
+  q("s-add").addEventListener("click", () => {
+    const d = q("s-desde").value, h = q("s-hasta").value, n = parseInt(q("s-n").value, 10) || 0, og = q("s-ong").value.trim(), msg = q("s-msg");
+    msg.style.color = "#b3261e"; msg.textContent = "";
+    if (!d && !h) { msg.textContent = "Indica al menos la fecha de inicio o la de fin."; return; }
+    if (d && h && d > h) { msg.textContent = "La fecha de inicio es posterior a la de fin."; return; }
+    const x = { desde: d, hasta: h, captadores: n, ong: og };
+    if (editS >= 0 && sols[editS]) { x.res = sols[editS].res; if (!x.res) delete x.res; sols[editS] = x; } else sols.push(x);
+    if (q("f-estado").value === "sin") q("f-estado").value = "solicitado";
+    if (!q("f-fecha").value) q("f-fecha").value = today();
+    resetS(); paintSols(); commit();
+    const falta = [!og && "ONG", !n && "captadores"].filter(Boolean);
+    msg.style.color = "#14532d"; msg.textContent = falta.length ? "Solicitud guardada. Falta indicar: " + falta.join(" y ") + "." : "Solicitud guardada.";
+  });
+  q("s-cancel").addEventListener("click", resetS);
   el.querySelector(".h-add").addEventListener("click", () => {
     const d = el.querySelector(".h-desde").value, h = el.querySelector(".h-hasta").value, n = parseInt(el.querySelector(".h-n").value, 10) || 0, og = el.querySelector(".h-ong").value.trim(), msg = el.querySelector(".h-msg");
     msg.textContent = "";
     if (!d && !h) { msg.textContent = "Indica al menos la fecha de inicio o la de fin."; return; }
     if (d && h && d > h) { msg.textContent = "La fecha de inicio es posterior a la de fin."; return; }
     if (editH >= 0 && hist[editH]) hist[editH] = { desde: d, hasta: h, captadores: n, ong: og }; else hist.push({ desde: d, hasta: h, captadores: n, ong: og });
-    resetH(); concIdx = -1; paintHist(); fillConc(); commit();
+    resetH(); paintHist(); commit();
   });
   el.querySelector(".h-cancel").addEventListener("click", resetH);
   el.querySelector(".f-save").addEventListener("click", commit);
@@ -946,7 +966,8 @@ function setEstado(c, k) {
   const prevP = permits[c.name];
   const p = Object.assign({ estado: "sin", fecha: "", contacto: "", notas: "", valoracion: 0, historial: [] }, permits[c.name] || {});
   p.estado = k;
-  if (k === "concedido" && hasSol(p)) { const q = p.solicitud, hs = p.historial || []; if ((q.desde || q.hasta) && !hs.some((h) => h.desde === q.desde && h.hasta === q.hasta)) p.historial = hs.concat([{ desde: q.desde || "", hasta: q.hasta || "", captadores: q.captadores || 0, ong: q.ong || "" }]); }
+  const pend = solsOf(p).filter((x) => !x.res);
+  if (k === "concedido" && pend.length === 1) { const x = pend[0], hs = p.historial || []; if (x.desde || x.hasta) { p.historial = hs.concat([{ desde: x.desde || "", hasta: x.hasta || "", captadores: x.captadores || 0, ong: x.ong || "" }]); p.solicitudes = solsOf(p).filter((z) => z !== x); delete p.solicitud; } }
   if (k === "solicitado" && !p.fecha) p.fecha = today();
   if (k === "sin") p.fecha = "";
   if (k === "sin" && !p.fecha && !p.contacto && !p.notas && !p.valoracion && !(p.historial || []).length && !p.seguimiento && !hasSol(p)) delete permits[c.name];
