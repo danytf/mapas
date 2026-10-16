@@ -1,4 +1,4 @@
-name: Audit static catalog
+name: Audit static catalog and coordinate types
 
 on:
   push:
