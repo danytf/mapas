@@ -32,7 +32,7 @@ El código usa el tercer valor de algunas coordenadas (`1`) como indicador de ap
 
 Se ha añadido [`scripts/audit-static-catalog.mjs`](../scripts/audit-static-catalog.mjs), que lee solo los literales estáticos de `index.html` y genera CSV/JSON de auditoría. No lee almacenamiento del navegador ni escribe en Supabase. Genera filas por fuente, grupos de nombres duplicados, registros con campos incompletos y claves de coordenadas no utilizadas.
 
-El script ya se ha ejecutado correctamente en GitHub Actions y ha generado los CSV/JSON como artefacto. La ejecución confirma los recuentos anteriores y la marca de aproximación para 27 coordenadas. **No se han verificado geográficamente las coordenadas** ni resuelto manualmente los campos incompletos.
+El script ya se ha ejecutado correctamente en [GitHub Actions](https://github.com/danytf/mapas/actions/runs/38974374559) y ha generado los CSV/JSON como [artefacto descargable](https://github.com/danytf/mapas/actions/runs/38974374559/artifacts/12078231907). La ejecución confirma los recuentos anteriores y la marca de aproximación para 27 coordenadas. **No se han verificado geográficamente las coordenadas** ni resuelto manualmente los campos incompletos.
 
 El siguiente paso es ejecutar el script sobre una copia exacta del archivo fuente, revisar los CSV/JSON y corregir discrepancias manualmente. Solo después debe prepararse un lote de importación reproducible con checksum e informe de incidencias.
 
