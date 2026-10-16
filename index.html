@@ -439,13 +439,16 @@ CENTERS.forEach((c) => { if (c.custom) { const p = customs.find((x) => x.name ==
 const saveCache = () => { try { localStorage.setItem(CACHE_KEY, JSON.stringify(cache)); } catch (e) {} };
 
 const map = L.map("map", { zoomControl: true }).setView([37.1773, -3.5986], 13);
-const esri = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}", {
-  maxZoom: 19, attribution: "Tiles © Esri — Source: Esri, HERE, Garmin, OpenStreetMap contributors | Geocodificación: © Instituto Geográfico Nacional de España (CartoCiudad)"
-}).addTo(map);
+const ATTR = "Tiles © Esri — Source: Esri, HERE, Garmin, OpenStreetMap contributors | Geocodificación: © Instituto Geográfico Nacional de España (CartoCiudad)";
+const esriTiles = (svc, o) => L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/" + svc + "/MapServer/tile/{z}/{y}/{x}", Object.assign({ maxZoom: 19, attribution: ATTR }, o || {}));
+const esri = esriTiles("World_Street_Map");
+const grisClaro = L.layerGroup([esriTiles("Canvas/World_Light_Gray_Base", { maxNativeZoom: 16 }), esriTiles("Canvas/World_Light_Gray_Reference", { maxNativeZoom: 16 })]);
+const grisOscuro = L.layerGroup([esriTiles("Canvas/World_Dark_Gray_Base", { maxNativeZoom: 16 }), esriTiles("Canvas/World_Dark_Gray_Reference", { maxNativeZoom: 16 })]);
+(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? grisOscuro : grisClaro).addTo(map);
 const osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 19, attribution: "© OpenStreetMap contributors | Geocodificación: © Instituto Geográfico Nacional de España (CartoCiudad)"
 });
-L.control.layers({ "Esri calles": esri, "OpenStreetMap (solo si sirves la página por http)": osm }, null, { position: "topright" }).addTo(map);
+L.control.layers({ "Gris claro (recomendado)": grisClaro, "Gris oscuro": grisOscuro, "Esri calles": esri, "OpenStreetMap (solo si sirves la página por http)": osm }, null, { position: "topright" }).addTo(map);
 
 const markers = {};
 const cluster = L.markerClusterGroup({
