@@ -1,4 +1,4 @@
-name: Audit static catalog coordinates and metadata
+name: Audit static catalog precision flags
 
 on:
   push:
