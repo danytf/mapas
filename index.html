@@ -125,8 +125,14 @@
   .legend-box i.gi { width: 19px; height: 19px; border-radius: 5px; display: grid; place-items: center; }
   .legend-box i.gi svg { width: 13px; height: 13px; stroke: #fff; fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
   .qs { margin-top: 7px; height: 26px; padding: 0 6px; font: inherit; font-size: 12px; font-weight: 560; border: 1px solid var(--line-2); border-radius: 6px; background: var(--panel); color: var(--fg); max-width: 100%; cursor: pointer; }
+  .qw { display: none; }
+  li:hover .qw, li.active .qw, li:focus-within .qw { display: block; }
+  @media (hover: none) { .qw { display: block; } }
   .qs:hover { border-color: var(--muted); }
   /* Agrupaciones del mapa */
+  .cl { width: 100%; height: 100%; border-radius: 50%; display: grid; place-items: center; box-shadow: 0 0 0 2px #fff, 0 2px 8px rgba(15,23,34,.45); }
+  .cl span { width: 68%; height: 68%; border-radius: 50%; background: var(--ink); color: #fff; display: grid; place-items: center; font: 650 12px var(--font); }
+  .cl.big span { font-size: 13px; }
   .marker-cluster, .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large { background: rgba(15,23,34,.18); }
   .marker-cluster div, .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {
     background: var(--ink); color: #fff; font: 650 12px var(--font); box-shadow: 0 2px 8px rgba(15,23,34,.4);
@@ -442,7 +448,19 @@ const osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
 L.control.layers({ "Esri calles": esri, "OpenStreetMap (solo si sirves la página por http)": osm }, null, { position: "topright" }).addTo(map);
 
 const markers = {};
-const cluster = L.markerClusterGroup({ maxClusterRadius: 38, showCoverageOnHover: false, disableClusteringAtZoom: 17 }).addTo(map);
+const cluster = L.markerClusterGroup({
+  maxClusterRadius: 38, showCoverageOnHover: false, disableClusteringAtZoom: 17,
+  iconCreateFunction: (cl) => {
+    const ms = cl.getAllChildMarkers(), cnt = {};
+    ms.forEach((m) => { const k = m.options.cat || "#475569"; cnt[k] = (cnt[k] || 0) + 1; });
+    let acc = 0; const stops = [];
+    Object.entries(cnt).sort((a, b) => b[1] - a[1]).forEach(([col, n]) => {
+      stops.push(col + " " + (acc / ms.length * 100).toFixed(1) + "% " + ((acc + n) / ms.length * 100).toFixed(1) + "%"); acc += n;
+    });
+    const big = ms.length >= 50, z = big ? 46 : 38;
+    return L.divIcon({ className: "cl-wrap", iconSize: [z, z], html: '<div class="cl' + (big ? " big" : "") + '" style="background:conic-gradient(' + stops.join(",") + ')"><span>' + ms.length + "</span></div>" });
+  }
+}).addTo(map);
 let touched = false;
 map.on("dragstart", () => { touched = true; });
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -631,7 +649,7 @@ function popupFor(c, pos) {
 function makeMarker(c) {
   const pos = cache[c.id];
   if (!pos || markers[c.id] || isOut(c)) return;
-  const m = L.marker([pos.lat, pos.lon], { icon: makeIcon(c), title: c.name });
+  const m = L.marker([pos.lat, pos.lon], { icon: makeIcon(c), title: c.name, cat: colorOf(c) });
   cluster.addLayer(m);
   m.bindPopup(() => popupFor(c, pos), { minWidth: 230 });
   m.on("click", () => highlight(c.id, false));
@@ -652,7 +670,7 @@ function setEstado(c, k) {
 }
 const qsel = (c) => {
   const m = permOf(c).estado, ef = estadoOf(c);
-  return '<div><select class="qs" aria-label="Cambiar el estado del permiso">' +
+  return '<div class="qw"><select class="qs" aria-label="Cambiar el estado del permiso">' +
     (ef !== m ? '<option value="" selected disabled>' + esc(estadoInfo(ef)[1]) + " (por fechas)</option>" : "") +
     ESTADOS.filter((e) => e[0] !== "caducado").map((e) => '<option value="' + e[0] + '"' + (ef === m && e[0] === m ? " selected" : "") + ">" + e[1] + "</option>").join("") + "</select></div>";
 };
