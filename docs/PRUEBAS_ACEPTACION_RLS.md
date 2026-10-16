@@ -43,6 +43,7 @@ No importar archivos de navegador, copias JSON/CSV de las pruebas antiguas ni re
 - Un usuario desactivado deja de tener acceso operativo aunque conserve sesión hasta que esta se renueve o revalide.
 - No se puede asociar una concesión con una solicitud perteneciente a otro establecimiento; el trigger debe rechazarlo incluso en una llamada directa a la API.
 - No se puede asociar un seguimiento a una solicitud o concesión de un establecimiento diferente; el trigger debe rechazarlo incluso en una llamada directa a la API.
+- No se puede cambiar el establecimiento padre de una solicitud o concesión si con ello quedan hijos vinculados a otro establecimiento.
 - Cambiar latitud, longitud o dirección de un establecimiento genera automáticamente una fila en establishment_location_history; cambios en otros campos no deben crearla.
 - Insertar, modificar o borrar registros en las entidades auditadas genera una fila en audit_log con actor, operación, tabla, ámbito provincial y nombres de campos, sin copiar valores de contacto/notas.
 - Un usuario autenticado no puede insertar, actualizar ni borrar directamente filas de audit_log, ni consumir su secuencia desde la API.
@@ -56,9 +57,10 @@ No importar archivos de navegador, copias JSON/CSV de las pruebas antiguas ni re
 La migración incorpora triggers de base de datos para:
 1. Rechazar concesiones cuya solicitud pertenezca a otro establecimiento.
 2. Rechazar seguimientos cuya solicitud o concesión pertenezca a otro establecimiento.
-3. Registrar cambios efectivos de latitud, longitud o dirección en el historial de ubicación.
-4. Escribir auditoría de servidor para establecimientos, solicitudes, concesiones, seguimientos, revisiones de ubicación, asignaciones provinciales y perfiles. El registro guarda nombres de campos cambiados, no sus valores potencialmente sensibles.
-5. Mantener el historial de ubicación como solo lectura para los clientes; las inserciones las hace el trigger de servidor.
+3. Impedir reasignaciones del establecimiento padre que dejarían solicitudes, concesiones o seguimientos con relaciones cruzadas.
+4. Registrar cambios efectivos de latitud, longitud o dirección en el historial de ubicación.
+5. Escribir auditoría de servidor para establecimientos, solicitudes, concesiones, seguimientos, revisiones de ubicación, asignaciones provinciales y perfiles. El registro guarda nombres de campos cambiados, no sus valores potencialmente sensibles.
+6. Mantener el historial de ubicación como solo lectura para los clientes; las inserciones las hace el trigger de servidor.
 
 Estos controles están **implementados en el archivo SQL, pero aún no están validados mediante ejecución en PostgreSQL/Supabase**. Antes de producción siguen pendientes:
 
