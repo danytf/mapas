@@ -521,7 +521,7 @@ begin
   end if;
   return new;
 end;
-$;
+$$;
 
 revoke all on function public.validate_permit_grant_application() from public;
 revoke all on function public.validate_followup_targets() from public;
