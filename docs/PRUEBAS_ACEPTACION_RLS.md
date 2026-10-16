@@ -2,7 +2,7 @@
 
 **Objetivo:** comprobar que la base de datos impone los permisos aunque alguien invoque la API directamente, sin depender de los controles visuales de la aplicación.
 
-Este plan acompaña a `supabase/migrations/202610160001_initial_schema.sql`. No sustituye la ejecución de las pruebas contra un proyecto Supabase de desarrollo. No se han creado credenciales ni se ha aplicado la migración a ningún proyecto.
+Este plan acompaña a `supabase/migrations/202610160001_initial_schema.sql`. La migración y las pruebas smoke se ejecutan automáticamente en GitHub Actions contra PostgreSQL 16 con una capa mínima de compatibilidad de `auth.uid()` y `auth.users`. Esto valida sintaxis, triggers, integridad y un primer escenario de RLS, pero **no sustituye** las pruebas en un proyecto Supabase real. No se han creado credenciales ni se ha aplicado la migración a ningún proyecto Supabase.
 
 ## 1. Preparación de un entorno de desarrollo
 
@@ -65,15 +65,15 @@ La migración incorpora triggers de base de datos para:
 7. Escribir auditoría de servidor para establecimientos, solicitudes, concesiones, seguimientos, revisiones de ubicación, asignaciones provinciales y perfiles. El registro guarda nombres de campos cambiados, no sus valores potencialmente sensibles.
 8. Mantener el historial de ubicación como solo lectura para los clientes; las inserciones las hace el trigger de servidor.
 
-Estos controles están **implementados en el archivo SQL, pero aún no están validados mediante ejecución en PostgreSQL/Supabase**. Antes de producción siguen pendientes:
+Los controles están implementados y la batería smoke pasa en PostgreSQL 16 en [GitHub Actions](https://github.com/danytf/mapas/actions/runs/38974728631). La prueba cubre aplicación de la migración, coherencia provincia-municipio, relaciones entre solicitudes/concesiones/seguimientos, prevención de reasignaciones incoherentes, historial y auditoría automáticos, bloqueo de escritura directa y aislamiento básico A/B. Antes de producción siguen pendientes:
 
-1. **Aplicación real:** ejecutar la migración en un proyecto Supabase de desarrollo limpio y resolver cualquier error de sintaxis, permisos o comportamiento de triggers.
-2. **Pruebas RLS:** ejecutar toda la matriz de aislamiento con usuarios A/B y administrador, incluyendo accesos directos por UUID y cambios de provincia.
-3. **Auditoría e historial:** comprobar que los triggers escriben incluso con RLS activo, que el actor es correcto y que no se filtran valores sensibles.
+1. **Supabase real:** aplicar la migración en un proyecto Supabase de desarrollo limpio y validar el comportamiento con sus roles, políticas y configuración reales.
+2. **Matriz RLS completa:** ampliar la prueba a todas las tablas y operaciones, incluidos accesos por UUID, cambios de provincia, permisos de administrador y usuarios desactivados.
+3. **Auditoría e historial en Supabase:** confirmar actor, permisos efectivos, retención y ausencia de datos sensibles en registros reales.
 4. **Perfil desactivado:** probar sesiones ya abiertas tras desactivar un perfil y definir la revalidación/revocación necesaria.
 5. **Campos de actualización:** confirmar que la capa de datos rellena updated_by con el usuario autenticado y que no puede suplantarse otro actor.
 6. **Privilegios efectivos:** revisar roles, tablas, secuencias y políticas del proyecto real para detectar permisos heredados o adicionales.
-7. **Pruebas automatizadas:** trasladar esta matriz a tests de integración contra Supabase local/CI.
+7. **Integración automatizada:** extender la suite PostgreSQL actual y añadir pruebas contra Supabase local/CI.
 8. **Catálogos:** preparar semillas verificadas de provincias, municipios y categorías, separadas de los datos de negocio.
 
 audit_log no concede escritura directa al rol authenticated; la escritura se realiza mediante triggers de servidor. Las funciones de trigger tienen search_path vacío y no se exponen como operaciones RPC.
