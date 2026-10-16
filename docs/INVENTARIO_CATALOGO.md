@@ -26,8 +26,12 @@ Una comprobación adicional del enlazado literal detectó **791/791 coincidencia
 - Los bloques tienen estructuras distintas y enlazan coordenadas por nombre visible. Hay que revisar colisiones, duplicados, nombres divergentes, direcciones incompletas y coordenadas fuera del ámbito esperado.
 - No se migrará ningún dato de `localStorage`, `sessionStorage` ni exportaciones de pruebas. Solo se evaluará el catálogo estático versionado en el código.
 
-## Siguiente paso recomendado
+## Extractor de auditoría creado
 
-Crear un extractor de solo lectura que produzca un CSV de auditoría, sin escribir en Supabase, con fuente, nombre, categoría, municipio, dirección, coordenadas, indicador de revisión y notas. Debe informar filas sin coordenadas/dirección, coordenadas parciales, nombres duplicados, claves sin correspondencia y candidatos a revisión manual. Después se normalizan municipios/provincias, se validan coordenadas y se prepara un lote reproducible con checksum e informe de incidencias.
+Se ha añadido [`scripts/audit-static-catalog.mjs`](../scripts/audit-static-catalog.mjs), que lee solo los literales estáticos de `index.html` y genera CSV/JSON de auditoría. No lee almacenamiento del navegador ni escribe en Supabase. Genera filas por fuente, grupos de nombres duplicados, registros con campos incompletos y claves de coordenadas no utilizadas.
+
+El analizador de literales se ha contrastado contra el `index.html` versionado y reproduce los recuentos indicados, incluidas las 791 coincidencias exactas de claves de coordenadas. **Todavía no se ha ejecutado el script localmente para generar sus ficheros de salida**, ni se han verificado geográficamente las coordenadas.
+
+El siguiente paso es ejecutar el script sobre una copia exacta del archivo fuente, revisar los CSV/JSON y corregir discrepancias manualmente. Solo después debe prepararse un lote de importación reproducible con checksum e informe de incidencias.
 
 **Estado:** inventario preliminar. No hay CSV/semilla aprobada ni carga en Supabase. `main` y la app publicada permanecen sin cambios.
