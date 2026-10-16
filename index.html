@@ -624,7 +624,7 @@ function refreshSelects() {
   const raw = {}; vis.forEach((c) => { const k = rawChain(c); if (k) raw[k] = (raw[k] || 0) + 1; });
   smallChains = new Set(Object.keys(raw).filter((k) => raw[k] < 2));
   vis.forEach((c) => { const k = chainOf(c); if (k) cnt[k] = (cnt[k] || 0) + 1; });
-  $("#cadena").innerHTML = '<option value="">Cadena: todas</option>' + Object.entries(cnt).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([k, n]) => '<option value="' + esc(k) + '">' + esc(k) + " (" + n + ")</option>").join("");
+  $("#cadena").innerHTML = '<option value="">Cadena: todas</option>' + Object.entries(cnt).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([k, n]) => '<option value="' + esc(k) + '">' + esc(k === "Dani" ? "Supermercados Dani" : k) + " (" + n + ")</option>").join("");
   $("#cadena").value = cv;
   $("#tipo").value = tv; $("#permiso").value = pv; $("#valor").value = vv; $("#orden").value = ov;
   $("#lgBody").innerHTML = "<h4>Color: categoría</h4>" +
