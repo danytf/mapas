@@ -150,8 +150,7 @@
     <div class="note">
       “Por confirmar”: la dirección procede de directorios no oficiales y no coincide con el listado del SAS o del Ayuntamiento.
       Fuera de la capital el catálogo oficial no trae calle: la dirección de los centros de salud procede de Google; si no se localiza, se coloca en el centro del municipio (“Ubicación aproximada”).
-      La primera carga geolocaliza ~85 puntos (unos 3-5 minutos, 1 consulta por segundo); después queda guardado en este navegador.
-      Las posiciones las calcula Nominatim (OpenStreetMap) al abrir la página y se guardan en este navegador.
+      Las posiciones están precalculadas con Nominatim (OpenStreetMap) y van incluidas en la página; solo se consulta si se añade un centro nuevo.
     </div>
   </aside>
   <div id="map" aria-label="Mapa de centros sanitarios"></div>
@@ -234,12 +233,15 @@ const PROV = [["C","Albolote","Albolote","Calle Alfonso XIII",1],["C","Alfacar",
 
 CENTERS.forEach((c, i) => { c.id = i + 1; });
 
+/* Posiciones precalculadas (OpenStreetMap/Nominatim). [lat, lon, 1 = aproximada: centro del municipio]. */
+const PRECOMPUTED = {"CS Albaicín":[37.181729,-3.592552],"CS Albayda-La Cruz":[37.194873,-3.618245],"CS Almanjáyar":[37.208206,-3.608364],"CS Barriada de la Juventud-Rosaleda":[37.18331,-3.618616],"CS Bola de Oro":[37.159355,-3.584493],"CS Cartuja":[37.204568,-3.614217],"CS Casería de Montijo":[37.199509,-3.61264],"CS Doctor Salvador Caballero":[37.1891,-3.609538],"CS Figares":[37.16883,-3.603477],"CS Fortuny (Velutti)":[37.181063,-3.60075],"CS Góngora":[37.166544,-3.594983],"CS Gran Capitán":[37.178424,-3.604103],"CS La Caleta":[37.187293,-3.612266],"CS La Chana":[37.189969,-3.628882],"CS Las Flores":[37.167916,-3.605019],"CS Realejo":[37.172839,-3.591966],"CS Zaidín Centro-Este":[37.160963,-3.600054],"CS Zaidín Sur":[37.153728,-3.598994],"CS Mirasierra":[37.160421,-3.585461],"H.U. Virgen de las Nieves":[37.18831,-3.609664],"H.U. San Cecilio":[37.148615,-3.598541],"Hospital de Neurotraumatología y Rehabilitación":[37.197492,-3.610533],"Hospital HLA Inmaculada":[37.164204,-3.608077],"Hospital Vithas Granada":[37.164671,-3.572761],"Hospital San Rafael":[37.180972,-3.60306],"Centro Doctor Olóriz (H.U. Virgen de las Nieves)":[37.187137,-3.607849],"Centro Comercial Neptuno":[37.168192,-3.607334],"Serrallo Shopping":[37.157091,-3.583426],"Alcampo Granada":[37.19831,-3.608905],"Carrefour Granada":[37.159138,-3.60613],"Hospital Santa Ana":[36.751671,-3.520832],"Hospital de Baza":[37.4905,-2.7735,1],"Hospital de Alta Resolución de Guadix":[37.2983,-3.1392,1],"Hospital de Alta Resolución de Loja":[37.17103,-4.153374],"Nevada Shopping":[37.146527,-3.61355],"Granaita (con cines Kinépolis)":[37.222648,-3.608015,1],"Albán Commercial Park":[37.150097,-3.615972],"Alhsur Mall":[37.129426,-3.584719],"Motril Retail Park (con Alcampo)":[36.743809,-3.526701],"Vithas Centro Médico Granada":[37.190475,-3.605159],"Clínica Velnia":[37.186366,-3.605663],"Granada Clinic":[37.171413,-3.605879],"Policlínica SMD":[37.150516,-3.610594],"Policlínica San Miguel":[37.146032,-3.623096],"Clínica Rosaleda":[37.138301,-3.622775],"Clínica Motril":[36.744287,-3.515268],"Policlínica Guadix":[37.2983,-3.1392,1],"Almusalud":[36.734002,-3.693762],"CS Albolote":[37.2285,-3.6445,1],"CS Alfacar":[37.244519,-3.556455],"CS Alhama de Granada":[37.00892,-3.986151],"CS Armilla":[37.141553,-3.623849],"CS Atarfe":[37.221753,-3.692766],"CS Cenes de la Vega":[37.160452,-3.538895],"CS Churriana de la Vega":[37.142966,-3.640102],"CS Huétor - Tájar":[37.195086,-4.048717],"CS Íllora":[37.2885,-3.8855,1],"CS Iznalloz":[37.390574,-3.521615],"CS Huétor Vega":[37.147966,-3.568716],"CS La Zubia":[37.114913,-3.581673],"CS Loja":[37.17103,-4.153374],"CS Maracena":[37.210306,-3.648906],"CS Montefrío":[37.325431,-4.005473],"CS Peligros":[37.230273,-3.625826],"CS Pinos Puente":[37.250137,-3.749278],"CS Santa Fe":[37.185766,-3.720521],"CS Dúrcal":[36.9945,-3.5655,1],"CS Baza":[37.4905,-2.7735,1],"CS Benamaurel":[37.607288,-2.702043],"CS Guadix":[37.2983,-3.1392,1],"CS Huéscar":[37.806275,-2.545229],"CS Alquife":[37.180228,-3.106683],"CS Pedro Martínez":[37.499675,-3.231324],"CS Purullena":[37.315164,-3.190478],"CS Albuñol":[36.7907,-3.2012,1],"CS Almuñécar":[36.733279,-3.6846],"CS Cádiar":[36.948106,-3.178977],"CS Motril - Este":[36.746073,-3.514225],"CS Motril - San Antonio":[36.751882,-3.518658],"CS Motril - Centro":[36.743809,-3.526701],"CS Órgiva":[36.903904,-3.421181],"CS Salobreña":[36.746489,-3.587257],"CS Ugíjar":[36.964763,-3.055359]};
 const CACHE_KEY = "cs-granada-geo-v3";
 const VIEWBOX = "-4.40,38.10,-2.50,36.65"; // provincia de Granada: izquierda, arriba, derecha, abajo
 const $ = (s) => document.querySelector(s);
 let cache = {};
 try { cache = JSON.parse(localStorage.getItem(CACHE_KEY) || "{}"); } catch (e) { cache = {}; }
 
+CENTERS.forEach((c) => { const q = PRECOMPUTED[c.name]; if (q) cache[c.id] = { lat: q[0], lon: q[1], approx: q[2] === 1 || undefined }; });
 const saveCache = () => { try { localStorage.setItem(CACHE_KEY, JSON.stringify(cache)); } catch (e) {} };
 
 const map = L.map("map", { zoomControl: true }).setView([37.1773, -3.5986], 13);
