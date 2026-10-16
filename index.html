@@ -121,6 +121,11 @@
     display: grid; place-items: center;
   }
   .pin b { transform: rotate(45deg); color: #fff; font: 650 11px var(--font); }
+  .pin svg { transform: rotate(45deg); width: 15px; height: 15px; stroke: #fff; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+  .legend-box i.gi { width: 19px; height: 19px; border-radius: 5px; display: grid; place-items: center; }
+  .legend-box i.gi svg { width: 13px; height: 13px; stroke: #fff; fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+  .qs { margin-top: 7px; height: 26px; padding: 0 6px; font: inherit; font-size: 12px; font-weight: 560; border: 1px solid var(--line-2); border-radius: 6px; background: var(--panel); color: var(--fg); max-width: 100%; cursor: pointer; }
+  .qs:hover { border-color: var(--muted); }
   /* Agrupaciones del mapa */
   .marker-cluster, .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large { background: rgba(15,23,34,.18); }
   .marker-cluster div, .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {
@@ -449,6 +454,26 @@ const TIPOS = [
   [9, "Decathlon", "#0891b2"], [10, "Carrefour", "#7c3aed"], [11, "Correos", "#a16207"], [12, "El Corte Inglés", "#15803d"],
   [13, "Bricolaje", "#92400e"], [14, "MediaMarkt", "#dc2626"], [15, "Estaciones", "#78716c"], [16, "Tiendas", "#be185d"], [17, "Eventos", "#4f46e5"]
 ];
+const GLYPH = {
+  "Hospital": '<path d="M12 5.5v13M5.5 12h13"/>',
+  "Centro de salud": '<circle cx="12" cy="12" r="7.5"/><path d="M12 8.5v7M8.5 12h7"/>',
+  "Supermercado": '<path d="M4 6h2.2l1.7 8.5h9.2L19 8.5H7"/><circle cx="10" cy="18.2" r=".6"/><circle cx="16.5" cy="18.2" r=".6"/>',
+  "Centro comercial": '<path d="M6 8.5h12l-1 10.5H7z"/><path d="M9 8.5a3 3 0 0 1 6 0"/>',
+  "Entidad oficial": '<path d="M4 10l8-5 8 5M6.5 10.5v6.5M10.2 10.5v6.5M13.8 10.5v6.5M17.5 10.5v6.5M4 19h16"/>',
+  "Gimnasios": '<path d="M7.5 8v8M16.5 8v8M4.5 10v4M19.5 10v4M7.5 12h9"/>',
+  "IKEA": '<path d="M5 11l7-6 7 6v8H5z"/>',
+  "Leroy Merlin": '<path d="M5 19l7.5-7.5M11 6.5l4-2.5 4.5 4.5-2.5 4z"/>',
+  "Decathlon": '<circle cx="12" cy="12" r="7.5"/><path d="M4.5 12h15M12 4.5c3.2 3.2 3.2 11.8 0 15M12 4.5c-3.2 3.2-3.2 11.8 0 15"/>',
+  "Carrefour": '<path d="M4 6h2.2l1.7 8.5h9.2L19 8.5H7"/><circle cx="10" cy="18.2" r=".6"/><circle cx="16.5" cy="18.2" r=".6"/>',
+  "Correos": '<path d="M4 7h16v10H4z"/><path d="M4.5 8l7.5 6 7.5-6"/>',
+  "El Corte Inglés": '<path d="M12 5l2.2 4.6 5 .7-3.6 3.5.9 5L12 16.4 7.5 18.8l.9-5L4.8 10.3l5-.7z"/>',
+  "Bricolaje": '<path d="M6 18l6-6M10 8l3-3 6 6-3 3z"/>',
+  "MediaMarkt": '<path d="M4 6h16v10H4zM9 19h6M12 16v3"/>',
+  "Estaciones": '<path d="M7 5h10v10H7zM7 10.5h10M9 18.5l-1.5 2M15 18.5l1.5 2"/>',
+  "Tiendas": '<path d="M4 9l1.5-4h13L20 9M5 9v10h14V9M10 19v-5h4v5"/>',
+  "Eventos": '<path d="M5 7h14v12H5zM5 11h14M9 5v4M15 5v4"/>'
+};
+const glyphOf = (c) => '<svg viewBox="0 0 24 24" aria-hidden="true">' + (GLYPH[c.tipo] || '<circle cx="12" cy="12" r="3"/>') + "</svg>";
 const colorOf = (c) => (TIPOS.find((t) => t[1] === c.tipo) || [0, 0, "#0b7a68"])[2];
 const matchTipo = (c, t) => !t || c.tipo === t;
 const rawChain = (c) => c.tipo === "Carrefour" ? "Carrefour" : c.tipo === "Supermercado" ? c.name.split(" – ")[0].trim() : "";
@@ -494,7 +519,7 @@ function makeIcon(c) {
   const e = estadoInfo(estadoOf(c));
   return L.divIcon({
     className: "",
-    html: '<div class="pin" style="background:' + colorOf(c) + ";border-color:" + e[2] + (e[0] === "sin" ? "" : ";border-width:3px") + '"><b>' + c.id + "</b></div>",
+    html: '<div class="pin" style="background:' + colorOf(c) + ";border-color:" + e[2] + (e[0] === "sin" ? "" : ";border-width:3px") + '">' + glyphOf(c) + "</div>",
     iconSize: [26, 26], iconAnchor: [13, 26], popupAnchor: [0, -24]
   });
 }
@@ -613,6 +638,24 @@ function makeMarker(c) {
   markers[c.id] = m;
 }
 
+function setEstado(c, k) {
+  const p = Object.assign({ estado: "sin", fecha: "", contacto: "", notas: "", valoracion: 0, historial: [] }, permits[c.name] || {});
+  p.estado = k;
+  if (k === "solicitado" && !p.fecha) p.fecha = today();
+  if (k === "sin") p.fecha = "";
+  if (k === "sin" && !p.fecha && !p.contacto && !p.notas && !p.valoracion && !(p.historial || []).length && !p.seguimiento) delete permits[c.name];
+  else permits[c.name] = p;
+  savePermits();
+  if (markers[c.id]) markers[c.id].setIcon(makeIcon(c));
+  const ul = $("#list"), st = ul.scrollTop;
+  refreshSelects(); renderList(); ul.scrollTop = st;
+}
+const qsel = (c) => {
+  const m = permOf(c).estado, ef = estadoOf(c);
+  return '<div><select class="qs" aria-label="Cambiar el estado del permiso">' +
+    (ef !== m ? '<option value="" selected disabled>' + esc(estadoInfo(ef)[1]) + " (por fechas)</option>" : "") +
+    ESTADOS.filter((e) => e[0] !== "caducado").map((e) => '<option value="' + e[0] + '"' + (ef === m && e[0] === m ? " selected" : "") + ">" + e[1] + "</option>").join("") + "</select></div>";
+};
 function renderList() {
   const q = $("#q").value.trim().toLowerCase();
   const tipo = $("#tipo").value;
@@ -647,9 +690,10 @@ function renderList() {
       (vigente(c) ? '<span class="tag" style="background:#dcfce7;color:#14532d">Vigente hasta ' + fmtD(vigente(c).hasta) + (vigente(c).captadores ? " · " + vigente(c).captadores + " capt." : "") + "</span>" : "") +
       (isApprox(c) ? '<span class="tag warn">Ubicación aproximada</span>' : "") +
       (c.conf ? "" : '<span class="tag warn">Por confirmar</span>') +
-      (cache[c.id] ? "" : '<span class="tag warn">Sin ubicar</span>') + "</div>";
-    li.addEventListener("click", () => highlight(c.id, true));
-    li.addEventListener("keydown", (e) => { if (e.key === "Enter") highlight(c.id, true); });
+      (cache[c.id] ? "" : '<span class="tag warn">Sin ubicar</span>') + qsel(c) + "</div>";
+    li.querySelector(".qs").addEventListener("change", (e) => setEstado(c, e.target.value));
+    li.addEventListener("click", (e) => { if (!e.target.closest(".qs")) highlight(c.id, true); });
+    li.addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.target.closest(".qs")) highlight(c.id, true); });
     ul.appendChild(li);
   });
   if ($("#orden").value !== "val") {
@@ -776,7 +820,7 @@ function refreshSelects() {
   $("#cadena").value = cv;
   $("#tipo").value = tv; $("#permiso").value = pv; $("#valor").value = vv; $("#orden").value = ov;
   $("#lgBody").innerHTML = "<h4>Color: categoría</h4>" +
-    TIPOS.filter(([i, t]) => vis.some((c) => c.tipo === t)).map(([i, t, col]) => '<div class="it"><i style="background:' + col + '"></i>' + t + "</div>").join("") +
+    TIPOS.filter(([i, t]) => vis.some((c) => c.tipo === t)).map(([i, t, col]) => '<div class="it"><i class="gi" style="background:' + col + '">' + glyphOf({ tipo: t }) + "</i>" + t + "</div>").join("") +
     "<h4>Borde: permiso</h4>" +
     ESTADOS.map(([k, t, col]) => '<div class="it"><i class="ring" style="border-color:' + (k === "sin" ? "#ffffff;box-shadow:0 0 0 1px #9aa8a4" : col) + '"></i>' + t + "</div>").join("");
   const nr = CENTERS.filter(isOut).length;
