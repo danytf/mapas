@@ -252,6 +252,16 @@
   #pnBody tbody tr[data-k] { cursor: pointer; }
   #pnBody tbody tr[data-k]:hover { background: var(--ok-bg); }
   #pnBody tr.tot td { font-weight: 700; }
+  .wk-nav { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+  .wk-nav b { font-size: 13.5px; font-weight: 650; flex: 1 1 180px; text-align: center; }
+  .wk-nav button, .wk-nav input { height: 30px; border: 1px solid var(--line-2); border-radius: 8px; background: var(--panel); color: var(--fg); font: inherit; font-size: 13px; padding: 0 10px; cursor: pointer; }
+  .wk-nav input[type=date] { width: 150px; flex: none; }
+  .wk-nav button:hover { border-color: var(--muted); }
+  .wk-sub { font-size: 12px; color: var(--muted); margin: 8px 0 4px; }
+  .wk-ong { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0 10px; }
+  .wk-ong span { font-size: 12px; background: var(--ok-bg); border-radius: 999px; padding: 3px 10px; }
+  #pnBody tr.wk-g td { background: var(--bg); font-weight: 650; font-size: 12px; text-align: left; }
+  #pnBody tr.wk-g i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 7px; border: 1px solid #0003; vertical-align: -1px; }
   .pn-note { font-size: 11.5px; color: var(--muted); margin-top: 10px; }
   .chipbtn { justify-self: start; height: 28px; font-size: 12px; padding: 0 12px; border-radius: 999px; border: 1px solid transparent; background: var(--warn-bg); color: var(--warn); cursor: pointer; }
   .chipbtn:hover { border-color: var(--warn); background: var(--warn-bg); }
@@ -1611,6 +1621,48 @@ const download = (name, text, type) => {
   };
   const rowsHtml = (map, kind) => map.map(([k, r]) => '<tr data-kind="' + kind + '" data-k="' + esc(k) + '"><td>' + esc(k) + "</td><td>" + r.n + "</td><td>" + r.sol + "</td><td>" + r.con + "</td><td>" + r.den + "</td><td>" + r.vig + "</td><td>" + r.capt + "</td></tr>").join("");
   const thead = (first) => "<thead><tr><th>" + first + "</th><th>Puntos</th><th>Solicitados</th><th>Concedidos</th><th>Denegados</th><th>Con vigencia hoy</th><th>Captadores hoy</th></tr></thead>";
+  let wk = mondayOf(today());
+  const addD = (d, n) => { const t = new Date(d + "T12:00:00"); t.setDate(t.getDate() + n); return t.toISOString().slice(0, 10); };
+  const WK_ORDEN = ["concedido", "solicitado", "caducado", "denegado", "cancelado"];
+  const wkItems = (a, b) => {
+    const out = [];
+    CENTERS.filter((c) => !isOut(c)).forEach((c) => {
+      const p = permOf(c), ov = (d, h) => (d || h) && (!d || d <= b) && (!h || h >= a);
+      (p.historial || []).forEach((h) => { if (ov(h.desde, h.hasta)) out.push({ c, e: h.cancelada ? "cancelado" : "concedido", desde: h.desde, hasta: h.hasta, ong: h.ong, n: h.captadores || 0 }); });
+      solsOf(p).forEach((x) => { if (ov(x.desde, x.hasta)) out.push({ c, e: x.res ? "denegado" : (solValid(x) ? "solicitado" : "caducado"), desde: x.desde, hasta: x.hasta, ong: x.ong, n: x.captadores || 0 }); });
+    });
+    return out;
+  };
+  const wkRender = () => {
+    const box = body.querySelector("#wkBox"); if (!box) return;
+    const a = wk, b = addD(wk, 6), items = wkItems(a, b), t = today();
+    const per = (e) => { const m = new Map(); items.filter((i) => i.e === e).forEach((i) => m.set(i.c.id, Math.max(m.get(i.c.id) || 0, i.n))); return m; };
+    const con = per("concedido"), sol = per("solicitado");
+    const sum = (m) => [...m.values()].reduce((x, y) => x + y, 0);
+    const cnt = (e) => new Set(items.filter((i) => i.e === e).map((i) => i.c.id)).size;
+    const ongs = {}; items.filter((i) => i.e === "concedido").forEach((i) => { const k = i.ong || "Sin ONG"; (ongs[k] = ongs[k] || { pts: new Set(), n: 0 }); if (!ongs[k].pts.has(i.c.id)) { ongs[k].pts.add(i.c.id); ongs[k].n += i.n; } });
+    const lab = "Semana del " + fmtD(a).slice(0, 5) + " al " + fmtD(b) + (a <= t && t <= b ? " (esta semana)" : "");
+    let h = '<div class="wk-nav"><button type="button" data-wk="-1" aria-label="Semana anterior">&#8249;</button><b>' + lab + '</b><button type="button" data-wk="1" aria-label="Semana siguiente">&#8250;</button><button type="button" data-wk="0">Hoy</button><input type="date" data-wkdate value="' + a + '" aria-label="Ir a la semana de esta fecha"></div>' +
+      '<div class="kpis">' +
+      '<div class="kpi hl"><b>' + con.size + "</b><span>Puntos concedidos</span></div>" +
+      '<div class="kpi hl"><b>' + sum(con) + "</b><span>Captadores concedidos</span></div>" +
+      '<div class="kpi al"><b>' + sol.size + "</b><span>Puntos solicitados</span></div>" +
+      '<div class="kpi al"><b>' + sum(sol) + "</b><span>Captadores solicitados</span></div></div>" +
+      '<div class="wk-sub">Sin respuesta: ' + cnt("caducado") + " · Denegados: " + cnt("denegado") + " · Cancelados: " + cnt("cancelado") + "</div>" +
+      (Object.keys(ongs).length ? '<div class="wk-ong">' + Object.entries(ongs).sort((x, y) => y[1].n - x[1].n).map(([k, v]) => "<span><b>" + esc(k) + "</b> · " + v.pts.size + " punto" + (v.pts.size === 1 ? "" : "s") + " · " + v.n + " capt.</span>").join("") + "</div>" : "");
+    if (!items.length) h += '<div class="pn-note">Ningún permiso con fechas en esta semana.</div>';
+    else {
+      h += '<div class="pn-scroll"><table><thead><tr><th>Punto</th><th>ONG</th><th>Fechas</th><th>Captadores</th></tr></thead><tbody>';
+      WK_ORDEN.forEach((e) => {
+        const g = items.filter((i) => i.e === e).sort((x, y) => (x.c.town || "Granada").localeCompare(y.c.town || "Granada") || x.c.name.localeCompare(y.c.name) || (x.desde || "").localeCompare(y.desde || ""));
+        if (!g.length) return;
+        h += '<tr class="wk-g"><td colspan="4"><i style="background:' + estadoInfo(e)[2] + '"></i>' + esc(estadoInfo(e)[1]) + " (" + g.length + ")</td></tr>";
+        g.forEach((i) => { h += '<tr data-kind="pt" data-k="' + i.c.id + '"><td>' + esc(i.c.name) + " · " + esc(i.c.town || "Granada") + "</td><td>" + esc(i.ong || "—") + "</td><td>" + fmtD(i.desde) + " – " + fmtD(i.hasta) + "</td><td>" + (i.n || "—") + "</td></tr>"; });
+      });
+      h += "</tbody></table></div>";
+    }
+    box.innerHTML = h;
+  };
   const render = () => {
     const all = CENTERS.filter((c) => !isOut(c));
     const t = stat(all);
@@ -1635,20 +1687,25 @@ const download = (name, text, type) => {
       '<div class="kpi hl"><b>' + t.capt + "</b><span>Captadores que se pueden enviar hoy</span></div>" +
       '<div class="kpi al"><b>' + soon.length + "</b><span>Caducan en 30 días</span></div>" +
       '<div class="kpi"><b>' + expired.length + "</b><span>Solicitud caducada</span></div></div>" +
+      '<h3>Permisos por semana</h3><div id="wkBox"></div>' +
       (soon.length ? "<h3>Caducan en los próximos 30 días</h3><div class=\"pn-scroll\"><table><thead><tr><th>Punto</th><th>Hasta</th><th>Captadores</th></tr></thead><tbody>" +
         soon.map(([c, end, n]) => '<tr data-kind="pt" data-k="' + c.id + '"><td>' + esc(c.name) + " · " + esc(c.town || "Granada") + "</td><td>" + fmtD(end) + "</td><td>" + n + "</td></tr>").join("") + "</tbody></table></div>" : "") +
       "<h3>Por categoría</h3><div class=\"pn-scroll\"><table>" + thead("Categoría") + "<tbody>" + rowsHtml(byTipo, "tipo") + '<tr class="tot"><td>Total</td><td>' + t.n + "</td><td>" + t.sol + "</td><td>" + t.con + "</td><td>" + t.den + "</td><td>" + t.vig + "</td><td>" + t.capt + "</td></tr></tbody></table></div>" +
       "<h3>Por municipio</h3><div class=\"pn-scroll\"><table>" + thead("Municipio") + "<tbody>" + rowsHtml(byTown, "town") + "</tbody></table></div>" +
-      '<div class="pn-note">Pulsa una fila para filtrar el mapa por esa categoría o municipio. «Concedidos» sigue el estado marcado a mano; «vigencia» y «captadores» salen del historial de concesiones.</div>';
+      '<div class="pn-note">Pulsa una fila para filtrar el mapa por esa categoría o municipio. El estado, la vigencia y los captadores se calculan con las solicitudes y concesiones de cada punto. En «Permisos por semana», un permiso entra si sus fechas tocan esa semana (lunes a domingo).</div>';
+    wkRender();
   };
   body.addEventListener("click", (e) => {
+    const wb = e.target.closest("[data-wk]");
+    if (wb) { wk = wb.dataset.wk === "0" ? mondayOf(today()) : addD(wk, 7 * +wb.dataset.wk); wkRender(); return; }
     const tr = e.target.closest("tr[data-k]"); if (!tr) return;
     const k = tr.dataset.k;
     if (tr.dataset.kind === "pt") { const c = CENTERS.find((x) => String(x.id) === k); if (c) focusPoint(c); return; }
     $("#tipo").value = tr.dataset.kind === "tipo" ? k : ""; $("#q").value = tr.dataset.kind === "town" ? k : ""; $("#permiso").value = ""; $("#valor").value = ""; $("#cadena").value = "";
     dlg.close(); refilter();
   });
-  $("#panelBtn").addEventListener("click", () => { render(); dlg.showModal(); });
+  body.addEventListener("change", (e) => { const d = e.target.closest("[data-wkdate]"); if (d && d.value) { wk = mondayOf(d.value); wkRender(); } });
+  $("#panelBtn").addEventListener("click", () => { wk = mondayOf(today()); render(); dlg.showModal(); });
   $("#pnClose").addEventListener("click", () => dlg.close());
 })();
 
