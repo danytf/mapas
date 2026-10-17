@@ -204,6 +204,64 @@ $$;
 
 -- Prueba de aislamiento provincial con llamadas bajo el rol API.
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
+
+-- Standard users may update location fields, but not master identity/status or insert master rows.
+do $master_write_test$
+declare affected integer;
+begin
+  update public.establishments
+  set address = address, latitude = latitude, longitude = longitude,
+      location_precision = location_precision, location_source = location_source,
+      location_verified_at = location_verified_at, updated_by = auth.uid()
+  where id = '00000000-0000-4000-8000-000000000005';
+  get diagnostics affected = row_count;
+  if affected <> 1 then
+    raise exception 'FALLO RLS: el usuario provincial no puede corregir la ubicación';
+  end if;
+
+  begin
+    update public.establishments
+    set name = name || ' forbidden', status = 'archived'
+    where id = '00000000-0000-4000-8000-000000000005';
+    get diagnostics affected = row_count;
+    if affected > 0 then
+      raise exception 'FALLO RLS: el usuario provincial pudo modificar nombre/estado del catálogo maestro';
+    end if;
+  exception when insufficient_privilege then
+    null;
+  end;
+
+  begin
+    insert into public.establishments (
+      province_id, category_id, name, normalized_name, source_ref, status, created_by, updated_by
+    ) values (
+      '00000000-0000-4000-8000-000000000001',
+      '00000000-0000-4000-8000-000000000003',
+      'Forbidden master insert', 'forbidden master insert', 'rls-test:forbidden-master-insert',
+      'archived', auth.uid(), auth.uid()
+    );
+    raise exception 'FALLO RLS: el usuario provincial pudo insertar un establecimiento maestro';
+  exception when insufficient_privilege then
+    null;
+  end;
+end;
+$master_write_test$;
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a1', false);
+do $admin_master_write_test$
+declare affected integer;
+begin
+  update public.establishments
+  set name = name || ' admin edit'
+  where id = '00000000-0000-4000-8000-000000000005';
+  get diagnostics affected = row_count;
+  if affected <> 1 then
+    raise exception 'FALLO RLS: el administrador no puede actualizar el catálogo maestro';
+  end if;
+end;
+$admin_master_write_test$;
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
 do $$
 declare visible_count integer;
 begin
