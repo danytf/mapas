@@ -1925,6 +1925,12 @@ const download = (name, text, type) => {
   a.href = URL.createObjectURL(new Blob([text], { type }));
   a.download = name; document.body.appendChild(a); a.click(); a.remove();
 };
+const csvCell = (value) => {
+  let text = String(value == null ? "" : value);
+  // Prefix untrusted text that spreadsheet software could interpret as a formula.
+  if (typeof value === "string" && /^\s*[=+\-@]/.test(text)) text = "'" + text;
+  return '"' + text.replace(/"/g, '""') + '"';
+};
 /* Panel resumen */
 (() => {
   const dlg = $("#dlgPanel"), body = $("#pnBody");
@@ -2056,11 +2062,10 @@ document.getElementById("logrosBtn").addEventListener("click", openLogros);
 document.getElementById("lgClose").addEventListener("click", () => document.getElementById("dlgLogros").close());
 $("#csv").addEventListener("click", () => {
   if (!window.confirm("El CSV incluye datos operativos —contactos, notas e historial de permisos—. Guárdalo solo en una ubicación autorizada. ¿Quieres exportarlo?")) return;
-  const q = (v) => '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
   const head = ["id", "categoria", "subtipo", "nombre", "direccion", "municipio", "lat", "lon", "ubicacion_aproximada", "origen", "valoracion", "estado_permiso", "fecha_solicitud", "proximo_seguimiento", "contacto", "notas", "solicitud", "concesion_vigente", "historial_concesiones"];
   const rows = CENTERS.filter((c) => !isOut(c)).map((c) => {
     const p = permOf(c), pos = cache[c.id] || {};
-    return [c.id, c.tipo, c.sub || "", c.name, c.street, c.town || "Granada", pos.lat || "", pos.lon || "", isApprox(c) ? "sí" : "", c.custom ? "agregado" : "base", p.valoracion || "", estadoInfo(estadoOf(c))[1], p.fecha, p.seguimiento || "", p.contacto, p.notas, solTxt(c), vigente(c) ? histTxt(vigente(c)) : "", histOf(c).map(histTxt).join(" | ")].map(q).join(";");
+    return [c.id, c.tipo, c.sub || "", c.name, c.street, c.town || "Granada", pos.lat || "", pos.lon || "", isApprox(c) ? "sí" : "", c.custom ? "agregado" : "base", p.valoracion || "", estadoInfo(estadoOf(c))[1], p.fecha, p.seguimiento || "", p.contacto, p.notas, solTxt(c), vigente(c) ? histTxt(vigente(c)) : "", histOf(c).map(histTxt).join(" | ")].map(csvCell).join(";");
   });
   download("permisos-captacion-granada.csv", "\ufeff" + head.join(";") + "\r\n" + rows.join("\r\n"), "text/csv;charset=utf-8");
 });
