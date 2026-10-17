@@ -332,6 +332,33 @@ begin
 end;
 $cross_province_write_test$;
 
+-- Un usuario normal no puede elevar su rol ni desactivar/reactivar su propia cuenta.
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
+do $self_privilege_escalation_test$
+declare affected integer;
+        profile_role text;
+begin
+  begin
+    update public.profiles
+       set role = 'admin'
+     where id = '00000000-0000-4000-8000-0000000000a2';
+    get diagnostics affected = row_count;
+    if affected <> 0 then
+      raise exception 'FALLO RLS: un usuario pudo elevar su propio rol a admin';
+    end if;
+  exception when insufficient_privilege then
+    null;
+  end;
+
+  select role into profile_role
+    from public.profiles
+   where id = '00000000-0000-4000-8000-0000000000a2';
+  if profile_role <> 'user' then
+    raise exception 'FALLO SEGURIDAD: el rol del usuario cambió sin autorización';
+  end if;
+end;
+$self_privilege_escalation_test$;
+
 -- Aislamiento del estado personal: la cuenta B no debe leer la fila de A.
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
 insert into public.user_app_state (user_id, state)
