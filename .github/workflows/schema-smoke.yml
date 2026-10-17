@@ -118,13 +118,17 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017172240_fix_followup_update_guard.sql
       - name: Require active profiles for personal app state
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017194119_require_active_user_for_personal_state.sql
+      - name: Preserve applied personal-state migration version
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017201136_protect_user_app_state_created_at.sql
+      - name: Restrict default function execution
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017210223_restrict_default_function_execution.sql
+      - name: Revoke direct access to audit sequence
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017220309_revoke_public_audit_log_sequence_privileges.sql
       - name: Protect profile identity from reassignment
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017221000_protect_profile_identity.sql
       - name: Restrict location proposal insert decisions
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017221500_restrict_location_review_insert_decisions.sql
       - name: Protect personal state creation timestamp
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017222500_protect_user_app_state_created_at.sql
-      - name: Revoke direct access to audit sequence
-        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017220309_revoke_public_audit_log_sequence_privileges.sql
       - name: Run schema, trigger, and RLS smoke tests
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/schema_smoke.sql
