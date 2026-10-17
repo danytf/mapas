@@ -1908,6 +1908,7 @@ $("#impf").addEventListener("change", async (e) => {
     gam: clone(gam)
   };
   let changedSharedNames = [];
+  let persistenceStarted = false;
   try {
     const d = JSON.parse(await f.text());
     if (!d || typeof d !== "object" || Array.isArray(d)) throw new Error("El archivo debe contener un objeto JSON.");
@@ -1972,6 +1973,7 @@ $("#impf").addEventListener("change", async (e) => {
         if (!gam[f][k]) gam[f][k] = G[f][k];
       }));
     }
+    persistenceStarted = true;
     seedXP();
 
     // Esperar confirmación de Supabase antes de comunicar que la importación terminó.
@@ -1999,24 +2001,26 @@ $("#impf").addEventListener("change", async (e) => {
     reviewed = new Set(original.reviewed);
     logros = original.logros;
     gam = original.gam;
-    try {
-      if (changedSharedNames.length) {
-        const rollbackNames = [...new Set(changedSharedNames)];
-        for (const name of rollbackNames) {
-          if (!Object.prototype.hasOwnProperty.call(original.permits, name)) permits[name] = {};
+    if (persistenceStarted) {
+      try {
+        if (changedSharedNames.length) {
+          const rollbackNames = [...new Set(changedSharedNames)];
+          for (const name of rollbackNames) {
+            if (!Object.prototype.hasOwnProperty.call(original.permits, name)) permits[name] = {};
+          }
+          await savePermits();
         }
-        await savePermits();
+        const persist = window.mapaPersistUserState;
+        if (typeof persist === "function") {
+          await persist("customs", original.customs);
+          await persist("removed", original.removed);
+          await persist("reviewed", original.reviewed);
+          await persist("badges", original.logros);
+          await persist("gamification", original.gam);
+        }
+      } catch (rollbackError) {
+        console.error("[Mapa] Falló la restauración posterior a una importación incompleta:", rollbackError);
       }
-      const persist = window.mapaPersistUserState;
-      if (typeof persist === "function") {
-        await persist("customs", original.customs);
-        await persist("removed", original.removed);
-        await persist("reviewed", original.reviewed);
-        await persist("badges", original.logros);
-        await persist("gamification", original.gam);
-      }
-    } catch (rollbackError) {
-      console.error("[Mapa] Falló la restauración posterior a una importación incompleta:", rollbackError);
     }
     refreshSelects();
     renderList();
