@@ -95,6 +95,21 @@ if (setLocStart < 0 || customStart < 0 || masterStart < 0) {
 forbidMatch(/id=["']imp["']|id=["']impf["']/i,
   "La interfaz no debe ofrecer importación de copias JSON antiguas.");
 
+const personalWriteStart = html.indexOf("window.mapaPersistUserState =");
+const personalWriteEnd = html.indexOf("async function loadPersonalState()", personalWriteStart);
+if (personalWriteStart < 0 || personalWriteEnd < 0) {
+  failures.push("No se pudo localizar la persistencia personal para auditar los fallos de escritura.");
+} else {
+  const personalWrite = html.slice(personalWriteStart, personalWriteEnd);
+  if (!/let persistedPersonalState = \{\}/.test(html) ||
+      !/const snapshot = JSON\.parse\(JSON\.stringify\(loadedPersonalState\)\)/.test(personalWrite) ||
+      !/persistedPersonalState = snapshot/.test(personalWrite) ||
+      !/personalStateVersions\.get\(key\) === version/.test(personalWrite) ||
+      !/loadedPersonalState = rest/.test(personalWrite)) {
+    failures.push("Si falla una escritura personal, debe revertirse la clave fallida sin sobrescribir ediciones posteriores ni encolar estado obsoleto.");
+  }
+}
+
 const commitStart = html.indexOf("const commit = async () => {");
 const commitEnd = html.indexOf('el.querySelectorAll(".stars button")', commitStart);
 if (commitStart < 0 || commitEnd < 0) {

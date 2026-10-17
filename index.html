@@ -2193,6 +2193,8 @@ renderList();
   let busy = false;
   let loadedStateUserId = null;
   let loadedPersonalState = {};
+  let persistedPersonalState = {};
+  let personalStateVersions = new Map();
   let stateWriteQueue = Promise.resolve();
 
   // El estado personal se guarda por auth.uid(); nunca se recupera de datos heredados del navegador.
@@ -2202,15 +2204,35 @@ renderList();
     let safeValue;
     try { safeValue = JSON.parse(JSON.stringify(value)); }
     catch (error) { console.error("[Mapa] Estado personal no serializable:", error); return Promise.resolve(false); }
+
     loadedPersonalState = { ...loadedPersonalState, [key]: safeValue };
+    const version = (personalStateVersions.get(key) || 0) + 1;
+    personalStateVersions.set(key, version);
+
+    // Serializa escrituras y captura el estado en el momento real de cada petición.
+    // Si falla, revierte solo esa clave y solo si no existe una edición posterior de la misma clave.
     stateWriteQueue = stateWriteQueue.then(async () => {
+      if (loadedStateUserId !== userId || window.mapaSession?.user?.id !== userId) return false;
+      const snapshot = JSON.parse(JSON.stringify(loadedPersonalState));
       const { error } = await client.from("user_app_state").upsert(
-        { user_id: userId, state: loadedPersonalState },
+        { user_id: userId, state: snapshot },
         { onConflict: "user_id" }
       );
       if (error) throw error;
+      persistedPersonalState = snapshot;
       return true;
     }).catch(error => {
+      if (loadedStateUserId === userId && personalStateVersions.get(key) === version) {
+        if (Object.prototype.hasOwnProperty.call(persistedPersonalState, key)) {
+          loadedPersonalState = {
+            ...loadedPersonalState,
+            [key]: JSON.parse(JSON.stringify(persistedPersonalState[key]))
+          };
+        } else {
+          const { [key]: ignored, ...rest } = loadedPersonalState;
+          loadedPersonalState = rest;
+        }
+      }
       console.error("[Mapa] No se pudo guardar el estado personal en Supabase:", error);
       const status = document.getElementById("status");
       if (status) status.textContent = "Aviso: no se han podido guardar los cambios personales en Supabase.";
@@ -2271,6 +2293,11 @@ renderList();
     delete loadedPersonalState.locations;
     gam = Object.assign({ aw: {}, day: {}, dm: {}, wm: {}, lvl: 1, sound: true, log: [], fog: true, wsum: "" }, state.gamification || {});
     logros = Object.assign({ n: {}, f: {}, racha: { dia: "", n: 0, mejor: 0 } }, state.badges || {});
+    // La base confirmada usa las referencias y puntos ya normalizados; nunca restaura coordenadas heredadas.
+    loadedPersonalState = { ...loadedPersonalState, customs, removed: [...removed], reviewed: [...reviewed] };
+    persistedPersonalState = JSON.parse(JSON.stringify(loadedPersonalState));
+    personalStateVersions.clear();
+    stateWriteQueue = Promise.resolve();
     customs.forEach(p => {
       if (CENTERS.some(c => c.name === p.name)) return;
       const c = { id: CENTERS.length + 1, name: p.name, tipo: p.tipo || "Tiendas", sub: p.sub || "", town: p.town || "", street: p.street || "", conf: true, custom: true, extra: "Punto personalizado" };
