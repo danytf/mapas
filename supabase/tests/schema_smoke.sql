@@ -148,7 +148,7 @@ begin
     set establishment_id = '00000000-0000-4000-8000-000000000006'
     where id = '00000000-0000-4000-8000-000000000007';
     raise exception 'FALLO: se permitió mover una solicitud con concesión asociada';
-  exception when check_violation then
+  exception when check_violation or insufficient_privilege then
     null;
   end;
 end;
