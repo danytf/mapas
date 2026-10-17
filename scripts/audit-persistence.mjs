@@ -32,6 +32,20 @@ requireMatch(/key\s*===\s*["']sb-wwoczmihhupofwmlmgga-auth-token["']/,
   "La limpieza debe limitar el token de Supabase al proyecto de este mapa.");
 
 const setLocStart = html.indexOf("async function setLoc(c, lat, lon, address)");
+const personalLoadStart = html.indexOf("async function loadPersonalState()");
+const customLoadStart = html.indexOf("customs = Array.isArray(state.customs)", personalLoadStart);
+const removedLoadStart = html.indexOf("removed = new Set", customLoadStart);
+if (personalLoadStart < 0 || customLoadStart < 0 || removedLoadStart < 0) {
+  failures.push("No se pudo localizar la validación de puntos personalizados restaurados.");
+} else {
+  const customLoad = html.slice(customLoadStart, removedLoadStart);
+  if (!/Number\.isFinite\(lat\)/.test(customLoad) ||
+      !/Number\.isFinite\(lon\)/.test(customLoad) ||
+      !/lat < 36\.5 \|\| lat > 38\.3 \|\| lon < -4\.6 \|\| lon > -2\.2/.test(customLoad) ||
+      !/customNames\.has\(name\)/.test(customLoad)) {
+    failures.push("Los puntos personalizados recuperados deben tener coordenadas dentro del ámbito y nombres únicos.");
+  }
+}
 const locationMasterStart = html.indexOf("const verifyController = new AbortController()", setLocStart);
 const locationMasterEnd = html.indexOf("let moving = null;", setLocStart);
 if (locationMasterStart < 0 || locationMasterEnd < 0) {
