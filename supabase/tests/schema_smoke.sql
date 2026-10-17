@@ -881,6 +881,97 @@ begin
 end;
 $category_delete_matrix$;
 
+-- Same-province operational DELETE is still administrator-only.
+-- Cross-province tests alone would not catch a policy accidentally widened to all scoped users.
+do $same_province_delete_matrix$
+declare affected integer;
+begin
+  delete from public.permit_applications where id = '00000000-0000-4000-8000-000000000007';
+  get diagnostics affected = row_count;
+  if affected <> 0 then
+    raise exception 'FALLO RLS: usuario provincial borró una solicitud de su propia provincia';
+  end if;
+
+  delete from public.permit_grants where id = '00000000-0000-4000-8000-000000000008';
+  get diagnostics affected = row_count;
+  if affected <> 0 then
+    raise exception 'FALLO RLS: usuario provincial borró una concesión de su propia provincia';
+  end if;
+
+  delete from public.followups where id = '00000000-0000-4000-8000-0000000000a9';
+  get diagnostics affected = row_count;
+  if affected <> 0 then
+    raise exception 'FALLO RLS: usuario provincial borró un seguimiento de su propia provincia';
+  end if;
+end;
+$same_province_delete_matrix$;
+
+-- Global reference data and identity/assignment tables are admin-write-only.
+do $admin_only_writes_matrix$
+declare affected integer; visible_count integer;
+begin
+  update public.categories set name = name || ' forbidden'
+   where id = '00000000-0000-4000-8000-000000000003';
+  get diagnostics affected = row_count;
+  if affected <> 0 then raise exception 'FALLO RLS: usuario normal actualizó categorías'; end if;
+
+  update public.municipalities set name = name || ' forbidden'
+   where id = '00000000-0000-4000-8000-000000000004';
+  get diagnostics affected = row_count;
+  if affected <> 0 then raise exception 'FALLO RLS: usuario normal actualizó municipios'; end if;
+
+  update public.provinces set name = name || ' forbidden'
+   where id = '00000000-0000-4000-8000-000000000001';
+  get diagnostics affected = row_count;
+  if affected <> 0 then raise exception 'FALLO RLS: usuario normal actualizó provincias'; end if;
+
+  delete from public.user_provinces
+   where user_id = '00000000-0000-4000-8000-0000000000a2'
+     and province_id = '00000000-0000-4000-8000-000000000001';
+  get diagnostics affected = row_count;
+  if affected <> 0 then raise exception 'FALLO RLS: usuario normal eliminó su asignación provincial'; end if;
+
+  begin
+    insert into public.categories (id, code, name)
+    values ('00000000-0000-4000-8000-0000000000d2', 'forbidden_user_category', 'Forbidden');
+    raise exception 'FALLO RLS: usuario normal insertó una categoría';
+  exception when insufficient_privilege then null;
+  end;
+
+  begin
+    insert into public.municipalities (province_id, name, normalized_name)
+    values ('00000000-0000-4000-8000-000000000001', 'Forbidden Municipality', 'forbidden municipality');
+    raise exception 'FALLO RLS: usuario normal insertó un municipio';
+  exception when insufficient_privilege then null;
+  end;
+
+  begin
+    insert into public.provinces (id, code, name)
+    values ('00000000-0000-4000-8000-0000000000d3', '97', 'Forbidden Province');
+    raise exception 'FALLO RLS: usuario normal insertó una provincia';
+  exception when insufficient_privilege then null;
+  end;
+
+  select count(*) into visible_count from public.audit_log;
+  if visible_count <> 0 then
+    raise exception 'FALLO RLS: usuario normal leyó el registro de auditoría reservado a administradores';
+  end if;
+end;
+$admin_only_writes_matrix$;
+
+-- Administrators can read audit logs; ordinary users cannot.
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a1', false);
+do $admin_audit_read_matrix$
+declare visible_count integer;
+begin
+  select count(*) into visible_count from public.audit_log;
+  if visible_count = 0 then
+    raise exception 'FALLO RLS: administrador no puede leer el registro de auditoría';
+  end if;
+end;
+$admin_audit_read_matrix$;
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
+
 -- Inactive users lose their personal app-state access too (not only provincial access).
 do $inactive_personal_state_matrix$
 declare visible_count integer; affected integer;
