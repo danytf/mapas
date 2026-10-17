@@ -19,7 +19,7 @@ END;
 $$;
 
 -- Register all 17 map categories, even if a category currently has no static points.
-INSERT INTO public.categories (code, name, is_active)
+INSERT INTO public.categories (code, name)
 VALUES
   ('hospital', 'Hospital'),
   ('centro-de-salud', 'Centro de salud'),
