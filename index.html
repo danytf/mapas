@@ -705,20 +705,24 @@ const savePermits = async (onlyName = null) => {
   const verifyController = new AbortController();
   const verifyTimeoutId = setTimeout(() => verifyController.abort(), 8000);
   try {
-    const row = rows[0];
     const verification = await client.from("establishment_app_state")
       .select("establishment_id,province_id,state,updated_by")
-      .eq("establishment_id", row.establishment_id)
-      .abortSignal(verifyController.signal)
-      .maybeSingle();
-    const persistedState = sanitizeSharedPermitState(verification.data?.state) || {};
-    const confirmed = !verification.error && verification.data &&
-      verification.data.establishment_id === row.establishment_id &&
-      verification.data.province_id === row.province_id &&
-      verification.data.updated_by === userId &&
-      stableJson(persistedState) === stableJson(row.state);
+      .in("establishment_id", rows.map(row => row.establishment_id))
+      .abortSignal(verifyController.signal);
+    const persistedById = new Map((Array.isArray(verification.data) ? verification.data : [])
+      .map(item => [item.establishment_id, item]));
+    const confirmed = !verification.error && rows.every(row => {
+      const persisted = persistedById.get(row.establishment_id);
+      return Boolean(persisted) &&
+        persisted.province_id === row.province_id &&
+        persisted.updated_by === userId &&
+        stableJson(sanitizeSharedPermitState(persisted.state) || {}) === stableJson(row.state);
+    });
     if (confirmed) {
-      sharedPermitRecords.set(onlyName || names[0], { establishment_id: row.establishment_id, province_id: row.province_id });
+      rows.forEach(row => {
+        const name = names.find(candidate => CENTERS.some(item => item.name === candidate && item.databaseId === row.establishment_id));
+        if (name) sharedPermitRecords.set(name, { establishment_id: row.establishment_id, province_id: row.province_id });
+      });
       console.warn("[Mapa] El estado compartido se confirmó mediante lectura posterior tras una respuesta ambigua.");
       return true;
     }
