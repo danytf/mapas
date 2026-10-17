@@ -1,0 +1,6 @@
+-- Reconciliation placeholder for migration version 20261017201136.
+-- This version is already recorded as applied in the production Supabase project,
+-- but its original file is absent from the repository history.
+-- Intentionally no-op: the canonical, idempotent trigger definition is preserved
+-- in 20261017222500_protect_user_app_state_created_at.sql.
+-- Keeping this version represented avoids rewriting production migration history.
