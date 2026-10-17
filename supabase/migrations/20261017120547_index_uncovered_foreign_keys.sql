@@ -1,0 +1,23 @@
+-- Index foreign-key columns that are not covered by an existing leading index.
+BEGIN;
+CREATE INDEX IF NOT EXISTS idx_audit_log_actor_id ON public.audit_log(actor_id);
+CREATE INDEX IF NOT EXISTS idx_establishment_app_state_updated_by ON public.establishment_app_state(updated_by);
+CREATE INDEX IF NOT EXISTS idx_establishment_location_history_changed_by ON public.establishment_location_history(changed_by);
+CREATE INDEX IF NOT EXISTS idx_establishment_location_reviews_created_by ON public.establishment_location_reviews(created_by);
+CREATE INDEX IF NOT EXISTS idx_establishment_location_reviews_reviewed_by ON public.establishment_location_reviews(reviewed_by);
+CREATE INDEX IF NOT EXISTS idx_establishments_created_by ON public.establishments(created_by);
+CREATE INDEX IF NOT EXISTS idx_establishments_updated_by ON public.establishments(updated_by);
+CREATE INDEX IF NOT EXISTS idx_followups_application_id ON public.followups(application_id);
+CREATE INDEX IF NOT EXISTS idx_followups_created_by ON public.followups(created_by);
+CREATE INDEX IF NOT EXISTS idx_followups_establishment_id ON public.followups(establishment_id);
+CREATE INDEX IF NOT EXISTS idx_followups_grant_id ON public.followups(grant_id);
+CREATE INDEX IF NOT EXISTS idx_import_batches_started_by ON public.import_batches(started_by);
+CREATE INDEX IF NOT EXISTS idx_import_records_candidate_establishment_id ON public.import_records(candidate_establishment_id);
+CREATE INDEX IF NOT EXISTS idx_permit_applications_created_by ON public.permit_applications(created_by);
+CREATE INDEX IF NOT EXISTS idx_permit_applications_updated_by ON public.permit_applications(updated_by);
+CREATE INDEX IF NOT EXISTS idx_permit_grants_application_id ON public.permit_grants(application_id);
+CREATE INDEX IF NOT EXISTS idx_permit_grants_created_by ON public.permit_grants(created_by);
+CREATE INDEX IF NOT EXISTS idx_permit_grants_updated_by ON public.permit_grants(updated_by);
+CREATE INDEX IF NOT EXISTS idx_user_provinces_assigned_by ON public.user_provinces(assigned_by);
+CREATE INDEX IF NOT EXISTS idx_user_provinces_province_id ON public.user_provinces(province_id);
+COMMIT;
