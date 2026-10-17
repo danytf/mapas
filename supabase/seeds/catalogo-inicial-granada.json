@@ -16,7 +16,7 @@
   },
   "establishments": [
     {
-      "source_ref": "catalogo-granada:centro-de-salud:cs-albaicin::plaza-san-nicolas-7",
+      "source_ref": "catalogo-granada:centro-de-salud:cs-albaicin:granada:plaza-san-nicolas-7",
       "name": "CS Albaicín",
       "category": "Centro de salud",
       "subtype": null,
@@ -30,7 +30,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:centro-de-salud:cs-albayda-la-cruz::avenida-de-juventudes-musicales",
+      "source_ref": "catalogo-granada:centro-de-salud:cs-albayda-la-cruz:granada:avenida-de-juventudes-musicales",
       "name": "CS Albayda-La Cruz",
       "category": "Centro de salud",
       "subtype": null,
@@ -44,7 +44,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:centro-de-salud:cs-almanjayar::calle-pintor-joaquin-capulino-jauregui-4",
+      "source_ref": "catalogo-granada:centro-de-salud:cs-almanjayar:granada:calle-pintor-joaquin-capulino-jauregui-4",
       "name": "CS Almanjáyar",
       "category": "Centro de salud",
       "subtype": null,
@@ -58,7 +58,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:centro-de-salud:cs-barriada-de-la-juventud-rosaleda::calle-berchules-2",
+      "source_ref": "catalogo-granada:centro-de-salud:cs-barriada-de-la-juventud-rosaleda:granada:calle-berchules-2",
       "name": "CS Barriada de la Juventud-Rosaleda",
       "category": "Centro de salud",
       "subtype": null,
@@ -72,7 +72,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:centro-de-salud:cs-bola-de-oro::calle-cerro-de-los-machos",
+      "source_ref": "catalogo-granada:centro-de-salud:cs-bola-de-oro:granada:calle-cerro-de-los-machos",
       "name": "CS Bola de Oro",
       "category": "Centro de salud",
       "subtype": null,
@@ -86,7 +86,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:centro-de-salud:cs-cartuja::calle-caseria-del-cerro",
+      "source_ref": "catalogo-granada:centro-de-salud:cs-cartuja:granada:calle-caseria-del-cerro",
       "name": "CS Cartuja",
       "category": "Centro de salud",
       "subtype": null,
@@ -100,7 +100,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:centro-de-salud:cs-caseria-de-montijo::carretera-de-jaen",
+      "source_ref": "catalogo-granada:centro-de-salud:cs-caseria-de-montijo:granada:carretera-de-jaen",
       "name": "CS Casería de Montijo",
       "category": "Centro de salud",
       "subtype": null,
@@ -114,7 +114,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:centro-de-salud:cs-doctor-salvador-caballero::calle-doctor-azpitarte-6",
+      "source_ref": "catalogo-granada:centro-de-salud:cs-doctor-salvador-caballero:granada:calle-doctor-azpitarte-6",
       "name": "CS Doctor Salvador Caballero",
       "category": "Centro de salud",
       "subtype": null,
@@ -128,7 +128,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:centro-de-salud:cs-figares::calle-joaquin-blume-1",
+      "source_ref": "catalogo-granada:centro-de-salud:cs-figares:granada:calle-joaquin-blume-1",
       "name": "CS Figares",
       "category": "Centro de salud",
       "subtype": null,
@@ -142,7 +142,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:centro-de-salud:cs-fortuny-velutti::calle-navarrete-35",
+      "source_ref": "catalogo-granada:centro-de-salud:cs-fortuny-velutti:granada:calle-navarrete-35",
       "name": "CS Fortuny (Velutti)",
       "category": "Centro de salud",
       "subtype": null,
@@ -156,7 +156,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:centro-de-salud:cs-gongora::calle-poeta-manuel-de-gongora-9",
+      "source_ref": "catalogo-granada:centro-de-salud:cs-gongora:granada:calle-poeta-manuel-de-gongora-9",
       "name": "CS Góngora",
       "category": "Centro de salud",
       "subtype": null,
@@ -170,7 +170,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:centro-de-salud:cs-gran-capitan::calle-gran-capitan-10",
+      "source_ref": "catalogo-granada:centro-de-salud:cs-gran-capitan:granada:calle-gran-capitan-10",
       "name": "CS Gran Capitán",
       "category": "Centro de salud",
       "subtype": null,
@@ -184,7 +184,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:centro-de-salud:cs-la-caleta::avenida-del-sur-11",
+      "source_ref": "catalogo-granada:centro-de-salud:cs-la-caleta:granada:avenida-del-sur-11",
       "name": "CS La Caleta",
       "category": "Centro de salud",
       "subtype": null,
@@ -198,7 +198,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:centro-de-salud:cs-la-chana::calle-virgen-de-la-consolacion",
+      "source_ref": "catalogo-granada:centro-de-salud:cs-la-chana:granada:calle-virgen-de-la-consolacion",
       "name": "CS La Chana",
       "category": "Centro de salud",
       "subtype": null,
@@ -212,7 +212,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:centro-de-salud:cs-las-flores::calle-profesor-garcia-gomez-8",
+      "source_ref": "catalogo-granada:centro-de-salud:cs-las-flores:granada:calle-profesor-garcia-gomez-8",
       "name": "CS Las Flores",
       "category": "Centro de salud",
       "subtype": null,
@@ -226,7 +226,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:centro-de-salud:cs-realejo::plaza-campo-del-principe",
+      "source_ref": "catalogo-granada:centro-de-salud:cs-realejo:granada:plaza-campo-del-principe",
       "name": "CS Realejo",
       "category": "Centro de salud",
       "subtype": null,
@@ -240,7 +240,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:centro-de-salud:cs-zaidin-centro-este::avenida-de-america-14",
+      "source_ref": "catalogo-granada:centro-de-salud:cs-zaidin-centro-este:granada:avenida-de-america-14",
       "name": "CS Zaidín Centro-Este",
       "category": "Centro de salud",
       "subtype": null,
@@ -254,7 +254,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:centro-de-salud:cs-zaidin-sur::calle-poeta-gracian-7",
+      "source_ref": "catalogo-granada:centro-de-salud:cs-zaidin-sur:granada:calle-poeta-gracian-7",
       "name": "CS Zaidín Sur",
       "category": "Centro de salud",
       "subtype": null,
@@ -268,7 +268,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:centro-de-salud:cs-mirasierra::calle-cerro-de-los-machos-5",
+      "source_ref": "catalogo-granada:centro-de-salud:cs-mirasierra:granada:calle-cerro-de-los-machos-5",
       "name": "CS Mirasierra",
       "category": "Centro de salud",
       "subtype": null,
@@ -282,7 +282,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:hospital:h-u-virgen-de-las-nieves::avenida-de-las-fuerzas-armadas-2",
+      "source_ref": "catalogo-granada:hospital:h-u-virgen-de-las-nieves:granada:avenida-de-las-fuerzas-armadas-2",
       "name": "H.U. Virgen de las Nieves",
       "category": "Hospital",
       "subtype": "Público",
@@ -296,7 +296,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:hospital:h-u-san-cecilio::avenida-del-conocimiento",
+      "source_ref": "catalogo-granada:hospital:h-u-san-cecilio:granada:avenida-del-conocimiento",
       "name": "H.U. San Cecilio",
       "category": "Hospital",
       "subtype": "Público",
@@ -310,7 +310,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:hospital:hospital-de-neurotraumatologia-y-rehabilitacion::avenida-de-juan-pablo-ii",
+      "source_ref": "catalogo-granada:hospital:hospital-de-neurotraumatologia-y-rehabilitacion:granada:avenida-de-juan-pablo-ii",
       "name": "Hospital de Neurotraumatología y Rehabilitación",
       "category": "Hospital",
       "subtype": "Público",
@@ -324,7 +324,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:hospital:hospital-hla-inmaculada::calle-doctor-alejandro-otero-8",
+      "source_ref": "catalogo-granada:hospital:hospital-hla-inmaculada:granada:calle-doctor-alejandro-otero-8",
       "name": "Hospital HLA Inmaculada",
       "category": "Hospital",
       "subtype": "Privado",
@@ -338,7 +338,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:hospital:hospital-vithas-granada::avenida-santa-maria-de-la-alhambra-6",
+      "source_ref": "catalogo-granada:hospital:hospital-vithas-granada:granada:avenida-santa-maria-de-la-alhambra-6",
       "name": "Hospital Vithas Granada",
       "category": "Hospital",
       "subtype": "Privado",
@@ -352,7 +352,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:hospital:hospital-san-rafael::calle-san-juan-de-dios-19",
+      "source_ref": "catalogo-granada:hospital:hospital-san-rafael:granada:calle-san-juan-de-dios-19",
       "name": "Hospital San Rafael",
       "category": "Hospital",
       "subtype": "Privado",
@@ -366,7 +366,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:hospital:centro-doctor-oloriz-h-u-virgen-de-las-nieves::avenida-doctor-oloriz-16",
+      "source_ref": "catalogo-granada:hospital:centro-doctor-oloriz-h-u-virgen-de-las-nieves:granada:avenida-doctor-oloriz-16",
       "name": "Centro Doctor Olóriz (H.U. Virgen de las Nieves)",
       "category": "Hospital",
       "subtype": "Público",
@@ -380,7 +380,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:centro-comercial:centro-comercial-neptuno::calle-arabial-45",
+      "source_ref": "catalogo-granada:centro-comercial:centro-comercial-neptuno:granada:calle-arabial-45",
       "name": "Centro Comercial Neptuno",
       "category": "Centro comercial",
       "subtype": null,
@@ -394,7 +394,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:centro-comercial:serrallo-shopping::paseo-laguna-de-cameros-1",
+      "source_ref": "catalogo-granada:centro-comercial:serrallo-shopping:granada:paseo-laguna-de-cameros-1",
       "name": "Serrallo Shopping",
       "category": "Centro comercial",
       "subtype": null,
@@ -408,7 +408,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:centro-comercial:alcampo-granada::avenida-de-juan-pablo-ii-88",
+      "source_ref": "catalogo-granada:centro-comercial:alcampo-granada:granada:avenida-de-juan-pablo-ii-88",
       "name": "Alcampo Granada",
       "category": "Centro comercial",
       "subtype": null,
@@ -422,7 +422,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:carrefour:carrefour-granada::carretera-de-armilla",
+      "source_ref": "catalogo-granada:carrefour:carrefour-granada:granada:carretera-de-armilla",
       "name": "Carrefour Granada",
       "category": "Carrefour",
       "subtype": null,
@@ -562,7 +562,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:hospital:vithas-centro-medico-granada::plaza-ciudad-de-los-carmenes-2",
+      "source_ref": "catalogo-granada:hospital:vithas-centro-medico-granada:granada:plaza-ciudad-de-los-carmenes-2",
       "name": "Vithas Centro Médico Granada",
       "category": "Hospital",
       "subtype": "Clínica privada",
@@ -576,7 +576,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:hospital:clinica-velnia::plaza-de-san-lazaro-14",
+      "source_ref": "catalogo-granada:hospital:clinica-velnia:granada:plaza-de-san-lazaro-14",
       "name": "Clínica Velnia",
       "category": "Hospital",
       "subtype": "Clínica privada",
@@ -590,7 +590,7 @@
       "status": "active"
     },
     {
-      "source_ref": "catalogo-granada:hospital:granada-clinic::calle-ancha-de-gracia-9",
+      "source_ref": "catalogo-granada:hospital:granada-clinic:granada:calle-ancha-de-gracia-9",
       "name": "Granada Clinic",
       "category": "Hospital",
       "subtype": "Clínica privada",
