@@ -709,8 +709,8 @@ const seguimientoDue = (c) => { const d = segCalc(permOf(c)) || permOf(c).seguim
 /* Revisiones y correcciones se guardan en el estado del usuario en Supabase. */
 let reviewed = new Set();
 const saveReviewed = () => typeof window.mapaPersistUserState === "function" ? window.mapaPersistUserState("reviewed", [...reviewed]) : Promise.resolve(false);
-let corr = {};
-const saveCorr = () => typeof window.mapaPersistUserState === "function" ? window.mapaPersistUserState("locations", corr) : Promise.resolve(false);
+// Las correcciones del catálogo maestro se guardan en establishments, nunca en estado local.
+
 const NOSAVE = "Aplicado, pero este navegador no permite guardar. Abre el mapa en https://danytf.github.io/mapas/ (no desde la vista previa) o pulsa Guardar copia.";
 CENTERS.forEach((c) => { const q = corr[c.name]; if (q && !c.custom) cache[c.id] = { lat: q[0], lon: q[1] }; });
 const DUPS = new Set([]);
@@ -913,10 +913,7 @@ function parseCoords(t) {
   return la >= 36.5 && la <= 38.3 && lo >= -4.6 && lo <= -2.2 ? [la, lo] : null;
 }
 async function setLoc(c, lat, lon, address) {
-  if (!c || c.custom || !c.databaseId) {
-    console.error("[Mapa] La corrección solo puede guardarse para establecimientos del catálogo de Supabase.");
-    return false;
-  }
+  if (!c) return false;
   const cleanAddress = String(address ?? c.street ?? "").trim();
   if (!cleanAddress) {
     console.error("[Mapa] No se puede guardar una ubicación sin dirección.");
@@ -925,6 +922,25 @@ async function setLoc(c, lat, lon, address) {
   if (!Number.isFinite(lat) || !Number.isFinite(lon) ||
       lat < 36.5 || lat > 38.3 || lon < -4.6 || lon > -2.2) return false;
 
+  if (c.custom) {
+    const p = customs.find((x) => x.name === c.name);
+    if (!p) return false;
+    p.lat = +lat.toFixed(6);
+    p.lon = +lon.toFixed(6);
+    p.street = cleanAddress;
+    p.approx = undefined;
+    if (!await saveCustoms()) return false;
+    c.street = cleanAddress;
+    cache[c.id] = { lat: p.lat, lon: p.lon };
+    if (markers[c.id]) markers[c.id].setLatLng([p.lat, p.lon]);
+    refreshSelects(); renderList();
+    return true;
+  }
+
+  if (!c.databaseId) {
+    console.error("[Mapa] El establecimiento no tiene ID de Supabase; no se guarda la corrección.");
+    return false;
+  }
   const { data, error } = await client.from("establishments").update({
     address: cleanAddress,
     latitude: +lat.toFixed(6),
@@ -1976,7 +1992,8 @@ renderList();
     customs = Array.isArray(state.customs) ? state.customs.filter(p => p && typeof p.name === "string" && Number.isFinite(Number(p.lat)) && Number.isFinite(Number(p.lon))) : [];
     removed = new Set(Array.isArray(state.removed) ? state.removed.filter(x => typeof x === "string") : []);
     reviewed = new Set(Array.isArray(state.reviewed) ? state.reviewed.filter(x => typeof x === "string") : []);
-    corr = state.locations && typeof state.locations === "object" && !Array.isArray(state.locations) ? state.locations : {};
+    // Ignorar correcciones heredadas por usuario: la ubicación vigente procede del catálogo maestro Supabase.
+    delete loadedPersonalState.locations;
     gam = Object.assign({ aw: {}, day: {}, dm: {}, wm: {}, lvl: 1, sound: true, log: [], fog: true, wsum: "" }, state.gamification || {});
     logros = Object.assign({ n: {}, f: {}, racha: { dia: "", n: 0, mejor: 0 } }, state.badges || {});
     customs.forEach(p => {
@@ -1984,10 +2001,6 @@ renderList();
       const c = { id: CENTERS.length + 1, name: p.name, tipo: p.tipo || "Tiendas", sub: p.sub || "", town: p.town || "", street: p.street || "", conf: true, custom: true, extra: "Punto personalizado" };
       CENTERS.push(c);
       cache[c.id] = { lat: Number(p.lat), lon: Number(p.lon), approx: p.approx || undefined };
-    });
-    CENTERS.forEach(c => {
-      const q = corr[c.name];
-      if (q && Array.isArray(q) && q.length >= 2 && Number.isFinite(Number(q[0])) && Number.isFinite(Number(q[1]))) cache[c.id] = { lat: Number(q[0]), lon: Number(q[1]) };
     });
     CENTERS.forEach(makeMarker);
     refreshSelects();
