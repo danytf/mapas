@@ -564,27 +564,26 @@
  * antiguas; la sesión actual vive solo en memoria y exige iniciar sesión tras recargar.
  */
 (() => {
-  try {
-    const legacyKeys = [
-      "puntos-propios-granada-v1", "puntos-quitados-granada-v1",
-      "cs-granada-geo-v3", "permisos-captacion-granada-v1",
-      "puntos-revisados-granada-v1", "ubicaciones-corregidas-granada-v1",
-      "logros-granada-v1", "gamificacion-granada-v1", "mapa-auth-remember"
-    ];
-    [localStorage, sessionStorage].forEach((storage) => {
+  const legacyKeys = [
+    "puntos-propios-granada-v1", "puntos-quitados-granada-v1",
+    "cs-granada-geo-v3", "permisos-captacion-granada-v1",
+    "puntos-revisados-granada-v1", "ubicaciones-corregidas-granada-v1",
+    "logros-granada-v1", "gamificacion-granada-v1", "mapa-auth-remember"
+  ];
+  // Limpia cada almacenamiento de forma independiente: un bloqueo de uno no
+  // impide limpiar el otro ni bloquea la app, que no persiste datos en ninguno.
+  for (const storageName of ["localStorage", "sessionStorage"]) {
+    try {
+      const storage = window[storageName];
       for (let i = storage.length - 1; i >= 0; i--) {
         const key = storage.key(i);
         if (key && (legacyKeys.includes(key) || key.startsWith("mapa-") || /^sb-.+-auth-token$/.test(key))) {
           storage.removeItem(key);
         }
       }
-    });
-  } catch (error) {
-    document.documentElement.classList.add("lock");
-    const status = document.getElementById("status");
-    if (status) status.textContent = "No se pudo limpiar el almacenamiento heredado. No se muestra información local.";
-    console.error("No se pudo limpiar el almacenamiento heredado del mapa.", error);
-    throw error;
+    } catch (error) {
+      console.warn("[Mapa] No se pudo limpiar " + storageName + "; la aplicación no lo usa para persistir datos.", error);
+    }
   }
 })();
 // El catálogo maestro se carga exclusivamente desde Supabase tras autenticar.
@@ -2078,7 +2077,7 @@ renderList();
   }
 
   // Lee el catálogo maestro desde Supabase sin importar ni escribir datos del navegador.
-  // Solo aplica coordenadas si las 791 referencias coinciden exactamente con el catálogo estático.
+  // El catálogo maestro se lee desde Supabase y reemplaza íntegramente cualquier estado previo.
   async function syncCatalogueFromSupabase() {
     const status = document.getElementById("status");
     const sessionInfo = window.mapaSession;
