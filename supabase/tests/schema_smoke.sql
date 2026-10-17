@@ -193,6 +193,40 @@ $$;
 -- El rol authenticated no debe tener escritura directa en auditoría ni historial.
 set role authenticated;
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a1', false);
+-- Las propuestas de ubicación son editables por su autor solo al crearlas; decidirlas es tarea administrativa.
+-- El usuario A puede registrar una propuesta para su provincia, pero no aceptarla ni suplantar al revisor.
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
+insert into public.establishment_location_reviews (
+  id, establishment_id, status, proposed_latitude, proposed_longitude,
+  proposed_address, source, notes, created_by
+) values (
+  '00000000-0000-4000-8000-0000000000b1',
+  '00000000-0000-4000-8000-000000000005',
+  'pending', 37.181, -3.601, 'Proposed address', 'manual_google_maps',
+  'Smoke test proposal', '00000000-0000-4000-8000-0000000000a2'
+);
+update public.establishment_location_reviews
+   set status = 'accepted',
+       reviewed_by = '00000000-0000-4000-8000-0000000000a2',
+       reviewed_at = now()
+ where id = '00000000-0000-4000-8000-0000000000b1';
+
+do $location_review_decision_test$
+declare saved_status text;
+        saved_reviewer uuid;
+        saved_reviewed_at timestamptz;
+begin
+  select status, reviewed_by, reviewed_at
+    into saved_status, saved_reviewer, saved_reviewed_at
+    from public.establishment_location_reviews
+   where id = '00000000-0000-4000-8000-0000000000b1';
+
+  if saved_status <> 'pending' or saved_reviewer is not null or saved_reviewed_at is not null then
+    raise exception 'FALLO SEGURIDAD: un usuario ordinario pudo decidir su propia propuesta de ubicación';
+  end if;
+end;
+$location_review_decision_test$;
+
 do $$
 begin
   begin
