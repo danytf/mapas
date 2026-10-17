@@ -110,6 +110,23 @@ if (personalWriteStart < 0 || personalWriteEnd < 0) {
   }
 }
 
+const personalTimeoutStart = html.indexOf("window.mapaPersistUserState =");
+const personalTimeoutEnd = html.indexOf("async function loadPersonalState()", personalTimeoutStart);
+const locationApplyStart = html.indexOf("const apply = async (txt) =>");
+const locationApplyEnd = html.indexOf('inp.addEventListener("paste"', locationApplyStart);
+if (personalTimeoutStart < 0 || personalTimeoutEnd < 0 || locationApplyStart < 0 || locationApplyEnd < 0) {
+  failures.push("No se pudieron localizar los límites de tiempo de las escrituras.");
+} else {
+  const personalTimeout = html.slice(personalTimeoutStart, personalTimeoutEnd);
+  const locationApply = html.slice(locationApplyStart, locationApplyEnd);
+  const permitSave = html.slice(html.indexOf("const savePermits ="), html.indexOf("let removed = new Set()"));
+  if (!/setTimeout\(\(\) => controller\.abort\(\), 12000\)/.test(personalTimeout) ||
+      !/abortSignal\(controller\.signal\)/.test(personalTimeout) ||
+      !/setTimeout\(\(\) => controller\.abort\(\), 15000\)/.test(permitSave) ||
+      !/setTimeout\(\(\) => resolve\(false\), 27000\)/.test(locationApply)) {
+    failures.push("Las escrituras deben tener un timeout real y la UI de ubicación debe esperar a que termine su verificación.");
+  }
+}
 const commitStart = html.indexOf("const commit = async () => {");
 const commitEnd = html.indexOf('el.querySelectorAll(".stars button")', commitStart);
 if (commitStart < 0 || commitEnd < 0) {
