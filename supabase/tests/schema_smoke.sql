@@ -98,6 +98,39 @@ insert into public.permit_grants (
   '00000000-0000-4000-8000-0000000000a1'
 );
 
+-- Child records in province B let the RLS tests distinguish cross-scope denial
+-- from unrelated FK/trigger failures.
+insert into public.permit_applications (
+  id, establishment_id, organization, created_by, updated_by
+) values (
+  '00000000-0000-4000-8000-0000000000c1',
+  '00000000-0000-4000-8000-000000000006',
+  'Smoke organization B',
+  '00000000-0000-4000-8000-0000000000a1',
+  '00000000-0000-4000-8000-0000000000a1'
+);
+
+insert into public.permit_grants (
+  id, establishment_id, application_id, organization, created_by, updated_by
+) values (
+  '00000000-0000-4000-8000-0000000000c2',
+  '00000000-0000-4000-8000-000000000006',
+  '00000000-0000-4000-8000-0000000000c1',
+  'Smoke organization B',
+  '00000000-0000-4000-8000-0000000000a1',
+  '00000000-0000-4000-8000-0000000000a1'
+);
+
+insert into public.followups (
+  id, establishment_id, grant_id, due_on, created_by
+) values (
+  '00000000-0000-4000-8000-0000000000c3',
+  '00000000-0000-4000-8000-000000000006',
+  '00000000-0000-4000-8000-0000000000c2',
+  current_date,
+  '00000000-0000-4000-8000-0000000000a1'
+);
+
 -- La base de datos debe rechazar cada relación incoherente.
 do $$
 begin
@@ -342,6 +375,70 @@ begin
   if affected <> 0 then
     raise exception 'FALLO RLS: el usuario de provincia A pudo actualizar un establecimiento de provincia B';
   end if;
+
+  update public.permit_applications
+     set notes = 'cross-province write must not persist'
+   where id = '00000000-0000-4000-8000-0000000000c1';
+  get diagnostics affected = row_count;
+  if affected <> 0 then
+    raise exception 'FALLO RLS: usuario A pudo actualizar una solicitud de provincia B';
+  end if;
+
+  update public.permit_grants
+     set notes = 'cross-province write must not persist'
+   where id = '00000000-0000-4000-8000-0000000000c2';
+  get diagnostics affected = row_count;
+  if affected <> 0 then
+    raise exception 'FALLO RLS: usuario A pudo actualizar una concesión de provincia B';
+  end if;
+
+  update public.followups
+     set notes = 'cross-province write must not persist'
+   where id = '00000000-0000-4000-8000-0000000000c3';
+  get diagnostics affected = row_count;
+  if affected <> 0 then
+    raise exception 'FALLO RLS: usuario A pudo actualizar un seguimiento de provincia B';
+  end if;
+
+  begin
+    insert into public.permit_applications (
+      establishment_id, organization, created_by, updated_by
+    ) values (
+      '00000000-0000-4000-8000-000000000006',
+      'Cross-province forbidden',
+      auth.uid(), auth.uid()
+    );
+    raise exception 'FALLO RLS: usuario A pudo insertar solicitud en provincia B';
+  exception when insufficient_privilege then
+    null;
+  end;
+
+  begin
+    insert into public.permit_grants (
+      establishment_id, organization, created_by, updated_by
+    ) values (
+      '00000000-0000-4000-8000-000000000006',
+      'Cross-province forbidden',
+      auth.uid(), auth.uid()
+    );
+    raise exception 'FALLO RLS: usuario A pudo insertar concesión en provincia B';
+  exception when insufficient_privilege then
+    null;
+  end;
+
+  begin
+    insert into public.followups (
+      establishment_id, grant_id, due_on, created_by
+    ) values (
+      '00000000-0000-4000-8000-000000000006',
+      '00000000-0000-4000-8000-0000000000c2',
+      current_date,
+      auth.uid()
+    );
+    raise exception 'FALLO RLS: usuario A pudo insertar seguimiento en provincia B';
+  exception when insufficient_privilege then
+    null;
+  end;
 
   begin
     insert into public.user_app_state (user_id, state)
