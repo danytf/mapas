@@ -771,8 +771,10 @@ const sanitizePermitEntry = (value, kind) => {
   if (!value || typeof value !== "object" || Array.isArray(value)) return null;
   const entry = {};
   const desde = validIsoDate(value.desde), hasta = validIsoDate(value.hasta), seg = validIsoDate(value.seg);
+  const fecha = validIsoDate(value.fecha);
   if (desde) entry.desde = desde;
   if (hasta) entry.hasta = hasta;
+  if (fecha && kind === "solicitud") entry.fecha = fecha;
   if (seg && kind === "solicitud") entry.seg = seg;
   const captadores = safeCount(value.captadores);
   if (captadores) entry.captadores = captadores;
