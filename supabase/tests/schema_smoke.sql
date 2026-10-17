@@ -21,6 +21,13 @@ update public.profiles
 set role = 'admin'
 where id = '00000000-0000-4000-8000-0000000000a1';
 
+update public.profiles
+set role = 'user'
+where id in (
+  '00000000-0000-4000-8000-0000000000a2',
+  '00000000-0000-4000-8000-0000000000a3'
+);
+
 insert into public.provinces (id, code, name) values
   ('00000000-0000-4000-8000-000000000001', '98', 'Smoke Province A'),
   ('00000000-0000-4000-8000-000000000002', '99', 'Smoke Province B');
