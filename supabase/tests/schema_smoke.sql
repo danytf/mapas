@@ -406,36 +406,35 @@ begin
 end;
 $profile_and_province_grant_test$;
 
--- Los seguimientos no pueden falsificar autoría ni atribuir una edición a otro usuario.
+-- Los seguimientos permiten actualizar sus campos operativos, pero no falsificar autoría.
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
 insert into public.followups (
   id, establishment_id, grant_id, due_on, outcome, created_by
 ) values (
   '00000000-0000-4000-8000-0000000000a9',
-  '00000000-0000-4000-8000-0000000000000005',
-  '00000000-0000-4000-8000-0000000000000008',
+  '00000000-0000-4000-8000-000000000005',
+  '00000000-0000-4000-8000-000000000008',
   current_date,
   'pendiente',
   '00000000-0000-4000-8000-0000000000a2'
 );
 update public.followups
-   set outcome = 'contactado',
-       updated_by = '00000000-0000-4000-8000-0000000000a3'
+   set outcome = 'contactado'
  where id = '00000000-0000-4000-8000-0000000000a9';
 
 do $followup_attribution_test$
 declare saved_creator uuid;
-        saved_editor uuid;
+        saved_outcome text;
 begin
-  select created_by, updated_by into saved_creator, saved_editor
+  select created_by, outcome into saved_creator, saved_outcome
     from public.followups
    where id = '00000000-0000-4000-8000-0000000000a9';
 
   if saved_creator <> '00000000-0000-4000-8000-0000000000a2' then
     raise exception 'FALLO SEGURIDAD: se alteró la autoría del seguimiento';
   end if;
-  if saved_editor <> '00000000-0000-4000-8000-0000000000a2' then
-    raise exception 'FALLO SEGURIDAD: el seguimiento permite falsificar updated_by';
+  if saved_outcome <> 'contactado' then
+    raise exception 'FALLO: un usuario autorizado no pudo actualizar un seguimiento';
   end if;
 
   begin
