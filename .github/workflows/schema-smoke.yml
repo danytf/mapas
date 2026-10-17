@@ -14,13 +14,6 @@ on:
       - "supabase/seed/**"
       - ".github/workflows/schema-smoke.yml"
   pull_request:
-    paths:
-      - "supabase/migrations/**"
-      - "supabase/bootstrap/**"
-      - "supabase/README.md"
-      - "supabase/tests/**"
-      - "supabase/seed/**"
-      - ".github/workflows/schema-smoke.yml"
 
 permissions:
   contents: read
