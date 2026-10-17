@@ -867,6 +867,40 @@ begin
   if shared_state_count <> 0 then
     raise exception 'FALLO RLS: una cuenta desactivada pudo actualizar seguimientos';
   end if;
+
+  delete from public.permit_applications where id = '00000000-0000-4000-8000-000000000007';
+  get diagnostics shared_state_count = row_count;
+  if shared_state_count <> 0 then raise exception 'FALLO RLS: una cuenta desactivada borró solicitudes'; end if;
+
+  delete from public.permit_grants where id = '00000000-0000-4000-8000-000000000008';
+  get diagnostics shared_state_count = row_count;
+  if shared_state_count <> 0 then raise exception 'FALLO RLS: una cuenta desactivada borró concesiones'; end if;
+
+  delete from public.followups where id = '00000000-0000-4000-8000-0000000000a9';
+  get diagnostics shared_state_count = row_count;
+  if shared_state_count <> 0 then raise exception 'FALLO RLS: una cuenta desactivada borró seguimientos'; end if;
+
+  begin
+    insert into public.permit_applications (establishment_id, organization, created_by, updated_by)
+    values ('00000000-0000-4000-8000-000000000005', 'Inactive user forbidden', auth.uid(), auth.uid());
+    raise exception 'FALLO RLS: una cuenta desactivada insertó una solicitud';
+  exception when insufficient_privilege then null;
+  end;
+
+  begin
+    insert into public.permit_grants (establishment_id, organization, created_by, updated_by)
+    values ('00000000-0000-4000-8000-000000000005', 'Inactive user forbidden', auth.uid(), auth.uid());
+    raise exception 'FALLO RLS: una cuenta desactivada insertó una concesión';
+  exception when insufficient_privilege then null;
+  end;
+
+  begin
+    insert into public.followups (establishment_id, grant_id, due_on, created_by)
+    values ('00000000-0000-4000-8000-000000000005',
+            '00000000-0000-4000-8000-000000000008', current_date, auth.uid());
+    raise exception 'FALLO RLS: una cuenta desactivada insertó un seguimiento';
+  exception when insufficient_privilege then null;
+  end;
 end;
 $inactive_user_scope_test$;
 
