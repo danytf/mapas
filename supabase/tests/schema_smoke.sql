@@ -336,7 +336,7 @@ $cross_province_write_test$;
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
 do $self_privilege_escalation_test$
 declare affected integer;
-        current_role text;
+        profile_role text;
 begin
   begin
     update public.profiles
@@ -350,10 +350,10 @@ begin
     null;
   end;
 
-  select role into current_role
+  select role into profile_role
     from public.profiles
    where id = '00000000-0000-4000-8000-0000000000a2';
-  if current_role <> 'user' then
+  if profile_role <> 'user' then
     raise exception 'FALLO SEGURIDAD: el rol del usuario cambió sin autorización';
   end if;
 end;
