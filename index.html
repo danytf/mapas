@@ -558,7 +558,40 @@
   </form>
 </dialog>
 <script>
-/* Fuentes: listado de zonas básicas del Distrito Granada (SAS) y Guía de Recursos del Ayuntamiento de Granada.
+/*
+ * Limpieza única de datos heredados de la versión anterior.
+ * No importar permisos, puntos manuales, caché, revisiones, ubicaciones,
+ * logros, gamificación ni sesiones antiguas del navegador.
+ */
+(() => {
+  const CLEANUP_KEY = "mapa-limpieza-datos-antiguos-20261017-v1";
+  try {
+    if (localStorage.getItem(CLEANUP_KEY) === "1") return;
+    const legacyKeys = [
+      "puntos-propios-granada-v1",
+      "puntos-quitados-granada-v1",
+      "cs-granada-geo-v3",
+      "permisos-captacion-granada-v1",
+      "puntos-revisados-granada-v1",
+      "ubicaciones-corregidas-granada-v1",
+      "logros-granada-v1",
+      "gamificacion-granada-v1",
+      "mapa-auth-remember"
+    ];
+    [localStorage, sessionStorage].forEach((storage) => {
+      legacyKeys.forEach((key) => storage.removeItem(key));
+      for (let i = storage.length - 1; i >= 0; i--) {
+        const key = storage.key(i);
+        if (key && /^sb-.+-auth-token$/.test(key)) storage.removeItem(key);
+      }
+    });
+    localStorage.setItem(CLEANUP_KEY, "1");
+  } catch (error) {
+    // Fail closed: no se importan datos aquí; la limpieza se reintentará al recargar.
+    console.warn("No se pudo completar la limpieza de datos heredados del mapa.", error);
+  }
+})();
+ /* Fuentes: listado de zonas básicas del Distrito Granada (SAS) y Guía de Recursos del Ayuntamiento de Granada.
    conf=false marca direcciones tomadas de otros directorios, pendientes de contrastar. */
 const CENTERS = [
   { id: 1,  name: "CS Albaicín",                      tipo: "Centro de salud", street: "Plaza San Nicolás 7",                  conf: true  },
