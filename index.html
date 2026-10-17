@@ -707,17 +707,27 @@ const normalizePersonalRefs = (value) => new Set((Array.isArray(value) ? value :
 const isOut = (c) => hasPersonalRef(removed, c);
 const permOf = (c) => permits[c.name] || { estado: "sin", fecha: "", contacto: "", notas: "", valoracion: 0 };
 const stars = (n) => "★".repeat(n) + "☆".repeat(5 - n);
-const fmtD = (d) => (d ? d.split("-").reverse().join("/") : "…");
+const fmtD = (d) => {
+  if (!d) return "…";
+  if (typeof d !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(d)) return "—";
+  const parsed = new Date(d + "T00:00:00Z");
+  return !Number.isFinite(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== d
+    ? "—" : d.slice(8, 10) + "/" + d.slice(5, 7) + "/" + d.slice(0, 4);
+};
+const safeCount = (value) => {
+  const n = typeof value === "number" ? value : Number(value);
+  return Number.isSafeInteger(n) && n > 0 && n <= 100000 ? n : 0;
+};
 const today = () => new Date().toISOString().slice(0, 10);
 const isVig = (h) => !h.cancelada && (!h.desde || h.desde <= today()) && (!h.hasta || h.hasta >= today());
 const histOf = (c) => ((permits[c.name] && permits[c.name].historial) || []).slice().sort((a, b) => (b.desde || "").localeCompare(a.desde || ""));
 const vigs = (c) => histOf(c).filter(isVig);
 const vigente = (c) => histOf(c).find(isVig);
-const histTxt = (h) => fmtD(h.desde) + " – " + fmtD(h.hasta) + (h.ong ? " · " + h.ong : "") + (h.captadores ? " · " + h.captadores + " captador" + (h.captadores === 1 ? "" : "es") : "");
+const histTxt = (h) => fmtD(h.desde) + " – " + fmtD(h.hasta) + (h.ong ? " · " + h.ong : "") + (safeCount(h.captadores) ? " · " + safeCount(h.captadores) + " captador" + (safeCount(h.captadores) === 1 ? "" : "es") : "");
 const solsOf = (p) => (p && Array.isArray(p.solicitudes)) ? p.solicitudes : (p && p.solicitud && (p.solicitud.desde || p.solicitud.hasta || p.solicitud.ong || p.solicitud.captadores) ? [p.solicitud] : []);
 const hasSol = (p) => solsOf(p).length > 0;
 const solValid = (q) => !q.res && (!q.hasta || q.hasta >= today());
-const solRange = (q) => [(q.desde || q.hasta) ? fmtD(q.desde) + " – " + fmtD(q.hasta) : "", q.ong, q.captadores ? q.captadores + " capt." : ""].filter(Boolean).join(" · ");
+const solRange = (q) => [(q.desde || q.hasta) ? fmtD(q.desde) + " – " + fmtD(q.hasta) : "", q.ong, safeCount(q.captadores) ? safeCount(q.captadores) + " capt." : ""].filter(Boolean).join(" · ");
 const solTxt = (c) => solsOf(permOf(c)).filter(solValid).map(solRange).filter(Boolean).join(" | ");
 const futura = (c) => histOf(c).filter((h) => !h.cancelada && h.desde && h.desde > today()).pop();
 /* Estado: se calcula solo a partir de las solicitudes y concesiones (nada se elige a mano). */
@@ -810,7 +820,7 @@ function popupFor(c, pos) {
     const cur = { historial: hist, solicitudes: sols, estado: p.estado }, ef = estadoCalc(cur), i = estadoInfo(ef), t = today();
     const vg = hist.filter(isVig).sort((a, b) => (b.desde || "").localeCompare(a.desde || ""))[0], fu = hist.filter((h) => !h.cancelada && h.desde && h.desde > t).sort((a, b) => (a.desde || "").localeCompare(b.desde || ""))[0];
     el.querySelector(".ef").innerHTML = 'Estado actual: <b style="background:' + i[2] + ';color:#111;padding:1px 6px;border-radius:4px;border:1px solid #cfdcd8">' + esc(i[1]) + "</b>" +
-      (vg ? " · hasta " + fmtD(vg.hasta) + (vg.ong ? " · " + esc(vg.ong) : "") + (vg.captadores ? " · " + vg.captadores + " captadores" : "") : (fu ? " · concedido del " + esc(fmtD(fu.desde)) + " al " + esc(fmtD(fu.hasta)) : (ef === "caducado" ? " · solicitudes sin respuesta: las fechas pedidas ya pasaron" : (ef === "solicitado" ? " · " + sols.filter(solValid).length + " pendiente" + (sols.filter(solValid).length === 1 ? "" : "s") : ""))));
+      (vg ? " · hasta " + fmtD(vg.hasta) + (vg.ong ? " · " + esc(vg.ong) : "") + (safeCount(vg.captadores) ? " · " + safeCount(vg.captadores) + " captadores" : "") : (fu ? " · concedido del " + esc(fmtD(fu.desde)) + " al " + esc(fmtD(fu.hasta)) : (ef === "caducado" ? " · solicitudes sin respuesta: las fechas pedidas ya pasaron" : (ef === "solicitado" ? " · " + sols.filter(solValid).length + " pendiente" + (sols.filter(solValid).length === 1 ? "" : "s") : ""))));
     const fs = fechaCalc(cur), sg = segCalc(cur), np = sols.filter(solValid).length;
     el.querySelector(".pinfo").innerHTML = '<div><span>Solicitado el</span><b>' + (fs ? esc(fmtD(fs)) : "—") + '</b></div><div><span>Próximo seguimiento</span><b>' + (sg ? esc(fmtD(sg)) + (sg <= t ? " (toca ya)" : "") : "—") + '</b></div><div><span>Solicitudes pendientes</span><b>' + np + '</b></div><div><span>Concesiones</span><b>' + hist.filter((h) => !h.cancelada).length + '</b></div>';
   };
@@ -1249,7 +1259,7 @@ function renderList() {
       (seguimientoDue(c) ? '<span class="tag warn">Seguimiento ' + (seguimientoDue(c) === today() ? "hoy" : "atrasado " + esc(fmtD(seguimientoDue(c)))) + "</span>" : "") +
       (DUPS.has(c.name) && !hasPersonalRef(reviewed, c) ? '<span class="tag warn">Posible duplicado</span>' : "") +
       (estadoOf(c) === "solicitado" && solTxt(c) ? '<span class="tag" style="background:#fff3d6;color:#8a5a00">Pedido: ' + esc(solTxt(c)) + "</span>" : "") +
-      (vigente(c) ? '<span class="tag" style="background:#dcfce7;color:#14532d">Vigente hasta ' + fmtD(vigente(c).hasta) + (vigente(c).ong ? " · " + esc(vigente(c).ong) : "") + (vigente(c).captadores ? " · " + vigente(c).captadores + " capt." : "") + "</span>" : (futura(c) ? '<span class="tag" style="background:#dcfce7;color:#14532d">Concedido del ' + esc(fmtD(futura(c).desde)) + " al " + esc(fmtD(futura(c).hasta)) + (futura(c).ong ? " · " + esc(futura(c).ong) : "") + (futura(c).captadores ? " · " + futura(c).captadores + " capt." : "") + "</span>" : "")) +
+      (vigente(c) ? '<span class="tag" style="background:#dcfce7;color:#14532d">Vigente hasta ' + fmtD(vigente(c).hasta) + (vigente(c).ong ? " · " + esc(vigente(c).ong) : "") + (safeCount(vigente(c).captadores) ? " · " + safeCount(vigente(c).captadores) + " capt." : "") + "</span>" : (futura(c) ? '<span class="tag" style="background:#dcfce7;color:#14532d">Concedido del ' + esc(fmtD(futura(c).desde)) + " al " + esc(fmtD(futura(c).hasta)) + (futura(c).ong ? " · " + esc(futura(c).ong) : "") + (safeCount(futura(c).captadores) ? " · " + safeCount(futura(c).captadores) + " capt." : "") + "</span>" : "")) +
       (isApprox(c) ? '<span class="tag warn">Ubicación aproximada</span>' : "") +
       (c.conf ? "" : '<span class="tag warn">Por confirmar</span>') +
       (cache[c.id] ? "" : '<span class="tag warn">Sin ubicar</span>') + "</div>";
@@ -1884,8 +1894,8 @@ const download = (name, text, type) => {
     const out = [];
     CENTERS.filter((c) => !isOut(c)).forEach((c) => {
       const p = permOf(c), ov = (d, h) => (d || h) && (!d || d <= b) && (!h || h >= a);
-      (p.historial || []).forEach((h) => { if (ov(h.desde, h.hasta)) out.push({ c, e: h.cancelada ? "cancelado" : "concedido", desde: h.desde, hasta: h.hasta, ong: h.ong, n: h.captadores || 0 }); });
-      solsOf(p).forEach((x) => { if (ov(x.desde, x.hasta)) out.push({ c, e: x.res ? "denegado" : (solValid(x) ? "solicitado" : "caducado"), desde: x.desde, hasta: x.hasta, ong: x.ong, n: x.captadores || 0 }); });
+      (p.historial || []).forEach((h) => { if (ov(h.desde, h.hasta)) out.push({ c, e: h.cancelada ? "cancelado" : "concedido", desde: h.desde, hasta: h.hasta, ong: h.ong, n: safeCount(h.captadores) }); });
+      solsOf(p).forEach((x) => { if (ov(x.desde, x.hasta)) out.push({ c, e: x.res ? "denegado" : (solValid(x) ? "solicitado" : "caducado"), desde: x.desde, hasta: x.hasta, ong: x.ong, n: safeCount(x.captadores) }); });
     });
     return out;
   };
