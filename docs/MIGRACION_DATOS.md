@@ -64,7 +64,7 @@ El catálogo inicial versionado se generó desde las fuentes del repositorio, no
 
 ### Trabajo técnico que puede abordarse después
 
-- Decidir si migrar las operaciones de permisos desde el JSONB de `establishment_app_state` a las tablas normalizadas `permit_applications`, `permit_grants` y `followups`. No iniciar ese cambio sin una migración de datos y pruebas de regresión.
+- Decidir si migrar las operaciones de permisos desde el JSONB de `establishment_app_state` a las tablas normalizadas `permit_applications`, `permit_grants` y `followups`. El plan reversible y las ambigüedades de mapeo están documentados en [Plan de migración de permisos normalizados](./PLAN_MIGRACION_PERMISOS_NORMALIZADOS.md); no se ha cambiado la interfaz ni se han migrado datos.
 - Completar las pruebas negativas RLS en CI usando un entorno Supabase de prueba, además de los smoke tests PostgreSQL.
 - Mantener la auditoría de persistencia del navegador como condición de CI.
 - Revisar y documentar el procedimiento de administración y recuperación de cuentas.
