@@ -484,6 +484,18 @@ begin
 end;
 $inactive_user_scope_test$;
 
+-- Timestamp trigger functions must not be executable as public API RPCs.
+do $timestamp_trigger_privilege_test$
+begin
+  if has_function_privilege('anon', 'public.set_user_app_state_updated_at()', 'EXECUTE')
+     or has_function_privilege('authenticated', 'public.set_user_app_state_updated_at()', 'EXECUTE')
+     or has_function_privilege('anon', 'public.set_establishment_app_state_updated_at()', 'EXECUTE')
+     or has_function_privilege('authenticated', 'public.set_establishment_app_state_updated_at()', 'EXECUTE') then
+    raise exception 'FALLO SEGURIDAD: una función trigger de actualización temporal es ejecutable desde la API';
+  end if;
+end;
+$timestamp_trigger_privilege_test$;
+
 reset role;
 
 select 'schema smoke tests passed' as result;
