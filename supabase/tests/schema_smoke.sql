@@ -1223,6 +1223,79 @@ begin
 end;
 $admin_only_writes_matrix$;
 
+-- Users must not promote themselves, deactivate themselves, or edit province assignments.
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
+do $self_privilege_escalation_matrix$
+declare affected integer; saved_role text; saved_active boolean;
+begin
+  update public.profiles set role = 'admin'
+   where id = '00000000-0000-4000-8000-0000000000a2';
+  get diagnostics affected = row_count;
+  if affected <> 0 then
+    raise exception 'FALLO RLS: usuario normal pudo elevar su propio rol';
+  end if;
+
+  update public.profiles set is_active = false
+   where id = '00000000-0000-4000-8000-0000000000a2';
+  get diagnostics affected = row_count;
+  if affected <> 0 then
+    raise exception 'FALLO RLS: usuario normal pudo modificar su propio estado de activación';
+  end if;
+
+  select role, is_active into saved_role, saved_active
+    from public.profiles where id = '00000000-0000-4000-8000-0000000000a2';
+  if saved_role <> 'user' or saved_active is not true then
+    raise exception 'FALLO RLS: se alteró el rol o la activación del usuario normal';
+  end if;
+
+  begin
+    insert into public.user_provinces (user_id, province_id, assigned_by)
+    values ('00000000-0000-4000-8000-0000000000a2',
+            '00000000-0000-4000-8000-000000000002', auth.uid());
+    raise exception 'FALLO RLS: usuario normal se asignó a otra provincia';
+  exception when insufficient_privilege then null;
+  end;
+
+  update public.user_provinces
+     set province_id = '00000000-0000-4000-8000-000000000002'
+   where user_id = '00000000-0000-4000-8000-0000000000a2'
+     and province_id = '00000000-0000-4000-8000-000000000001';
+  get diagnostics affected = row_count;
+  if affected <> 0 then
+    raise exception 'FALLO RLS: usuario normal pudo cambiar su asignación provincial';
+  end if;
+
+  select count(*) into affected from public.user_provinces
+   where user_id = '00000000-0000-4000-8000-0000000000a2'
+     and province_id = '00000000-0000-4000-8000-000000000001';
+  if affected <> 1 then
+    raise exception 'FALLO RLS: la asignación provincial original se alteró';
+  end if;
+end;
+$self_privilege_escalation_matrix$;
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a1', false);
+do $admin_profile_assignment_matrix$
+declare affected integer; saved_role text;
+begin
+  update public.profiles set role = 'user'
+   where id = '00000000-0000-4000-8000-0000000000a2';
+  get diagnostics affected = row_count;
+  if affected <> 1 then raise exception 'FALLO RLS: administrador no pudo actualizar el perfil de prueba'; end if;
+
+  update public.profiles set role = 'user'
+   where id = '00000000-0000-4000-8000-0000000000a2';
+  select role into saved_role from public.profiles
+   where id = '00000000-0000-4000-8000-0000000000a2';
+  if saved_role <> 'user' then raise exception 'FALLO RLS: estado de perfil de prueba incoherente'; end if;
+
+  update public.profiles set role = 'user'
+   where id = '00000000-0000-4000-8000-0000000000a2';
+end;
+$admin_profile_assignment_matrix$;
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
+
 -- Administrators can read audit logs; ordinary users cannot.
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a1', false);
 do $admin_audit_read_matrix$
