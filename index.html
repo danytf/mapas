@@ -760,7 +760,7 @@ function popupFor(c, pos) {
     (c.prov ? "<br><em>El catálogo oficial no incluye la calle" + (pos.approx ? "; posición aproximada (centro del municipio)" : "") + "</em>" : "") +
     (c.conf ? "" : "<br><em>Dirección por confirmar</em>") +
     (pos && pos.lat != null ? '<br><a class="how" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=' + pos.lat + "," + pos.lon + '">Cómo llegar</a>' : "") +
-    '<details class="loc"' + (isRev(c) ? " open" : "") + '><summary>Ubicación' + (isRev(c) ? " (por revisar)" : "") + '</summary><div class="lrow"><a class="lb l-gm" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(c.name.replace(/ – .*$/, "") + " " + addrOf(c) + " España") + '">Abrir en Google Maps</a><button type="button" class="lb l-mv">Mover pin</button><button type="button" class="lb l-cp">Copiar coordenadas</button></div><label class="l-address-label">Dirección del establecimiento<input class="l-address" type="text" value="' + esc(c.street || "") + '" aria-label="Dirección corregida"></label><input class="l-in" type="text" value="' + (cache[c.id] ? cache[c.id].lat.toFixed(6) + ", " + cache[c.id].lon.toFixed(6) : "") + '" placeholder="Coordenadas de Google Maps (latitud, longitud)" aria-label="Coordenadas de Google Maps"><button type="button" class="lb l-save-location">Guardar dirección y coordenadas en Supabase</button><div class="lmsg" role="status"></div></details>' +
+    '<details class="loc"' + (isRev(c) ? " open" : "") + '><summary>Ubicación' + (isRev(c) ? " (por revisar)" : "") + '</summary><div class="lrow"><a class="lb l-gm" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(c.name.replace(/ – .*$/, "") + " " + addrOf(c) + " España") + '">Buscar establecimiento en Google Maps</a><button type="button" class="lb l-mv">Mover pin</button><button type="button" class="lb l-cp">Copiar coordenadas actuales</button></div><label class="l-address-label">Dirección postal del establecimiento<input class="l-address" type="text" value="' + esc(c.street || "") + '" aria-label="Dirección postal corregida"></label><label class="l-coords-label">Coordenadas o URL de Google Maps<input class="l-in" type="text" value="' + (cache[c.id] ? cache[c.id].lat.toFixed(6) + ", " + cache[c.id].lon.toFixed(6) : "") + '" placeholder="Pega 37.167041, -4.152314 o la URL de Google Maps" aria-label="Coordenadas o URL de Google Maps"></label><p class="l-help">Importante: cambiar solo la dirección postal NO mueve el marcador. Para moverlo, pega aquí las coordenadas o la URL de Google Maps del lugar correcto, o usa «Mover pin». Después pulsa Guardar.</p><button type="button" class="lb l-save-location">Guardar dirección y ubicación en Supabase</button><div class="lmsg" role="status"></div></details>' +
     '<div class="pform"><div><span style="font-size:11px;color:#5b726c">Valoración para captación</span><div class="stars" role="radiogroup" aria-label="Valoración de 1 a 5 estrellas">' +
     [1, 2, 3, 4, 5].map((n) => '<button type="button" data-n="' + n + '" aria-label="' + n + ' estrellas">★</button>').join("") + '<span class="sv"></span></div></div>' +
     '<div class="ef" style="font-size:12px"></div>' +
@@ -894,7 +894,7 @@ function popupFor(c, pos) {
     const msg = el.querySelector(".lmsg"), inp = el.querySelector(".l-in");
     const apply = async (txt) => {
       const r = parseCoords(txt);
-      if (!r) { msg.textContent = "No reconozco las coordenadas. Ejemplo: 37.1773, -3.5986"; return; }
+      if (!r) { msg.textContent = "No reconozco las coordenadas ni la URL. Pega una URL de Google Maps que contenga @latitud,longitud o coordenadas como 37.1773, -3.5986."; return; }
       msg.style.color = "#555";
       msg.textContent = "Guardando en Supabase…";
       const address = el.querySelector(".l-address").value;
@@ -940,7 +940,7 @@ function popupFor(c, pos) {
       clearTimeout(window.mapaLocationNoticeTimer);
       window.mapaLocationNoticeTimer = setTimeout(() => notice.remove(), 12000);
     };
-    inp.addEventListener("paste", (e) => { const t = (e.clipboardData || window.clipboardData).getData("text"); e.preventDefault(); inp.value = t; msg.style.color = ""; msg.textContent = "Coordenadas cargadas. Revisa la dirección y pulsa Guardar para enviar los cambios a Supabase."; });
+    inp.addEventListener("paste", (e) => { const t = (e.clipboardData || window.clipboardData).getData("text"); e.preventDefault(); inp.value = t; msg.style.color = ""; msg.textContent = "Ubicación detectada. Revisa la dirección y las coordenadas y pulsa Guardar para enviar ambos cambios a Supabase."; });
     inp.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); apply(inp.value); } });
     el.querySelector(".l-save-location").addEventListener("click", () => apply(inp.value));
     el.querySelector(".l-cp").addEventListener("click", async () => {
