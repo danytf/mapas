@@ -18,7 +18,8 @@ $$;
 insert into auth.users (id, raw_user_meta_data) values
   ('00000000-0000-4000-8000-0000000000a1', '{"full_name":"Smoke Admin"}'::jsonb),
   ('00000000-0000-4000-8000-0000000000a2', '{"full_name":"Smoke User A"}'::jsonb),
-  ('00000000-0000-4000-8000-0000000000a3', '{"full_name":"Smoke User B"}'::jsonb);
+  ('00000000-0000-4000-8000-0000000000a3', '{"full_name":"Smoke User B"}'::jsonb),
+  ('00000000-0000-4000-8000-0000000000a4', '{"full_name":"Smoke Inactive User"}'::jsonb);
 
 update public.profiles
 set role = 'admin'
@@ -36,7 +37,9 @@ insert into public.provinces (id, code, name) values
   ('00000000-0000-4000-8000-000000000002', '99', 'Smoke Province B');
 
 insert into public.categories (id, code, name)
-values ('00000000-0000-4000-8000-000000000003', 'smoke_category', 'Smoke Category');
+values
+  ('00000000-0000-4000-8000-000000000003', 'smoke_category', 'Smoke Category'),
+  ('00000000-0000-4000-8000-0000000000d1', 'rls_matrix_delete_category', 'RLS Matrix Delete Category');
 
 insert into public.municipalities (id, province_id, name, normalized_name)
 values (
@@ -742,7 +745,10 @@ $state_table_privilege_test$;
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a1', false);
 update public.profiles
 set is_active = false
-where id = '00000000-0000-4000-8000-0000000000a2';
+where id in (
+  '00000000-0000-4000-8000-0000000000a2',
+  '00000000-0000-4000-8000-0000000000a4'
+);
 
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
 do $inactive_user_scope_test$
@@ -854,6 +860,27 @@ begin
 end;
 $cross_province_delete_matrix$;
 
+-- Ordinary users cannot delete even globally readable catalogue reference rows;
+-- administrators can delete an isolated synthetic fixture.
+do $category_delete_matrix$
+declare affected integer;
+begin
+  perform set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
+  delete from public.categories where id = '00000000-0000-4000-8000-0000000000d1';
+  get diagnostics affected = row_count;
+  if affected <> 0 then
+    raise exception 'FALLO RLS: usuario provincial pudo borrar una categoría de referencia';
+  end if;
+
+  perform set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a1', false);
+  delete from public.categories where id = '00000000-0000-4000-8000-0000000000d1';
+  get diagnostics affected = row_count;
+  if affected <> 1 then
+    raise exception 'FALLO RLS: administrador no pudo borrar el fixture aislado de categoría';
+  end if;
+end;
+$category_delete_matrix$;
+
 -- Inactive users lose their personal app-state access too (not only provincial access).
 do $inactive_personal_state_matrix$
 declare visible_count integer; affected integer;
@@ -872,6 +899,20 @@ begin
   end if;
 end;
 $inactive_personal_state_matrix$;
+
+-- A separate inactive account without a pre-existing state row must not create one.
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a4', false);
+do $inactive_personal_state_insert$
+begin
+  begin
+    insert into public.user_app_state (user_id, state)
+    values ('00000000-0000-4000-8000-0000000000a4', '{"inactive_insert":true}'::jsonb);
+    raise exception 'FALLO RLS: cuenta desactivada pudo crear su estado personal';
+  exception when insufficient_privilege then
+    null;
+  end;
+end;
+$inactive_personal_state_insert$;
 
 -- Timestamp trigger functions must not be executable as public API RPCs.
 do $timestamp_trigger_privilege_test$
