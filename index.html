@@ -1864,8 +1864,11 @@ $("#n-click").addEventListener("click", () => {
   map.on("click", onClick); document.addEventListener("keydown", onKey);
 });
 
+cluster.clearLayers();
+Object.keys(markers).forEach(key => delete markers[key]);
+Object.keys(cache).forEach(key => delete cache[key]);
+CENTERS.splice(0, CENTERS.length);
 renderList();
-locateAll().then(renderList);
   
 /*
  * EXPORTACIÓN INICIAL DEL CATÁLOGO ESTÁTICO
@@ -2101,159 +2104,107 @@ window.exportarCatalogoInicial = function () {
   async function syncCatalogueFromSupabase() {
     const status = document.getElementById("status");
     const sessionInfo = window.mapaSession;
-    try {
-      const provinces = sessionInfo?.provinces || [];
-      const staticGranadaOnly = sessionInfo?.profile?.role !== "admin" &&
-        provinces.length === 1 && String(provinces[0].code) === "18";
-
-      // Para usuarios de otras provincias, el catálogo se construye con los
-      // registros activos, geolocalizados y visibles por RLS para su provincia.
-      // No se usa el catálogo estático de Granada como sustituto.
-      if (sessionInfo?.profile?.role !== "admin" && !staticGranadaOnly) {
-        const provinceIds = provinces.map(p => p.id).filter(Boolean);
-        if (!provinceIds.length) throw new Error("Tu usuario no tiene provincias activas asignadas.");
-
-        const { data, error } = await client
-          .from("establishments")
-          .select("id,province_id,name,address,latitude,longitude,location_precision,source_ref,status,subtype,categories(name),municipalities(name),provinces(name,code)")
-          .in("province_id", provinceIds)
-          .eq("status", "active")
-          .not("latitude", "is", null)
-          .not("longitude", "is", null)
-          .limit(1000);
-        if (error) throw error;
-        if (!Array.isArray(data)) throw new Error("Supabase no devolvió una lista válida de establecimientos.");
-
-        const seenIds = new Set();
-        const rows = data.filter(row => {
-          if (!row || !row.id || seenIds.has(row.id)) {
-            throw new Error("Supabase devolvió un establecimiento sin ID o duplicado.");
-          }
-          seenIds.add(row.id);
-          if (!provinceIds.includes(row.province_id)) {
-            throw new Error("Supabase devolvió un establecimiento fuera de las provincias asignadas.");
-          }
-          if (!Number.isFinite(row.latitude) || !Number.isFinite(row.longitude) ||
-              row.latitude < -90 || row.latitude > 90 ||
-              row.longitude < -180 || row.longitude > 180) {
-            throw new Error("Hay coordenadas inválidas en Supabase; no se aplicó ningún cambio.");
-          }
-          return true;
-        });
-
-        // Sustituir el catálogo de demostración completo: nunca dejar visibles
-        // los puntos estáticos de Granada en la sesión de otra provincia.
-        cluster.clearLayers();
-        Object.keys(markers).forEach(key => delete markers[key]);
-        Object.keys(cache).forEach(key => delete cache[key]);
-        CENTERS.splice(0, CENTERS.length);
-        rows.forEach((row, index) => {
-          const category = row.categories?.name || "Tiendas";
-          if (!TIPOS.some(item => item[1] === category)) {
-            TIPOS.push([TIPOS.length + 1, category, "#475569"]);
-          }
-          const municipality = row.municipalities?.name || "";
-          const provinceName = row.provinces?.name || provinces.find(p => p.id === row.province_id)?.name || "";
-          CENTERS.push({
-            id: index + 1,
-            name: row.name,
-            tipo: category,
-            sub: row.subtype || "",
-            town: municipality || provinceName,
-            street: row.address || "",
-            conf: row.location_precision !== "unknown",
-            databaseId: row.id,
-            sourceRef: row.source_ref || null
-          });
-          cache[index + 1] = {
-            lat: row.latitude,
-            lon: row.longitude,
-            approx: row.location_precision === "approximate" || undefined
-          };
-        });
-
-        CENTERS.forEach(makeMarker);
-        refreshSelects();
-        renderList();
-        if (rows.length) {
-          fitAll();
-          window.mapaSession.catalogueReady = true;
-          window.mapaSession.catalogueCount = rows.length;
-          if (status) status.textContent = rows.length + " establecimientos de tu provincia sincronizados desde Supabase.";
-        } else {
-          // No hay puntos de esa provincia todavía. Mostrar el mapa base
-          // centrado en ella, pero sin ningún punto de Granada ni registros de prueba.
-          const province = provinces[0];
-          const centersByCode = { "29": [36.7213, -4.4214], "18": [37.1773, -3.5986] };
-          map.setView(centersByCode[String(province?.code)] || [36.8, -4.0], 9);
-          window.mapaSession.catalogueReady = true;
-          window.mapaSession.catalogueCount = 0;
-          if (status) status.textContent = "Todavía no hay establecimientos activos con coordenadas en " + (province?.name || "tu provincia") + ". El mapa de Granada no se ha mostrado.";
-        }
-        return true;
-      }
-
-      // Catálogo estático histórico de Granada: exigir coincidencia exacta
-      // de las 791 referencias antes de aplicar coordenadas.
-      const slug = value => String(value || "")
-        .normalize("NFD")
-        .replace(/[\\u0300-\\u036f]/g, "")
-        .toLocaleLowerCase("es")
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-|-$/g, "");
-      const sourceRef = c => {
-        const tipoRef = SUPER.some(([name]) => name === c.name) ? "Supermercado" : c.tipo;
-        return ["catalogo-granada", slug(tipoRef || "otro"), slug(c.name), slug(c.town || "Granada"), slug(c.street)].join(":");
-      };
-      const staticPoints = CENTERS.filter(point => !point.custom);
-      const byRef = new Map();
-      for (const point of staticPoints) {
-        const ref = sourceRef(point);
-        if (byRef.has(ref)) { const previous = byRef.get(ref); throw new Error("Referencia local duplicada: " + ref + " (puntos " + previous.id + " — " + previous.name + " / " + point.id + " — " + point.name + ")."); }
-        byRef.set(ref, point);
-      }
-      if (byRef.size !== 791) throw new Error("El catálogo estático no contiene las 791 referencias esperadas.");
-
-      const { data, error } = await client
-        .from("establishments")
-        .select("id,name,address,latitude,longitude,location_precision,source_ref,status")
-        .like("source_ref", "catalogo-granada:%")
-        .eq("status", "active")
-        .limit(1000);
-      if (error) throw error;
-      if (!Array.isArray(data) || data.length !== 791) {
-        throw new Error("Supabase devolvió " + (data?.length ?? 0) + " puntos de Granada; se esperaban 791.");
-      }
-
-      const seen = new Set();
-      const updates = [];
-      for (const row of data) {
-        if (!row.source_ref || seen.has(row.source_ref)) throw new Error("Supabase devolvió una referencia ausente o duplicada.");
-        seen.add(row.source_ref);
-        const point = byRef.get(row.source_ref);
-        if (!point) throw new Error("Referencia no encontrada en el catálogo estático: " + row.source_ref + " (nombre: " + (row.name || "sin nombre") + "; dirección: " + (row.address || "sin dirección") + ").");
-        if (!Number.isFinite(row.latitude) || !Number.isFinite(row.longitude) ||
-            row.latitude < -90 || row.latitude > 90 || row.longitude < -180 || row.longitude > 180) {
-          throw new Error("Hay coordenadas inválidas en Supabase; no se aplicó ningún cambio.");
-        }
-        updates.push({ id: point.id, position: { lat: row.latitude, lon: row.longitude, approx: row.location_precision === "approximate" || undefined } });
-      }
-      if (seen.size !== byRef.size) throw new Error("No coinciden las referencias de Supabase y del catálogo estático.");
-      for (const update of updates) cache[update.id] = update.position;
+    const clearDisplayedCatalogue = () => {
       cluster.clearLayers();
       Object.keys(markers).forEach(key => delete markers[key]);
-      CENTERS.forEach(makeMarker);
+      Object.keys(cache).forEach(key => delete cache[key]);
+      CENTERS.splice(0, CENTERS.length);
+      refreshSelects();
       renderList();
-      fitAll();
+      window.mapaSession.catalogueReady = false;
+      window.mapaSession.catalogueCount = 0;
+    };
+
+    try {
+      if (!sessionInfo?.profile) throw new Error("No hay una sesión validada.");
+      const isAdmin = sessionInfo.profile.role === "admin";
+      const provinceIds = (sessionInfo.provinces || []).map(p => p.id).filter(Boolean);
+      if (!isAdmin && !provinceIds.length) {
+        throw new Error("Tu usuario no tiene provincias activas asignadas.");
+      }
+
+      if (status) status.textContent = "Cargando establecimientos desde Supabase…";
+      let query = client
+        .from("establishments")
+        .select("id,province_id,name,address,latitude,longitude,location_precision,source_ref,status,subtype,categories(name),municipalities(name),provinces(name,code)")
+        .eq("status", "active")
+        .not("latitude", "is", null)
+        .not("longitude", "is", null)
+        .limit(5000);
+      if (!isAdmin) query = query.in("province_id", provinceIds);
+
+      const { data, error } = await query;
+      if (error) throw error;
+      if (!Array.isArray(data)) throw new Error("Supabase no devolvió una lista válida de establecimientos.");
+
+      const seenIds = new Set();
+      const rows = data.filter(row => {
+        if (!row || !row.id || seenIds.has(row.id)) {
+          throw new Error("Supabase devolvió un establecimiento sin ID o duplicado.");
+        }
+        seenIds.add(row.id);
+        if (!row.province_id) throw new Error("Hay un establecimiento sin provincia asignada en Supabase.");
+        if (!isAdmin && !provinceIds.includes(row.province_id)) {
+          throw new Error("Supabase devolvió un establecimiento fuera de las provincias asignadas.");
+        }
+        if (!Number.isFinite(Number(row.latitude)) || !Number.isFinite(Number(row.longitude)) ||
+            Number(row.latitude) < -90 || Number(row.latitude) > 90 ||
+            Number(row.longitude) < -180 || Number(row.longitude) > 180) {
+          throw new Error("Hay coordenadas inválidas en Supabase.");
+        }
+        return true;
+      });
+
+      // Sustituir cualquier estado previo: la única fuente del mapa es Supabase.
+      cluster.clearLayers();
+      Object.keys(markers).forEach(key => delete markers[key]);
+      Object.keys(cache).forEach(key => delete cache[key]);
+      CENTERS.splice(0, CENTERS.length);
+      rows.forEach((row, index) => {
+        const category = row.categories?.name || "Tiendas";
+        if (!TIPOS.some(item => item[1] === category)) {
+          TIPOS.push([TIPOS.length + 1, category, "#475569"]);
+        }
+        const municipality = row.municipalities?.name || "";
+        const provinceName = row.provinces?.name || sessionInfo.provinces?.find(p => p.id === row.province_id)?.name || "";
+        CENTERS.push({
+          id: index + 1,
+          name: row.name,
+          tipo: category,
+          sub: row.subtype || "",
+          town: municipality || provinceName,
+          street: row.address || "",
+          conf: row.location_precision !== "unknown",
+          databaseId: row.id,
+          sourceRef: row.source_ref || null
+        });
+        cache[index + 1] = {
+          lat: Number(row.latitude),
+          lon: Number(row.longitude),
+          approx: row.location_precision === "approximate" || undefined
+        };
+      });
+
+      CENTERS.forEach(makeMarker);
+      refreshSelects();
+      renderList();
+      if (rows.length) fitAll();
+      else map.setView([37.1773, -3.5986], 7);
+
       window.mapaSession.catalogueReady = true;
-      window.mapaSession.catalogueCount = updates.length;
-      if (status) status.textContent = updates.length + " puntos sincronizados desde Supabase.";
+      window.mapaSession.catalogueCount = rows.length;
+      window.mapaSession.catalogueError = null;
+      if (status) {
+        status.textContent = rows.length
+          ? rows.length + " establecimientos cargados desde Supabase."
+          : "Supabase no tiene establecimientos activos con coordenadas para tu ámbito. No se muestran datos locales.";
+      }
       return true;
     } catch (error) {
-      window.mapaSession.catalogueReady = false;
+      clearDisplayedCatalogue();
       window.mapaSession.catalogueError = error.message || "Error de lectura del catálogo.";
-      if (status) status.textContent = "No se pudo sincronizar el catálogo de Supabase; se mantiene el mapa actual. " + window.mapaSession.catalogueError;
-      console.error("[Mapa] Sincronización del catálogo de Supabase:", error);
+      if (status) status.textContent = "No se pudo cargar el mapa desde Supabase. No se muestran datos locales. " + window.mapaSession.catalogueError;
+      console.error("[Mapa] Error cargando el catálogo de Supabase:", error);
       return false;
     }
   }
@@ -2327,7 +2278,7 @@ window.exportarCatalogoInicial = function () {
       if (error) throw error;
 
       await validateSession(data.session);
-      await syncCatalogueFromSupabase();
+      if (!await syncCatalogueFromSupabase()) throw new Error(window.mapaSession?.catalogueError || "No se pudo cargar el mapa desde Supabase.");
 
       err.textContent = "";
       passInput.value = "";
@@ -2367,7 +2318,7 @@ window.exportarCatalogoInicial = function () {
 
     if (data.session) {
       await validateSession(data.session);
-      await syncCatalogueFromSupabase();
+      if (!await syncCatalogueFromSupabase()) throw new Error(window.mapaSession?.catalogueError || "No se pudo cargar el mapa desde Supabase.");
       root.classList.remove("lock");
       window.dispatchEvent(new Event("resize"));
     }
