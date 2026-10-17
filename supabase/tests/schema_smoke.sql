@@ -1352,6 +1352,29 @@ begin
 end;
 $admin_profile_assignment_matrix$;
 
+-- Profile identity is immutable even for administrators; role/activation remain admin-managed.
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a1', false);
+do $profile_identity_immutable$
+declare saved_id uuid;
+begin
+  select id into saved_id from public.profiles
+   where id = '00000000-0000-4000-8000-0000000000a2';
+
+  begin
+    update public.profiles
+       set id = '00000000-0000-4000-8000-0000000000a3'
+     where id = '00000000-0000-4000-8000-0000000000a2';
+    raise exception 'FALLO SEGURIDAD: se permitió modificar la identidad de un perfil';
+  exception when insufficient_privilege then
+    null;
+  end;
+
+  if not exists (select 1 from public.profiles where id = saved_id) then
+    raise exception 'FALLO SEGURIDAD: cambió la identidad del perfil';
+  end if;
+end;
+$profile_identity_immutable$;
+
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
 
 -- Administrators can read audit logs; ordinary users cannot.
