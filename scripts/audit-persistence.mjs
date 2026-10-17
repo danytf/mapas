@@ -39,23 +39,35 @@ if (setLocStart < 0 || customStart < 0 || masterStart < 0) {
   }
 }
 
-const importStart = html.indexOf('$("#impf").addEventListener("change", async (e) => {');
-const importEnd = html.indexOf("/* Restaurar puntos quitados */", importStart);
-if (importStart < 0 || importEnd < 0) {
-  failures.push("No se pudo localizar el flujo de importación de copias.");
+forbidMatch(/id=["']imp["']|id=["']impf["']/i,
+  "La interfaz no debe ofrecer importación de copias JSON antiguas.");
+forbidMatch(/\$\(["']#impf["']\)\.addEventListener\s*\(/,
+  "No debe existir un manejador de importación JSON.");
+
+const copyStart = html.indexOf('$("#copy").addEventListener("click", async () => {');
+const csvStart = html.indexOf('$("#csv").addEventListener("click", () => {');
+const jsonStart = html.indexOf('$("#bak").addEventListener("click", () => {');
+const restoreStart = html.indexOf("/* Restaurar puntos quitados */", jsonStart);
+if (copyStart < 0 || csvStart < 0 || jsonStart < 0 || restoreStart < 0) {
+  failures.push("No se pudieron localizar los manejadores de exportación.");
 } else {
-  const importer = html.slice(importStart, importEnd);
-  if (!/if\s*\(!await\s+savePermits\(\)\)/.test(importer)) {
-    failures.push("La importación debe esperar el guardado de permisos compartidos.");
+  const copyExport = html.slice(copyStart, csvStart);
+  const csvExport = html.slice(csvStart, jsonStart);
+  const jsonExport = html.slice(jsonStart, restoreStart);
+  if (!/window\.confirm\s*\(/.test(copyExport)) {
+    failures.push("La copia de coordenadas al portapapeles debe pedir confirmación.");
   }
-  if (!/if\s*\(!await\s+persist\(key,\s*value\)\)/.test(importer)) {
-    failures.push("La importación debe esperar cada guardado del estado personal.");
+  if (!/window\.confirm\s*\(/.test(csvExport)) {
+    failures.push("La exportación CSV debe advertir y pedir confirmación.");
   }
-  if (!/Copia importada y guardada en Supabase/.test(importer)) {
-    failures.push("El mensaje de éxito debe confirmar guardado en Supabase.");
+  if (!/window\.confirm\s*\(/.test(jsonExport) ||
+      !/NO es una copia completa de Supabase/.test(jsonExport)) {
+    failures.push("La exportación JSON debe advertir que no es un backup completo y pedir confirmación.");
+  }
+  if (/ubicaciones\s*:/.test(jsonExport)) {
+    failures.push("La exportación JSON no debe incluir sobrescrituras de ubicaciones del catálogo maestro.");
   }
 }
-
 if (failures.length) {
   console.error("AUDITORÍA DE PERSISTENCIA: ERROR");
   failures.forEach(message => console.error("- " + message));
@@ -64,5 +76,5 @@ if (failures.length) {
   console.log("AUDITORÍA DE PERSISTENCIA: OK");
   console.log("- Sin escrituras detectadas en almacenamiento persistente del navegador.");
   console.log("- Se descartan ubicaciones personales heredadas.");
-  console.log("- La importación espera confirmación de Supabase.");
+  console.log("- No hay importador de copias antiguas y ambas exportaciones requieren confirmación.");
 }
