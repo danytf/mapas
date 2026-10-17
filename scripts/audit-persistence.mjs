@@ -64,6 +64,22 @@ if (personalLoadStart < 0 || customLoadStart < 0 || removedLoadStart < 0) {
     failures.push("Los puntos personalizados recuperados deben tener coordenadas dentro del ámbito y nombres únicos.");
   }
 }
+const locationResponseStart = html.indexOf("const responseConfirmed =", setLocStart);
+const locationResponseEnd = html.indexOf("if (!responseConfirmed)", locationResponseStart);
+if (locationResponseStart < 0 || locationResponseEnd < 0) {
+  failures.push("La respuesta normal del guardado de ubicación debe verificarse antes de declarar éxito.");
+} else {
+  const locationResponse = html.slice(locationResponseStart, locationResponseEnd);
+  if (!/data\.id === c\.databaseId/.test(locationResponse) ||
+      !/String\(data\.address \|\| ""\)\.trim\(\) === cleanAddress/.test(locationResponse) ||
+      !/Number\(data\.latitude\) === targetLat/.test(locationResponse) ||
+      !/Number\(data\.longitude\) === targetLon/.test(locationResponse) ||
+      !/data\.location_precision === "verified"/.test(locationResponse) ||
+      !/data\.location_source === "manual_google_maps"/.test(locationResponse) ||
+      !/data\.updated_by === window\.mapaSession\.user\.id/.test(locationResponse)) {
+    failures.push("La respuesta normal debe confirmar ID, dirección, coordenadas, precisión, origen y usuario antes de declarar éxito.");
+  }
+}
 const locationMasterStart = html.indexOf("const verifyController = new AbortController()", setLocStart);
 const locationMasterEnd = html.indexOf("let moving = null;", setLocStart);
 if (locationMasterStart < 0 || locationMasterEnd < 0) {
