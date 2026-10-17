@@ -39,7 +39,7 @@ BEGIN
   END IF;
 
   -- The authenticated caller cannot impersonate another editor.
-  IF TG_TABLE_NAME IN ('establishments', 'permit_applications', 'permit_grants', 'followups') THEN
+  IF TG_TABLE_NAME IN ('establishments', 'permit_applications', 'permit_grants') THEN
     IF (SELECT auth.uid()) IS NOT NULL THEN
       NEW.updated_by := (SELECT auth.uid());
     END IF;
