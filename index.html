@@ -712,7 +712,7 @@ const saveReviewed = () => typeof window.mapaPersistUserState === "function" ? w
 // Las correcciones del catálogo maestro se guardan en establishments, nunca en estado local.
 
 const NOSAVE = "Aplicado, pero este navegador no permite guardar. Abre el mapa en https://danytf.github.io/mapas/ (no desde la vista previa) o pulsa Guardar copia.";
-CENTERS.forEach((c) => { const q = corr[c.name]; if (q && !c.custom) cache[c.id] = { lat: q[0], lon: q[1] }; });
+
 const DUPS = new Set([]);
 const isApprox = (c) => !!(cache[c.id] && cache[c.id].approx) && !reviewed.has(c.name);
 const isRev = (c) => !reviewed.has(c.name) && (!!(cache[c.id] && cache[c.id].approx) || DUPS.has(c.name) || !c.conf);
@@ -1781,7 +1781,7 @@ $("#csv").addEventListener("click", () => {
   });
   download("permisos-captacion-granada.csv", "\ufeff" + head.join(";") + "\r\n" + rows.join("\r\n"), "text/csv;charset=utf-8");
 });
-$("#bak").addEventListener("click", () => download("copia-mapa-recursos-granada.json", JSON.stringify({ version: 2, permisos: permits, puntos_propios: customs, quitados: [...removed], revisados: [...reviewed], ubicaciones: corr, logros, gamificacion: gam }, null, 2), "application/json"));
+$("#bak").addEventListener("click", () => download("copia-mapa-recursos-granada.json", JSON.stringify({ version: 2, permisos: permits, puntos_propios: customs, quitados: [...removed], revisados: [...reviewed], logros, gamificacion: gam }, null, 2), "application/json"));
 $("#imp").addEventListener("click", () => $("#impf").click());
 $("#impf").addEventListener("change", async (e) => {
   const f = e.target.files[0]; if (!f) return;
@@ -1796,13 +1796,13 @@ $("#impf").addEventListener("change", async (e) => {
     Object.keys(pm || {}).forEach((k) => { if (names.has(k) && pm[k] && (pm[k].estado || pm[k].solicitudes || pm[k].solicitud || (pm[k].historial || []).length)) { permits[k] = pm[k]; n++; } });
     (d.quitados || []).forEach((k) => { if (names.has(k)) removed.add(k); });
     (d.revisados || []).forEach((k) => { if (names.has(k)) reviewed.add(k); });
-    Object.keys(d.ubicaciones || {}).forEach((k) => { const q = d.ubicaciones[k]; if (names.has(k) && Array.isArray(q) && q.length === 2) corr[k] = q; }); saveCorr();
+    // Las ubicaciones del catálogo maestro no se importan desde copias antiguas.
     if (d.logros && d.logros.n) { Object.keys(d.logros.n).forEach((k) => { if ((d.logros.n[k] || 0) > (logros.n[k] || 0)) { logros.n[k] = d.logros.n[k]; logros.f[k] = (d.logros.f || {})[k] || today(); } }); const dr = d.logros.racha || {}; logros.racha.mejor = Math.max(logros.racha.mejor, dr.mejor || 0); saveLogros(); }
     savePermits(); saveRemoved(); saveReviewed();
     if (d.gamificacion && d.gamificacion.aw) { const G = d.gamificacion; ["aw", "day", "dm", "wm"].forEach((f) => Object.keys(G[f] || {}).forEach((k) => { if (!gam[f][k]) gam[f][k] = G[f][k]; })); }
     seedXP();
     saveCustoms();
-    CENTERS.forEach((c) => { const q = corr[c.name]; if (q && !c.custom) { cache[c.id] = { lat: q[0], lon: q[1] }; if (markers[c.id]) markers[c.id].setLatLng(q); } });
+    
     if (addedC) { location.reload(); return; }
     refreshSelects();
     Object.keys(markers).forEach((id) => markers[id].setIcon(makeIcon(CENTERS[id - 1])));
