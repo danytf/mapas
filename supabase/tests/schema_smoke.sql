@@ -296,6 +296,42 @@ begin
   end if;
 end;
 $$;
+-- Pruebas negativas de escritura: conocer el UUID de otra provincia no concede acceso.
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
+do $cross_province_write_test$
+declare affected integer;
+begin
+  update public.establishments
+     set address = address
+   where id = '00000000-0000-4000-8000-000000000006';
+  get diagnostics affected = row_count;
+  if affected <> 0 then
+    raise exception 'FALLO RLS: el usuario de provincia A pudo actualizar un establecimiento de provincia B';
+  end if;
+
+  begin
+    insert into public.user_app_state (user_id, state)
+    values ('00000000-0000-4000-8000-0000000000a3', '{}'::jsonb);
+    raise exception 'FALLO RLS: un usuario pudo crear estado personal para otra cuenta';
+  exception when insufficient_privilege then
+    null;
+  end;
+
+  begin
+    insert into public.establishment_app_state (establishment_id, province_id, state, updated_by)
+    values (
+      '00000000-0000-4000-8000-000000000006',
+      '00000000-0000-4000-8000-000000000002',
+      '{"test":"cross-province-write"}'::jsonb,
+      '00000000-0000-4000-8000-0000000000a2'
+    );
+    raise exception 'FALLO RLS: el usuario de provincia A pudo insertar estado operativo en provincia B';
+  exception when insufficient_privilege then
+    null;
+  end;
+end;
+$cross_province_write_test$;
+
 -- Aislamiento del estado personal: la cuenta B no debe leer la fila de A.
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
 insert into public.user_app_state (user_id, state)
