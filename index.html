@@ -2313,7 +2313,7 @@ window.exportarCatalogoInicial = function () {
     await client.auth.signOut().catch(() => {});
     window.mapaSession = null;
     root.classList.add("lock");
-    err.textContent = "Inicia sesión para comprobar tu acceso.";
+    err.textContent = error.message || "Inicia sesión para comprobar tu acceso.";
   }
 
   if (root.classList.contains("lock")) {
