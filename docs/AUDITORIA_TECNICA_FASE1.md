@@ -116,3 +116,21 @@ La gamificación no es un requisito de persistencia corporativa confirmado. No d
 ## 9. Fuera del alcance de esta fase
 
 Esta auditoría no modifica `index.html`, no configura un proveedor de autenticación, no crea tablas, no carga datos en una base de datos y no despliega nada. Es un diagnóstico estático para guiar la fase de diseño y construcción.
+
+---
+
+## Seguimiento de remediación (17 de octubre de 2026)
+
+Este apartado actualiza el estado de los hallazgos anteriores; el diagnóstico de la Fase 1 se conserva como registro histórico de lo que existía antes de la migración.
+
+| Hallazgo original | Estado actual | Evidencia / límite |
+|---|---|---|
+| P0 — el acceso era solo un filtro visual | **Corregido en arquitectura** | La app usa Supabase Auth, valida perfil activo y ámbito provincial; las tablas tienen RLS. La matriz negativa completa con usuarios reales aún debe ejecutarse. |
+| P0 — persistencia aislada por navegador | **Corregido en arquitectura** | El catálogo y los estados operativos/personal se leen y guardan en Supabase. La auditoría CI comprueba que el frontend no escriba en almacenamiento persistente del navegador. |
+| P1 — identificadores numéricos y nombres | **Parcialmente corregido** | Los establecimientos maestros tienen UUID y `source_ref` únicos. Algunos estados personales (`removed`, `reviewed`) siguen identificándose por nombre visible, por lo que los renombrados pueden dejar referencias personales obsoletas. |
+| P1 — importador JSON legacy | **Retirado** | La interfaz ya no ofrece importar copias antiguas; se evita reintroducir estados de prueba. El catálogo maestro no se actualiza desde exportaciones JSON. |
+| Catálogo y coordenadas | **Importados; validación geográfica continua** | 791 establecimientos activos con coordenadas, 791 referencias únicas, 31 ubicaciones verificadas manualmente. La integridad numérica y el historial no certifican por sí solos la exactitud geográfica de todos los puntos. |
+| Modelo de permisos normalizado | **Parcial** | Existen tablas normalizadas para solicitudes, concesiones y seguimientos, pero la interfaz actual mantiene el estado funcional en `establishment_app_state` JSONB. Su eventual migración requiere un plan separado. |
+| Backups y recuperación | **Pendiente de prueba** | Hay instrucciones documentadas para exportar la base de datos con Supabase CLI. No se ha realizado una restauración aislada desde esta integración. |
+
+La aplicación sigue siendo una página web de una sola pieza, sin PWA. Los cambios recientes se integran mediante PR y GitHub Actions; el despliegue de Pages se comprueba por separado de la validación estática.
