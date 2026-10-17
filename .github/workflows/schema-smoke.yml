@@ -74,6 +74,8 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/202610170002_guard_sensitive_updates.sql
       - name: Apply application state migration
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017031513_create_user_app_state.sql
+      - name: Apply shared establishment state migration
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017032027_create_establishment_app_state.sql
       - name: Apply master catalogue write restrictions
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017125817_restrict_establishment_master_writes.sql
       - name: Guard shared state identity and province
