@@ -767,6 +767,112 @@ begin
 end;
 $inactive_user_scope_test$;
 
+
+-- Phase 2.1: explicit operation-coverage matrix for every public table.
+-- This verifies the intended command surface exists; behavioural tests below/above
+-- exercise row-level scope and denied writes with synthetic fixtures.
+do $rls_policy_matrix$
+declare
+  item record;
+  expected text[];
+  missing text[];
+begin
+  for item in
+    select * from (values
+      ('audit_log', array['SELECT']::text[]),
+      ('categories', array['SELECT','INSERT','UPDATE','DELETE']::text[]),
+      ('establishment_app_state', array['SELECT','INSERT','UPDATE']::text[]),
+      ('establishment_location_history', array['SELECT']::text[]),
+      ('establishment_location_reviews', array['SELECT','INSERT','UPDATE','DELETE']::text[]),
+      ('establishments', array['SELECT','INSERT','UPDATE','DELETE']::text[]),
+      ('followups', array['SELECT','INSERT','UPDATE','DELETE']::text[]),
+      ('import_batches', array['SELECT','INSERT','UPDATE','DELETE']::text[]),
+      ('import_records', array['SELECT','INSERT','UPDATE','DELETE']::text[]),
+      ('municipalities', array['SELECT','INSERT','UPDATE','DELETE']::text[]),
+      ('permit_applications', array['SELECT','INSERT','UPDATE','DELETE']::text[]),
+      ('permit_grants', array['SELECT','INSERT','UPDATE','DELETE']::text[]),
+      ('profiles', array['SELECT','INSERT','UPDATE','DELETE']::text[]),
+      ('provinces', array['SELECT','INSERT','UPDATE','DELETE']::text[]),
+      ('user_app_state', array['SELECT','INSERT','UPDATE']::text[]),
+      ('user_provinces', array['SELECT','INSERT','UPDATE','DELETE']::text[])
+    ) as matrix(table_name, commands)
+  loop
+    select array_agg(command order by command) into missing
+    from unnest(item.commands) as u(command)
+    where not exists (
+      select 1 from pg_policies p
+      where p.schemaname = 'public'
+        and p.tablename = item.table_name
+        and (p.cmd = command or p.cmd = 'ALL')
+    );
+    if coalesce(array_length(missing, 1), 0) > 0 then
+      raise exception 'FALLO RLS: faltan políticas para public.% operaciones %',
+        item.table_name, missing;
+    end if;
+  end loop;
+end;
+$rls_policy_matrix$;
+
+-- Cross-province SELECT must hide child records as well as the establishment itself.
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
+do $cross_province_select_matrix$
+declare visible_count integer;
+begin
+  select count(*) into visible_count from public.permit_applications
+   where id = '00000000-0000-4000-8000-0000000000c1';
+  if visible_count <> 0 then raise exception 'FALLO RLS: usuario A ve solicitud de provincia B'; end if;
+
+  select count(*) into visible_count from public.permit_grants
+   where id = '00000000-0000-4000-8000-0000000000c2';
+  if visible_count <> 0 then raise exception 'FALLO RLS: usuario A ve concesión de provincia B'; end if;
+
+  select count(*) into visible_count from public.followups
+   where id = '00000000-0000-4000-8000-0000000000c3';
+  if visible_count <> 0 then raise exception 'FALLO RLS: usuario A ve seguimiento de provincia B'; end if;
+end;
+$cross_province_select_matrix$;
+
+-- Users without province scope must not delete records in another province.
+do $cross_province_delete_matrix$
+declare affected integer;
+begin
+  delete from public.establishments where id = '00000000-0000-4000-8000-000000000006';
+  get diagnostics affected = row_count;
+  if affected <> 0 then raise exception 'FALLO RLS: usuario A borró establecimiento de provincia B'; end if;
+
+  delete from public.permit_applications where id = '00000000-0000-4000-8000-0000000000c1';
+  get diagnostics affected = row_count;
+  if affected <> 0 then raise exception 'FALLO RLS: usuario A borró solicitud de provincia B'; end if;
+
+  delete from public.permit_grants where id = '00000000-0000-4000-8000-0000000000c2';
+  get diagnostics affected = row_count;
+  if affected <> 0 then raise exception 'FALLO RLS: usuario A borró concesión de provincia B'; end if;
+
+  delete from public.followups where id = '00000000-0000-4000-8000-0000000000c3';
+  get diagnostics affected = row_count;
+  if affected <> 0 then raise exception 'FALLO RLS: usuario A borró seguimiento de provincia B'; end if;
+end;
+$cross_province_delete_matrix$;
+
+-- Inactive users lose their personal app-state access too (not only provincial access).
+do $inactive_personal_state_matrix$
+declare visible_count integer; affected integer;
+begin
+  select count(*) into visible_count from public.user_app_state
+   where user_id = '00000000-0000-4000-8000-0000000000a2';
+  if visible_count <> 0 then
+    raise exception 'FALLO RLS: una cuenta desactivada puede leer su estado personal';
+  end if;
+
+  update public.user_app_state set state = '{"should_not_persist":true}'::jsonb
+   where user_id = '00000000-0000-4000-8000-0000000000a2';
+  get diagnostics affected = row_count;
+  if affected <> 0 then
+    raise exception 'FALLO RLS: una cuenta desactivada puede actualizar su estado personal';
+  end if;
+end;
+$inactive_personal_state_matrix$;
+
 -- Timestamp trigger functions must not be executable as public API RPCs.
 do $timestamp_trigger_privilege_test$
 begin
