@@ -1304,23 +1304,31 @@ begin
     raise exception 'FALLO RLS: la asignación provincial original se alteró';
   end if;
 
-  delete from public.user_app_state where user_id = auth.uid();
-  get diagnostics affected = row_count;
-  if affected <> 0 then
-    raise exception 'FALLO RLS: un usuario pudo borrar su estado personal';
-  end if;
+  begin
+    delete from public.user_app_state where user_id = auth.uid();
+    get diagnostics affected = row_count;
+    if affected <> 0 then
+      raise exception 'FALLO RLS: un usuario pudo borrar su estado personal';
+    end if;
+  exception when insufficient_privilege then
+    null;
+  end;
 
   select count(*) into affected from public.user_app_state where user_id = auth.uid();
   if affected <> 1 then
     raise exception 'FALLO RLS: se perdió el estado personal tras intentar borrarlo';
   end if;
 
-  delete from public.establishment_app_state
-   where establishment_id = '00000000-0000-4000-8000-000000000005';
-  get diagnostics affected = row_count;
-  if affected <> 0 then
-    raise exception 'FALLO RLS: un usuario provincial pudo borrar el estado compartido';
-  end if;
+  begin
+    delete from public.establishment_app_state
+     where establishment_id = '00000000-0000-4000-8000-000000000005';
+    get diagnostics affected = row_count;
+    if affected <> 0 then
+      raise exception 'FALLO RLS: un usuario provincial pudo borrar el estado compartido';
+    end if;
+  exception when insufficient_privilege then
+    null;
+  end;
 end;
 $self_privilege_escalation_matrix$;
 
