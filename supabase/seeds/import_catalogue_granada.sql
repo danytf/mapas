@@ -494,4 +494,21 @@ WHERE x.province = 'Granada'
   AND x.source_ref IS NOT NULL
 ON CONFLICT DO NOTHING;
 
+-- Fail the transaction if any catalogue source_ref did not resolve to an establishment.
+DO $
+DECLARE
+  expected_count integer;
+  present_count integer;
+BEGIN
+  SELECT jsonb_array_length(data) INTO expected_count FROM _mapa_catalogue_payload;
+  SELECT count(DISTINCT x.source_ref) INTO present_count
+  FROM _mapa_catalogue_payload src
+  CROSS JOIN LATERAL jsonb_to_recordset(src.data) AS x(source_ref text)
+  JOIN public.establishments e ON e.source_ref = x.source_ref;
+  IF present_count <> expected_count THEN
+    RAISE EXCEPTION 'Catalogue import incomplete: expected % source_ref values, found %. Transaction rolled back.', expected_count, present_count;
+  END IF;
+END;
+$;
+
 COMMIT;
