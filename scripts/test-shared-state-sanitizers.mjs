@@ -52,6 +52,17 @@ assert.equal(sanitizeSharedPermitState(["not", "an", "object"]), null);
 assert.equal(sanitizeSharedPermitState({ historial: [{ desde: "2026-01-01", ong: "OK", captadores: 3, cancelada: true }] }).historial[0].cancelada, true);
 assert.equal(sanitizeSharedPermitState({ solicitudes: Array.from({ length: 250 }, () => ({ ong: "OK" })) }).solicitudes.length, 200);
 
+const csvStart = html.indexOf("const csvCell = (value) => {");
+const csvEnd = html.indexOf("/* Panel resumen */", csvStart);
+assert.ok(csvStart >= 0 && csvEnd > csvStart, "No se pudo extraer el serializador CSV");
+const csvCell = runInNewContext(html.slice(csvStart, csvEnd) + "\\ncsvCell");
+assert.equal(csvCell("=1+1"), "\"'=1+1\"");
+assert.equal(csvCell(" +cmd|' /C calc'!A0"), "\"' +cmd|' /C calc'!A0\"");
+assert.equal(csvCell("@SUM(1,2)"), "\"'@SUM(1,2)\"");
+assert.equal(csvCell("-1.25"), "\"'-1.25\"");
+assert.equal(csvCell(-1.25), "\"-1.25\"");
+assert.equal(csvCell('normal "text"'), "\"normal \"\"text\"\"\"");
+
 console.log("PRUEBAS DE SANITIZACIÓN: OK");
 console.log("- Fechas ISO válidas se formatean; fechas inválidas y payloads HTML se rechazan.");
 console.log("- Los contadores aceptan enteros acotados y rechazan booleanos, objetos y texto malicioso.");
