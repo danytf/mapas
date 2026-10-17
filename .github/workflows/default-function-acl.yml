@@ -1,0 +1,37 @@
+name: Validate default function ACLs
+on:
+  pull_request:
+    paths:
+      - "supabase/migrations/20261017223100_restrict_default_function_execution.sql"
+      - "supabase/tests/default_function_acl_smoke.sql"
+      - ".github/workflows/default-function-acl.yml"
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      PGHOST: localhost
+      PGPORT: 5432
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: postgres
+    steps:
+      - uses: actions/checkout@v4
+      - run: psql -v ON_ERROR_STOP=1 -c "CREATE ROLE anon NOLOGIN; CREATE ROLE authenticated NOLOGIN;"
+      - run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017223100_restrict_default_function_execution.sql
+      - run: psql -v ON_ERROR_STOP=1 -f supabase/tests/default_function_acl_smoke.sql
