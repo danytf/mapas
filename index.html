@@ -2096,6 +2096,93 @@ window.exportarCatalogoInicial = function () {
 
   let busy = false;
 
+  // Lee el catálogo maestro desde Supabase sin importar ni escribir datos del navegador.
+  // Solo aplica coordenadas si las 791 referencias coinciden exactamente con el catálogo estático.
+  async function syncCatalogueFromSupabase() {
+    const status = document.getElementById("status");
+    try {
+      const slug = value => String(value || "")
+        .normalize("NFD")
+        .replace(/[\\u0300-\\u036f]/g, "")
+        .toLocaleLowerCase("es")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "");
+      const sourceRef = c => [
+        "catalogo-granada",
+        slug(c.tipo || "otro"),
+        slug(c.name),
+        slug(c.town || "Granada"),
+        slug(c.street)
+      ].join(":");
+
+      const staticPoints = CENTERS.filter(point => !point.custom);
+      const byRef = new Map();
+      for (const point of staticPoints) {
+        const ref = sourceRef(point);
+        if (byRef.has(ref)) throw new Error("El catálogo local contiene una referencia duplicada.");
+        byRef.set(ref, point);
+      }
+      if (byRef.size !== 791) {
+        throw new Error("El catálogo estático no contiene las 791 referencias esperadas.");
+      }
+
+      const { data, error } = await client
+        .from("establishments")
+        .select("id,name,address,latitude,longitude,location_precision,source_ref,status")
+        .like("source_ref", "catalogo-granada:%")
+        .limit(1000);
+      if (error) throw error;
+      if (!Array.isArray(data) || data.length !== 791) {
+        throw new Error("Supabase devolvió " + (data?.length ?? 0) + " puntos; se esperaban 791.");
+      }
+
+      const seen = new Set();
+      const updates = [];
+      for (const row of data) {
+        if (!row.source_ref || seen.has(row.source_ref)) {
+          throw new Error("Supabase devolvió una referencia ausente o duplicada.");
+        }
+        seen.add(row.source_ref);
+        const point = byRef.get(row.source_ref);
+        if (!point) throw new Error("Hay una referencia de Supabase que no coincide con el catálogo estático.");
+        if (!Number.isFinite(row.latitude) || !Number.isFinite(row.longitude) ||
+            row.latitude < -90 || row.latitude > 90 ||
+            row.longitude < -180 || row.longitude > 180) {
+          throw new Error("Hay coordenadas inválidas en Supabase; no se aplicó ningún cambio.");
+        }
+        updates.push({
+          id: point.id,
+          position: {
+            lat: row.latitude,
+            lon: row.longitude,
+            approx: row.location_precision === "approximate" || undefined
+          }
+        });
+      }
+      if (seen.size !== byRef.size) {
+        throw new Error("No coinciden las referencias de Supabase y del catálogo estático.");
+      }
+
+      // Aplicar solo después de validar el conjunto completo: nunca se mezclan cargas parciales.
+      for (const update of updates) cache[update.id] = update.position;
+      cluster.clearLayers();
+      Object.keys(markers).forEach(key => delete markers[key]);
+      CENTERS.forEach(makeMarker);
+      renderList();
+      fitAll();
+      window.mapaSession.catalogueReady = true;
+      window.mapaSession.catalogueCount = updates.length;
+      if (status) status.textContent = updates.length + " puntos sincronizados desde Supabase.";
+      return true;
+    } catch (error) {
+      window.mapaSession.catalogueReady = false;
+      window.mapaSession.catalogueError = error.message || "Error de lectura del catálogo.";
+      if (status) status.textContent = "No se pudo sincronizar el catálogo de Supabase; se mantiene el mapa actual. " + window.mapaSession.catalogueError;
+      console.error("[Mapa] Sincronización del catálogo de Supabase:", error);
+      return false;
+    }
+  }
+
   async function validateSession(session) {
     if (!session?.user) return false;
 
@@ -2165,6 +2252,7 @@ window.exportarCatalogoInicial = function () {
       if (error) throw error;
 
       await validateSession(data.session);
+      await syncCatalogueFromSupabase();
 
       err.textContent = "";
       passInput.value = "";
@@ -2204,6 +2292,7 @@ window.exportarCatalogoInicial = function () {
 
     if (data.session) {
       await validateSession(data.session);
+      await syncCatalogueFromSupabase();
       root.classList.remove("lock");
       window.dispatchEvent(new Event("resize"));
     }
