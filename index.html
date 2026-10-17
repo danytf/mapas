@@ -587,8 +587,12 @@
     });
     localStorage.setItem(CLEANUP_KEY, "1");
   } catch (error) {
-    // Fail closed: no se importan datos aquí; la limpieza se reintentará al recargar.
-    console.warn("No se pudo completar la limpieza de datos heredados del mapa.", error);
+    // Si no se puede limpiar, detener la aplicación antes de leer el estado antiguo.
+    document.documentElement.classList.add("lock");
+    const status = document.getElementById("status");
+    if (status) status.textContent = "No se pudieron limpiar los datos heredados. No se muestra información local.";
+    console.error("No se pudo completar la limpieza de datos heredados del mapa.", error);
+    throw error;
   }
 })();
  /* Fuentes: listado de zonas básicas del Distrito Granada (SAS) y Guía de Recursos del Ayuntamiento de Granada.
