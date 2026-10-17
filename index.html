@@ -1208,10 +1208,11 @@ lg.onAdd = () => {
 lg.addTo(map);
 
 /* Logros (insignias): se calculan con los datos; el nivel conseguido no se pierde. */
-const LOG_KEY = "logros-granada-v1";
-const LOG_FIRST = (() => { try { return localStorage.getItem(LOG_KEY) === null; } catch (e) { return true; } })();
-let logros = Object.assign({ n: {}, f: {}, racha: { dia: "", n: 0, mejor: 0 } }, loadJSON(LOG_KEY, {}));
-const saveLogros = () => { try { localStorage.setItem(LOG_KEY, JSON.stringify(logros)); } catch (e) {} };
+const LOG_FIRST = true;
+let logros = { n: {}, f: {}, racha: { dia: "", n: 0, mejor: 0 } };
+const saveLogros = () => {
+  if (typeof window.mapaPersistUserState === "function") window.mapaPersistUserState("badges", logros);
+};
 const LV_NAMES = ["", "Bronce", "Plata", "Oro"];
 const ICO = {
   permiso: '<path d="M6 12.5l4 4 8-9"/>', gestor: '<path d="M5 19V9l7-4 7 4v10M9 19v-5h6v5"/>', verde: '<path d="M12 21s-6.5-5.8-6.5-11a6.5 6.5 0 0113 0c0 5.2-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/>',
@@ -1304,11 +1305,16 @@ function checkLogros() {
 }
 
 /* Gamificación: experiencia (XP), niveles, misiones y celebraciones. Cada acción da XP una sola vez (clave única), así que repetirla no suma. */
-const GAM_KEY = "gamificacion-granada-v1";
-const GAM_FIRST = (() => { try { return localStorage.getItem(GAM_KEY) === null; } catch (e) { return true; } })();
-let gam = Object.assign({ aw: {}, day: {}, dm: {}, wm: {}, lvl: 1, sound: true, log: [], fog: true, wsum: "" }, loadJSON(GAM_KEY, {}));
+const GAM_FIRST = true;
+let gam = { aw: {}, day: {}, dm: {}, wm: {}, lvl: 1, sound: true, log: [], fog: true, wsum: "" };
 let gamReady = false;
-const saveGam = () => { try { localStorage.setItem(GAM_KEY, JSON.stringify(gam)); return true; } catch (e) { return false; } };
+const saveGam = () => {
+  if (typeof window.mapaPersistUserState === "function") {
+    window.mapaPersistUserState("gamification", gam);
+    return true;
+  }
+  return false;
+};
 const RANGOS = [["Explorador", 0], ["Rastreador", 100], ["Gestor", 300], ["Negociador", 600], ["Estratega", 1000], ["Embajador", 1600], ["Maestro de Zona", 2400], ["Capitán del Territorio", 3500], ["Gran Maestre", 5000], ["Leyenda del Territorio", 7000]];
 const xpTotal = () => Object.values(gam.aw).reduce((a, v) => a + v, 0);
 const lvOfXp = (x) => { let l = 0; RANGOS.forEach((r, i) => { if (x >= r[1]) l = i; }); return l; };
@@ -2155,6 +2161,49 @@ window.exportarCatalogoInicial = function () {
   );
 
   let busy = false;
+  let loadedStateUserId = null;
+  let loadedPersonalState = {};
+  let stateWriteQueue = Promise.resolve();
+
+  // El estado personal se guarda por auth.uid(); nunca se recupera de datos heredados del navegador.
+  window.mapaPersistUserState = (key, value) => {
+    const userId = window.mapaSession?.user?.id;
+    if (!userId || loadedStateUserId !== userId) return Promise.resolve(false);
+    let safeValue;
+    try { safeValue = JSON.parse(JSON.stringify(value)); }
+    catch (error) { console.error("[Mapa] Estado personal no serializable:", error); return Promise.resolve(false); }
+    loadedPersonalState = { ...loadedPersonalState, [key]: safeValue };
+    stateWriteQueue = stateWriteQueue.then(async () => {
+      const { error } = await client.from("user_app_state").upsert(
+        { user_id: userId, state: loadedPersonalState },
+        { onConflict: "user_id" }
+      );
+      if (error) throw error;
+      return true;
+    }).catch(error => {
+      console.error("[Mapa] No se pudo guardar el estado personal en Supabase:", error);
+      const status = document.getElementById("status");
+      if (status) status.textContent = "Aviso: no se han podido guardar los cambios personales en Supabase.";
+      return false;
+    });
+    return stateWriteQueue;
+  };
+
+  async function loadPersonalState() {
+    const userId = window.mapaSession?.user?.id;
+    if (!userId) throw new Error("No hay usuario autenticado para cargar su estado personal.");
+    const { data, error } = await client.from("user_app_state")
+      .select("user_id,state").eq("user_id", userId).maybeSingle();
+    if (error) throw error;
+    if (data && data.user_id !== userId) throw new Error("Supabase devolvió estado de otro usuario.");
+    const state = data?.state && typeof data.state === "object" && !Array.isArray(data.state) ? data.state : {};
+    loadedPersonalState = state;
+    loadedStateUserId = userId;
+    gam = Object.assign({ aw: {}, day: {}, dm: {}, wm: {}, lvl: 1, sound: true, log: [], fog: true, wsum: "" }, state.gamification || {});
+    logros = Object.assign({ n: {}, f: {}, racha: { dia: "", n: 0, mejor: 0 } }, state.badges || {});
+    gamTile();
+    checkLogros();
+  }
 
   // Lee el catálogo maestro desde Supabase sin importar ni escribir datos del navegador.
   // Solo aplica coordenadas si las 791 referencias coinciden exactamente con el catálogo estático.
@@ -2337,6 +2386,7 @@ window.exportarCatalogoInicial = function () {
 
       await validateSession(data.session);
       if (!await syncCatalogueFromSupabase()) throw new Error(window.mapaSession?.catalogueError || "No se pudo cargar el mapa desde Supabase.");
+      await loadPersonalState();
 
       err.textContent = "";
       passInput.value = "";
@@ -2377,6 +2427,7 @@ window.exportarCatalogoInicial = function () {
     if (data.session) {
       await validateSession(data.session);
       if (!await syncCatalogueFromSupabase()) throw new Error(window.mapaSession?.catalogueError || "No se pudo cargar el mapa desde Supabase.");
+      await loadPersonalState();
       root.classList.remove("lock");
       window.dispatchEvent(new Event("resize"));
     }
