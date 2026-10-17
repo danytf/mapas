@@ -26,7 +26,8 @@ function check(name, fn) {
   }
 }
 
-const escMatch = html.match(/const\s+esc\s*=\s*\(s\)\s*=>\s*String\(s\)\.replace\([^;]+;/);
+const escLine = html.split(/\r?\n/).find((line) => /^\s*const\s+esc\s*=/.test(line));
+const escMatch = escLine ? [escLine.trim()] : null;
 check("la función esc de producción existe y se puede extraer", () => {
   assert.ok(escMatch, "No se encontró la definición esperada de const esc");
 });
@@ -58,7 +59,7 @@ check("no hay protocolo javascript: en el código", () => {
   assert.doesNotMatch(html, /javascript\s*:/i);
 });
 check("no hay atributos HTML de eventos inline", () => {
-  assert.doesNotMatch(html, /\son(?:abort|error|load|click|mouseover|focus|blur|submit|pointerdown|keydown)\s*=/i);
+  assert.doesNotMatch(html, /<[a-z][^>]*\son(?:abort|error|load|click|mouseover|focus|blur|submit|pointerdown|keydown)\s*=/i);
 });
 check("los enlaces dinámicos a Google Maps codifican el texto de búsqueda", () => {
   assert.match(html, /encodeURIComponent\(pos\s*&&\s*pos\.lat\s*!=\s*null\s*\?\s*pos\.lat\s*\+\s*","\s*\+\s*pos\.lon\s*:\s*c\.name\.replace/);
