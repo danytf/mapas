@@ -898,12 +898,25 @@ function popupFor(c, pos) {
       msg.textContent = "Guardando en Supabase…";
       const address = el.querySelector(".l-address").value;
       const ok = await setLoc(c, r[0], r[1], address);
-      msg.textContent = ok
+      const resultText = ok
         ? "Dirección y coordenadas guardadas en el catálogo maestro de Supabase."
         : "No se guardó en Supabase. " + (window.mapaLastLocationError || "Comprueba los permisos y la conexión.");
-      msg.style.color = ok ? "#14532d" : "#b3261e";
+      const resultColor = ok ? "#14532d" : "#b3261e";
       window.mapaLastLocationError = "";
-      const mk = markers[c.id]; if (mk) cluster.zoomToShowLayer(mk, () => mk.openPopup());
+      const showResult = () => {
+        const liveMsg = document.querySelector(".leaflet-popup .lmsg") || msg;
+        liveMsg.textContent = resultText;
+        liveMsg.style.color = resultColor;
+      };
+      const mk = markers[c.id];
+      if (mk) {
+        cluster.zoomToShowLayer(mk, () => {
+          mk.once("popupopen", showResult);
+          mk.openPopup();
+        });
+      } else {
+        showResult();
+      }
     };
     inp.addEventListener("paste", (e) => { const t = (e.clipboardData || window.clipboardData).getData("text"); e.preventDefault(); inp.value = t; msg.style.color = ""; msg.textContent = "Coordenadas cargadas. Revisa la dirección y pulsa Guardar para enviar los cambios a Supabase."; });
     inp.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); apply(inp.value); } });
