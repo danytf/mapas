@@ -1911,10 +1911,9 @@ window.exportarCatalogoInicial = function () {
       .replace(/^-|-$/g, "");
     return [
       "catalogo-granada",
-      "centro",
+      slug(e.tipo || "otro"),
       slug(e.name),
       slug(e.town),
-      slug(e.tipo),
       slug(e.street)
     ].join(":");
   };
@@ -1953,7 +1952,7 @@ window.exportarCatalogoInicial = function () {
     const coordenadas = leerCoordenadas(PRECOMPUTED[nombre]);
 
     establecimientos.push({
-      source_ref: `catalogo-granada:supermercado:${i + 1}`,
+      source_ref: crearSourceRef({ name: nombre, town: municipio, tipo: "Supermercado", street: direccion }),
       name: String(nombre || "").trim(),
       category: "Supermercado",
       subtype: subtipo || null,
