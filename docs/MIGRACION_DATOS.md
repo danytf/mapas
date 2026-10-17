@@ -41,9 +41,10 @@ Las identidades del catálogo son UUID persistentes. El nombre visible no se uti
 4. No afirmar que un guardado se completó hasta recibir confirmación de Supabase.
 5. No modificar coordenadas maestras a partir de una exportación JSON. Las correcciones se hacen sobre el UUID del establecimiento, con usuario autenticado y registro de auditoría.
 6. Mantener RLS como barrera de seguridad; los controles visuales no sustituyen autorización en la base de datos.
-7. No etiquetar una ubicación como verificada sin confirmación explícita. La precisión de dirección y la verificación manual son estados distintos.
-8. Tratar CSV/JSON exportados como datos operativos: pueden contener contactos, notas e historial. La exportación de interfaz no es un backup completo de Supabase.
-9. Probar cualquier restauración en un proyecto aislado, nunca sobre la base de datos usada por la aplicación.
+7. Los usuarios no administradores solo pueden modificar dirección y ubicación del catálogo maestro; cambiar identidad/estado e insertar establecimientos exige administrador.
+8. No etiquetar una ubicación como verificada sin confirmación explícita. La precisión de dirección y la verificación manual son estados distintos.
+9. Tratar CSV/JSON exportados como datos operativos: pueden contener contactos, notas e historial. La exportación de interfaz no es un backup completo de Supabase.
+10. Probar cualquier restauración en un proyecto aislado, nunca sobre la base de datos usada por la aplicación.
 
 ## Catálogo y categorías
 
