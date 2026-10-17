@@ -1536,4 +1536,21 @@ $timestamp_trigger_privilege_test$;
 
 reset role;
 
+-- Client API roles must not access the audit sequence directly.
+do $audit_sequence_privilege_test$
+begin
+  if has_sequence_privilege('anon', 'public.audit_log_id_seq', 'USAGE')
+     or has_sequence_privilege('anon', 'public.audit_log_id_seq', 'SELECT')
+     or has_sequence_privilege('anon', 'public.audit_log_id_seq', 'UPDATE') then
+    raise exception 'FALLO SEGURIDAD: anon conserva privilegios sobre audit_log_id_seq';
+  end if;
+
+  if has_sequence_privilege('authenticated', 'public.audit_log_id_seq', 'USAGE')
+     or has_sequence_privilege('authenticated', 'public.audit_log_id_seq', 'SELECT')
+     or has_sequence_privilege('authenticated', 'public.audit_log_id_seq', 'UPDATE') then
+    raise exception 'FALLO SEGURIDAD: authenticated conserva privilegios sobre audit_log_id_seq';
+  end if;
+end;
+$audit_sequence_privilege_test$;
+
 select 'schema smoke tests passed' as result;
