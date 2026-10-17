@@ -16,6 +16,9 @@ on:
     paths:
       - "index.html"
       - "scripts/audit-static-catalog.mjs"
+      - "scripts/audit-persistence.mjs"
+      - "scripts/audit-xss.mjs"
+      - "scripts/test-shared-state-sanitizers.mjs"
       - ".github/workflows/audit-static-catalog.yml"
   workflow_dispatch:
 
