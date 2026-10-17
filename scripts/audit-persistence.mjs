@@ -110,6 +110,20 @@ if (personalWriteStart < 0 || personalWriteEnd < 0) {
   }
 }
 
+const permitWriteStart = html.indexOf("const savePermits = async");
+const permitWriteEnd = html.indexOf("let removed = new Set()", permitWriteStart);
+if (permitWriteStart < 0 || permitWriteEnd < 0) {
+  failures.push("No se pudo localizar la comprobación posterior de escrituras compartidas.");
+} else {
+  const permitWrite = html.slice(permitWriteStart, permitWriteEnd);
+  if (!/stableJson\(persistedState\) === stableJson\(row\.state\)/.test(permitWrite) ||
+      !/verification\.data\.updated_by === userId/.test(permitWrite) ||
+      !/verification\.data\.province_id === row\.province_id/.test(permitWrite) ||
+      !/setTimeout\(\(\) => controller\.abort\(\), 15000\)/.test(permitWrite) ||
+      !/setTimeout\(\(\) => verifyController\.abort\(\), 8000\)/.test(permitWrite)) {
+    failures.push("Un timeout de permisos debe comprobar estado, provincia y usuario persistidos antes de revertir la edición.");
+  }
+}
 const personalTimeoutStart = html.indexOf("window.mapaPersistUserState =");
 const personalTimeoutEnd = html.indexOf("async function loadPersonalState()", personalTimeoutStart);
 const locationApplyStart = html.indexOf("const apply = async (txt) =>");
