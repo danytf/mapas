@@ -122,5 +122,7 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017221000_protect_profile_identity.sql
       - name: Restrict location proposal insert decisions
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017221500_restrict_location_review_insert_decisions.sql
+      - name: Protect personal state creation timestamp
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017222500_protect_user_app_state_created_at.sql
       - name: Run schema, trigger, and RLS smoke tests
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/schema_smoke.sql

@@ -1285,7 +1285,7 @@ $admin_only_writes_matrix$;
 -- Users must not promote themselves, deactivate themselves, or edit province assignments.
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
 do $self_privilege_escalation_matrix$
-declare affected integer; saved_role text; saved_active boolean;
+declare affected integer; saved_role text; saved_active boolean; saved_created_at timestamptz;
 begin
   update public.profiles set role = 'admin'
    where id = '00000000-0000-4000-8000-0000000000a2';
@@ -1329,6 +1329,25 @@ begin
      and province_id = '00000000-0000-4000-8000-000000000001';
   if affected <> 1 then
     raise exception 'FALLO RLS: la asignación provincial original se alteró';
+  end if;
+
+  select created_at into saved_created_at
+    from public.user_app_state where user_id = auth.uid();
+
+  begin
+    update public.user_app_state
+       set created_at = '2000-01-01T00:00:00Z'::timestamptz
+     where user_id = auth.uid();
+    raise exception 'FALLO SEGURIDAD: usuario modificó created_at de su estado personal';
+  exception when insufficient_privilege then
+    null;
+  end;
+
+  if not exists (
+    select 1 from public.user_app_state
+     where user_id = auth.uid() and created_at = saved_created_at
+  ) then
+    raise exception 'FALLO SEGURIDAD: cambió created_at del estado personal';
   end if;
 
   begin
