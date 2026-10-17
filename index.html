@@ -2107,13 +2107,19 @@ window.exportarCatalogoInicial = function () {
         .toLocaleLowerCase("es")
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-|-$/g, "");
-      const sourceRef = c => [
-        "catalogo-granada",
-        slug(c.tipo || "otro"),
-        slug(c.name),
-        slug(c.town || "Granada"),
-        slug(c.street)
-      ].join(":");
+      const sourceRef = c => {
+        // SUPER se exporta con categoría "Supermercado", aunque en el mapa
+        // algunos Carrefour tengan tipo visual "Carrefour". La referencia
+        // debe usar la misma categoría que el exportador, sin cambiar la UI.
+        const tipoRef = SUPER.some(([name]) => name === c.name) ? "Supermercado" : c.tipo;
+        return [
+          "catalogo-granada",
+          slug(tipoRef || "otro"),
+          slug(c.name),
+          slug(c.town || "Granada"),
+          slug(c.street)
+        ].join(":");
+      };
 
       const staticPoints = CENTERS.filter(point => !point.custom);
       const byRef = new Map();
