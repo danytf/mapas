@@ -1278,19 +1278,19 @@ select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a1
 do $admin_profile_assignment_matrix$
 declare affected integer; saved_role text;
 begin
+  update public.profiles set role = 'admin'
+   where id = '00000000-0000-4000-8000-0000000000a2';
+  get diagnostics affected = row_count;
+  if affected <> 1 then raise exception 'FALLO RLS: administrador no pudo cambiar el rol de prueba'; end if;
+
+  select role into saved_role from public.profiles
+   where id = '00000000-0000-4000-8000-0000000000a2';
+  if saved_role <> 'admin' then raise exception 'FALLO RLS: no se aplicó el cambio administrativo de rol'; end if;
+
   update public.profiles set role = 'user'
    where id = '00000000-0000-4000-8000-0000000000a2';
   get diagnostics affected = row_count;
-  if affected <> 1 then raise exception 'FALLO RLS: administrador no pudo actualizar el perfil de prueba'; end if;
-
-  update public.profiles set role = 'user'
-   where id = '00000000-0000-4000-8000-0000000000a2';
-  select role into saved_role from public.profiles
-   where id = '00000000-0000-4000-8000-0000000000a2';
-  if saved_role <> 'user' then raise exception 'FALLO RLS: estado de perfil de prueba incoherente'; end if;
-
-  update public.profiles set role = 'user'
-   where id = '00000000-0000-4000-8000-0000000000a2';
+  if affected <> 1 then raise exception 'FALLO RLS: no se pudo restaurar el usuario de prueba'; end if;
 end;
 $admin_profile_assignment_matrix$;
 
