@@ -24,6 +24,13 @@ forbidMatch(/\bnavigator\s*\.\s*serviceWorker\s*\.\s*register\s*\(/i,
 requireMatch(/delete\s+loadedPersonalState\.locations\s*;/,
   "Debe descartarse el campo heredado loadedPersonalState.locations.");
 
+forbidMatch(/key\.startsWith\(["']mapa-["']\)/,
+  "La limpieza no debe borrar indiscriminadamente todas las claves mapa-* del mismo origen.");
+forbidMatch(/\^sb-\.\+-auth-token\$/,
+  "La limpieza no debe borrar tokens de otros proyectos Supabase.");
+requireMatch(/key\s*===\s*["']sb-wwoczmihhupofwmlmgga-auth-token["']/,
+  "La limpieza debe limitar el token de Supabase al proyecto de este mapa.");
+
 const setLocStart = html.indexOf("async function setLoc(c, lat, lon, address)");
 const customStart = html.indexOf("if (c.custom) {", setLocStart);
 const masterStart = html.indexOf("if (!c.databaseId)", customStart);
