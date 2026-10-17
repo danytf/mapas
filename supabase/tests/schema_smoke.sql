@@ -391,8 +391,7 @@ $rls_test$;
 do $function_privilege_test$
 begin
   if has_function_privilege('anon', 'public.guard_establishment_app_state()', 'EXECUTE')
-     or has_function_privilege('authenticated', 'public.guard_establishment_app_state()', 'EXECUTE')
-     or has_function_privilege('PUBLIC', 'public.guard_establishment_app_state()', 'EXECUTE') then
+     or has_function_privilege('authenticated', 'public.guard_establishment_app_state()', 'EXECUTE') then
     raise exception 'FALLO SEGURIDAD: la función trigger de estado compartido se puede invocar como RPC';
   end if;
 end;
