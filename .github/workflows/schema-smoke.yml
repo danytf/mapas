@@ -8,6 +8,8 @@ on:
       - architecture/**
     paths:
       - "supabase/migrations/**"
+      - "supabase/bootstrap/**"
+      - "supabase/README.md"
       - "supabase/tests/**"
       - "supabase/seed/**"
       - ".github/workflows/schema-smoke.yml"
