@@ -1594,4 +1594,40 @@ begin
 end;
 $anonymous_relation_privilege_test$;
 
+-- New public objects must not inherit direct API privileges by default.
+do $default_api_privilege_test$
+declare
+  item record;
+begin
+  for item in
+    select d.defaclobjtype, acl.grantee, acl.privilege_type
+      from pg_default_acl d
+      join pg_namespace n on n.oid = d.defaclnamespace
+      cross join lateral aclexplode(d.defaclacl) acl
+     where n.nspname = 'public'
+       and d.defaclrole = 'postgres'::regrole
+       and (
+         (d.defaclobjtype in ('r', 'S')
+          and acl.grantee in (
+            'anon'::regrole::oid,
+            'authenticated'::regrole::oid,
+            'service_role'::regrole::oid
+          ))
+         or
+         (d.defaclobjtype = 'f'
+          and acl.grantee in (
+            0,
+            'anon'::regrole::oid,
+            'authenticated'::regrole::oid,
+            'service_role'::regrole::oid
+          ))
+       )
+  loop
+    raise exception
+      'FALLO SEGURIDAD: privilegio por defecto % para grantee % sobre tipo de objeto %',
+      item.privilege_type, item.grantee, item.defaclobjtype;
+  end loop;
+end;
+$default_api_privilege_test$;
+
 select 'schema smoke tests passed' as result;
