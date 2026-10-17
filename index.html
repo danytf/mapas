@@ -1887,11 +1887,11 @@ renderList();
   const SUPABASE_KEY = "sb_publishable_oY0KaIJqzSP5HG0b7VID-Q_kd5g9eN-";
 
   // Almacenamiento efímero en memoria: nunca localStorage ni sessionStorage.
-  let authSessionMemory = null;
+  const authSessionMemory = Object.create(null);
   const authStorage = {
-    getItem(key) { return key === "supabase.auth.token" ? authSessionMemory : null; },
-    setItem(key, value) { if (key === "supabase.auth.token") authSessionMemory = value; },
-    removeItem(key) { if (key === "supabase.auth.token") authSessionMemory = null; }
+    getItem(key) { return Object.prototype.hasOwnProperty.call(authSessionMemory, key) ? authSessionMemory[key] : null; },
+    setItem(key, value) { authSessionMemory[key] = value; },
+    removeItem(key) { delete authSessionMemory[key]; }
   };
   const client = window.supabase.createClient(
     SUPABASE_URL,
