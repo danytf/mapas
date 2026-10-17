@@ -2103,7 +2103,7 @@ window.exportarCatalogoInicial = function () {
     try {
       const slug = value => String(value || "")
         .normalize("NFD")
-        .replace(/[\\u0300-\\u036f]/g, "")
+        .replace(/[\u0300-\u036f]/g, "")
         .toLocaleLowerCase("es")
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-|-$/g, "");
