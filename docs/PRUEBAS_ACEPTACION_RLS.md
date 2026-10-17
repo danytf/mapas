@@ -81,12 +81,13 @@ Los controles están implementados y la batería smoke pasa en PostgreSQL 16 en 
 
 audit_log no concede escritura directa al rol authenticated; la escritura se realiza mediante triggers de servidor. Las funciones de trigger tienen search_path vacío y no se exponen como operaciones RPC.
 
-## 5. Criterio de salida
+## 5. Criterio de salida para ampliar el ámbito y dar por aceptada la seguridad
 
-No conectar el frontend ni cargar el catálogo nacional hasta que:
-- la migración se aplique limpiamente en un proyecto de desarrollo;
-- todas las pruebas negativas de aislamiento pasen;
-- la integridad entre establecimientos, solicitudes, concesiones y seguimientos esté protegida en la base de datos;
-- la auditoría e historial de coordenadas estén implementados;
+La app ya está conectada a Supabase para el catálogo de Granada. No debe ampliarse a otras provincias ni darse por completada la aceptación de seguridad hasta que:
+- pase la matriz negativa completa con usuarios autenticados de distintas provincias y un administrador en un entorno aislado;
+- se comprueben perfiles desactivados, sesiones caducadas y conflictos de edición concurrente;
+- la integridad entre establecimientos, solicitudes, concesiones y seguimientos se pruebe también con sesiones reales, no solo mediante smoke tests;
 - el primer administrador y la recuperación de acceso estén documentados;
-- quede confirmado que no se importará estado local de pruebas.
+- se genere una copia lógica completa y se restaure en un entorno aislado;
+- quede confirmado que no se importará estado local de pruebas;
+- se decida y documente si el estado operativo seguirá en `establishment_app_state` JSONB o migrará a las tablas normalizadas, antes de modificar ese modelo.
