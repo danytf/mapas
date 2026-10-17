@@ -1226,7 +1226,7 @@ async function setLoc(c, lat, lon, address) {
       location_verified_at: new Date().toISOString(),
       updated_by: window.mapaSession.user.id
     }).eq("id", c.databaseId)
-      .select("id,address,latitude,longitude,location_precision")
+      .select("id,address,latitude,longitude,location_precision,location_source,location_verified_at,updated_by")
       .abortSignal(controller.signal)
       .maybeSingle();
     data = result.data;
@@ -1237,10 +1237,21 @@ async function setLoc(c, lat, lon, address) {
     clearTimeout(timeoutId);
   }
 
-  if (error || !data || data.id !== c.databaseId) {
+  const responseVerifiedAt = data?.location_verified_at ? Date.parse(data.location_verified_at) : NaN;
+  const responseConfirmed = !error && data &&
+    data.id === c.databaseId &&
+    String(data.address || "").trim() === cleanAddress &&
+    Number(data.latitude) === targetLat &&
+    Number(data.longitude) === targetLon &&
+    data.location_precision === "verified" &&
+    data.location_source === "manual_google_maps" &&
+    data.updated_by === window.mapaSession.user.id &&
+    Number.isFinite(responseVerifiedAt) && Math.abs(Date.now() - responseVerifiedAt) <= 120000;
+
+  if (!responseConfirmed) {
     const originalReason = error?.message || (controller.signal.aborted
       ? "Supabase no respondió en 15 segundos; se verificará si la escritura llegó a completarse."
-      : "No se confirmó la actualización inicial (permisos, conexión o registro no visible).");
+      : "La respuesta inicial no confirma todos los valores guardados (permisos, conexión o registro no visible).");
     // Una respuesta perdida no demuestra que el servidor no haya guardado el cambio.
     // Consultar el registro antes de declarar un fallo evita dejar el mapa desincronizado.
     const verifyController = new AbortController();
