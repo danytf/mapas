@@ -798,8 +798,8 @@ const savePermits = () => {
     });
 };
 let removed = new Set();
-const saveRemoved = () => { if (typeof window.mapaPersistUserState === "function") window.mapaPersistUserState("removed", [...removed]); };
-const saveCustoms = () => { if (typeof window.mapaPersistUserState === "function") window.mapaPersistUserState("customs", customs); };
+const saveRemoved = () => typeof window.mapaPersistUserState === "function" ? window.mapaPersistUserState("removed", [...removed]) : Promise.resolve(false);
+const saveCustoms = () => typeof window.mapaPersistUserState === "function" ? window.mapaPersistUserState("customs", customs) : Promise.resolve(false);
 const isOut = (c) => removed.has(c.name);
 const permOf = (c) => permits[c.name] || { estado: "sin", fecha: "", contacto: "", notas: "", valoracion: 0 };
 const stars = (n) => "★".repeat(n) + "☆".repeat(5 - n);
@@ -834,13 +834,9 @@ const fechaCalc = (p) => solsOf(p).map((x) => x.fecha).filter(Boolean).sort().po
 const seguimientoDue = (c) => { const d = segCalc(permOf(c)) || permOf(c).seguimiento; return d && d <= today() ? d : ""; };
 /* Revisiones y correcciones se guardan en el estado del usuario en Supabase. */
 let reviewed = new Set();
-const saveReviewed = () => { if (typeof window.mapaPersistUserState === "function") window.mapaPersistUserState("reviewed", [...reviewed]); };
+const saveReviewed = () => typeof window.mapaPersistUserState === "function" ? window.mapaPersistUserState("reviewed", [...reviewed]) : Promise.resolve(false);
 let corr = {};
-const saveCorr = () => {
-  if (typeof window.mapaPersistUserState !== "function") return false;
-  window.mapaPersistUserState("locations", corr);
-  return true;
-};
+const saveCorr = () => typeof window.mapaPersistUserState === "function" ? window.mapaPersistUserState("locations", corr) : Promise.resolve(false);
 const NOSAVE = "Aplicado, pero este navegador no permite guardar. Abre el mapa en https://danytf.github.io/mapas/ (no desde la vista previa) o pulsa Guardar copia.";
 CENTERS.forEach((c) => { const q = corr[c.name]; if (q && !c.custom) cache[c.id] = { lat: q[0], lon: q[1] }; });
 const DUPS = new Set([]);
@@ -955,7 +951,7 @@ function popupFor(c, pos) {
     el.querySelectorAll(".stars button").forEach((b) => b.classList.toggle("on", +b.dataset.n <= val));
     el.querySelector(".sv").textContent = val ? val + " de 5" : "sin valorar";
   };
-  const commit = () => {
+  const commit = async () => {
     const sm = el.querySelector(".saved"); sm.style.color = "";
     const v = { contacto: el.querySelector(".f-contacto").value.trim(), notas: el.querySelector(".f-notas").value.trim(), valoracion: val, historial: hist };
     if (sols.length) v.solicitudes = sols;
@@ -963,12 +959,13 @@ function popupFor(c, pos) {
     else { v.estado = p.estado || "sin"; v.fecha = p.fecha || ""; if (p.seguimiento) v.seguimiento = p.seguimiento; }
     const prevP = permits[c.name];
     if (v.estado === "sin" && !v.fecha && !v.contacto && !v.notas && !v.valoracion && !hist.length && !v.seguimiento && !sols.length) delete permits[c.name]; else permits[c.name] = v;
-    savePermits();
+    const saved = await savePermits();
     if (markers[c.id]) markers[c.id].setIcon(makeIcon(c));
     refreshSelects();
     renderList();
     paintEf();
-    sm.textContent = "Guardado";
+    sm.style.color = saved ? "#14532d" : "#b3261e";
+    sm.textContent = saved ? "Guardado en Supabase" : "No se pudo guardar; revisa la conexión";
     gamPermit(c, prevP);
   };
   el.querySelectorAll(".stars button").forEach((b) => b.addEventListener("click", () => { val = val === +b.dataset.n ? 0 : +b.dataset.n; paint(); commit(); }));
@@ -999,10 +996,10 @@ function popupFor(c, pos) {
   let armed = false;
   {
     const msg = el.querySelector(".lmsg"), inp = el.querySelector(".l-in");
-    const apply = (txt) => {
+    const apply = async (txt) => {
       const r = parseCoords(txt);
       if (!r) { msg.textContent = "No reconozco las coordenadas. Ejemplo: 37.1773, -3.5986"; return; }
-      const ok = setLoc(c, r[0], r[1]);
+      const ok = await setLoc(c, r[0], r[1]);
       logrosToast(ok ? "Ubicación guardada y revisada: " + r[0].toFixed(6) + ", " + r[1].toFixed(6) : NOSAVE);
       const mk = markers[c.id]; if (mk) cluster.zoomToShowLayer(mk, () => mk.openPopup());
     };
@@ -1037,16 +1034,23 @@ function parseCoords(t) {
   const la = +m[1], lo = +m[2];
   return la >= 36.5 && la <= 38.3 && lo >= -4.6 && lo <= -2.2 ? [la, lo] : null;
 }
-function setLoc(c, lat, lon) {
-  let saveOk = true;
+async function setLoc(c, lat, lon) {
   cache[c.id] = { lat, lon };
-  if (c.custom) { const p = customs.find((x) => x.name === c.name); if (p) { p.lat = lat; p.lon = lon; p.approx = undefined; saveCustoms(); } }
-  else { corr[c.name] = [+lat.toFixed(6), +lon.toFixed(6)]; saveOk = saveCorr(); }
-  reviewed.add(c.name); saveReviewed();
+  let saveOk;
+  if (c.custom) {
+    const p = customs.find((x) => x.name === c.name);
+    if (p) { p.lat = lat; p.lon = lon; p.approx = undefined; saveOk = await saveCustoms(); }
+    else saveOk = false;
+  } else {
+    corr[c.name] = [+lat.toFixed(6), +lon.toFixed(6)];
+    saveOk = await saveCorr();
+  }
+  reviewed.add(c.name);
+  const reviewSaved = await saveReviewed();
   if (markers[c.id]) markers[c.id].setLatLng([lat, lon]);
   refreshSelects(); renderList();
   gamRev(c);
-  return saveOk;
+  return !!saveOk && !!reviewSaved;
 }
 let moving = null;
 function endMove(save) {
@@ -1061,7 +1065,7 @@ function startMove(c) {
   map.closePopup(); cluster.removeLayer(m); m.addTo(map); m.dragging.enable();
   moving = { c, m };
   logrosToast("Arrastra el pin hasta el local y suéltalo. Se guarda solo.");
-  m.once("dragend", () => { const p = m.getLatLng(); const ok = setLoc(c, p.lat, p.lng); endMove(); logrosToast(ok ? "Ubicación guardada: " + p.lat.toFixed(6) + ", " + p.lng.toFixed(6) : NOSAVE); });
+  m.once("dragend", async () => { const p = m.getLatLng(); const ok = await setLoc(c, p.lat, p.lng); endMove(); logrosToast(ok ? "Ubicación guardada: " + p.lat.toFixed(6) + ", " + p.lng.toFixed(6) : NOSAVE); });
 }
 function makeMarker(c) {
   const pos = cache[c.id];
