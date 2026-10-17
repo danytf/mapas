@@ -31,14 +31,38 @@ El Servicio Andaluz de Salud publica el directorio de centros y permite descarga
 
 La página oficial muestra centros de salud y consultorios de la provincia de Granada, entre ellos centros que no figuran en el bloque `PROV`. La descarga CSV de la página no se pudo recuperar durante esta revisión, por lo que no se ha generado una lista oficial de faltantes ni se han añadido registros inferidos.
 
-## Estado del exportador
+## Resultado de la generación estática (2026-10-17)
 
-- Excluye puntos personalizados (`c.custom`) para evitar datos de prueba del navegador.
-- Usa referencias estables para los centros basadas en nombre, municipio, tipo y dirección.
-- Deduplica por nombre, municipio, categoría y dirección normalizados.
-- Descarga un JSON; no escribe en Supabase.
-- No se ha ejecutado en un navegador real en esta revisión.
-- No se ha importado ningún registro nuevo a Supabase.
+Se ha reproducido la lógica del exportador usando únicamente las declaraciones estáticas de `CENTERS`, `PROV`, `SUPER` y `PRECOMPUTED` de `index.html`. No se ha leído `localStorage`, no se han incorporado puntos personalizados y no se ha reemplazado ninguna coordenada por una geocodificación nueva.
+
+| Control | Resultado |
+|---|---:|
+| Centros/establecimientos estáticos tras combinar `CENTERS` y `PROV` | 83 |
+| Supermercados estáticos | 320 |
+| Registros antes de deduplicar | 403 |
+| Registros después de deduplicar | 403 |
+| Duplicados eliminados | 0 |
+| Coordenadas ausentes | 0 |
+| Coordenadas numéricamente inválidas | 0 |
+| Referencias `source_ref` duplicadas | 0 |
+| Coordenadas marcadas como aproximadas | 19 |
+| Municipios distintos | 76 |
+
+El JSON se guardó en `supabase/seeds/catalogo-inicial-granada.json` y se volvió a leer desde GitHub para verificar que el contenido persistido coincide con el generado. La validación independiente del JSON confirmó 403 filas, cero campos obligatorios vacíos, cero pares de coordenadas ausentes o inválidos y cero referencias duplicadas.
+
+**Limitación:** esto es una reproducción determinista desde el código estático, no una ejecución de `window.exportarCatalogoInicial()` dentro de un navegador real. Las coordenadas están validadas numéricamente y se conserva la marca de aproximación, pero no se ha vuelto a verificar su exactitud geográfica.
+
+## Preparación de importación
+
+Se generó `supabase/seeds/import_catalogue_granada.sql` con carga idempotente. El SQL:
+- comprueba que existen la provincia Granada y el índice único de `source_ref`;
+- prepara 5 categorías y 76 municipios a partir de los nombres presentes en el catálogo;
+- inserta los 403 registros estáticos, resolviendo las claves foráneas;
+- ignora conflictos de inserción para no sobrescribir establecimientos ya existentes ni sus coordenadas.
+
+Migraciones previas requeridas: `202610170007_unique_establishment_source_ref.sql` y `202610170008_seed_granada_province.sql`.
+
+El SQL y las migraciones **todavía no se han ejecutado en Supabase**; no se ha importado ningún establecimiento y los registros de prueba siguen sin cambios.
 
 ## Criterios para desbloquear la importación
 
