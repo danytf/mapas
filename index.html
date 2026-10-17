@@ -1865,6 +1865,168 @@ $("#n-click").addEventListener("click", () => {
 
 renderList();
 locateAll().then(renderList);
+  
+/*
+ * EXPORTACIÓN INICIAL DEL CATÁLOGO ESTÁTICO
+ * - No lee localStorage ni sessionStorage.
+ * - No exporta correcciones, puntos propios ni datos de prueba.
+ * - No modifica Supabase ni borra registros.
+ *
+ * Ejecutar desde la consola del navegador:
+ *   exportarCatalogoInicial()
+ */
+window.exportarCatalogoInicial = function () {
+  if (
+    typeof CENTERS === "undefined" ||
+    typeof PROV === "undefined" ||
+    typeof SUPER === "undefined" ||
+    typeof PRECOMPUTED === "undefined"
+  ) {
+    throw new Error(
+      "No se encuentran las variables del catálogo. " +
+      "Comprueba que el bloque está al final del script principal."
+    );
+  }
+
+  const establecimientos = [];
+  let siguienteId = 1;
+
+  // Centros y establecimientos definidos estáticamente.
+  for (const c of CENTERS) {
+    const coordenadas = PRECOMPUTED[c.name];
+
+    establecimientos.push({
+      source_ref: `catalogo-granada:${c.id}`,
+      name: String(c.name || "").trim(),
+      category: String(c.tipo || "Otro").trim(),
+      subtype: c.sub || null,
+      municipality: String(c.town || "Granada").trim(),
+      address: String(c.street || "").trim() || null,
+      latitude: Array.isArray(coordenadas)
+        ? coordenadas[0]
+        : null,
+      longitude: Array.isArray(coordenadas)
+        ? coordenadas[1]
+        : null,
+      location_precision:
+        Array.isArray(coordenadas) && coordenadas[2] === 1
+          ? "approximate"
+          : Array.isArray(coordenadas)
+            ? "address"
+            : "unknown",
+      location_source: Array.isArray(coordenadas)
+        ? "static_precomputed"
+        : null,
+      province: "Granada",
+      status: "active"
+    });
+    siguienteId++;
+  }
+
+  // Catálogo de centros de atención primaria de la provincia.
+  // Se excluyen duplicados exactos por nombre y municipio.
+  for (const [tipo, nombre, municipio, calle] of PROV) {
+    const esCentroSalud = tipo === "C";
+    const nombreCompleto =
+      (esCentroSalud ? "CS " : "Consultorio ") + nombre;
+
+    establecimientos.push({
+      source_ref: `catalogo-granada:atencion-primaria:${nombre}`,
+      name: nombreCompleto,
+      category: esCentroSalud
+        ? "Centro de salud"
+        : "Consultorio",
+      subtype: null,
+      municipality: String(municipio || "Granada").trim(),
+      address: String(calle || "").trim() || null,
+      latitude: null,
+      longitude: null,
+      location_precision: "unknown",
+      location_source: null,
+      province: "Granada",
+      status: "active"
+    });
+  }
+
+  // Supermercados definidos estáticamente.
+  SUPER.forEach((s, i) => {
+    const [nombre, municipio, direccion, subtipo] = s;
+    const coordenadas = PRECOMPUTED[nombre];
+
+    establecimientos.push({
+      source_ref: `catalogo-granada:supermercado:${i + 1}`,
+      name: String(nombre || "").trim(),
+      category: "Supermercado",
+      subtype: subtipo || null,
+      municipality: String(municipio || "Granada").trim(),
+      address: String(direccion || "").trim() || null,
+      latitude: Array.isArray(coordenadas)
+        ? coordenadas[0]
+        : null,
+      longitude: Array.isArray(coordenadas)
+        ? coordenadas[1]
+        : null,
+      location_precision:
+        Array.isArray(coordenadas) && coordenadas[2] === 1
+          ? "approximate"
+          : Array.isArray(coordenadas)
+            ? "address"
+            : "unknown",
+      location_source: Array.isArray(coordenadas)
+        ? "static_precomputed"
+        : null,
+      province: "Granada",
+      status: "active"
+    });
+  });
+
+  // Deduplicación conservadora por nombre + municipio.
+  const vistos = new Set();
+  const unicos = establecimientos.filter(e => {
+    const clave =
+      e.name.normalize("NFKC").toLocaleLowerCase("es") +
+      "|" +
+      e.municipality.normalize("NFKC").toLocaleLowerCase("es");
+
+    if (vistos.has(clave)) return false;
+    vistos.add(clave);
+    return true;
+  });
+
+  const resultado = {
+    format_version: 1,
+    source: "static_catalogue_only",
+    province: "Granada",
+    generated_at: new Date().toISOString(),
+    counts: {
+      before_deduplication: establecimientos.length,
+      after_deduplication: unicos.length,
+      without_coordinates: unicos.filter(
+        e => e.latitude === null || e.longitude === null
+      ).length
+    },
+    establishments: unicos
+  };
+
+  const archivo = new Blob(
+    [JSON.stringify(resultado, null, 2)],
+    { type: "application/json;charset=utf-8" }
+  );
+  const url = URL.createObjectURL(archivo);
+  const enlace = document.createElement("a");
+  enlace.href = url;
+  enlace.download = "catalogo-inicial-granada.json";
+  enlace.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+  console.table(resultado.counts);
+  console.info(
+    "Exportación generada. No se ha escrito nada en Supabase."
+  );
+
+  return resultado.counts;
+};
+
 </script>
 <script>
 
