@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="es">
 <head>
-<script>try { if (!sessionStorage.getItem("rgr-auth") && !localStorage.getItem("rgr-auth")) document.documentElement.classList.add("lock"); } catch (e) { document.documentElement.classList.add("lock"); }</script>
+<script>document.documentElement.classList.add("lock");</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mapa del Responsable de Gestión de Recursos</title>
@@ -455,6 +455,7 @@
     .legend-box { max-height: 34vh; overflow: auto; }
   }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 <div id="login" role="dialog" aria-modal="true" aria-labelledby="lgTitle">
@@ -462,7 +463,7 @@
     <img class="lg-logo" alt="Wesser">
     <h1 id="lgTitle">Acceso al mapa</h1>
     <p>Mapa del Responsable de Gestión de Recursos</p>
-    <label>Usuario<input id="lgUser" type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required></label>
+    <label>Correo electrónico<input id="lgUser" type="email" autocomplete="username" autocapitalize="none" spellcheck="false" required></label> type="text" autocomplete="username" autocapitalize="none" spellcheck="false" required></label>
     <label>Contraseña<input id="lgPass" type="password" autocomplete="current-password" required></label>
     <label class="rem"><input id="lgRem" type="checkbox"> Mantener la sesión en este navegador</label>
     <p class="err" id="lgErr" role="alert"></p>
@@ -1867,26 +1868,188 @@ renderList();
 locateAll().then(renderList);
 </script>
 <script>
-/* Acceso: filtro de pantalla (no es seguridad real: el contenido sigue siendo visible en el código de la página). */
-(() => {
-  const h53 = (s, seed = 0) => { let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed; for (let i = 0, ch; i < s.length; i++) { ch = s.charCodeAt(i); h1 = Math.imul(h1 ^ ch, 2654435761); h2 = Math.imul(h2 ^ ch, 1597334677); } h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909); h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909); return 4294967296 * (2097151 & h2) + (h1 >>> 0); };
-  const OK = 7290991121314571, root = document.documentElement;
-  const logo = document.querySelector("header .logo"), lg = document.querySelector("#login .lg-logo");
-  if (logo && lg) lg.src = logo.src; else if (lg) lg.remove();
+
+/* Autenticación con Supabase */
+(async () => {
+  const root = document.documentElement;
+  const form = document.getElementById("loginForm");
   const err = document.getElementById("lgErr");
-  document.getElementById("loginForm").addEventListener("submit", (e) => {
-    e.preventDefault();
-    const u = document.getElementById("lgUser").value.trim().toLowerCase(), p = document.getElementById("lgPass").value;
-    if (h53("rgr|" + u + "|" + p) !== OK) { err.textContent = "Usuario o contraseña incorrectos."; document.getElementById("lgPass").select(); return; }
-    try { (document.getElementById("lgRem").checked ? localStorage : sessionStorage).setItem("rgr-auth", "1"); } catch (x) {}
-    err.textContent = ""; document.getElementById("lgPass").value = ""; root.classList.remove("lock");
-    window.dispatchEvent(new Event("resize"));
+  const userInput = document.getElementById("lgUser");
+  const passInput = document.getElementById("lgPass");
+  const remember = document.getElementById("lgRem");
+  const loginButton = form.querySelector('button[type="submit"]');
+  const logo = document.querySelector("header .logo");
+  const loginLogo = document.querySelector("#login .lg-logo");
+
+  if (logo && loginLogo) loginLogo.src = logo.src;
+
+  // Mantener bloqueada la interfaz mientras se verifica la sesión.
+  root.classList.add("lock");
+
+  const SUPABASE_URL = "https://wwoczmihhupofwmlmgga.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_oY0KaIJqzSP5HG0b7VID-Q_kd5g9eN-";
+
+  // Permite elegir entre persistencia de sesión y de navegador.
+ 
+  const AUTH_MODE_KEY = "mapa-auth-remember";
+
+  remember.checked = localStorage.getItem(AUTH_MODE_KEY) === "1";
+
+  const authStorage = {
+    getItem(key) {
+      const storage = localStorage.getItem(AUTH_MODE_KEY) === "1"
+        ? localStorage
+        : sessionStorage;
+      return storage.getItem(key);
+    },
+    setItem(key, value) {
+      const persistent = localStorage.getItem(AUTH_MODE_KEY) === "1";
+      const target = persistent ? localStorage : sessionStorage;
+      const other = persistent ? sessionStorage : localStorage;
+      other.removeItem(key);
+      target.setItem(key, value);
+    },
+    removeItem(key) {
+      localStorage.removeItem(key);
+      sessionStorage.removeItem(key);
+    }
+  };
+  const client = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY,
+    {
+      auth: {
+        storage: authStorage,
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
+      }
+    }
+  );
+
+  let busy = false;
+
+  async function validateSession(session) {
+    if (!session?.user) return false;
+
+    const { data: profile, error: profileError } = await client
+      .from("profiles")
+      .select("id, display_name, role, is_active")
+      .eq("id", session.user.id)
+      .maybeSingle();
+
+    if (profileError) throw profileError;
+    if (!profile || !profile.is_active) {
+      throw new Error("Tu usuario no está activo o no tiene un perfil válido.");
+    }
+
+    const { data: assignments, error: assignmentsError } = await client
+      .from("user_provinces")
+      .select("province_id, provinces(id, code, name, is_active)")
+      .eq("user_id", session.user.id);
+
+    if (assignmentsError) throw assignmentsError;
+
+    const provinces = (assignments ?? [])
+      .map(item => item.provinces)
+      .filter(province => province && province.is_active);
+
+    if (profile.role !== "admin" && provinces.length === 0) {
+      throw new Error("Tu usuario no tiene provincias activas asignadas.");
+    }
+
+    window.mapaSession = {
+      user: session.user,
+      profile,
+      provinces,
+      supabase: client
+    };
+
+    return true;
+  }
+
+  async function showLoginError(message) {
+    err.textContent = message;
+    root.classList.add("lock");
+  }
+
+  form.addEventListener("submit", async event => {
+    event.preventDefault();
+    if (busy) return;
+
+    busy = true;
+    loginButton.disabled = true;
+    err.textContent = "Verificando acceso…";
+
+    try {
+      const email = userInput.value.trim();
+      const password = passInput.value;
+      if (remember.checked) {
+  localStorage.setItem(AUTH_MODE_KEY, "1");
+} else {
+  localStorage.removeItem(AUTH_MODE_KEY);
+}
+
+      const { data, error } = await client.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      if (error) throw error;
+
+      await validateSession(data.session);
+
+      err.textContent = "";
+      passInput.value = "";
+      root.classList.remove("lock");
+      window.dispatchEvent(new Event("resize"));
+    } catch (error) {
+      await client.auth.signOut().catch(() => {});
+      window.mapaSession = null;
+
+      await showLoginError(
+        error.message === "Invalid login credentials"
+          ? "Correo o contraseña incorrectos."
+          : error.message || "No se ha podido validar el acceso."
+      );
+      passInput.select();
+    } finally {
+      busy = false;
+      loginButton.disabled = false;
+    }
   });
-  document.getElementById("logout").addEventListener("click", () => {
-    try { sessionStorage.removeItem("rgr-auth"); localStorage.removeItem("rgr-auth"); } catch (x) {}
-    location.reload();
+
+  document.getElementById("logout").addEventListener("click", async event => {
+    event.preventDefault();
+    root.classList.add("lock");
+
+    try {
+      await client.auth.signOut();
+    } finally {
+      window.mapaSession = null;
+      location.reload();
+    }
   });
-  if (root.classList.contains("lock")) setTimeout(() => { const u = document.getElementById("lgUser"); if (u) u.focus(); }, 0);
+
+  try {
+    const { data, error } = await client.auth.getSession();
+    if (error) throw error;
+
+    if (data.session) {
+      await validateSession(data.session);
+      root.classList.remove("lock");
+      window.dispatchEvent(new Event("resize"));
+    }
+  } catch (error) {
+    await client.auth.signOut().catch(() => {});
+    window.mapaSession = null;
+    root.classList.add("lock");
+    err.textContent = "Inicia sesión para comprobar tu acceso.";
+  }
+
+  if (root.classList.contains("lock")) {
+    setTimeout(() => userInput.focus(), 0);
+  }
 })();
 </script>
 </body>
