@@ -720,12 +720,12 @@ const safeCount = (value) => {
   return Number.isSafeInteger(n) && n > 0 && n <= 100000 ? n : 0;
 };
 const validIsoDate = (value) => {
-  if (typeof value !== "string" || !/^\\d{4}-\\d{2}-\\d{2}$/.test(value)) return "";
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return "";
   const date = new Date(value + "T00:00:00Z");
   return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value ? value : "";
 };
 const cleanStateText = (value, maxLength) =>
-  typeof value === "string" ? value.replace(/\\u0000/g, "").slice(0, maxLength) : "";
+  typeof value === "string" ? value.replace(/\u0000/g, "").slice(0, maxLength) : "";
 const sanitizePermitEntry = (value, kind) => {
   if (!value || typeof value !== "object" || Array.isArray(value)) return null;
   const entry = {};
