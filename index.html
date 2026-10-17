@@ -2218,6 +2218,13 @@ window.exportarCatalogoInicial = function () {
       throw new Error("Tu usuario no tiene provincias activas asignadas.");
     }
 
+    // El catálogo estático actual contiene únicamente Granada. Hasta que se
+    // incorporen catálogos por provincia, impedir que otros usuarios vean
+    // accidentalmente el mapa de Granada como si fuera su catálogo provincial.
+    if (profile.role !== "admin" && !provinces.some(province => String(province.code) === "18")) {
+      throw new Error("El catálogo de tu provincia todavía no está cargado. No se ha mostrado el mapa de otra provincia.");
+    }
+
     window.mapaSession = {
       user: session.user,
       profile,
