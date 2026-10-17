@@ -32,6 +32,23 @@ Esto confirma el aislamiento básico de lectura y actualización entre las dos p
 
 **No equivale a la aceptación RLS completa.** Siguen pendientes las pruebas de inserción/eliminación no autorizadas, perfiles desactivados, sesiones caducadas, matriz de permisos de todas las tablas, concurrencia y restauración aislada.
 
+
+### Pruebas negativas adicionales
+
+| Prueba | Resultado |
+|---|---|
+| Usuario Granada intenta actualizar el estado compartido de Málaga | 0 filas afectadas |
+| Usuario Málaga actualiza su estado compartido | 1 fila afectada; transacción revertida |
+| Usuario Granada intenta actualizar el estado personal de Málaga | 0 filas afectadas |
+| Usuario Málaga intenta borrar el estado personal de Granada | 0 filas afectadas |
+| Usuario estándar intenta cambiar su propio rol a `admin` | 0 filas afectadas |
+| Usuario estándar intenta borrar su propia asignación provincial | 0 filas afectadas |
+| Usuario autenticado intenta insertar directamente en `audit_log` | Denegado |
+| Usuario autenticado intenta insertar directamente en `establishment_location_history` | Denegado |
+| Usuario Granada intenta enviar otro UUID en `updated_by` al actualizar un establecimiento de Granada | El trigger `guard_sensitive_updates` sustituye el valor por `auth.uid()`; la prueba comprobó la identidad efectiva y revirtió la transacción |
+
+Los intentos de escritura anteriores se realizaron en transacciones revertidas. No se dejaron cambios persistentes ni se alteraron coordenadas. El último caso no se rechaza con error: se neutraliza en el trigger de servidor, que fuerza el actor autenticado antes de que se evalúe la condición `WITH CHECK` de RLS.
+
 ## 1. Preparación de un entorno de desarrollo
 
 1. Crear un proyecto Supabase separado de producción.
