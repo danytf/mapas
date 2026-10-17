@@ -597,6 +597,36 @@ const $ = (s) => document.querySelector(s);
 let cache = {};
 const saveCache = () => {};
 
+const map = L.map("map", { zoomControl: true }).setView([37.1773, -3.5986], 13);
+const ATTR = "Tiles © Esri — Source: Esri, HERE, Garmin, OpenStreetMap contributors | Geocodificación: © Instituto Geográfico Nacional de España (CartoCiudad) | Ubicaciones: © colaboradores de OpenStreetMap (ODbL)";
+const esriTiles = (svc, o) => L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/" + svc + "/MapServer/tile/{z}/{y}/{x}", Object.assign({ maxZoom: 19, attribution: ATTR }, o || {}));
+const esri = esriTiles("World_Street_Map");
+const grisClaro = L.layerGroup([esriTiles("Canvas/World_Light_Gray_Base", { maxNativeZoom: 16 }), esriTiles("Canvas/World_Light_Gray_Reference", { maxNativeZoom: 16 })]);
+const grisOscuro = L.layerGroup([esriTiles("Canvas/World_Dark_Gray_Base", { maxNativeZoom: 16 }), esriTiles("Canvas/World_Dark_Gray_Reference", { maxNativeZoom: 16 })]);
+(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? grisOscuro : grisClaro).addTo(map);
+const osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  maxZoom: 19, attribution: "© OpenStreetMap contributors | Geocodificación: © Instituto Geográfico Nacional de España (CartoCiudad)"
+});
+L.control.layers({ "Gris claro (recomendado)": grisClaro, "Gris oscuro": grisOscuro, "Esri calles": esri, "OpenStreetMap (solo si sirves la página por http)": osm }, null, { position: "topright" }).addTo(map);
+
+const markers = {};
+const cluster = L.markerClusterGroup({
+  maxClusterRadius: 38, showCoverageOnHover: false, disableClusteringAtZoom: 17,
+  iconCreateFunction: (cl) => {
+    const ms = cl.getAllChildMarkers(), cnt = {};
+    ms.forEach((m) => { const k = m.options.cat || "#475569"; cnt[k] = (cnt[k] || 0) + 1; });
+    let acc = 0; const stops = [];
+    Object.entries(cnt).sort((a, b) => b[1] - a[1]).forEach(([col, n]) => {
+      stops.push(col + " " + (acc / ms.length * 100).toFixed(1) + "% " + ((acc + n) / ms.length * 100).toFixed(1) + "%"); acc += n;
+    });
+    const big = ms.length >= 50, z = big ? 46 : 38;
+    return L.divIcon({ className: "cl-wrap", iconSize: [z, z], html: '<div class="cl' + (big ? " big" : "") + '" style="background:conic-gradient(' + stops.join(",") + ')"><span>' + ms.length + "</span></div>" });
+  }
+}).addTo(map);
+let touched = false;
+map.on("dragstart", () => { touched = true; });
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
 /* Categorías: mismas que la lista de recursos (id, descripción). */
 const TIPOS = [
   [1, "Hospital", "#c0392b"], [2, "Centro de salud", "#0b7a68"], [3, "Supermercado", "#b83280"], [4, "Centro comercial", "#2b6cb0"],
