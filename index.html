@@ -661,7 +661,12 @@ const chainOf = (c) => { const k = rawChain(c); return smallChains.has(k) ? "Ind
 const ESTADOS = [["sin", "Sin solicitar", "#ffffff"], ["solicitado", "Solicitado", "#fbbf24"], ["concedido", "Concedido", "#22c55e"], ["denegado", "Denegado", "#111827"], ["caducado", "Caducado", "#94a3b8"], ["cancelado", "Cancelado", "#ef4444"]];
 let permits = {};
 let sharedPermitRecords = new Map();
-const savePermits = (onlyName = null) => {
+const stableJson = (value) => {
+  if (value === null || typeof value !== "object") return JSON.stringify(value);
+  if (Array.isArray(value)) return "[" + value.map(stableJson).join(",") + "]";
+  return "{" + Object.keys(value).sort().map(key => JSON.stringify(key) + ":" + stableJson(value[key])).join(",") + "}";
+};
+const savePermits = async (onlyName = null) => {
   const session = window.mapaSession;
   const client = session?.supabase;
   const userId = session?.user?.id;
@@ -675,24 +680,56 @@ const savePermits = (onlyName = null) => {
   }).filter(Boolean);
   if (!rows.length) return Promise.resolve(true);
   const status = document.getElementById("status");
+  let writeError = null;
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 15000);
-  return client.from("establishment_app_state").upsert(rows, { onConflict: "establishment_id" })
-    .abortSignal(controller.signal)
-    .then(({ error }) => {
-      if (error) throw error;
+  try {
+    const result = await client.from("establishment_app_state").upsert(rows, { onConflict: "establishment_id" })
+      .abortSignal(controller.signal);
+    writeError = result.error;
+    if (!writeError) {
       rows.forEach(row => {
         const c = CENTERS.find(item => item.databaseId === row.establishment_id);
         if (c) sharedPermitRecords.set(c.name, { establishment_id: row.establishment_id, province_id: row.province_id });
       });
       return true;
-    })
-    .catch(error => {
-      console.error("[Mapa] No se pudo guardar el estado compartido del establecimiento:", error);
-      if (status) status.textContent = "Aviso: no se pudieron guardar los permisos compartidos en Supabase.";
-      return false;
-    })
-    .finally(() => clearTimeout(timeoutId));
+    }
+  } catch (error) {
+    writeError = error;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+
+  // Una respuesta perdida no demuestra que el servidor no haya guardado el estado.
+  // Antes de revertir la ficha, comprobar los valores efectivos en Supabase.
+  const verifyController = new AbortController();
+  const verifyTimeoutId = setTimeout(() => verifyController.abort(), 8000);
+  try {
+    const row = rows[0];
+    const verification = await client.from("establishment_app_state")
+      .select("establishment_id,province_id,state,updated_by")
+      .eq("establishment_id", row.establishment_id)
+      .abortSignal(verifyController.signal)
+      .maybeSingle();
+    const persistedState = sanitizeSharedPermitState(verification.data?.state) || {};
+    const confirmed = !verification.error && verification.data &&
+      verification.data.establishment_id === row.establishment_id &&
+      verification.data.province_id === row.province_id &&
+      verification.data.updated_by === userId &&
+      stableJson(persistedState) === stableJson(row.state);
+    if (confirmed) {
+      sharedPermitRecords.set(onlyName || names[0], { establishment_id: row.establishment_id, province_id: row.province_id });
+      console.warn("[Mapa] El estado compartido se confirmó mediante lectura posterior tras una respuesta ambigua.");
+      return true;
+    }
+    console.error("[Mapa] No se pudo confirmar el guardado del estado compartido en Supabase:", writeError, verification.error);
+  } catch (verificationError) {
+    console.error("[Mapa] No se pudo verificar el estado compartido tras un error de escritura:", writeError, verificationError);
+  } finally {
+    clearTimeout(verifyTimeoutId);
+  }
+  if (status) status.textContent = "Aviso: no se pudo confirmar el guardado de los permisos compartidos en Supabase.";
+  return false;
 };
 let removed = new Set();
 const saveRemoved = () => typeof window.mapaPersistUserState === "function" ? window.mapaPersistUserState("removed", [...removed]) : Promise.resolve(false);
