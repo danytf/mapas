@@ -898,8 +898,11 @@ function popupFor(c, pos) {
       msg.textContent = "Guardando en Supabase…";
       const address = el.querySelector(".l-address").value;
       const ok = await setLoc(c, r[0], r[1], address);
-      msg.textContent = ok ? "Dirección y coordenadas guardadas en el catálogo maestro de Supabase." : "No se guardó. Comprueba los permisos y la conexión; el catálogo no se ha cambiado.";
+      msg.textContent = ok
+        ? "Dirección y coordenadas guardadas en el catálogo maestro de Supabase."
+        : "No se guardó en Supabase. " + (window.mapaLastLocationError || "Comprueba los permisos y la conexión.");
       msg.style.color = ok ? "#14532d" : "#b3261e";
+      window.mapaLastLocationError = "";
       const mk = markers[c.id]; if (mk) cluster.zoomToShowLayer(mk, () => mk.openPopup());
     };
     inp.addEventListener("paste", (e) => { const t = (e.clipboardData || window.clipboardData).getData("text"); e.preventDefault(); inp.value = t; msg.style.color = ""; msg.textContent = "Coordenadas cargadas. Revisa la dirección y pulsa Guardar para enviar los cambios a Supabase."; });
@@ -963,19 +966,36 @@ async function setLoc(c, lat, lon, address) {
     console.error("[Mapa] El establecimiento no tiene ID de Supabase; no se guarda la corrección.");
     return false;
   }
-  const { data, error } = await client.from("establishments").update({
-    address: cleanAddress,
-    latitude: +lat.toFixed(6),
-    longitude: +lon.toFixed(6),
-    location_precision: "verified",
-    location_source: "manual_google_maps",
-    location_verified_at: new Date().toISOString()
-  }).eq("id", c.databaseId)
-    .select("id,address,latitude,longitude,location_precision")
-    .maybeSingle();
+  let data = null;
+  let error = null;
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
+  try {
+    const result = await client.from("establishments").update({
+      address: cleanAddress,
+      latitude: +lat.toFixed(6),
+      longitude: +lon.toFixed(6),
+      location_precision: "verified",
+      location_source: "manual_google_maps",
+      location_verified_at: new Date().toISOString()
+    }).eq("id", c.databaseId)
+      .select("id,address,latitude,longitude,location_precision")
+      .abortSignal(controller.signal)
+      .maybeSingle();
+    data = result.data;
+    error = result.error;
+  } catch (requestError) {
+    error = requestError;
+  } finally {
+    clearTimeout(timeoutId);
+  }
 
   if (error || !data || data.id !== c.databaseId) {
-    console.error("[Mapa] No se pudo guardar la ubicación maestra en Supabase:", error || "No se actualizó ninguna fila (permisos o registro no visible).");
+    const reason = error?.message || (controller.signal.aborted
+      ? "Supabase no respondió en 15 segundos; la petición se ha cancelado."
+      : "No se actualizó ninguna fila (permisos o registro no visible).");
+    window.mapaLastLocationError = reason;
+    console.error("[Mapa] No se pudo guardar la ubicación maestra en Supabase:", error || reason);
     return false;
   }
 
