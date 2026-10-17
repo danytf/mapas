@@ -24,6 +24,21 @@ forbidMatch(/\bnavigator\s*\.\s*serviceWorker\s*\.\s*register\s*\(/i,
 requireMatch(/delete\s+loadedPersonalState\.locations\s*;/,
   "Debe descartarse el campo heredado loadedPersonalState.locations.");
 
+const setLocStart = html.indexOf("async function setLoc(c, lat, lon, address)");
+const customStart = html.indexOf("if (c.custom) {", setLocStart);
+const masterStart = html.indexOf("if (!c.databaseId)", customStart);
+if (setLocStart < 0 || customStart < 0 || masterStart < 0) {
+  failures.push("No se pudo localizar la edición de ubicaciones personalizadas.");
+} else {
+  const customLocation = html.slice(customStart, masterStart);
+  if (!/if\s*\(!await\s+saveCustoms\(\)\)\s*\{/.test(customLocation) ||
+      !/p\.lat\s*=\s*previous\.lat/.test(customLocation) ||
+      !/p\.lon\s*=\s*previous\.lon/.test(customLocation) ||
+      !/await\s+saveCustoms\(\)/.test(customLocation)) {
+    failures.push("Si falla el guardado de un punto personalizado, debe restaurarse su ubicación anterior.");
+  }
+}
+
 const importStart = html.indexOf('$("#impf").addEventListener("change", async (e) => {');
 const importEnd = html.indexOf("/* Restaurar puntos quitados */", importStart);
 if (importStart < 0 || importEnd < 0) {
