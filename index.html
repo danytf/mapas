@@ -768,7 +768,28 @@ const chainOf = (c) => { const k = rawChain(c); return smallChains.has(k) ? "Ind
 /* Estado operativo del usuario: persistencia remota en Supabase. */
 const ESTADOS = [["sin", "Sin solicitar", "#ffffff"], ["solicitado", "Solicitado", "#fbbf24"], ["concedido", "Concedido", "#22c55e"], ["denegado", "Denegado", "#111827"], ["caducado", "Caducado", "#94a3b8"], ["cancelado", "Cancelado", "#ef4444"]];
 let permits = {};
-const savePermits = () => { if (typeof window.mapaPersistUserState === "function") window.mapaPersistUserState("permits", permits); };
+const savePermits = () => {
+  const session = window.mapaSession;
+  const client = session?.supabase;
+  const userId = session?.user?.id;
+  if (!client || !userId) return Promise.resolve(false);
+  const rows = Object.entries(permits).map(([name, state]) => {
+    const c = CENTERS.find(item => item.name === name && item.databaseId && item.provinceId);
+    return c ? { establishment_id: c.databaseId, province_id: c.provinceId, state, updated_by: userId } : null;
+  }).filter(Boolean);
+  if (!rows.length) return Promise.resolve(true);
+  const status = document.getElementById("status");
+  return client.from("establishment_app_state").upsert(rows, { onConflict: "establishment_id" })
+    .then(({ error }) => {
+      if (error) throw error;
+      return true;
+    })
+    .catch(error => {
+      console.error("[Mapa] No se pudo guardar el estado compartido del establecimiento:", error);
+      if (status) status.textContent = "Aviso: no se pudieron guardar los permisos compartidos en Supabase.";
+      return false;
+    });
+};
 let removed = new Set();
 const saveRemoved = () => { if (typeof window.mapaPersistUserState === "function") window.mapaPersistUserState("removed", [...removed]); };
 const saveCustoms = () => { if (typeof window.mapaPersistUserState === "function") window.mapaPersistUserState("customs", customs); };
@@ -2194,7 +2215,20 @@ window.exportarCatalogoInicial = function () {
     loadedPersonalState = state;
     loadedStateUserId = userId;
     // No se importan datos heredados del navegador.
-    permits = state.permits && typeof state.permits === "object" ? state.permits : {};
+    // Los permisos son estado operativo compartido y se leen de establishment_app_state.
+    delete loadedPersonalState.permits;
+    permits = {};
+    const { data: sharedRows, error: sharedError } = await client
+      .from("establishment_app_state")
+      .select("establishment_id,province_id,state")
+      .limit(5000);
+    if (sharedError) throw sharedError;
+    if (!Array.isArray(sharedRows)) throw new Error("Supabase no devolvió el estado operativo compartido.");
+    const byId = new Map(CENTERS.filter(c => c.databaseId).map(c => [c.databaseId, c]));
+    sharedRows.forEach(row => {
+      const c = byId.get(row.establishment_id);
+      if (c && row.province_id === c.provinceId && row.state && typeof row.state === "object" && !Array.isArray(row.state)) permits[c.name] = row.state;
+    });
     customs = Array.isArray(state.customs) ? state.customs.filter(p => p && typeof p.name === "string" && Number.isFinite(Number(p.lat)) && Number.isFinite(Number(p.lon))) : [];
     removed = new Set(Array.isArray(state.removed) ? state.removed.filter(x => typeof x === "string") : []);
     reviewed = new Set(Array.isArray(state.reviewed) ? state.reviewed.filter(x => typeof x === "string") : []);
@@ -2296,6 +2330,7 @@ window.exportarCatalogoInicial = function () {
           street: row.address || "",
           conf: row.location_precision !== "unknown",
           databaseId: row.id,
+          provinceId: row.province_id,
           sourceRef: row.source_ref || null
         });
         cache[index + 1] = {
