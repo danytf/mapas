@@ -1010,11 +1010,23 @@ async function setLoc(c, lat, lon, address) {
   if (c.custom) {
     const p = customs.find((x) => x.name === c.name);
     if (!p) return false;
+    const previous = {
+      lat: p.lat, lon: p.lon, street: p.street,
+      hadApprox: Object.prototype.hasOwnProperty.call(p, "approx"), approx: p.approx
+    };
     p.lat = +lat.toFixed(6);
     p.lon = +lon.toFixed(6);
     p.street = cleanAddress;
-    p.approx = undefined;
-    if (!await saveCustoms()) return false;
+    delete p.approx;
+    if (!await saveCustoms()) {
+      p.lat = previous.lat;
+      p.lon = previous.lon;
+      p.street = previous.street;
+      if (previous.hadApprox) p.approx = previous.approx;
+      else delete p.approx;
+      await saveCustoms();
+      return false;
+    }
     c.street = cleanAddress;
     cache[c.id] = { lat: p.lat, lon: p.lon };
     if (markers[c.id]) markers[c.id].setLatLng([p.lat, p.lon]);
