@@ -950,16 +950,41 @@ function popupFor(c, pos) {
     el.querySelector(".l-mv").addEventListener("click", () => startMove(c));
   }
   const rv = el.querySelector(".f-rev");
-  if (rv) rv.addEventListener("click", () => { reviewed.add(c.name); saveReviewed(); rv.remove(); refreshSelects(); renderList(); el.querySelector(".saved").textContent = "Marcado como revisado"; gamRev(c); });
+  if (rv) rv.addEventListener("click", async () => {
+    reviewed.add(c.name);
+    if (!await saveReviewed()) {
+      reviewed.delete(c.name);
+      await saveReviewed();
+      const status = document.getElementById("status");
+      if (status) status.textContent = "No se pudo guardar la revisión en Supabase; no se ha marcado como revisado.";
+      return;
+    }
+    rv.remove(); refreshSelects(); renderList(); el.querySelector(".saved").textContent = "Marcado como revisado"; gamRev(c);
+  });
   const del = el.querySelector(".f-del");
-  del.addEventListener("click", () => {
+  del.addEventListener("click", async () => {
     if (!armed) { armed = true; del.textContent = "¿Seguro? Pulsa otra vez"; return; }
     if (c.custom) {
+      const previous = customs.slice();
       customs = customs.filter((x) => x.name !== c.name);
-      saveCustoms();
+      if (!await saveCustoms()) {
+        customs = previous;
+        await saveCustoms();
+        const status = document.getElementById("status");
+        if (status) status.textContent = "No se pudo eliminar el punto de Supabase; se mantiene en el mapa.";
+        return;
+      }
       location.reload();
     } else {
-      removed.add(c.name); saveRemoved(); map.closePopup(); refreshSelects(); renderList();
+      removed.add(c.name);
+      if (!await saveRemoved()) {
+        removed.delete(c.name);
+        await saveRemoved();
+        const status = document.getElementById("status");
+        if (status) status.textContent = "No se pudo guardar la ocultación en Supabase; el establecimiento se mantiene.";
+        return;
+      }
+      map.closePopup(); refreshSelects(); renderList();
     }
   });
   return el;
@@ -1900,8 +1925,15 @@ $("#impf").addEventListener("change", async (e) => {
 });
 
 /* Restaurar puntos quitados */
-$("#restore").addEventListener("click", () => {
-  removed = new Set(); saveRemoved();
+$("#restore").addEventListener("click", async () => {
+  const previous = new Set(removed);
+  removed = new Set();
+  if (!await saveRemoved()) {
+    removed = previous;
+    await saveRemoved();
+    $("#status").textContent = "No se pudo restaurar el catálogo en Supabase; se mantienen los cambios anteriores.";
+    return;
+  }
   CENTERS.forEach(makeMarker);
   refreshSelects(); renderList();
 });
@@ -1916,10 +1948,15 @@ function readForm() {
   if (CENTERS.some((c) => c.name.toLowerCase() === name.toLowerCase())) { nmsg("Ya existe un punto con ese nombre."); return null; }
   return { name, tipo: $("#n-tipo").value, town, street };
 }
-function addCustom(rec, pos) {
+async function addCustom(rec, pos) {
   const p = { ...rec, lat: pos.lat, lon: pos.lon };
   customs.push(p);
-  saveCustoms();
+  if (!await saveCustoms()) {
+    customs = customs.filter(x => x !== p);
+    await saveCustoms();
+    $("#status").textContent = "No se pudo guardar el punto personalizado en Supabase; no se ha añadido al mapa.";
+    return false;
+  }
   const c = { id: CENTERS.length + 1, name: p.name, tipo: p.tipo, sub: "", town: p.town, street: p.street, conf: true, custom: true, extra: "Punto agregado manualmente" };
   CENTERS.push(c);
   cache[c.id] = { lat: p.lat, lon: p.lon };
@@ -1929,6 +1966,7 @@ function addCustom(rec, pos) {
   gamAdd(c);
   cluster.zoomToShowLayer(markers[c.id], () => { map.flyTo(markers[c.id].getLatLng(), Math.max(map.getZoom(), 16), { duration: 0.6 }); markers[c.id].openPopup(); });
   highlight(c.id, false);
+  return true;
 }
 $("#add").addEventListener("click", () => { nmsg(""); $("#addForm").reset(); $("#n-town").value = "Granada"; dlg.showModal(); });
 $("#n-cancel").addEventListener("click", () => dlg.close());
@@ -1939,7 +1977,7 @@ $("#n-geo").addEventListener("click", async () => {
   try {
     const pos = await nominatim(rec.street + ", " + rec.town);
     if (!pos) { nmsg("No se ha encontrado esa dirección. Prueba a cambiarla o usa “Colocar en el mapa”."); return; }
-    dlg.close(); addCustom(rec, pos);
+    dlg.close(); await addCustom(rec, pos);
   } catch (e) { nmsg("No se pudo consultar OpenStreetMap (" + e.message + ")."); }
 });
 $("#n-click").addEventListener("click", () => {
@@ -1948,7 +1986,7 @@ $("#n-click").addEventListener("click", () => {
   document.body.classList.add("placing");
   $("#status").textContent = "Haz clic en el mapa donde está “" + rec.name + "” (Escape para cancelar).";
   const stop = () => { document.body.classList.remove("placing"); map.off("click", onClick); document.removeEventListener("keydown", onKey); };
-  const onClick = (ev) => { stop(); $("#status").textContent = "Punto agregado."; addCustom(rec, { lat: ev.latlng.lat, lon: ev.latlng.lng }); };
+  const onClick = async (ev) => { stop(); await addCustom(rec, { lat: ev.latlng.lat, lon: ev.latlng.lng }); if (CENTERS.some(c => c.name === rec.name && c.custom)) $("#status").textContent = "Punto agregado y guardado en Supabase."; };
   const onKey = (ev) => { if (ev.key === "Escape") { stop(); $("#status").textContent = "Cancelado."; } };
   map.on("click", onClick); document.addEventListener("keydown", onKey);
 });
