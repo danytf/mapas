@@ -906,6 +906,8 @@ $category_delete_matrix$;
 do $same_province_delete_matrix$
 declare affected integer;
 begin
+  perform set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
+
   delete from public.permit_applications where id = '00000000-0000-4000-8000-000000000007';
   get diagnostics affected = row_count;
   if affected <> 0 then
