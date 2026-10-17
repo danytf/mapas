@@ -130,8 +130,8 @@ if (copyStart < 0 || csvStart < 0 || jsonStart < 0 || restoreStart < 0) {
   if (!/window\.confirm\s*\(/.test(csvExport)) {
     failures.push("La exportación CSV debe advertir y pedir confirmación.");
   }
-  if (!/const csvCell = \\(value\\) =>/.test(html) ||
-      !/\\.map\\(csvCell\\)\\.join\\(";"\\)/.test(csvExport)) {
+  if (!html.includes("const csvCell = (value) =>") ||
+      !csvExport.includes(".map(csvCell).join(\";\"") ) {
     failures.push("La exportación CSV debe serializar cada celda con protección frente a fórmulas.");
   }
   if (!/window\.confirm\s*\(/.test(jsonExport) ||
