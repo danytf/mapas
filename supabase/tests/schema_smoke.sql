@@ -299,6 +299,38 @@ begin
   exception when insufficient_privilege then
     null;
   end;
+
+  begin
+    update public.establishment_location_history
+       set new_address = 'forged history update'
+     where establishment_id = '00000000-0000-4000-8000-000000000005';
+    raise exception 'FALLO: authenticated pudo modificar historial directamente';
+  exception when insufficient_privilege then
+    null;
+  end;
+
+  begin
+    delete from public.establishment_location_history
+     where establishment_id = '00000000-0000-4000-8000-000000000005';
+    raise exception 'FALLO: authenticated pudo borrar historial directamente';
+  exception when insufficient_privilege then
+    null;
+  end;
+
+  begin
+    update public.audit_log set action = 'forged'
+     where table_name = 'establishments';
+    raise exception 'FALLO: authenticated pudo modificar audit_log directamente';
+  exception when insufficient_privilege then
+    null;
+  end;
+
+  begin
+    delete from public.audit_log where table_name = 'establishments';
+    raise exception 'FALLO: authenticated pudo borrar audit_log directamente';
+  exception when insufficient_privilege then
+    null;
+  end;
 end;
 $$;
 
@@ -1222,6 +1254,105 @@ begin
   end if;
 end;
 $admin_only_writes_matrix$;
+
+-- Users must not promote themselves, deactivate themselves, or edit province assignments.
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
+do $self_privilege_escalation_matrix$
+declare affected integer; saved_role text; saved_active boolean;
+begin
+  update public.profiles set role = 'admin'
+   where id = '00000000-0000-4000-8000-0000000000a2';
+  get diagnostics affected = row_count;
+  if affected <> 0 then
+    raise exception 'FALLO RLS: usuario normal pudo elevar su propio rol';
+  end if;
+
+  update public.profiles set is_active = false
+   where id = '00000000-0000-4000-8000-0000000000a2';
+  get diagnostics affected = row_count;
+  if affected <> 0 then
+    raise exception 'FALLO RLS: usuario normal pudo modificar su propio estado de activación';
+  end if;
+
+  select role, is_active into saved_role, saved_active
+    from public.profiles where id = '00000000-0000-4000-8000-0000000000a2';
+  if saved_role <> 'user' or saved_active is not true then
+    raise exception 'FALLO RLS: se alteró el rol o la activación del usuario normal';
+  end if;
+
+  begin
+    insert into public.user_provinces (user_id, province_id, assigned_by)
+    values ('00000000-0000-4000-8000-0000000000a2',
+            '00000000-0000-4000-8000-000000000002', auth.uid());
+    raise exception 'FALLO RLS: usuario normal se asignó a otra provincia';
+  exception when insufficient_privilege then null;
+  end;
+
+  update public.user_provinces
+     set province_id = '00000000-0000-4000-8000-000000000002'
+   where user_id = '00000000-0000-4000-8000-0000000000a2'
+     and province_id = '00000000-0000-4000-8000-000000000001';
+  get diagnostics affected = row_count;
+  if affected <> 0 then
+    raise exception 'FALLO RLS: usuario normal pudo cambiar su asignación provincial';
+  end if;
+
+  select count(*) into affected from public.user_provinces
+   where user_id = '00000000-0000-4000-8000-0000000000a2'
+     and province_id = '00000000-0000-4000-8000-000000000001';
+  if affected <> 1 then
+    raise exception 'FALLO RLS: la asignación provincial original se alteró';
+  end if;
+
+  begin
+    delete from public.user_app_state where user_id = auth.uid();
+    get diagnostics affected = row_count;
+    if affected <> 0 then
+      raise exception 'FALLO RLS: un usuario pudo borrar su estado personal';
+    end if;
+  exception when insufficient_privilege then
+    null;
+  end;
+
+  select count(*) into affected from public.user_app_state where user_id = auth.uid();
+  if affected <> 1 then
+    raise exception 'FALLO RLS: se perdió el estado personal tras intentar borrarlo';
+  end if;
+
+  begin
+    delete from public.establishment_app_state
+     where establishment_id = '00000000-0000-4000-8000-000000000005';
+    get diagnostics affected = row_count;
+    if affected <> 0 then
+      raise exception 'FALLO RLS: un usuario provincial pudo borrar el estado compartido';
+    end if;
+  exception when insufficient_privilege then
+    null;
+  end;
+end;
+$self_privilege_escalation_matrix$;
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a1', false);
+do $admin_profile_assignment_matrix$
+declare affected integer; saved_role text;
+begin
+  update public.profiles set role = 'admin'
+   where id = '00000000-0000-4000-8000-0000000000a2';
+  get diagnostics affected = row_count;
+  if affected <> 1 then raise exception 'FALLO RLS: administrador no pudo cambiar el rol de prueba'; end if;
+
+  select role into saved_role from public.profiles
+   where id = '00000000-0000-4000-8000-0000000000a2';
+  if saved_role <> 'admin' then raise exception 'FALLO RLS: no se aplicó el cambio administrativo de rol'; end if;
+
+  update public.profiles set role = 'user'
+   where id = '00000000-0000-4000-8000-0000000000a2';
+  get diagnostics affected = row_count;
+  if affected <> 1 then raise exception 'FALLO RLS: no se pudo restaurar el usuario de prueba'; end if;
+end;
+$admin_profile_assignment_matrix$;
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
 
 -- Administrators can read audit logs; ordinary users cannot.
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a1', false);
