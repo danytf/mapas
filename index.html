@@ -485,9 +485,7 @@
       <button id="restore" type="button" role="menuitem">Restaurar puntos quitados (0)</button>
       <div class="mh">Datos</div>
       <button id="csv" type="button" role="menuitem">Exportar CSV</button>
-      <button id="bak" type="button" role="menuitem">Guardar copia</button>
-      <button id="imp" type="button" role="menuitem">Cargar copia</button>
-      <input id="impf" type="file" accept="application/json,.json" hidden>
+      <button id="bak" type="button" role="menuitem">Exportar estado (JSON)</button>
       <div class="mh">Sesión</div>
       <button id="logout" type="button" role="menuitem">Cerrar sesión</button>
       <div class="mh">Avanzado</div>
@@ -1734,6 +1732,7 @@ function openLogros() {
 document.getElementById("logrosBtn").addEventListener("click", openLogros);
 document.getElementById("lgClose").addEventListener("click", () => document.getElementById("dlgLogros").close());
 $("#csv").addEventListener("click", () => {
+  if (!window.confirm("El CSV incluye datos operativos, como contactos, notas e historial de permisos. Guárdalo solo en una ubicación autorizada. ¿Quieres exportarlo?")) return;
   const q = (v) => '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
   const head = ["id", "categoria", "subtipo", "nombre", "direccion", "municipio", "lat", "lon", "ubicacion_aproximada", "origen", "valoracion", "estado_permiso", "fecha_solicitud", "proximo_seguimiento", "contacto", "notas", "solicitud", "concesion_vigente", "historial_concesiones"];
   const rows = CENTERS.filter((c) => !isOut(c)).map((c) => {
@@ -1742,9 +1741,11 @@ $("#csv").addEventListener("click", () => {
   });
   download("permisos-captacion-granada.csv", "\ufeff" + head.join(";") + "\r\n" + rows.join("\r\n"), "text/csv;charset=utf-8");
 });
-$("#bak").addEventListener("click", () => download("copia-mapa-recursos-granada.json", JSON.stringify({ version: 2, permisos: permits, puntos_propios: customs, quitados: [...removed], revisados: [...reviewed], ubicaciones: corr, logros, gamificacion: gam }, null, 2), "application/json"));
-$("#imp").addEventListener("click", () => $("#impf").click());
-$("#impf").addEventListener("change", async (e) => {
+$("#bak").addEventListener("click", () => {
+  if (!window.confirm("Se exportarán datos operativos del mapa a un archivo JSON. Este archivo NO es una copia completa de la base de datos ni sustituye a una copia de seguridad de Supabase. Guárdalo solo en una ubicación autorizada. ¿Continuar?")) return;
+  download("exportacion-estado-mapa.json", JSON.stringify({ version: 2, permisos: permits, puntos_propios: customs, quitados: [...removed], revisados: [...reviewed], ubicaciones: corr, logros, gamificacion: gam }, null, 2), "application/json");
+});
+/* Restaurar puntos quitados */
   const f = e.target.files[0]; if (!f) return;
   try {
     const d = JSON.parse(await f.text());
