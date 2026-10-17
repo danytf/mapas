@@ -1924,7 +1924,6 @@ $("#impf").addEventListener("change", async (e) => {
     const pm = version2 ? d.permisos : d;
     if (!pm || typeof pm !== "object" || Array.isArray(pm)) throw new Error("El bloque de permisos no es válido.");
     const validNames = new Set([...CENTERS.map(c => c.name), ...customs.map(p => p.name)]);
-    const knownKeys = ["permisos", "puntos_propios", "quitados", "revisados", "logros", "gamificacion", "version"];
     const hasRecognizedContent = version2 || ["puntos_propios", "quitados", "revisados", "logros", "gamificacion"].some(k => d[k] !== undefined) || Object.keys(pm).some(k => validNames.has(k) && pm[k] && typeof pm[k] === "object");
     if (!hasRecognizedContent) throw new Error("El archivo no parece una copia de seguridad compatible con el mapa.");
 
