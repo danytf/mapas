@@ -228,6 +228,80 @@ begin
   end if;
 end;
 $$;
+-- Aislamiento del estado personal: la cuenta B no debe leer la fila de A.
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
+insert into public.user_app_state (user_id, state)
+values ('00000000-0000-4000-8000-0000000000a2', '{"gamification":{"lvl":3},"badges":{"test":"A"}}'::jsonb);
+
+do $
+declare visible_count integer;
+begin
+  select count(*) into visible_count from public.user_app_state
+  where user_id = '00000000-0000-4000-8000-0000000000a2';
+  if visible_count <> 1 then
+    raise exception 'FALLO RLS: el propietario no puede leer su estado personal';
+  end if;
+end;
+$;
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a3', false);
+do $
+declare visible_count integer;
+begin
+  select count(*) into visible_count from public.user_app_state
+  where user_id = '00000000-0000-4000-8000-0000000000a2';
+  if visible_count <> 0 then
+    raise exception 'FALLO RLS: la cuenta B puede leer el estado personal de A';
+  end if;
+end;
+$;
+
+-- El estado operativo de un establecimiento es compartido dentro de su provincia,
+-- pero no debe filtrarse a usuarios asignados a otra provincia.
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
+insert into public.establishment_app_state (establishment_id, province_id, state, updated_by)
+values (
+  '00000000-0000-4000-8000-000000000005',
+  '00000000-0000-4000-8000-000000000001',
+  '{"permit":{"status":"smoke-test"}}'::jsonb,
+  '00000000-0000-4000-8000-0000000000a2'
+);
+
+do $
+declare visible_count integer;
+begin
+  select count(*) into visible_count from public.establishment_app_state
+  where establishment_id = '00000000-0000-4000-8000-000000000005';
+  if visible_count <> 1 then
+    raise exception 'FALLO RLS: el usuario asignado no puede leer el estado operativo provincial';
+  end if;
+end;
+$;
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a3', false);
+do $
+declare visible_count integer;
+begin
+  select count(*) into visible_count from public.establishment_app_state
+  where establishment_id = '00000000-0000-4000-8000-000000000005';
+  if visible_count <> 0 then
+    raise exception 'FALLO RLS: la cuenta de provincia B puede leer el estado operativo de A';
+  end if;
+end;
+$;
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a1', false);
+do $
+declare visible_count integer;
+begin
+  select count(*) into visible_count from public.establishment_app_state
+  where establishment_id = '00000000-0000-4000-8000-000000000005';
+  if visible_count <> 1 then
+    raise exception 'FALLO RLS: el administrador no puede leer estado operativo interprovincial';
+  end if;
+end;
+$;
+
 reset role;
 
 select 'schema smoke tests passed' as result;
