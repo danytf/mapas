@@ -44,14 +44,19 @@ forbidMatch(/id=["']imp["']|id=["']impf["']/i,
 forbidMatch(/\$\(["']#impf["']\)\.addEventListener\s*\(/,
   "No debe existir un manejador de importación JSON.");
 
+const copyStart = html.indexOf('$("#copy").addEventListener("click", async () => {');
 const csvStart = html.indexOf('$("#csv").addEventListener("click", () => {');
 const jsonStart = html.indexOf('$("#bak").addEventListener("click", () => {');
 const restoreStart = html.indexOf("/* Restaurar puntos quitados */", jsonStart);
-if (csvStart < 0 || jsonStart < 0 || restoreStart < 0) {
+if (copyStart < 0 || csvStart < 0 || jsonStart < 0 || restoreStart < 0) {
   failures.push("No se pudieron localizar los manejadores de exportación.");
 } else {
+  const copyExport = html.slice(copyStart, csvStart);
   const csvExport = html.slice(csvStart, jsonStart);
   const jsonExport = html.slice(jsonStart, restoreStart);
+  if (!/window\.confirm\s*\(/.test(copyExport)) {
+    failures.push("La copia de coordenadas al portapapeles debe pedir confirmación.");
+  }
   if (!/window\.confirm\s*\(/.test(csvExport)) {
     failures.push("La exportación CSV debe advertir y pedir confirmación.");
   }
