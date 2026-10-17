@@ -116,9 +116,10 @@ if (permitWriteStart < 0 || permitWriteEnd < 0) {
   failures.push("No se pudo localizar la comprobación posterior de escrituras compartidas.");
 } else {
   const permitWrite = html.slice(permitWriteStart, permitWriteEnd);
-  if (!/stableJson\(persistedState\) === stableJson\(row\.state\)/.test(permitWrite) ||
-      !/verification\.data\.updated_by === userId/.test(permitWrite) ||
-      !/verification\.data\.province_id === row\.province_id/.test(permitWrite) ||
+  if (!/rows\.every\(row =>/.test(permitWrite) ||
+      !/\.in\("establishment_id", rows\.map\(row => row\.establishment_id\)\)/.test(permitWrite) ||
+      !/persisted\.updated_by === userId/.test(permitWrite) ||
+      !/persisted\.province_id === row\.province_id/.test(permitWrite) ||
       !/setTimeout\(\(\) => controller\.abort\(\), 15000\)/.test(permitWrite) ||
       !/setTimeout\(\(\) => verifyController\.abort\(\), 8000\)/.test(permitWrite)) {
     failures.push("Un timeout de permisos debe comprobar estado, provincia y usuario persistidos antes de revertir la edición.");
