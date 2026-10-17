@@ -406,6 +406,48 @@ begin
 end;
 $profile_and_province_grant_test$;
 
+-- Los seguimientos permiten actualizar sus campos operativos, pero no falsificar autoría.
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
+insert into public.followups (
+  id, establishment_id, grant_id, due_on, outcome, created_by
+) values (
+  '00000000-0000-4000-8000-0000000000a9',
+  '00000000-0000-4000-8000-000000000005',
+  '00000000-0000-4000-8000-000000000008',
+  current_date,
+  'pendiente',
+  '00000000-0000-4000-8000-0000000000a2'
+);
+update public.followups
+   set outcome = 'contactado'
+ where id = '00000000-0000-4000-8000-0000000000a9';
+
+do $followup_attribution_test$
+declare saved_creator uuid;
+        saved_outcome text;
+begin
+  select created_by, outcome into saved_creator, saved_outcome
+    from public.followups
+   where id = '00000000-0000-4000-8000-0000000000a9';
+
+  if saved_creator <> '00000000-0000-4000-8000-0000000000a2' then
+    raise exception 'FALLO SEGURIDAD: se alteró la autoría del seguimiento';
+  end if;
+  if saved_outcome <> 'contactado' then
+    raise exception 'FALLO: un usuario autorizado no pudo actualizar un seguimiento';
+  end if;
+
+  begin
+    update public.followups
+       set created_by = '00000000-0000-4000-8000-0000000000a3'
+     where id = '00000000-0000-4000-8000-0000000000a9';
+    raise exception 'FALLO SEGURIDAD: se permitió reescribir created_by en un seguimiento';
+  exception when insufficient_privilege then
+    null;
+  end;
+end;
+$followup_attribution_test$;
+
 -- Aislamiento del estado personal: la cuenta B no debe leer la fila de A.
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
 insert into public.user_app_state (user_id, state)

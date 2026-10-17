@@ -31,15 +31,17 @@ BEGIN
   END LOOP;
 
   -- Changing a record's province is an administrative operation.
-  IF TG_TABLE_NAME = 'establishments'
-     AND NEW.province_id IS DISTINCT FROM OLD.province_id
-     AND NOT public.is_admin() THEN
-    RAISE EXCEPTION 'Solo un administrador puede cambiar la provincia de un establecimiento'
-      USING ERRCODE = '42501';
+  -- Access table-specific fields only inside a table-specific branch.
+  IF TG_TABLE_NAME = 'establishments' THEN
+    IF NEW.province_id IS DISTINCT FROM OLD.province_id
+       AND NOT public.is_admin() THEN
+      RAISE EXCEPTION 'Solo un administrador puede cambiar la provincia de un establecimiento'
+        USING ERRCODE = '42501';
+    END IF;
   END IF;
 
   -- The authenticated caller cannot impersonate another editor.
-  IF TG_TABLE_NAME IN ('establishments', 'permit_applications', 'permit_grants', 'followups') THEN
+  IF TG_TABLE_NAME IN ('establishments', 'permit_applications', 'permit_grants') THEN
     IF (SELECT auth.uid()) IS NOT NULL THEN
       NEW.updated_by := (SELECT auth.uid());
     END IF;
