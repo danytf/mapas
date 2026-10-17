@@ -769,13 +769,14 @@ const chainOf = (c) => { const k = rawChain(c); return smallChains.has(k) ? "Ind
 const ESTADOS = [["sin", "Sin solicitar", "#ffffff"], ["solicitado", "Solicitado", "#fbbf24"], ["concedido", "Concedido", "#22c55e"], ["denegado", "Denegado", "#111827"], ["caducado", "Caducado", "#94a3b8"], ["cancelado", "Cancelado", "#ef4444"]];
 let permits = {};
 let sharedPermitRecords = new Map();
-const savePermits = () => {
+const savePermits = (onlyName = null) => {
   const session = window.mapaSession;
   const client = session?.supabase;
   const userId = session?.user?.id;
   if (!client || !userId) return Promise.resolve(false);
-  const names = new Set([...sharedPermitRecords.keys(), ...Object.keys(permits)]);
-  const rows = [...names].map(name => {
+  // Un guardado normal solo toca el establecimiento editado; evita sobrescribir cambios concurrentes.
+  const names = onlyName ? [onlyName] : Object.keys(permits);
+  const rows = [...new Set(names)].map(name => {
     const c = CENTERS.find(item => item.name === name && item.databaseId && item.provinceId);
     if (!c) return null;
     return { establishment_id: c.databaseId, province_id: c.provinceId, state: permits[name] || {}, updated_by: userId };
@@ -959,7 +960,7 @@ function popupFor(c, pos) {
     else { v.estado = p.estado || "sin"; v.fecha = p.fecha || ""; if (p.seguimiento) v.seguimiento = p.seguimiento; }
     const prevP = permits[c.name];
     if (v.estado === "sin" && !v.fecha && !v.contacto && !v.notas && !v.valoracion && !hist.length && !v.seguimiento && !sols.length) delete permits[c.name]; else permits[c.name] = v;
-    const saved = await savePermits();
+    const saved = await savePermits(c.name);
     if (markers[c.id]) markers[c.id].setIcon(makeIcon(c));
     refreshSelects();
     renderList();
