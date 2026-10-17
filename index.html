@@ -715,7 +715,8 @@ const fmtD = (d) => {
     ? "—" : d.slice(8, 10) + "/" + d.slice(5, 7) + "/" + d.slice(0, 4);
 };
 const safeCount = (value) => {
-  const n = typeof value === "number" ? value : Number(value);
+  const text = typeof value === "string" ? value.trim() : "";
+  const n = typeof value === "number" ? value : (/^\d+$/.test(text) ? Number(text) : NaN);
   return Number.isSafeInteger(n) && n > 0 && n <= 100000 ? n : 0;
 };
 const today = () => new Date().toISOString().slice(0, 10);
