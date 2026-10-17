@@ -3,8 +3,11 @@ begin
   if (select count(*) from public.provinces) <> 52 then
     raise exception 'FALLO: el seed no ha cargado las 52 provincias/códigos territoriales esperados';
   end if;
-  if (select count(*) from public.categories) <> 16 then
-    raise exception 'FALLO: el seed no ha cargado las 16 categorías de referencia esperadas';
+  if (select count(*) from public.categories where is_active) <> 17 then
+    raise exception 'FALLO: la taxonomía activa del mapa debe contener 17 categorías';
+  end if;
+  if (select count(*) from public.categories) <> 28 then
+    raise exception 'FALLO: se esperaba conservar 11 categorías de referencia antiguas como inactivas';
   end if;
 end;
 $$;
