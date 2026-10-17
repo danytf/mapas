@@ -1892,7 +1892,10 @@ window.exportarCatalogoInicial = function () {
   let siguienteId = 1;
 
   // Centros y establecimientos definidos estáticamente.
+  // CENTERS también puede contener puntos personalizados cargados desde localStorage.
+  // Excluirlos explícitamente para que la exportación solo use el catálogo estático.
   for (const c of CENTERS) {
+    if (c.custom) continue;
     const coordenadas = PRECOMPUTED[c.name];
 
     establecimientos.push({
