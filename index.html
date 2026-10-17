@@ -499,6 +499,11 @@
   <aside>
     <div class="tools">
       <input id="q" type="search" placeholder="Buscar por nombre o calle" aria-label="Buscar centro">
+      <div class="row" style="grid-template-columns:1fr">
+        <select id="provincia" aria-label="Filtrar por provincia">
+          <option value="">Provincia: todas</option>
+        </select>
+      </div>
       <div class="row">
         <select id="tipo" aria-label="Filtrar por categoría"></select>
         <select id="permiso" aria-label="Filtrar por estado del permiso"></select>
@@ -1011,6 +1016,7 @@ function makeMarker(c) {
 
 function renderList() {
   const q = $("#q").value.trim().toLowerCase();
+  const provincia = $("#provincia").value;
   const tipo = $("#tipo").value;
   const est = $("#permiso").value;
   const cadOn = $("#tipo").value === "Supermercado";
@@ -1027,7 +1033,7 @@ function renderList() {
   ul.innerHTML = "";
   const order = $("#orden").value === "val" ? [...CENTERS].sort((a, b) => rate(b) - rate(a) || a.id - b.id) : CENTERS;
   order.forEach((c) => {
-    const visible = !isOut(c) && matchTipo(c, tipo) && (!ch || chainOf(c) === ch) && (!sb || c.sub === sb) && (!est || estadoOf(c) === est) && (!onlyRev || isRev(c)) && (!onlySeg || seguimientoDue(c)) && okVal(c) &&
+    const visible = !isOut(c) && (!provincia || (c.province || c.prov || "") === provincia) && matchTipo(c, tipo) && (!ch || chainOf(c) === ch) && (!sb || c.sub === sb) && (!est || estadoOf(c) === est) && (!onlyRev || isRev(c)) && (!onlySeg || seguimientoDue(c)) && okVal(c) &&
       (!q || (c.name + " " + c.street + " " + (c.town || "Granada")).toLowerCase().includes(q));
     if (markers[c.id]) {
       const on = cluster.hasLayer(markers[c.id]);
@@ -1141,6 +1147,7 @@ async function locateAll() {
 let fitTimer, onlyRev = false, onlySeg = false;
 const refilter = () => { renderList(); clearTimeout(fitTimer); fitTimer = setTimeout(() => { touched = false; fitAll(); }, 200); };
 $("#q").addEventListener("input", refilter);
+$("#provincia").addEventListener("change", refilter);
 $("#tipo").addEventListener("change", refilter);
 $("#cadena").addEventListener("change", refilter);
 $("#subtipo").addEventListener("change", refilter);
@@ -1577,6 +1584,19 @@ gamReady = true;
 
 function refreshSelects() {
   const vis = CENTERS.filter((c) => !isOut(c));
+  const provinceValue = $("#provincia").value;
+  const provinceCounts = {};
+  vis.forEach((c) => {
+    const provinceName = (c.province || c.prov || "").trim();
+    if (provinceName) provinceCounts[provinceName] = (provinceCounts[provinceName] || 0) + 1;
+  });
+  $("#provincia").innerHTML = '<option value="">Provincia: todas (' + vis.length + ')</option>' +
+    Object.entries(provinceCounts).sort((a, b) => a[0].localeCompare(b[0], "es")).map(([name, count]) =>
+      '<option value="' + esc(name) + '">' + esc(name) + ' (' + count + ')</option>'
+    ).join("");
+  if (provinceValue && Object.prototype.hasOwnProperty.call(provinceCounts, provinceValue)) {
+    $("#provincia").value = provinceValue;
+  }
   const tv = $("#tipo").value, pv = $("#permiso").value;
   $("#tipo").innerHTML = '<option value="">Categoría: todas</option>' +
     TIPOS.map(([i, t]) => '<option value="' + t + '">' + i + " · " + t + " (" + vis.filter((c) => c.tipo === t).length + ")</option>").join("");
@@ -2173,6 +2193,7 @@ window.exportarCatalogoInicial = function () {
           tipo: category,
           sub: row.subtype || "",
           town: municipality || provinceName,
+          province: provinceName,
           street: row.address || "",
           conf: row.location_precision !== "unknown",
           databaseId: row.id,
