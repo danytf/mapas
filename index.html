@@ -1928,7 +1928,7 @@ const download = (name, text, type) => {
 const csvCell = (value) => {
   let text = String(value == null ? "" : value);
   // Prefix untrusted text that spreadsheet software could interpret as a formula.
-  if (typeof value === "string" && /^\\s*[=+\\-@]/.test(text)) text = "'" + text;
+  if (typeof value === "string" && /^\s*[=+\-@]/.test(text)) text = "'" + text;
   return '"' + text.replace(/"/g, '""') + '"';
 };
 /* Panel resumen */
