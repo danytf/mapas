@@ -782,6 +782,7 @@ declare
   item record;
   expected text[];
   missing text[];
+  rls_enabled boolean;
 begin
   for item in
     select * from (values
@@ -803,6 +804,25 @@ begin
       ('user_provinces', array['SELECT','INSERT','UPDATE','DELETE']::text[])
     ) as matrix(table_name, commands)
   loop
+    select c.relrowsecurity into rls_enabled
+      from pg_class c
+      join pg_namespace n on n.oid = c.relnamespace
+     where n.nspname = 'public' and c.relname = item.table_name and c.relkind = 'r';
+    if coalesce(rls_enabled, false) is not true then
+      raise exception 'FALLO RLS: public.% no tiene RLS habilitado', item.table_name;
+    end if;
+
+    if exists (
+      select 1
+        from pg_policies p
+        cross join lateral unnest(p.roles) as policy_role(role_name)
+       where p.schemaname = 'public'
+         and p.tablename = item.table_name
+         and policy_role.role_name::text in ('anon', 'public')
+    ) then
+      raise exception 'FALLO RLS: public.% tiene una política asignada a anon/public', item.table_name;
+    end if;
+
     select array_agg(command order by command) into missing
     from unnest(item.commands) as u(command)
     where not exists (
