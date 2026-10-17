@@ -24,6 +24,14 @@ forbidMatch(/\bnavigator\s*\.\s*serviceWorker\s*\.\s*register\s*\(/i,
 requireMatch(/delete\s+loadedPersonalState\.locations\s*;/,
   "Debe descartarse el campo heredado loadedPersonalState.locations.");
 
+requireMatch(/const personalStateKey/,
+  "Las referencias personales deben usar UUID para establecimientos maestros.");
+requireMatch(/removed = normalizePersonalRefs/,
+  "Las ocultaciones antiguas por nombre deben migrarse a claves estables al cargarse.");
+requireMatch(/reviewed = normalizePersonalRefs/,
+  "Las revisiones antiguas por nombre deben migrarse a claves estables al cargarse.");
+
+
 forbidMatch(/key\.startsWith\(["']mapa-["']\)/,
   "La limpieza no debe borrar indiscriminadamente todas las claves mapa-* del mismo origen.");
 forbidMatch(/\^sb-\.\+-auth-token\$/,
@@ -34,7 +42,7 @@ requireMatch(/key\s*===\s*["']sb-wwoczmihhupofwmlmgga-auth-token["']/,
 const setLocStart = html.indexOf("async function setLoc(c, lat, lon, address)");
 const personalLoadStart = html.indexOf("async function loadPersonalState()");
 const customLoadStart = html.indexOf("customs = Array.isArray(state.customs)", personalLoadStart);
-const removedLoadStart = html.indexOf("removed = new Set", customLoadStart);
+const removedLoadStart = html.indexOf("removed = normalizePersonalRefs", customLoadStart);
 if (personalLoadStart < 0 || customLoadStart < 0 || removedLoadStart < 0) {
   failures.push("No se pudo localizar la validación de puntos personalizados restaurados.");
 } else {
