@@ -10,6 +10,7 @@ on:
       - "index.html"
       - "scripts/audit-static-catalog.mjs"
       - "scripts/audit-persistence.mjs"
+      - "scripts/audit-xss.mjs"
       - ".github/workflows/audit-static-catalog.yml"
   pull_request:
     paths:
@@ -39,6 +40,8 @@ jobs:
           node scripts/audit-persistence.mjs index.html
       - name: Test shared-state sanitizers
         run: node scripts/test-shared-state-sanitizers.mjs
+      - name: Run XSS regression audit
+        run: node scripts/audit-xss.mjs index.html
       - name: Check inline JavaScript syntax in index.html
         shell: bash
         run: |
