@@ -455,6 +455,35 @@ end;
 $state_table_privilege_test$;
 
 
+-- Una cuenta desactivada pierde el acceso provincial incluso si conserva asignaciones.
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a1', false);
+update public.profiles
+set is_active = false
+where id = '00000000-0000-4000-8000-0000000000a2';
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
+do $inactive_user_scope_test$
+declare establishment_count integer;
+        shared_state_count integer;
+begin
+  select count(*) into establishment_count
+  from public.establishments
+  where id = '00000000-0000-4000-8000-000000000005';
+
+  if establishment_count <> 0 then
+    raise exception 'FALLO RLS: una cuenta desactivada conserva acceso al catálogo provincial';
+  end if;
+
+  select count(*) into shared_state_count
+  from public.establishment_app_state
+  where establishment_id = '00000000-0000-4000-8000-000000000005';
+
+  if shared_state_count <> 0 then
+    raise exception 'FALLO RLS: una cuenta desactivada conserva acceso al estado operativo provincial';
+  end if;
+end;
+$inactive_user_scope_test$;
+
 reset role;
 
 select 'schema smoke tests passed' as result;
