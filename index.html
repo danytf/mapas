@@ -1088,13 +1088,15 @@ async function setLoc(c, lat, lon, address) {
 
   let data = null;
   let error = null;
+  const targetLat = +lat.toFixed(6);
+  const targetLon = +lon.toFixed(6);
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 15000);
   try {
     const result = await supabaseClient.from("establishments").update({
       address: cleanAddress,
-      latitude: +lat.toFixed(6),
-      longitude: +lon.toFixed(6),
+      latitude: targetLat,
+      longitude: targetLon,
       location_precision: "verified",
       location_source: "manual_google_maps",
       location_verified_at: new Date().toISOString(),
@@ -1112,13 +1114,53 @@ async function setLoc(c, lat, lon, address) {
   }
 
   if (error || !data || data.id !== c.databaseId) {
-    const reason = error?.message || (controller.signal.aborted
-      ? "Supabase no respondió en 15 segundos; la petición se ha cancelado."
-      : "No se actualizó ninguna fila (permisos o registro no visible).");
-    window.mapaLastLocationError = reason;
-    console.error("[Mapa] No se pudo guardar la ubicación maestra en Supabase:", error || reason);
-    return false;
+    const originalReason = error?.message || (controller.signal.aborted
+      ? "Supabase no respondió en 15 segundos; se verificará si la escritura llegó a completarse."
+      : "No se confirmó la actualización inicial (permisos, conexión o registro no visible).");
+    // Una respuesta perdida no demuestra que el servidor no haya guardado el cambio.
+    // Consultar el registro antes de declarar un fallo evita dejar el mapa desincronizado.
+    const verifyController = new AbortController();
+    const verifyTimeoutId = setTimeout(() => verifyController.abort(), 8000);
+    try {
+      const verification = await supabaseClient.from("establishments")
+        .select("id,address,latitude,longitude,location_precision,location_source,location_verified_at,updated_by")
+        .eq("id", c.databaseId)
+        .abortSignal(verifyController.signal)
+        .maybeSingle();
+      const persisted = verification.data;
+      const verifiedAt = persisted?.location_verified_at ? Date.parse(persisted.location_verified_at) : NaN;
+      const recentVerification = Number.isFinite(verifiedAt) && Math.abs(Date.now() - verifiedAt) <= 120000;
+      const writeConfirmed = !verification.error && persisted &&
+        persisted.id === c.databaseId &&
+        String(persisted.address || "").trim() === cleanAddress &&
+        Number(persisted.latitude) === targetLat &&
+        Number(persisted.longitude) === targetLon &&
+        persisted.location_precision === "verified" &&
+        persisted.location_source === "manual_google_maps" &&
+        persisted.updated_by === window.mapaSession.user.id &&
+        recentVerification;
+      if (writeConfirmed) {
+        data = persisted;
+        error = null;
+        console.warn("[Mapa] La escritura de ubicación se confirmó mediante lectura posterior tras una respuesta ambigua.");
+      } else {
+        const verificationReason = verification.error?.message || (verifyController.signal.aborted
+          ? "La lectura de comprobación también agotó el tiempo."
+          : "La lectura de comprobación no encontró los valores recién guardados.");
+        window.mapaLastLocationError = originalReason + " " + verificationReason;
+        console.error("[Mapa] No se pudo confirmar el guardado de la ubicación maestra en Supabase:", window.mapaLastLocationError);
+        return false;
+      }
+    } catch (verificationError) {
+      window.mapaLastLocationError = originalReason + " No se pudo verificar el resultado: " + (verificationError?.message || String(verificationError));
+      console.error("[Mapa] No se pudo confirmar el guardado de la ubicación maestra en Supabase:", window.mapaLastLocationError);
+      return false;
+    } finally {
+      clearTimeout(verifyTimeoutId);
+    }
   }
+
+  window.mapaLastLocationError = null;
 
   c.street = data.address || cleanAddress;
   c.conf = true;
