@@ -78,8 +78,6 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/bootstrap/202610170001_minimize_api_table_privileges.sql
       - name: Apply sensitive update guard
         run: psql -v ON_ERROR_STOP=1 -f supabase/bootstrap/202610170002_guard_sensitive_updates.sql
-      - name: Improve composite-key audit
-        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017114643_audit_composite_keys_user_provinces.sql
       - name: Revoke anonymous table privileges
         run: psql -v ON_ERROR_STOP=1 -f supabase/bootstrap/202610170004_revoke_anon_table_privileges.sql
       - name: Restrict function execution
@@ -100,6 +98,8 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/seed/reference_catalog.sql
       - name: Reconcile categories to map taxonomy
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017114356_reconcile_categories_to_map_taxonomy.sql
+      - name: Improve composite-key audit
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017114643_audit_composite_keys_user_provinces.sql
       - name: Add uncovered foreign-key indexes
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017120547_index_uncovered_foreign_keys.sql
       - name: Split administrator RLS policies
