@@ -12,6 +12,38 @@ const sourcePath = path.resolve(process.argv[2] ?? "index.html");
 const outputDir = path.resolve(process.argv[3] ?? "catalog-audit-output");
 const source = fs.readFileSync(sourcePath, "utf8");
 
+// La aplicación migró el catálogo maestro a Supabase. Si ya no existen los
+// bloques históricos de datos estáticos, auditar esos literales es obsoleto:
+// validar explícitamente la arquitectura activa y generar un informe honesto.
+const hasStaticCatalog = /\\bconst\\s+PROV\\s*=/.test(source)
+  && /\\bconst\\s+SUPER\\s*=/.test(source);
+if (!hasStaticCatalog) {
+  const hasSupabaseSync = /syncCatalogueFromSupabase/.test(source)
+    && /from\\(["']establishments["']\\)/.test(source);
+  const localStorageWrites = (source.match(/localStorage\\.(?:setItem|removeItem|clear)\\s*\\(/g) || []).length;
+  const sessionStorageWrites = (source.match(/sessionStorage\\.(?:setItem|removeItem|clear)\\s*\\(/g) || []).length;
+  const summary = {
+    source_file: sourcePath,
+    source_sha256: createHash("sha256").update(source).digest("hex"),
+    catalog_mode: "supabase",
+    static_catalog_present: false,
+    supabase_catalog_sync_detected: hasSupabaseSync,
+    local_storage_write_calls: localStorageWrites,
+    session_storage_write_calls: sessionStorageWrites,
+    result: hasSupabaseSync && localStorageWrites === 0 && sessionStorageWrites === 0 ? "pass" : "fail",
+    limitation: "El catálogo reside en Supabase; esta comprobación no valida coordenadas fila por fila ni sustituye pruebas contra la base de datos."
+  };
+  fs.mkdirSync(outputDir, { recursive: true });
+  fs.writeFileSync(path.join(outputDir, "summary.json"), JSON.stringify(summary, null, 2) + "\\n");
+  fs.writeFileSync(path.join(outputDir, "catalog-audit.csv"), "catalog_mode\\nSupabase\\n");
+  fs.writeFileSync(path.join(outputDir, "duplicate-names.csv"), "normalized_name,count,source_rows,names\\n");
+  fs.writeFileSync(path.join(outputDir, "rows-with-issues.csv"), "source_block,source_index,source_key,issues\\n");
+  fs.writeFileSync(path.join(outputDir, "unused-coordinate-keys.csv"), "key\\n");
+  console.log(JSON.stringify({ outputDir, ...summary }, null, 2));
+  if (summary.result !== "pass") process.exitCode = 1;
+  process.exit();
+}
+
 function literalFor(name) {
   const match = new RegExp("\\bconst\\s+" + name + "\\s*=\\s*").exec(source);
   if (!match) throw new Error("No se encontró la constante " + name);
