@@ -865,14 +865,14 @@ $cross_province_delete_matrix$;
 do $category_delete_matrix$
 declare affected integer;
 begin
-  select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
+  perform set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
   delete from public.categories where id = '00000000-0000-4000-8000-0000000000d1';
   get diagnostics affected = row_count;
   if affected <> 0 then
     raise exception 'FALLO RLS: usuario provincial pudo borrar una categoría de referencia';
   end if;
 
-  select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a1', false);
+  perform set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a1', false);
   delete from public.categories where id = '00000000-0000-4000-8000-0000000000d1';
   get diagnostics affected = row_count;
   if affected <> 1 then
