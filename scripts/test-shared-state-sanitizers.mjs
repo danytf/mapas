@@ -30,9 +30,9 @@ const dirtyState = sanitizeSharedPermitState({
   notas: "N".repeat(6000),
   valoracion: 99,
   solicitudes: [
-    { desde: "2026-10-01", hasta: "2026-10-31", captadores: "4", ong: "<svg/onload=alert(1)>", seg: "2026-10-20" },
+    { desde: "2026-10-01", hasta: "2026-10-31", fecha: "2026-10-03", captadores: "4", ong: "<svg/onload=alert(1)>", seg: "2026-10-20" },
     "<script>alert(1)</script>",
-    { desde: "not-a-date", captadores: "<img>", res: "hacked" }
+    { desde: "not-a-date", fecha: "2026-02-31", captadores: "<img>", res: "hacked" }
   ],
   historial: "not-an-array",
   arbitrary: { prototype: "pollution" }
@@ -46,6 +46,7 @@ assert.equal(dirtyState.valoracion, undefined);
 assert.equal(dirtyState.solicitudes.length, 1);
 assert.equal(dirtyState.solicitudes[0].ong, "<svg/onload=alert(1)>");
 assert.equal(dirtyState.solicitudes[0].captadores, 4);
+assert.equal(dirtyState.solicitudes[0].fecha, "2026-10-03", "La fecha de solicitud debe conservarse al sanitizar el estado compartido.");
 assert.equal(dirtyState.historial, undefined);
 assert.equal(dirtyState.arbitrary, undefined);
 assert.equal(sanitizeSharedPermitState(["not", "an", "object"]), null);
