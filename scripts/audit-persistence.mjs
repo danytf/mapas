@@ -32,6 +32,20 @@ requireMatch(/key\s*===\s*["']sb-wwoczmihhupofwmlmgga-auth-token["']/,
   "La limpieza debe limitar el token de Supabase al proyecto de este mapa.");
 
 const setLocStart = html.indexOf("async function setLoc(c, lat, lon, address)");
+const locationMasterStart = html.indexOf("const verifyController = new AbortController()", setLocStart);
+const locationMasterEnd = html.indexOf("let moving = null;", setLocStart);
+if (locationMasterStart < 0 || locationMasterEnd < 0) {
+  failures.push("El guardado de ubicación maestra debe comprobar el resultado de una respuesta ambigua.");
+} else {
+  const locationWrite = html.slice(locationMasterStart, locationMasterEnd);
+  if (!/location_source === "manual_google_maps"/.test(locationWrite) ||
+      !/location_precision === "verified"/.test(locationWrite) ||
+      !/persisted\.updated_by === window\.mapaSession\.user\.id/.test(locationWrite) ||
+      !/persisted\.latitude\) === targetLat/.test(locationWrite) ||
+      !/persisted\.longitude\) === targetLon/.test(locationWrite)) {
+    failures.push("La lectura posterior debe confirmar dirección, coordenadas, precisión, origen y usuario antes de declarar éxito.");
+  }
+}
 const customStart = html.indexOf("if (c.custom) {", setLocStart);
 const masterStart = html.indexOf("if (!c.databaseId)", customStart);
 if (setLocStart < 0 || customStart < 0 || masterStart < 0) {
