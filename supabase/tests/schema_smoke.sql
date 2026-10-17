@@ -359,6 +359,53 @@ begin
 end;
 $self_privilege_escalation_test$;
 
+-- Un usuario ordinario no puede modificar perfiles ni asignarse provincias.
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
+do $profile_and_province_grant_test$
+declare affected integer;
+        assigned_count integer;
+        profile_role text;
+begin
+  begin
+    update public.profiles
+       set is_active = false
+     where id = '00000000-0000-4000-8000-0000000000a3';
+    get diagnostics affected = row_count;
+    if affected <> 0 then
+      raise exception 'FALLO RLS: un usuario normal pudo modificar el perfil de otra cuenta';
+    end if;
+  exception when insufficient_privilege then
+    null;
+  end;
+
+  begin
+    insert into public.user_provinces (user_id, province_id, assigned_by)
+    values (
+      '00000000-0000-4000-8000-0000000000a2',
+      '00000000-0000-4000-8000-000000000002',
+      '00000000-0000-4000-8000-0000000000a2'
+    );
+    raise exception 'FALLO RLS: un usuario normal pudo asignarse una provincia adicional';
+  exception when insufficient_privilege then
+    null;
+  end;
+
+  select count(*) into assigned_count
+    from public.user_provinces
+   where user_id = '00000000-0000-4000-8000-0000000000a2';
+  if assigned_count <> 1 then
+    raise exception 'FALLO SEGURIDAD: la asignación provincial del usuario cambió sin autorización';
+  end if;
+
+  select role into profile_role
+    from public.profiles
+   where id = '00000000-0000-4000-8000-0000000000a3';
+  if profile_role <> 'user' then
+    raise exception 'FALLO SEGURIDAD: el perfil de otra cuenta fue alterado';
+  end if;
+end;
+$profile_and_province_grant_test$;
+
 -- Aislamiento del estado personal: la cuenta B no debe leer la fila de A.
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
 insert into public.user_app_state (user_id, state)
