@@ -895,28 +895,50 @@ function popupFor(c, pos) {
     const apply = async (txt) => {
       const r = parseCoords(txt);
       if (!r) { msg.textContent = "No reconozco las coordenadas. Ejemplo: 37.1773, -3.5986"; return; }
+      msg.style.color = "#555";
       msg.textContent = "Guardando en Supabase…";
       const address = el.querySelector(".l-address").value;
-      const ok = await setLoc(c, r[0], r[1], address);
+      let timeoutId;
+      let ok = false;
+      try {
+        ok = await Promise.race([
+          setLoc(c, r[0], r[1], address),
+          new Promise((resolve) => {
+            timeoutId = setTimeout(() => resolve(false), 17000);
+          })
+        ]);
+      } catch (saveError) {
+        window.mapaLastLocationError = saveError?.message || String(saveError);
+        console.error("[Mapa] Error inesperado al guardar la ubicación:", saveError);
+      } finally {
+        clearTimeout(timeoutId);
+      }
+      const timedOut = !ok && !window.mapaLastLocationError;
       const resultText = ok
         ? "Dirección y coordenadas guardadas en el catálogo maestro de Supabase."
-        : "No se guardó en Supabase. " + (window.mapaLastLocationError || "Comprueba los permisos y la conexión.");
+        : "No se confirmó el guardado en Supabase. " + (window.mapaLastLocationError || (timedOut
+          ? "La operación no respondió en 17 segundos. No vuelvas a pulsar todavía; revisa la conexión y los registros."
+          : "Comprueba la sesión y los permisos del establecimiento."));
       const resultColor = ok ? "#14532d" : "#b3261e";
       window.mapaLastLocationError = "";
-      const showResult = () => {
-        const liveMsg = document.querySelector(".leaflet-popup .lmsg") || msg;
-        liveMsg.textContent = resultText;
-        liveMsg.style.color = resultColor;
-      };
-      const mk = markers[c.id];
-      if (mk) {
-        cluster.zoomToShowLayer(mk, () => {
-          mk.once("popupopen", showResult);
-          mk.openPopup();
-        });
-      } else {
-        showResult();
-      }
+      msg.textContent = resultText;
+      msg.style.color = resultColor;
+      // Mostrar siempre un aviso global: renderList/zoomToShowLayer pueden retirar del DOM
+      // el popup original y dejar su mensaje invisible.
+      const notice = document.getElementById("locationSaveNotice") || document.createElement("div");
+      notice.id = "locationSaveNotice";
+      notice.textContent = resultText;
+      Object.assign(notice.style, {
+        position: "fixed", zIndex: "10000", left: "50%", bottom: "22px",
+        transform: "translateX(-50%)", width: "min(560px, calc(100vw - 28px))",
+        boxSizing: "border-box", padding: "12px 16px", borderRadius: "8px",
+        background: ok ? "#dcfce7" : "#fee2e2", color: resultColor,
+        border: "1px solid " + (ok ? "#86efac" : "#fca5a5"),
+        boxShadow: "0 4px 18px #0003", fontSize: "14px", fontWeight: "600"
+      });
+      if (!notice.isConnected) document.body.appendChild(notice);
+      clearTimeout(window.mapaLocationNoticeTimer);
+      window.mapaLocationNoticeTimer = setTimeout(() => notice.remove(), 12000);
     };
     inp.addEventListener("paste", (e) => { const t = (e.clipboardData || window.clipboardData).getData("text"); e.preventDefault(); inp.value = t; msg.style.color = ""; msg.textContent = "Coordenadas cargadas. Revisa la dirección y pulsa Guardar para enviar los cambios a Supabase."; });
     inp.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); apply(inp.value); } });
