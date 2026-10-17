@@ -72,6 +72,16 @@ jobs:
           GRANT USAGE ON SCHEMA auth TO authenticated;
           GRANT EXECUTE ON FUNCTION auth.uid() TO authenticated;
           SQL
+      - name: Model existing Supabase default API grants
+        run: |
+          psql -v ON_ERROR_STOP=1 <<'SQL'
+          ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public
+            GRANT ALL ON TABLES TO anon, authenticated, service_role;
+          ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public
+            GRANT ALL ON SEQUENCES TO anon, authenticated, service_role;
+          ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public
+            GRANT EXECUTE ON FUNCTIONS TO anon, authenticated, service_role;
+          SQL
       - name: Apply schema migration
         run: psql -v ON_ERROR_STOP=1 -f supabase/bootstrap/202610160001_initial_schema.sql
       - name: Minimize API table privileges
@@ -130,5 +140,7 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017221500_restrict_location_review_insert_decisions.sql
       - name: Protect personal state creation timestamp
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017222500_protect_user_app_state_created_at.sql
+      - name: Revoke default API object privileges
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261018002000_revoke_default_api_object_privileges.sql
       - name: Run schema, trigger, and RLS smoke tests
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/schema_smoke.sql
