@@ -690,6 +690,53 @@ begin
 end;
 $followup_attribution_test$;
 
+-- Solicitudes y concesiones conservan su ID y autoría tras la creación.
+do $permit_record_attribution_test$
+declare saved_application_creator uuid; saved_grant_creator uuid;
+begin
+  begin
+    update public.permit_applications
+       set created_by = '00000000-0000-4000-8000-0000000000a3'
+     where id = '00000000-0000-4000-8000-000000000007';
+    raise exception 'FALLO SEGURIDAD: se permitió reescribir created_by en una solicitud';
+  exception when insufficient_privilege then null;
+  end;
+
+  begin
+    update public.permit_applications
+       set id = '00000000-0000-4000-8000-0000000000b5'
+     where id = '00000000-0000-4000-8000-000000000007';
+    raise exception 'FALLO SEGURIDAD: se permitió cambiar el ID de una solicitud';
+  exception when insufficient_privilege then null;
+  end;
+
+  begin
+    update public.permit_grants
+       set created_by = '00000000-0000-4000-8000-0000000000a3'
+     where id = '00000000-0000-4000-8000-000000000008';
+    raise exception 'FALLO SEGURIDAD: se permitió reescribir created_by en una concesión';
+  exception when insufficient_privilege then null;
+  end;
+
+  begin
+    update public.permit_grants
+       set id = '00000000-0000-4000-8000-0000000000b6'
+     where id = '00000000-0000-4000-8000-000000000008';
+    raise exception 'FALLO SEGURIDAD: se permitió cambiar el ID de una concesión';
+  exception when insufficient_privilege then null;
+  end;
+
+  select created_by into saved_application_creator from public.permit_applications
+   where id = '00000000-0000-4000-8000-000000000007';
+  select created_by into saved_grant_creator from public.permit_grants
+   where id = '00000000-0000-4000-8000-000000000008';
+  if saved_application_creator <> '00000000-0000-4000-8000-0000000000a1'
+     or saved_grant_creator <> '00000000-0000-4000-8000-0000000000a1' then
+    raise exception 'FALLO SEGURIDAD: cambió la autoría de una solicitud o concesión';
+  end if;
+end;
+$permit_record_attribution_test$;
+
 -- Aislamiento del estado personal: la cuenta B no debe leer la fila de A.
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
 insert into public.user_app_state (user_id, state)
