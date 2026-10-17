@@ -736,8 +736,8 @@ const saveReviewed = () => typeof window.mapaPersistUserState === "function" ? w
 const NOSAVE = "Aplicado, pero este navegador no permite guardar. Abre el mapa en https://danytf.github.io/mapas/ (no desde la vista previa) o pulsa Guardar copia.";
 
 const DUPS = new Set([]);
-const isApprox = (c) => !!(cache[c.id] && cache[c.id].approx) && !reviewed.has(c.name);
-const isRev = (c) => !reviewed.has(c.name) && (!!(cache[c.id] && cache[c.id].approx) || DUPS.has(c.name) || !c.conf);
+const isApprox = (c) => !!(cache[c.id] && cache[c.id].approx);
+const isRev = (c) => isApprox(c) || (!reviewed.has(c.name) && (DUPS.has(c.name) || !c.conf));
 const estadoInfo = (k) => ESTADOS.find((e) => e[0] === k) || ESTADOS[0];
 
 const addrOf = (c) => (c.street ? c.street + ", " : "") + (c.town || "Granada");
@@ -768,7 +768,8 @@ function popupFor(c, pos) {
     '<label>Contacto (nombre, teléfono, email)<input class="f-contacto" type="text" value="' + esc(p.contacto || "") + '"></label>' +
     '<label>Notas<textarea class="f-notas">' + esc(p.notas || "") + '</textarea></label>' +
     '<div class="hist"><h4>Solicitudes</h4><div class="hint">Un mismo punto puede tener varias solicitudes, cada una con sus fechas.</div><ul class="s-list"></ul><details class="aform s-form"><summary>Añadir solicitud</summary><div class="row3"><label>Desde<input class="s-desde" type="date"></label><label>Hasta<input class="s-hasta" type="date"></label><label>Captadores<input class="s-n" type="number" min="1" step="1" placeholder="nº"></label></div><label>ONG<input class="s-ong" type="text" list="ongList" placeholder="AECC, Cruz Roja…" autocomplete="off"></label><label>Próximo seguimiento<input class="s-seg" type="date"></label><button type="button" class="s-add">Añadir solicitud</button><button type="button" class="s-cancel" hidden>Cancelar edición</button></details><div class="s-msg" style="font-size:11px;color:#b3261e;min-height:13px"></div><h4 style="margin-top:10px">Concesiones (historial)</h4><ul class="h-list"></ul><details class="aform h-form"><summary>Añadir concesión</summary><div class="row3"><label>Desde<input class="h-desde" type="date"></label><label>Hasta<input class="h-hasta" type="date"></label><label>Captadores<input class="h-n" type="number" min="1" step="1" placeholder="nº"></label></div><label>ONG<input class="h-ong" type="text" list="ongList" placeholder="AECC, Cruz Roja…" autocomplete="off"></label><button type="button" class="h-add">Añadir concesión al historial</button><button type="button" class="h-cancel" hidden>Cancelar edición</button></details><div class="h-msg" style="font-size:11px;color:#b3261e;min-height:13px"></div></div>' +
-    (isRev(c) ? '<button type="button" class="f-rev" style="background:#fff;color:#c8102e">Aceptar ubicación (marcar como revisada)</button>' : "") +
+    (isRev(c) && !reviewed.has(c.name) ? '<button type="button" class="f-rev" style="background:#fff;color:#c8102e">Marcar revisión visual</button>' : "") +
+    (isApprox(c) && reviewed.has(c.name) ? '<span class="tag warn">Revisada visualmente; ubicación aún sin verificar</span>' : "") +
     '<button type="button" class="f-save">Guardar cambios</button><button type="button" class="f-del danger">' + (c.custom ? "Eliminar punto" : "Quitar del mapa") + '</button><div class="saved"></div></div>';
   const pf = el.querySelector(".pform");
   const put = (n, t) => { if (n) n.setAttribute("data-tab", t); };
