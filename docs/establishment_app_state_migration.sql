@@ -1,0 +1,3 @@
+create table public.establishment_app_state (establishment_id uuid primary key references public.establishments(id), province_id uuid not null references public.provinces(id), state jsonb not null default '{}'::jsonb, updated_by uuid references auth.users(id), created_at timestamptz not null default now(), updated_at timestamptz not null default now());
+alter table public.establishment_app_state enable row level security;
+grant select, insert, update on public.establishment_app_state to authenticated;
