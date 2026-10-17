@@ -106,5 +106,7 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017130854_guard_establishment_app_state.sql
       - name: Revoke direct execution of shared-state trigger
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017151957_revoke_guard_establishment_app_state_execute.sql
+      - name: Minimize personal and shared state table privileges
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017152419_minimize_state_table_privileges.sql
       - name: Run schema, trigger, and RLS smoke tests
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/schema_smoke.sql
