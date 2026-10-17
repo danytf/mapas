@@ -55,7 +55,7 @@ assert.equal(sanitizeSharedPermitState({ solicitudes: Array.from({ length: 250 }
 const csvStart = html.indexOf("const csvCell = (value) => {");
 const csvEnd = html.indexOf("/* Panel resumen */", csvStart);
 assert.ok(csvStart >= 0 && csvEnd > csvStart, "No se pudo extraer el serializador CSV");
-const csvCell = runInNewContext(html.slice(csvStart, csvEnd) + "\\ncsvCell");
+const csvCell = runInNewContext(html.slice(csvStart, csvEnd) + "\ncsvCell");
 assert.equal(csvCell("=1+1"), "\"'=1+1\"");
 assert.equal(csvCell(" +cmd|' /C calc'!A0"), "\"' +cmd|' /C calc'!A0\"");
 assert.equal(csvCell("@SUM(1,2)"), "\"'@SUM(1,2)\"");
