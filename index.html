@@ -1905,7 +1905,7 @@ window.exportarCatalogoInicial = function () {
   const crearSourceRef = (e) => {
     const slug = valor => String(valor || "")
       .normalize("NFD")
-      .replace(/[\\u0300-\\u036f]/g, "")
+      .replace(/[\u0300-\u036f]/g, "")
       .toLocaleLowerCase("es")
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-|-$/g, "");
