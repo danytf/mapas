@@ -88,3 +88,11 @@ Trabajo de mejora recomendado, separado de la importación ya completada:
 1. Contrastar las ubicaciones con fuentes oficiales y revisar manualmente los puntos marcados como aproximados.
 2. Ejecutar el exportador en un entorno de navegador limpio y comparar su resultado con el JSON versionado.
 3. Revisar por separado los nombres de categorías del mapa y la taxonomía preexistente de Supabase antes de conectar el frontend.
+
+## Estado actualizado tras la validación manual (17/10/2026)
+
+La lectura directa de Supabase confirma 791 establecimientos activos, todos con coordenadas, 791 referencias de origen únicas y cero nombres activos duplicados. La tabla de precisión muestra 760 filas `address` y 31 filas `verified` con origen `manual_google_maps`; no quedan filas activas marcadas `approximate`.
+
+Las 27 filas que aparecían como aproximadas en el seed fueron revisadas manualmente en la aplicación: 25 tienen cambios de coordenadas y entradas de historial que reflejan los valores actuales; las otras 2 se confirmaron sin cambiar latitud/longitud, por lo que no generan una entrada de historial de cambio. No se modificó ninguna coordenada durante esta auditoría documental.
+
+La comprobación del último historial disponible para los 32 establecimientos que tienen historial no encontró discrepancias entre dirección/coordenadas actuales y los valores nuevos registrados. Esto valida coherencia interna del historial, no sustituye una comprobación geográfica independiente de cada punto.
