@@ -11,7 +11,7 @@ Actualizado: 17 de octubre de 2026.
 
 ## Exportar desde la interfaz
 
-Las opciones **Exportar CSV** y **Exportar estado (JSON)** piden confirmación antes de crear el archivo.
+Las opciones **Exportar CSV** y **Exportar estado (JSON)** piden confirmación antes de crear el archivo. La opción avanzada **Copiar JSON con coordenadas** también pide confirmación antes de copiar nombres, direcciones y coordenadas al portapapeles.
 
 - El CSV incluye datos operativos como contactos, notas, solicitudes e historial de permisos. Guárdalo únicamente en una ubicación autorizada y protegida.
 - El JSON contiene una exportación parcial del estado operativo y de puntos personalizados. **No es una copia completa de la base de datos**: no incluye el catálogo maestro completo ni sustituye un backup de Supabase.
