@@ -1,112 +1,77 @@
-# Contrato de migración de datos — Mapas
+# Estado de migración y contrato de datos — Mapa
 
-## Objetivo
-Preparar la evolución de la aplicación actual basada en almacenamiento local hacia una aplicación multiusuario con datos compartidos por provincia, sin alterar la aplicación publicada hasta validar el modelo y la migración.
+**Actualizado:** 17 de octubre de 2026.  
+**Aplicación:** `index.html` en GitHub Pages.  
+**Backend:** proyecto Supabase de desarrollo `wwoczmihhupofwmlmgga`.
 
-## Estado actual conocido
-- La aplicación principal está en `index.html` y usa Leaflet.
-- Parte de los datos operativos vive en `localStorage`/`sessionStorage`.
-- `rgr-auth` es un indicador local y no debe considerarse autenticación segura.
-- El catálogo base y algunos conjuntos auxiliares están definidos en el frontend.
-- Las claves locales usan nombres de establecimientos; pueden existir duplicados o variaciones de nombre.
-- La exportación JSON actual declara `version: 2` e incluye permisos, puntos propios, quitados, revisados, ubicaciones, logros y gamificación.
+## Estado actual verificado
 
-## Principios obligatorios
-1. No publicar cambios de producción antes de probar la migración en un entorno separado.
-2. No poner secretos privilegiados (`service_role`, claves privadas) en HTML/JavaScript del cliente.
-3. Aplicar autorización en PostgreSQL/RLS y en funciones de servidor; ocultar controles en el frontend no es seguridad.
-4. Identificar establecimientos con UUID estable, no con el nombre visible.
-5. Migración idempotente: repetir una importación no debe duplicar datos ni conceder permisos dos veces.
-6. No descartar registros ambiguos: enviarlos a incidencias para revisión manual.
-7. Mantener historial de concesiones, revocaciones y cambios de ubicación; usar archivado lógico cuando proceda.
-8. Mantener el progreso y los logros personales separados de los datos operativos compartidos.
+La migración del catálogo maestro está realizada. La aplicación ya no usa el catálogo embebido ni los datos del navegador como fuente de verdad.
 
-## Modelo relacional inicial
-- `provinces`: provincias disponibles.
-- `municipalities`: municipios vinculados a provincia.
-- `categories`: catálogo controlado de categorías.
-- `profiles`: perfil del usuario autenticado y rol global.
-- `user_provinces`: asignaciones de usuarios a provincias.
-- `establishments`: identidad canónica del establecimiento, con categoría, municipio, dirección y coordenadas.
-- `establishment_operations`: estado operativo compartido por establecimiento, con autor y marcas temporales.
-- `permit_applications`: solicitudes de permiso.
-- `permit_grants`: concesiones y revocaciones históricas, no sobrescritas destructivamente.
-- `followups`: seguimientos e incidencias operativas.
-- `establishment_location_reviews`: estado de revisión geográfica.
-- `establishment_location_history`: historial de cambios de dirección/coordenadas.
-- `audit_log`: trazabilidad de cambios relevantes.
-- `migration_batches`: cada lote de importación y su estado.
-- `migration_records`: resultado por registro, con origen, destino, estado y motivo de incidencia.
-- `user_progress`: XP/logros personales, separado del estado compartido.
+- **791 establecimientos activos** en `public.establishments`.
+- **791/791** tienen latitud y longitud; no hay coordenadas fuera de los límites geográficos revisados ni nombres activos duplicados.
+- **791 referencias `source_ref` únicas** en el catálogo activo.
+- 31 registros están marcados `verified` con origen `manual_google_maps`; los otros 760 tienen precisión `address`.
+- Las 27 filas marcadas inicialmente como aproximadas en el seed fueron revisadas manualmente en la interfaz: 25 tienen cambios de coordenadas registrados en el historial y 2 se confirmaron sin cambiar sus coordenadas.
+- El historial más reciente coincide con la ubicación actual en los 32 establecimientos con historial.
+- Las 16 tablas públicas tienen RLS habilitado y no se encontraron privilegios de tabla para `anon` ni `PUBLIC`.
+- El catálogo se carga tras validar la sesión, el perfil activo y las provincias asignadas.
+- La sesión de Supabase se mantiene en memoria. La aplicación no escribe datos operativos en `localStorage`, `sessionStorage`, IndexedDB ni Cache Storage.
+- La importación de copias JSON antiguas se ha retirado para evitar reintroducir datos experimentales.
+- GitHub Actions comprueba la sintaxis JavaScript, las reglas de persistencia y el inventario estático. La prueba visual de usuario sigue siendo necesaria para validar la interfaz en un navegador real.
 
-El esquema definitivo debe validarse contra todas las funciones y campos reales del código antes de escribir migraciones SQL.
+## Fuentes de verdad y persistencia
 
-## Reglas de resolución de identidad
-Orden sugerido para emparejar un registro local con `establishments`:
-1. Identificador canónico previo, si existe y está validado.
-2. Nombre normalizado + municipio.
-3. Nombre normalizado + dirección normalizada.
-4. Nombre + proximidad de coordenadas, solo como sugerencia de revisión; nunca como coincidencia automática única si hay candidatos múltiples.
+| Datos | Fuente de verdad actual | Uso en la aplicación |
+|---|---|---|
+| Identidad, categoría, municipio, dirección y coordenadas maestras | `public.establishments` y catálogos relacionados | Lectura desde Supabase; los cambios de ubicación actualizan el establecimiento por UUID |
+| Ámbito territorial y rol | `public.profiles`, `public.user_provinces`, `public.provinces` | Se validan antes de cargar datos |
+| Estado operativo compartido de permisos | `public.establishment_app_state` | La interfaz guarda un bloque JSONB por establecimiento; incluye solicitudes, concesiones e historial funcional |
+| Puntos personalizados, puntos ocultos, revisiones y progreso personal | `public.user_app_state` | Estado JSONB restringido al usuario autenticado |
+| Historial de ubicación y auditoría | `public.establishment_location_history`, `public.audit_log` | Trazabilidad de cambios efectivos; el historial lo genera el servidor |
+| Modelo relacional de solicitudes, concesiones y seguimientos | `public.permit_applications`, `public.permit_grants`, `public.followups` | Las tablas existen y tienen RLS, pero la interfaz actual todavía guarda su estado operativo en `establishment_app_state`; la integración completa con el modelo normalizado queda pendiente de decisión |
 
-La normalización puede quitar diferencias de mayúsculas, espacios y acentos, pero debe conservar el nombre original y nunca fusionar automáticamente establecimientos distintos por similitud textual.
+Las identidades del catálogo son UUID persistentes. El nombre visible no se utiliza como identificador maestro para actualizar coordenadas.
 
-## Claves locales conocidas
-- `permisos-captacion-granada-v1`
-- `puntos-propios-granada-v1`
-- `puntos-quitados-granada-v1`
-- `puntos-revisados-granada-v1`
-- `ubicaciones-corregidas-granada-v1`
-- `cs-granada-geo-v3`
-- `logros-granada-v1`
-- `rgr-auth`
+## Reglas que no deben romperse
 
-Hay que verificar en el código el esquema exacto de cada clave, así como las constantes `CUSTOM_KEY`, `REMOVED_KEY`, `PERM_KEY`, `REV_KEY`, `LOC_KEY`, `CACHE_KEY` y `GAM_KEY` antes de implementar el importador.
+1. No leer, importar ni restaurar datos experimentales de almacenamiento local del navegador.
+2. No incluir el catálogo maestro ni claves privilegiadas en el HTML/JavaScript público.
+3. No mostrar datos de respaldo local cuando falle la lectura de Supabase: mostrar error y no cargar un catálogo alternativo.
+4. No afirmar que un guardado se completó hasta recibir confirmación de Supabase.
+5. No modificar coordenadas maestras a partir de una exportación JSON. Las correcciones se hacen sobre el UUID del establecimiento, con usuario autenticado y registro de auditoría.
+6. Mantener RLS como barrera de seguridad; los controles visuales no sustituyen autorización en la base de datos.
+7. No etiquetar una ubicación como verificada sin confirmación explícita. La precisión de dirección y la verificación manual son estados distintos.
+8. Tratar CSV/JSON exportados como datos operativos: pueden contener contactos, notas e historial. La exportación de interfaz no es un backup completo de Supabase.
+9. Probar cualquier restauración en un proyecto aislado, nunca sobre la base de datos usada por la aplicación.
 
-## Contrato del importador
-El importador deberá:
-- Leer exportaciones existentes sin modificarlas.
-- Validar versión, tipos, campos requeridos y límites de tamaño.
-- Ofrecer modo `dry-run` con recuento de creados, actualizados, ignorados y ambiguos.
-- Guardar el JSON original y un resumen de errores por lote.
-- Usar una clave de idempotencia por lote y por registro de origen.
-- No transformar `rgr-auth` en una identidad autenticada; los usuarios deberán iniciar sesión mediante Auth.
-- No asignar permisos de provincia basándose únicamente en datos manipulables del navegador.
-- Dejar los registros no resueltos en `migration_records` para revisión manual.
-- Permitir reanudar un lote interrumpido sin duplicar resultados.
+## Catálogo y categorías
 
-## Autorización y seguridad
-- Autenticación mediante Supabase Auth u otro proveedor aprobado.
-- RLS habilitada en todas las tablas con datos operativos.
-- Un usuario estándar solo puede consultar y modificar registros de provincias asignadas, según su rol y las reglas de negocio.
-- Un administrador puede gestionar usuarios y asignaciones mediante políticas verificadas y, cuando sea necesario, funciones de servidor seguras.
-- La asignación de roles y provincias no debe poder elevarse desde el cliente.
-- Registrar actor, fecha, acción y entidad en operaciones sensibles.
-- Probar expresamente accesos entre provincias, usuarios sin asignación y sesiones expiradas.
+La interfaz define 17 categorías. En la base de datos actual, 13 categorías contienen establecimientos activos; las otras cuatro permanecen sin registros y no deben rellenarse con datos inventados. No se deben borrar categorías vacías sin revisar antes las referencias y el modelo de negocio.
 
-## Pruebas mínimas antes de producción
-1. Exportación JSON válida, incompleta y malformada.
-2. Importación repetida del mismo lote sin duplicados.
-3. Nombres duplicados entre municipios y nombres con tildes o variantes.
-4. Registros sin coordenadas y coordenadas inválidas.
-5. Reanudación tras fallo parcial.
-6. Usuario de provincia A intentando leer o editar provincia B.
-7. Usuario estándar intentando asignar roles o provincias.
-8. Revocación de permisos conservando historial.
-9. Conflictos de edición concurrente y detección de versión obsoleta.
-10. Copia de seguridad y procedimiento probado de restauración.
+El catálogo inicial versionado se generó desde las fuentes del repositorio, no desde el navegador. La validación de recuentos y coordenadas no certifica por sí sola la exactitud geográfica; los registros aproximados deben seguir distinguiéndose de los verificados.
 
-## Fases recomendadas
-1. Inventariar y documentar el esquema real de todas las claves locales.
-2. Definir el esquema SQL, índices, restricciones y políticas RLS.
-3. Crear un entorno de pruebas separado y cargar datos de muestra anonimizados.
-4. Implementar y validar importador con `dry-run` y registro de incidencias.
-5. Adaptar la aplicación a Auth y a la API compartida, manteniendo un modo de compatibilidad durante pruebas.
-6. Ejecutar piloto con una provincia y verificar permisos, auditoría y restauración.
-7. Migrar producción solo tras aprobación y plan de reversión.
+## Tareas pendientes
 
-## Decisiones pendientes
-- Confirmar proveedor de backend y proyecto de pruebas.
-- Definir roles exactos y permisos por operación.
-- Definir cuáles campos operativos son compartidos y cuáles personales.
-- Revisar condiciones de uso de GitHub Pages para el uso corporativo/comercial previsto.
-- Verificar el esquema completo de las claves de localStorage a partir del código actual.
+### Necesitan pruebas con usuario o un entorno aislado
+
+- Ejecutar una batería real de RLS con administrador, usuario asignado a Granada, usuario sin asignación y perfil desactivado.
+- Probar la interfaz desplegada con una sesión real: inicio/cierre de sesión, lectura de catálogo, filtros, modificación de ubicación, guardado de permisos y estado personal.
+- Generar una copia lógica completa de Supabase y restaurarla en un proyecto aislado. No se ha hecho esa restauración desde esta integración.
+- Comprobar conflictos de edición concurrente y comportamiento tras caducidad/revocación de sesión.
+- Revisar oficialmente los puntos de servicio que faltan en el inventario; no añadir centros inferidos sin fuente verificable.
+
+### Trabajo técnico que puede abordarse después
+
+- Decidir si migrar las operaciones de permisos desde el JSONB de `establishment_app_state` a las tablas normalizadas `permit_applications`, `permit_grants` y `followups`. No iniciar ese cambio sin una migración de datos y pruebas de regresión.
+- Completar las pruebas negativas RLS en CI usando un entorno Supabase de prueba, además de los smoke tests PostgreSQL.
+- Mantener la auditoría de persistencia del navegador como condición de CI.
+- Revisar y documentar el procedimiento de administración y recuperación de cuentas.
+
+## Referencias
+
+- [Auditoría inicial del catálogo](./auditoria-catalogo-inicial.md)
+- [Pruebas de aceptación RLS](./PRUEBAS_ACEPTACION_RLS.md)
+- [Clasificación de datos y exposición pública](./clasificacion-datos-y-exposicion-publica.md)
+- [Exportaciones y copias de seguridad](./import-export-backups.md)
+- [Supabase — Database Backups](https://supabase.com/docs/guides/platform/backups)

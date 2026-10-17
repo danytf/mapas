@@ -2,7 +2,10 @@
 
 **Objetivo:** comprobar que la base de datos impone los permisos aunque alguien invoque la API directamente, sin depender de los controles visuales de la aplicación.
 
-Este plan acompaña a `supabase/migrations/202610160001_initial_schema.sql`. La migración, la semilla de referencia y las pruebas smoke se ejecutan automáticamente en [GitHub Actions](https://github.com/danytf/mapas/actions/runs/38974877511) contra PostgreSQL 16 con una capa mínima de compatibilidad de `auth.uid()` y `auth.users`. La ejecución comprueba la carga de 52 códigos territoriales y 16 categorías, además de sintaxis, triggers, integridad y un primer escenario de RLS. Esto **no sustituye** las pruebas en un proyecto Supabase real. No se han creado credenciales ni se ha aplicado la migración a ningún proyecto Supabase.
+**Estado actualizado a 17 de octubre de 2026:** las migraciones están aplicadas al proyecto Supabase de desarrollo `wwoczmihhupofwmlmgga`. La revisión directa confirma que las 16 tablas públicas tienen RLS habilitado, que no hay privilegios de tabla concedidos a `anon` ni a `PUBLIC`, y que las políticas por tabla usan ámbitos de usuario/provincia o administración. El catálogo activo contiene 791 establecimientos con coordenadas y referencias de origen únicas.
+
+La suite de GitHub Actions ejecuta los smoke tests en PostgreSQL 16 con una capa mínima de compatibilidad para Supabase Auth; esto comprueba integridad, triggers y escenarios limitados de RLS, pero no equivale a probar todos los permisos efectivos con sesiones reales de Supabase. La matriz negativa completa descrita en este documento sigue pendiente de ejecución contra usuarios de prueba autenticados en un entorno aislado. No se deben marcar las pruebas de acceso entre provincias como completas solo por haber inspeccionado las políticas.
+
 
 ## 1. Preparación de un entorno de desarrollo
 
@@ -78,12 +81,13 @@ Los controles están implementados y la batería smoke pasa en PostgreSQL 16 en 
 
 audit_log no concede escritura directa al rol authenticated; la escritura se realiza mediante triggers de servidor. Las funciones de trigger tienen search_path vacío y no se exponen como operaciones RPC.
 
-## 5. Criterio de salida
+## 5. Criterio de salida para ampliar el ámbito y dar por aceptada la seguridad
 
-No conectar el frontend ni cargar el catálogo nacional hasta que:
-- la migración se aplique limpiamente en un proyecto de desarrollo;
-- todas las pruebas negativas de aislamiento pasen;
-- la integridad entre establecimientos, solicitudes, concesiones y seguimientos esté protegida en la base de datos;
-- la auditoría e historial de coordenadas estén implementados;
+La app ya está conectada a Supabase para el catálogo de Granada. No debe ampliarse a otras provincias ni darse por completada la aceptación de seguridad hasta que:
+- pase la matriz negativa completa con usuarios autenticados de distintas provincias y un administrador en un entorno aislado;
+- se comprueben perfiles desactivados, sesiones caducadas y conflictos de edición concurrente;
+- la integridad entre establecimientos, solicitudes, concesiones y seguimientos se pruebe también con sesiones reales, no solo mediante smoke tests;
 - el primer administrador y la recuperación de acceso estén documentados;
-- quede confirmado que no se importará estado local de pruebas.
+- se genere una copia lógica completa y se restaure en un entorno aislado;
+- quede confirmado que no se importará estado local de pruebas;
+- se decida y documente si el estado operativo seguirá en `establishment_app_state` JSONB o migrará a las tablas normalizadas, antes de modificar ese modelo.
