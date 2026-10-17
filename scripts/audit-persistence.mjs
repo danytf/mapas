@@ -48,6 +48,21 @@ if (setLocStart < 0 || customStart < 0 || masterStart < 0) {
 
 forbidMatch(/id=["']imp["']|id=["']impf["']/i,
   "La interfaz no debe ofrecer importación de copias JSON antiguas.");
+
+const commitStart = html.indexOf("const commit = async () => {");
+const commitEnd = html.indexOf('el.querySelectorAll(".stars button")', commitStart);
+if (commitStart < 0 || commitEnd < 0) {
+  failures.push("No se pudo localizar el guardado de permisos compartidos.");
+} else {
+  const permitCommit = html.slice(commitStart, commitEnd);
+  if (!/if\s*\(!saved\)\s*\{/.test(permitCommit) ||
+      !/permits\[c\.name\]\s*=\s*previous\.permit/.test(permitCommit) ||
+      !/const rollbackSaved = await savePermits\(c\.name\)/.test(permitCommit) ||
+      !/controls\.forEach\(control => \{ control\.disabled = true; \}\)/.test(permitCommit) ||
+      !/gamPermit\(c, previous\.permit\)/.test(permitCommit)) {
+    failures.push("El guardado de permisos debe bloquear ediciones concurrentes, revertir el estado ante fallo y otorgar progreso solo tras guardar.");
+  }
+}
 forbidMatch(/\$\(["']#impf["']\)\.addEventListener\s*\(/,
   "No debe existir un manejador de importación JSON.");
 
