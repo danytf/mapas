@@ -2209,7 +2209,7 @@ window.exportarCatalogoInicial = function () {
       const byRef = new Map();
       for (const point of staticPoints) {
         const ref = sourceRef(point);
-        if (byRef.has(ref)) throw new Error("El catálogo local contiene una referencia duplicada.");
+        if (byRef.has(ref)) { const previous = byRef.get(ref); throw new Error("Referencia local duplicada: " + ref + " (puntos " + previous.id + " — " + previous.name + " / " + point.id + " — " + point.name + ")."); }
         byRef.set(ref, point);
       }
       if (byRef.size !== 791) throw new Error("El catálogo estático no contiene las 791 referencias esperadas.");
