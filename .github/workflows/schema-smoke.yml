@@ -128,3 +128,5 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017223000_restrict_default_function_execution.sql
       - name: Run schema, trigger, and RLS smoke tests
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/schema_smoke.sql
+      - name: Verify default function ACLs
+        run: psql -v ON_ERROR_STOP=1 -f supabase/tests/default_function_acl_smoke.sql
