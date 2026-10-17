@@ -53,17 +53,30 @@ El JSON `supabase/seeds/catalogo-inicial-granada.json` se ha actualizado y vuelt
 
 **Limitación:** esta validación reproduce las fuentes estáticas del código; no ejecuta `window.exportarCatalogoInicial()` en un navegador real. Las coordenadas pasan controles numéricos y conservan su marca de aproximación, pero no se ha vuelto a comprobar su exactitud geográfica.
 
-## Preparación de importación
+## Resultado de importación en Supabase
 
-Migraciones previas requeridas: `202610170007_unique_establishment_source_ref.sql` y `202610170008_seed_granada_province.sql`.
+**Importación ejecutada y verificada el 17 de octubre de 2026** en el proyecto de desarrollo `mapas-dev` (`wwoczmihhupofwmlmgga`).
 
-El SQL y las migraciones **todavía no se han ejecutado en Supabase**; no se ha importado ningún establecimiento y los registros de prueba siguen sin cambios.
+| Verificación posterior | Resultado |
+|---|---:|
+| Filas del catálogo estático importadas | 791 |
+| Referencias `source_ref` únicas | 791 |
+| Coordenadas ausentes o fuera de rango | 0 |
+| Puntos con precisión `approximate` | 27 |
+| Municipios de Granada registrados | 185 |
+| Establecimientos totales en la tabla (incluye 2 pruebas) | 793 |
 
-## Criterios para desbloquear la importación
+Se aplicaron las migraciones de índice único parcial de `source_ref` y de la provincia de Granada. El SQL de importación se ejecutó dentro de una transacción y se añadió una comprobación final que provoca rollback si no aparecen las 791 referencias esperadas.
 
-1. Obtener el CSV oficial y filtrar provincia = Granada.
-2. Distinguir centros de salud, consultorios y otros tipos de centro; no mezclar universos.
-3. Comparar el directorio oficial con `CENTERS` y `PROV` por nombre normalizado, municipio y tipo, revisando manualmente las coincidencias ambiguas.
-4. Validar direcciones y coordenadas; no considerar exacta una coordenada solo porque esté dentro del rango válido.
-5. Ejecutar el exportador en un entorno de navegador limpio y revisar recuentos, coordenadas ausentes/inválidas y colisiones de `source_ref`.
-6. Importar primero en una fase de staging con clave idempotente y reporte de conflictos; no insertar directamente en las tablas maestras hasta aprobar el resultado.
+Los dos registros de prueba permanecen intactos: `TEST RLS - Granada` y `TEST RLS - Málaga`. No se importaron datos de `localStorage`, `sessionStorage` ni copias de pruebas del navegador. La importación conserva las coordenadas estáticas existentes; no las recalcula.
+
+La tabla `categories` tenía 16 categorías antes de la carga. Se registraron las categorías del mapa que faltaban sin eliminar ni renombrar las preexistentes; por eso la tabla contiene ahora 28 categorías en total. Las 13 categorías que tienen puntos estáticos suman las 791 filas importadas. Las otras cuatro categorías del mapa no se rellenaron con establecimientos inventados.
+
+## Limitaciones pendientes
+
+La validación comprueba la integridad numérica y la carga de datos, **no certifica la exactitud geográfica real** de cada coordenada. El catálogo no se volvió a generar ejecutando `window.exportarCatalogoInicial()` en un navegador real; se reconstruyó a partir de las fuentes estáticas del repositorio.
+
+Trabajo de mejora recomendado, separado de la importación ya completada:
+1. Contrastar las ubicaciones con fuentes oficiales y revisar manualmente los puntos marcados como aproximados.
+2. Ejecutar el exportador en un entorno de navegador limpio y comparar su resultado con el JSON versionado.
+3. Revisar por separado los nombres de categorías del mapa y la taxonomía preexistente de Supabase antes de conectar el frontend.
