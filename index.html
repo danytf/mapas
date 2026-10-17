@@ -2144,7 +2144,7 @@ window.exportarCatalogoInicial = function () {
         }
         seen.add(row.source_ref);
         const point = byRef.get(row.source_ref);
-        if (!point) throw new Error("Hay una referencia de Supabase que no coincide con el catálogo estático.");
+        if (!point) throw new Error("Referencia no encontrada en el catálogo estático: " + row.source_ref + " (nombre: " + (row.name || "sin nombre") + "; dirección: " + (row.address || "sin dirección") + ").");
         if (!Number.isFinite(row.latitude) || !Number.isFinite(row.longitude) ||
             row.latitude < -90 || row.latitude > 90 ||
             row.longitude < -180 || row.longitude > 180) {
