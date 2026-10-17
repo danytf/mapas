@@ -70,6 +70,8 @@ jobs:
           SQL
       - name: Apply schema migration
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/202610160001_initial_schema.sql
+      - name: Apply application state migration
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017031513_create_user_app_state.sql
       - name: Load reference catalogs
         run: psql -v ON_ERROR_STOP=1 -f supabase/seed/reference_catalog.sql
       - name: Run schema, trigger, and RLS smoke tests
