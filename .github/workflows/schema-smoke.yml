@@ -115,6 +115,6 @@ jobs:
       - name: Revoke state timestamp trigger RPC execution
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017164429_20261017164000_revoke_state_timestamp_trigger_execute.sql
       - name: Fix follow-up update guard
-        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017172000_fix_followup_update_guard.sql
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017172240_fix_followup_update_guard.sql
       - name: Run schema, trigger, and RLS smoke tests
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/schema_smoke.sql
