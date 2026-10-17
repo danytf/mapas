@@ -495,7 +495,7 @@ WHERE x.province = 'Granada'
 ON CONFLICT DO NOTHING;
 
 -- Fail the transaction if any catalogue source_ref did not resolve to an establishment.
-DO $
+DO $guard$
 DECLARE
   expected_count integer;
   present_count integer;
@@ -509,6 +509,6 @@ BEGIN
     RAISE EXCEPTION 'Catalogue import incomplete: expected % source_ref values, found %. Transaction rolled back.', expected_count, present_count;
   END IF;
 END;
-$;
+$guard$;
 
 COMMIT;
