@@ -485,9 +485,7 @@
       <button id="restore" type="button" role="menuitem">Restaurar puntos quitados (0)</button>
       <div class="mh">Datos</div>
       <button id="csv" type="button" role="menuitem">Exportar CSV</button>
-      <button id="bak" type="button" role="menuitem">Guardar copia</button>
-      <button id="imp" type="button" role="menuitem">Cargar copia</button>
-      <input id="impf" type="file" accept="application/json,.json" hidden>
+      <button id="bak" type="button" role="menuitem">Exportar estado (JSON)</button>
       <div class="mh">Sesión</div>
       <button id="logout" type="button" role="menuitem">Cerrar sesión</button>
       <div class="mh">Avanzado</div>
@@ -1897,6 +1895,7 @@ function openLogros() {
 document.getElementById("logrosBtn").addEventListener("click", openLogros);
 document.getElementById("lgClose").addEventListener("click", () => document.getElementById("dlgLogros").close());
 $("#csv").addEventListener("click", () => {
+  if (!window.confirm("El CSV incluye datos operativos —contactos, notas e historial de permisos—. Guárdalo solo en una ubicación autorizada. ¿Quieres exportarlo?")) return;
   const q = (v) => '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"';
   const head = ["id", "categoria", "subtipo", "nombre", "direccion", "municipio", "lat", "lon", "ubicacion_aproximada", "origen", "valoracion", "estado_permiso", "fecha_solicitud", "proximo_seguimiento", "contacto", "notas", "solicitud", "concesion_vigente", "historial_concesiones"];
   const rows = CENTERS.filter((c) => !isOut(c)).map((c) => {
@@ -1905,141 +1904,11 @@ $("#csv").addEventListener("click", () => {
   });
   download("permisos-captacion-granada.csv", "\ufeff" + head.join(";") + "\r\n" + rows.join("\r\n"), "text/csv;charset=utf-8");
 });
-$("#bak").addEventListener("click", () => download("copia-mapa-recursos-granada.json", JSON.stringify({ version: 2, permisos: permits, puntos_propios: customs, quitados: [...removed], revisados: [...reviewed], logros, gamificacion: gam }, null, 2), "application/json"));
-$("#imp").addEventListener("click", () => $("#impf").click());
-$("#impf").addEventListener("change", async (e) => {
-  const f = e.target.files[0]; if (!f) return;
-  const status = $("#status");
-  const clone = (value) => JSON.parse(JSON.stringify(value));
-  const original = {
-    permits: clone(permits),
-    customs: clone(customs),
-    removed: [...removed],
-    reviewed: [...reviewed],
-    logros: clone(logros),
-    gam: clone(gam)
-  };
-  let changedSharedNames = [];
-  let persistenceStarted = false;
-  try {
-    const d = JSON.parse(await f.text());
-    if (!d || typeof d !== "object" || Array.isArray(d)) throw new Error("El archivo debe contener un objeto JSON.");
-    const version2 = d.version === 2;
-    if (version2 && (!d.permisos || typeof d.permisos !== "object" || Array.isArray(d.permisos))) {
-      throw new Error("La copia versión 2 no contiene un bloque de permisos válido.");
-    }
-    for (const key of ["puntos_propios", "quitados", "revisados"]) {
-      if (d[key] !== undefined && !Array.isArray(d[key])) throw new Error("El bloque '" + key + "' no tiene un formato válido.");
-    }
-    if (d.logros !== undefined && (!d.logros || typeof d.logros !== "object" || Array.isArray(d.logros))) throw new Error("El bloque de logros no es válido.");
-    if (d.gamificacion !== undefined && (!d.gamificacion || typeof d.gamificacion !== "object" || Array.isArray(d.gamificacion))) throw new Error("El bloque de gamificación no es válido.");
-
-    const pm = version2 ? d.permisos : d;
-    if (!pm || typeof pm !== "object" || Array.isArray(pm)) throw new Error("El bloque de permisos no es válido.");
-    const validNames = new Set([...CENTERS.map(c => c.name), ...customs.map(p => p.name)]);
-    const hasRecognizedContent = version2 || ["puntos_propios", "quitados", "revisados", "logros", "gamificacion"].some(k => d[k] !== undefined) || Object.keys(pm).some(k => validNames.has(k) && pm[k] && typeof pm[k] === "object");
-    if (!hasRecognizedContent) throw new Error("El archivo no parece una copia de seguridad compatible con el mapa.");
-
-    let n = 0, addedC = 0;
-    const customNames = new Set(customs.map(p => p.name));
-    for (const p of (d.puntos_propios || [])) {
-      if (!p || typeof p.name !== "string" || !p.name.trim()) continue;
-      const name = p.name.trim();
-      const lat = Number(p.lat), lon = Number(p.lon);
-      if (!Number.isFinite(lat) || !Number.isFinite(lon) || lat < 36.5 || lat > 38.3 || lon < -4.6 || lon > -2.2) continue;
-      if (customNames.has(name) || CENTERS.some(c => c.name === name)) continue;
-      customs.push({
-        name, tipo: typeof p.tipo === "string" ? p.tipo : "Tiendas",
-        sub: typeof p.sub === "string" ? p.sub : "",
-        town: typeof p.town === "string" ? p.town : "",
-        street: typeof p.street === "string" ? p.street : "",
-        lat, lon, approx: Boolean(p.approx)
-      });
-      customNames.add(name); addedC++;
-    }
-
-    const names = new Set([...CENTERS.map(c => c.name), ...customs.map(p => p.name)]);
-    Object.keys(pm).forEach(k => {
-      const p = pm[k];
-      if (names.has(k) && p && typeof p === "object" && !Array.isArray(p) &&
-          (p.estado || p.solicitudes || p.solicitud || (Array.isArray(p.historial) && p.historial.length))) {
-        permits[k] = p; n++;
-      }
-    });
-    (d.quitados || []).forEach(k => { if (typeof k === "string" && names.has(k)) removed.add(k); });
-    (d.revisados || []).forEach(k => { if (typeof k === "string" && names.has(k)) reviewed.add(k); });
-
-    if (d.logros && d.logros.n && typeof d.logros.n === "object") {
-      Object.keys(d.logros.n).forEach(k => {
-        if ((Number(d.logros.n[k]) || 0) > (logros.n[k] || 0)) {
-          logros.n[k] = Math.max(0, Number(d.logros.n[k]) || 0);
-          logros.f[k] = (d.logros.f || {})[k] || today();
-        }
-      });
-      const dr = d.logros.racha || {};
-      logros.racha.mejor = Math.max(Number(logros.racha.mejor) || 0, Number(dr.mejor) || 0);
-    }
-    if (d.gamificacion && d.gamificacion.aw) {
-      const G = d.gamificacion;
-      ["aw", "day", "dm", "wm"].forEach(f => Object.keys(G[f] || {}).forEach(k => {
-        if (!gam[f][k]) gam[f][k] = G[f][k];
-      }));
-    }
-    persistenceStarted = true;
-    seedXP();
-
-    // Esperar confirmación de Supabase antes de comunicar que la importación terminó.
-    changedSharedNames = Object.keys(permits).filter(k => JSON.stringify(permits[k]) !== JSON.stringify(original.permits[k]));
-    if (!await savePermits()) throw new Error("Supabase rechazó el guardado de los permisos compartidos.");
-    const persist = window.mapaPersistUserState;
-    if (typeof persist !== "function") throw new Error("No está disponible el guardado personal en Supabase.");
-    for (const [key, value] of [
-      ["customs", customs], ["removed", [...removed]], ["reviewed", [...reviewed]],
-      ["badges", logros], ["gamification", gam]
-    ]) {
-      if (!await persist(key, value)) throw new Error("Supabase no confirmó el guardado del bloque '" + key + "'.");
-    }
-
-    if (addedC) { location.reload(); return; }
-    refreshSelects();
-    Object.keys(markers).forEach(id => { const c = CENTERS.find(x => String(x.id) === String(id)); if (c) markers[id].setIcon(makeIcon(c)); });
-    renderList();
-    status.textContent = "Copia importada y guardada en Supabase: " + n + " permisos, " + addedC + " puntos nuevos.";
-  } catch (err) {
-    // Revertir la vista y tratar de restaurar en Supabase cualquier bloque que sí llegara a guardarse.
-    permits = original.permits;
-    customs = original.customs;
-    removed = new Set(original.removed);
-    reviewed = new Set(original.reviewed);
-    logros = original.logros;
-    gam = original.gam;
-    if (persistenceStarted) {
-      try {
-        if (changedSharedNames.length) {
-          const rollbackNames = [...new Set(changedSharedNames)];
-          for (const name of rollbackNames) {
-            if (!Object.prototype.hasOwnProperty.call(original.permits, name)) permits[name] = {};
-          }
-          await savePermits();
-        }
-        const persist = window.mapaPersistUserState;
-        if (typeof persist === "function") {
-          await persist("customs", original.customs);
-          await persist("removed", original.removed);
-          await persist("reviewed", original.reviewed);
-          await persist("badges", original.logros);
-          await persist("gamification", original.gam);
-        }
-      } catch (rollbackError) {
-        console.error("[Mapa] Falló la restauración posterior a una importación incompleta:", rollbackError);
-      }
-    }
-    refreshSelects();
-    renderList();
-    status.textContent = "No se pudo completar la importación: " + (err?.message || String(err)) + ". Se ha restaurado el estado anterior en memoria y se ha intentado revertir Supabase.";
-  }
-  e.target.value = "";
+$("#bak").addEventListener("click", () => {
+  if (!window.confirm("Se exportará el estado operativo del mapa a un archivo JSON. Este archivo NO es una copia completa de Supabase ni contiene una copia íntegra del catálogo maestro. Guárdalo solo en una ubicación autorizada. ¿Continuar?")) return;
+  download("exportacion-estado-mapa.json", JSON.stringify({ version: 2, permisos: permits, puntos_propios: customs, quitados: [...removed], revisados: [...reviewed], logros, gamificacion: gam }, null, 2), "application/json");
 });
+
 
 /* Restaurar puntos quitados */
 $("#restore").addEventListener("click", async () => {
