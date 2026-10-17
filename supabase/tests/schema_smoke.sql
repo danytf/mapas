@@ -396,6 +396,29 @@ begin
   end if;
 end;
 $function_privilege_test$;
+do $state_table_privilege_test$
+begin
+  if has_table_privilege('authenticated', 'public.user_app_state', 'DELETE')
+     or has_table_privilege('authenticated', 'public.user_app_state', 'TRUNCATE')
+     or has_table_privilege('authenticated', 'public.user_app_state', 'REFERENCES')
+     or has_table_privilege('authenticated', 'public.user_app_state', 'TRIGGER')
+     or has_table_privilege('authenticated', 'public.establishment_app_state', 'DELETE')
+     or has_table_privilege('authenticated', 'public.establishment_app_state', 'TRUNCATE')
+     or has_table_privilege('authenticated', 'public.establishment_app_state', 'REFERENCES')
+     or has_table_privilege('authenticated', 'public.establishment_app_state', 'TRIGGER') then
+    raise exception 'FALLO SEGURIDAD: las tablas de estado conceden privilegios API innecesarios';
+  end if;
+  if not has_table_privilege('authenticated', 'public.user_app_state', 'SELECT')
+     or not has_table_privilege('authenticated', 'public.user_app_state', 'INSERT')
+     or not has_table_privilege('authenticated', 'public.user_app_state', 'UPDATE')
+     or not has_table_privilege('authenticated', 'public.establishment_app_state', 'SELECT')
+     or not has_table_privilege('authenticated', 'public.establishment_app_state', 'INSERT')
+     or not has_table_privilege('authenticated', 'public.establishment_app_state', 'UPDATE') then
+    raise exception 'FALLO: faltan privilegios necesarios para el estado de la aplicación';
+  end if;
+end;
+$state_table_privilege_test$;
+
 
 reset role;
 
