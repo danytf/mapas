@@ -675,7 +675,10 @@ const savePermits = (onlyName = null) => {
   }).filter(Boolean);
   if (!rows.length) return Promise.resolve(true);
   const status = document.getElementById("status");
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
   return client.from("establishment_app_state").upsert(rows, { onConflict: "establishment_id" })
+    .abortSignal(controller.signal)
     .then(({ error }) => {
       if (error) throw error;
       rows.forEach(row => {
@@ -688,7 +691,8 @@ const savePermits = (onlyName = null) => {
       console.error("[Mapa] No se pudo guardar el estado compartido del establecimiento:", error);
       if (status) status.textContent = "Aviso: no se pudieron guardar los permisos compartidos en Supabase.";
       return false;
-    });
+    })
+    .finally(() => clearTimeout(timeoutId));
 };
 let removed = new Set();
 const saveRemoved = () => typeof window.mapaPersistUserState === "function" ? window.mapaPersistUserState("removed", [...removed]) : Promise.resolve(false);
@@ -1019,7 +1023,8 @@ function popupFor(c, pos) {
         ok = await Promise.race([
           setLoc(c, r[0], r[1], address),
           new Promise((resolve) => {
-            timeoutId = setTimeout(() => resolve(false), 17000);
+            // setLoc puede necesitar hasta 15 s para actualizar y 8 s para verificar una respuesta ambigua.
+          timeoutId = setTimeout(() => resolve(false), 27000);
           })
         ]);
       } catch (saveError) {
@@ -2214,13 +2219,19 @@ renderList();
     stateWriteQueue = stateWriteQueue.then(async () => {
       if (loadedStateUserId !== userId || window.mapaSession?.user?.id !== userId) return false;
       const snapshot = JSON.parse(JSON.stringify(loadedPersonalState));
-      const { error } = await client.from("user_app_state").upsert(
-        { user_id: userId, state: snapshot },
-        { onConflict: "user_id" }
-      );
-      if (error) throw error;
-      persistedPersonalState = snapshot;
-      return true;
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 12000);
+      try {
+        const { error } = await client.from("user_app_state").upsert(
+          { user_id: userId, state: snapshot },
+          { onConflict: "user_id" }
+        ).abortSignal(controller.signal);
+        if (error) throw error;
+        persistedPersonalState = snapshot;
+        return true;
+      } finally {
+        clearTimeout(timeoutId);
+      }
     }).catch(error => {
       if (loadedStateUserId === userId && personalStateVersions.get(key) === version) {
         if (Object.prototype.hasOwnProperty.call(persistedPersonalState, key)) {
