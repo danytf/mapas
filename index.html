@@ -464,7 +464,7 @@
     <h1 id="lgTitle">Acceso al mapa</h1>
     <p>Mapa del Responsable de Gestión de Recursos</p>
     <label>Correo electrónico<input id="lgUser" type="email" autocomplete="username" autocapitalize="none" spellcheck="false" required></label>    <label>Contraseña<input id="lgPass" type="password" autocomplete="current-password" required></label>
-    <label class="rem"><input id="lgRem" type="checkbox"> Mantener la sesión en este navegador</label>
+    <p class="hint">Por seguridad, la sesión no se guarda en el navegador. Tendrás que iniciar sesión de nuevo al recargar.</p>
     <p class="err" id="lgErr" role="alert"></p>
     <button type="submit">Entrar</button>
   </form>
@@ -559,39 +559,31 @@
 </dialog>
 <script>
 /*
- * Limpieza única de datos heredados de la versión anterior.
- * No importar permisos, puntos manuales, caché, revisiones, ubicaciones,
- * logros, gamificación ni sesiones antiguas del navegador.
+ * El mapa no persiste datos en localStorage ni sessionStorage.
+ * En cada carga se eliminan claves heredadas del mapa y sesiones Supabase
+ * antiguas; la sesión actual vive solo en memoria y exige iniciar sesión tras recargar.
  */
 (() => {
-  const CLEANUP_KEY = "mapa-limpieza-datos-antiguos-20261017-v2";
   try {
-    if (localStorage.getItem(CLEANUP_KEY) === "1") return;
     const legacyKeys = [
-      "puntos-propios-granada-v1",
-      "puntos-quitados-granada-v1",
-      "cs-granada-geo-v3",
-      "permisos-captacion-granada-v1",
-      "puntos-revisados-granada-v1",
-      "ubicaciones-corregidas-granada-v1",
-      "logros-granada-v1",
-      "gamificacion-granada-v1",
-      "mapa-auth-remember"
+      "puntos-propios-granada-v1", "puntos-quitados-granada-v1",
+      "cs-granada-geo-v3", "permisos-captacion-granada-v1",
+      "puntos-revisados-granada-v1", "ubicaciones-corregidas-granada-v1",
+      "logros-granada-v1", "gamificacion-granada-v1", "mapa-auth-remember"
     ];
     [localStorage, sessionStorage].forEach((storage) => {
-      legacyKeys.forEach((key) => storage.removeItem(key));
       for (let i = storage.length - 1; i >= 0; i--) {
         const key = storage.key(i);
-        if (key && /^sb-.+-auth-token$/.test(key)) storage.removeItem(key);
+        if (key && (legacyKeys.includes(key) || key.startsWith("mapa-") || /^sb-.+-auth-token$/.test(key))) {
+          storage.removeItem(key);
+        }
       }
     });
-    localStorage.setItem(CLEANUP_KEY, "1");
   } catch (error) {
-    // Si no se puede limpiar, detener la aplicación antes de leer el estado antiguo.
     document.documentElement.classList.add("lock");
     const status = document.getElementById("status");
-    if (status) status.textContent = "No se pudieron limpiar los datos heredados. No se muestra información local.";
-    console.error("No se pudo completar la limpieza de datos heredados del mapa.", error);
+    if (status) status.textContent = "No se pudo limpiar el almacenamiento heredado. No se muestra información local.";
+    console.error("No se pudo limpiar el almacenamiento heredado del mapa.", error);
     throw error;
   }
 })();
@@ -1882,7 +1874,6 @@ renderList();
   const err = document.getElementById("lgErr");
   const userInput = document.getElementById("lgUser");
   const passInput = document.getElementById("lgPass");
-  const remember = document.getElementById("lgRem");
   const loginButton = form.querySelector('button[type="submit"]');
   const logo = document.querySelector("header .logo");
   const loginLogo = document.querySelector("#login .lg-logo");
@@ -1895,30 +1886,12 @@ renderList();
   const SUPABASE_URL = "https://wwoczmihhupofwmlmgga.supabase.co";
   const SUPABASE_KEY = "sb_publishable_oY0KaIJqzSP5HG0b7VID-Q_kd5g9eN-";
 
-  // Permite elegir entre persistencia de sesión y de navegador.
- 
-  const AUTH_MODE_KEY = "mapa-auth-remember";
-
-  remember.checked = localStorage.getItem(AUTH_MODE_KEY) === "1";
-
+  // Almacenamiento efímero en memoria: nunca localStorage ni sessionStorage.
+  let authSessionMemory = null;
   const authStorage = {
-    getItem(key) {
-      const storage = localStorage.getItem(AUTH_MODE_KEY) === "1"
-        ? localStorage
-        : sessionStorage;
-      return storage.getItem(key);
-    },
-    setItem(key, value) {
-      const persistent = localStorage.getItem(AUTH_MODE_KEY) === "1";
-      const target = persistent ? localStorage : sessionStorage;
-      const other = persistent ? sessionStorage : localStorage;
-      other.removeItem(key);
-      target.setItem(key, value);
-    },
-    removeItem(key) {
-      localStorage.removeItem(key);
-      sessionStorage.removeItem(key);
-    }
+    getItem(key) { return key === "supabase.auth.token" ? authSessionMemory : null; },
+    setItem(key, value) { if (key === "supabase.auth.token") authSessionMemory = value; },
+    removeItem(key) { if (key === "supabase.auth.token") authSessionMemory = null; }
   };
   const client = window.supabase.createClient(
     SUPABASE_URL,
@@ -1928,7 +1901,7 @@ renderList();
         storage: authStorage,
         persistSession: true,
         autoRefreshToken: true,
-        detectSessionInUrl: true
+        detectSessionInUrl: false
       }
     }
   );
@@ -2176,12 +2149,6 @@ renderList();
     try {
       const email = userInput.value.trim();
       const password = passInput.value;
-      if (remember.checked) {
-  localStorage.setItem(AUTH_MODE_KEY, "1");
-} else {
-  localStorage.removeItem(AUTH_MODE_KEY);
-}
-
       const { data, error } = await client.auth.signInWithPassword({
         email,
         password
