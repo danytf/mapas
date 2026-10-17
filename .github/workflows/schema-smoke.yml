@@ -8,12 +8,16 @@ on:
       - architecture/**
     paths:
       - "supabase/migrations/**"
+      - "supabase/bootstrap/**"
+      - "supabase/README.md"
       - "supabase/tests/**"
       - "supabase/seed/**"
       - ".github/workflows/schema-smoke.yml"
   pull_request:
     paths:
       - "supabase/migrations/**"
+      - "supabase/bootstrap/**"
+      - "supabase/README.md"
       - "supabase/tests/**"
       - "supabase/seed/**"
       - ".github/workflows/schema-smoke.yml"
@@ -69,33 +73,33 @@ jobs:
           GRANT EXECUTE ON FUNCTION auth.uid() TO authenticated;
           SQL
       - name: Apply schema migration
-        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/202610160001_initial_schema.sql
+        run: psql -v ON_ERROR_STOP=1 -f supabase/bootstrap/202610160001_initial_schema.sql
       - name: Minimize API table privileges
-        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/202610170001_minimize_api_table_privileges.sql
+        run: psql -v ON_ERROR_STOP=1 -f supabase/bootstrap/202610170001_minimize_api_table_privileges.sql
       - name: Apply sensitive update guard
-        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/202610170002_guard_sensitive_updates.sql
-      - name: Improve composite-key audit
-        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/202610170003_audit_composite_keys.sql
+        run: psql -v ON_ERROR_STOP=1 -f supabase/bootstrap/202610170002_guard_sensitive_updates.sql
       - name: Revoke anonymous table privileges
-        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/202610170004_revoke_anon_table_privileges.sql
+        run: psql -v ON_ERROR_STOP=1 -f supabase/bootstrap/202610170004_revoke_anon_table_privileges.sql
       - name: Restrict function execution
-        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/202610170005_restrict_function_execution.sql
+        run: psql -v ON_ERROR_STOP=1 -f supabase/bootstrap/202610170005_restrict_function_execution.sql
       - name: Revoke internal function execution
-        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/202610170006_revoke_internal_function_execution.sql
+        run: psql -v ON_ERROR_STOP=1 -f supabase/bootstrap/202610170006_revoke_internal_function_execution.sql
       - name: Enforce unique establishment source references
-        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/202610170007_unique_establishment_source_ref.sql
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017023117_unique_establishment_source_ref.sql
       - name: Seed Granada province
-        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/202610170008_seed_granada_province.sql
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017023120_seed_granada_province.sql
       - name: Apply personal state migration
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017031513_create_user_app_state.sql
       - name: Apply shared establishment state migration
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017032027_create_establishment_app_state.sql
       - name: Harden authorization function exposure
-        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017040000_harden_authorization_function_exposure.sql
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017092625_harden_authorization_function_exposure.sql
       - name: Load reference catalogs
         run: psql -v ON_ERROR_STOP=1 -f supabase/seed/reference_catalog.sql
       - name: Reconcile categories to map taxonomy
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017114356_reconcile_categories_to_map_taxonomy.sql
+      - name: Improve composite-key audit
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017114643_audit_composite_keys_user_provinces.sql
       - name: Add uncovered foreign-key indexes
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017120547_index_uncovered_foreign_keys.sql
       - name: Split administrator RLS policies
