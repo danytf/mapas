@@ -33,32 +33,27 @@ La página oficial muestra centros de salud y consultorios de la provincia de Gr
 
 ## Resultado de la generación estática (2026-10-17)
 
-Se ha reproducido la lógica del exportador usando únicamente las declaraciones estáticas de `CENTERS`, `PROV`, `SUPER` y `PRECOMPUTED` de `index.html`. No se ha leído `localStorage`, no se han incorporado puntos personalizados y no se ha reemplazado ninguna coordenada por una geocodificación nueva.
+Se reconstruyó el catálogo a partir de todas las fuentes estáticas de `index.html`: `CENTERS` (48), `PROV` (35), `OFICIALES` (207), `GYMS` (89), `BIGS` (92) y `SUPER` (320). Total: 791 puntos. No se ha leído `localStorage` ni `sessionStorage`, no se han incorporado puntos personalizados y no se han recalculado coordenadas mediante geocodificación.
 
 | Control | Resultado |
 |---|---:|
-| Centros/establecimientos estáticos tras combinar `CENTERS` y `PROV` | 83 |
-| Supermercados estáticos | 320 |
-| Registros antes de deduplicar | 403 |
-| Registros después de deduplicar | 403 |
+| Puntos antes y después de deduplicar | 791 |
 | Duplicados eliminados | 0 |
-| Coordenadas ausentes | 0 |
+| Pares de coordenadas ausentes | 0 |
 | Coordenadas numéricamente inválidas | 0 |
 | Referencias `source_ref` duplicadas | 0 |
-| Coordenadas marcadas como aproximadas | 19 |
-| Municipios distintos | 76 |
+| Coordenadas marcadas como aproximadas | 27 |
+| Municipios distintos | 185 |
+| Categorías definidas en la aplicación | 17 |
+| Categorías con puntos estáticos en el catálogo | 13 |
 
-El JSON se guardó en `supabase/seeds/catalogo-inicial-granada.json` y se volvió a leer desde GitHub para verificar que el contenido persistido coincide con el generado. La validación independiente del JSON confirmó 403 filas, cero campos obligatorios vacíos, cero pares de coordenadas ausentes o inválidos y cero referencias duplicadas.
+Las 17 categorías de la aplicación son: Hospital, Centro de salud, Supermercado, Centro comercial, Entidad oficial, Gimnasios, IKEA, Leroy Merlin, Decathlon, Carrefour, Correos, El Corte Inglés, Bricolaje, MediaMarkt, Estaciones, Tiendas y Eventos. Las categorías sin puntos estáticos no se han rellenado con registros inventados.
 
-**Limitación:** esto es una reproducción determinista desde el código estático, no una ejecución de `window.exportarCatalogoInicial()` dentro de un navegador real. Las coordenadas están validadas numéricamente y se conserva la marca de aproximación, pero no se ha vuelto a verificar su exactitud geográfica.
+El JSON `supabase/seeds/catalogo-inicial-granada.json` se ha actualizado y vuelto a leer desde GitHub. El SQL `supabase/seeds/import_catalogue_granada.sql` se ha regenerado para los 791 puntos y las 17 categorías. Valida el número de filas, referencias duplicadas y coordenadas antes de insertar, y omite conflictos sin sobrescribir establecimientos existentes.
+
+**Limitación:** esta validación reproduce las fuentes estáticas del código; no ejecuta `window.exportarCatalogoInicial()` en un navegador real. Las coordenadas pasan controles numéricos y conservan su marca de aproximación, pero no se ha vuelto a comprobar su exactitud geográfica.
 
 ## Preparación de importación
-
-Se generó `supabase/seeds/import_catalogue_granada.sql` con carga idempotente. El SQL:
-- comprueba que existen la provincia Granada y el índice único de `source_ref`;
-- prepara 5 categorías y 76 municipios a partir de los nombres presentes en el catálogo;
-- inserta los 403 registros estáticos, resolviendo las claves foráneas;
-- ignora conflictos de inserción para no sobrescribir establecimientos ya existentes ni sus coordenadas.
 
 Migraciones previas requeridas: `202610170007_unique_establishment_source_ref.sql` y `202610170008_seed_granada_province.sql`.
 
