@@ -44,6 +44,10 @@ Esto confirma el aislamiento básico de lectura y actualización entre las dos p
 | Usuario Granada intenta hacer upsert del estado personal de Málaga | Bloqueado por RLS; transacción revertida |
 | Usuario Granada intenta hacer upsert del estado compartido de Málaga | Bloqueado por RLS; transacción revertida |
 | Usuario estándar intenta borrar un establecimiento de su propia provincia | 0 filas afectadas; borrado reservado a administradores |
+| Usuario estándar corrige dirección/coordenadas en su provincia tras la migración de mínimo privilegio | Permitido; transacción revertida |
+| Usuario estándar intenta cambiar nombre/estado del catálogo maestro | Bloqueado por el trigger; transacción revertida |
+| Usuario estándar intenta insertar un establecimiento maestro | Bloqueado por RLS; transacción revertida |
+| Administrador actualiza campos maestros | Permitido; transacción revertida |
 | Usuario estándar intenta cambiar su propio rol a `admin` | 0 filas afectadas |
 | Usuario estándar intenta borrar su propia asignación provincial | 0 filas afectadas |
 | Usuario autenticado intenta insertar directamente en `audit_log` | Denegado |
