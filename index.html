@@ -2168,7 +2168,24 @@ renderList();
       sharedPermitRecords.set(c.name, { establishment_id: row.establishment_id, province_id: row.province_id });
       if (Object.keys(row.state).length) permits[c.name] = row.state;
     });
-    customs = Array.isArray(state.customs) ? state.customs.filter(p => p && typeof p.name === "string" && Number.isFinite(Number(p.lat)) && Number.isFinite(Number(p.lon))) : [];
+    const customNames = new Set(CENTERS.map(c => c.name));
+    customs = Array.isArray(state.customs) ? state.customs.filter(p => {
+      if (!p || typeof p.name !== "string" || !p.name.trim()) return false;
+      const lat = Number(p.lat), lon = Number(p.lon);
+      if (!Number.isFinite(lat) || !Number.isFinite(lon) ||
+          lat < 36.5 || lat > 38.3 || lon < -4.6 || lon > -2.2) return false;
+      const name = p.name.trim();
+      if (customNames.has(name)) return false;
+      customNames.add(name);
+      return true;
+    }).map(p => ({
+      name: p.name.trim(),
+      tipo: typeof p.tipo === "string" ? p.tipo : "Tiendas",
+      sub: typeof p.sub === "string" ? p.sub : "",
+      town: typeof p.town === "string" ? p.town : "",
+      street: typeof p.street === "string" ? p.street : "",
+      lat: Number(p.lat), lon: Number(p.lon), approx: Boolean(p.approx)
+    })) : [];
     removed = new Set(Array.isArray(state.removed) ? state.removed.filter(x => typeof x === "string") : []);
     reviewed = new Set(Array.isArray(state.reviewed) ? state.reviewed.filter(x => typeof x === "string") : []);
     // Ignorar correcciones heredadas por usuario: la ubicación vigente procede del catálogo maestro Supabase.
