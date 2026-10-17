@@ -134,6 +134,26 @@ insert into public.followups (
   '00000000-0000-4000-8000-0000000000a1'
 );
 
+-- Cross-province fixtures for shared state and location proposals.
+insert into public.establishment_app_state (
+  establishment_id, province_id, state, updated_by
+) values (
+  '00000000-0000-4000-8000-000000000006',
+  '00000000-0000-4000-8000-000000000002',
+  '{"fixture":"province-b-state"}'::jsonb,
+  '00000000-0000-4000-8000-0000000000a1'
+);
+
+insert into public.establishment_location_reviews (
+  id, establishment_id, status, proposed_latitude, proposed_longitude,
+  proposed_address, source, notes, created_by
+) values (
+  '00000000-0000-4000-8000-0000000000c4',
+  '00000000-0000-4000-8000-000000000006',
+  'pending', 37.301, -3.201, 'Province B proposal', 'manual_google_maps',
+  'Cross-province RLS fixture', '00000000-0000-4000-8000-0000000000a1'
+);
+
 -- La base de datos debe rechazar cada relación incoherente.
 do $$
 begin
@@ -402,6 +422,35 @@ begin
   if affected <> 0 then
     raise exception 'FALLO RLS: usuario A pudo actualizar un seguimiento de provincia B';
   end if;
+
+  update public.establishment_app_state
+     set state = '{"cross_province_write":true}'::jsonb,
+         updated_by = auth.uid()
+   where establishment_id = '00000000-0000-4000-8000-000000000006';
+  get diagnostics affected = row_count;
+  if affected <> 0 then
+    raise exception 'FALLO RLS: usuario A pudo actualizar estado compartido de provincia B';
+  end if;
+
+  update public.establishment_location_reviews
+     set proposed_address = 'forbidden cross-province edit'
+   where id = '00000000-0000-4000-8000-0000000000c4';
+  get diagnostics affected = row_count;
+  if affected <> 0 then
+    raise exception 'FALLO RLS: usuario A pudo actualizar propuesta de ubicación de provincia B';
+  end if;
+
+  begin
+    insert into public.establishment_location_reviews (
+      establishment_id, status, proposed_address, source, created_by
+    ) values (
+      '00000000-0000-4000-8000-000000000006',
+      'pending', 'Forbidden cross-province proposal', 'manual_google_maps', auth.uid()
+    );
+    raise exception 'FALLO RLS: usuario A pudo insertar propuesta en provincia B';
+  exception when insufficient_privilege then
+    null;
+  end;
 
   begin
     insert into public.permit_applications (
@@ -855,6 +904,14 @@ begin
   select count(*) into visible_count from public.followups
    where id = '00000000-0000-4000-8000-0000000000c3';
   if visible_count <> 0 then raise exception 'FALLO RLS: usuario A ve seguimiento de provincia B'; end if;
+
+  select count(*) into visible_count from public.establishment_app_state
+   where establishment_id = '00000000-0000-4000-8000-000000000006';
+  if visible_count <> 0 then raise exception 'FALLO RLS: usuario A ve estado compartido de provincia B'; end if;
+
+  select count(*) into visible_count from public.establishment_location_reviews
+   where id = '00000000-0000-4000-8000-0000000000c4';
+  if visible_count <> 0 then raise exception 'FALLO RLS: usuario A ve propuesta de ubicación de provincia B'; end if;
 end;
 $cross_province_select_matrix$;
 
