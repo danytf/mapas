@@ -2,7 +2,7 @@ name: Validate default function ACLs
 on:
   pull_request:
     paths:
-      - "supabase/migrations/20261017223100_restrict_default_function_execution.sql"
+      - "supabase/migrations/20261017210223_restrict_default_function_execution.sql"
       - "supabase/tests/default_function_acl_smoke.sql"
       - ".github/workflows/default-function-acl.yml"
 permissions:
@@ -33,5 +33,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: psql -v ON_ERROR_STOP=1 -c "CREATE ROLE anon NOLOGIN; CREATE ROLE authenticated NOLOGIN;"
-      - run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017223100_restrict_default_function_execution.sql
+      - run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261017210223_restrict_default_function_execution.sql
       - run: psql -v ON_ERROR_STOP=1 -f supabase/tests/default_function_acl_smoke.sql
