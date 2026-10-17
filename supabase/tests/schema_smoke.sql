@@ -261,6 +261,33 @@ insert into public.establishment_location_reviews (
   'pending', 37.181, -3.601, 'Proposed address', 'manual_google_maps',
   'Smoke test proposal', '00000000-0000-4000-8000-0000000000a2'
 );
+
+-- A provincial user cannot smuggle an already-approved proposal through INSERT.
+do $location_review_insert_decision_test$
+begin
+  begin
+    insert into public.establishment_location_reviews (
+      id, establishment_id, status, proposed_latitude, proposed_longitude,
+      proposed_address, source, notes, reviewed_by, reviewed_at, created_by
+    ) values (
+      '00000000-0000-4000-8000-0000000000b2',
+      '00000000-0000-4000-8000-000000000005',
+      'accepted', 37.182, -3.602, 'Forged accepted address', 'manual_google_maps',
+      'Must be rejected on insert', '00000000-0000-4000-8000-0000000000a2', now(),
+      '00000000-0000-4000-8000-0000000000a2'
+    );
+    raise exception 'FALLO SEGURIDAD: usuario provincial insertó una propuesta ya aceptada';
+  exception when insufficient_privilege then
+    null;
+  end;
+
+  if exists (select 1 from public.establishment_location_reviews
+              where id = '00000000-0000-4000-8000-0000000000b2') then
+    raise exception 'FALLO SEGURIDAD: persistió una propuesta con decisión falsificada';
+  end if;
+end;
+$location_review_insert_decision_test$;
+
 update public.establishment_location_reviews
    set status = 'accepted',
        reviewed_by = '00000000-0000-4000-8000-0000000000a2',
@@ -1351,6 +1378,29 @@ begin
   if affected <> 1 then raise exception 'FALLO RLS: no se pudo restaurar el usuario de prueba'; end if;
 end;
 $admin_profile_assignment_matrix$;
+
+-- Profile identity is immutable even for administrators; role/activation remain admin-managed.
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a1', false);
+do $profile_identity_immutable$
+declare saved_id uuid;
+begin
+  select id into saved_id from public.profiles
+   where id = '00000000-0000-4000-8000-0000000000a2';
+
+  begin
+    update public.profiles
+       set id = '00000000-0000-4000-8000-0000000000a3'
+     where id = '00000000-0000-4000-8000-0000000000a2';
+    raise exception 'FALLO SEGURIDAD: se permitió modificar la identidad de un perfil';
+  exception when insufficient_privilege then
+    null;
+  end;
+
+  if not exists (select 1 from public.profiles where id = saved_id) then
+    raise exception 'FALLO SEGURIDAD: cambió la identidad del perfil';
+  end if;
+end;
+$profile_identity_immutable$;
 
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
 
