@@ -48,6 +48,8 @@ Esto confirma el aislamiento básico de lectura y actualización entre las dos p
 | Usuario estándar intenta cambiar nombre/estado del catálogo maestro | Bloqueado por el trigger; transacción revertida |
 | Usuario estándar intenta insertar un establecimiento maestro | Bloqueado por RLS; transacción revertida |
 | Administrador actualiza campos maestros | Permitido; transacción revertida |
+| Usuario intenta suplantar `updated_by` en estado compartido | El trigger fija el usuario autenticado; transacción revertida |
+| Administrador intenta asociar estado compartido a provincia distinta de la del establecimiento maestro | Bloqueado por el trigger; transacción revertida |
 | Usuario estándar intenta cambiar su propio rol a `admin` | 0 filas afectadas |
 | Usuario estándar intenta borrar su propia asignación provincial | 0 filas afectadas |
 | Usuario autenticado intenta insertar directamente en `audit_log` | Denegado |
