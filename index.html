@@ -1001,12 +1001,21 @@ async function setLoc(c, lat, lon, address) {
     console.error("[Mapa] El establecimiento no tiene ID de Supabase; no se guarda la corrección.");
     return false;
   }
+  // setLoc está fuera del ámbito privado de autenticación: obtener el cliente
+  // desde la sesión validada que expone el módulo de acceso.
+  const supabaseClient = window.mapaSession?.supabase;
+  if (!supabaseClient || !window.mapaSession?.user?.id) {
+    window.mapaLastLocationError = "No hay una sesión autenticada de Supabase disponible.";
+    console.error("[Mapa] Guardado cancelado: falta cliente o usuario autenticado.");
+    return false;
+  }
+
   let data = null;
   let error = null;
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 15000);
   try {
-    const result = await client.from("establishments").update({
+    const result = await supabaseClient.from("establishments").update({
       address: cleanAddress,
       latitude: +lat.toFixed(6),
       longitude: +lon.toFixed(6),
