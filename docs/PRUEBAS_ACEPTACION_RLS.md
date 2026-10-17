@@ -2,7 +2,10 @@
 
 **Objetivo:** comprobar que la base de datos impone los permisos aunque alguien invoque la API directamente, sin depender de los controles visuales de la aplicación.
 
-Este plan acompaña a `supabase/migrations/202610160001_initial_schema.sql`. La migración, la semilla de referencia y las pruebas smoke se ejecutan automáticamente en [GitHub Actions](https://github.com/danytf/mapas/actions/runs/38974877511) contra PostgreSQL 16 con una capa mínima de compatibilidad de `auth.uid()` y `auth.users`. La ejecución comprueba la carga de 52 códigos territoriales y 16 categorías, además de sintaxis, triggers, integridad y un primer escenario de RLS. Esto **no sustituye** las pruebas en un proyecto Supabase real. No se han creado credenciales ni se ha aplicado la migración a ningún proyecto Supabase.
+**Estado actualizado a 17 de octubre de 2026:** las migraciones están aplicadas al proyecto Supabase de desarrollo `wwoczmihhupofwmlmgga`. La revisión directa confirma que las 16 tablas públicas tienen RLS habilitado, que no hay privilegios de tabla concedidos a `anon` ni a `PUBLIC`, y que las políticas por tabla usan ámbitos de usuario/provincia o administración. El catálogo activo contiene 791 establecimientos con coordenadas y referencias de origen únicas.
+
+La suite de GitHub Actions ejecuta los smoke tests en PostgreSQL 16 con una capa mínima de compatibilidad para Supabase Auth; esto comprueba integridad, triggers y escenarios limitados de RLS, pero no equivale a probar todos los permisos efectivos con sesiones reales de Supabase. La matriz negativa completa descrita en este documento sigue pendiente de ejecución contra usuarios de prueba autenticados en un entorno aislado. No se deben marcar las pruebas de acceso entre provincias como completas solo por haber inspeccionado las políticas.
+
 
 ## 1. Preparación de un entorno de desarrollo
 
