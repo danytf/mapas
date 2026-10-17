@@ -24,6 +24,14 @@ forbidMatch(/\bnavigator\s*\.\s*serviceWorker\s*\.\s*register\s*\(/i,
 requireMatch(/delete\s+loadedPersonalState\.locations\s*;/,
   "Debe descartarse el campo heredado loadedPersonalState.locations.");
 
+requireMatch(/const personalStateKey = \\(c\\) => c\\.databaseId \\? "est:" \\+ c\\.databaseId : "custom:" \\+ c\\.name;/,
+  "Las referencias personales deben usar UUID para establecimientos maestros.");
+requireMatch(/removed = normalizePersonalRefs\\(state\\.removed\\);/,
+  "Las ocultaciones antiguas por nombre deben migrarse a claves estables al cargarse.");
+requireMatch(/reviewed = normalizePersonalRefs\\(state\\.reviewed\\);/,
+  "Las revisiones antiguas por nombre deben migrarse a claves estables al cargarse.");
+
+
 forbidMatch(/key\.startsWith\(["']mapa-["']\)/,
   "La limpieza no debe borrar indiscriminadamente todas las claves mapa-* del mismo origen.");
 forbidMatch(/\^sb-\.\+-auth-token\$/,
