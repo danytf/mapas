@@ -72,6 +72,14 @@ Los dos registros de prueba permanecen intactos: `TEST RLS - Granada` y `TEST RL
 
 La tabla `categories` tenía 16 categorías antes de la carga. Se registraron las categorías del mapa que faltaban sin eliminar ni renombrar las preexistentes; por eso la tabla contiene ahora 28 categorías en total. Las 13 categorías que tienen puntos estáticos suman las 791 filas importadas. Las otras cuatro categorías del mapa no se rellenaron con establecimientos inventados.
 
+## Integración inicial de lectura en la aplicación
+
+Se añadió en `index.html` una sincronización de solo lectura que se ejecuta después de validar la sesión de Supabase. Solicita los registros cuyo `source_ref` empieza por `catalogo-granada:`, exige exactamente 791 filas, referencias únicas y coordenadas válidas, y comprueba que todas las referencias coinciden con el catálogo estático antes de aplicar cualquier coordenada. Si una comprobación falla, no aplica una carga parcial y mantiene el mapa actual, mostrando el error en el estado de la interfaz.
+
+La sincronización no inserta, actualiza ni elimina filas en Supabase y no migra datos de `localStorage` ni `sessionStorage`. Los nombres, categorías y metadatos funcionales siguen procediendo del catálogo estático en esta primera fase; se usan las coordenadas validadas de Supabase para reconstruir los marcadores.
+
+**Pendiente de verificación en navegador:** confirmar con una sesión real que las políticas RLS permiten la lectura, que el indicador muestra «791 puntos sincronizados desde Supabase» y que filtros, ventanas emergentes y controles siguen funcionando. No se afirma todavía que esta prueba visual se haya realizado.
+
 ## Limitaciones pendientes
 
 La validación comprueba la integridad numérica y la carga de datos, **no certifica la exactitud geográfica real** de cada coordenada. El catálogo no se volvió a generar ejecutando `window.exportarCatalogoInicial()` en un navegador real; se reconstruyó a partir de las fuentes estáticas del repositorio.
