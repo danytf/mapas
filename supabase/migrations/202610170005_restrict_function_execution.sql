@@ -13,7 +13,13 @@ REVOKE EXECUTE ON FUNCTION public.prevent_application_reassignment_conflicts() F
 REVOKE EXECUTE ON FUNCTION public.prevent_grant_reassignment_conflicts() FROM PUBLIC, anon;
 REVOKE EXECUTE ON FUNCTION public.prevent_municipality_reassignment_conflicts() FROM PUBLIC, anon;
 REVOKE EXECUTE ON FUNCTION public.record_establishment_location_history() FROM PUBLIC, anon;
-REVOKE EXECUTE ON FUNCTION public.rls_auto_enable() FROM PUBLIC, anon;
+DO $migration$
+BEGIN
+  IF to_regprocedure('public.rls_auto_enable()') IS NOT NULL THEN
+    EXECUTE 'REVOKE EXECUTE ON FUNCTION public.rls_auto_enable() FROM PUBLIC, anon';
+  END IF;
+END
+$migration$;
 REVOKE EXECUTE ON FUNCTION public.set_updated_at() FROM PUBLIC, anon;
 REVOKE EXECUTE ON FUNCTION public.validate_establishment_municipality_province() FROM PUBLIC, anon;
 REVOKE EXECUTE ON FUNCTION public.validate_followup_targets() FROM PUBLIC, anon;
