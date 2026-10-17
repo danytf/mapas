@@ -1553,4 +1553,45 @@ begin
 end;
 $audit_sequence_privilege_test$;
 
+-- The anonymous API role must have no direct privileges on any public relation.
+-- This catalog-wide invariant also covers newly added tables/sequences.
+do $anonymous_relation_privilege_test$
+declare
+  item record;
+  privilege_name text;
+begin
+  for item in
+    select c.oid, c.relname, c.relkind, c.relacl
+      from pg_class c
+      join pg_namespace n on n.oid = c.relnamespace
+     where n.nspname = 'public'
+       and c.relkind in ('r', 'p', 'S', 'v', 'm')
+  loop
+    if item.relkind = 'S' then
+      if has_sequence_privilege('anon', item.oid, 'USAGE')
+         or has_sequence_privilege('anon', item.oid, 'SELECT')
+         or has_sequence_privilege('anon', item.oid, 'UPDATE') then
+        raise exception 'FALLO SEGURIDAD: anon conserva privilegios sobre la secuencia public.%', item.relname;
+      end if;
+    else
+      foreach privilege_name in array array['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'REFERENCES', 'TRIGGER']
+      loop
+        if has_table_privilege('anon', item.oid, privilege_name) then
+          raise exception 'FALLO SEGURIDAD: anon conserva privilegio % sobre public.%', privilege_name, item.relname;
+        end if;
+      end loop;
+    end if;
+
+    if exists (
+      select 1
+        from aclexplode(coalesce(item.relacl, '{}'::aclitem[])) acl
+       where acl.grantee = 0
+         and acl.privilege_type in ('SELECT', 'INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'REFERENCES', 'TRIGGER', 'USAGE')
+    ) then
+      raise exception 'FALLO SEGURIDAD: public conserva privilegios directos sobre public.%', item.relname;
+    end if;
+  end loop;
+end;
+$anonymous_relation_privilege_test$;
+
 select 'schema smoke tests passed' as result;
