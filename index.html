@@ -671,7 +671,7 @@ const savePermits = (onlyName = null) => {
   const rows = [...new Set(names)].map(name => {
     const c = CENTERS.find(item => item.name === name && item.databaseId && item.provinceId);
     if (!c) return null;
-    return { establishment_id: c.databaseId, province_id: c.provinceId, state: permits[name] || {}, updated_by: userId };
+    return { establishment_id: c.databaseId, province_id: c.provinceId, state: sanitizeSharedPermitState(permits[name]) || {}, updated_by: userId };
   }).filter(Boolean);
   if (!rows.length) return Promise.resolve(true);
   const status = document.getElementById("status");
@@ -718,6 +718,57 @@ const safeCount = (value) => {
   const text = typeof value === "string" ? value.trim() : "";
   const n = typeof value === "number" ? value : (/^\d+$/.test(text) ? Number(text) : NaN);
   return Number.isSafeInteger(n) && n > 0 && n <= 100000 ? n : 0;
+};
+const validIsoDate = (value) => {
+  if (typeof value !== "string" || !/^\\d{4}-\\d{2}-\\d{2}$/.test(value)) return "";
+  const date = new Date(value + "T00:00:00Z");
+  return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value ? value : "";
+};
+const cleanStateText = (value, maxLength) =>
+  typeof value === "string" ? value.replace(/\\u0000/g, "").slice(0, maxLength) : "";
+const sanitizePermitEntry = (value, kind) => {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  const entry = {};
+  const desde = validIsoDate(value.desde), hasta = validIsoDate(value.hasta), seg = validIsoDate(value.seg);
+  if (desde) entry.desde = desde;
+  if (hasta) entry.hasta = hasta;
+  if (seg && kind === "solicitud") entry.seg = seg;
+  const captadores = safeCount(value.captadores);
+  if (captadores) entry.captadores = captadores;
+  const ong = cleanStateText(value.ong, 200).trim();
+  if (ong) entry.ong = ong;
+  if (kind === "solicitud" && (value.res === true || value.res === "denegada")) entry.res = "denegada";
+  if (kind === "concesion" && value.cancelada === true) entry.cancelada = true;
+  return entry;
+};
+const sanitizeSharedPermitState = (value) => {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  const result = {};
+  const allowedStates = new Set(["sin", "solicitado", "concedido", "denegado", "caducado", "cancelado"]);
+  if (allowedStates.has(value.estado)) result.estado = value.estado;
+  const fecha = validIsoDate(value.fecha), seguimiento = validIsoDate(value.seguimiento);
+  if (fecha) result.fecha = fecha;
+  if (seguimiento) result.seguimiento = seguimiento;
+  const contacto = cleanStateText(value.contacto, 500);
+  const notas = cleanStateText(value.notas, 5000);
+  if (contacto) result.contacto = contacto;
+  if (notas) result.notas = notas;
+  const rating = Number(value.valoracion);
+  if (Number.isInteger(rating) && rating >= 0 && rating <= 5) result.valoracion = rating;
+  if (Array.isArray(value.solicitudes)) {
+    result.solicitudes = value.solicitudes.slice(0, 200)
+      .map(entry => sanitizePermitEntry(entry, "solicitud"))
+      .filter(entry => entry && Object.keys(entry).length);
+  } else if (value.solicitud && typeof value.solicitud === "object" && !Array.isArray(value.solicitud)) {
+    const solicitud = sanitizePermitEntry(value.solicitud, "solicitud");
+    if (solicitud && Object.keys(solicitud).length) result.solicitud = solicitud;
+  }
+  if (Array.isArray(value.historial)) {
+    result.historial = value.historial.slice(0, 200)
+      .map(entry => sanitizePermitEntry(entry, "concesion"))
+      .filter(entry => entry && Object.keys(entry).length);
+  }
+  return result;
 };
 const today = () => new Date().toISOString().slice(0, 10);
 const isVig = (h) => !h.cancelada && (!h.desde || h.desde <= today()) && (!h.hasta || h.hasta >= today());
@@ -2188,7 +2239,8 @@ renderList();
       const c = byId.get(row.establishment_id);
       if (!c || row.province_id !== c.provinceId || !row.state || typeof row.state !== "object" || Array.isArray(row.state)) return;
       sharedPermitRecords.set(c.name, { establishment_id: row.establishment_id, province_id: row.province_id });
-      if (Object.keys(row.state).length) permits[c.name] = row.state;
+      const safePermitState = sanitizeSharedPermitState(row.state);
+      if (safePermitState && Object.keys(safePermitState).length) permits[c.name] = safePermitState;
     });
     const customNames = new Set(CENTERS.map(c => c.name));
     customs = Array.isArray(state.customs) ? state.customs.filter(p => {
