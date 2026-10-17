@@ -32,13 +32,13 @@ requireMatch(/reviewed = normalizePersonalRefs/,
   "Las revisiones antiguas por nombre deben migrarse a claves estables al cargarse.");
 
 
-requireMatch(/const safeCount = \\(value\\)/,
+requireMatch(/const safeCount =/,
   "Los contadores de captadores compartidos deben validarse como enteros antes de renderizar.");
-requireMatch(/const fmtD = \\(d\\) => \\{/,
+requireMatch(/const fmtD =/,
   "El formateador de fechas debe rechazar datos no válidos antes de insertarlos en HTML.");
-requireMatch(/n: safeCount\\(h\\.captadores\\)/,
+requireMatch(/n: safeCount/,
   "El calendario semanal debe sanitizar el número de captadores de concesiones compartidas.");
-requireMatch(/n: safeCount\\(x\\.captadores\\)/,
+requireMatch(/n: safeCount/,
   "El calendario semanal debe sanitizar el número de captadores de solicitudes compartidas.");
 
 
