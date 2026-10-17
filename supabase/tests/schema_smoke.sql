@@ -797,11 +797,8 @@ begin
       ('user_provinces', array['SELECT','INSERT','UPDATE','DELETE']::text[])
     ) as matrix(table_name, commands)
   loop
-    foreach expected in array array[item.commands] loop
-      null;
-    end loop;
     select array_agg(command order by command) into missing
-    from unnest(item.commands) command
+    from unnest(item.commands) as u(command)
     where not exists (
       select 1 from pg_policies p
       where p.schemaname = 'public'
