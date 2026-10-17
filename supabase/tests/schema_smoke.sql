@@ -233,7 +233,7 @@ select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2
 insert into public.user_app_state (user_id, state)
 values ('00000000-0000-4000-8000-0000000000a2', '{"gamification":{"lvl":3},"badges":{"test":"A"}}'::jsonb);
 
-do $
+do $rls_test$
 declare visible_count integer;
 begin
   select count(*) into visible_count from public.user_app_state
@@ -242,10 +242,10 @@ begin
     raise exception 'FALLO RLS: el propietario no puede leer su estado personal';
   end if;
 end;
-$;
+$rls_test$;
 
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a3', false);
-do $
+do $rls_test$
 declare visible_count integer;
 begin
   select count(*) into visible_count from public.user_app_state
@@ -254,7 +254,7 @@ begin
     raise exception 'FALLO RLS: la cuenta B puede leer el estado personal de A';
   end if;
 end;
-$;
+$rls_test$;
 
 -- El estado operativo de un establecimiento es compartido dentro de su provincia,
 -- pero no debe filtrarse a usuarios asignados a otra provincia.
@@ -267,7 +267,7 @@ values (
   '00000000-0000-4000-8000-0000000000a2'
 );
 
-do $
+do $rls_test$
 declare visible_count integer;
 begin
   select count(*) into visible_count from public.establishment_app_state
@@ -276,10 +276,10 @@ begin
     raise exception 'FALLO RLS: el usuario asignado no puede leer el estado operativo provincial';
   end if;
 end;
-$;
+$rls_test$;
 
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a3', false);
-do $
+do $rls_test$
 declare visible_count integer;
 begin
   select count(*) into visible_count from public.establishment_app_state
@@ -288,10 +288,10 @@ begin
     raise exception 'FALLO RLS: la cuenta de provincia B puede leer el estado operativo de A';
   end if;
 end;
-$;
+$rls_test$;
 
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a1', false);
-do $
+do $rls_test$
 declare visible_count integer;
 begin
   select count(*) into visible_count from public.establishment_app_state
@@ -300,7 +300,7 @@ begin
     raise exception 'FALLO RLS: el administrador no puede leer estado operativo interprovincial';
   end if;
 end;
-$;
+$rls_test$;
 
 reset role;
 
