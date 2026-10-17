@@ -1251,6 +1251,7 @@ $("#cadena").addEventListener("change", refilter);
 $("#subtipo").addEventListener("change", refilter);
 $("#revBtn").addEventListener("click", () => { onlyRev = !onlyRev; $("#revBtn").setAttribute("aria-pressed", onlyRev); refilter(); });
 $("#copy").addEventListener("click", async () => {
+  if (!window.confirm("Se copiarán al portapapeles nombres, direcciones y coordenadas del catálogo. Trata esos datos como información operativa y compártelos solo si estás autorizado. ¿Continuar?")) return;
   const out = CENTERS.map((c) => ({
     id: c.id, nombre: c.name, tipo: c.tipo, direccion: addrOf(c), direccion_confirmada: c.conf && !c.prov, ubicacion_aproximada: isApprox(c), lat: cache[c.id] ? cache[c.id].lat : null, lon: cache[c.id] ? cache[c.id].lon : null
   }));
