@@ -125,11 +125,12 @@ Este apartado actualiza el estado de los hallazgos anteriores; el diagnóstico d
 
 | Hallazgo original | Estado actual | Evidencia / límite |
 |---|---|---|
-| P0 — el acceso era solo un filtro visual | **Corregido en arquitectura** | La app usa Supabase Auth, valida perfil activo y ámbito provincial; las tablas tienen RLS. La matriz negativa completa con usuarios reales aún debe ejecutarse. |
+| P0 — el acceso era solo un filtro visual | **Corregido en arquitectura; validación parcial real** | Supabase Auth, perfil activo, ámbito provincial y RLS. Smoke CI pasa; pruebas transaccionales con cuentas estándar/admin confirman edición de ubicación permitida, cambio de identidad/estado bloqueado y protección del estado compartido. La matriz completa de permisos y la prueba visual siguen pendientes. |
 | P0 — persistencia aislada por navegador | **Corregido en arquitectura** | El catálogo y los estados operativos/personal se leen y guardan en Supabase. La auditoría CI comprueba que el frontend no escriba en almacenamiento persistente del navegador. |
 | P1 — identificadores numéricos y nombres | **Corregido para el catálogo maestro** | `removed` y `reviewed` se guardan con UUID para establecimientos maestros; el estado antiguo por nombre se normaliza al cargar. Los puntos personalizados conservan una clave basada en su nombre porque no tienen UUID maestro. |
 | P1 — importador JSON legacy | **Retirado** | La interfaz ya no ofrece importar copias antiguas; se evita reintroducir estados de prueba. El catálogo maestro no se actualiza desde exportaciones JSON. |
 | Catálogo y coordenadas | **Importados; validación geográfica continua** | 791 establecimientos activos con coordenadas, 791 referencias únicas, 31 ubicaciones verificadas manualmente. La integridad numérica y el historial no certifican por sí solos la exactitud geográfica de todos los puntos. |
+| P1 — XSS almacenado desde el estado operativo compartido | **Mitigado en renderizado** | Las fechas se validan como ISO real y los contadores se convierten a enteros acotados antes de construir HTML. Sigue siendo necesaria una revisión funcional visual y mantener el escape contextual de cualquier campo nuevo. |
 | Modelo de permisos normalizado | **Parcial** | Existen tablas normalizadas para solicitudes, concesiones y seguimientos, pero la interfaz actual mantiene el estado funcional en `establishment_app_state` JSONB. Su eventual migración requiere un plan separado. |
 | Backups y recuperación | **Pendiente de prueba** | Hay instrucciones documentadas para exportar la base de datos con Supabase CLI. No se ha realizado una restauración aislada desde esta integración. |
 
