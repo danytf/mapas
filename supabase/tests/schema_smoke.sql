@@ -329,7 +329,7 @@ values (
   '00000000-0000-4000-8000-000000000005',
   '00000000-0000-4000-8000-000000000001',
   '{"permit":{"status":"smoke-test"}}'::jsonb,
-  '00000000-0000-4000-8000-0000000000a2'
+  '00000000-0000-4000-8000-0000000000a3'
 );
 
 do $rls_test$
@@ -339,6 +339,11 @@ begin
   where establishment_id = '00000000-0000-4000-8000-000000000005';
   if visible_count <> 1 then
     raise exception 'FALLO RLS: el usuario asignado no puede leer el estado operativo provincial';
+  end if;
+  if (select updated_by from public.establishment_app_state
+      where establishment_id = '00000000-0000-4000-8000-000000000005')
+      <> '00000000-0000-4000-8000-0000000000a2' then
+    raise exception 'FALLO: el estado compartido permite suplantar updated_by';
   end if;
 end;
 $rls_test$;
@@ -356,6 +361,19 @@ end;
 $rls_test$;
 
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a1', false);
+do $shared_state_integrity_test$
+begin
+  begin
+    update public.establishment_app_state
+       set province_id = '00000000-0000-4000-8000-000000000002'
+     where establishment_id = '00000000-0000-4000-8000-000000000005';
+    raise exception 'FALLO: el estado compartido se pudo reasignar a una provincia incorrecta';
+  exception when check_violation or insufficient_privilege then
+    null;
+  end;
+end;
+$shared_state_integrity_test$;
+
 do $rls_test$
 declare visible_count integer;
 begin
