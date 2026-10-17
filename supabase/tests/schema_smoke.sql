@@ -819,9 +819,96 @@ begin
   if shared_state_count <> 0 then
     raise exception 'FALLO RLS: una cuenta desactivada conserva acceso al estado operativo provincial';
   end if;
+  select count(*) into establishment_count
+  from public.permit_applications
+  where id = '00000000-0000-4000-8000-000000000007';
+  if establishment_count <> 0 then
+    raise exception 'FALLO RLS: una cuenta desactivada conserva acceso a solicitudes';
+  end if;
+
+  select count(*) into establishment_count
+  from public.permit_grants
+  where id = '00000000-0000-4000-8000-000000000008';
+  if establishment_count <> 0 then
+    raise exception 'FALLO RLS: una cuenta desactivada conserva acceso a concesiones';
+  end if;
+
+  select count(*) into establishment_count
+  from public.followups
+  where id = '00000000-0000-4000-8000-0000000000a9';
+  if establishment_count <> 0 then
+    raise exception 'FALLO RLS: una cuenta desactivada conserva acceso a seguimientos';
+  end if;
+
+  select count(*) into establishment_count
+  from public.establishment_location_reviews
+  where id = '00000000-0000-4000-8000-0000000000b1';
+  if establishment_count <> 0 then
+    raise exception 'FALLO RLS: una cuenta desactivada conserva acceso a propuestas de ubicación';
+  end if;
+
+  update public.permit_applications set notes = 'inactive write must not persist'
+   where id = '00000000-0000-4000-8000-000000000007';
+  get diagnostics shared_state_count = row_count;
+  if shared_state_count <> 0 then
+    raise exception 'FALLO RLS: una cuenta desactivada pudo actualizar solicitudes';
+  end if;
+
+  update public.permit_grants set notes = 'inactive write must not persist'
+   where id = '00000000-0000-4000-8000-000000000008';
+  get diagnostics shared_state_count = row_count;
+  if shared_state_count <> 0 then
+    raise exception 'FALLO RLS: una cuenta desactivada pudo actualizar concesiones';
+  end if;
+
+  update public.followups set notes = 'inactive write must not persist'
+   where id = '00000000-0000-4000-8000-0000000000a9';
+  get diagnostics shared_state_count = row_count;
+  if shared_state_count <> 0 then
+    raise exception 'FALLO RLS: una cuenta desactivada pudo actualizar seguimientos';
+  end if;
+
+  delete from public.permit_applications where id = '00000000-0000-4000-8000-000000000007';
+  get diagnostics shared_state_count = row_count;
+  if shared_state_count <> 0 then raise exception 'FALLO RLS: una cuenta desactivada borró solicitudes'; end if;
+
+  delete from public.permit_grants where id = '00000000-0000-4000-8000-000000000008';
+  get diagnostics shared_state_count = row_count;
+  if shared_state_count <> 0 then raise exception 'FALLO RLS: una cuenta desactivada borró concesiones'; end if;
+
+  delete from public.followups where id = '00000000-0000-4000-8000-0000000000a9';
+  get diagnostics shared_state_count = row_count;
+  if shared_state_count <> 0 then raise exception 'FALLO RLS: una cuenta desactivada borró seguimientos'; end if;
+
+  begin
+    insert into public.permit_applications (establishment_id, organization, created_by, updated_by)
+    values ('00000000-0000-4000-8000-000000000005', 'Inactive user forbidden', auth.uid(), auth.uid());
+    raise exception 'FALLO RLS: una cuenta desactivada insertó una solicitud';
+  exception when insufficient_privilege then null;
+  end;
+
+  begin
+    insert into public.permit_grants (establishment_id, organization, created_by, updated_by)
+    values ('00000000-0000-4000-8000-000000000005', 'Inactive user forbidden', auth.uid(), auth.uid());
+    raise exception 'FALLO RLS: una cuenta desactivada insertó una concesión';
+  exception when insufficient_privilege then null;
+  end;
+
+  begin
+    insert into public.followups (establishment_id, grant_id, due_on, created_by)
+    values ('00000000-0000-4000-8000-000000000005',
+            '00000000-0000-4000-8000-000000000008', current_date, auth.uid());
+    raise exception 'FALLO RLS: una cuenta desactivada insertó un seguimiento';
+  exception when insufficient_privilege then null;
+  end;
 end;
 $inactive_user_scope_test$;
 
+-- Reactivate user A only for the active-user province/role matrix below.
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a1', false);
+update public.profiles set is_active = true
+where id = '00000000-0000-4000-8000-0000000000a2';
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
 
 -- Phase 2.1: explicit operation-coverage matrix for every public table.
 -- This verifies the intended command surface exists; behavioural tests below/above
@@ -1049,6 +1136,12 @@ begin
   end if;
 end;
 $admin_audit_read_matrix$;
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
+
+-- Revoke province access again for the dedicated personal-state inactive-user checks.
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a1', false);
+update public.profiles set is_active = false
+where id = '00000000-0000-4000-8000-0000000000a2';
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
 
 -- Inactive users lose their personal app-state access too (not only provincial access).
