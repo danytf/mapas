@@ -396,6 +396,41 @@ begin
   end if;
 end;
 $function_privilege_test$;
+
+-- Invariantes de seguridad para todas las funciones SECURITY DEFINER propias.
+-- Evita que una nueva función privilegiada se publique sin search_path fijo
+-- o quede invocable por el rol anónimo de la API.
+do $security_definer_invariants$
+declare
+  fn record;
+begin
+  if has_schema_privilege('anon', 'private', 'USAGE') then
+    raise exception 'FALLO SEGURIDAD: el rol anon tiene USAGE sobre el esquema private';
+  end if;
+
+  for fn in
+    select n.nspname, p.oid, p.proname, p.proconfig
+    from pg_proc p
+    join pg_namespace n on n.oid = p.pronamespace
+    where n.nspname in ('public', 'private')
+      and p.prosecdef
+  loop
+    if fn.proconfig is null or not exists (
+      select 1
+      from unnest(fn.proconfig) setting
+      where setting like 'search_path=%'
+    ) then
+      raise exception 'FALLO SEGURIDAD: %.% SECURITY DEFINER no fija search_path',
+        fn.nspname, fn.proname;
+    end if;
+
+    if has_function_privilege('anon', fn.oid, 'EXECUTE') then
+      raise exception 'FALLO SEGURIDAD: anon puede ejecutar %.%',
+        fn.nspname, fn.proname;
+    end if;
+  end loop;
+end;
+$security_definer_invariants$;
 do $state_table_privilege_test$
 begin
   if has_table_privilege('authenticated', 'public.user_app_state', 'DELETE')
