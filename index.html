@@ -1070,7 +1070,7 @@ function renderList() {
   ul.innerHTML = "";
   const order = $("#orden").value === "val" ? [...CENTERS].sort((a, b) => rate(b) - rate(a) || a.id - b.id) : CENTERS;
   order.forEach((c) => {
-    const visible = !isOut(c) && (!provincia || (c.province || c.prov || "") === provincia) && matchTipo(c, tipo) && (!ch || chainOf(c) === ch) && (!sb || c.sub === sb) && (!est || estadoOf(c) === est) && (!onlyRev || isRev(c)) && (!onlySeg || seguimientoDue(c)) && okVal(c) &&
+    const visible = !isOut(c) && (!provincia || (typeof c.province === "string" ? c.province : (typeof c.prov === "string" ? c.prov : "")) === provincia) && matchTipo(c, tipo) && (!ch || chainOf(c) === ch) && (!sb || c.sub === sb) && (!est || estadoOf(c) === est) && (!onlyRev || isRev(c)) && (!onlySeg || seguimientoDue(c)) && okVal(c) &&
       (!q || (c.name + " " + c.street + " " + (c.town || "Granada")).toLowerCase().includes(q));
     if (markers[c.id]) {
       const on = cluster.hasLayer(markers[c.id]);
@@ -1624,7 +1624,7 @@ function refreshSelects() {
   const provinceValue = $("#provincia").value;
   const provinceCounts = {};
   vis.forEach((c) => {
-    const provinceName = (c.province || c.prov || "").trim();
+    const provinceName = (typeof c.province === "string" ? c.province : (typeof c.prov === "string" ? c.prov : "")).trim();
     if (provinceName) provinceCounts[provinceName] = (provinceCounts[provinceName] || 0) + 1;
   });
   $("#provincia").innerHTML = '<option value="">Provincia: todas (' + vis.length + ')</option>' +
