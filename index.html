@@ -1021,7 +1021,8 @@ async function setLoc(c, lat, lon, address) {
       longitude: +lon.toFixed(6),
       location_precision: "verified",
       location_source: "manual_google_maps",
-      location_verified_at: new Date().toISOString()
+      location_verified_at: new Date().toISOString(),
+      updated_by: window.mapaSession.user.id
     }).eq("id", c.databaseId)
       .select("id,address,latitude,longitude,location_precision")
       .abortSignal(controller.signal)
