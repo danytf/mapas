@@ -2474,9 +2474,13 @@ renderList();
       window.mapaSession.catalogueCount = rows.length;
       window.mapaSession.catalogueError = null;
       if (status) {
+        const provinceNames = (sessionInfo.provinces || []).map(p => p.name).filter(Boolean);
+        const scopeLabel = isAdmin
+          ? "tu ámbito de administración"
+          : provinceNames.length ? provinceNames.join(", ") : "tu ámbito provincial";
         status.textContent = rows.length
           ? rows.length + " establecimientos cargados desde Supabase."
-          : "Supabase no tiene establecimientos activos con coordenadas para tu ámbito. No se muestran datos locales.";
+          : "No hay establecimientos activos con coordenadas en Supabase para " + scopeLabel + ". El catálogo de este ámbito está vacío; no se muestran datos locales.";
       }
       return true;
     } catch (error) {
