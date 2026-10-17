@@ -7,6 +7,31 @@
 La suite de GitHub Actions ejecuta los smoke tests en PostgreSQL 16 con una capa mínima de compatibilidad para Supabase Auth; esto comprueba integridad, triggers y escenarios limitados de RLS, pero no equivale a probar todos los permisos efectivos con sesiones reales de Supabase. La matriz negativa completa descrita en este documento sigue pendiente de ejecución contra usuarios de prueba autenticados en un entorno aislado. No se deben marcar las pruebas de acceso entre provincias como completas solo por haber inspeccionado las políticas.
 
 
+
+## Resultados de comprobación limitada en Supabase real (17/10/2026)
+
+Se ejecutaron consultas como rol `authenticated`, con `auth.uid()` establecido para las cuentas de prueba existentes. Las pruebas de actualización se ejecutaron dentro de transacciones que terminaron en `ROLLBACK`; no dejaron cambios persistentes.
+
+| Prueba | Resultado |
+|---|---|
+| Administrador: lectura de establecimientos | 792 visibles en total: 791 activos y 1 registro de prueba archivado |
+| Usuario asignado a Granada: lectura de Granada | 791 visibles |
+| Usuario asignado a Granada: lectura del registro de prueba de Málaga | 0 visibles |
+| Usuario asignado a Málaga: lectura del registro de prueba de Málaga | 1 visible |
+| Usuario asignado a Málaga: lectura de Granada | 0 visibles |
+| Usuario Granada: actualización dentro de Granada con `updated_by = auth.uid()` | 1 fila afectada |
+| Usuario Granada: actualización del registro de Málaga | 0 filas afectadas |
+| Usuario Málaga: actualización del registro de Málaga | 1 fila afectada |
+| Usuario Málaga: actualización de un establecimiento de Granada | 0 filas afectadas |
+| Estado personal: cada usuario lee su propia fila | 1 fila visible para cada usuario probado |
+| Estado personal: leer la fila del otro usuario | 0 filas visibles |
+| Estado compartido: usuario Granada | 2 filas visibles, todas de una provincia |
+| Estado compartido: usuario Málaga | 1 fila visible, de una provincia |
+
+Esto confirma el aislamiento básico de lectura y actualización entre las dos provincias y la propiedad del estado personal para las cuentas probadas. El registro de Málaga utilizado es un establecimiento de prueba archivado; no forma parte de los 791 establecimientos activos del mapa.
+
+**No equivale a la aceptación RLS completa.** Siguen pendientes las pruebas de inserción/eliminación no autorizadas, perfiles desactivados, sesiones caducadas, matriz de permisos de todas las tablas, concurrencia y restauración aislada.
+
 ## 1. Preparación de un entorno de desarrollo
 
 1. Crear un proyecto Supabase separado de producción.
