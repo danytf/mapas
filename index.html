@@ -1890,6 +1890,18 @@ window.exportarCatalogoInicial = function () {
   }
 
   const establecimientos = [];
+  let coordenadasInvalidas = 0;
+  const leerCoordenadas = (valor) => {
+    if (!Array.isArray(valor) || valor.length < 2) return null;
+    const lat = Number(valor[0]);
+    const lon = Number(valor[1]);
+    if (!Number.isFinite(lat) || !Number.isFinite(lon) ||
+        lat < -90 || lat > 90 || lon < -180 || lon > 180) {
+      coordenadasInvalidas++;
+      return null;
+    }
+    return { latitude: lat, longitude: lon, approximate: valor[2] === 1 };
+  };
   const crearSourceRef = (e) => {
     const slug = valor => String(valor || "")
       .normalize("NFD")
@@ -1912,7 +1924,7 @@ window.exportarCatalogoInicial = function () {
   // Excluirlos explícitamente para que la exportación solo use el catálogo estático.
   for (const c of CENTERS) {
     if (c.custom) continue;
-    const coordenadas = PRECOMPUTED[c.name];
+    const coordenadas = leerCoordenadas(PRECOMPUTED[c.name]);
 
     establecimientos.push({
       source_ref: crearSourceRef(c),
@@ -1921,21 +1933,12 @@ window.exportarCatalogoInicial = function () {
       subtype: c.sub || null,
       municipality: String(c.town || "Granada").trim(),
       address: String(c.street || "").trim() || null,
-      latitude: Array.isArray(coordenadas)
-        ? coordenadas[0]
-        : null,
-      longitude: Array.isArray(coordenadas)
-        ? coordenadas[1]
-        : null,
-      location_precision:
-        Array.isArray(coordenadas) && coordenadas[2] === 1
-          ? "approximate"
-          : Array.isArray(coordenadas)
-            ? "address"
-            : "unknown",
-      location_source: Array.isArray(coordenadas)
-        ? "static_precomputed"
-        : null,
+      latitude: coordenadas ? coordenadas.latitude : null,
+      longitude: coordenadas ? coordenadas.longitude : null,
+      location_precision: coordenadas
+        ? coordenadas.approximate ? "approximate" : "address"
+        : "unknown",
+      location_source: coordenadas ? "static_precomputed" : null,
       province: "Granada",
       status: "active"
     });
@@ -1948,7 +1951,7 @@ window.exportarCatalogoInicial = function () {
   // Supermercados definidos estáticamente.
   SUPER.forEach((s, i) => {
     const [nombre, municipio, direccion, subtipo] = s;
-    const coordenadas = PRECOMPUTED[nombre];
+    const coordenadas = leerCoordenadas(PRECOMPUTED[nombre]);
 
     establecimientos.push({
       source_ref: `catalogo-granada:supermercado:${i + 1}`,
@@ -1957,21 +1960,12 @@ window.exportarCatalogoInicial = function () {
       subtype: subtipo || null,
       municipality: String(municipio || "Granada").trim(),
       address: String(direccion || "").trim() || null,
-      latitude: Array.isArray(coordenadas)
-        ? coordenadas[0]
-        : null,
-      longitude: Array.isArray(coordenadas)
-        ? coordenadas[1]
-        : null,
-      location_precision:
-        Array.isArray(coordenadas) && coordenadas[2] === 1
-          ? "approximate"
-          : Array.isArray(coordenadas)
-            ? "address"
-            : "unknown",
-      location_source: Array.isArray(coordenadas)
-        ? "static_precomputed"
-        : null,
+      latitude: coordenadas ? coordenadas.latitude : null,
+      longitude: coordenadas ? coordenadas.longitude : null,
+      location_precision: coordenadas
+        ? coordenadas.approximate ? "approximate" : "address"
+        : "unknown",
+      location_source: coordenadas ? "static_precomputed" : null,
       province: "Granada",
       status: "active"
     });
@@ -1994,6 +1988,14 @@ window.exportarCatalogoInicial = function () {
     return true;
   });
 
+  const recuentoRefs = new Map();
+  for (const e of unicos) {
+    recuentoRefs.set(e.source_ref, (recuentoRefs.get(e.source_ref) || 0) + 1);
+  }
+  const colisionesSourceRef = [...recuentoRefs.entries()]
+    .filter(([, cantidad]) => cantidad > 1)
+    .map(([source_ref, cantidad]) => ({ source_ref, cantidad }));
+
   const resultado = {
     format_version: 1,
     source: "static_catalogue_only",
@@ -2002,10 +2004,14 @@ window.exportarCatalogoInicial = function () {
     counts: {
       before_deduplication: establecimientos.length,
       after_deduplication: unicos.length,
+      removed_as_duplicates: establecimientos.length - unicos.length,
       without_coordinates: unicos.filter(
         e => e.latitude === null || e.longitude === null
-      ).length
+      ).length,
+      invalid_coordinates: coordenadasInvalidas,
+      duplicate_source_refs: colisionesSourceRef.length
     },
+    diagnostics: { duplicate_source_refs: colisionesSourceRef },
     establishments: unicos
   };
 
@@ -2022,7 +2028,8 @@ window.exportarCatalogoInicial = function () {
 
   console.table(resultado.counts);
   console.info(
-    "Exportación generada. No se ha escrito nada en Supabase."
+    "Exportación generada. No se ha escrito nada en Supabase.",
+    resultado.diagnostics
   );
 
   return resultado.counts;
