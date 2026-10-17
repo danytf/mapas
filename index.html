@@ -849,8 +849,10 @@ function popupFor(c, pos) {
   const commit = async () => {
     if (commitBusy) return;
     commitBusy = true;
-    const controls = [...el.querySelectorAll(".pform button, .pform input, .pform textarea, .pform select")];
-    controls.forEach(control => { control.disabled = true; });
+    const setCommitControlsDisabled = (disabled) => {
+      el.querySelectorAll(".pform button, .pform input, .pform textarea, .pform select").forEach(control => { control.disabled = disabled; });
+    };
+    setCommitControlsDisabled(true);
     const sm = el.querySelector(".saved");
     const previous = {
       permit: permits[c.name] === undefined ? undefined : JSON.parse(JSON.stringify(permits[c.name])),
@@ -881,6 +883,7 @@ function popupFor(c, pos) {
         el.querySelector(".f-contacto").value = previous.contacto;
         el.querySelector(".f-notas").value = previous.notas;
         paint(); paintHist(); paintSols(); paintEf();
+        setCommitControlsDisabled(true);
         const rollbackSaved = await savePermits(c.name);
         if (markers[c.id]) markers[c.id].setIcon(makeIcon(c));
         refreshSelects(); renderList(); paintEf();
@@ -900,7 +903,7 @@ function popupFor(c, pos) {
       gamPermit(c, previous.permit);
     } finally {
       commitBusy = false;
-      controls.forEach(control => { control.disabled = false; });
+      setCommitControlsDisabled(false);
     }
   };
   el.querySelectorAll(".stars button").forEach((b) => b.addEventListener("click", () => { val = val === +b.dataset.n ? 0 : +b.dataset.n; paint(); commit(); }));
