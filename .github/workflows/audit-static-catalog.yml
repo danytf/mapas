@@ -9,6 +9,7 @@ on:
     paths:
       - "index.html"
       - "scripts/audit-static-catalog.mjs"
+      - "scripts/audit-persistence.mjs"
       - ".github/workflows/audit-static-catalog.yml"
   pull_request:
     paths:
@@ -32,6 +33,10 @@ jobs:
           node-version: 22
       - name: Check audit script syntax
         run: node --check scripts/audit-static-catalog.mjs
+      - name: Check browser persistence and Supabase write invariants
+        run: |
+          node --check scripts/audit-persistence.mjs
+          node scripts/audit-persistence.mjs index.html
       - name: Check inline JavaScript syntax in index.html
         shell: bash
         run: |
