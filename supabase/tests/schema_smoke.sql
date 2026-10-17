@@ -975,6 +975,104 @@ begin
 end;
 $rls_policy_matrix$;
 
+-- Import staging tables are strictly administrator-only for all CRUD operations.
+-- Fixtures are synthetic and created/deleted in this disposable test database.
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a1', false);
+insert into public.import_batches (id, source_name, started_by, summary)
+values (
+  '00000000-0000-4000-8000-0000000000d4',
+  'RLS matrix synthetic batch',
+  '00000000-0000-4000-8000-0000000000a1',
+  '{"test_fixture":true}'::jsonb
+);
+insert into public.import_records (id, batch_id, source_row, payload)
+values (
+  '00000000-0000-4000-8000-0000000000d5',
+  '00000000-0000-4000-8000-0000000000d4',
+  1,
+  '{"test_fixture":true}'::jsonb
+);
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
+do $import_tables_non_admin_matrix$
+declare visible_count integer; affected integer;
+begin
+  select count(*) into visible_count from public.import_batches
+   where id = '00000000-0000-4000-8000-0000000000d4';
+  if visible_count <> 0 then raise exception 'FALLO RLS: usuario normal leyó un lote de importación'; end if;
+
+  select count(*) into visible_count from public.import_records
+   where id = '00000000-0000-4000-8000-0000000000d5';
+  if visible_count <> 0 then raise exception 'FALLO RLS: usuario normal leyó un registro de importación'; end if;
+
+  update public.import_batches set summary = '{"forbidden":true}'::jsonb
+   where id = '00000000-0000-4000-8000-0000000000d4';
+  get diagnostics affected = row_count;
+  if affected <> 0 then raise exception 'FALLO RLS: usuario normal actualizó un lote de importación'; end if;
+
+  update public.import_records set payload = '{"forbidden":true}'::jsonb
+   where id = '00000000-0000-4000-8000-0000000000d5';
+  get diagnostics affected = row_count;
+  if affected <> 0 then raise exception 'FALLO RLS: usuario normal actualizó un registro de importación'; end if;
+
+  delete from public.import_records where id = '00000000-0000-4000-8000-0000000000d5';
+  get diagnostics affected = row_count;
+  if affected <> 0 then raise exception 'FALLO RLS: usuario normal borró un registro de importación'; end if;
+
+  delete from public.import_batches where id = '00000000-0000-4000-8000-0000000000d4';
+  get diagnostics affected = row_count;
+  if affected <> 0 then raise exception 'FALLO RLS: usuario normal borró un lote de importación'; end if;
+
+  begin
+    insert into public.import_batches (source_name, started_by)
+    values ('Forbidden non-admin batch', auth.uid());
+    raise exception 'FALLO RLS: usuario normal insertó un lote de importación';
+  exception when insufficient_privilege then null;
+  end;
+
+  begin
+    insert into public.import_records (batch_id, payload)
+    values ('00000000-0000-4000-8000-0000000000d4', '{}'::jsonb);
+    raise exception 'FALLO RLS: usuario normal insertó un registro de importación';
+  exception when insufficient_privilege then null;
+  end;
+end;
+$import_tables_non_admin_matrix$;
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a1', false);
+do $import_tables_admin_matrix$
+declare visible_count integer; affected integer;
+begin
+  select count(*) into visible_count from public.import_batches
+   where id = '00000000-0000-4000-8000-0000000000d4';
+  if visible_count <> 1 then raise exception 'FALLO RLS: administrador no leyó lote de importación'; end if;
+
+  select count(*) into visible_count from public.import_records
+   where id = '00000000-0000-4000-8000-0000000000d5';
+  if visible_count <> 1 then raise exception 'FALLO RLS: administrador no leyó registro de importación'; end if;
+
+  update public.import_batches set summary = '{"admin_update":true}'::jsonb
+   where id = '00000000-0000-4000-8000-0000000000d4';
+  get diagnostics affected = row_count;
+  if affected <> 1 then raise exception 'FALLO RLS: administrador no actualizó lote de importación'; end if;
+
+  update public.import_records set payload = '{"admin_update":true}'::jsonb
+   where id = '00000000-0000-4000-8000-0000000000d5';
+  get diagnostics affected = row_count;
+  if affected <> 1 then raise exception 'FALLO RLS: administrador no actualizó registro de importación'; end if;
+
+  delete from public.import_records where id = '00000000-0000-4000-8000-0000000000d5';
+  get diagnostics affected = row_count;
+  if affected <> 1 then raise exception 'FALLO RLS: administrador no borró registro de importación'; end if;
+
+  delete from public.import_batches where id = '00000000-0000-4000-8000-0000000000d4';
+  get diagnostics affected = row_count;
+  if affected <> 1 then raise exception 'FALLO RLS: administrador no borró lote de importación'; end if;
+end;
+$import_tables_admin_matrix$;
+
+select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
+
 -- Cross-province SELECT must hide child records as well as the establishment itself.
 select set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a2', false);
 do $cross_province_select_matrix$
