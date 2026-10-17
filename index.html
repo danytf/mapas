@@ -1923,30 +1923,8 @@ window.exportarCatalogoInicial = function () {
     siguienteId++;
   }
 
-  // Catálogo de centros de atención primaria de la provincia.
-  // Se excluyen duplicados exactos por nombre y municipio.
-  for (const [tipo, nombre, municipio, calle] of PROV) {
-    const esCentroSalud = tipo === "C";
-    const nombreCompleto =
-      (esCentroSalud ? "CS " : "Consultorio ") + nombre;
-
-    establecimientos.push({
-      source_ref: `catalogo-granada:atencion-primaria:${nombre}`,
-      name: nombreCompleto,
-      category: esCentroSalud
-        ? "Centro de salud"
-        : "Consultorio",
-      subtype: null,
-      municipality: String(municipio || "Granada").trim(),
-      address: String(calle || "").trim() || null,
-      latitude: null,
-      longitude: null,
-      location_precision: "unknown",
-      location_source: null,
-      province: "Granada",
-      status: "active"
-    });
-  }
+  // PROV ya se incorpora a CENTERS al inicializar el catálogo.
+  // No volver a recorrer PROV aquí: duplicaría esos establecimientos.
 
   // Supermercados definidos estáticamente.
   SUPER.forEach((s, i) => {
@@ -1983,10 +1961,14 @@ window.exportarCatalogoInicial = function () {
   // Deduplicación conservadora por nombre + municipio.
   const vistos = new Set();
   const unicos = establecimientos.filter(e => {
-    const clave =
-      e.name.normalize("NFKC").toLocaleLowerCase("es") +
-      "|" +
-      e.municipality.normalize("NFKC").toLocaleLowerCase("es");
+    const normalizar = valor =>
+      String(valor || "").normalize("NFKC").toLocaleLowerCase("es").trim();
+    const clave = [
+      normalizar(e.name),
+      normalizar(e.municipality),
+      normalizar(e.category),
+      normalizar(e.address)
+    ].join("|");
 
     if (vistos.has(clave)) return false;
     vistos.add(clave);
