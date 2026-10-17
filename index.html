@@ -845,22 +845,63 @@ function popupFor(c, pos) {
     el.querySelectorAll(".stars button").forEach((b) => b.classList.toggle("on", +b.dataset.n <= val));
     el.querySelector(".sv").textContent = val ? val + " de 5" : "sin valorar";
   };
+  let commitBusy = false;
   const commit = async () => {
-    const sm = el.querySelector(".saved"); sm.style.color = "";
-    const v = { contacto: el.querySelector(".f-contacto").value.trim(), notas: el.querySelector(".f-notas").value.trim(), valoracion: val, historial: hist };
-    if (sols.length) v.solicitudes = sols;
-    if (sols.length || hist.length) { v.estado = estadoCalc(v); v.fecha = fechaCalc(v); const sg = segCalc(v); if (sg) v.seguimiento = sg; }
-    else { v.estado = p.estado || "sin"; v.fecha = p.fecha || ""; if (p.seguimiento) v.seguimiento = p.seguimiento; }
-    const prevP = permits[c.name];
-    if (v.estado === "sin" && !v.fecha && !v.contacto && !v.notas && !v.valoracion && !hist.length && !v.seguimiento && !sols.length) delete permits[c.name]; else permits[c.name] = v;
-    const saved = await savePermits(c.name);
-    if (markers[c.id]) markers[c.id].setIcon(makeIcon(c));
-    refreshSelects();
-    renderList();
-    paintEf();
-    sm.style.color = saved ? "#14532d" : "#b3261e";
-    sm.textContent = saved ? "Guardado en Supabase" : "No se pudo guardar; revisa la conexión";
-    gamPermit(c, prevP);
+    if (commitBusy) return;
+    commitBusy = true;
+    const controls = [...el.querySelectorAll(".pform button, .pform input, .pform textarea, .pform select")];
+    controls.forEach(control => { control.disabled = true; });
+    const sm = el.querySelector(".saved");
+    const previous = {
+      permit: permits[c.name] === undefined ? undefined : JSON.parse(JSON.stringify(permits[c.name])),
+      val,
+      hist: hist.map(item => ({ ...item })),
+      sols: sols.map(item => ({ ...item })),
+      contacto: el.querySelector(".f-contacto").value,
+      notas: el.querySelector(".f-notas").value
+    };
+    sm.style.color = "";
+    try {
+      const v = { contacto: el.querySelector(".f-contacto").value.trim(), notas: el.querySelector(".f-notas").value.trim(), valoracion: val, historial: hist };
+      if (sols.length) v.solicitudes = sols;
+      if (sols.length || hist.length) { v.estado = estadoCalc(v); v.fecha = fechaCalc(v); const sg = segCalc(v); if (sg) v.seguimiento = sg; }
+      else { v.estado = p.estado || "sin"; v.fecha = p.fecha || ""; if (p.seguimiento) v.seguimiento = p.seguimiento; }
+      if (v.estado === "sin" && !v.fecha && !v.contacto && !v.notas && !v.valoracion && !hist.length && !v.seguimiento && !sols.length) delete permits[c.name];
+      else permits[c.name] = v;
+
+      const saved = await savePermits(c.name);
+      if (!saved) {
+        // La operación puede haber fallado antes o después de que la petición llegara al servidor.
+        // Restaurar el estado anterior en memoria y volver a persistirlo evita dejar una edición ambigua.
+        if (previous.permit === undefined) delete permits[c.name];
+        else permits[c.name] = previous.permit;
+        val = previous.val;
+        hist = previous.hist;
+        sols = previous.sols;
+        el.querySelector(".f-contacto").value = previous.contacto;
+        el.querySelector(".f-notas").value = previous.notas;
+        paint(); paintHist(); paintSols(); paintEf();
+        const rollbackSaved = await savePermits(c.name);
+        if (markers[c.id]) markers[c.id].setIcon(makeIcon(c));
+        refreshSelects(); renderList(); paintEf();
+        sm.style.color = "#b3261e";
+        sm.textContent = rollbackSaved
+          ? "No se pudo guardar; se restauró el estado anterior."
+          : "No se pudo guardar ni confirmar la restauración. Recupera la conexión antes de seguir editando.";
+        return;
+      }
+
+      if (markers[c.id]) markers[c.id].setIcon(makeIcon(c));
+      refreshSelects();
+      renderList();
+      paintEf();
+      sm.style.color = "#14532d";
+      sm.textContent = "Guardado en Supabase";
+      gamPermit(c, previous.permit);
+    } finally {
+      commitBusy = false;
+      controls.forEach(control => { control.disabled = false; });
+    }
   };
   el.querySelectorAll(".stars button").forEach((b) => b.addEventListener("click", () => { val = val === +b.dataset.n ? 0 : +b.dataset.n; paint(); commit(); }));
   paint(); paintHist(); paintSols(); paintEf();
