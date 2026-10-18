@@ -15,6 +15,7 @@ on:
       - "scripts/audit-cdn-integrity.mjs"
       - "scripts/audit-csp.mjs"
       - "scripts/test-paged-fetch.mjs"
+      - "scripts/test-multiprovince.mjs"
       - ".github/workflows/audit-static-catalog.yml"
   pull_request:
   workflow_dispatch:
@@ -42,6 +43,8 @@ jobs:
         run: node scripts/test-shared-state-sanitizers.mjs
       - name: Test paged loading of catalogue and shared state
         run: node scripts/test-paged-fetch.mjs
+      - name: Test multi-province behaviour (no hard-coded Granada)
+        run: node scripts/test-multiprovince.mjs
       - name: Run XSS regression audit
         run: node scripts/audit-xss.mjs index.html
       - name: Check keyboard access to statistics panel rows

@@ -57,9 +57,9 @@ if (personalLoadStart < 0 || customLoadStart < 0 || removedLoadStart < 0) {
   failures.push("No se pudo localizar la validación de puntos personalizados restaurados.");
 } else {
   const customLoad = html.slice(customLoadStart, removedLoadStart);
-  if (!/Number\.isFinite\(lat\)/.test(customLoad) ||
-      !/Number\.isFinite\(lon\)/.test(customLoad) ||
-      !/lat < 36\.5 \|\| lat > 38\.3 \|\| lon < -4\.6 \|\| lon > -2\.2/.test(customLoad) ||
+  // H-20: el ámbito es España entera (inSpain), no el recuadro de Granada.
+  if (!/const inSpain = \(lat, lon\) => Number\.isFinite\(lat\) && Number\.isFinite\(lon\) &&/.test(html) ||
+      !/if \(!inSpain\(lat, lon\)\) return false;/.test(customLoad) ||
       !/customNames\.has\(name\)/.test(customLoad)) {
     failures.push("Los puntos personalizados recuperados deben tener coordenadas dentro del ámbito y nombres únicos.");
   }
