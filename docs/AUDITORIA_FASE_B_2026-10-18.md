@@ -77,3 +77,10 @@ Comprobación en producción con la página cargada: 0 service workers, 0 Cache 
 Autorizada por el titular el 2026-10-18. Aplicada en Supabase (proyecto `wwoczmihhupofwmlmgga`) con versión `20261018123313`; el fichero del repositorio usa esa misma versión para mantener el libro de migraciones alineado.
 
 Verificación posterior en producción: la función `guard_sensitive_updates` contiene la excepción `author_removed`; ACL sin cambios (solo `postgres` y `service_role`); huellas sin variación: políticas 50 `6bbc89fb`, permisos de tabla 56 `b3201656`, triggers 32 `5643370d`, funciones públicas (sin `rls_auto_enable`, función de la plataforma) 17 `bfc221b1`.
+
+## H-12: historial del estado compartido (opción C)
+
+Migración `20261018124030_create_establishment_state_history.sql`, aplicada en producción el 2026-10-18 tras CI en verde. Aditiva: tabla `establishment_app_state_history` (solo lectura para administradores) y trigger que guarda el estado previo en cada `UPDATE` con estado distinto y en cada `DELETE`. No resuelve el conflicto de escritura concurrente (H-11, opción A pendiente): hace recuperable lo sobrescrito.
+
+Verificación en producción tras aplicarla: huellas idénticas a las de la reconstrucción local desde el repositorio (políticas 51 `7f65af3e`, permisos de tabla 57 `374f58c4`, triggers 33 `349b150d`, tablas con RLS 17 `e9ad42c3`, funciones públicas sin `rls_auto_enable` 18 `ddb530f9`). Advisors de seguridad sin cambios (solo la protección frente a contraseñas filtradas, aceptada).
+Pruebas: `supabase/tests/state_history.sql`, 29 comprobaciones; la matriz RLS sigue en 973 celdas, 0 discrepancias.

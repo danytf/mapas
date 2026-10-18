@@ -1582,9 +1582,11 @@ begin
       end loop;
     end if;
 
-    if exists (
+    -- ACL NULL = solo el propietario (p. ej. secuencias de columnas identity nuevas): nada que revisar.
+    -- aclexplode('{}') falla con "ACL arrays must be one-dimensional", por eso no se usa coalesce.
+    if item.relacl is not null and exists (
       select 1
-        from aclexplode(coalesce(item.relacl, '{}'::aclitem[])) acl
+        from aclexplode(item.relacl) acl
        where acl.grantee = 0
          and acl.privilege_type in ('SELECT', 'INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'REFERENCES', 'TRIGGER', 'USAGE')
     ) then
