@@ -1494,8 +1494,9 @@ function makeMarkers(list) {
 function makeMarker(c) { makeMarkers([c]); }
 
 // Lista lateral: con muchos puntos solo se dibujan los primeros (LIST_PAGE) y un botón «Mostrar más» (H-27).
-// Dibujar miles de elementos con cada filtro o letra de la búsqueda tardaba segundos.
-const LIST_PAGE = 300;
+// Dibujar miles de elementos con cada filtro o letra de la búsqueda tardaba segundos. El límite es de 1.000 para que
+// un catálogo como el actual (unos 800 puntos) se vea entero, como antes; solo actúa cuando hay miles de puntos.
+const LIST_PAGE = 1000;
 let listLimit = LIST_PAGE, listKey = "", lastOrdered = [];
 // Elemento de la lista de un punto.
 function listItemFor(c) {

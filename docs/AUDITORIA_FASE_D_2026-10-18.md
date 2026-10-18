@@ -118,7 +118,7 @@ Causas:
 Corrección (solo `index.html`):
 - `renderList` filtra una vez, calcula los grupos sobre los datos y no sobre el DOM, y añade y quita los marcadores en bloque (`cluster.addLayers` y `cluster.removeLayers`).
 - Los marcadores nuevos se crean y añaden en bloque (`makeMarkers`).
-- La lista lateral dibuja como máximo 300 puntos y un pie «Mostrando 300 de N puntos. [Mostrar 600 más]». La primera página vuelve cuando cambian la búsqueda o los filtros. Los grupos («Seguimientos de hoy o atrasados», «Caducan en 30 días», «Resto de puntos») se siguen calculando sobre todos los puntos visibles y sus contadores son los totales. Si se pulsa en el mapa el marcador de un punto que no está dibujado, la lista se amplía hasta incluirlo y lo marca como activo. Con 300 puntos o menos, la lista es idéntica a la de antes.
+- La lista lateral dibuja como máximo 1.000 puntos (`LIST_PAGE`) y un pie «Mostrando 1000 de N puntos. [Mostrar 2000 más]». La primera versión usaba 300; se subió a 1.000 por decisión del titular (18/10/2026) porque con los 791 puntos de producción un límite de 300 era un cambio visible sin beneficio: el problema de rendimiento solo aparece con miles de puntos. La primera página vuelve cuando cambian la búsqueda o los filtros. Los grupos («Seguimientos de hoy o atrasados», «Caducan en 30 días», «Resto de puntos») se siguen calculando sobre todos los puntos visibles y sus contadores son los totales. Si se pulsa en el mapa el marcador de un punto que no está dibujado, la lista se amplía hasta incluirlo y lo marca como activo. Con 1.000 puntos o menos, la lista es idéntica a la de antes.
 - `normalizePersonalRefs` usa índices por nombre y por referencia (3.553 ms → 23 ms).
 
 Medición con el código nuevo:
@@ -135,4 +135,23 @@ Verificación de que no cambia lo que se ve:
 - Con 2.000 puntos con estados: los grupos muestran los totales (67, 67 y 1.866); «Mostrar más» amplía a 900; un filtro devuelve a la primera página y con 200 resultados no hay pie; el marcador de un punto fuera de la primera página amplía la lista (304 → 2.003 elementos) y lo marca activo. Con teclado real, Intro sobre «Mostrar más» amplía a 900 puntos y el foco pasa al primer punto añadido (el botón desaparece al redibujar). 0 violaciones de CSP.
 - `scripts/test-list-performance.mjs` (nuevo, en CI): equivalencia de `normalizePersonalRefs` con la versión anterior en 8 entradas, coste con 50.000 puntos y 3.000 referencias (23 ms; con `main` falla con 3.553 ms) y que no vuelven los patrones lentos.
 
-Límites: es el navegador de la máquina de pruebas contra un simulador local, no el servidor real ni la red; no se midió el uso de varios usuarios a la vez. Lo más pesado que queda con 50.000 puntos es `refreshSelects` (1,8 s, lineal) y la memoria (177 MB); si el administrador necesitara menos, cabría cargar por provincia (decisión de producto, no necesaria hoy). En producción hoy hay 791 puntos: el cambio no se nota, y la lista es idéntica porque no llega a 300.
+Límites: es el navegador de la máquina de pruebas contra un simulador local, no el servidor real ni la red; no se midió el uso de varios usuarios a la vez. Lo más pesado que queda con 50.000 puntos es `refreshSelects` (1,8 s, lineal) y la memoria (177 MB); si el administrador necesitara menos, cabría cargar por provincia (decisión de producto, no necesaria hoy). En producción hoy hay 791 puntos: con el límite de 1.000 la lista es idéntica a la de antes de H-27 (ver abajo).
+
+### Ajuste del límite de la lista a 1.000 (PR #101)
+
+La primera versión de H-27 (PR #100) limitaba la lista a 300 puntos. Al verificarla en producción con la sesión del titular se vio que, con los 791 puntos reales, la lista mostraba «Mostrando 300 de 791 puntos» en lugar de los 791 de antes: un cambio visible sin beneficio, porque el problema de rendimiento solo aparece con miles de puntos. Se había anunciado por error que con 791 puntos no se notaría (791 supera 300). El titular eligió subir el límite a 1.000.
+
+- Con 791 puntos con estados de permisos y el límite de 1.000, la lista de la versión **anterior a H-27** y la de la nueva son idénticas, byte a byte, en los 9 escenarios (794 elementos en la base: 791 puntos y 3 cabeceras de grupo; categoría 83; búsqueda 114; solicitado 28; concedido 55; orden por valoración 791; «por revisar» 116; «seguimiento» 28), y no aparece el pie.
+- Rendimiento con el límite de 1.000 (administrador, Supabase simulado):
+
+| Puntos | Hasta el mapa | Filtro / búsqueda / quitar filtro | Elementos en la lista | Nodos DOM |
+|---|---|---|---|---|
+| 791 | 0,23 s | 41 ms / 38 ms / 75 ms | 791 | 6.960 |
+| 5.000 | 0,89 s | 168 ms / 157 ms / 247 ms | 1.000 | 8.493 |
+| 50.000 | 6,5-6,6 s (dos mediciones) | 0,6 s / 0,4 s / 0,9 s | 1.000 | 8.493 |
+
+Con 50.000 puntos la medición con límite 300 había dado 3,9 s; las dos mediciones con 1.000 dieron 6,5-6,6 s, pero en la repetición renderList sumó solo 263 ms y lo que se encareció fue refreshSelects (6,2 s frente a 1,8 s) y la creación de marcadores (1,6 s frente a 0,6 s), que no dependen del límite: la máquina de pruebas iba más lenta. Se documenta como un rango de 4 a 7 s según la carga de la máquina.
+
+### Verificación en producción de H-27 (PR #100, 18/10/2026)
+
+main 08e3f58, mismo SHA-256 que la URL pública. Sin sesión: código nuevo, sin errores ni violaciones de CSP. Con la sesión del titular (administrador, solo lectura): 791 puntos en una petición, sin errores en consola ni violaciones de CSP, 2.715 nodos DOM y 6 MB de memoria; la lista mostraba 300 de 791 (el efecto descrito arriba, corregido en el PR #101); la base no cambia (791 puntos, 2 estados en versión 1, 43 filas de historial de ubicación, última auditoría del 17/10).

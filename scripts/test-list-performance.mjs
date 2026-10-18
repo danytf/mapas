@@ -58,7 +58,7 @@ const prohibidos = [
 ];
 for (const [re, que] of prohibidos) assert.ok(!re.test(html), "Vuelve a aparecer: " + que);
 const requeridos = [
-  ["const LIST_PAGE = 300;", "lista lateral paginada"],
+  ["const LIST_PAGE = 1000;", "lista lateral paginada (1.000 puntos por página)"],
   ["cluster.addLayers(toAdd)", "marcadores visibles añadidos en bloque"],
   ["cluster.removeLayers(toRemove)", "marcadores ocultos quitados en bloque"],
   ["cluster.addLayers(nuevos)", "marcadores nuevos añadidos en bloque"],
