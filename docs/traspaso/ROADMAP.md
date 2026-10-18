@@ -24,7 +24,7 @@ Reglas de ejecución: ver `CLAUDE.md`. Cada fase termina con criterios de cierre
 
 **Criterios de cierre de la C:** todas las pruebas ejecutadas con resultado registrado en `docs/AUDITORIA_FASE_C_<fecha>.md`; cada fallo con ID, severidad y estado; H-11 cerrado o decisión escrita de aceptarlo; H-02 aplicado o decisión escrita; rama aislada eliminada al terminar (confirmar con el titular).
 
-## Fase D. Integridad, dependencias, accesibilidad, rendimiento (SIGUIENTE)
+## Fase D. Integridad, dependencias, accesibilidad, rendimiento (CERRADA el 18/10/2026)
 
 Hecho: integridad del catálogo y del historial; dependencias fijadas con SRI; teclado del panel (H-05); auditoría XSS y de persistencia en CI.
 Pendiente:

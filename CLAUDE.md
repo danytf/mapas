@@ -6,7 +6,7 @@ Lee este fichero entero al empezar y después `docs/traspaso/ESTADO.md` y `docs/
 
 Aplicación web estática (`index.html` + Leaflet) publicada en GitHub Pages: https://danytf.github.io/mapas/ . Mapa de lugares de Granada donde solicitar permisos para equipos de captación de socios. Datos en Supabase (PostgreSQL con RLS), proyecto `wwoczmihhupofwmlmgga`. Repositorio `danytf/mapas`, rama `main`.
 
-Estamos en una auditoría integral por fases A-F (ver `docs/traspaso/ROADMAP.md`). A, B y C están cerradas; **la siguiente es la Fase D** (integridad, dependencias, accesibilidad y rendimiento, con los hallazgos H-15 a H-20 aplazados de la C).
+Estamos en una auditoría integral por fases A-F (ver `docs/traspaso/ROADMAP.md`). A, B, C y D están cerradas; **la siguiente es la Fase E** (copias de seguridad, restauración y despliegue; la prueba de restauración necesita un proyecto aislado y la aprobación del titular).
 
 ## Reglas inviolables (del titular)
 

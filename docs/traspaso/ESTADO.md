@@ -9,8 +9,8 @@
 | A. Reconstruir el estado real | Cerrada |
 | B. Seguridad y persistencia | Cerrada (H-11 aplazado a la C por decisión del titular) |
 | C. Pruebas E2E en navegador | Cerrada el 18/10/2026 (`docs/AUDITORIA_FASE_C_2026-10-18.md`): 11 pruebas y arrastre del pin; H-02, H-11, H-13 y H-14 corregidos y desplegados; H-15 a H-20 pasan a la D |
-| D. Integridad, dependencias, accesibilidad, rendimiento | **Siguiente**. Parcial (ver ROADMAP), con los hallazgos aplazados de la C |
-| E. Backup, restauración y despliegue | Sin empezar |
+| D. Integridad, dependencias, accesibilidad, rendimiento | Cerrada el 18/10/2026 (`docs/AUDITORIA_FASE_D_2026-10-18.md`, `..._ACCESIBILIDAD_...` y `..._INDICES_...`): H-03, H-15 a H-23, H-26, H-27 y H-28 a H-35 corregidos y desplegados, H-36 informe; H-24 y H-25 aceptados por el titular. Sin probar: lectores de pantalla reales, zoom y objetivos táctiles |
+| E. Backup, restauración y despliegue | **Siguiente** |
 | F. Informe final | Sin empezar |
 
 ## Producción (Supabase `wwoczmihhupofwmlmgga`)
@@ -40,7 +40,7 @@
 
 ## Hallazgos
 
-Ver `HALLAZGOS.md`. Accesibilidad (H-28 a H-35): corregida en el PR #105; informe de índices sin uso (H-36): PR #104. El asesor de rendimiento de Supabase muestra 21 avisos `unused_index` (informativos y aceptados); los 23 índices con 0 escaneos incluyen 2 de restricción. H-27 (P2, latente: con 20.000 puntos el administrador esperaba 75 s al cargar el mapa): cerrado (PR #100 y PR #101), verificado en producción. H-26 (P2, latente: políticas RLS evaluadas por fila, 25 s con 50.000 puntos para el administrador): migración aplicada en producción (PR #99). Cerrados en la Fase C: H-02, H-11, H-13, H-14 y H-05 (verificado). Cerrados en la Fase D (uso en varias provincias y volumen): H-22 (PR #94 y migración aplicada), H-23 (P1, PR #95), H-20 y H-21 (PR #96), todos verificados en producción. Corregidos en el PR #98, pendiente de fusionar: H-15 a H-19 (P3, interfaz). H-25 (P3) aceptado por ahora por el titular. Riesgo actual pendiente de decisión del titular: H-24 (P2, plan gratuito de Supabase: pausa tras 7 días de poca actividad). Pendientes de producto (ROADMAP): panel de administración y ampliación del catálogo a toda España (hoy solo Granada, aún por completar). Además: H-03 (P3, recomendación), H-08 (Fase E) y H-09 (P3, aceptado).
+Ver `HALLAZGOS.md`. Accesibilidad (H-28 a H-35): corregida en el PR #105 y verificada en producción (despliegue con el mismo SHA-256 que `main`; el titular comprobó los colores con su sesión en modo claro y oscuro); informe de índices sin uso (H-36): PR #104. El asesor de rendimiento de Supabase muestra 21 avisos `unused_index` (informativos y aceptados); los 23 índices con 0 escaneos incluyen 2 de restricción. H-27 (P2, latente: con 20.000 puntos el administrador esperaba 75 s al cargar el mapa): cerrado (PR #100 y PR #101), verificado en producción. H-26 (P2, latente: políticas RLS evaluadas por fila, 25 s con 50.000 puntos para el administrador): migración aplicada en producción (PR #99). Cerrados en la Fase C: H-02, H-11, H-13, H-14 y H-05 (verificado). Cerrados en la Fase D (uso en varias provincias y volumen): H-22 (PR #94 y migración aplicada), H-23 (P1, PR #95), H-20 y H-21 (PR #96), todos verificados en producción. Corregidos en el PR #98, pendiente de fusionar: H-15 a H-19 (P3, interfaz). H-25 (P3) aceptado por ahora por el titular. Riesgo actual pendiente de decisión del titular: H-24 (P2, plan gratuito de Supabase: pausa tras 7 días de poca actividad). Pendientes de producto (ROADMAP): panel de administración y ampliación del catálogo a toda España (hoy solo Granada, aún por completar). Además: H-03 (P3, recomendación), H-08 (Fase E) y H-09 (P3, aceptado).
 
 ## Entorno aislado de la Fase C
 
