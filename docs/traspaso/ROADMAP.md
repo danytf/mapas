@@ -53,7 +53,7 @@ Informe final con: resumen ejecutivo; matriz de 10 capas (el listado literal de 
 
 - Privacidad: parte técnica auditada (`docs/AUDITORIA_PRIVACIDAD_2026-10-19.md`, H-39 y H-40 abiertos); falta la parte jurídica (base jurídica, aviso a usuarios, contratos con Supabase y GitHub) con quien lleve la protección de datos en Wesser.
 - Observabilidad y respuesta a incidentes.
-- Identidad: recuperación de acceso y revocación de sesiones.
+- Identidad: auditada en `docs/AUDITORIA_IDENTIDAD_2026-10-19.md` (revocación en base de datos verificada; falta leer en el panel de Supabase la duración de sesión y probar la recuperación por correo con una cuenta controlada por el titular).
 - Accesibilidad manual: lectores de pantalla reales, zoom y objetivos táctiles.
 - Reversión real de un despliegue en producción.
 
