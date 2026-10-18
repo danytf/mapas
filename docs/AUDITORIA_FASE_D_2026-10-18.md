@@ -16,7 +16,7 @@ Estado: **en curso**. Esta primera entrega recoge los hallazgos de la Fase D rel
 - Tras el despliegue (`main` `8dcbf29`, mismo SHA-256 que la URL pública): 791 puntos, una petición ordenada por clave para el catálogo y otra para el estado, sin `limit=5000`, 0 violaciones de la CSP, sin errores en consola y base de datos sin cambios.
 - Pendiente: la prueba de volumen con unos 50.000 puntos en un entorno aislado (ROADMAP).
 
-## H-20 y H-21: la app no depende de Granada (PR #96)
+## H-20 y H-21: la app no depende de Granada (cerrados, PR #96)
 
 Entorno: copia de `index.html` conectada a un Supabase simulado local (`scripts/dev/mock-supabase.mjs` y `scripts/dev/build-mock-site.mjs`), con usuarios `multi` (Granada y Almería), `alm` (Almería), `vacio` (Jaén, sin puntos) y `admin`. Es una prueba del cliente: no cubre RLS ni la API real, que ya están cubiertas por las pruebas SQL y las verificaciones de producción en solo lectura.
 
@@ -33,4 +33,6 @@ Entorno: copia de `index.html` conectada a un Supabase simulado local (`scripts/
 
 Regresión: `scripts/test-multiprovince.mjs` (en CI) ejecuta `inSpain`, `parseCoords`, `townOf`, `defaultTown`, el nombre del CSV y el área de búsqueda con puntos de varias provincias (Canarias, Baleares, Ceuta y Melilla incluidas; París, Rabat, el Atlántico y coordenadas cambiadas fuera) y prohíbe que vuelvan los valores fijos de Granada; `scripts/audit-persistence.mjs` exige `inSpain` en la carga de puntos personales. Se retira `locateAll`, geocodificación masiva heredada que ya no se llamaba desde ningún sitio.
 
-Observación nueva: H-25 (P3). La corrección de ubicación acepta cualquier punto de España; un error de pegado a otra provincia se guarda en el catálogo maestro (queda en el historial de ubicación). Un umbral de distancia respecto a la ubicación anterior necesita que el titular fije el valor.
+Tras el despliegue (`main` `aac12ea`, mismo SHA-256 que la URL pública, sin `VIEWBOX` ni `locateAll`): sin sesión, vista inicial en el centro de España (zoom 6), formulario sin municipio por defecto, sin errores ni violaciones de CSP. Con la sesión del titular (administrador, solo lectura): 791 puntos en una petición, encuadre en Granada, municipio por defecto «Granada» (una sola provincia), CSV `permisos-captacion-granada.csv`, área de búsqueda `-4.37909,38.10923,-2.28279,36.55051`, 0 puntos personales, 0 violaciones de CSP y sin errores en consola; la base no cambia (791 puntos, 2 estados en versión 1, 43 filas de historial de ubicación, última auditoría del 17/10).
+
+Observación nueva: H-25 (P3), aceptado por ahora por el titular el 18/10/2026 (revisar al ampliar el catálogo; si se reabre, mejor un aviso con confirmación que un rechazo). La corrección de ubicación acepta cualquier punto de España; un error de pegado a otra provincia se guarda en el catálogo maestro (queda en el historial de ubicación). Un umbral de distancia respecto a la ubicación anterior necesitaría que el titular fije el valor.
