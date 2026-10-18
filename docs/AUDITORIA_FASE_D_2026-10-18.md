@@ -155,3 +155,24 @@ Con 50.000 puntos la medición con límite 300 había dado 3,9 s; las dos medici
 ### Verificación en producción de H-27 (PR #100, 18/10/2026)
 
 main 08e3f58, mismo SHA-256 que la URL pública. Sin sesión: código nuevo, sin errores ni violaciones de CSP. Con la sesión del titular (administrador, solo lectura): 791 puntos en una petición, sin errores en consola ni violaciones de CSP, 2.715 nodos DOM y 6 MB de memoria; la lista mostraba 300 de 791 (el efecto descrito arriba, corregido en el PR #101); la base no cambia (791 puntos, 2 estados en versión 1, 43 filas de historial de ubicación, última auditoría del 17/10).
+
+### Peso de la carga inicial (medido el 18/10/2026 sobre https://danytf.github.io/mapas/, sin sesión)
+
+Medido en Chrome con la API de rendimiento del navegador y las cabeceras de los CDN. No incluye teselas del mapa (ArcGIS, bajo demanda) ni la consulta del catálogo autenticada.
+
+| Recurso | Transferido (comprimido) |
+|---|---|
+| index.html (gzip) | 87.832 B (235.122 B descomprimido) |
+| supabase-js 2.118.0 (jsDelivr, brotli) | 55.911 B |
+| leaflet.js 1.9.4 (unpkg, gzip) | 42.481 B |
+| leaflet.markercluster.js 1.5.3 | 8.706 B |
+| leaflet.css | 3.522 B |
+| MarkerCluster.css + .Default.css | 251 B + 393 B |
+| CSS de Google Fonts | 429 B |
+| **Total sin teselas ni catálogo** | **unos 199 kB** (194 KiB) |
+
+- Tiempos (carga fría de la sesión de pruebas): primer contenido pintado 672 ms; DOMContentLoaded 760 ms; carga completa 781 ms; primer byte 366 ms.
+- Limitación: los tamaños de los recursos de otros dominios no los expone el navegador (sin Timing-Allow-Origin), por eso se leyeron con `curl` (cabeceras y bytes comprimidos); los tiempos son de un solo navegador y una sola conexión, orientativos.
+- La CSP bloquea `fetch` desde la página a los CDN (comprobado: «Failed to fetch»), como se espera.
+- Catálogo: el JSON completo de las 791 filas de `establishments` ocupa 640.161 B sin comprimir (809 B por fila de media; es una cota superior, porque la app pide solo algunas columnas, y la compresión de la respuesta de la API no se ha medido). La consulta del catálogo se hace en una petición (791 < 1.000) y con 50.000 puntos serían unas 50 peticiones de 1.000 filas (ver H-23 y H-27).
+- Conclusión: la carga inicial es ligera (unos 0,2 MB más el catálogo) y no requiere acción. El mayor coste potencial es el catálogo cuando crezca, ya tratado en H-23, H-26 y H-27.
