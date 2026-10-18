@@ -64,7 +64,9 @@ select pg_temp.check('administrador activo lee los usuarios', pg_temp.cnt('authe
   pg_temp.cnt('authenticated', 'c1', 'select count(*) from public.admin_list_users() where id in (pg_temp.u(''c1''), pg_temp.u(''c2''), pg_temp.u(''c3''), pg_temp.u(''c4''))')::text);
 select pg_temp.check('devuelve el correo', pg_temp.cnt('authenticated', 'c1', 'select count(*) from public.admin_list_users() where email = ''usuario@prueba.invalid''') = 1);
 select pg_temp.check('devuelve las provincias asignadas', pg_temp.cnt('authenticated', 'c1', 'select cardinality(province_ids) from public.admin_list_users() where id = pg_temp.u(''c3'')') = 1);
-select pg_temp.check('la función es SECURITY DEFINER con search_path vacío', (select prosecdef and coalesce(proconfig, '{}') @> array['search_path=""'] from pg_proc where oid = 'public.admin_list_users()'::regprocedure));
+select pg_temp.check('la lógica privilegiada está en private (SECURITY DEFINER, search_path vacío)', (select prosecdef and coalesce(proconfig, '{}') @> array['search_path=""'] from pg_proc where oid = 'private.admin_list_users()'::regprocedure));
+select pg_temp.check('la función pública es un envoltorio SECURITY INVOKER', (select not prosecdef from pg_proc where oid = 'public.admin_list_users()'::regprocedure));
+select pg_temp.check('anon sin EXECUTE en private.admin_list_users', not has_function_privilege('anon', 'private.admin_list_users()', 'execute'));
 select pg_temp.check('anon y PUBLIC sin EXECUTE; authenticated con EXECUTE',
   not has_function_privilege('anon', 'public.admin_list_users()', 'execute') and has_function_privilege('authenticated', 'public.admin_list_users()', 'execute'));
 
