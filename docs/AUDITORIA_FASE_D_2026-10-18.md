@@ -1,6 +1,6 @@
 # Auditoría Fase D: preparación para varias provincias y volumen (18/10/2026)
 
-Estado: **en curso**. Esta primera entrega recoge los hallazgos de la Fase D relacionados con el uso en varias provincias y con el volumen del catálogo (H-20 a H-23). El resto de la fase (rendimiento medido, accesibilidad más allá del teclado, H-03, H-15 a H-19 y H-25) sigue pendiente.
+Estado: **en curso**. Recoge los hallazgos de la Fase D relacionados con el uso en varias provincias y con el volumen del catálogo (H-20 a H-23) y los arreglos de interfaz H-15 a H-19. El resto de la fase (rendimiento medido, accesibilidad más allá del teclado, H-03 y registrar el rol de base de datos en la auditoría sin sesión) sigue pendiente, además de la prueba de volumen con 50.000 puntos.
 
 ## H-22: provincia desactivada (cerrado, PR #94)
 
@@ -36,3 +36,25 @@ Regresión: `scripts/test-multiprovince.mjs` (en CI) ejecuta `inSpain`, `parseCo
 Tras el despliegue (`main` `aac12ea`, mismo SHA-256 que la URL pública, sin `VIEWBOX` ni `locateAll`): sin sesión, vista inicial en el centro de España (zoom 6), formulario sin municipio por defecto, sin errores ni violaciones de CSP. Con la sesión del titular (administrador, solo lectura): 791 puntos en una petición, encuadre en Granada, municipio por defecto «Granada» (una sola provincia), CSV `permisos-captacion-granada.csv`, área de búsqueda `-4.37909,38.10923,-2.28279,36.55051`, 0 puntos personales, 0 violaciones de CSP y sin errores en consola; la base no cambia (791 puntos, 2 estados en versión 1, 43 filas de historial de ubicación, última auditoría del 17/10).
 
 Observación nueva: H-25 (P3), aceptado por ahora por el titular el 18/10/2026 (revisar al ampliar el catálogo; si se reabre, mejor un aviso con confirmación que un rechazo). La corrección de ubicación acepta cualquier punto de España; un error de pegado a otra provincia se guarda en el catálogo maestro (queda en el historial de ubicación). Un umbral de distancia respecto a la ubicación anterior necesitaría que el titular fije el valor.
+
+## H-15 a H-19: arreglos de interfaz (PR #98)
+
+Entorno: copia de `index.html` contra el Supabase simulado (`scripts/dev/mock-supabase.mjs`, `scripts/dev/build-mock-site.mjs`), primero con el código de `main` y después con el nuevo.
+
+| Hallazgo | Código anterior | Código nuevo |
+|---|---|---|
+| H-19: escrituras de `user_app_state` al entrar | 2 | 1 |
+| H-15: triple clic en «Guardar dirección y ubicación» | 3 escrituras | 1 escritura; el botón se deshabilita mientras guarda y se libera después; un segundo guardado posterior funciona |
+| H-17: búsqueda sin resultados | lista vacía sin mensaje | «Ningún punto coincide con la búsqueda y los filtros.»; la lista vuelve a mostrar los 7 puntos al borrar la búsqueda |
+| H-17: etiquetas de valoración | «★★★★★ (5)», «★★★★☆ o más»… | «★★★★★ · 5 estrellas», «★★★★☆ · 4 estrellas o más», «★★★☆☆ · 3 estrellas o más» |
+| H-16: guardado de ubicación sin red | «Failed to fetch» (repetido) | «No hay conexión. Revisa tu conexión a internet.» (una vez) |
+| H-16: sin respuesta del servidor (corta a los 15,1 s) | «AbortError: The operation was aborted.» | «La operación no respondió a tiempo.» |
+| H-16: error 500 con código técnico | texto del servidor | «El servidor devolvió un error. Inténtalo de nuevo; si se repite, avisa al administrador.» |
+| H-16: sesión caducada (401, JWT expired) | «JWT expired» | «La sesión ha caducado. Vuelve a iniciar sesión.» |
+| H-16: acceso sin conexión / contraseña incorrecta / error al leer el catálogo | «Failed to fetch» / correcto / texto del servidor | «No hay conexión. Revisa tu conexión a internet.» / «Correo o contraseña incorrectos.» / «Error de lectura del catálogo.» |
+| H-18: menú con teclado real | las flechas no hacían nada y Intro no movía el foco | Intro abre y lleva el foco al primer elemento; Abajo, Arriba, Inicio y Fin se mueven con vuelta al principio y al final; Escape cierra y devuelve el foco al botón del menú |
+| H-18: foco al cerrar «Panel resumen» y «Logros» con Escape | el foco se perdía | vuelve al botón del menú |
+
+Durante la prueba el foco se quedaba en el botón «Cerrar» del diálogo ya cerrado: se corrigió para que vuelva siempre al botón del menú. La comprobación del diálogo «Agregar punto» quedó pendiente porque la pestaña de pruebas se bloqueó con un diálogo nativo del navegador al pulsar Intro sobre otra opción del menú; el código es el mismo (cierre por el evento `close` de todos los diálogos).
+
+Regresión: `scripts/test-ui-fixes.mjs` (en CI) ejecuta `friendlyError` con 22 casos (tiempo agotado, sin conexión, sesión caducada, sin permiso, error del servidor, errores propios en español que pasan tal cual, sin texto técnico) y comprueba que no vuelven los mensajes técnicos, el texto de 17 segundos ni la etiqueta «(5)», y que siguen presentes el bloqueo del botón, el mensaje de lista vacía, el teclado del menú, el foco al cerrar diálogos y la escritura única del estado personal.

@@ -16,6 +16,7 @@ on:
       - "scripts/audit-csp.mjs"
       - "scripts/test-paged-fetch.mjs"
       - "scripts/test-multiprovince.mjs"
+      - "scripts/test-ui-fixes.mjs"
       - ".github/workflows/audit-static-catalog.yml"
   pull_request:
   workflow_dispatch:
@@ -45,6 +46,8 @@ jobs:
         run: node scripts/test-paged-fetch.mjs
       - name: Test multi-province behaviour (no hard-coded Granada)
         run: node scripts/test-multiprovince.mjs
+      - name: Test UI fixes (error messages, location save guard, menu keyboard)
+        run: node scripts/test-ui-fixes.mjs
       - name: Run XSS regression audit
         run: node scripts/audit-xss.mjs index.html
       - name: Check keyboard access to statistics panel rows

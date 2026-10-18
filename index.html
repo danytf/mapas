@@ -955,6 +955,17 @@ const isApprox = (c) => !!(cache[c.id] && cache[c.id].approx);
 const isRev = (c) => isApprox(c) || (!hasPersonalRef(reviewed, c) && (DUPS.has(c.name) || !c.conf));
 const estadoInfo = (k) => ESTADOS.find((e) => e[0] === k) || ESTADOS[0];
 
+// Texto en español para un error técnico (Supabase, red o tiempo agotado); el detalle técnico va a la consola.
+// Los errores propios de la app (con mensaje ya en español) se devuelven tal cual.
+function friendlyError(e, fallback) {
+  const text = String((e && (e.message || e.name)) || e || "");
+  if (e && (e.name === "AbortError" || /aborted/i.test(text))) return "La operación no respondió a tiempo.";
+  if (e && (e.name === "TypeError" || /failed to fetch|networkerror|load failed/i.test(text))) return "No hay conexión. Revisa tu conexión a internet.";
+  if (/jwt expired|invalid jwt|refresh token/i.test(text) || (e && (e.status === 401 || e.code === "PGRST301"))) return "La sesión ha caducado. Vuelve a iniciar sesión.";
+  if ((e && e.code === "42501") || /row-level security|permission denied/i.test(text)) return "No tienes permiso para esta operación.";
+  if (e && (e.code || e.status)) return fallback || "El servidor devolvió un error. Inténtalo de nuevo; si se repite, avisa al administrador.";
+  return text || fallback || "Error inesperado.";
+}
 // Municipio mostrado de un punto: el suyo, o el nombre de su provincia si no lo tiene.
 const townOf = (c) => c.town || c.province || "Sin municipio";
 const addrOf = (c) => (c.street ? c.street + ", " : "") + townOf(c);
@@ -1180,10 +1191,14 @@ function popupFor(c, pos) {
   el.querySelector(".f-save").addEventListener("click", commit);
   let armed = false;
   {
-    const msg = el.querySelector(".lmsg"), inp = el.querySelector(".l-in");
+    const msg = el.querySelector(".lmsg"), inp = el.querySelector(".l-in"), saveLocBtn = el.querySelector(".l-save-location");
+    let savingLocation = false;
     const apply = async (txt) => {
+      if (savingLocation) return;
       const r = parseCoords(txt);
       if (!r) { msg.textContent = "No reconozco las coordenadas ni la URL. Pega una URL de Google Maps que contenga @latitud,longitud o coordenadas como 37.1773, -3.5986."; return; }
+      savingLocation = true;
+      saveLocBtn.disabled = true;
       msg.style.color = "#555";
       msg.textContent = "Guardando en Supabase…";
       const address = el.querySelector(".l-address").value;
@@ -1198,16 +1213,18 @@ function popupFor(c, pos) {
           })
         ]);
       } catch (saveError) {
-        window.mapaLastLocationError = saveError?.message || String(saveError);
+        window.mapaLastLocationError = friendlyError(saveError);
         console.error("[Mapa] Error inesperado al guardar la ubicación:", saveError);
       } finally {
         clearTimeout(timeoutId);
+        savingLocation = false;
+        saveLocBtn.disabled = false;
       }
       const timedOut = !ok && !window.mapaLastLocationError;
       const resultText = ok
         ? "Dirección y coordenadas guardadas en el catálogo maestro de Supabase."
         : "No se confirmó el guardado en Supabase. " + (window.mapaLastLocationError || (timedOut
-          ? "La operación no respondió en 17 segundos. No vuelvas a pulsar todavía; revisa la conexión y los registros."
+          ? "La operación no respondió a tiempo (27 segundos). No vuelvas a pulsar todavía; revisa la conexión."
           : "Comprueba la sesión y los permisos del establecimiento."));
       const resultColor = ok ? "#14532d" : "#b3261e";
       window.mapaLastLocationError = "";
@@ -1380,7 +1397,7 @@ async function setLoc(c, lat, lon, address) {
     Number.isFinite(responseVerifiedAt) && Math.abs(Date.now() - responseVerifiedAt) <= 120000;
 
   if (!responseConfirmed) {
-    const originalReason = error?.message || (controller.signal.aborted
+    const originalReason = (error ? friendlyError(error) : "") || (controller.signal.aborted
       ? "Supabase no respondió en 15 segundos; se verificará si la escritura llegó a completarse."
       : "La respuesta inicial no confirma todos los valores guardados (permisos, conexión o registro no visible).");
     // Una respuesta perdida no demuestra que el servidor no haya guardado el cambio.
@@ -1410,15 +1427,15 @@ async function setLoc(c, lat, lon, address) {
         error = null;
         console.warn("[Mapa] La escritura de ubicación se confirmó mediante lectura posterior tras una respuesta ambigua.");
       } else {
-        const verificationReason = verification.error?.message || (verifyController.signal.aborted
+        const verificationReason = (verification.error ? friendlyError(verification.error) : "") || (verifyController.signal.aborted
           ? "La lectura de comprobación también agotó el tiempo."
           : "La lectura de comprobación no encontró los valores recién guardados.");
-        window.mapaLastLocationError = originalReason + " " + verificationReason;
+        window.mapaLastLocationError = originalReason + (verificationReason === originalReason ? "" : " " + verificationReason);
         console.error("[Mapa] No se pudo confirmar el guardado de la ubicación maestra en Supabase:", window.mapaLastLocationError);
         return false;
       }
     } catch (verificationError) {
-      window.mapaLastLocationError = originalReason + " No se pudo verificar el resultado: " + (verificationError?.message || String(verificationError));
+      window.mapaLastLocationError = originalReason + (friendlyError(verificationError) === originalReason ? "" : " No se pudo verificar el resultado: " + friendlyError(verificationError));
       console.error("[Mapa] No se pudo confirmar el guardado de la ubicación maestra en Supabase:", window.mapaLastLocationError);
       return false;
     } finally {
@@ -1526,6 +1543,13 @@ function renderList() {
       ul.insertBefore(frag, ul.firstChild);
     }
   }
+  if (!ul.children.length) {
+    const empty = document.createElement("li");
+    empty.className = "grp";
+    empty.setAttribute("role", "presentation");
+    empty.textContent = CENTERS.length ? "Ningún punto coincide con la búsqueda y los filtros." : "No hay puntos que mostrar.";
+    ul.appendChild(empty);
+  }
 }
 
 function highlight(id, fly) {
@@ -1547,7 +1571,7 @@ async function nominatim(q, vb) {
   const url = "https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=es" +
     (vb ? "&viewbox=" + vb + "&bounded=1" : "") + "&q=" + encodeURIComponent(q);
   const r = await fetch(url, { headers: { "Accept-Language": "es" } });
-  if (!r.ok) throw new Error("HTTP " + r.status);
+  if (!r.ok) throw new Error(r.status === 429 ? "Demasiadas búsquedas seguidas; espera un minuto y vuelve a intentarlo." : "El servicio de direcciones no está disponible ahora mismo (error " + r.status + ").");
   const j = await r.json();
   return j.length ? { lat: parseFloat(j[0].lat), lon: parseFloat(j[0].lon) } : null;
 }
@@ -2027,7 +2051,7 @@ function refreshSelects() {
   $("#permiso").innerHTML = '<option value="">Estado: todos</option>' +
     ESTADOS.map(([k, t]) => '<option value="' + k + '">' + t + " (" + vis.filter((c) => estadoOf(c) === k).length + ")</option>").join("");
   const vv = $("#valor").value, ov = $("#orden").value;
-  $("#valor").innerHTML = '<option value="">Valoración: todas</option><option value="5">★★★★★ (5)</option><option value="4">★★★★☆ o más</option><option value="3">★★★☆☆ o más</option><option value="sin">Sin valorar</option>';
+  $("#valor").innerHTML = '<option value="">Valoración: todas</option><option value="5">★★★★★ · 5 estrellas</option><option value="4">★★★★☆ · 4 estrellas o más</option><option value="3">★★★☆☆ · 3 estrellas o más</option><option value="sin">Sin valorar</option>';
   $("#orden").innerHTML = '<option value="">Orden: normal</option><option value="val">Mejor valorados</option>';
   const cv = $("#cadena").value, cnt = {};
   const raw = {}; vis.forEach((c) => { const k = rawChain(c); if (k) raw[k] = (raw[k] || 0) + 1; });
@@ -2074,11 +2098,35 @@ $("#valor").addEventListener("change", refilter);
 $("#orden").addEventListener("change", renderList);
 (() => {
   const btn = $("#menuBtn"), panel = $("#menuPanel");
-  const set = (open) => { panel.hidden = !open; btn.setAttribute("aria-expanded", open); };
-  btn.addEventListener("click", (e) => { e.stopPropagation(); set(panel.hidden); });
-  panel.addEventListener("click", () => set(false));
+  const items = () => [...panel.querySelectorAll('[role="menuitem"]')].filter((i) => !i.disabled);
+  // Abrir con el teclado lleva el foco al primer (o último) elemento del menú.
+  const set = (open, focusItem) => {
+    panel.hidden = !open; btn.setAttribute("aria-expanded", open);
+    if (open && focusItem) { const list = items(); (focusItem === "last" ? list[list.length - 1] : list[0])?.focus(); }
+  };
+  btn.addEventListener("click", (e) => { e.stopPropagation(); const abrir = panel.hidden; set(abrir, abrir && e.detail === 0 ? "first" : null); });
+  btn.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowDown") { e.preventDefault(); set(true, "first"); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); set(true, "last"); }
+  });
+  panel.addEventListener("keydown", (e) => {
+    const list = items(), i = list.indexOf(document.activeElement);
+    if (!list.length) return;
+    if (e.key === "ArrowDown") { e.preventDefault(); list[(i + 1) % list.length].focus(); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); list[(i - 1 + list.length) % list.length].focus(); }
+    else if (e.key === "Home") { e.preventDefault(); list[0].focus(); }
+    else if (e.key === "End") { e.preventDefault(); list[list.length - 1].focus(); }
+    else if (e.key === "Escape") { e.preventDefault(); set(false); btn.focus(); }
+  });
+  // El menú se oculta al elegir una opción: el foco vuelve al botón del menú salvo que se abra un diálogo.
+  panel.addEventListener("click", () => { set(false); if (!document.querySelector("dialog[open]")) btn.focus(); });
   document.addEventListener("click", (e) => { if (!panel.contains(e.target)) set(false); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") set(false); });
+  // Al cerrar un diálogo abierto desde el menú, el elemento de origen está oculto: el foco vuelve al botón del menú.
+  document.querySelectorAll("dialog").forEach((d) => d.addEventListener("close", () => {
+    const f = document.activeElement;
+    if (!f || f === document.body || d.contains(f)) btn.focus();
+  }));
 })();
 const download = (name, text, type) => {
   const a = document.createElement("a");
@@ -2304,7 +2352,7 @@ $("#n-geo").addEventListener("click", async () => {
     const pos = await nominatim(rec.street + ", " + rec.town, searchViewbox());
     if (!pos) { nmsg("No se ha encontrado esa dirección. Prueba a cambiarla o usa “Colocar en el mapa”."); return; }
     dlg.close(); await addCustom(rec, pos);
-  } catch (e) { nmsg("No se pudo consultar OpenStreetMap (" + e.message + ")."); }
+  } catch (e) { console.error("[Mapa] Error consultando Nominatim:", e); nmsg("No se pudo buscar la dirección: " + friendlyError(e, "el servicio de direcciones no responde.")); }
 });
 $("#n-click").addEventListener("click", () => {
   const rec = readForm(); if (!rec) return;
@@ -2389,6 +2437,9 @@ renderList();
     stateWriteQueue = stateWriteQueue.then(async () => {
       if (loadedStateUserId !== userId || window.mapaSession?.user?.id !== userId) return false;
       const snapshot = JSON.parse(JSON.stringify(loadedPersonalState));
+      // Al entrar se solicitan varias escrituras seguidas (insignias, progreso…): la primera ya guarda todo el
+      // estado, así que las siguientes, que dejarían el mismo contenido, no se envían (H-19).
+      if (stableJson(snapshot) === stableJson(persistedPersonalState)) return true;
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 12000);
       try {
@@ -2606,7 +2657,7 @@ renderList();
       return true;
     } catch (error) {
       clearDisplayedCatalogue();
-      window.mapaSession.catalogueError = error.message || "Error de lectura del catálogo.";
+      window.mapaSession.catalogueError = friendlyError(error, "Error de lectura del catálogo.");
       if (status) status.textContent = "No se pudo cargar el mapa desde Supabase. No se muestran datos locales. " + window.mapaSession.catalogueError;
       console.error("[Mapa] Error cargando el catálogo de Supabase:", error);
       return false;
@@ -2690,7 +2741,7 @@ renderList();
       await showLoginError(
         error.message === "Invalid login credentials"
           ? "Correo o contraseña incorrectos."
-          : error.message || "No se ha podido validar el acceso."
+          : friendlyError(error, "No se ha podido validar el acceso.")
       );
       passInput.select();
     } finally {
@@ -2726,7 +2777,7 @@ renderList();
     await client.auth.signOut().catch(() => {});
     window.mapaSession = null;
     root.classList.add("lock");
-    err.textContent = error.message || "Inicia sesión para comprobar tu acceso.";
+    err.textContent = friendlyError(error, "Inicia sesión para comprobar tu acceso.");
   }
 
   if (root.classList.contains("lock")) {
