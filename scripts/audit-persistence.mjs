@@ -126,20 +126,30 @@ if (personalWriteStart < 0 || personalWriteEnd < 0) {
   }
 }
 
-const permitWriteStart = html.indexOf("const savePermits = async");
+const permitWriteStart = html.indexOf("const saveSharedPermitRow = async");
 const permitWriteEnd = html.indexOf("let removed = new Set()", permitWriteStart);
 if (permitWriteStart < 0 || permitWriteEnd < 0) {
   failures.push("No se pudo localizar la comprobación posterior de escrituras compartidas.");
 } else {
   const permitWrite = html.slice(permitWriteStart, permitWriteEnd);
-  if (!/rows\.every\(row =>/.test(permitWrite) ||
-      !/\.in\("establishment_id", rows\.map\(row => row\.establishment_id\)\)/.test(permitWrite) ||
+  if (!/\.eq\("establishment_id", row\.establishment_id\)/.test(permitWrite) ||
       !/persisted\.updated_by === userId/.test(permitWrite) ||
       !/persisted\.province_id === row\.province_id/.test(permitWrite) ||
       !/setTimeout\(\(\) => controller\.abort\(\), 15000\)/.test(permitWrite) ||
       !/setTimeout\(\(\) => verifyController\.abort\(\), 8000\)/.test(permitWrite)) {
     failures.push("Un timeout de permisos debe comprobar estado, provincia y usuario persistidos antes de revertir la edición.");
   }
+  // H-11: el estado compartido se guarda condicionado a la versión leída; nunca con upsert ciego.
+  if (!/\.update\(\{ state: row\.state, updated_by: userId \}\)\s*\.eq\("establishment_id", row\.establishment_id\)\.eq\("version", expected\)/.test(permitWrite) ||
+      !/\.from\("establishment_app_state"\)\.insert\(row\)/.test(permitWrite) ||
+      !/writeError\?\.code === "23505"\) return "conflict"/.test(permitWrite) ||
+      !/if \(persistedVersion !== expected\) return "conflict"/.test(permitWrite) ||
+      /establishment_app_state"\)\.upsert\(/.test(permitWrite)) {
+    failures.push("El estado compartido debe guardarse con control de versión (UPDATE condicionado o INSERT) y detectar conflictos (H-11).");
+  }
+}
+if (/from\("establishment_app_state"\)\s*\.upsert\(/.test(html)) {
+  failures.push("No debe haber upsert ciego sobre establishment_app_state (H-11).");
 }
 const personalTimeoutStart = html.indexOf("window.mapaPersistUserState =");
 const personalTimeoutEnd = html.indexOf("async function loadPersonalState()", personalTimeoutStart);
@@ -150,7 +160,7 @@ if (personalTimeoutStart < 0 || personalTimeoutEnd < 0 || locationApplyStart < 0
 } else {
   const personalTimeout = html.slice(personalTimeoutStart, personalTimeoutEnd);
   const locationApply = html.slice(locationApplyStart, locationApplyEnd);
-  const permitSave = html.slice(html.indexOf("const savePermits ="), html.indexOf("let removed = new Set()"));
+  const permitSave = html.slice(html.indexOf("const saveSharedPermitRow ="), html.indexOf("let removed = new Set()"));
   if (!/setTimeout\(\(\) => controller\.abort\(\), 12000\)/.test(personalTimeout) ||
       !/abortSignal\(controller\.signal\)/.test(personalTimeout) ||
       !/setTimeout\(\(\) => controller\.abort\(\), 15000\)/.test(permitSave) ||
@@ -164,7 +174,14 @@ if (commitStart < 0 || commitEnd < 0) {
   failures.push("No se pudo localizar el guardado de permisos compartidos.");
 } else {
   const permitCommit = html.slice(commitStart, commitEnd);
-  if (!/if\s*\(!saved\)\s*\{/.test(permitCommit) ||
+  // H-11: ante un conflicto no se reescribe nada (ni la restauración), solo se ofrece recargar.
+  const conflictStart = permitCommit.indexOf('if (saved === "conflict") {');
+  const errorStart = permitCommit.indexOf('if (saved !== "ok") {');
+  const conflictBranch = conflictStart >= 0 && errorStart > conflictStart ? permitCommit.slice(conflictStart, errorStart) : "";
+  if (!conflictBranch || /savePermits\(/.test(conflictBranch) || !/reloadSharedPermit\(c\)/.test(conflictBranch)) {
+    failures.push("Un conflicto al guardar permisos no debe reescribir el estado y debe ofrecer cargar la versión actual (H-11).");
+  }
+  if (!/if\s*\(saved !== "ok"\)\s*\{/.test(permitCommit) ||
       !/permits\[c\.name\]\s*=\s*previous\.permit/.test(permitCommit) ||
       !/const rollbackSaved = await savePermits\(c\.name\)/.test(permitCommit) ||
       !/setCommitControlsDisabled\(true\)/.test(permitCommit) ||
