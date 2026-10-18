@@ -2,7 +2,7 @@
 
 Reglas de ejecución: ver `CLAUDE.md`. Cada fase termina con criterios de cierre explícitos y evidencia reproducible. Todo lo que escriba datos se prueba en un entorno aislado, nunca en producción.
 
-## Fase C. Pruebas E2E en navegador (EN CURSO)
+## Fase C. Pruebas E2E en navegador (CERRADA el 18/10/2026)
 
 **Entorno decidido el 18/10/2026:** proyecto Supabase aislado y gratuito `mapas-e2e` (las ramas no existen en el plan gratuito). Ver `ESTADO.md` y `docs/AUDITORIA_FASE_C_2026-10-18.md`. Texto original de la planificación:
 - Opción recomendada: rama aislada de Supabase (`create_branch`). Antes, pedir aprobación del coste al titular. Crear cuentas sintéticas (administrador, usuario de la provincia con equipo, usuario de otra provincia, usuario activo sin provincia, usuario desactivado) y datos sintéticos. Las claves de la rama no se escriben en ningún fichero del repositorio ni en informes.
@@ -24,7 +24,7 @@ Reglas de ejecución: ver `CLAUDE.md`. Cada fase termina con criterios de cierre
 
 **Criterios de cierre de la C:** todas las pruebas ejecutadas con resultado registrado en `docs/AUDITORIA_FASE_C_<fecha>.md`; cada fallo con ID, severidad y estado; H-11 cerrado o decisión escrita de aceptarlo; H-02 aplicado o decisión escrita; rama aislada eliminada al terminar (confirmar con el titular).
 
-## Fase D. Integridad, dependencias, accesibilidad, rendimiento
+## Fase D. Integridad, dependencias, accesibilidad, rendimiento (SIGUIENTE)
 
 Hecho: integridad del catálogo y del historial; dependencias fijadas con SRI; teclado del panel (H-05); auditoría XSS y de persistencia en CI.
 Pendiente:
