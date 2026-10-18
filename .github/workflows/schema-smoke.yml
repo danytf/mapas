@@ -137,6 +137,8 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261018002000_revoke_default_api_object_privileges.sql
       - name: Allow author nullification when a profile is deleted
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261018123313_allow_author_set_null_on_profile_delete.sql
+      - name: Create establishment state history
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261018140000_create_establishment_state_history.sql
       - name: Verify every migration file is applied by this workflow
         shell: bash
         run: |
@@ -150,5 +152,7 @@ jobs:
           exit $missing
       - name: Run schema, trigger, and RLS smoke tests
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/schema_smoke.sql
+      - name: Run establishment state history tests
+        run: psql -v ON_ERROR_STOP=1 -f supabase/tests/state_history.sql
       - name: Run exhaustive authorization matrix
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/rls_matrix.sql
