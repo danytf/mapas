@@ -11,7 +11,7 @@
 | C. Pruebas E2E en navegador | Cerrada el 18/10/2026 (`docs/AUDITORIA_FASE_C_2026-10-18.md`): 11 pruebas y arrastre del pin; H-02, H-11, H-13 y H-14 corregidos y desplegados; H-15 a H-20 pasan a la D |
 | D. Integridad, dependencias, accesibilidad, rendimiento | Cerrada el 18/10/2026 (`docs/AUDITORIA_FASE_D_2026-10-18.md`, `..._ACCESIBILIDAD_...` y `..._INDICES_...`): H-03, H-15 a H-23, H-26, H-27 y H-28 a H-35 corregidos y desplegados, H-36 informe; H-24 y H-25 aceptados por el titular. Sin probar: lectores de pantalla reales, zoom y objetivos táctiles |
 | E. Backup, restauración y despliegue | Cerrada el 19/10/2026 (`docs/AUDITORIA_FASE_E_2026-10-18.md`, `docs/import-export-backups.md`): H-37 y H-38 cerrados; restauración probada en un proyecto aislado (ya eliminado) con las 6 huellas y los recuentos idénticos a producción; plan gratuito aceptado (H-24) con copia mensual manual |
-| F. Informe final | Cerrada el 19/10/2026 (`docs/AUDITORIA_INFORME_FINAL_2026-10-19.md`); capas 8 y 10 parciales; privacidad y observabilidad no cubiertas (ver ROADMAP, «Auditorías futuras») |
+| F. Informe final | Cerrada el 19/10/2026 (`docs/AUDITORIA_INFORME_FINAL_2026-10-19.md`); capas 8 y 10 parciales; privacidad parcial (auditoría técnica del 19/10/2026) y observabilidad no cubierta (ver ROADMAP, «Auditorías futuras») |
 
 ## Producción (Supabase `wwoczmihhupofwmlmgga`)
 
