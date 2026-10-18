@@ -34,6 +34,14 @@ Referencia: [Supabase CLI — db dump](https://supabase.com/docs/reference/cli/s
 
 Protege la cadena de conexión y los archivos resultantes. No la pegues en el chat ni la guardes en el repositorio. Conserva los dumps en una ubicación privada cifrada, separada de GitHub y de Supabase. Los archivos pueden contener datos personales y operativos.
 
+## Procedimiento de copia mensual (decidido el 19/10/2026)
+
+- **Quién:** el titular, a mano, desde un ordenador de confianza. La cadena de conexión con la contraseña de la base no se comparte con asistentes ni se usa en GitHub Actions.
+- **Cuándo:** una vez al mes y siempre antes de aplicar una migración en producción. Si el uso crece, pasar a semanal.
+- **Cómo:** `export DB_URL='<cadena de conexión del panel de Supabase>'` y después `bash scripts/backup-supabase.sh`. Genera en `~/backups-mapas/<fecha>/` los ficheros `roles.sql`, `schema.sql` y `data.sql` más `SHA256SUMS`, y se niega a dar la copia por válida si algún fichero está vacío o no contiene `establishments`.
+- **Dónde guardarla:** un sitio privado y cifrado, fuera de GitHub y de Supabase; conservar al menos las 3 últimas.
+- **Estado:** el script se ha comprobado solo en sintaxis y en su comportamiento sin `DB_URL`. **No se ha ejecutado contra Supabase ni se ha restaurado una copia**: hasta la prueba de restauración (Fase E) no debe darse por buena. Puede requerir Docker según la versión de Supabase CLI.
+
 ## Restauración y verificación
 
 No pruebes una restauración sobre la base de datos usada por la aplicación. Restaura primero en un proyecto de desarrollo aislado y sigue la guía oficial compatible con los dumps generados: [Backup and restore using the CLI](https://supabase.com/docs/guides/platform/migrating-within-supabase/backup-restore).
