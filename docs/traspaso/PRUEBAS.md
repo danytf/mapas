@@ -27,5 +27,11 @@ Resultado esperado: `state_history: 29 comprobaciones correctas` y `Matriz RLS: 
 ## Comparar con producción
 `supabase/tools/schema_fingerprint.sql` devuelve conteo y huella MD5 de políticas, permisos, funciones, triggers y RLS. Ejecutarlo en local y, con el MCP de Supabase, en producción (excluyendo `rls_auto_enable` de las funciones públicas). Valores de referencia en la cabecera del fichero y en `ESTADO.md`.
 
+## E2E en navegador (Fase C)
+1. Proyecto Supabase aislado y vacío (nunca producción). Montar el esquema con `psql` en el orden de `schema-smoke.yml` (sin los dos primeros pasos, que simulan Supabase) y comparar huellas con `supabase/tools/schema_fingerprint.sql`.
+2. Definir `E2E_PW_ADMIN`, `E2E_PW_GRANADA`, `E2E_PW_GRANADA2`, `E2E_PW_ALMERIA`, `E2E_PW_SINPROVINCIA` y `E2E_PW_DESACTIVADO` y ejecutar `psql "<conexión>" -v ON_ERROR_STOP=1 -f supabase/e2e/seed_synthetic.sql`. Aborta si la base no está vacía o faltan las variables.
+3. Copia de `index.html` fuera del repositorio con `SUPABASE_URL` y `SUPABASE_KEY` del proyecto aislado, servida en `http://127.0.0.1:<puerto>/`.
+4. Guion de pruebas y resultados esperados: `docs/AUDITORIA_FASE_C_2026-10-18.md`.
+
 ## Control negativo de la matriz
 Reconstruir sin la migración `20261018123313_allow_author_set_null_on_profile_delete.sql`: la matriz debe fallar con 2 discrepancias.

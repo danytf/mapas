@@ -1,0 +1,48 @@
+# Auditoría Fase C: pruebas E2E en navegador (18/10/2026)
+
+Estado: **en curso**. Hechas las pruebas 1-8 y 11 del `docs/traspaso/ROADMAP.md`. Pendientes: 9 (H-11, cambia código y esquema), 10 (CSP, H-02) y la corrección de ubicación arrastrando el pin.
+
+## Entorno
+
+- Proyecto Supabase aislado `mapas-e2e` (`obqodndkzznrpuwxzbsi`, eu-west-1, plan gratuito, coste 0 confirmado por el titular en la página de facturación). Producción (`wwoczmihhupofwmlmgga`) solo recibió consultas de lectura.
+- Esquema montado con `psql` en el orden de `schema-smoke.yml`: 6 scripts de `supabase/bootstrap/`, las 25 migraciones y `supabase/seed/reference_catalog.sql`. Sin errores.
+- Huellas de `supabase/tools/schema_fingerprint.sql` calculadas el mismo día en la copia y en producción: idénticas en los 6 grupos (políticas 51 `7f65af3e66b1cc0f51ba20b862ce4911`, permisos de tabla 57 `374f58c4db66b7ed8bc4034aabe338d0`, funciones públicas 18 `ddb530f9f92332ad92c3c0a41bbf81f7`, funciones privadas 3 `de9d04b43f9034f456254727f36e3631`, triggers 33 `349b150dddfe9d5075d5f03f4977ab04`, tablas con RLS 17 `e9ad42c35b8f8fffae38deb31ec73e35`).
+- Datos sintéticos: 5 municipios; 22 puntos «[PRUEBA]» con calles inventadas (14 visibles en Granada, 6 en Almería, 1 archivado y 1 sin coordenadas); 6 cuentas `@e2e.mapas.test` con UUID fijos `e2e00000-0000-4000-8000-00000000000N`: administrador, Granada, Granada 2, Almería, sin provincia y desactivado. Contraseñas aleatorias guardadas fuera del repositorio. El guion de carga aborta si la base no está vacía.
+- Aplicación: copia temporal de `index.html` fuera del repositorio, idéntica salvo `SUPABASE_URL` y `SUPABASE_KEY` (líneas 2231-2232), servida en `http://127.0.0.1:8765/`. Navegador: Chrome con Claude in Chrome.
+- Fallos de red simulados sustituyendo `window.fetch` en la página (el cliente de Supabase resuelve `fetch` en cada llamada). Los diálogos nativos de confirmación se sustituyeron para registrar su texto y respuesta.
+
+## Resultados
+
+| # | Prueba | Resultado | Evidencia |
+|---|---|---|---|
+| 1 | Inicio y cierre de sesión; recarga | Supera | Entrar con Granada carga 14 puntos; todas las llamadas van a `obqodndkzznrpuwxzbsi` con 200. Recargar vuelve a pedir acceso. «Cerrar sesión» revoca las sesiones en el servidor (`auth.sessions` = 0 para esa cuenta) |
+| 2 | Carga del catálogo; fallo de lectura | Supera | Granada 14, Almería 6 (ninguno de Granada), administrador 20. Archivado y sin coordenadas nunca aparecen. Con la lectura de `establishments` devolviendo 500: no entra al mapa, 0 marcadores, sin datos locales |
+| 3 | Filtros y panel con teclado (H-05) | Supera | Categoría, estado del permiso, valoración, buscador y combinaciones: lista y marcadores correctos. No hay filtro de municipio; lo cubre el buscador. H-05: menú y «Panel resumen» solo con teclado; las 13 filas son botones alcanzables con Tab, foco visible (contorno 1,6 px rojo), Intro filtra por categoría y Espacio por municipio, y el panel se cierra |
+| 4 | Corrección de ubicación | Supera | Guardado normal: valor remoto, `updated_by` = usuario, 1 fila en `establishment_location_history`, 1 en `audit_log`; tras recargar se ve el valor remoto. Error 500: aviso y sin cambios. Sin respuesta: corta a los 15,1 s, aviso y sin cambios. Respuesta perdida tras escritura real: confirmada por la lectura posterior y correcta en la base |
+| 5 | Flujo de permisos | Supera | En un punto: 2 solicitudes, conceder una, denegar otra y cancelar la concesión (Solicitado, Concedido, Cancelado). En otros: Caducado, Denegado y Concedido vigente hoy. Filtro y KPI correctos (1 permiso vigente, 5 captadores hoy). 5 filas en `establishment_app_state_history`, que cuadran con las acciones. Granada 2 ve el mismo estado compartido |
+| 6 | Roles y provincias en la interfaz | Supera | Sin provincia: «Tu usuario no tiene provincias activas asignadas.». Desactivado: «Tu usuario no está activo o no tiene un perfil válido.». Tras el rechazo, la sesión queda revocada en el servidor. Almería lee 0 estados compartidos y su escritura sobre un punto de Granada recibe 403 `42501`. La interfaz no tiene funciones exclusivas de administrador aparte del alcance del catálogo |
+| 7 | Exportaciones; sin importador | Supera | CSV, JSON y copia al portapapeles: si se cancela la confirmación no se exporta nada; si se acepta se generan el CSV (15 filas), el JSON y la copia (15 puntos). No hay campo de fichero ni `FileReader`; `audit-persistence.mjs` lo confirma |
+| 8 | Persistencia en el navegador | Supera | Tras la sesión completa: `localStorage`, `sessionStorage`, IndexedDB, Cache Storage y cookies vacíos, 0 service workers, uso de almacenamiento 0 |
+| 11 | Resistencia | Supera con un fallo (H-15) | Guardado de permisos con red caída, red caída también en la comprobación, 401 «JWT expired» y error 400: aviso claro, sin dar el guardado por bueno y sin filas en la base. Doble clic en «Guardar cambios»: 1 escritura. Triple clic en «Guardar dirección y ubicación»: 3 escrituras (H-15) |
+
+## Hallazgos nuevos
+
+| ID | Sev. | Estado | Resumen | Evidencia |
+|---|---|---|---|---|
+| H-13 | P1 | Abierto | Los permisos de un punto personal («Agregar punto») no se guardan en Supabase, pero la app muestra «Guardado en Supabase». Al recargar se pierden. `savePermits` solo escribe puntos con `databaseId`; si no hay filas devuelve `true` (`index.html` 678-683) | Reproducido en la copia: punto personal con una solicitud, 0 filas nuevas en `establishment_app_state`, nada en `user_app_state` y, tras recargar, «Sin solicitar». En producción hay 0 puntos personales (lectura del 18/10), así que no hay datos perdidos |
+| H-14 | P2 | Abierto (latente) | El cliente indexa el estado de permisos por nombre del punto (`permits[c.name]`, `CENTERS.find(item => item.name === name)`), no por ID. Dos puntos con el mismo nombre compartirían o cruzarían su estado. La exportación JSON también usa el nombre como clave | Código: `index.html` 671-695 y 2331-2337. Producción: 0 nombres repetidos entre los puntos visibles (lectura del 18/10). Pendiente: reproducirlo en la copia |
+| H-15 | P3 | Abierto | «Guardar dirección y ubicación» no se bloquea mientras guarda: 3 clics rápidos generan 3 PATCH | 3 PATCH, 1 fila de historial (el trigger ignora los repetidos) y 3 filas en `audit_log` |
+| H-16 | P3 | Abierto | Mensajes de error: el aviso de tiempo agotado dice «17 segundos» y la espera real es de 27 s (`index.html` 1072 y 1085); al agotarse el tiempo se muestra «AbortError: The operation was aborted.» en lugar del texto en español previsto; si falla la carga del catálogo, se muestra el texto técnico del servidor | Pruebas 2 y 4 |
+| H-17 | P3 | Abierto | Usabilidad: una búsqueda sin resultados deja la lista vacía sin mensaje (`renderList`); la opción «★★★★★ (5)» del filtro de valoración parece un recuento; el CSV se llama siempre `permisos-captacion-granada.csv`, también para otras provincias | Prueba 3 y código |
+| H-18 | P3 | Abierto (Fase D) | Accesibilidad: el menú usa `role="menuitem"` pero no responde a las flechas, solo a Tab; al cerrar el «Panel resumen» el foco va al cuerpo de la página en vez de al botón de origen | Prueba 3 |
+| H-19 | P3 | Por investigar | Al iniciar sesión se envían dos `POST user_app_state` seguidos | Registro de red de la prueba 1 |
+
+Observaciones informativas, sin acción propuesta: recargar sin cerrar sesión deja viva la sesión anterior en el servidor hasta que caduca (el token solo estaba en memoria y se pierde). Chrome puede ofrecer guardar las credenciales de prueba de `127.0.0.1`; conviene borrarlas al terminar.
+
+## Pendiente en esta fase
+
+- 9. H-11: control de conflicto (diseño en `docs/traspaso/HALLAZGOS.md`). Requiere migración, prueba SQL, paso en `schema-smoke.yml`, cambio en `index.html` y prueba E2E con Granada y Granada 2. Antes de implementarlo se presenta el diseño al titular.
+- 10. H-02: CSP por `<meta>` con la política candidata y recorrido de los flujos con la consola abierta. Antes, comprobar las cabeceras reales de producción.
+- Corrección de ubicación arrastrando el pin («Mover pin»).
+- Correcciones de H-13 a H-17 (y H-18 en la Fase D), cada una con su prueba de regresión.
+- Al cerrar: eliminar `mapas-e2e` con confirmación del titular.

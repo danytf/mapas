@@ -2,10 +2,10 @@
 
 Reglas de ejecución: ver `CLAUDE.md`. Cada fase termina con criterios de cierre explícitos y evidencia reproducible. Todo lo que escriba datos se prueba en un entorno aislado, nunca en producción.
 
-## Fase C. Pruebas E2E en navegador (SIGUIENTE)
+## Fase C. Pruebas E2E en navegador (EN CURSO)
 
-**Antes de empezar (depende del titular):** decidir el entorno de pruebas.
-- Opción recomendada: rama aislada de Supabase (`create_branch`). Antes, consultar `get_cost` y `confirm_cost` y pedir aprobación del coste al titular. Crear cuentas sintéticas (administrador, usuario de la provincia con equipo, usuario de otra provincia, usuario activo sin provincia, usuario desactivado) y datos sintéticos. Las claves de la rama no se escriben en ningún fichero del repositorio ni en informes.
+**Entorno decidido el 18/10/2026:** proyecto Supabase aislado y gratuito `mapas-e2e` (las ramas no existen en el plan gratuito). Ver `ESTADO.md` y `docs/AUDITORIA_FASE_C_2026-10-18.md`. Texto original de la planificación:
+- Opción recomendada: rama aislada de Supabase (`create_branch`). Antes, pedir aprobación del coste al titular. Crear cuentas sintéticas (administrador, usuario de la provincia con equipo, usuario de otra provincia, usuario activo sin provincia, usuario desactivado) y datos sintéticos. Las claves de la rama no se escriben en ningún fichero del repositorio ni en informes.
 - Alternativa sin coste: Playwright con la red simulada (interceptar las llamadas a Supabase). Cubre la interfaz pero no RLS real; la autorización ya está cubierta por `rls_matrix.sql`.
 - Nunca usar las cuentas ni los datos reales para pruebas con escritura.
 

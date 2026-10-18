@@ -21,7 +21,7 @@ Estamos en una auditoría integral por fases A-F (ver `docs/traspaso/ROADMAP.md`
 - No eliminar índices, tablas, columnas, políticas ni funciones por intuición (incluidos los 23 índices sin uso). No activar FORCE RLS de forma indiscriminada.
 - No cambiar el comportamiento funcional sin necesidad demostrada y pruebas de regresión. No añadir funciones o pantallas sin necesidad real.
 - No cambiar la protección contra contraseñas filtradas sin autorización (aviso conocido y aceptado).
-- No crear recursos de pago ni tocar producción sin confirmar coste y permisos con el titular (en Supabase usar `get_cost` y `confirm_cost` antes de crear ramas o proyectos).
+- No crear recursos de pago ni tocar producción sin confirmar coste y permisos con el titular (en Supabase, `create_project` y `create_branch` presentan el coste al llamarlas; el MCP actual no tiene `get_cost`/`confirm_cost`. La organización está en plan gratuito, sin ramas).
 - No afirmar que un PR, prueba o despliegue existe o pasa sin haberlo verificado. No decir que falta CSP sin comprobar las cabeceras reales.
 - Si algo depende de su autorización, de credenciales que no tienes o de una prueba manual: déjalo identificado y sigue con lo independiente.
 
