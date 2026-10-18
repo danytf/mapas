@@ -44,6 +44,18 @@ Protege la cadena de conexión y los archivos resultantes. No la pegues en el ch
 
 ## Restauración y verificación
 
+**Primera prueba real (19/10/2026, proyecto temporal `mapas-restore-test`, copia de `pg_dump`):** los datos se restauraron completos (791 puntos, 3 estados compartidos, 3 perfiles, 856 filas de auditoría; esquema `schema.sql` en unos 10 s y datos en unos 3 s por la red del titular). Pero **la primera copia solo volcaba el schema `public`, y las políticas RLS dependen de funciones del schema `private`: la restauración dejó 0 políticas y RLS desactivado**. El script se corrigió para volcar también `private` y negarse a dar la copia por válida si falta. Además, `schema.sql` empieza con `CREATE SCHEMA public;`, que falla en un proyecto Supabase nuevo.
+
+Pasos de restauración con la copia de `pg_dump` (en un proyecto aislado, nunca sobre producción):
+
+```bash
+cd <carpeta de la copia>
+sed '/^CREATE SCHEMA public;$/d' schema.sql | psql "$NEW_URL" -v ON_ERROR_STOP=1 -q
+(echo "SET session_replication_role = replica;"; cat data.sql) | psql "$NEW_URL" -v ON_ERROR_STOP=1 -q
+```
+
+Después, comprobar las 6 huellas (`supabase/tools/schema_fingerprint.sql`) y los recuentos. Los usuarios de autenticación no van en esta copia.
+
 No pruebes una restauración sobre la base de datos usada por la aplicación. Restaura primero en un proyecto de desarrollo aislado y sigue la guía oficial compatible con los dumps generados: [Backup and restore using the CLI](https://supabase.com/docs/guides/platform/migrating-within-supabase/backup-restore).
 
 Después comprueba, como mínimo:
