@@ -674,6 +674,41 @@ const stableJson = (value) => {
   if (Array.isArray(value)) return "[" + value.map(stableJson).join(",") + "]";
   return "{" + Object.keys(value).sort().map(key => JSON.stringify(key) + ":" + stableJson(value[key])).join(",") + "}";
 };
+// Lee todas las filas de una consulta de Supabase por páginas (H-23). La API devuelve como mucho
+// «Max rows» filas por petición (1.000 en este proyecto) y lo hace sin avisar, así que una lectura sin
+// paginar con más filas que ese tope daría un mapa incompleto. Se pagina por clave (id mayor que el
+// último recibido), que aguanta cambios concurrentes, y no se supone que el tamaño de la página sea
+// el del servidor: se sigue hasta alcanzar el total que informa la primera respuesta. Si al terminar
+// faltan filas o hay un error, lanza una excepción: nunca devuelve una lista incompleta.
+// buildQuery() devuelve una consulta nueva (con select y filtros, sin orden ni límite).
+const fetchAllRows = async (buildQuery, keyColumn, pageSize = 1000, maxPages = 500) => {
+  const rows = [];
+  let lastKey = null;
+  let total = null;
+  for (let page = 0; page < maxPages; page++) {
+    let query = buildQuery(page === 0 ? { count: "exact" } : undefined).order(keyColumn, { ascending: true });
+    if (lastKey !== null) query = query.gt(keyColumn, lastKey);
+    const { data, error, count } = await query.limit(pageSize);
+    if (error) throw error;
+    if (!Array.isArray(data)) throw new Error("Supabase no devolvió una lista válida de filas.");
+    if (page === 0) {
+      if (!Number.isFinite(count)) throw new Error("Supabase no informó del total de filas; no se puede comprobar que la carga esté completa.");
+      total = count;
+    }
+    if (!data.length) break;
+    const newKey = data[data.length - 1]?.[keyColumn];
+    if (newKey === undefined || newKey === null || (lastKey !== null && !(newKey > lastKey))) {
+      throw new Error("La paginación no avanza: falta la clave de ordenación en la respuesta.");
+    }
+    for (const row of data) rows.push(row);
+    lastKey = newKey;
+    if (rows.length >= total) break;
+  }
+  if (rows.length < total) {
+    throw new Error("La carga está incompleta (" + rows.length + " de " + total + " filas). Recarga la página; si se repite, avisa al administrador.");
+  }
+  return rows;
+};
 // Guarda una fila del estado compartido solo si nadie la ha cambiado desde que se leyó (H-11):
 // UPDATE condicionado a la versión leída o INSERT si no había fila. Devuelve "ok", "conflict" o "error".
 const saveSharedPermitRow = async (client, userId, row) => {
@@ -2408,12 +2443,9 @@ renderList();
     delete loadedPersonalState.permits;
     permits = {};
     sharedPermitVersions = new Map();
-    const { data: sharedRows, error: sharedError } = await client
-      .from("establishment_app_state")
-      .select("establishment_id,province_id,state,version")
-      .limit(5000);
-    if (sharedError) throw sharedError;
-    if (!Array.isArray(sharedRows)) throw new Error("Supabase no devolvió el estado operativo compartido.");
+    const sharedRows = await fetchAllRows(
+      (opts) => client.from("establishment_app_state").select("establishment_id,province_id,state,version", opts),
+      "establishment_id");
     const byId = new Map(CENTERS.filter(c => c.databaseId).map(c => [c.databaseId, c]));
     sharedRows.forEach(row => {
       const c = byId.get(row.establishment_id);
@@ -2498,18 +2530,17 @@ renderList();
       }
 
       if (status) status.textContent = "Cargando establecimientos desde Supabase…";
-      let query = client
-        .from("establishments")
-        .select("id,province_id,name,address,latitude,longitude,location_precision,source_ref,status,subtype,categories(name),municipalities(name),provinces(name,code)")
-        .eq("status", "active")
-        .not("latitude", "is", null)
-        .not("longitude", "is", null)
-        .limit(5000);
-      if (!isAdmin) query = query.in("province_id", provinceIds);
-
-      const { data, error } = await query;
-      if (error) throw error;
-      if (!Array.isArray(data)) throw new Error("Supabase no devolvió una lista válida de establecimientos.");
+      // Carga paginada (H-23): la API limita cada petición a «Max rows» filas (1.000) sin avisar.
+      const data = await fetchAllRows((opts) => {
+        let query = client
+          .from("establishments")
+          .select("id,province_id,name,address,latitude,longitude,location_precision,source_ref,status,subtype,categories(name),municipalities(name),provinces(name,code)", opts)
+          .eq("status", "active")
+          .not("latitude", "is", null)
+          .not("longitude", "is", null);
+        if (!isAdmin) query = query.in("province_id", provinceIds);
+        return query;
+      }, "id");
 
       const seenIds = new Set();
       const rows = data.filter(row => {

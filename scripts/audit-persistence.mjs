@@ -151,6 +151,13 @@ if (permitWriteStart < 0 || permitWriteEnd < 0) {
 if (/from\("establishment_app_state"\)\s*\.upsert\(/.test(html)) {
   failures.push("No debe haber upsert ciego sobre establishment_app_state (H-11).");
 }
+// H-23: el catálogo y el estado compartido se leen paginados (la API recorta a «Max rows» sin avisar).
+if (/\.limit\(\d+\)/.test(html.replace(/await query\.limit\(pageSize\)/, "")) ||
+    !/const fetchAllRows = async/.test(html) ||
+    !/fetchAllRows\(\s*\(opts\) => client\.from\("establishment_app_state"\)\.select\("[^"]+", opts\),\s*"establishment_id"\)/.test(html) ||
+    !/fetchAllRows\(\(opts\) => \{[\s\S]{0,200}\.from\("establishments"\)[\s\S]{0,900}\}, "id"\)/.test(html)) {
+  failures.push("El catálogo y el estado compartido deben leerse con fetchAllRows (paginado por clave) y sin .limit(N) fijo (H-23).");
+}
 // H-14: el estado de permisos se indexa por una clave estable (ID de Supabase), nunca por el nombre.
 if (/permits\[c\.name\]|permits\[name\]|item\.name === name && item\.databaseId/.test(html) ||
     !/const permitKey = \(c\) => c\.databaseId \? "id:" \+ c\.databaseId : "custom:" \+ c\.name;/.test(html)) {

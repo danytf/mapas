@@ -9,6 +9,7 @@ node scripts/audit-cdn-integrity.mjs index.html
 node scripts/audit-csp.mjs index.html
 node scripts/audit-static-catalog.mjs index.html      # genera catalog-audit-output/ (ignorado por git)
 node scripts/test-shared-state-sanitizers.mjs
+node scripts/test-paged-fetch.mjs
 ```
 Cada una devuelve código distinto de cero si falla. `audit-a11y` y `audit-cdn-integrity` fallan en versiones anteriores a #81 y #80 (control negativo).
 
