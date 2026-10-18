@@ -8,15 +8,15 @@
 |---|---|
 | A. Reconstruir el estado real | Cerrada |
 | B. Seguridad y persistencia | Cerrada (H-11 aplazado a la C por decisión del titular) |
-| C. Pruebas E2E en navegador | **En curso**: pruebas 1-8 y 11 hechas (`docs/AUDITORIA_FASE_C_2026-10-18.md`); pendientes H-11 (diseño aprobado), H-02 (CSP) y las correcciones de H-13 a H-17 |
+| C. Pruebas E2E en navegador | **En curso**: 11 pruebas hechas (`docs/AUDITORIA_FASE_C_2026-10-18.md`); H-11 con migración en producción y cliente en PR; H-02 en PR; pendientes H-13 a H-17 |
 | D. Integridad, dependencias, accesibilidad, rendimiento | Parcial (ver ROADMAP) |
 | E. Backup, restauración y despliegue | Sin empezar |
 | F. Informe final | Sin empezar |
 
 ## Producción (Supabase `wwoczmihhupofwmlmgga`)
 
-- Migraciones: 25 registradas, última `20261018124030_create_establishment_state_history`. Coinciden una a una con `supabase/migrations/`.
-- Huellas del esquema público (comparables con `supabase/tools/schema_fingerprint.sql`): políticas 51 `7f65af3e`, permisos de tabla 57 `374f58c4`, funciones propias 18 `ddb530f9` (sin `rls_auto_enable`, función de la plataforma), funciones privadas 3 `de9d04b4`, triggers 33 `349b150d`, tablas con RLS 17 `e9ad42c3`.
+- Migraciones: 26 registradas, última `20261018145132_establishment_app_state_version` (H-11, aplicada el 18/10/2026). Coinciden una a una con `supabase/migrations/`.
+- Huellas del esquema público (comparables con `supabase/tools/schema_fingerprint.sql`): políticas 51 `7f65af3e`, permisos de tabla 57 `374f58c4`, funciones propias 19 `976fdf1e` (sin `rls_auto_enable`, función de la plataforma), funciones privadas 3 `de9d04b4`, triggers 34 `6d0afe68`, tablas con RLS 17 `e9ad42c3`.
 - 17 tablas, todas con RLS. Ninguna concede privilegios a `anon`.
 - Avisos del asesor de seguridad: solo "protección frente a contraseñas filtradas desactivada" (aceptado, no tocar).
 - Datos (consulta del 18/10/2026): 791 establecimientos, todos activos y con coordenadas; 3 perfiles (1 administrador); 2 filas de `user_provinces`; 2 filas de `establishment_app_state`; 3 de `user_app_state`; 0 en `permit_applications`, `permit_grants` y `followups` (el estado real de permisos vive en el JSONB de `establishment_app_state`); 856 filas de `audit_log`; 43 de `establishment_location_history`; 0 de `establishment_app_state_history` (aún no hubo sobrescrituras).
@@ -39,7 +39,7 @@
 
 ## Hallazgos
 
-Ver `HALLAZGOS.md`. Abiertos: H-11 (conflicto de escritura, P1, se hará en la Fase C), H-02 (CSP, P2, depende de pruebas en navegador), H-03 (P3, recomendación), H-09 (P3, aceptado), y la verificación manual de H-05 en producción.
+Ver `HALLAZGOS.md`. Abiertos: H-11 (P1, migración aplicada; cliente pendiente de fusionar), H-02 (P2, en PR), H-13 (P1), H-14 (P2), H-15 a H-19 (P3), H-03 (P3, recomendación) y H-09 (P3, aceptado). H-05 verificado en navegador.
 
 ## Entorno aislado de la Fase C
 
@@ -52,4 +52,4 @@ Ver `HALLAZGOS.md`. Abiertos: H-11 (conflicto de escritura, P1, se hará en la F
 
 - Verificado por el titular: protección de `main`; plan gratuito de la organización tras crear `mapas-e2e`.
 - Verificado en la Fase C con cuenta sintética: H-05 (teclado en el panel).
-- Pendiente de él: aprobar la migración de H-11 en producción y la fusión de los PR de la Fase C; confirmar la eliminación de `mapas-e2e` al terminar; borrar del gestor de contraseñas de Chrome las credenciales de prueba de `127.0.0.1` si las guardó.
+- Pendiente de él: fusionar los PR de H-11 y H-02 (migración de H-11 aprobada y aplicada el 18/10/2026); confirmar la eliminación de `mapas-e2e` al terminar; borrar del gestor de contraseñas de Chrome las credenciales de prueba de `127.0.0.1` si las guardó.

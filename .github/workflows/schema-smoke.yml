@@ -140,7 +140,7 @@ jobs:
       - name: Create establishment state history
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261018124030_create_establishment_state_history.sql
       - name: Add establishment state version for conflict control
-        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261018150000_establishment_app_state_version.sql
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261018145132_establishment_app_state_version.sql
       - name: Verify every migration file is applied by this workflow
         shell: bash
         run: |

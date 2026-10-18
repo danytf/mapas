@@ -42,14 +42,14 @@ Observaciones informativas, sin acción propuesta: recargar sin cerrar sesión d
 
 ## Corrección de H-11
 
-- Migración `supabase/migrations/20261018150000_establishment_app_state_version.sql` (nombre provisional: se renombra con la versión que registre Supabase al aplicarla en producción). Columna `version bigint NOT NULL DEFAULT 1` con `CHECK (version >= 1)` y trigger `BEFORE INSERT OR UPDATE` que la fija a 1 al crear y a la anterior + 1 al modificar; el cliente no puede fijarla. Compatible con la app publicada: su upsert sigue funcionando e incrementa la versión.
+- Migración `supabase/migrations/20261018145132_establishment_app_state_version.sql`, aplicada en producción el 18/10/2026 con aprobación del titular (versión registrada por Supabase: `20261018145132`). Antes de aplicarla: 25 migraciones y huellas sin cambios; después: 26 migraciones, funciones públicas 19 `976fdf1e7a5a27d87a1716be11bb8460` y triggers 34 `6d0afe68c1d04f67df988a84211ed563` (el resto igual), las 2 filas de estado en versión 1 y el asesor de seguridad solo con el aviso aceptado de contraseñas filtradas. Columna `version bigint NOT NULL DEFAULT 1` con `CHECK (version >= 1)` y trigger `BEFORE INSERT OR UPDATE` que la fija a 1 al crear y a la anterior + 1 al modificar; el cliente no puede fijarla. Compatible con la app publicada: su upsert sigue funcionando e incrementa la versión.
 - Cliente: `saveSharedPermitRow` guarda con `UPDATE ... eq("version", leída)` o con `INSERT` si no había fila; 0 filas o clave duplicada son conflicto. Una respuesta ambigua se resuelve leyendo la fila (éxito solo si el estado, la provincia y el autor coinciden y la versión es la leída + 1). Ante un conflicto, `commit()` no reescribe ni restaura: avisa y ofrece «Cargar la versión actual» (`reloadSharedPermit`). Lo escrito sigue en la ficha hasta recargar.
 - Pruebas: `supabase/tests/state_version.sql` (20 comprobaciones; paso nuevo en `schema-smoke.yml`); sin la migración falla. `scripts/audit-persistence.mjs` exige el guardado condicionado, prohíbe el upsert ciego sobre `establishment_app_state` y exige que la rama de conflicto no reescriba; con el `index.html` de `main` falla (control negativo). Reconstrucción local: humo, `state_history` (29), `state_version` (20) y matriz RLS (973 celdas, 0 discrepancias) en verde.
 - Huellas esperadas tras aplicar la migración (iguales en `mapas-e2e` y en la reconstrucción local): funciones públicas 19 `976fdf1e7a5a27d87a1716be11bb8460`, triggers 34 `6d0afe68c1d04f67df988a84211ed563`; el resto sin cambios.
 
 ## Pendiente en esta fase
 
-- H-11: aplicar la migración en producción (con aprobación del titular), renombrarla con la versión registrada, fusionar el PR y verificar en la URL pública.
+- H-11: migración ya aplicada en producción; falta fusionar el PR del cliente y verificar en la URL pública.
 - 10. H-02: CSP por `<meta>` con la política candidata y recorrido de los flujos con la consola abierta. Antes, comprobar las cabeceras reales de producción.
 - Corrección de ubicación arrastrando el pin («Mover pin»).
 - Correcciones de H-13 a H-17 (y H-18 en la Fase D), cada una con su prueba de regresión.
