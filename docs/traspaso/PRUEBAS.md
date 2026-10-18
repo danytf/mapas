@@ -13,6 +13,7 @@ node scripts/test-paged-fetch.mjs
 node scripts/test-multiprovince.mjs
 node scripts/test-ui-fixes.mjs
 node scripts/test-list-performance.mjs
+node scripts/test-a11y-fase-d.mjs index.html          # contraste WCAG AA claro/oscuro, nombres, aria-live y foco (Fase D)
 ```
 Cada una devuelve código distinto de cero si falla. `audit-a11y` y `audit-cdn-integrity` fallan en versiones anteriores a #81 y #80 (control negativo).
 
