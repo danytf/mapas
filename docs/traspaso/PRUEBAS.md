@@ -6,6 +6,7 @@ node scripts/audit-persistence.mjs index.html
 node scripts/audit-xss.mjs index.html
 node scripts/audit-a11y.mjs index.html
 node scripts/audit-cdn-integrity.mjs index.html
+node scripts/audit-csp.mjs index.html
 node scripts/audit-static-catalog.mjs index.html      # genera catalog-audit-output/ (ignorado por git)
 node scripts/test-shared-state-sanitizers.mjs
 ```

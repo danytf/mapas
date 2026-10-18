@@ -13,6 +13,7 @@ on:
       - "scripts/audit-xss.mjs"
       - "scripts/audit-a11y.mjs"
       - "scripts/audit-cdn-integrity.mjs"
+      - "scripts/audit-csp.mjs"
       - ".github/workflows/audit-static-catalog.yml"
   pull_request:
   workflow_dispatch:
@@ -46,6 +47,10 @@ jobs:
         run: |
           node --check scripts/audit-cdn-integrity.mjs
           node scripts/audit-cdn-integrity.mjs index.html
+      - name: Check Content-Security-Policy covers every origin in use
+        run: |
+          node --check scripts/audit-csp.mjs
+          node scripts/audit-csp.mjs index.html
       - name: Check inline JavaScript syntax in index.html
         shell: bash
         run: |
