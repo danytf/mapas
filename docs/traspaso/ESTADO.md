@@ -1,6 +1,6 @@
 # Estado del proyecto a 18/10/2026 (traspaso a Visual Studio Code)
 
-`main` en `10d5743`. Todo lo descrito está fusionado, desplegado y verificado salvo lo marcado como pendiente. Evidencias detalladas: `docs/AUDITORIA_FASE_B_2026-10-18.md`, `docs/CIERRE_FASE_B_2026-10-18.md`, `docs/CIERRE_AUDITORIA_FASES_1_2_2026-10-18.md`.
+`main` en `c978e61`. Todo lo descrito está fusionado, desplegado y verificado salvo lo marcado como pendiente. Evidencias detalladas: `docs/AUDITORIA_FASE_B_2026-10-18.md`, `docs/CIERRE_FASE_B_2026-10-18.md`, `docs/CIERRE_AUDITORIA_FASES_1_2_2026-10-18.md`.
 
 ## Fases
 
@@ -8,8 +8,8 @@
 |---|---|
 | A. Reconstruir el estado real | Cerrada |
 | B. Seguridad y persistencia | Cerrada (H-11 aplazado a la C por decisión del titular) |
-| C. Pruebas E2E en navegador | **Pendiente solo de cierre**: 11 pruebas y arrastre del pin hechos (`docs/AUDITORIA_FASE_C_2026-10-18.md`); H-11 (PR #89) y H-02 (PR #90) desplegados y verificados; H-13 y H-14 corregidos en PR; falta eliminar `mapas-e2e`. H-15 a H-20 pasan a la Fase D |
-| D. Integridad, dependencias, accesibilidad, rendimiento | Parcial (ver ROADMAP) |
+| C. Pruebas E2E en navegador | Cerrada el 18/10/2026 (`docs/AUDITORIA_FASE_C_2026-10-18.md`): 11 pruebas y arrastre del pin; H-02, H-11, H-13 y H-14 corregidos y desplegados; H-15 a H-20 pasan a la D |
+| D. Integridad, dependencias, accesibilidad, rendimiento | **Siguiente**. Parcial (ver ROADMAP), con los hallazgos aplazados de la C |
 | E. Backup, restauración y despliegue | Sin empezar |
 | F. Informe final | Sin empezar |
 
@@ -35,21 +35,19 @@
 - Workflows: `audit-static-catalog.yml` (job `audit`), `schema-smoke.yml` (job `postgres-smoke`, PostgreSQL 17: reconstruye el esquema, humo, historial y matriz RLS, y comprueba que toda migración está aplicada), `default-function-acl.yml`, `deploy-pages.yml`.
 - Protección de `main` verificada por el titular el 18/10/2026 (ver CLAUDE.md).
 - PR fusionados el 18/10/2026: #79 matriz RLS y baja de autores (H-10), #82 historial del estado compartido (H-12), #80 SRI y versiones fijas (H-01), #81 teclado en el panel (H-05), #83-#85 documentación. Antes: #78 consolidación de evidencias de las fases 1 y 2.
-- Pruebas: matriz RLS 973 celdas, 0 discrepancias, 781 denegaciones comprobadas; historial 29 comprobaciones; auditorías estáticas en verde.
+- Fase C (18/10/2026): #88 informe y datos sintéticos, #89 control de conflicto (H-11), #90 CSP (H-02), #91 permisos por ID y puntos personales (H-13, H-14).
+- Pruebas: matriz RLS 973 celdas, 0 discrepancias, 781 denegaciones comprobadas; historial 29 comprobaciones; control de versión 20 comprobaciones; auditorías estáticas (incluida `audit-csp.mjs`) en verde.
 
 ## Hallazgos
 
-Ver `HALLAZGOS.md`. Cerrados en la Fase C: H-02, H-11 y H-05 (verificado). Corregidos en PR: H-13 (P1) y H-14 (P2). Abiertos para la Fase D: H-15 a H-18 (P3), H-19 (P3, por investigar) y H-20 (P2, latente). Además: H-03 (P3, recomendación), H-08 (Fase E) y H-09 (P3, aceptado).
+Ver `HALLAZGOS.md`. Cerrados en la Fase C: H-02, H-11, H-13, H-14 y H-05 (verificado). Abiertos para la Fase D: H-15 a H-18 (P3), H-19 (P3, por investigar) y H-20 (P2, latente). Además: H-03 (P3, recomendación), H-08 (Fase E) y H-09 (P3, aceptado).
 
 ## Entorno aislado de la Fase C
 
-- Proyecto Supabase `mapas-e2e` (`obqodndkzznrpuwxzbsi`, eu-west-1), creado el 18/10/2026 en la organización Wesser (plan gratuito, coste 0 confirmado por el titular). Las ramas de Supabase no están disponibles en el plan gratuito y el MCP no ofrece `get_cost`/`confirm_cost`: el coste lo presenta `create_project`/`create_branch` al llamarlas.
-- Esquema montado con `psql` desde el repositorio y huellas idénticas a producción (6 de 6). Datos sintéticos de `supabase/e2e/seed_synthetic.sql`.
-- Acceso del equipo del titular: `psql` por el pooler de sesión (`aws-0-eu-west-1.pooler.supabase.com:5432`, usuario `postgres.obqodndkzznrpuwxzbsi`) con la contraseña en `%APPDATA%\postgresql\pgpass.conf` (fuera del repositorio). Las contraseñas de las cuentas sintéticas están fuera del repositorio.
-- Se elimina al cerrar la Fase C, con confirmación del titular.
+- Proyecto Supabase `mapas-e2e` (`obqodndkzznrpuwxzbsi`), creado el 18/10/2026 en plan gratuito y eliminado por el titular el mismo día al cerrar la fase. Para repetir las pruebas: `docs/traspaso/PRUEBAS.md` (sección E2E) y `supabase/e2e/seed_synthetic.sql`. Las ramas de Supabase no existen en el plan gratuito y el MCP no ofrece `get_cost`/`confirm_cost`: el coste lo presenta `create_project`/`create_branch` al llamarlas.
 
 ## Cosas verificadas por el titular o que dependen de él
 
 - Verificado por el titular: protección de `main`; plan gratuito de la organización tras crear `mapas-e2e`.
 - Verificado en la Fase C con cuenta sintética: H-05 (teclado en el panel). Verificado con la sesión del titular en producción (solo lectura): H-11 y H-02.
-- Pendiente de él: fusionar el PR de H-13/H-14; confirmar la eliminación de `mapas-e2e`; borrar del gestor de contraseñas de Chrome las credenciales de prueba de `127.0.0.1` si las guardó.
+- Pendiente de él (limpieza local tras la Fase C): quitar los permisos temporales de `.claude/settings.local.json`, borrar `%APPDATA%\postgresql\pgpass.conf` (contraseña del proyecto ya eliminado); borrar del gestor de contraseñas de Chrome las credenciales de prueba de `127.0.0.1` si las guardó.

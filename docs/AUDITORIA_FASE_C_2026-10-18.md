@@ -1,6 +1,6 @@
 # Auditoría Fase C: pruebas E2E en navegador (18/10/2026)
 
-Estado: **pendiente solo de cierre** (fusionar el PR de H-13/H-14 y eliminar `mapas-e2e`). Hechas las 11 pruebas del `docs/traspaso/ROADMAP.md` y la corrección de ubicación arrastrando el pin. H-11 (PR #89) y H-02 (PR #90) corregidos, desplegados y verificados en producción.
+Estado: **cerrada el 18/10/2026**. Hechas las 11 pruebas del `docs/traspaso/ROADMAP.md` y la corrección de ubicación arrastrando el pin. H-02 (PR #90), H-11 (PR #89), H-13 y H-14 (PR #91) corregidos y desplegados; H-02 y H-11 verificados además con la sesión del titular en producción. Entorno aislado eliminado.
 
 ## Entorno
 
@@ -66,8 +66,16 @@ Observaciones informativas, sin acción propuesta: recargar sin cerrar sesión d
 
 Supera. «Gimnasio Zeta» (Granada): «Mover pin» y arrastre real con el ratón; aviso «Ubicación guardada en Supabase: 37.181914, -3.614840»; en la base, esas coordenadas, precisión `verified`, autor el usuario Granada y 1 fila de historial.
 
-## Pendiente para cerrar la fase
+## Cierre (18/10/2026)
 
-- Fusionar el PR de H-13/H-14 y verificar en la URL pública.
-- Eliminar `mapas-e2e` con confirmación del titular.
-- H-15 a H-18 y H-20 pasan a la Fase D por decisión del titular (18/10/2026); H-19 queda por investigar en la Fase D.
+Criterios de cierre del ROADMAP:
+
+- Todas las pruebas ejecutadas con resultado registrado: las 11 y el arrastre del pin (este documento).
+- Cada fallo con ID, severidad y estado: H-13 a H-20 en `docs/traspaso/HALLAZGOS.md`.
+- H-11 cerrado: PR #89 y migración `20261018145132`.
+- H-02 aplicado: PR #90.
+- Entorno aislado eliminado: el titular borró `mapas-e2e` y `list_projects` solo devuelve `mapas-dev`.
+
+PR #91 (H-13 y H-14) fusionado y desplegado: la URL pública sirve el `index.html` de `main` (mismo SHA-256, commit `c978e61`) y carga sin errores ni violaciones de la CSP antes de iniciar sesión. No se verificó con sesión en producción: el cambio solo afecta al guardado, probado en el entorno aislado, y no se escriben datos reales para pruebas.
+
+Pasan a la Fase D por decisión del titular: H-15 a H-18 y H-20; H-19 queda por investigar.
