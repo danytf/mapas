@@ -5,7 +5,7 @@ Formato exigido por el titular para cada hallazgo: ID, capa, severidad P0-P3, es
 | ID | Sev. | Estado | Resumen | Regresión |
 |---|---|---|---|---|
 | H-01 | P1 | Cerrado (PR #80) | Recursos de CDN sin versión fija ni SRI. Ahora 6 recursos con versión exacta, sha384 y `crossorigin`; hash correcto aceptado y alterado rechazado en navegador | `scripts/audit-cdn-integrity.mjs` en CI |
-| H-02 | P2 | **Abierto** | Sin CSP. Solo es posible por `<meta>` en GitHub Pages. Hay política candidata calculada con los orígenes reales; requiere probarla en navegador con sesión (mapas, geocodificación, exportación, importación) | Por crear en la Fase C |
+| H-02 | P2 | **Corregido en `security/h-02-csp`, pendiente de desplegar** | Sin CSP (comprobado con las cabeceras reales el 18/10: solo HSTS). Política por `<meta>` como primer elemento de `<head>`; probada en navegador con sesión en todos los flujos: 0 violaciones, y control positivo de bloqueo. Mantiene `'unsafe-inline'` (scripts y estilos en línea) | `scripts/audit-csp.mjs` en CI |
 | H-03 | P3 | Abierto (recomendación) | `set_updated_at` tiene `search_path=public`; no se cambia sin necesidad demostrada | Huellas del esquema |
 | H-04 | P3 | Cerrado por decisión | Usuarios con provincia pueden modificar (no borrar) solicitudes, concesiones y seguimientos de otros usuarios de su provincia. Se mantiene | `rls_matrix.sql` |
 | H-05 | P2 | Cerrado (PR #81) y verificado en navegador el 18/10/2026 | Filas del panel de estadísticas solo operables con ratón. Ahora llevan botón nativo. Verificado solo con teclado: Tab llega a las 13 filas, foco visible, Intro y Espacio filtran (Fase C, prueba 3) | `scripts/audit-a11y.mjs` en CI |
