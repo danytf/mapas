@@ -2,18 +2,20 @@
 // Imita lo mínimo de GoTrue y PostgREST que usa la app, con datos sintéticos de varias provincias, y un
 // Nominatim simulado que registra las peticiones. Puerto 8766, estado en memoria. Uso: node scripts/dev/mock-supabase.mjs
 // Usuarios (contraseña «x»): multi@test.es (Granada y Almería), alm@test.es (Almería), vacio@test.es (Jaén, sin puntos), admin@test.es.
-// Utilidades: GET /__log (peticiones registradas), GET /__state (estado), GET /__reset.
+// Utilidades: GET /__log (peticiones registradas), GET /__state (estado), GET /__reset (opcional ?n=<puntos>&estados=1).
 import { createServer } from "node:http";
 
 const PORT = 8766;
 const id = (n) => "00000000-0000-4000-8000-" + String(n).padStart(12, "0");
 const b64 = (o) => Buffer.from(JSON.stringify(o)).toString("base64url");
 
-const provinces = [
-  { id: id(901), code: "18", name: "Granada", is_active: true },
-  { id: id(902), code: "04", name: "Almería", is_active: true },
-  { id: id(903), code: "23", name: "Jaén", is_active: true }
-];
+// Prueba de volumen: MOCK_POINTS=<n> (o GET /__reset?n=<n>) genera n puntos sintéticos y reproducibles repartidos por
+// las 52 provincias, en lugar de los 7 de ejemplo. Granada (18) y Almería (04) conservan su nombre.
+const NOMBRES = { "18": "Granada", "04": "Almería", "23": "Jaén" };
+const provinces = Array.from({ length: 52 }, (_, i) => {
+  const code = String(i + 1).padStart(2, "0");
+  return { id: id(900 + i + 1), code, name: NOMBRES[code] || "Provincia " + code, is_active: true };
+});
 const P = (code) => provinces.find((p) => p.code === code);
 const users = {
   "multi@test.es": { id: id(1), role: "user", provinces: ["18", "04"] },
@@ -30,8 +32,38 @@ const seedPoints = [
   ["Centro comercial", "CC Vera", "04", "Vera", "Calle Ficticia 12", 37.2500, -1.8600],
   ["Tiendas", "Tienda El Ejido", "04", "El Ejido", "Calle Ficticia 13", 36.7760, -2.8140]
 ];
-const freshState = () => ({
-  establishments: seedPoints.map(([cat, name, code, muni, addr, lat, lon], i) => ({
+const CATEGORIAS = ["Hospital", "Centro de salud", "Supermercado", "Centro comercial", "Entidad oficial", "Gimnasios", "Correos", "Bricolaje", "Estaciones", "Tiendas"];
+function generados(n) {
+  let semilla = 12345;
+  const azar = () => { semilla = (semilla * 1103515245 + 12345) % 2147483648; return semilla / 2147483648; };
+  return Array.from({ length: n }, (_, i) => {
+    const p = provinces[i % provinces.length];
+    return {
+      id: id(100000 + i), province_id: p.id, name: "Punto sintético " + (i + 1), address: "Calle Ficticia " + (i % 300) + ", Municipio " + p.code + "-" + (i % 40),
+      latitude: +(36.0 + azar() * 7.5).toFixed(6), longitude: +(-9.0 + azar() * 12.5).toFixed(6),
+      location_precision: i % 7 === 0 ? "approximate" : "address", source_ref: "vol-" + i, status: "active", subtype: null,
+      categories: { name: CATEGORIAS[i % CATEGORIAS.length] }, municipalities: { name: "Municipio " + p.code + "-" + (i % 40) }, provinces: { name: p.name, code: p.code }
+    };
+  });
+}
+// Estados de permisos sintéticos (GET /__reset?estados=1 o MOCK_STATES=1): uno de cada diez puntos tiene estado:
+// con seguimiento atrasado, con concesión que caduca en 10 días o con concesión vigente a 90 días.
+const dia = (d) => new Date(Date.now() + d * 864e5).toISOString().slice(0, 10);
+function estadosDe(establishments) {
+  const filas = [];
+  establishments.forEach((e, i) => {
+    if (i % 10 !== 0) return;
+    const patron = (i / 10) % 3;
+    const state = patron === 0
+      ? { estado: "solicitado", fecha: dia(-1), solicitudes: [{ desde: dia(5), hasta: dia(15), fecha: dia(-1), captadores: 2, ong: "ONG Mock", seg: dia(-1) }] }
+      : { estado: "concedido", fecha: dia(-20), historial: [{ desde: dia(-5), hasta: dia(patron === 1 ? 10 : 90), captadores: 3, ong: "ONG Mock" }] };
+    filas.push({ establishment_id: e.id, province_id: e.province_id, state, version: 1 });
+  });
+  return filas;
+}
+const freshState = (n = Number(process.env.MOCK_POINTS || 0), conEstados = process.env.MOCK_STATES === "1") => ({
+  conEstados,
+  establishments: n > 0 ? generados(n) : seedPoints.map(([cat, name, code, muni, addr, lat, lon], i) => ({
     id: id(100 + i), province_id: P(code).id, name, address: addr, latitude: lat, longitude: lon,
     location_precision: "address", source_ref: "mock-" + i, status: "active", subtype: null,
     categories: { name: cat }, municipalities: { name: muni }, provinces: { name: P(code).name, code }
@@ -83,7 +115,7 @@ createServer(async (req, res) => {
   // Utilidades de prueba.
   if (path === "/__log") return send(res, 200, S.log);
   if (path === "/__state") return send(res, 200, { userState: S.userState, establishments: S.establishments });
-  if (path === "/__reset") { S = freshState(); return send(res, 200, { ok: true }); }
+  if (path === "/__reset") { const n = url.searchParams.get("n"); const e = url.searchParams.get("estados"); S = freshState(n === null ? undefined : Number(n), e === null ? undefined : e === "1"); return send(res, 200, { ok: true, puntos: S.establishments.length, estados: S.conEstados }); }
 
   // Nominatim simulado: registra la petición y responde en el centro del área pedida (o en Madrid).
   if (path === "/nominatim/search") {
@@ -143,7 +175,10 @@ createServer(async (req, res) => {
       if (req.method === "GET") { const st = S.userState[u.id]; return reply(applyFilters(st ? [{ user_id: u.id, state: st }] : [], url.searchParams)); }
       S.userState[u.id] = body.state; return send(res, 201);
     }
-    if (table === "establishment_app_state") return reply([]);
+    if (table === "establishment_app_state") {
+      const visibles = new Set((u.role === "admin" ? S.establishments : S.establishments.filter((e) => u.provinces.some((c) => P(c).id === e.province_id))).map((e) => e.id));
+      return reply(S.conEstados ? applyFilters(estadosDe(S.establishments).filter((r) => visibles.has(r.establishment_id)), url.searchParams) : []);
+    }
     return send(res, 404, { code: "MOCK404", message: "tabla no simulada: " + table });
   }
   return send(res, 404, { message: "ruta no simulada: " + path });

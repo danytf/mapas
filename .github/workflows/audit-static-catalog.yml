@@ -17,6 +17,7 @@ on:
       - "scripts/test-paged-fetch.mjs"
       - "scripts/test-multiprovince.mjs"
       - "scripts/test-ui-fixes.mjs"
+      - "scripts/test-list-performance.mjs"
       - ".github/workflows/audit-static-catalog.yml"
   pull_request:
   workflow_dispatch:
@@ -48,6 +49,8 @@ jobs:
         run: node scripts/test-multiprovince.mjs
       - name: Test UI fixes (error messages, location save guard, menu keyboard)
         run: node scripts/test-ui-fixes.mjs
+      - name: Test list and marker performance with many points
+        run: node scripts/test-list-performance.mjs
       - name: Run XSS regression audit
         run: node scripts/audit-xss.mjs index.html
       - name: Check keyboard access to statistics panel rows

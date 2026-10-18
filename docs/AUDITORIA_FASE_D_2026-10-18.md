@@ -94,3 +94,45 @@ Verificación de que la regla no cambia:
 Producción tras aplicarla: 28 migraciones; solo cambian la huella de políticas (51, `f12aa1807b8a71c454a6854adb378ebc`) y la de funciones privadas (4, `8c6f87f46800ea447b7a26217f409509`), ambas iguales que en la reconstrucción local; permisos, funciones públicas, triggers y RLS sin cambios; 791 puntos y 2 estados sin cambios; la función nueva no es ejecutable por `anon` y sí por `authenticated`; el asesor de seguridad solo muestra el aviso aceptado de contraseñas filtradas y el de rendimiento solo avisos informativos de índices sin uso (21). Con el rol `authenticated` simulado dentro de una transacción que se deshace, en el Supabase real: el administrador real ve 791 puntos y 2 estados, y un usuario no administrador real con provincia asignada ve 791 y 2.
 
 Límites de la medición: es PostgreSQL local, no el servidor de Supabase (más pequeño, así que los tiempos absolutos serían mayores; el factor de mejora es el relevante), y no incluye PostgREST ni la red. Queda pendiente la parte del navegador con 50.000 puntos (carga, lista, marcadores y filtros), que también puede hacerse sin proyecto con el Supabase simulado.
+
+## H-27 y prueba de volumen en el navegador (PR #100)
+
+Se hizo **sin crear ningún proyecto de Supabase**: la app real en Chrome contra el Supabase simulado (`scripts/dev/mock-supabase.mjs`, que ahora genera N puntos sintéticos reproducibles en las 52 provincias con `GET /__reset?n=<puntos>&estados=1` y los entrega paginados de 1.000 en 1.000 con el recuento exacto, como la API real). Usuario administrador, que carga todos los puntos. Guiones reutilizables: `scripts/dev/measure-load.js` y `scripts/dev/list-scenarios.js`.
+
+Medición con el código anterior (el de `main` antes de este PR):
+
+| Puntos | Hasta el mapa | `renderList` | Marcadores (`makeMarker`, `cluster.addLayer`) | `refreshSelects` | Filtro de categoría / búsqueda |
+|---|---|---|---|---|---|
+| 5.000 | 6,4 s | 3,9 s | 1,8 s (1,7 s) | 0,4 s | 0,5 s / 0,8 s |
+| 10.000 | 20,4 s | **16,5 s** (×4,2) | 3,1 s (2,8 s) | 0,7 s | |
+| 20.000 | **75,5 s** (una sola tarea que congela la página 75 s, más otra de 8 s) | | | | |
+
+Con 5.000 puntos la página ya se congelaba 6,3 s. Duplicar los puntos multiplicaba `renderList` por 4 (coste cuadrático) y 20.000 puntos dejaban la página congelada más de un minuto; 50.000 eran inviables (extrapolación, no medido: varios minutos). Marcadores y selectores crecían de forma lineal.
+
+Causas:
+1. `renderList`: para agrupar los puntos con seguimiento y los que caducan en 30 días buscaba el punto de cada elemento con `CENTERS.find((x) => x.id === +li.dataset.id)`, una búsqueda lineal que además lee `dataset` del DOM en cada comparación: n² lecturas del DOM.
+2. Los marcadores se añadían al agrupador uno a uno (`cluster.addLayer`, unos 0,3 ms cada uno) y, en cada filtro, se quitaban y añadían uno a uno.
+3. Se dibujaba la lista entera (un elemento del DOM por punto) con cada filtro o letra de la búsqueda: con 5.000 puntos, 37.651 nodos.
+4. Menor: `normalizePersonalRefs` recorría todos los puntos por cada referencia (3.553 ms con 50.000 puntos y 3.000 referencias).
+
+Corrección (solo `index.html`):
+- `renderList` filtra una vez, calcula los grupos sobre los datos y no sobre el DOM, y añade y quita los marcadores en bloque (`cluster.addLayers` y `cluster.removeLayers`).
+- Los marcadores nuevos se crean y añaden en bloque (`makeMarkers`).
+- La lista lateral dibuja como máximo 300 puntos y un pie «Mostrando 300 de N puntos. [Mostrar 600 más]». La primera página vuelve cuando cambian la búsqueda o los filtros. Los grupos («Seguimientos de hoy o atrasados», «Caducan en 30 días», «Resto de puntos») se siguen calculando sobre todos los puntos visibles y sus contadores son los totales. Si se pulsa en el mapa el marcador de un punto que no está dibujado, la lista se amplía hasta incluirlo y lo marca como activo. Con 300 puntos o menos, la lista es idéntica a la de antes.
+- `normalizePersonalRefs` usa índices por nombre y por referencia (3.553 ms → 23 ms).
+
+Medición con el código nuevo:
+
+| Puntos | Hasta el mapa | `renderList` (2 llamadas) | Marcadores (`addLayers`) | `refreshSelects` (2 llamadas) | Filtro de categoría / búsqueda | Nodos DOM | Memoria | Tarea más larga |
+|---|---|---|---|---|---|---|---|---|
+| 5.000 | **0,35 s** (antes 6,4 s) | 13 ms | 121 ms (89 ms) | 178 ms | 37 ms / 37 ms | 3.393 | 47 MB | 238 ms |
+| **50.000** | **3,9 s** (50 peticiones) | 63 ms | 567 ms (343 ms) | 1,8 s | 176 ms / 286 ms | 3.393 | 177 MB | 1,6 s |
+
+Descarga: unos 38 KB con gzip por cada 1.000 puntos (423 KB sin comprimir), es decir, unos 1 MB con gzip (20 MB sin comprimir) para 50.000 puntos con las columnas que pide la app.
+
+Verificación de que no cambia lo que se ve:
+- Con 250 puntos con estados de permisos (grupos incluidos), 9 escenarios (sin filtros, categoría, búsqueda, estado solicitado, estado concedido, orden por valoración, «por revisar», «seguimiento» y vuelta a la base) dan el mismo número de elementos y el **mismo HTML, byte a byte**, en la versión anterior y en la nueva.
+- Con 2.000 puntos con estados: los grupos muestran los totales (67, 67 y 1.866); «Mostrar más» amplía a 900; un filtro devuelve a la primera página y con 200 resultados no hay pie; el marcador de un punto fuera de la primera página amplía la lista (304 → 2.003 elementos) y lo marca activo. Con teclado real, Intro sobre «Mostrar más» amplía a 900 puntos y el foco pasa al primer punto añadido (el botón desaparece al redibujar). 0 violaciones de CSP.
+- `scripts/test-list-performance.mjs` (nuevo, en CI): equivalencia de `normalizePersonalRefs` con la versión anterior en 8 entradas, coste con 50.000 puntos y 3.000 referencias (23 ms; con `main` falla con 3.553 ms) y que no vuelven los patrones lentos.
+
+Límites: es el navegador de la máquina de pruebas contra un simulador local, no el servidor real ni la red; no se midió el uso de varios usuarios a la vez. Lo más pesado que queda con 50.000 puntos es `refreshSelects` (1,8 s, lineal) y la memoria (177 MB); si el administrador necesitara menos, cabría cargar por provincia (decisión de producto, no necesaria hoy). En producción hoy hay 791 puntos: el cambio no se nota, y la lista es idéntica porque no llega a 300.

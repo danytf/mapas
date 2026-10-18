@@ -71,6 +71,7 @@ node scripts/test-shared-state-sanitizers.mjs
 node scripts/test-paged-fetch.mjs
 node scripts/test-multiprovince.mjs
 node scripts/test-ui-fixes.mjs
+node scripts/test-list-performance.mjs
 ```
 
 Pruebas SQL: ver `docs/traspaso/PRUEBAS.md`. Un cambio de esquema exige migración + prueba + paso en `schema-smoke.yml`.
