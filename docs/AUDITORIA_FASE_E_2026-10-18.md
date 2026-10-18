@@ -1,6 +1,6 @@
 # Fase E: copias de seguridad, restauración y despliegue (parcial, 18/10/2026)
 
-Estado: empezada. Hecho lo que no necesita aprobación del titular. **Pendiente: la prueba de restauración**, que exige un proyecto Supabase aislado (confirmar coste antes de crearlo).
+Estado: **cerrada el 19/10/2026**. La restauración se probó tres veces en un proyecto aislado (`mapas-restore-test`, plan gratuito, sin coste, eliminado después); la tercera dio las 6 huellas y los recuentos idénticos a producción. Detalle de la prueba y procedimiento en `docs/import-export-backups.md` y H-38 en `HALLAZGOS.md`.
 
 ## 1. Cobertura de copia del plan de Supabase (H-24)
 
@@ -12,16 +12,17 @@ Estado: empezada. Hecho lo que no necesita aprobación del titular. **Pendiente:
 
 ## 2. Prueba de restauración
 
-No hecha. Requiere un volcado real de producción y un proyecto vacío (crearlo implica coste o límite del plan gratuito: confirmar con el titular). Plan propuesto: volcar a un fichero local protegido, crear un proyecto aislado, restaurar, comparar con las 6 huellas de `supabase/tools/schema_fingerprint.sql`, los recuentos (791 puntos, 2 estados, 856 filas de auditoría) y repasar qué se pierde (usuarios de `auth` y contraseñas de roles propios no entran en el volcado de la documentación), registrar tiempos y eliminar el proyecto.
+Hecha el 19/10/2026 en un proyecto aislado (ver H-38). Resultado final: políticas, funciones privadas, funciones públicas, permisos, triggers y RLS idénticos a producción (6 de 6) y mismos recuentos (791 puntos, 3 estados con versión máxima 2, 856 auditorías, 3 perfiles). Tiempos con la conexión del titular: esquema 17,7 s, datos 3,1 s. No se restauran los usuarios de autenticación, la configuración de Auth ni las claves del proyecto nuevo.
 
 ## 3. Despliegue y reversión
 
 - Workflow `deploy-pages.yml`: se lanza al tocar `index.html` o el propio workflow en `main`, o a mano (`workflow_dispatch`).
-- **Hallazgo H-37 (P3, informativo):** el workflow sube `path: .`, es decir, **todo el repositorio**, no solo `index.html`. Comprobado el 18/10/2026 en la URL pública: se sirven `CLAUDE.md`, `docs/traspaso/ESTADO.md`, `supabase/tests/rls_matrix.sql` y `scripts/dev/mock-supabase.mjs` (HTTP 200); `.github/` y `.claude/` no (404). El repositorio es público, de modo que no se expone nada que no esté ya en GitHub, y no hay credenciales en él; aun así, la web publicada contiene documentación y scripts internos. Propuesta, no aplicada porque cambia el despliegue: subir solo `index.html` (carpeta de salida con ese fichero) y comprobarlo con la URL pública.
+- **Hallazgo H-37 (P3, cerrado en el PR #109 el 19/10/2026; el texto siguiente describe la situación inicial):** el workflow sube `path: .`, es decir, **todo el repositorio**, no solo `index.html`. Comprobado el 18/10/2026 en la URL pública: se sirven `CLAUDE.md`, `docs/traspaso/ESTADO.md`, `supabase/tests/rls_matrix.sql` y `scripts/dev/mock-supabase.mjs` (HTTP 200); `.github/` y `.claude/` no (404). El repositorio es público, de modo que no se expone nada que no esté ya en GitHub, y no hay credenciales en él; aun así, la web publicada contiene documentación y scripts internos. Propuesta, no aplicada porque cambia el despliegue: subir solo `index.html` (carpeta de salida con ese fichero) y comprobarlo con la URL pública.
 - Reversión: como `main` exige PR y checks, revertir es: rama `fix/revertir-<PR>`, `git revert <commit de fusión>`, PR, checks `audit` y `postgres-smoke`, fusión; si cambia `index.html` el despliegue arranca solo. Prueba en seco (local, sin publicar): `git revert -n 36da309` (PR #105) se aplica sin conflictos (6 ficheros). Cambios de esquema no se revierten con esto: requieren una migración nueva (no se eliminan objetos por intuición).
 - No probado: una reversión real en producción.
 
-## Pendiente de la Fase E
-1. Prueba de restauración (aprobación de coste del titular).
-2. Decidir H-37 (desplegar solo `index.html`).
-3. Establecer quién hace el volcado periódico y dónde se guarda.
+## Pendiente tras la Fase E
+
+- Rutina mensual de copia a cargo del titular (script y procedimiento documentados).
+- Una reversión real de un despliegue no se ha probado en producción (solo en seco).
+- Con crecimiento del uso, valorar el plan de pago (H-24) o copias semanales.
