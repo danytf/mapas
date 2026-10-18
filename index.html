@@ -663,16 +663,82 @@ const chainOf = (c) => { const k = rawChain(c); return smallChains.has(k) ? "Ind
 const ESTADOS = [["sin", "Sin solicitar", "#ffffff"], ["solicitado", "Solicitado", "#fbbf24"], ["concedido", "Concedido", "#22c55e"], ["denegado", "Denegado", "#111827"], ["caducado", "Caducado", "#94a3b8"], ["cancelado", "Cancelado", "#ef4444"]];
 let permits = {};
 let sharedPermitRecords = new Map();
+// Versión leída de cada fila de establishment_app_state (por ID de establecimiento). La mantiene la base
+// de datos; se guarda solo si nadie la ha cambiado desde que se leyó (H-11).
+let sharedPermitVersions = new Map();
 const stableJson = (value) => {
   if (value === null || typeof value !== "object") return JSON.stringify(value);
   if (Array.isArray(value)) return "[" + value.map(stableJson).join(",") + "]";
   return "{" + Object.keys(value).sort().map(key => JSON.stringify(key) + ":" + stableJson(value[key])).join(",") + "}";
 };
+// Guarda una fila del estado compartido solo si nadie la ha cambiado desde que se leyó (H-11):
+// UPDATE condicionado a la versión leída o INSERT si no había fila. Devuelve "ok", "conflict" o "error".
+const saveSharedPermitRow = async (client, userId, row) => {
+  const expected = sharedPermitVersions.get(row.establishment_id);
+  let writeError = null;
+  let written = null;
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
+  try {
+    const query = expected === undefined
+      ? client.from("establishment_app_state").insert(row)
+      : client.from("establishment_app_state").update({ state: row.state, updated_by: userId })
+        .eq("establishment_id", row.establishment_id).eq("version", expected);
+    const result = await query.select("establishment_id,version").abortSignal(controller.signal);
+    writeError = result.error;
+    written = Array.isArray(result.data) ? result.data : null;
+  } catch (error) {
+    writeError = error;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+  if (!writeError && written && written.length === 1 && Number.isFinite(Number(written[0].version))) {
+    sharedPermitVersions.set(row.establishment_id, Number(written[0].version));
+    return "ok";
+  }
+  // Otro usuario creó la fila antes que este INSERT.
+  if (writeError?.code === "23505") return "conflict";
+
+  // Cero filas o respuesta perdida: una respuesta perdida no demuestra que el servidor no haya guardado.
+  // Leer el valor efectivo antes de decidir entre éxito, conflicto o error.
+  const verifyController = new AbortController();
+  const verifyTimeoutId = setTimeout(() => verifyController.abort(), 8000);
+  try {
+    const verification = await client.from("establishment_app_state")
+      .select("establishment_id,province_id,state,updated_by,version")
+      .eq("establishment_id", row.establishment_id)
+      .abortSignal(verifyController.signal)
+      .maybeSingle();
+    if (verification.error) {
+      console.error("[Mapa] No se pudo confirmar el guardado del estado compartido en Supabase:", writeError, verification.error);
+      return "error";
+    }
+    const persisted = verification.data;
+    const persistedVersion = persisted ? Number(persisted.version) : undefined;
+    const ours = Boolean(persisted) &&
+      persisted.province_id === row.province_id &&
+      persisted.updated_by === userId &&
+      stableJson(sanitizeSharedPermitState(persisted.state) || {}) === stableJson(row.state) &&
+      (expected === undefined || persistedVersion === expected + 1);
+    if (ours) {
+      sharedPermitVersions.set(row.establishment_id, persistedVersion);
+      console.warn("[Mapa] El estado compartido se confirmó mediante lectura posterior tras una respuesta ambigua.");
+      return "ok";
+    }
+    if (persistedVersion !== expected) return "conflict";
+    console.error("[Mapa] No se pudo guardar el estado compartido en Supabase:", writeError);
+  } catch (verificationError) {
+    console.error("[Mapa] No se pudo verificar el estado compartido tras un error de escritura:", writeError, verificationError);
+  } finally {
+    clearTimeout(verifyTimeoutId);
+  }
+  return "error";
+};
 const savePermits = async (onlyName = null) => {
   const session = window.mapaSession;
   const client = session?.supabase;
   const userId = session?.user?.id;
-  if (!client || !userId) return Promise.resolve(false);
+  if (!client || !userId) return "error";
   // Un guardado normal solo toca el establecimiento editado; evita sobrescribir cambios concurrentes.
   const names = onlyName ? [onlyName] : Object.keys(permits);
   const rows = [...new Set(names)].map(name => {
@@ -680,62 +746,41 @@ const savePermits = async (onlyName = null) => {
     if (!c) return null;
     return { establishment_id: c.databaseId, province_id: c.provinceId, state: sanitizeSharedPermitState(permits[name]) || {}, updated_by: userId };
   }).filter(Boolean);
-  if (!rows.length) return Promise.resolve(true);
+  if (!rows.length) return "ok";
   const status = document.getElementById("status");
-  let writeError = null;
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 15000);
-  try {
-    const result = await client.from("establishment_app_state").upsert(rows, { onConflict: "establishment_id" })
-      .abortSignal(controller.signal);
-    writeError = result.error;
-    if (!writeError) {
-      rows.forEach(row => {
-        const c = CENTERS.find(item => item.databaseId === row.establishment_id);
-        if (c) sharedPermitRecords.set(c.name, { establishment_id: row.establishment_id, province_id: row.province_id });
-      });
-      return true;
+  for (const row of rows) {
+    const result = await saveSharedPermitRow(client, userId, row);
+    if (result !== "ok") {
+      if (status) status.textContent = result === "conflict"
+        ? "Aviso: otra persona ha cambiado este punto mientras lo editabas; no se ha sobrescrito su cambio."
+        : "Aviso: no se pudo confirmar el guardado de los permisos compartidos en Supabase.";
+      return result;
     }
-  } catch (error) {
-    writeError = error;
-  } finally {
-    clearTimeout(timeoutId);
+    const c = CENTERS.find(item => item.databaseId === row.establishment_id);
+    if (c) sharedPermitRecords.set(c.name, { establishment_id: row.establishment_id, province_id: row.province_id });
   }
-
-  // Una respuesta perdida no demuestra que el servidor no haya guardado el estado.
-  // Antes de revertir la ficha, comprobar los valores efectivos en Supabase.
-  const verifyController = new AbortController();
-  const verifyTimeoutId = setTimeout(() => verifyController.abort(), 8000);
-  try {
-    const verification = await client.from("establishment_app_state")
-      .select("establishment_id,province_id,state,updated_by")
-      .in("establishment_id", rows.map(row => row.establishment_id))
-      .abortSignal(verifyController.signal);
-    const persistedById = new Map((Array.isArray(verification.data) ? verification.data : [])
-      .map(item => [item.establishment_id, item]));
-    const confirmed = !verification.error && rows.every(row => {
-      const persisted = persistedById.get(row.establishment_id);
-      return Boolean(persisted) &&
-        persisted.province_id === row.province_id &&
-        persisted.updated_by === userId &&
-        stableJson(sanitizeSharedPermitState(persisted.state) || {}) === stableJson(row.state);
-    });
-    if (confirmed) {
-      rows.forEach(row => {
-        const name = names.find(candidate => CENTERS.some(item => item.name === candidate && item.databaseId === row.establishment_id));
-        if (name) sharedPermitRecords.set(name, { establishment_id: row.establishment_id, province_id: row.province_id });
-      });
-      console.warn("[Mapa] El estado compartido se confirmó mediante lectura posterior tras una respuesta ambigua.");
-      return true;
-    }
-    console.error("[Mapa] No se pudo confirmar el guardado del estado compartido en Supabase:", writeError, verification.error);
-  } catch (verificationError) {
-    console.error("[Mapa] No se pudo verificar el estado compartido tras un error de escritura:", writeError, verificationError);
-  } finally {
-    clearTimeout(verifyTimeoutId);
+  return "ok";
+};
+// Relee de Supabase el estado compartido de un punto (tras un conflicto) y actualiza la memoria.
+const reloadSharedPermit = async (c) => {
+  const client = window.mapaSession?.supabase;
+  if (!client || !c?.databaseId) return false;
+  const { data, error } = await client.from("establishment_app_state")
+    .select("establishment_id,province_id,state,version")
+    .eq("establishment_id", c.databaseId)
+    .maybeSingle();
+  if (error) return false;
+  if (!data) {
+    sharedPermitVersions.delete(c.databaseId);
+    delete permits[c.name];
+    return true;
   }
-  if (status) status.textContent = "Aviso: no se pudo confirmar el guardado de los permisos compartidos en Supabase.";
-  return false;
+  if (data.province_id !== c.provinceId || !data.state || typeof data.state !== "object" || Array.isArray(data.state)) return false;
+  sharedPermitVersions.set(c.databaseId, Number(data.version));
+  const safePermitState = sanitizeSharedPermitState(data.state);
+  if (safePermitState && Object.keys(safePermitState).length) permits[c.name] = safePermitState;
+  else delete permits[c.name];
+  return true;
 };
 let removed = new Set();
 const saveRemoved = () => typeof window.mapaPersistUserState === "function" ? window.mapaPersistUserState("removed", [...removed]) : Promise.resolve(false);
@@ -994,7 +1039,34 @@ function popupFor(c, pos) {
       else permits[c.name] = v;
 
       const saved = await savePermits(c.name);
-      if (!saved) {
+      if (saved === "conflict") {
+        // Otra persona guardó este punto después de que se leyera: no se sobrescribe ni se intenta
+        // restaurar (eso también pisaría su cambio). Lo escrito sigue visible en la ficha hasta que
+        // se cargue la versión actual.
+        if (previous.permit === undefined) delete permits[c.name];
+        else permits[c.name] = previous.permit;
+        sm.style.color = "#b3261e";
+        sm.textContent = "No se ha guardado: otra persona ha cambiado este punto mientras lo editabas. Anota lo que querías cambiar, carga la versión actual y vuelve a aplicarlo. ";
+        const reload = document.createElement("button");
+        reload.type = "button";
+        reload.className = "f-reload";
+        reload.textContent = "Cargar la versión actual";
+        reload.addEventListener("click", () => setTimeout(async () => {
+          reload.disabled = true;
+          if (!await reloadSharedPermit(c)) {
+            reload.disabled = false;
+            sm.firstChild.textContent = "No se pudo cargar la versión actual de Supabase. Revisa la conexión y vuelve a intentarlo. ";
+            return;
+          }
+          if (markers[c.id]) markers[c.id].setIcon(makeIcon(c));
+          refreshSelects(); renderList();
+          map.closePopup();
+          if (markers[c.id]) cluster.zoomToShowLayer(markers[c.id], () => markers[c.id].openPopup());
+        }, 0));
+        sm.appendChild(reload);
+        return;
+      }
+      if (saved !== "ok") {
         // La operación puede haber fallado antes o después de que la petición llegara al servidor.
         // Restaurar el estado anterior en memoria y volver a persistirlo evita dejar una edición ambigua.
         if (previous.permit === undefined) delete permits[c.name];
@@ -1010,7 +1082,7 @@ function popupFor(c, pos) {
         if (markers[c.id]) markers[c.id].setIcon(makeIcon(c));
         refreshSelects(); renderList(); paintEf();
         sm.style.color = "#b3261e";
-        sm.textContent = rollbackSaved
+        sm.textContent = rollbackSaved === "ok"
           ? "No se pudo guardar; se restauró el estado anterior."
           : "No se pudo guardar ni confirmar la restauración. Recupera la conexión antes de seguir editando.";
         return;
@@ -2322,16 +2394,19 @@ renderList();
     // Los permisos son estado operativo compartido y se leen de establishment_app_state.
     delete loadedPersonalState.permits;
     permits = {};
+    sharedPermitVersions = new Map();
     const { data: sharedRows, error: sharedError } = await client
       .from("establishment_app_state")
-      .select("establishment_id,province_id,state")
+      .select("establishment_id,province_id,state,version")
       .limit(5000);
     if (sharedError) throw sharedError;
     if (!Array.isArray(sharedRows)) throw new Error("Supabase no devolvió el estado operativo compartido.");
     const byId = new Map(CENTERS.filter(c => c.databaseId).map(c => [c.databaseId, c]));
     sharedRows.forEach(row => {
       const c = byId.get(row.establishment_id);
-      if (!c || row.province_id !== c.provinceId || !row.state || typeof row.state !== "object" || Array.isArray(row.state)) return;
+      if (!c || row.province_id !== c.provinceId) return;
+      if (Number.isFinite(Number(row.version))) sharedPermitVersions.set(row.establishment_id, Number(row.version));
+      if (!row.state || typeof row.state !== "object" || Array.isArray(row.state)) return;
       sharedPermitRecords.set(c.name, { establishment_id: row.establishment_id, province_id: row.province_id });
       const safePermitState = sanitizeSharedPermitState(row.state);
       if (safePermitState && Object.keys(safePermitState).length) permits[c.name] = safePermitState;

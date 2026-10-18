@@ -1,6 +1,6 @@
 # Auditoría Fase C: pruebas E2E en navegador (18/10/2026)
 
-Estado: **en curso**. Hechas las pruebas 1-8 y 11 del `docs/traspaso/ROADMAP.md`. Pendientes: 9 (H-11, cambia código y esquema), 10 (CSP, H-02) y la corrección de ubicación arrastrando el pin.
+Estado: **en curso**. Hechas las pruebas 1-9 y 11 del `docs/traspaso/ROADMAP.md` (la 9 con la corrección de H-11, pendiente de desplegar). Pendientes: 10 (CSP, H-02) y la corrección de ubicación arrastrando el pin.
 
 ## Entorno
 
@@ -23,6 +23,7 @@ Estado: **en curso**. Hechas las pruebas 1-8 y 11 del `docs/traspaso/ROADMAP.md`
 | 6 | Roles y provincias en la interfaz | Supera | Sin provincia: «Tu usuario no tiene provincias activas asignadas.». Desactivado: «Tu usuario no está activo o no tiene un perfil válido.». Tras el rechazo, la sesión queda revocada en el servidor. Almería lee 0 estados compartidos y su escritura sobre un punto de Granada recibe 403 `42501`. La interfaz no tiene funciones exclusivas de administrador aparte del alcance del catálogo |
 | 7 | Exportaciones; sin importador | Supera | CSV, JSON y copia al portapapeles: si se cancela la confirmación no se exporta nada; si se acepta se generan el CSV (15 filas), el JSON y la copia (15 puntos). No hay campo de fichero ni `FileReader`; `audit-persistence.mjs` lo confirma |
 | 8 | Persistencia en el navegador | Supera | Tras la sesión completa: `localStorage`, `sessionStorage`, IndexedDB, Cache Storage y cookies vacíos, 0 service workers, uso de almacenamiento 0 |
+| 9 | H-11: dos sesiones sobre el mismo punto | Supera (con la corrección de la rama `fix/h-11-conflicto-estado`) | Migración aplicada en `mapas-e2e`. Granada (A) y Granada 2 (B) abren «Bricolaje Lambda» con versión 1. A guarda (versión 2). B guarda con versión 1: «No se ha guardado: otra persona ha cambiado este punto…» y botón «Cargar la versión actual»; la base conserva lo de A. B pulsa el botón (clic real), la ficha muestra lo de A, B guarda la suma (versión 3). Un guardado tardío de A sin recargar también se rechaza. Alta simultánea en «Tienda Theta» (sin fila previa): A crea la fila y el INSERT de B choca con la clave, conflicto. Historial: solo los 2 guardados legítimos; los 3 intentos en conflicto no dejan rastro. Regresión: 3 guardados seguidos correctos; sin red avisa y, al volver la red, guarda. Sin errores de JavaScript en consola |
 | 11 | Resistencia | Supera con un fallo (H-15) | Guardado de permisos con red caída, red caída también en la comprobación, 401 «JWT expired» y error 400: aviso claro, sin dar el guardado por bueno y sin filas en la base. Doble clic en «Guardar cambios»: 1 escritura. Triple clic en «Guardar dirección y ubicación»: 3 escrituras (H-15) |
 
 ## Hallazgos nuevos
@@ -39,9 +40,16 @@ Estado: **en curso**. Hechas las pruebas 1-8 y 11 del `docs/traspaso/ROADMAP.md`
 
 Observaciones informativas, sin acción propuesta: recargar sin cerrar sesión deja viva la sesión anterior en el servidor hasta que caduca (el token solo estaba en memoria y se pierde). Chrome puede ofrecer guardar las credenciales de prueba de `127.0.0.1`; conviene borrarlas al terminar.
 
+## Corrección de H-11
+
+- Migración `supabase/migrations/20261018150000_establishment_app_state_version.sql` (nombre provisional: se renombra con la versión que registre Supabase al aplicarla en producción). Columna `version bigint NOT NULL DEFAULT 1` con `CHECK (version >= 1)` y trigger `BEFORE INSERT OR UPDATE` que la fija a 1 al crear y a la anterior + 1 al modificar; el cliente no puede fijarla. Compatible con la app publicada: su upsert sigue funcionando e incrementa la versión.
+- Cliente: `saveSharedPermitRow` guarda con `UPDATE ... eq("version", leída)` o con `INSERT` si no había fila; 0 filas o clave duplicada son conflicto. Una respuesta ambigua se resuelve leyendo la fila (éxito solo si el estado, la provincia y el autor coinciden y la versión es la leída + 1). Ante un conflicto, `commit()` no reescribe ni restaura: avisa y ofrece «Cargar la versión actual» (`reloadSharedPermit`). Lo escrito sigue en la ficha hasta recargar.
+- Pruebas: `supabase/tests/state_version.sql` (20 comprobaciones; paso nuevo en `schema-smoke.yml`); sin la migración falla. `scripts/audit-persistence.mjs` exige el guardado condicionado, prohíbe el upsert ciego sobre `establishment_app_state` y exige que la rama de conflicto no reescriba; con el `index.html` de `main` falla (control negativo). Reconstrucción local: humo, `state_history` (29), `state_version` (20) y matriz RLS (973 celdas, 0 discrepancias) en verde.
+- Huellas esperadas tras aplicar la migración (iguales en `mapas-e2e` y en la reconstrucción local): funciones públicas 19 `976fdf1e7a5a27d87a1716be11bb8460`, triggers 34 `6d0afe68c1d04f67df988a84211ed563`; el resto sin cambios.
+
 ## Pendiente en esta fase
 
-- 9. H-11: control de conflicto (diseño en `docs/traspaso/HALLAZGOS.md`). Requiere migración, prueba SQL, paso en `schema-smoke.yml`, cambio en `index.html` y prueba E2E con Granada y Granada 2. Antes de implementarlo se presenta el diseño al titular.
+- H-11: aplicar la migración en producción (con aprobación del titular), renombrarla con la versión registrada, fusionar el PR y verificar en la URL pública.
 - 10. H-02: CSP por `<meta>` con la política candidata y recorrido de los flujos con la consola abierta. Antes, comprobar las cabeceras reales de producción.
 - Corrección de ubicación arrastrando el pin («Mover pin»).
 - Correcciones de H-13 a H-17 (y H-18 en la Fase D), cada una con su prueba de regresión.
