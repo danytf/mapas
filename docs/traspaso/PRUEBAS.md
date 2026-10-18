@@ -38,6 +38,11 @@ Resultado esperado: `state_history: 29 comprobaciones correctas`, `state_version
 3. Copia de `index.html` fuera del repositorio con `SUPABASE_URL` y `SUPABASE_KEY` del proyecto aislado, servida en `http://127.0.0.1:<puerto>/`.
 4. Guion de pruebas y resultados esperados: `docs/AUDITORIA_FASE_C_2026-10-18.md`.
 
+## Volumen de la base de datos (sin proyecto ni coste)
+Con una base PostgreSQL local reconstruida (`scripts/dev/rebuild-local-db.sh`):
+1. `psql -v ON_ERROR_STOP=1 -f supabase/tools/volume/load_synthetic_volume.sql`: 50.000 puntos sintéticos en las 52 provincias, 3.000 estados compartidos y tres usuarios (administrador, dos provincias, una provincia). Solo para una base local.
+2. `psql -v ON_ERROR_STOP=1 -f supabase/tools/volume/measure_catalogue_load.sql`: tiempos de la carga del catálogo (recuento exacto y páginas de 1.000 por clave) y del estado compartido con las políticas RLS reales. Referencia tras H-26: administrador unos 90 ms, dos provincias unos 10 ms, una provincia unos 2 ms. Detalle y comparación con las políticas anteriores en `docs/AUDITORIA_FASE_D_2026-10-18.md`.
+
 ## Interfaz con un Supabase simulado (sin proyecto ni coste)
 Para probar lógica del navegador (provincias, geocodificación, valores por defecto, nombre de ficheros) sin crear un proyecto:
 1. `node scripts/dev/mock-supabase.mjs` (puerto 8766): imita GoTrue y PostgREST con datos sintéticos de Granada, Almería y Jaén y un Nominatim simulado que registra las peticiones (`/__log`). Usuarios, con contraseña «x»: `multi@test.es` (dos provincias), `alm@test.es` (una), `vacio@test.es` (sin puntos), `admin@test.es`.
