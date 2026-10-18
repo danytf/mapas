@@ -48,10 +48,11 @@ git remote add origin https://github.com/danytf/mapas.git
 git config core.autocrlf false
 git fetch origin main
 git reset origin/main
+git checkout -- .github
 git status
 ```
 
-`git status` debe salir limpio (la carpeta es una copia de `main` a 18/10/2026). Si muestra diferencias, compáralas con `git diff` antes de tocar nada y cuéntaselo a Dani. Después `git pull origin main`. Para las ramas de trabajo: `git config --add remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'`.
+La carpeta es una copia de `main` a 18/10/2026, sin la carpeta `.github` (las herramientas remotas no pueden escribir ficheros de workflows); `git checkout -- .github` la restaura desde `origin/main`. Después `git status` debe salir limpio. Si muestra diferencias, compáralas con `git diff` antes de tocar nada y cuéntaselo a Dani. Después `git pull origin main`. Para ver las ramas de trabajo: `git config --add remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'`.
 
 ## Herramientas esperadas
 
