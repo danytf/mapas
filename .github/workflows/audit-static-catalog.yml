@@ -11,6 +11,7 @@ on:
       - "scripts/audit-static-catalog.mjs"
       - "scripts/audit-persistence.mjs"
       - "scripts/audit-xss.mjs"
+      - "scripts/audit-a11y.mjs"
       - "scripts/audit-cdn-integrity.mjs"
       - ".github/workflows/audit-static-catalog.yml"
   pull_request:
@@ -39,6 +40,8 @@ jobs:
         run: node scripts/test-shared-state-sanitizers.mjs
       - name: Run XSS regression audit
         run: node scripts/audit-xss.mjs index.html
+      - name: Check keyboard access to statistics panel rows
+        run: node scripts/audit-a11y.mjs index.html
       - name: Check CDN resources are version-pinned with SRI
         run: |
           node --check scripts/audit-cdn-integrity.mjs

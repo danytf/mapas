@@ -250,6 +250,8 @@
   #pnBody th:first-child, #pnBody td:first-child { text-align: left; white-space: normal; }
   #pnBody thead th { position: sticky; top: 0; background: var(--panel); font-weight: 600; color: var(--muted); border-bottom: 1px solid var(--line-2); }
   #pnBody tbody tr[data-k] { cursor: pointer; }
+  #pnBody .pn-rowbtn { all: unset; box-sizing: border-box; cursor: pointer; font: inherit; color: inherit; text-align: left; border-radius: 4px; }
+  #pnBody .pn-rowbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   #pnBody tbody tr[data-k]:hover { background: var(--ok-bg); }
   #pnBody tr.tot td { font-weight: 700; }
   .wk-nav { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
@@ -2002,7 +2004,7 @@ const csvCell = (value) => {
     });
     return r;
   };
-  const rowsHtml = (map, kind) => map.map(([k, r]) => '<tr data-kind="' + kind + '" data-k="' + esc(k) + '"><td>' + esc(k) + "</td><td>" + r.n + "</td><td>" + r.sol + "</td><td>" + r.con + "</td><td>" + r.den + "</td><td>" + r.vig + "</td><td>" + r.capt + "</td></tr>").join("");
+  const rowsHtml = (map, kind) => map.map(([k, r]) => '<tr data-kind="' + kind + '" data-k="' + esc(k) + '"><td><button type="button" class="pn-rowbtn">' + esc(k) + "</button></td><td>" + r.n + "</td><td>" + r.sol + "</td><td>" + r.con + "</td><td>" + r.den + "</td><td>" + r.vig + "</td><td>" + r.capt + "</td></tr>").join("");
   const thead = (first) => "<thead><tr><th>" + first + "</th><th>Puntos</th><th>Solicitados</th><th>Concedidos</th><th>Denegados</th><th>Con vigencia hoy</th><th>Captadores hoy</th></tr></thead>";
   let wk = mondayOf(today());
   const addD = (d, n) => { const t = new Date(d + "T12:00:00"); t.setDate(t.getDate() + n); return t.toISOString().slice(0, 10); };
@@ -2084,7 +2086,7 @@ const csvCell = (value) => {
       '<div class="kpi"><b>' + expired.length + "</b><span>Solicitud caducada</span></div></div>" +
       '<h3>Permisos por semana</h3><div id="wkBox"></div>' +
       (soon.length ? "<h3>Caducan en los próximos 30 días</h3><div class=\"pn-scroll\"><table><thead><tr><th>Punto</th><th>Hasta</th><th>Captadores</th></tr></thead><tbody>" +
-        soon.map(([c, end, n]) => '<tr data-kind="pt" data-k="' + c.id + '"><td>' + esc(c.name) + " · " + esc(c.town || "Granada") + "</td><td>" + fmtD(end) + "</td><td>" + n + "</td></tr>").join("") + "</tbody></table></div>" : "") +
+        soon.map(([c, end, n]) => '<tr data-kind="pt" data-k="' + c.id + '"><td><button type="button" class="pn-rowbtn">' + esc(c.name) + " · " + esc(c.town || "Granada") + "</button></td><td>" + fmtD(end) + "</td><td>" + n + "</td></tr>").join("") + "</tbody></table></div>" : "") +
       "<h3>Por categoría</h3><div class=\"pn-scroll\"><table>" + thead("Categoría") + "<tbody>" + rowsHtml(byTipo, "tipo") + '<tr class="tot"><td>Total</td><td>' + t.n + "</td><td>" + t.sol + "</td><td>" + t.con + "</td><td>" + t.den + "</td><td>" + t.vig + "</td><td>" + t.capt + "</td></tr></tbody></table></div>" +
       "<h3>Por municipio</h3><div class=\"pn-scroll\"><table>" + thead("Municipio") + "<tbody>" + rowsHtml(byTown, "town") + "</tbody></table></div>" +
       '<div class="pn-note">Pulsa una fila para filtrar el mapa por esa categoría o municipio. El estado, la vigencia y los captadores se calculan con las solicitudes y concesiones de cada punto. En «Permisos por semana», un permiso entra si sus fechas tocan esa semana (lunes a domingo).</div>';
