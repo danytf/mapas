@@ -40,7 +40,7 @@ Protege la cadena de conexión y los archivos resultantes. No la pegues en el ch
 - **Cuándo:** una vez al mes y siempre antes de aplicar una migración en producción. Si el uso crece, pasar a semanal.
 - **Cómo:** `export DB_URL='<cadena de conexión del panel de Supabase>'` y después `bash scripts/backup-supabase.sh`. Genera en `~/backups-mapas/<fecha>/` los ficheros `roles.sql`, `schema.sql` y `data.sql` más `SHA256SUMS`, y se niega a dar la copia por válida si algún fichero está vacío o no contiene `establishments`.
 - **Dónde guardarla:** un sitio privado y cifrado, fuera de GitHub y de Supabase; conservar al menos las 3 últimas.
-- **Estado:** el script se ha comprobado solo en sintaxis y en su comportamiento sin `DB_URL`. **No se ha ejecutado contra Supabase ni se ha restaurado una copia**: hasta la prueba de restauración (Fase E) no debe darse por buena. Puede requerir Docker según la versión de Supabase CLI.
+- **Estado:** el script se ha comprobado solo en sintaxis y en su comportamiento sin `DB_URL`. **No se ha ejecutado contra Supabase ni se ha restaurado una copia**: hasta la prueba de restauración (Fase E) no debe darse por buena. Con Supabase CLI (puede requerir Docker) vuelca roles, esquema y datos. Si no está instalado usa `pg_dump` y vuelca solo el schema `public`: no incluye usuarios de autenticación ni sus contraseñas. Con `pg_dump` hay que usar una cadena de conexión que funcione desde tu red (si la directa falla, usa la del "session pooler" del panel de Supabase).
 
 ## Restauración y verificación
 

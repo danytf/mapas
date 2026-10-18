@@ -4,7 +4,8 @@
 #   export DB_URL='<cadena de conexión de la base, del panel de Supabase>'
 #   bash scripts/backup-supabase.sh [carpeta_destino]
 # La cadena de conexión no se escribe en ningún fichero ni se muestra. Carpeta por defecto: ~/backups-mapas (fuera del repositorio).
-# Requiere Supabase CLI (`supabase`); según su versión puede requerir Docker en marcha.
+# Usa Supabase CLI (`supabase`) si está instalado (puede requerir Docker). Si no, usa `pg_dump` (versión 17 o superior) y vuelca solo el schema public
+# (no incluye usuarios de auth ni roles: tras restaurar habría que recrearlos; ver docs/import-export-backups.md).
 # Esto es una copia, no una restauración: hasta probarla en un proyecto aislado (Fase E) no debe darse por buena.
 set -euo pipefail
 umask 077
@@ -13,7 +14,7 @@ if [ -z "${DB_URL:-}" ]; then
   echo "Falta la variable DB_URL (cadena de conexión de Supabase). No se ha hecho nada." >&2
   exit 1
 fi
-command -v supabase >/dev/null 2>&1 || { echo "No se encuentra el comando supabase (Supabase CLI)." >&2; exit 1; }
+if command -v supabase >/dev/null 2>&1; then MODE=cli; elif command -v pg_dump >/dev/null 2>&1; then MODE=pgdump; else echo "No se encuentra ni supabase (CLI) ni pg_dump." >&2; exit 1; fi
 
 DEST_BASE="${1:-$HOME/backups-mapas}"
 STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
@@ -21,12 +22,21 @@ DEST="$DEST_BASE/$STAMP"
 mkdir -p "$DEST"
 cd "$DEST"
 
-echo "Volcando roles..."
-supabase db dump --db-url "$DB_URL" -f roles.sql --role-only
-echo "Volcando esquema..."
-supabase db dump --db-url "$DB_URL" -f schema.sql
-echo "Volcando datos..."
-supabase db dump --db-url "$DB_URL" -f data.sql --use-copy --data-only
+if [ "$MODE" = cli ]; then
+  echo "Volcando roles..."
+  supabase db dump --db-url "$DB_URL" -f roles.sql --role-only
+  echo "Volcando esquema..."
+  supabase db dump --db-url "$DB_URL" -f schema.sql
+  echo "Volcando datos..."
+  supabase db dump --db-url "$DB_URL" -f data.sql --use-copy --data-only
+else
+  echo "Supabase CLI no disponible: usando pg_dump (solo schema public)."
+  echo "-- Sin volcado de roles en modo pg_dump (los roles de Supabase ya existen en un proyecto nuevo)." > roles.sql
+  echo "Volcando esquema public..."
+  pg_dump "$DB_URL" --schema=public --schema-only --no-owner --no-privileges -f schema.sql
+  echo "Volcando datos de public..."
+  pg_dump "$DB_URL" --schema=public --data-only --no-owner -f data.sql
+fi
 
 # Comprobaciones mínimas: ficheros no vacíos y con contenido esperado.
 for f in roles.sql schema.sql data.sql; do
