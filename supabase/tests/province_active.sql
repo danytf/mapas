@@ -76,8 +76,12 @@ create function pg_temp.upd_st(p_actor text, p_est text) returns bigint language
 -- Estructura: las tres políticas de estado compartido siguen existiendo con las mismas operaciones.
 select pg_temp.check('establishment_app_state conserva sus 3 políticas',
   (select count(*) = 3 from pg_policies where schemaname = 'public' and tablename = 'establishment_app_state'));
-select pg_temp.check('las políticas de estado usan has_province_access',
-  (select bool_and(coalesce(qual, '') ilike '%has_province_access%' or coalesce(with_check, '') ilike '%has_province_access%')
+-- Las políticas de estado comprueban la provincia con la misma regla que has_province_access: directamente (H-22)
+-- o mediante private.accessible_province_ids (H-26, evaluada una vez por consulta); el comportamiento lo fijan
+-- las comprobaciones de abajo y rls_performance.sql.
+select pg_temp.check('las políticas de estado comprueban la provincia con la regla común',
+  (select bool_and((coalesce(qual, '') || coalesce(with_check, '')) ilike '%has_province_access%'
+                   or (coalesce(qual, '') || coalesce(with_check, '')) ilike '%accessible_province_ids%')
      from pg_policies where schemaname = 'public' and tablename = 'establishment_app_state'));
 select pg_temp.check('has_province_access sigue sin EXECUTE para anon',
   not has_function_privilege('anon', 'public.has_province_access(uuid)', 'EXECUTE')

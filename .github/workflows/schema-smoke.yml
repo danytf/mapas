@@ -143,6 +143,8 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261018145132_establishment_app_state_version.sql
       - name: Require active province in authorization
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261018172704_province_active_in_authorization.sql
+      - name: Evaluate province access once per query in catalogue and state policies
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261018190000_rls_policy_performance.sql
       - name: Verify every migration file is applied by this workflow
         shell: bash
         run: |
@@ -162,5 +164,7 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/state_version.sql
       - name: Run active-province authorization tests
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/province_active.sql
+      - name: Run RLS policy performance and equivalence tests
+        run: psql -v ON_ERROR_STOP=1 -f supabase/tests/rls_performance.sql
       - name: Run exhaustive authorization matrix
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/rls_matrix.sql

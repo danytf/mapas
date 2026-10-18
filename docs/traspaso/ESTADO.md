@@ -15,7 +15,7 @@
 
 ## Producción (Supabase `wwoczmihhupofwmlmgga`)
 
-- Migraciones: 27 registradas, última `20261018172704_province_active_in_authorization` (H-22, aplicada el 18/10/2026; antes `20261018145132` de H-11). Coinciden una a una con `supabase/migrations/`.
+- Migraciones: 27 registradas, última `20261018172704_province_active_in_authorization` (H-22, aplicada el 18/10/2026; antes `20261018145132` de H-11). Coinciden una a una con `supabase/migrations/`, salvo `20261018190000_rls_policy_performance` (H-26, nombre provisional), pendiente de aplicar en producción.
 - Huellas del esquema público (comparables con `supabase/tools/schema_fingerprint.sql`): políticas 51 `9af6855f`, permisos de tabla 57 `374f58c4`, funciones propias 19 `976fdf1e` (sin `rls_auto_enable`, función de la plataforma), funciones privadas 3 `de9d04b4`, triggers 34 `6d0afe68`, tablas con RLS 17 `e9ad42c3`.
 - 17 tablas, todas con RLS. Ninguna concede privilegios a `anon`.
 - Avisos del asesor de seguridad: solo "protección frente a contraseñas filtradas desactivada" (aceptado, no tocar).
@@ -40,7 +40,7 @@
 
 ## Hallazgos
 
-Ver `HALLAZGOS.md`. Cerrados en la Fase C: H-02, H-11, H-13, H-14 y H-05 (verificado). Cerrados en la Fase D (uso en varias provincias y volumen): H-22 (PR #94 y migración aplicada), H-23 (P1, PR #95), H-20 y H-21 (PR #96), todos verificados en producción. Corregidos en el PR #98, pendiente de fusionar: H-15 a H-19 (P3, interfaz). H-25 (P3) aceptado por ahora por el titular. Riesgo actual pendiente de decisión del titular: H-24 (P2, plan gratuito de Supabase: pausa tras 7 días de poca actividad). Pendientes de producto (ROADMAP): panel de administración y ampliación del catálogo a toda España (hoy solo Granada, aún por completar). Además: H-03 (P3, recomendación), H-08 (Fase E) y H-09 (P3, aceptado).
+Ver `HALLAZGOS.md`. H-26 (P2, latente: políticas RLS evaluadas por fila, 25 s con 50.000 puntos para el administrador): corregido en el PR #99, pendiente de aplicar la migración. Cerrados en la Fase C: H-02, H-11, H-13, H-14 y H-05 (verificado). Cerrados en la Fase D (uso en varias provincias y volumen): H-22 (PR #94 y migración aplicada), H-23 (P1, PR #95), H-20 y H-21 (PR #96), todos verificados en producción. Corregidos en el PR #98, pendiente de fusionar: H-15 a H-19 (P3, interfaz). H-25 (P3) aceptado por ahora por el titular. Riesgo actual pendiente de decisión del titular: H-24 (P2, plan gratuito de Supabase: pausa tras 7 días de poca actividad). Pendientes de producto (ROADMAP): panel de administración y ampliación del catálogo a toda España (hoy solo Granada, aún por completar). Además: H-03 (P3, recomendación), H-08 (Fase E) y H-09 (P3, aceptado).
 
 ## Entorno aislado de la Fase C
 
