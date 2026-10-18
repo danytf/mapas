@@ -840,13 +840,21 @@ const personalStateKey = (c) => c.databaseId ? "est:" + c.databaseId : "custom:"
 const hasPersonalRef = (set, c) => set.has(personalStateKey(c)) || set.has(c.name);
 const addPersonalRef = (set, c) => { set.delete(c.name); set.add(personalStateKey(c)); };
 const deletePersonalRef = (set, c) => { set.delete(personalStateKey(c)); set.delete(c.name); };
-const normalizePersonalRefs = (value) => new Set((Array.isArray(value) ? value : [])
-  .filter(x => typeof x === "string")
-  .map(ref => {
-    const c = CENTERS.find(item => item.databaseId &&
-      (ref === item.name || ref === ("est:" + item.databaseId)));
-    return c ? personalStateKey(c) : ref;
-  }));
+const normalizePersonalRefs = (value) => {
+  // Índices por nombre y por referencia (antes se recorrían todos los puntos por cada referencia).
+  const porNombre = new Map(), porRef = new Map();
+  CENTERS.forEach((item) => {
+    if (!item.databaseId) return;
+    if (!porNombre.has(item.name)) porNombre.set(item.name, item);
+    porRef.set("est:" + item.databaseId, item);
+  });
+  return new Set((Array.isArray(value) ? value : [])
+    .filter(x => typeof x === "string")
+    .map(ref => {
+      const c = porRef.get(ref) || porNombre.get(ref);
+      return c ? personalStateKey(c) : ref;
+    }));
+};
 const isOut = (c) => hasPersonalRef(removed, c);
 const permOf = (c) => permits[permitKey(c)] || { estado: "sin", fecha: "", contacto: "", notas: "", valoracion: 0 };
 const stars = (n) => "★".repeat(n) + "☆".repeat(5 - n);
@@ -1468,14 +1476,49 @@ function startMove(c) {
   logrosToast("Arrastra el pin hasta el local y suéltalo. Se guarda solo.");
   m.once("dragend", async () => { const p = m.getLatLng(); const ok = await setLoc(c, p.lat, p.lng, c.street); endMove(); logrosToast(ok ? "Ubicación guardada en Supabase: " + p.lat.toFixed(6) + ", " + p.lng.toFixed(6) : "No se pudo guardar en Supabase; comprueba los permisos y la conexión."); if (!ok && cache[c.id]) m.setLatLng([cache[c.id].lat, cache[c.id].lon]); });
 }
-function makeMarker(c) {
-  const pos = cache[c.id];
-  if (!pos || markers[c.id] || isOut(c)) return;
-  const m = L.marker([pos.lat, pos.lon], { icon: makeIcon(c), title: c.name, cat: colorOf(c) });
-  cluster.addLayer(m);
-  m.bindPopup(() => popupFor(c, cache[c.id]), { minWidth: 330, maxWidth: 380 });
-  m.on("click", () => highlight(c.id, false));
-  markers[c.id] = m;
+// Crea los marcadores que faltan y los añade al agrupador de una vez: añadirlos uno a uno cuesta unos 0,3 ms
+// cada uno con miles de puntos (H-27).
+function makeMarkers(list) {
+  const nuevos = [];
+  list.forEach((c) => {
+    const pos = cache[c.id];
+    if (!pos || markers[c.id] || isOut(c)) return;
+    const m = L.marker([pos.lat, pos.lon], { icon: makeIcon(c), title: c.name, cat: colorOf(c) });
+    m.bindPopup(() => popupFor(c, cache[c.id]), { minWidth: 330, maxWidth: 380 });
+    m.on("click", () => highlight(c.id, false));
+    markers[c.id] = m;
+    nuevos.push(m);
+  });
+  if (nuevos.length) cluster.addLayers(nuevos);
+}
+function makeMarker(c) { makeMarkers([c]); }
+
+// Lista lateral: con muchos puntos solo se dibujan los primeros (LIST_PAGE) y un botón «Mostrar más» (H-27).
+// Dibujar miles de elementos con cada filtro o letra de la búsqueda tardaba segundos.
+const LIST_PAGE = 300;
+let listLimit = LIST_PAGE, listKey = "", lastOrdered = [];
+// Elemento de la lista de un punto.
+function listItemFor(c) {
+  const li = document.createElement("li");
+  li.tabIndex = 0;
+  li.dataset.id = c.id;
+  if (!cache[c.id]) li.classList.add("unplaced");
+  li.innerHTML =
+    '<div class="num" style="background:' + colorOf(c) + ';color:#fff">' + c.id + "</div><div><strong>" + esc(c.name) + '</strong><span class="addr">' +
+    esc(addrOf(c)) + "</span><br>" +
+    '<span class="tag">' + esc(c.tipo + (c.sub ? " · " + c.sub : "")) + "</span>" +
+    (permOf(c).valoracion ? '<span class="tag" style="background:#fff3d6;color:#8a5a00">' + stars(permOf(c).valoracion) + "</span>" : "") +
+    (estadoOf(c) !== "sin" ? '<span class="tag" style="background:' + estadoInfo(estadoOf(c))[2] + ';color:' + (["concedido", "solicitado", "caducado"].includes(estadoOf(c)) ? "#111" : "#fff") + '">' + estadoInfo(estadoOf(c))[1] + (permOf(c).fecha && estadoOf(c) !== "concedido" && estadoOf(c) !== "caducado" ? " · " + esc(fmtD(permOf(c).fecha)) : "") + "</span>" : "") +
+    (seguimientoDue(c) ? '<span class="tag warn">Seguimiento ' + (seguimientoDue(c) === today() ? "hoy" : "atrasado " + esc(fmtD(seguimientoDue(c)))) + "</span>" : "") +
+    (DUPS.has(c.name) && !hasPersonalRef(reviewed, c) ? '<span class="tag warn">Posible duplicado</span>' : "") +
+    (estadoOf(c) === "solicitado" && solTxt(c) ? '<span class="tag" style="background:#fff3d6;color:#8a5a00">Pedido: ' + esc(solTxt(c)) + "</span>" : "") +
+    (vigente(c) ? '<span class="tag" style="background:#dcfce7;color:#14532d">Vigente hasta ' + fmtD(vigente(c).hasta) + (vigente(c).ong ? " · " + esc(vigente(c).ong) : "") + (safeCount(vigente(c).captadores) ? " · " + safeCount(vigente(c).captadores) + " capt." : "") + "</span>" : (futura(c) ? '<span class="tag" style="background:#dcfce7;color:#14532d">Concedido del ' + esc(fmtD(futura(c).desde)) + " al " + esc(fmtD(futura(c).hasta)) + (futura(c).ong ? " · " + esc(futura(c).ong) : "") + (safeCount(futura(c).captadores) ? " · " + safeCount(futura(c).captadores) + " capt." : "") + "</span>" : "")) +
+    (isApprox(c) ? '<span class="tag warn">Ubicación aproximada</span>' : "") +
+    (c.conf ? "" : '<span class="tag warn">Por confirmar</span>') +
+    (cache[c.id] ? "" : '<span class="tag warn">Sin ubicar</span>') + "</div>";
+  li.addEventListener("click", (e) => { highlight(c.id, true); });
+  li.addEventListener("keydown", (e) => { if (e.key === "Enter") highlight(c.id, true); });
+  return li;
 }
 
 function renderList() {
@@ -1494,54 +1537,80 @@ function renderList() {
   const rate = (c) => permOf(c).valoracion || 0;
   const okVal = (c) => !vf || (vf === "sin" ? !rate(c) : rate(c) >= +vf);
   const ul = $("#list");
+  // Si cambian la búsqueda o los filtros, la lista vuelve a su primera página.
+  const key = JSON.stringify([q, provincia, tipo, est, vf, ch, sb, onlyRev, onlySeg, $("#orden").value]);
+  if (key !== listKey) { listKey = key; listLimit = LIST_PAGE; }
   ul.innerHTML = "";
   const order = $("#orden").value === "val" ? [...CENTERS].sort((a, b) => rate(b) - rate(a) || a.id - b.id) : CENTERS;
+  const shown = [], toAdd = [], toRemove = [];
   order.forEach((c) => {
     const visible = !isOut(c) && (!provincia || (typeof c.province === "string" ? c.province : (typeof c.prov === "string" ? c.prov : "")) === provincia) && matchTipo(c, tipo) && (!ch || chainOf(c) === ch) && (!sb || c.sub === sb) && (!est || estadoOf(c) === est) && (!onlyRev || isRev(c)) && (!onlySeg || seguimientoDue(c)) && okVal(c) &&
       (!q || (c.name + " " + c.street + " " + townOf(c)).toLowerCase().includes(q));
-    if (markers[c.id]) {
-      const on = cluster.hasLayer(markers[c.id]);
-      if (visible && !on) cluster.addLayer(markers[c.id]);
-      if (!visible && on) cluster.removeLayer(markers[c.id]);
+    const m = markers[c.id];
+    if (m) {
+      const on = cluster.hasLayer(m);
+      if (visible && !on) toAdd.push(m);
+      if (!visible && on) toRemove.push(m);
     }
-    if (!visible) return;
-    const li = document.createElement("li");
-    li.tabIndex = 0;
-    li.dataset.id = c.id;
-    if (!cache[c.id]) li.classList.add("unplaced");
-    li.innerHTML =
-      '<div class="num" style="background:' + colorOf(c) + ';color:#fff">' + c.id + "</div><div><strong>" + esc(c.name) + '</strong><span class="addr">' +
-      esc(addrOf(c)) + "</span><br>" +
-      '<span class="tag">' + esc(c.tipo + (c.sub ? " · " + c.sub : "")) + "</span>" +
-      (permOf(c).valoracion ? '<span class="tag" style="background:#fff3d6;color:#8a5a00">' + stars(permOf(c).valoracion) + "</span>" : "") +
-      (estadoOf(c) !== "sin" ? '<span class="tag" style="background:' + estadoInfo(estadoOf(c))[2] + ';color:' + (["concedido", "solicitado", "caducado"].includes(estadoOf(c)) ? "#111" : "#fff") + '">' + estadoInfo(estadoOf(c))[1] + (permOf(c).fecha && estadoOf(c) !== "concedido" && estadoOf(c) !== "caducado" ? " · " + esc(fmtD(permOf(c).fecha)) : "") + "</span>" : "") +
-      (seguimientoDue(c) ? '<span class="tag warn">Seguimiento ' + (seguimientoDue(c) === today() ? "hoy" : "atrasado " + esc(fmtD(seguimientoDue(c)))) + "</span>" : "") +
-      (DUPS.has(c.name) && !hasPersonalRef(reviewed, c) ? '<span class="tag warn">Posible duplicado</span>' : "") +
-      (estadoOf(c) === "solicitado" && solTxt(c) ? '<span class="tag" style="background:#fff3d6;color:#8a5a00">Pedido: ' + esc(solTxt(c)) + "</span>" : "") +
-      (vigente(c) ? '<span class="tag" style="background:#dcfce7;color:#14532d">Vigente hasta ' + fmtD(vigente(c).hasta) + (vigente(c).ong ? " · " + esc(vigente(c).ong) : "") + (safeCount(vigente(c).captadores) ? " · " + safeCount(vigente(c).captadores) + " capt." : "") + "</span>" : (futura(c) ? '<span class="tag" style="background:#dcfce7;color:#14532d">Concedido del ' + esc(fmtD(futura(c).desde)) + " al " + esc(fmtD(futura(c).hasta)) + (futura(c).ong ? " · " + esc(futura(c).ong) : "") + (safeCount(futura(c).captadores) ? " · " + safeCount(futura(c).captadores) + " capt." : "") + "</span>" : "")) +
-      (isApprox(c) ? '<span class="tag warn">Ubicación aproximada</span>' : "") +
-      (c.conf ? "" : '<span class="tag warn">Por confirmar</span>') +
-      (cache[c.id] ? "" : '<span class="tag warn">Sin ubicar</span>') + "</div>";
-    li.addEventListener("click", (e) => { highlight(c.id, true); });
-    li.addEventListener("keydown", (e) => { if (e.key === "Enter") highlight(c.id, true); });
-    ul.appendChild(li);
+    if (visible) shown.push(c);
   });
+  // Marcadores en bloque (uno a uno era muy lento con miles de puntos).
+  if (toRemove.length) cluster.removeLayers(toRemove);
+  if (toAdd.length) cluster.addLayers(toAdd);
+  // Grupos «Seguimientos de hoy o atrasados» y «Caducan en 30 días», calculados sobre todos los puntos visibles.
+  let sections = [[null, false, shown]];
   if ($("#orden").value !== "val") {
     const lim = new Date(Date.now() + 30 * 864e5).toISOString().slice(0, 10), t0 = today();
-    const due = [], soon = [];
-    [...ul.children].forEach((li) => {
-      const c = CENTERS.find((x) => x.id === +li.dataset.id), v = vigente(c);
-      if (seguimientoDue(c)) due.push(li); else if (v && v.hasta && v.hasta >= t0 && v.hasta <= lim) soon.push(li);
+    const due = [], soon = [], rest = [];
+    shown.forEach((c) => {
+      const v = vigente(c);
+      if (seguimientoDue(c)) due.push(c); else if (v && v.hasta && v.hasta >= t0 && v.hasta <= lim) soon.push(c); else rest.push(c);
     });
     if (due.length || soon.length) {
-      const rest = ul.children.length - due.length - soon.length;
-      const hd = (t, hot) => { const h = document.createElement("li"); h.className = "grp" + (hot ? " hot" : ""); h.setAttribute("role", "presentation"); h.textContent = t; return h; };
-      const frag = document.createDocumentFragment();
-      if (due.length) { frag.appendChild(hd("Seguimientos de hoy o atrasados (" + due.length + ")", true)); due.forEach((l) => frag.appendChild(l)); }
-      if (soon.length) { frag.appendChild(hd("Caducan en 30 días (" + soon.length + ")", true)); soon.forEach((l) => frag.appendChild(l)); }
-      if (rest) frag.appendChild(hd("Resto de puntos (" + rest + ")", false));
-      ul.insertBefore(frag, ul.firstChild);
+      sections = [];
+      if (due.length) sections.push(["Seguimientos de hoy o atrasados (" + due.length + ")", true, due]);
+      if (soon.length) sections.push(["Caducan en 30 días (" + soon.length + ")", true, soon]);
+      if (rest.length) sections.push(["Resto de puntos (" + rest.length + ")", false, rest]);
     }
+  }
+  lastOrdered = sections.flatMap((s) => s[2]);
+  // Solo se dibujan los primeros listLimit puntos.
+  const frag = document.createDocumentFragment();
+  let dibujados = 0;
+  for (const [titulo, caliente, lista] of sections) {
+    if (dibujados >= listLimit) break;
+    if (titulo) {
+      const hd = document.createElement("li");
+      hd.className = "grp" + (caliente ? " hot" : "");
+      hd.setAttribute("role", "presentation");
+      hd.textContent = titulo;
+      frag.appendChild(hd);
+    }
+    for (const c of lista) {
+      if (dibujados >= listLimit) break;
+      frag.appendChild(listItemFor(c));
+      dibujados++;
+    }
+  }
+  ul.appendChild(frag);
+  if (lastOrdered.length > dibujados) {
+    const mas = document.createElement("li");
+    mas.className = "grp mas";
+    mas.setAttribute("role", "presentation");
+    const resto = lastOrdered.length - dibujados;
+    mas.appendChild(document.createTextNode("Mostrando " + dibujados + " de " + lastOrdered.length + " puntos. "));
+    const boton = document.createElement("button");
+    boton.type = "button";
+    boton.textContent = "Mostrar " + Math.min(resto, LIST_PAGE * 2) + " más";
+    boton.addEventListener("click", () => {
+      const previos = dibujados;
+      listLimit += LIST_PAGE * 2;
+      renderList();
+      // El botón desaparece al redibujar: el foco pasa al primer punto añadido.
+      $("#list").querySelectorAll("li[data-id]")[previos]?.focus();
+    });
+    mas.appendChild(boton);
+    ul.appendChild(mas);
   }
   if (!ul.children.length) {
     const empty = document.createElement("li");
@@ -1554,7 +1623,15 @@ function renderList() {
 
 function highlight(id, fly) {
   document.querySelectorAll("li.active").forEach((n) => n.classList.remove("active"));
-  const li = document.querySelector('li[data-id="' + id + '"]');
+  let li = document.querySelector('li[data-id="' + id + '"]');
+  if (!li) {
+    const idx = lastOrdered.findIndex((c) => c.id === id);
+    if (idx >= listLimit) {
+      listLimit = Math.ceil((idx + 1) / LIST_PAGE) * LIST_PAGE;
+      renderList();
+      li = document.querySelector('li[data-id="' + id + '"]');
+    }
+  }
   if (li) { li.classList.add("active"); li.scrollIntoView({ block: "nearest" }); }
   const m = markers[id];
   if (m && fly) { touched = true; cluster.zoomToShowLayer(m, () => { map.flyTo(m.getLatLng(), Math.max(map.getZoom(), 16), { duration: 0.6 }); m.openPopup(); }); }
@@ -2301,7 +2378,7 @@ $("#restore").addEventListener("click", async () => {
     $("#status").textContent = "No se pudo restaurar el catálogo en Supabase; se mantienen los cambios anteriores.";
     return;
   }
-  CENTERS.forEach(makeMarker);
+  makeMarkers(CENTERS);
   refreshSelects(); renderList();
 });
 
@@ -2542,7 +2619,7 @@ renderList();
       if (safePermitState && Object.keys(safePermitState).length) permits[permitKey(c)] = safePermitState;
     });
     loadedPersonalState = { ...loadedPersonalState, customPermits: customPermitsSnapshot() };
-    CENTERS.forEach(makeMarker);
+    makeMarkers(CENTERS);
     refreshSelects();
     renderList();
     gamTile();
@@ -2636,7 +2713,7 @@ renderList();
         };
       });
 
-      CENTERS.forEach(makeMarker);
+      makeMarkers(CENTERS);
       refreshSelects();
       renderList();
       if (rows.length) fitAll();
