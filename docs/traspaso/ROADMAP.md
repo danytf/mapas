@@ -34,6 +34,7 @@ Pendiente:
 - H-03 (`search_path` de `set_updated_at`): decidir si se corrige; cambio de bajo riesgo con migración y huellas.
 - Registrar el rol de base de datos en `audit_log` cuando no hay JWT (mejora de trazabilidad).
 - Hallazgos de la Fase C aplazados aquí por decisión del titular (18/10/2026), ver `HALLAZGOS.md`: H-15 (bloquear «Guardar dirección y ubicación» mientras guarda), H-16 (mensajes de error en español y espera de 27 s), H-17 (lista vacía sin mensaje, etiqueta de valoración, nombre del CSV), H-18 (flechas en el menú y foco al cerrar el panel), H-19 (doble escritura de `user_app_state` al entrar) y H-20 (recuadro fijo de Granada en los puntos personales: prioridad P2).
+- Preparación para varias provincias (registrado el 18/10/2026 a petición del titular): H-21 (app centrada en Granada: geocodificación, vista inicial, municipio por defecto y nombre del CSV; P2), H-22 (la base no tiene en cuenta si la provincia está activa; P3) y H-23 (límite de 5.000 filas sin paginar y máximo de 1.000 de la API; P2). Probar además en el navegador un usuario con dos provincias asignadas, que en la Fase C no se probó (las cuentas sintéticas tenían una cada una).
 
 ## Fase E. Backup, restauración y despliegue
 
@@ -46,6 +47,11 @@ Pendiente:
 ## Fase F. Cierre
 
 Informe final con: resumen ejecutivo; matriz de 10 capas (el listado literal de capas del primer encargo no se conservó: construirla agrupando las evidencias por área: estado y reproducibilidad, base de datos y migraciones, autorización RLS, persistencia, concurrencia e integridad, aplicación y E2E, dependencias, accesibilidad, rendimiento, backup y despliegue; confirmar con el titular); defectos confirmados y correcciones; recomendaciones por prioridad; resultados de pruebas reproducibles; estado de RLS, permisos, funciones y triggers; persistencia; backups y restauración; commits, PR y checks; riesgos residuales y tareas que dependen del titular; criterios de cierre por fase. Formato por hallazgo: ID, capa, severidad, estado, evidencia, impacto, acción, prueba de regresión, riesgo residual, dependencia del titular.
+
+## Pendientes de producto (fuera de la auditoría, decididos por el titular)
+
+- **Panel de administración** (decisión del titular, 18/10/2026: se desarrollará más adelante). Hoy el administrador no tiene pantallas propias: dar de alta usuarios, asignar provincias y editar el catálogo maestro (nombres, categorías, puntos nuevos) se hace por SQL (`docs/ADMINISTRACION_CUENTAS.md`). Cuando se aborde: diseño previo con el titular, sin debilitar la autorización (las escrituras deben seguir protegidas por RLS y `is_admin()`) y con pruebas en un entorno aislado.
+- **Ampliación del catálogo a toda España.** Hoy solo hay catálogo de Granada (791 puntos, aún por completar). La idea del titular es ir ampliándolo al resto de provincias. Antes de cargar otra provincia conviene tener resueltos H-20, H-21 y H-23, y cargar con el mismo procedimiento revisado que Granada (`supabase/seeds/`, `source_ref` único, sin inventar puntos ni coordenadas).
 
 ## Dependencias del titular (resumen)
 
