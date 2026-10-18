@@ -22,10 +22,10 @@
 | H-01 | P1 | Corregido en PR #80 (sin fusionar) | CDN sin versión fija ni SRI; 6 recursos con sha384 y versión exacta; regresión en CI |
 | H-02 | P2 | Abierto | Sin CSP. Propuesta en la sección 3; no aplicada |
 | H-03 | P3 | Abierto (recomendación) | `set_updated_at` tiene `search_path=public`; no se cambia sin necesidad demostrada |
-| H-04 | P2/P3 | Decisión pendiente | Usuarios con provincia pueden modificar (no borrar) solicitudes, concesiones y seguimientos creados por otros usuarios; la matriz lo fija como comportamiento actual |
+| H-04 | P3 | Cerrado por decisión del titular (18/10/2026): se mantiene | Usuarios con provincia pueden modificar (no borrar) solicitudes, concesiones y seguimientos creados por otros usuarios de su provincia. Es una decisión de diseño: el equipo de cada provincia trabaja sobre los mismos puntos. La matriz (`rls_matrix.sql`) fija el comportamiento y avisará si cambia |
 | H-09 | P3 | Aceptado | Origen compartido `danytf.github.io` con otras aplicaciones |
 | H-10 | P2 | Cerrado | Migración `20261018123313` aplicada en producción; prueba de baja de autor en la matriz |
-| H-11 | P1 | Abierto | Último en guardar pisa al anterior en `establishment_app_state.state`; reproducido en local |
+| H-11 | P1 | Abierto, aplazado a la Fase C por decisión del titular (18/10/2026) | Último en guardar pisa al anterior en `establishment_app_state.state`; reproducido en local. Se implementará la opción A (control de versión en el cliente con aviso de conflicto) donde se pueda probar en navegador con sesión. Mientras tanto, lo pisado es recuperable (H-12) |
 | H-12 | P1/P2 | Cerrado | Migración `20261018124030` aplicada; historial de estados previos; 29 pruebas |
 
 Fuera de la B pero resuelto hoy: H-05 (teclado en filas del panel, PR #81).
@@ -40,9 +40,9 @@ No se aplica porque requiere validación en navegador con sesión iniciada (mapa
 
 ## 4. Pendiente para dar la B por completamente cerrada (depende del titular)
 
-1. Fusionar los PR #79, #80, #81 y #82 (en ese orden; #82 está apilado sobre #79).
-2. Decidir H-04 (documentar el modelo de propiedad o restringirlo) y la opción A de H-11.
-3. Confirmar en GitHub que `main` exige los checks `audit` y `postgres-smoke`; no se ha podido comprobar por API.
+1. ~~Fusionar los PR #79, #80, #81 y #82~~ Hecho el 18/10/2026; `main` en producción verificado en navegador.
+2. ~~Decidir H-04 y H-11~~ Decidido: H-04 se mantiene y se documenta; H-11 (opción A) pasa a la Fase C.
+3. Confirmar en GitHub que `main` exige los checks `audit` y `postgres-smoke` y PR obligatorio. Lo comprueba el titular (no verificable por API desde esta sesión); hasta entonces figura como no verificado.
 
 ## 5. Límites conocidos
 
