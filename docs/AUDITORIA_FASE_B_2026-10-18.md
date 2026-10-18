@@ -40,7 +40,7 @@ Comportamientos verificados que conviene conocer:
 
 **Impacto real:** no hay pérdida ni corrupción de datos (el fallo es cerrado). Impide la baja definitiva de cualquier persona que haya dado de alta algo, y el mensaje confunde. `docs/ADMINISTRACION_CUENTAS.md` recomienda desactivar en lugar de borrar, de modo que el flujo habitual no se ve afectado.
 
-**Corrección:** `supabase/migrations/20261018121500_allow_author_set_null_on_profile_delete.sql`. `created_by` solo puede pasar a `NULL` cuando el perfil que figuraba como autor ya no existe, en los dos controles del guard. Mientras el autor exista, la inmutabilidad sigue intacta.
+**Corrección:** `supabase/migrations/20261018123313_allow_author_set_null_on_profile_delete.sql`. `created_by` solo puede pasar a `NULL` cuando el perfil que figuraba como autor ya no existe, en los dos controles del guard. Mientras el autor exista, la inmutabilidad sigue intacta.
 
 **Pruebas de regresión (en `rls_matrix.sql`):**
 
@@ -70,3 +70,10 @@ Comprobación en producción con la página cargada: 0 service workers, 0 Cache 
 - Se simula Supabase Auth con un shim mínimo (`auth.users`, `auth.uid()`). No se ejercitan PostgREST, GoTrue, JWT reales ni sesiones caducadas: eso corresponde a las pruebas de navegador de la Fase C.
 - La migración H-10 **no se ha aplicado a producción**. Requiere autorización expresa.
 - Quedan fuera de esta fase: pruebas de concurrencia entre dos usuarios (capa 5), rendimiento, accesibilidad y restauración de backup.
+
+
+## Aplicación en producción de la migración H-10
+
+Autorizada por el titular el 2026-10-18. Aplicada en Supabase (proyecto `wwoczmihhupofwmlmgga`) con versión `20261018123313`; el fichero del repositorio usa esa misma versión para mantener el libro de migraciones alineado.
+
+Verificación posterior en producción: la función `guard_sensitive_updates` contiene la excepción `author_removed`; ACL sin cambios (solo `postgres` y `service_role`); huellas sin variación: políticas 50 `6bbc89fb`, permisos de tabla 56 `b3201656`, triggers 32 `5643370d`, funciones públicas (sin `rls_auto_enable`, función de la plataforma) 17 `bfc221b1`.
