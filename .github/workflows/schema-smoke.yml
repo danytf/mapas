@@ -146,7 +146,7 @@ jobs:
       - name: Evaluate province access once per query in catalogue and state policies
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261018183559_rls_policy_performance.sql
       - name: Set search_path of set_updated_at and record the database role in audit rows without a user
-        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261018200000_audit_db_role_and_updated_at_search_path.sql
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261018192324_audit_db_role_and_updated_at_search_path.sql
       - name: Verify every migration file is applied by this workflow
         shell: bash
         run: |
