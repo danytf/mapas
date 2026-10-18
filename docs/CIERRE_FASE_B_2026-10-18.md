@@ -43,7 +43,7 @@ No se aplica porque requiere validación en navegador con sesión iniciada (mapa
 
 1. ~~Fusionar los PR #79, #80, #81 y #82~~ Hecho el 18/10/2026; `main` en producción verificado en navegador.
 2. ~~Decidir H-04 y H-11~~ Decidido: H-04 se mantiene y se documenta; H-11 (opción A) pasa a la Fase C.
-3. ~~Confirmar la protección de `main`~~ Verificado por el titular con capturas de la configuración el 18/10/2026: regla sobre `main` (aplica a 1 rama); PR obligatorio (sin aprobaciones requeridas, adecuado para un único titular); checks obligatorios `audit` y `postgres-smoke` (GitHub Actions); sin permitir saltarse las reglas, administradores incluidos; force push y borrado de rama desactivados. Coherente con lo observado: las fusiones de hoy solo fueron posibles con ambos checks en verde. Mejora opcional no activada: "Require branches to be up to date before merging" (un PR podría fusionarse con checks ejecutados sobre una base antigua; hoy el #81 tuvo que combinarse con `main` por conflicto).
+3. ~~Confirmar la protección de `main`~~ Verificado por el titular con capturas de la configuración el 18/10/2026: regla sobre `main` (aplica a 1 rama); PR obligatorio (sin aprobaciones requeridas, adecuado para un único titular); checks obligatorios `audit` y `postgres-smoke` (GitHub Actions); sin permitir saltarse las reglas, administradores incluidos; force push y borrado de rama desactivados. Coherente con lo observado: las fusiones de hoy solo fueron posibles con ambos checks en verde. Mejora activada después por el titular el 18/10/2026: "Require branches to be up to date before merging" (los PR deben estar actualizados con `main` antes de fusionar, de modo que el CI se ejecuta sobre el resultado real).
 
 ## 5. Límites conocidos
 
