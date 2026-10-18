@@ -1,0 +1,11 @@
+{
+  "source_file": "/home/claude/mapas/index.html",
+  "source_sha256": "6401baea9ae4c491c30f01fa21a2a4b0ae19d99d2aff7159181fbfc6e5934d6f",
+  "catalog_mode": "supabase",
+  "static_catalog_present": false,
+  "supabase_catalog_sync_detected": true,
+  "local_storage_write_calls": 0,
+  "session_storage_write_calls": 0,
+  "result": "pass",
+  "limitation": "El catálogo reside en Supabase; esta comprobación no valida coordenadas fila por fila ni sustituye pruebas contra la base de datos."
+}
