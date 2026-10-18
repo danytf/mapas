@@ -1,6 +1,6 @@
 -- Huella MD5 del esquema público. Compara una base local reconstruida con producción.
 -- En producción excluir la función de plataforma rls_auto_enable (no existe en la reconstrucción local).
--- Valores de referencia a 18/10/2026 (tras H-26): políticas 51 f12aa180, permisos 57 374f58c4, funciones propias 19 976fdf1e, privadas 4 8c6f87f4, triggers 34 6d0afe68, RLS 17 e9ad42c3.
+-- Valores de referencia a 18/10/2026 (tras H-26): políticas 51 f12aa180, permisos 57 374f58c4, funciones propias 19 a06e6e20 (tras H-03; antes 976fdf1e), privadas 4 8c6f87f4, triggers 34 6d0afe68, RLS 17 e9ad42c3.
 select 'policies' k, count(*) n, md5(string_agg(tablename||'|'||policyname||'|'||cmd||'|'||roles::text||'|'||coalesce(qual,'')||'|'||coalesce(with_check,''), E'\n' order by tablename, policyname)) h from pg_policies where schemaname='public'
 union all
 select 'table_grants', count(*), md5(string_agg(grantee||'|'||table_name||'|'||privilege_type, E'\n' order by table_name, grantee, privilege_type)) from information_schema.role_table_grants where table_schema='public' and grantee in ('anon','authenticated','PUBLIC')

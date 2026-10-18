@@ -145,6 +145,8 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261018172704_province_active_in_authorization.sql
       - name: Evaluate province access once per query in catalogue and state policies
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261018183559_rls_policy_performance.sql
+      - name: Set search_path of set_updated_at and record the database role in audit rows without a user
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261018192324_audit_db_role_and_updated_at_search_path.sql
       - name: Verify every migration file is applied by this workflow
         shell: bash
         run: |
@@ -166,5 +168,7 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/province_active.sql
       - name: Run RLS policy performance and equivalence tests
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/rls_performance.sql
+      - name: Run audit database-role tests
+        run: psql -v ON_ERROR_STOP=1 -f supabase/tests/audit_db_role.sql
       - name: Run exhaustive authorization matrix
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/rls_matrix.sql
