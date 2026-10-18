@@ -45,9 +45,17 @@ Pendiente:
 - `docs/import-export-backups.md` es el punto de partida.
 - H-24: documentar el plan de Supabase de producción y su efecto en la disponibilidad (pausa por inactividad del plan gratuito) y en las copias; según la decisión del titular sobre el plan, registrar cómo reactivar el proyecto si se pausa.
 
-## Fase F. Cierre (informe redactado el 19/10/2026 en `docs/AUDITORIA_INFORME_FINAL_2026-10-19.md`; falta que el titular confirme la matriz de capas)
+## Fase F. Cierre (CERRADA el 19/10/2026: `docs/AUDITORIA_INFORME_FINAL_2026-10-19.md`, matriz confirmada con escala Cerrada/Parcial/No cubierta/Bloqueada)
 
 Informe final con: resumen ejecutivo; matriz de 10 capas (el listado literal de capas del primer encargo no se conservó: construirla agrupando las evidencias por área: estado y reproducibilidad, base de datos y migraciones, autorización RLS, persistencia, concurrencia e integridad, aplicación y E2E, dependencias, accesibilidad, rendimiento, backup y despliegue; confirmar con el titular); defectos confirmados y correcciones; recomendaciones por prioridad; resultados de pruebas reproducibles; estado de RLS, permisos, funciones y triggers; persistencia; backups y restauración; commits, PR y checks; riesgos residuales y tareas que dependen del titular; criterios de cierre por fase. Formato por hallazgo: ID, capa, severidad, estado, evidencia, impacto, acción, prueba de regresión, riesgo residual, dependencia del titular.
+
+## Auditorías futuras (no cubiertas)
+
+- Privacidad y protección de datos (datos personales, conservación, derechos de acceso y supresión).
+- Observabilidad y respuesta a incidentes.
+- Identidad: recuperación de acceso y revocación de sesiones.
+- Accesibilidad manual: lectores de pantalla reales, zoom y objetivos táctiles.
+- Reversión real de un despliegue en producción.
 
 ## Pendientes de producto (fuera de la auditoría, decididos por el titular)
 
