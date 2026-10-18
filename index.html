@@ -19,7 +19,7 @@
     --bg: #eef0f3;
     --panel: #ffffff;
     --fg: #141b26;
-    --muted: #697384;
+    --muted: #5c6779;
     --line: #e2e6ec;
     --line-2: #cfd5de;
     --accent: #c8102e;
@@ -43,6 +43,9 @@
       --ink: #070b12; --ink-2: #111a29;
       --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.45);
     }
+    #dlgGam em.up { color: #4ade80; }
+    #dlgGam em.dn { color: #ff7084; }
+    .kstrip .k.hot { background: #c8102e; border-color: #c8102e; }
   }
   * { box-sizing: border-box; }
   html, body { height: 100%; margin: 0; }
@@ -151,6 +154,9 @@
   .leaflet-popup-content-wrapper { border-radius: 14px; box-shadow: var(--shadow); padding: 2px; }
   .leaflet-popup-content { margin: 14px 16px; font: 13px/1.45 var(--font); color: #141b26; }
   .leaflet-popup-content { max-height: min(780px, 88vh); overflow-y: auto; scrollbar-width: thin; padding-right: 4px; }
+  /* La ficha del punto es siempre clara (fondo blanco de Leaflet): fija sus colores aunque el sistema esté en oscuro. */
+  .leaflet-popup-content { --fg: #141b26; --muted: #5c6779; --panel: #ffffff; --bg: #eef0f3; --line: #e2e6ec; --line-2: #cfd5de; --accent: #c8102e; --accent-d: #9f0c24; --accent-soft: #fdecef; --warn: #8a5a00; --warn-bg: #fff3d6; --ok: #14532d; --ok-bg: #f3f5f8; --ok-soft: #dcfce7; }
+  input::placeholder, textarea::placeholder { color: var(--muted); opacity: 1; }
   .leaflet-popup-content strong { font-size: 15px; font-weight: 650; letter-spacing: -.01em; line-height: 1.25; display: block; }
   .leaflet-popup-close-button { top: 8px !important; right: 8px !important; }
   .pform { display: grid; gap: 7px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #e2e6ec; }
@@ -161,9 +167,9 @@
   .pform button { height: 34px; padding: 0 12px; background: #c8102e; color: #fff; border-color: #c8102e; }
   .pform button:hover { background: #9f0c24; border-color: #9f0c24; }
   .stars { display: flex; align-items: center; gap: 2px; }
-  .pform .stars button { height: auto; padding: 0 1px; border: 0; background: none; color: #cfd5de; font-size: 24px; line-height: 1; cursor: pointer; }
+  .pform .stars button { height: auto; padding: 0 1px; border: 0; background: none; color: #8a94a3; font-size: 24px; line-height: 1; cursor: pointer; }
   .pform .stars button:hover { background: none; }
-  .pform .stars button.on { color: #f5a623; }
+  .pform .stars button.on { color: #c47a00; }
   .pform .stars .sv { font-size: 11px; color: #697384; margin-left: 6px; }
   a.how { display: inline-block; margin-top: 6px; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; color: #fff; background: #0f1722; text-decoration: none; }
   a.how:hover { background: #1b2636; }
@@ -241,9 +247,9 @@
   .kpi b { display: block; font-size: 28px; font-weight: 680; line-height: 1.05; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
   .kpi span { font-size: 12px; color: var(--muted); }
   .kpi.hl { background: var(--ok-soft); border-color: transparent; color: var(--ok); }
-  .kpi.hl span { color: inherit; opacity: .8; }
+  .kpi.hl span { color: inherit; opacity: .95; }
   .kpi.al { background: var(--warn-bg); border-color: transparent; color: var(--warn); }
-  .kpi.al span { color: inherit; opacity: .85; }
+  .kpi.al span { color: inherit; opacity: .95; }
   #pnBody h3 { font-size: 13.5px; font-weight: 650; margin: 18px 0 8px; }
   .pn-scroll { max-height: 280px; overflow: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
   #pnBody table { width: 100%; border-collapse: collapse; font-size: 12.5px; font-variant-numeric: tabular-nums; }
@@ -290,7 +296,7 @@
   .wk-bar.s-solicitado { background: repeating-linear-gradient(135deg, #fde68a 0 8px, #fbbf24 8px 16px); color: #5b3a00; }
   .wk-bar.s-caducado { background: #cbd5e1; color: #334155; }
   .wk-bar.s-denegado { background: #1f2937; color: #fff; }
-  .wk-bar.s-cancelado { background: #ef4444; color: #fff; text-decoration: line-through; }
+  .wk-bar.s-cancelado { background: #dc2626; color: #fff; text-decoration: line-through; }
   .wk-leg { display: flex; gap: 12px; flex-wrap: wrap; font-size: 11.5px; color: var(--muted); margin-top: 8px; }
   .wk-leg i { display: inline-block; width: 12px; height: 12px; border-radius: 4px; margin-right: 5px; vertical-align: -2px; }
   .wk-sub { font-size: 12px; color: var(--muted); margin: 8px 0 4px; }
@@ -347,12 +353,12 @@
   #dlgGam .ms li.ok .ck { background: #22a15a; border-color: #22a15a; }
   #dlgGam .ms li.ok .mt { text-decoration: line-through; opacity: .7; }
   #dlgGam .ms .mp { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
-  #dlgGam .ms .mx { white-space: nowrap; font-size: 12px; font-weight: 700; color: #8a5a00; }
+  #dlgGam .ms .mx { white-space: nowrap; font-size: 12px; font-weight: 700; color: var(--warn); }
   #dlgGam .ms .mb { grid-column: 2 / 5; height: 4px; border-radius: 2px; background: var(--line); overflow: hidden; }
   #dlgGam .ms .mb i { display: block; height: 100%; background: var(--accent); }
   #dlgGam .lgl li { display: flex; gap: 10px; font-size: 12.5px; padding: 4px 0; border-bottom: 1px solid var(--line); }
   #dlgGam .lgl li span { color: var(--muted); min-width: 70px; }
-  #dlgGam .lgl li b { margin-left: auto; color: #8a5a00; }
+  #dlgGam .lgl li b { margin-left: auto; color: var(--warn); }
   #dlgGam .how { margin-top: 12px; font-size: 12px; color: var(--muted); }
   #dlgGam .how summary { cursor: pointer; }
   #dlgGam .snd { display: flex; align-items: flex-start; gap: 8px; margin: 12px 0 0; font-size: 12.5px; font-weight: 500; color: var(--fg); }
@@ -376,7 +382,7 @@
   #dlgGam .alc { display: grid; gap: 4px; text-align: left; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); color: var(--fg); font: inherit; cursor: pointer; height: auto; }
   #dlgGam .alc:hover { border-color: var(--line-2); }
   #dlgGam .alc b { font-size: 13px; } #dlgGam .alc span { font-size: 11.5px; color: var(--muted); }
-  #dlgGam .alc.full { border-color: #e0a800; background: linear-gradient(135deg, var(--panel), #fff6d6); }
+  #dlgGam .alc.full { border-color: #e0a800; background: linear-gradient(135deg, var(--panel), var(--warn-bg)); }
   #dlgGam .alc.full b::after { content: " ★"; color: #e0a800; }
   #dlgGam .alc .sg { display: flex; height: 5px; border-radius: 3px; background: var(--line); overflow: hidden; }
   #dlgGam .alc .sg i.g { background: #22a15a; } #dlgGam .alc .sg i.a { background: #fbbf24; }
@@ -391,7 +397,7 @@
   #dlgGam .wkl li { display: grid; grid-template-columns: 1fr auto 58px; gap: 10px; padding: 8px 2px; border-bottom: 1px solid var(--line); font-size: 13px; }
   #dlgGam .wkl b { font-variant-numeric: tabular-nums; }
   #dlgGam em { font-style: normal; font-size: 12px; color: var(--muted); }
-  #dlgGam em.up { color: #1b8a4b; font-weight: 700; } #dlgGam em.dn { color: #b42318; font-weight: 700; }
+  #dlgGam em.up { color: #177a40; font-weight: 700; } #dlgGam em.dn { color: #b42318; font-weight: 700; }
   #confetti { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; }
   #xpfly { position: fixed; left: 50%; bottom: 84px; transform: translateX(-50%); display: grid; gap: 6px; justify-items: center; pointer-events: none; z-index: 9998; }
   #xpfly div { background: #1f2a3b; color: #fff; border: 1px solid #e0a800; padding: 7px 14px; border-radius: 999px; font-size: 13px; box-shadow: 0 6px 20px rgba(15,23,34,.35); animation: xpfly 2.6s ease forwards; }
@@ -525,7 +531,7 @@
     </div>
     <ul id="list"></ul>
   </aside>
-  <div id="map" aria-label="Mapa de centros sanitarios"></div>
+  <div id="map" role="region" aria-label="Mapa de centros sanitarios"></div>
 </main>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
@@ -539,18 +545,18 @@
   <div class="lg-h"><h2 id="gamT">Mi progreso</h2><span></span><button type="button" id="gamLogros">Insignias</button><button type="button" id="gamClose" aria-label="Cerrar">Cerrar</button></div>
   <div id="gamBody"></div>
 </dialog>
-<dialog id="dlgPanel">
-  <div class="pn-head"><h2>Panel resumen</h2><button type="button" id="pnClose" aria-label="Cerrar">&times;</button></div>
+<dialog id="dlgPanel" aria-labelledby="pnT">
+  <div class="pn-head"><h2 id="pnT">Panel resumen</h2><button type="button" id="pnClose" aria-label="Cerrar">&times;</button></div>
   <div id="pnBody"></div>
 </dialog>
-<dialog id="dlg">
+<dialog id="dlg" aria-labelledby="addT">
   <form method="dialog" id="addForm">
-    <h2>Agregar punto</h2>
+    <h2 id="addT">Agregar punto</h2>
     <label>Nombre<input id="n-name" required placeholder="Ej.: Hospital Nuestra Señora de la Salud"></label>
     <label>Categoría<select id="n-tipo"></select></label>
     <label>Dirección (calle y número)<input id="n-street" placeholder="Opcional si lo colocas con un clic"></label>
     <label>Municipio<input id="n-town" placeholder="Municipio"></label>
-    <div class="msg" id="n-msg"></div>
+    <div class="msg" id="n-msg" role="status"></div>
     <div class="row">
       <button type="button" id="n-geo" class="primary">Ubicar por dirección</button>
       <button type="button" id="n-click">Colocar en el mapa</button>
@@ -664,6 +670,11 @@ const GLYPH = {
   "Eventos": '<path d="M5 7h14v12H5zM5 11h14M9 5v4M15 5v4"/>'
 };
 const glyphOf = (c) => '<svg viewBox="0 0 24 24" aria-hidden="true">' + (GLYPH[c.tipo] || '<circle cx="12" cy="12" r="3"/>') + "</svg>";
+// Texto legible sobre el color de categoría (blanco u oscuro, el de mayor contraste WCAG).
+const inkOn = (hex) => {
+  const lum = (h) => { const v = [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255).map((x) => (x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4))); return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2]; };
+  return 1.05 / (lum(hex) + 0.05) >= (lum(hex) + 0.05) / (lum("#111827") + 0.05) ? "#fff" : "#111827";
+};
 const colorOf = (c) => (TIPOS.find((t) => t[1] === c.tipo) || [0, 0, "#0b7a68"])[2];
 const matchTipo = (c, t) => !t || c.tipo === t;
 const rawChain = (c) => c.tipo === "Carrefour" ? "Carrefour" : c.tipo === "Supermercado" ? c.name.split(" – ")[0].trim() : "";
@@ -671,7 +682,7 @@ let smallChains = new Set();
 const chainOf = (c) => { const k = rawChain(c); return smallChains.has(k) ? "Independientes (rótulo único)" : k; };
 
 /* Estado operativo del usuario: persistencia remota en Supabase. */
-const ESTADOS = [["sin", "Sin solicitar", "#ffffff"], ["solicitado", "Solicitado", "#fbbf24"], ["concedido", "Concedido", "#22c55e"], ["denegado", "Denegado", "#111827"], ["caducado", "Caducado", "#94a3b8"], ["cancelado", "Cancelado", "#ef4444"]];
+const ESTADOS = [["sin", "Sin solicitar", "#ffffff"], ["solicitado", "Solicitado", "#fbbf24"], ["concedido", "Concedido", "#22c55e"], ["denegado", "Denegado", "#111827"], ["caducado", "Caducado", "#94a3b8"], ["cancelado", "Cancelado", "#dc2626"]];
 let permits = {};
 // Clave estable del estado de permisos de un punto (H-14): el ID de Supabase en el catálogo maestro;
 // en los puntos personales, que no tienen ID, su nombre (único por usuario).
@@ -996,17 +1007,17 @@ function popupFor(c, pos) {
     (c.prov ? "<br><em>El catálogo oficial no incluye la calle" + (pos.approx ? "; posición aproximada (centro del municipio)" : "") + "</em>" : "") +
     (c.conf ? "" : "<br><em>Dirección por confirmar</em>") +
     (pos && pos.lat != null ? '<br><a class="how" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=' + pos.lat + "," + pos.lon + '">Cómo llegar</a>' : "") +
-    '<details class="loc"' + (isRev(c) ? " open" : "") + '><summary>Ubicación' + (isRev(c) ? " (por revisar)" : "") + '</summary><div class="lrow"><a class="lb l-gm" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(pos && pos.lat != null ? pos.lat + "," + pos.lon : c.name.replace(/ – .*$/, "") + " " + addrOf(c) + " España") + '">Ver ubicación exacta en Google Maps</a><button type="button" class="lb l-mv">Mover pin</button><button type="button" class="lb l-cp">Copiar coordenadas actuales</button></div><label class="l-address-label">Dirección postal del establecimiento<input class="l-address" type="text" value="' + esc(c.street || "") + '" aria-label="Dirección postal corregida"></label><label class="l-coords-label">Coordenadas o URL de Google Maps<input class="l-in" type="text" value="' + (cache[c.id] ? cache[c.id].lat.toFixed(6) + ", " + cache[c.id].lon.toFixed(6) : "") + '" placeholder="Pega 37.167041, -4.152314 o la URL de Google Maps" aria-label="Coordenadas o URL de Google Maps"></label><p class="l-help">Importante: cambiar solo la dirección postal NO mueve el marcador. Para moverlo, pega aquí las coordenadas o la URL de Google Maps del lugar correcto, o usa «Mover pin». Después pulsa Guardar.</p><button type="button" class="lb l-save-location">Guardar dirección y ubicación en Supabase</button><div class="lmsg" role="status"></div></details>' +
-    '<div class="pform"><div><span style="font-size:11px;color:#5b726c">Valoración para captación</span><div class="stars" role="radiogroup" aria-label="Valoración de 1 a 5 estrellas">' +
-    [1, 2, 3, 4, 5].map((n) => '<button type="button" data-n="' + n + '" aria-label="' + n + ' estrellas">★</button>').join("") + '<span class="sv"></span></div></div>' +
+    '<details class="loc"' + (isRev(c) ? " open" : "") + '><summary>Ubicación' + (isRev(c) ? " (por revisar)" : "") + '</summary><div class="lrow"><a class="lb l-gm" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(pos && pos.lat != null ? pos.lat + "," + pos.lon : c.name.replace(/ – .*$/, "") + " " + addrOf(c) + " España") + '">Ver ubicación exacta en Google Maps</a><button type="button" class="lb l-mv">Mover pin</button><button type="button" class="lb l-cp">Copiar coordenadas actuales</button></div><label class="l-address-label">Dirección postal del establecimiento<input class="l-address" type="text" value="' + esc(c.street || "") + '"></label><label class="l-coords-label">Coordenadas o URL de Google Maps<input class="l-in" type="text" value="' + (cache[c.id] ? cache[c.id].lat.toFixed(6) + ", " + cache[c.id].lon.toFixed(6) : "") + '" placeholder="Pega 37.167041, -4.152314 o la URL de Google Maps" aria-label="Coordenadas o URL de Google Maps"></label><p class="l-help">Importante: cambiar solo la dirección postal NO mueve el marcador. Para moverlo, pega aquí las coordenadas o la URL de Google Maps del lugar correcto, o usa «Mover pin». Después pulsa Guardar.</p><button type="button" class="lb l-save-location">Guardar dirección y ubicación en Supabase</button><div class="lmsg" role="status"></div></details>' +
+    '<div class="pform"><div><span style="font-size:11px;color:#5b726c">Valoración para captación</span><div class="stars" role="group" aria-label="Valoración de 1 a 5 estrellas">' +
+    [1, 2, 3, 4, 5].map((n) => '<button type="button" data-n="' + n + '" aria-pressed="false" aria-label="' + n + (n === 1 ? ' estrella' : ' estrellas') + '">★</button>').join("") + '<span class="sv"></span></div></div>' +
     '<div class="ef" style="font-size:12px"></div>' +
     '<div class="pinfo"></div><div class="phint">El estado, la fecha de solicitud y el seguimiento se calculan solos a partir de lo que registres en la pestaña Solicitudes.</div>' +
     '<label>Contacto (nombre, teléfono, email)<input class="f-contacto" type="text" value="' + esc(p.contacto || "") + '"></label>' +
     '<label>Notas<textarea class="f-notas">' + esc(p.notas || "") + '</textarea></label>' +
-    '<div class="hist"><h4>Solicitudes</h4><div class="hint">Un mismo punto puede tener varias solicitudes, cada una con sus fechas.</div><ul class="s-list"></ul><details class="aform s-form"><summary>Añadir solicitud</summary><div class="row3"><label>Desde<input class="s-desde" type="date"></label><label>Hasta<input class="s-hasta" type="date"></label><label>Captadores<input class="s-n" type="number" min="1" step="1" placeholder="nº"></label></div><label>ONG<input class="s-ong" type="text" list="ongList" placeholder="AECC, Cruz Roja…" autocomplete="off"></label><label>Próximo seguimiento<input class="s-seg" type="date"></label><button type="button" class="s-add">Añadir solicitud</button><button type="button" class="s-cancel" hidden>Cancelar edición</button></details><div class="s-msg" style="font-size:11px;color:#b3261e;min-height:13px"></div><h4 style="margin-top:10px">Concesiones (historial)</h4><ul class="h-list"></ul><details class="aform h-form"><summary>Añadir concesión</summary><div class="row3"><label>Desde<input class="h-desde" type="date"></label><label>Hasta<input class="h-hasta" type="date"></label><label>Captadores<input class="h-n" type="number" min="1" step="1" placeholder="nº"></label></div><label>ONG<input class="h-ong" type="text" list="ongList" placeholder="AECC, Cruz Roja…" autocomplete="off"></label><button type="button" class="h-add">Añadir concesión al historial</button><button type="button" class="h-cancel" hidden>Cancelar edición</button></details><div class="h-msg" style="font-size:11px;color:#b3261e;min-height:13px"></div></div>' +
+    '<div class="hist"><h4>Solicitudes</h4><div class="hint">Un mismo punto puede tener varias solicitudes, cada una con sus fechas.</div><ul class="s-list"></ul><details class="aform s-form"><summary>Añadir solicitud</summary><div class="row3"><label>Desde<input class="s-desde" type="date"></label><label>Hasta<input class="s-hasta" type="date"></label><label>Captadores<input class="s-n" type="number" min="1" step="1" placeholder="nº"></label></div><label>ONG<input class="s-ong" type="text" list="ongList" placeholder="AECC, Cruz Roja…" autocomplete="off"></label><label>Próximo seguimiento<input class="s-seg" type="date"></label><button type="button" class="s-add">Añadir solicitud</button><button type="button" class="s-cancel" hidden>Cancelar edición</button></details><div class="s-msg" role="status" style="font-size:11px;color:#b3261e;min-height:13px"></div><h4 style="margin-top:10px">Concesiones (historial)</h4><ul class="h-list"></ul><details class="aform h-form"><summary>Añadir concesión</summary><div class="row3"><label>Desde<input class="h-desde" type="date"></label><label>Hasta<input class="h-hasta" type="date"></label><label>Captadores<input class="h-n" type="number" min="1" step="1" placeholder="nº"></label></div><label>ONG<input class="h-ong" type="text" list="ongList" placeholder="AECC, Cruz Roja…" autocomplete="off"></label><button type="button" class="h-add">Añadir concesión al historial</button><button type="button" class="h-cancel" hidden>Cancelar edición</button></details><div class="h-msg" style="font-size:11px;color:#b3261e;min-height:13px"></div></div>' +
     (isRev(c) && !hasPersonalRef(reviewed, c) ? '<button type="button" class="f-rev" style="background:#fff;color:#c8102e">Marcar revisión visual</button>' : "") +
     (isApprox(c) && hasPersonalRef(reviewed, c) ? '<span class="tag warn">Revisada visualmente; ubicación aún sin verificar</span>' : "") +
-    '<button type="button" class="f-save">Guardar cambios</button><button type="button" class="f-del danger">' + (c.custom ? "Eliminar punto" : "Quitar del mapa") + '</button><div class="saved"></div></div>';
+    '<button type="button" class="f-save">Guardar cambios</button><button type="button" class="f-del danger">' + (c.custom ? "Eliminar punto" : "Quitar del mapa") + '</button><div class="saved" role="status"></div></div>';
   const pf = el.querySelector(".pform");
   const put = (n, t) => { if (n) n.setAttribute("data-tab", t); };
   put(pf.firstElementChild, "p"); put(el.querySelector(".ef"), "p");
@@ -1081,7 +1092,7 @@ function popupFor(c, pos) {
     });
   };
   const paint = () => {
-    el.querySelectorAll(".stars button").forEach((b) => b.classList.toggle("on", +b.dataset.n <= val));
+    el.querySelectorAll(".stars button").forEach((b) => { b.classList.toggle("on", +b.dataset.n <= val); b.setAttribute("aria-pressed", +b.dataset.n === val); });
     el.querySelector(".sv").textContent = val ? val + " de 5" : "sin valorar";
   };
   let commitBusy = false;
@@ -1505,7 +1516,7 @@ function listItemFor(c) {
   li.dataset.id = c.id;
   if (!cache[c.id]) li.classList.add("unplaced");
   li.innerHTML =
-    '<div class="num" style="background:' + colorOf(c) + ';color:#fff">' + c.id + "</div><div><strong>" + esc(c.name) + '</strong><span class="addr">' +
+    '<div class="num" style="background:' + colorOf(c) + ';color:' + inkOn(colorOf(c)) + '">' + c.id + "</div><div><strong>" + esc(c.name) + '</strong><span class="addr">' +
     esc(addrOf(c)) + "</span><br>" +
     '<span class="tag">' + esc(c.tipo + (c.sub ? " · " + c.sub : "")) + "</span>" +
     (permOf(c).valoracion ? '<span class="tag" style="background:#fff3d6;color:#8a5a00">' + stars(permOf(c).valoracion) + "</span>" : "") +
@@ -1518,7 +1529,7 @@ function listItemFor(c) {
     (c.conf ? "" : '<span class="tag warn">Por confirmar</span>') +
     (cache[c.id] ? "" : '<span class="tag warn">Sin ubicar</span>') + "</div>";
   li.addEventListener("click", (e) => { highlight(c.id, true); });
-  li.addEventListener("keydown", (e) => { if (e.key === "Enter") highlight(c.id, true); });
+  li.addEventListener("keydown", (e) => { if (e.key === "Enter") { popupFromKey = li; highlight(c.id, true); } });
   return li;
 }
 
@@ -1637,6 +1648,22 @@ function highlight(id, fly) {
   const m = markers[id];
   if (m && fly) { touched = true; cluster.zoomToShowLayer(m, () => { map.flyTo(m.getLatLng(), Math.max(map.getZoom(), 16), { duration: 0.6 }); m.openPopup(); }); }
 }
+
+// Accesibilidad de la ficha: nombre de diálogo, foco en ella al abrirla con el teclado desde la lista y retorno del foco al cerrarla.
+let popupFromKey = null, popupReturn = null;
+map.on("popupopen", (e) => {
+  const box = e.popup.getElement();
+  if (!box) return;
+  box.setAttribute("role", "dialog");
+  box.setAttribute("aria-label", (e.popup._source && e.popup._source.options.title) || "Ficha del punto");
+  box.addEventListener("keydown", (ev) => { if (ev.key === "Escape") map.closePopup(); });
+  if (popupFromKey) { popupReturn = popupFromKey; popupFromKey = null; box.tabIndex = -1; box.focus({ preventScroll: true }); }
+});
+map.on("popupclose", (e) => {
+  const box = e.popup.getElement(), ret = popupReturn;
+  popupReturn = null;
+  if (ret && ret.isConnected && (document.activeElement === document.body || (box && box.contains(document.activeElement)))) ret.focus({ preventScroll: true });
+});
 
 function fitAll() {
   const pts = Object.values(markers).filter((m) => cluster.hasLayer(m)).map((m) => m.getLatLng());
@@ -1908,9 +1935,11 @@ function levelUp(lv) {
   let o = document.getElementById("lvlUp");
   if (o) o.remove();
   o = document.createElement("div"); o.id = "lvlUp"; o.setAttribute("role", "alertdialog"); o.setAttribute("aria-label", "Has subido de nivel");
+  const prev = document.activeElement;
   o.innerHTML = '<div class="lu"><div class="lu-ring"><span>' + lv + '</span></div><h2>¡Nivel ' + lv + '!</h2><p>' + esc(r) + '</p><button type="button" class="lu-ok">Seguir</button></div>';
   document.body.appendChild(o);
-  const close = () => o.remove();
+  const close = () => { const had = o.contains(document.activeElement); o.remove(); if (had && prev && prev.isConnected) prev.focus(); };
+  o.addEventListener("keydown", (ev) => { if (ev.key === "Escape") close(); });
   o.querySelector(".lu-ok").addEventListener("click", close); o.addEventListener("click", (ev) => { if (ev.target === o) close(); });
   setTimeout(close, 7000);
   o.querySelector(".lu-ok").focus();
@@ -2035,7 +2064,7 @@ function tabTerr() {
   const ts = townStats(), N = ts.length || 1, c2 = ts.filter((o) => o.st >= 2).length, c1 = ts.filter((o) => o.st === 1).length, c3 = ts.filter((o) => o.st === 3).length;
   return '<div class="tr-h"><p><b>' + c2 + "</b> de " + ts.length + ' municipios conquistados</p><span class="bar"><i style="width:' + Math.round(100 * c2 / N) + '%"></i></span><small>' + c1 + " en marcha · " + c3 + " dominados (la mitad o más de sus puntos con permiso)</small></div>" +
     '<label class="snd"><input type="checkbox" id="fogChk"' + (gam.fog ? " checked" : "") + "> Mostrar la conquista en el mapa: gris sin explorar, ámbar en marcha, verde conquistado, dorado dominado</label>" +
-    '<input type="search" id="trQ" class="trq" placeholder="Buscar municipio" value="' + esc(gamTq) + '"><ul class="trl" id="trList"></ul>';
+    '<input type="search" id="trQ" class="trq" placeholder="Buscar municipio" aria-label="Buscar municipio" value="' + esc(gamTq) + '"><ul class="trl" id="trList"></ul>';
 }
 function trFill() {
   const ul = document.getElementById("trList"); if (!ul) return;
