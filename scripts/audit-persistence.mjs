@@ -151,6 +151,21 @@ if (permitWriteStart < 0 || permitWriteEnd < 0) {
 if (/from\("establishment_app_state"\)\s*\.upsert\(/.test(html)) {
   failures.push("No debe haber upsert ciego sobre establishment_app_state (H-11).");
 }
+// H-14: el estado de permisos se indexa por una clave estable (ID de Supabase), nunca por el nombre.
+if (/permits\[c\.name\]|permits\[name\]|item\.name === name && item\.databaseId/.test(html) ||
+    !/const permitKey = \(c\) => c\.databaseId \? "id:" \+ c\.databaseId : "custom:" \+ c\.name;/.test(html)) {
+  failures.push("El estado de permisos debe indexarse por permitKey (ID de Supabase), no por el nombre del punto (H-14).");
+}
+// H-13: los permisos de un punto personal se guardan en el estado personal; nunca se da por bueno sin escribir.
+const savePermitsStart = html.indexOf("const savePermits = async (c) =>");
+const savePermitsBody = savePermitsStart >= 0 ? html.slice(savePermitsStart, html.indexOf("const reloadSharedPermit", savePermitsStart)) : "";
+if (!savePermitsBody ||
+    !/if \(!c\.databaseId\) \{\s*const result = c\.custom \? await saveCustomPermits\(\) : "error";/.test(savePermitsBody) ||
+    /return "ok";/.test(savePermitsBody) ||
+    !/window\.mapaPersistUserState\("customPermits", customPermitsSnapshot\(\)\)/.test(html) ||
+    !/state\.customPermits/.test(html)) {
+  failures.push("Los permisos de los puntos personales deben guardarse y cargarse desde user_app_state (customPermits) sin dar por bueno un guardado no realizado (H-13).");
+}
 const personalTimeoutStart = html.indexOf("window.mapaPersistUserState =");
 const personalTimeoutEnd = html.indexOf("async function loadPersonalState()", personalTimeoutStart);
 const locationApplyStart = html.indexOf("const apply = async (txt) =>");
@@ -182,11 +197,11 @@ if (commitStart < 0 || commitEnd < 0) {
     failures.push("Un conflicto al guardar permisos no debe reescribir el estado y debe ofrecer cargar la versión actual (H-11).");
   }
   if (!/if\s*\(saved !== "ok"\)\s*\{/.test(permitCommit) ||
-      !/permits\[c\.name\]\s*=\s*previous\.permit/.test(permitCommit) ||
-      !/const rollbackSaved = await savePermits\(c\.name\)/.test(permitCommit) ||
+      !/permits\[permitKey\(c\)\]\s*=\s*previous\.permit/.test(permitCommit) ||
+      !/const rollbackSaved = await savePermits\(c\)/.test(permitCommit) ||
       !/setCommitControlsDisabled\(true\)/.test(permitCommit) ||
       !/setCommitControlsDisabled\(false\)/.test(permitCommit) ||
-      !/paint\(\); paintHist\(\); paintSols\(\); paintEf\(\);\s*setCommitControlsDisabled\(true\);\s*const rollbackSaved = await savePermits\(c\.name\)/.test(permitCommit) ||
+      !/paint\(\); paintHist\(\); paintSols\(\); paintEf\(\);\s*setCommitControlsDisabled\(true\);\s*const rollbackSaved = await savePermits\(c\)/.test(permitCommit) ||
       !/gamPermit\(c, previous\.permit\)/.test(permitCommit)) {
     failures.push("El guardado de permisos debe bloquear ediciones concurrentes, revertir el estado ante fallo y otorgar progreso solo tras guardar.");
   }

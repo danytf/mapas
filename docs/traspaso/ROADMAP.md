@@ -33,6 +33,7 @@ Pendiente:
 - Los 23 índices sin uso: no eliminar; si se revisan, solo informe con datos de uso reales.
 - H-03 (`search_path` de `set_updated_at`): decidir si se corrige; cambio de bajo riesgo con migración y huellas.
 - Registrar el rol de base de datos en `audit_log` cuando no hay JWT (mejora de trazabilidad).
+- Hallazgos de la Fase C aplazados aquí por decisión del titular (18/10/2026), ver `HALLAZGOS.md`: H-15 (bloquear «Guardar dirección y ubicación» mientras guarda), H-16 (mensajes de error en español y espera de 27 s), H-17 (lista vacía sin mensaje, etiqueta de valoración, nombre del CSV), H-18 (flechas en el menú y foco al cerrar el panel), H-19 (doble escritura de `user_app_state` al entrar) y H-20 (recuadro fijo de Granada en los puntos personales: prioridad P2).
 
 ## Fase E. Backup, restauración y despliegue
 
