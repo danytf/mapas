@@ -72,6 +72,7 @@ node scripts/test-paged-fetch.mjs
 node scripts/test-multiprovince.mjs
 node scripts/test-ui-fixes.mjs
 node scripts/test-list-performance.mjs
+node scripts/test-a11y-fase-d.mjs index.html
 ```
 
 Pruebas SQL: ver `docs/traspaso/PRUEBAS.md`. Un cambio de esquema exige migración + prueba + paso en `schema-smoke.yml`.
