@@ -549,7 +549,7 @@
     <label>Nombre<input id="n-name" required placeholder="Ej.: Hospital Nuestra Señora de la Salud"></label>
     <label>Categoría<select id="n-tipo"></select></label>
     <label>Dirección (calle y número)<input id="n-street" placeholder="Opcional si lo colocas con un clic"></label>
-    <label>Municipio<input id="n-town" value="Granada"></label>
+    <label>Municipio<input id="n-town" placeholder="Municipio"></label>
     <div class="msg" id="n-msg"></div>
     <div class="row">
       <button type="button" id="n-geo" class="primary">Ubicar por dirección</button>
@@ -592,12 +592,22 @@
 const CENTERS = [];
 let customs = [];
 const PRECOMPUTED = Object.create(null);
-const VIEWBOX = "-4.40,38.10,-2.50,36.65";
+// Zonas de España (Península y Baleares, Canarias, Ceuta y Melilla): solo una comprobación de cordura de las
+// coordenadas (descarta otros continentes, el Atlántico, el norte de África y valores cambiados), no un límite
+// de provincia: la autorización por provincia la hace la base de datos.
+const SPAIN_AREAS = [
+  { latMin: 35.9, latMax: 43.9, lonMin: -9.4, lonMax: 4.4 },
+  { latMin: 27.5, latMax: 29.5, lonMin: -18.3, lonMax: -13.3 },
+  { latMin: 35.2, latMax: 36.0, lonMin: -5.5, lonMax: -2.8 }
+];
+const SPAIN_CENTER = [40.2, -3.7];
+const inSpain = (lat, lon) => Number.isFinite(lat) && Number.isFinite(lon) &&
+  SPAIN_AREAS.some((z) => lat >= z.latMin && lat <= z.latMax && lon >= z.lonMin && lon <= z.lonMax);
 const $ = (s) => document.querySelector(s);
 let cache = {};
 const saveCache = () => {};
 
-const map = L.map("map", { zoomControl: true }).setView([37.1773, -3.5986], 13);
+const map = L.map("map", { zoomControl: true }).setView(SPAIN_CENTER, 6);
 const ATTR = "Tiles © Esri — Source: Esri, HERE, Garmin, OpenStreetMap contributors | Geocodificación: © Instituto Geográfico Nacional de España (CartoCiudad) | Ubicaciones: © colaboradores de OpenStreetMap (ODbL)";
 const esriTiles = (svc, o) => L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/" + svc + "/MapServer/tile/{z}/{y}/{x}", Object.assign({ maxZoom: 19, attribution: ATTR }, o || {}));
 const esri = esriTiles("World_Street_Map");
@@ -945,7 +955,9 @@ const isApprox = (c) => !!(cache[c.id] && cache[c.id].approx);
 const isRev = (c) => isApprox(c) || (!hasPersonalRef(reviewed, c) && (DUPS.has(c.name) || !c.conf));
 const estadoInfo = (k) => ESTADOS.find((e) => e[0] === k) || ESTADOS[0];
 
-const addrOf = (c) => (c.street ? c.street + ", " : "") + (c.town || "Granada");
+// Municipio mostrado de un punto: el suyo, o el nombre de su provincia si no lo tiene.
+const townOf = (c) => c.town || c.province || "Sin municipio";
+const addrOf = (c) => (c.street ? c.street + ", " : "") + townOf(c);
 
 function makeIcon(c) {
   const e = estadoInfo(estadoOf(c));
@@ -1278,7 +1290,7 @@ function parseCoords(t) {
   let m = t.match(/@(-?\d{1,2}\.\d+),(-?\d{1,3}\.\d+)/) || t.match(/!3d(-?\d{1,2}\.\d+)!4d(-?\d{1,3}\.\d+)/) || t.match(/(-?\d{1,2}\.\d+)\s*[,;\s]\s*(-?\d{1,3}\.\d+)/);
   if (!m) return null;
   const la = +m[1], lo = +m[2];
-  return la >= 36.5 && la <= 38.3 && lo >= -4.6 && lo <= -2.2 ? [la, lo] : null;
+  return inSpain(la, lo) ? [la, lo] : null;
 }
 async function setLoc(c, lat, lon, address) {
   if (!c) return false;
@@ -1287,8 +1299,7 @@ async function setLoc(c, lat, lon, address) {
     console.error("[Mapa] No se puede guardar una ubicación sin dirección.");
     return false;
   }
-  if (!Number.isFinite(lat) || !Number.isFinite(lon) ||
-      lat < 36.5 || lat > 38.3 || lon < -4.6 || lon > -2.2) return false;
+  if (!inSpain(lat, lon)) return false;
 
   if (c.custom) {
     const p = customs.find((x) => x.name === c.name);
@@ -1470,7 +1481,7 @@ function renderList() {
   const order = $("#orden").value === "val" ? [...CENTERS].sort((a, b) => rate(b) - rate(a) || a.id - b.id) : CENTERS;
   order.forEach((c) => {
     const visible = !isOut(c) && (!provincia || (typeof c.province === "string" ? c.province : (typeof c.prov === "string" ? c.prov : "")) === provincia) && matchTipo(c, tipo) && (!ch || chainOf(c) === ch) && (!sb || c.sub === sb) && (!est || estadoOf(c) === est) && (!onlyRev || isRev(c)) && (!onlySeg || seguimientoDue(c)) && okVal(c) &&
-      (!q || (c.name + " " + c.street + " " + (c.town || "Granada")).toLowerCase().includes(q));
+      (!q || (c.name + " " + c.street + " " + townOf(c)).toLowerCase().includes(q));
     if (markers[c.id]) {
       const on = cluster.hasLayer(markers[c.id]);
       if (visible && !on) cluster.addLayer(markers[c.id]);
@@ -1530,54 +1541,24 @@ function fitAll() {
   if (pts.length) map.fitBounds(L.latLngBounds(pts).pad(0.12));
 }
 
+// Busca una dirección en Nominatim (OpenStreetMap). Si se indica un área (viewbox «izq,arr,der,aba»), el
+// resultado debe caer dentro de ella; sin área se busca en toda España.
 async function nominatim(q, vb) {
   const url = "https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=es" +
-    "&viewbox=" + (vb || VIEWBOX) + "&bounded=1&q=" + encodeURIComponent(q);
+    (vb ? "&viewbox=" + vb + "&bounded=1" : "") + "&q=" + encodeURIComponent(q);
   const r = await fetch(url, { headers: { "Accept-Language": "es" } });
   if (!r.ok) throw new Error("HTTP " + r.status);
   const j = await r.json();
   return j.length ? { lat: parseFloat(j[0].lat), lon: parseFloat(j[0].lon) } : null;
 }
-
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
-async function locateAll() {
-  const pending = CENTERS.filter((c) => !cache[c.id] && !isOut(c));
-  let done = CENTERS.length - pending.length;
-  const tick = () => {
-    $("#prog").style.width = Math.round((done / CENTERS.length) * 100) + "%";
-    const placed = CENTERS.filter((c) => cache[c.id]).length;
-    $("#status").textContent = placed + " de " + CENTERS.length + " ubicados" +
-      (done < CENTERS.length ? " · buscando posiciones…" : "");
-  };
-  tick();
-  CENTERS.forEach(makeMarker);
-  fitAll();
-  for (const c of pending) {
-    try {
-      let pos;
-      if (c.prov || c.town) {
-        // 1) centro del municipio (una consulta por municipio, en caché); 2) calle o nombre dentro de ~4 km; 3) si no, el centro.
-        const k = "t:" + c.town;
-        if (!cache[k]) { const t = await nominatim(c.town + ", Granada"); if (t) cache[k] = t; await sleep(1100); }
-        const t = cache[k];
-        if (t) {
-          const d = c.street ? 0.06 : 0.04, vb = [t.lon - d, t.lat + d, t.lon + d, t.lat - d].join(",");
-          if (c.street) { pos = await nominatim(c.street + ", " + c.town, vb); if (!pos) await sleep(1100); }
-          if (!pos) pos = { lat: t.lat, lon: t.lon, approx: true };
-        }
-      } else {
-        pos = await nominatim(c.street + ", " + (c.town || "Granada"));
-        if (!pos) { await sleep(1100); pos = await nominatim(c.q2 || (c.name.replace(/^CS /, "Centro de Salud ") + ", Granada")); }
-      }
-      if (pos) { cache[c.id] = pos; saveCache(); makeMarker(c); }
-    } catch (e) {
-      $("#status").textContent = "No se pudo consultar OpenStreetMap (" + e.message + "). Recarga más tarde.";
-    }
-    done++; tick(); if (done % 10 === 0 || done === CENTERS.length) renderList(); if (!touched && done % 10 === 0) fitAll();
-    await sleep(1100); // límite de uso de Nominatim: 1 petición por segundo
-  }
-  tick();
+// Área de búsqueda para «Ubicar por dirección»: el rectángulo de los puntos del catálogo que ve el usuario
+// (sus provincias; todas, si es administrador) con un margen. Sin puntos, sin área.
+function searchViewbox() {
+  const pts = CENTERS.filter((c) => !c.custom && !isOut(c) && cache[c.id] && Number.isFinite(cache[c.id].lat))
+    .map((c) => [cache[c.id].lat, cache[c.id].lon]);
+  if (!pts.length) return "";
+  const lats = pts.map((p) => p[0]), lons = pts.map((p) => p[1]), m = 0.15;
+  return [Math.min(...lons) - m, Math.max(...lats) + m, Math.max(...lons) + m, Math.min(...lats) - m].map((x) => +x.toFixed(5)).join(",");
 }
 
 let fitTimer, onlyRev = false, onlySeg = false;
@@ -1632,7 +1613,7 @@ function logrosCalc() {
   const lvOf = (v, ts) => ts.filter((t) => v >= t).length;
   const tier = (v, ts, unit) => { const lv = lvOf(v, ts); return { lv, max: ts.length, txt: lv >= ts.length ? v + " " + unit : v + " / " + ts[lv] + " " + unit }; };
   const bin = (ok, txt) => ({ lv: ok ? 1 : 0, max: 1, txt });
-  const towns = new Set(con.map((c) => c.town || "Granada"));
+  const towns = new Set(con.map((c) => townOf(c)));
   const cats = ["Hospital", "Centro de salud", "Supermercado", "Centro comercial", "Entidad oficial"];
   const catsOk = cats.filter((t) => con.some((c) => c.tipo === t));
   const grp = {}; vis.forEach((c) => { const k = rawChain(c); if (k) (grp[k] = grp[k] || []).push(c); });
@@ -1853,7 +1834,7 @@ function gamPermit(c, prev) {
   let g = 0, big = false, lab = "";
   const add = (k, pts, kind, label, opt) => { const r = award(k, pts, kind, Object.assign({ label }, opt || {})); if (r) { g += r; lab = lab || label; } return r; };
   if (est !== "sin") add("sol:" + name, 10, "sol", "Permiso solicitado");
-  if (est === "concedido" && add("con:" + name, 50, "con", "Permiso concedido", { town: c.town || "Granada" })) big = true;
+  if (est === "concedido" && add("con:" + name, 50, "con", "Permiso concedido", { town: townOf(c) })) big = true;
   if (est !== "sin" && p.contacto) add("ctc:" + name, 8, "ctc", "Contacto anotado");
   if (p.valoracion > 0) add("val:" + name, 5, "val", "Punto valorado");
   const o = pv.seguimiento || "", n = p.seguimiento || "";
@@ -1920,7 +1901,7 @@ function townStats() {
   const m = {};
   CENTERS.forEach((c) => {
     if (isOut(c)) return;
-    const t = c.town || "Granada", o = m[t] || (m[t] = { t, n: 0, con: 0, sol: 0, pts: [] }), e = estadoOf(c);
+    const t = townOf(c), o = m[t] || (m[t] = { t, n: 0, con: 0, sol: 0, pts: [] }), e = estadoOf(c);
     o.n++; if (e === "concedido") o.con++; else if (e === "solicitado") o.sol++;
     const q = cache[c.id]; if (q && q.lat) o.pts.push([q.lat, q.lon]);
   });
@@ -1944,7 +1925,7 @@ function fogDraw() {
   fogLayer.addTo(map);
 }
 function focusTown(t) {
-  const pts = CENTERS.filter((c) => !isOut(c) && (c.town || "Granada") === t && cache[c.id] && cache[c.id].lat).map((c) => [cache[c.id].lat, cache[c.id].lon]);
+  const pts = CENTERS.filter((c) => !isOut(c) && townOf(c) === t && cache[c.id] && cache[c.id].lat).map((c) => [cache[c.id].lat, cache[c.id].lon]);
   document.getElementById("dlgGam").close();
   if (pts.length) map.fitBounds(L.latLngBounds(pts), { padding: [60, 60], maxZoom: 15 });
 }
@@ -2169,8 +2150,8 @@ const csvCell = (value) => {
         arr.slice().sort((x, y) => WK_ORDEN.indexOf(x.e) - WK_ORDEN.indexOf(y.e) || (x.desde || "").localeCompare(y.desde || "") || x.c.name.localeCompare(y.c.name)).forEach((i) => {
           const s0 = Math.max(0, i.desde && i.desde > a ? days.indexOf(i.desde) : 0), e0 = Math.min(6, i.hasta && i.hasta < b ? days.indexOf(i.hasta) : 6);
           const clipL = i.desde && i.desde < a, clipR = i.hasta && i.hasta > b;
-          const tip = i.c.name + " (" + (i.c.town || "Granada") + ")\n" + estadoInfo(i.e)[1] + " · " + fmtD(i.desde) + " – " + fmtD(i.hasta) + (i.ong ? " · " + i.ong : "") + (i.n ? " · " + i.n + " captadores" : "");
-          h += '<div class="wkr it"><div class="wk-n"><span>' + esc(i.c.name) + "</span><small>" + esc(i.c.town || "Granada") + "</small></div>" + cells() +
+          const tip = i.c.name + " (" + townOf(i.c) + ")\n" + estadoInfo(i.e)[1] + " · " + fmtD(i.desde) + " – " + fmtD(i.hasta) + (i.ong ? " · " + i.ong : "") + (i.n ? " · " + i.n + " captadores" : "");
+          h += '<div class="wkr it"><div class="wk-n"><span>' + esc(i.c.name) + "</span><small>" + esc(townOf(i.c)) + "</small></div>" + cells() +
             '<button type="button" class="wk-bar s-' + i.e + (clipL ? " cl" : "") + (clipR ? " cr" : "") + '" data-pt="' + i.c.id + '" style="grid-column:' + (s0 + 2) + " / " + (e0 + 3) + '" title="' + esc(tip) + '"><em>' + (e0 - s0 >= 1 ? esc(estadoInfo(i.e)[1]) : "") + "</em>" + (i.n ? '<em class="nn">' + i.n + "</em>" : "") + "</button></div>";
         });
       });
@@ -2190,7 +2171,7 @@ const csvCell = (value) => {
     });
     soon.sort((a, b) => a[1].localeCompare(b[1]));
     const byTipo = TIPOS.map(([, n]) => [n, stat(all.filter((c) => c.tipo === n))]).filter(([, r]) => r.n);
-    const towns = {}; all.forEach((c) => { const k = c.town || "Granada"; (towns[k] = towns[k] || []).push(c); });
+    const towns = {}; all.forEach((c) => { const k = townOf(c); (towns[k] = towns[k] || []).push(c); });
     const byTown = Object.entries(towns).map(([k, v]) => [k, stat(v)]).sort((a, b) => b[1].capt - a[1].capt || b[1].vig - a[1].vig || b[1].con - a[1].con || b[1].n - a[1].n || a[0].localeCompare(b[0]));
     body.innerHTML =
       '<div class="kpis">' +
@@ -2204,7 +2185,7 @@ const csvCell = (value) => {
       '<div class="kpi"><b>' + expired.length + "</b><span>Solicitud caducada</span></div></div>" +
       '<h3>Permisos por semana</h3><div id="wkBox"></div>' +
       (soon.length ? "<h3>Caducan en los próximos 30 días</h3><div class=\"pn-scroll\"><table><thead><tr><th>Punto</th><th>Hasta</th><th>Captadores</th></tr></thead><tbody>" +
-        soon.map(([c, end, n]) => '<tr data-kind="pt" data-k="' + c.id + '"><td><button type="button" class="pn-rowbtn">' + esc(c.name) + " · " + esc(c.town || "Granada") + "</button></td><td>" + fmtD(end) + "</td><td>" + n + "</td></tr>").join("") + "</tbody></table></div>" : "") +
+        soon.map(([c, end, n]) => '<tr data-kind="pt" data-k="' + c.id + '"><td><button type="button" class="pn-rowbtn">' + esc(c.name) + " · " + esc(townOf(c)) + "</button></td><td>" + fmtD(end) + "</td><td>" + n + "</td></tr>").join("") + "</tbody></table></div>" : "") +
       "<h3>Por categoría</h3><div class=\"pn-scroll\"><table>" + thead("Categoría") + "<tbody>" + rowsHtml(byTipo, "tipo") + '<tr class="tot"><td>Total</td><td>' + t.n + "</td><td>" + t.sol + "</td><td>" + t.con + "</td><td>" + t.den + "</td><td>" + t.vig + "</td><td>" + t.capt + "</td></tr></tbody></table></div>" +
       "<h3>Por municipio</h3><div class=\"pn-scroll\"><table>" + thead("Municipio") + "<tbody>" + rowsHtml(byTown, "town") + "</tbody></table></div>" +
       '<div class="pn-note">Pulsa una fila para filtrar el mapa por esa categoría o municipio. El estado, la vigencia y los captadores se calculan con las solicitudes y concesiones de cada punto. En «Permisos por semana», un permiso entra si sus fechas tocan esa semana (lunes a domingo).</div>';
@@ -2239,14 +2220,20 @@ function openLogros() {
 }
 document.getElementById("logrosBtn").addEventListener("click", openLogros);
 document.getElementById("lgClose").addEventListener("click", () => document.getElementById("dlgLogros").close());
+// Nombre de los ficheros exportados según las provincias que ve el usuario (p. ej. «granada» o «almeria-granada»).
+const slugName = (s) => String(s).normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+function exportScopeName() {
+  const names = [...new Set(CENTERS.filter((c) => !c.custom && c.province).map((c) => slugName(c.province)))].filter(Boolean).sort();
+  return !names.length ? "mapa" : names.length <= 3 ? names.join("-") : "varias-provincias";
+}
 $("#csv").addEventListener("click", () => {
   if (!window.confirm("El CSV incluye datos operativos —contactos, notas e historial de permisos—. Guárdalo solo en una ubicación autorizada. ¿Quieres exportarlo?")) return;
   const head = ["id", "categoria", "subtipo", "nombre", "direccion", "municipio", "lat", "lon", "ubicacion_aproximada", "origen", "valoracion", "estado_permiso", "fecha_solicitud", "proximo_seguimiento", "contacto", "notas", "solicitud", "concesion_vigente", "historial_concesiones"];
   const rows = CENTERS.filter((c) => !isOut(c)).map((c) => {
     const p = permOf(c), pos = cache[c.id] || {};
-    return [c.id, c.tipo, c.sub || "", c.name, c.street, c.town || "Granada", pos.lat || "", pos.lon || "", isApprox(c) ? "sí" : "", c.custom ? "agregado" : "base", p.valoracion || "", estadoInfo(estadoOf(c))[1], p.fecha, p.seguimiento || "", p.contacto, p.notas, solTxt(c), vigente(c) ? histTxt(vigente(c)) : "", histOf(c).map(histTxt).join(" | ")].map(csvCell).join(";");
+    return [c.id, c.tipo, c.sub || "", c.name, c.street, townOf(c), pos.lat || "", pos.lon || "", isApprox(c) ? "sí" : "", c.custom ? "agregado" : "base", p.valoracion || "", estadoInfo(estadoOf(c))[1], p.fecha, p.seguimiento || "", p.contacto, p.notas, solTxt(c), vigente(c) ? histTxt(vigente(c)) : "", histOf(c).map(histTxt).join(" | ")].map(csvCell).join(";");
   });
-  download("permisos-captacion-granada.csv", "\ufeff" + head.join(";") + "\r\n" + rows.join("\r\n"), "text/csv;charset=utf-8");
+  download("permisos-captacion-" + exportScopeName() + ".csv", "\ufeff" + head.join(";") + "\r\n" + rows.join("\r\n"), "text/csv;charset=utf-8");
 });
 $("#bak").addEventListener("click", () => {
   if (!window.confirm("Se exportará el estado operativo del mapa a un archivo JSON. Este archivo NO es una copia completa de Supabase ni contiene una copia íntegra del catálogo maestro. Guárdalo solo en una ubicación autorizada. ¿Continuar?")) return;
@@ -2274,9 +2261,16 @@ $("#restore").addEventListener("click", async () => {
 const dlg = $("#dlg");
 $("#n-tipo").innerHTML = TIPOS.map(([i, t]) => '<option value="' + t + '">' + i + " · " + t + "</option>").join("");
 const nmsg = (t) => { $("#n-msg").textContent = t; };
+// Municipio por defecto del alta de puntos: el nombre de la provincia si el usuario ve una sola; con varias
+// provincias (o sin puntos) no se supone ninguno y se le pide.
+function defaultTown() {
+  const provinces = [...new Set(CENTERS.filter((c) => !c.custom && c.province).map((c) => c.province))];
+  return provinces.length === 1 ? provinces[0] : "";
+}
 function readForm() {
-  const name = $("#n-name").value.trim(), town = $("#n-town").value.trim() || "Granada", street = $("#n-street").value.trim();
+  const name = $("#n-name").value.trim(), town = $("#n-town").value.trim() || defaultTown(), street = $("#n-street").value.trim();
   if (!name) { nmsg("Escribe un nombre."); return null; }
+  if (!town) { nmsg("Indica el municipio."); return null; }
   if (CENTERS.some((c) => c.name.toLowerCase() === name.toLowerCase())) { nmsg("Ya existe un punto con ese nombre."); return null; }
   return { name, tipo: $("#n-tipo").value, town, street };
 }
@@ -2300,14 +2294,14 @@ async function addCustom(rec, pos) {
   highlight(c.id, false);
   return true;
 }
-$("#add").addEventListener("click", () => { nmsg(""); $("#addForm").reset(); $("#n-town").value = "Granada"; dlg.showModal(); });
+$("#add").addEventListener("click", () => { nmsg(""); $("#addForm").reset(); $("#n-town").value = defaultTown(); dlg.showModal(); });
 $("#n-cancel").addEventListener("click", () => dlg.close());
 $("#n-geo").addEventListener("click", async () => {
   const rec = readForm(); if (!rec) return;
   if (!rec.street) { nmsg("Sin dirección no se puede buscar: indica la calle o usa “Colocar en el mapa”."); return; }
   nmsg("Buscando…");
   try {
-    const pos = await nominatim(rec.street + ", " + rec.town);
+    const pos = await nominatim(rec.street + ", " + rec.town, searchViewbox());
     if (!pos) { nmsg("No se ha encontrado esa dirección. Prueba a cambiarla o usa “Colocar en el mapa”."); return; }
     dlg.close(); await addCustom(rec, pos);
   } catch (e) { nmsg("No se pudo consultar OpenStreetMap (" + e.message + ")."); }
@@ -2459,8 +2453,7 @@ renderList();
     customs = Array.isArray(state.customs) ? state.customs.filter(p => {
       if (!p || typeof p.name !== "string" || !p.name.trim()) return false;
       const lat = Number(p.lat), lon = Number(p.lon);
-      if (!Number.isFinite(lat) || !Number.isFinite(lon) ||
-          lat < 36.5 || lat > 38.3 || lon < -4.6 || lon > -2.2) return false;
+      if (!inSpain(lat, lon)) return false;
       const name = p.name.trim();
       if (customNames.has(name)) return false;
       customNames.add(name);
@@ -2596,7 +2589,7 @@ renderList();
       refreshSelects();
       renderList();
       if (rows.length) fitAll();
-      else map.setView([37.1773, -3.5986], 7);
+      else map.setView(SPAIN_CENTER, 6);
 
       window.mapaSession.catalogueReady = true;
       window.mapaSession.catalogueCount = rows.length;

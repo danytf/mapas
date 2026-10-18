@@ -10,6 +10,7 @@ node scripts/audit-csp.mjs index.html
 node scripts/audit-static-catalog.mjs index.html      # genera catalog-audit-output/ (ignorado por git)
 node scripts/test-shared-state-sanitizers.mjs
 node scripts/test-paged-fetch.mjs
+node scripts/test-multiprovince.mjs
 ```
 Cada una devuelve código distinto de cero si falla. `audit-a11y` y `audit-cdn-integrity` fallan en versiones anteriores a #81 y #80 (control negativo).
 
@@ -35,6 +36,12 @@ Resultado esperado: `state_history: 29 comprobaciones correctas`, `state_version
 2. Definir `E2E_PW_ADMIN`, `E2E_PW_GRANADA`, `E2E_PW_GRANADA2`, `E2E_PW_ALMERIA`, `E2E_PW_SINPROVINCIA` y `E2E_PW_DESACTIVADO` y ejecutar `psql "<conexión>" -v ON_ERROR_STOP=1 -f supabase/e2e/seed_synthetic.sql`. Aborta si la base no está vacía o faltan las variables.
 3. Copia de `index.html` fuera del repositorio con `SUPABASE_URL` y `SUPABASE_KEY` del proyecto aislado, servida en `http://127.0.0.1:<puerto>/`.
 4. Guion de pruebas y resultados esperados: `docs/AUDITORIA_FASE_C_2026-10-18.md`.
+
+## Interfaz con un Supabase simulado (sin proyecto ni coste)
+Para probar lógica del navegador (provincias, geocodificación, valores por defecto, nombre de ficheros) sin crear un proyecto:
+1. `node scripts/dev/mock-supabase.mjs` (puerto 8766): imita GoTrue y PostgREST con datos sintéticos de Granada, Almería y Jaén y un Nominatim simulado que registra las peticiones (`/__log`). Usuarios, con contraseña «x»: `multi@test.es` (dos provincias), `alm@test.es` (una), `vacio@test.es` (sin puntos), `admin@test.es`.
+2. `node scripts/dev/build-mock-site.mjs index.html <salida>/index.html` y servir esa copia en un servidor estático local (p. ej. 127.0.0.1:8765).
+3. Abrir la copia en el navegador. No prueba RLS ni la API real (eso lo cubren `supabase/tests/` y las pruebas en un proyecto aislado); cubre el comportamiento del cliente. Resultados de ejemplo: `docs/AUDITORIA_FASE_D_2026-10-18.md`.
 
 ## Control negativo de la matriz
 Reconstruir sin la migración `20261018123313_allow_author_set_null_on_profile_delete.sql`: la matriz debe fallar con 2 discrepancias.
