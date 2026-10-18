@@ -10,7 +10,7 @@
 | B. Seguridad y persistencia | Cerrada (H-11 aplazado a la C por decisión del titular) |
 | C. Pruebas E2E en navegador | Cerrada el 18/10/2026 (`docs/AUDITORIA_FASE_C_2026-10-18.md`): 11 pruebas y arrastre del pin; H-02, H-11, H-13 y H-14 corregidos y desplegados; H-15 a H-20 pasan a la D |
 | D. Integridad, dependencias, accesibilidad, rendimiento | Cerrada el 18/10/2026 (`docs/AUDITORIA_FASE_D_2026-10-18.md`, `..._ACCESIBILIDAD_...` y `..._INDICES_...`): H-03, H-15 a H-23, H-26, H-27 y H-28 a H-35 corregidos y desplegados, H-36 informe; H-24 y H-25 aceptados por el titular. Sin probar: lectores de pantalla reales, zoom y objetivos táctiles |
-| E. Backup, restauración y despliegue | **En curso**: cobertura de copia y reversión documentadas (H-37 abierto); falta la prueba de restauración, que necesita proyecto aislado y aprobación de coste |
+| E. Backup, restauración y despliegue | **En curso**: cobertura de copia y reversión documentadas (H-37 cerrado); falta la prueba de restauración, que necesita proyecto aislado y aprobación de coste |
 | F. Informe final | Sin empezar |
 
 ## Producción (Supabase `wwoczmihhupofwmlmgga`)
