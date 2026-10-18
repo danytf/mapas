@@ -72,6 +72,15 @@ const freshState = (n = Number(process.env.MOCK_POINTS || 0), conEstados = proce
   log: []
 });
 let S = freshState();
+// Administración simulada: usuarios con rol, estado, nombre y provincias editables (el usuario "baja@test.es" no inicia sesión).
+const admInicial = () => ({
+  [id(1)]: { email: "multi@test.es", role: "user", is_active: true, display_name: null, provs: ["18", "04"], last: "2026-10-18T09:00:00Z" },
+  [id(2)]: { email: "alm@test.es", role: "user", is_active: true, display_name: "Almería <b>1</b>", provs: ["04"], last: null },
+  [id(3)]: { email: "vacio@test.es", role: "user", is_active: true, display_name: null, provs: ["23"], last: null },
+  [id(4)]: { email: "admin@test.es", role: "admin", is_active: true, display_name: null, provs: [], last: "2026-10-19T08:00:00Z" },
+  [id(5)]: { email: "baja@test.es", role: "user", is_active: false, display_name: null, provs: [], last: null }
+});
+let ADM = admInicial();
 
 const userByToken = (req) => {
   const t = (req.headers.authorization || "").replace("Bearer ", "");
@@ -115,7 +124,7 @@ createServer(async (req, res) => {
   // Utilidades de prueba.
   if (path === "/__log") return send(res, 200, S.log);
   if (path === "/__state") return send(res, 200, { userState: S.userState, establishments: S.establishments });
-  if (path === "/__reset") { const n = url.searchParams.get("n"); const e = url.searchParams.get("estados"); S = freshState(n === null ? undefined : Number(n), e === null ? undefined : e === "1"); return send(res, 200, { ok: true, puntos: S.establishments.length, estados: S.conEstados }); }
+  if (path === "/__reset") { const n = url.searchParams.get("n"); const e = url.searchParams.get("estados"); S = freshState(n === null ? undefined : Number(n), e === null ? undefined : e === "1"); ADM = admInicial(); for (const p of provinces) p.is_active = true; return send(res, 200, { ok: true, puntos: S.establishments.length, estados: S.conEstados }); }
 
   // Nominatim simulado: registra la petición y responde en el centro del área pedida (o en Madrid).
   if (path === "/nominatim/search") {
@@ -158,6 +167,41 @@ createServer(async (req, res) => {
     };
     S.log.push({ tipo: "rest", metodo: req.method, tabla: table, consulta: url.search.slice(0, 300) });
 
+    const eqParam = (name) => { const v = url.searchParams.get(name); return v && v.startsWith("eq.") ? v.slice(3) : null; };
+    if (table === "rpc/admin_list_users") {
+      if (u.role !== "admin" || !ADM[u.id]?.is_active) return send(res, 403, { code: "42501", message: "No autorizado" });
+      return send(res, 200, Object.entries(ADM).map(([uid, a]) => ({ id: uid, email: a.email, display_name: a.display_name, role: a.role, is_active: a.is_active, created_at: "2026-10-16T00:00:00Z", last_sign_in_at: a.last, province_ids: a.provs.map((c) => P(c).id) })));
+    }
+    if (table === "profiles" && req.method === "PATCH") {
+      if (u.role !== "admin") return send(res, 200, []);
+      const uid = eqParam("id"), a = ADM[uid];
+      if (!a) return send(res, 200, []);
+      const nuevo = { ...a, ...("role" in body ? { role: body.role } : {}), ...("is_active" in body ? { is_active: body.is_active } : {}), ...("display_name" in body ? { display_name: body.display_name } : {}) };
+      const activosAdmin = (x) => x.role === "admin" && x.is_active;
+      if (activosAdmin(a) && !activosAdmin(nuevo) && !Object.entries(ADM).some(([k, x]) => k !== uid && activosAdmin(x))) return send(res, 400, { code: "23514", message: "No se puede dejar el sistema sin administradores activos" });
+      ADM[uid] = nuevo;
+      S.log.push({ tipo: "adm", accion: "profiles", uid, body });
+      return send(res, 200, [{ id: uid }]);
+    }
+    if (table === "provinces") {
+      if (req.method === "PATCH") { const p = provinces.find((q) => q.id === eqParam("id")); if (!p || u.role !== "admin") return send(res, 200, []); Object.assign(p, body); S.log.push({ tipo: "adm", accion: "provinces", id: p.id, body }); return send(res, 200, [{ id: p.id }]); }
+      return reply(provinces.slice().map((p) => ({ id: p.id, code: p.code, name: p.name, is_active: p.is_active })));
+    }
+    if (table === "user_provinces" && req.method === "POST") {
+      if (u.role !== "admin") return send(res, 403, { code: "42501", message: "row-level security" });
+      const a = ADM[body.user_id], p = provinces.find((q) => q.id === body.province_id);
+      if (a && p && !a.provs.includes(p.code)) a.provs.push(p.code);
+      S.log.push({ tipo: "adm", accion: "alta_provincia", body });
+      return send(res, 201);
+    }
+    if (table === "user_provinces" && req.method === "DELETE") {
+      if (u.role !== "admin") return send(res, 200, []);
+      const a = ADM[eqParam("user_id")], p = provinces.find((q) => q.id === eqParam("province_id"));
+      if (!a || !p || !a.provs.includes(p.code)) return send(res, 200, []);
+      a.provs = a.provs.filter((c) => c !== p.code);
+      S.log.push({ tipo: "adm", accion: "baja_provincia", user: eqParam("user_id"), province: p.id });
+      return send(res, 200, [{ user_id: eqParam("user_id") }]);
+    }
     if (table === "profiles") return reply(applyFilters([{ id: u.id, display_name: emailOf(u), role: u.role, is_active: true }], url.searchParams));
     if (table === "user_provinces") {
       return reply(applyFilters(u.provinces.map((code) => ({ user_id: u.id, province_id: P(code).id, provinces: P(code) })), url.searchParams));

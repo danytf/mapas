@@ -242,6 +242,22 @@
   #dlgPanel { width: min(920px, 96vw); max-height: 90vh; overflow: auto; background: var(--bg); }
   .pn-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
   #pnClose { font-size: 24px; line-height: 1; height: 34px; width: 34px; padding: 0; background: transparent; border: 0; color: var(--muted); cursor: pointer; border-radius: 8px; }
+  #dlgAdm { width: min(980px, 96vw); max-height: 90vh; overflow: auto; background: var(--bg); }
+  #dlgAdm .adm-note { font-size: 12.5px; color: var(--muted); margin: 0 0 8px; }
+  #admMsg { min-height: 18px; font-size: 12.5px; margin: 0 0 6px; color: var(--ok); }
+  #admMsg.err { color: var(--accent); font-weight: 600; }
+  #admBody h3 { font-size: 13.5px; font-weight: 650; margin: 14px 0 8px; }
+  .adm-scroll { overflow: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+  #admBody table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  #admBody th, #admBody td { padding: 7px 10px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+  #admBody thead th { background: var(--panel); font-weight: 600; color: var(--muted); border-bottom: 1px solid var(--line-2); }
+  #admBody tbody th { font-weight: 600; word-break: break-all; }
+  #admBody input[type="text"], #admBody select { font: inherit; padding: 5px 7px; border: 1px solid var(--line-2); border-radius: 7px; background: var(--panel); color: var(--fg); width: 100%; min-width: 120px; }
+  .adm-chk { display: flex; align-items: center; gap: 6px; font-size: 12.5px; white-space: nowrap; }
+  .adm-provs { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 4px 12px; margin-top: 6px; max-height: 180px; overflow: auto; }
+  .adm-tag { font-size: 11px; font-weight: 650; color: var(--muted); border: 1px solid var(--line-2); border-radius: 999px; padding: 0 6px; }
+  .adm-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  #admBody[aria-busy="true"] { opacity: .6; pointer-events: none; }
   .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); gap: 10px; margin-bottom: 18px; }
   .kpi { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; background: var(--panel); }
   .kpi b { display: block; font-size: 28px; font-weight: 680; line-height: 1.05; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
@@ -495,6 +511,8 @@
       <div class="mh">Datos</div>
       <button id="csv" type="button" role="menuitem">Exportar CSV</button>
       <button id="bak" type="button" role="menuitem">Exportar estado (JSON)</button>
+      <div class="mh" id="admMh" hidden>Administración</div>
+      <button id="admBtn" type="button" role="menuitem" hidden>Usuarios y provincias</button>
       <div class="mh">Sesión</div>
       <button id="logout" type="button" role="menuitem">Cerrar sesión</button>
       <div class="mh">Avanzado</div>
@@ -548,6 +566,12 @@
 <dialog id="dlgPanel" aria-labelledby="pnT">
   <div class="pn-head"><h2 id="pnT">Panel resumen</h2><button type="button" id="pnClose" aria-label="Cerrar">&times;</button></div>
   <div id="pnBody"></div>
+</dialog>
+<dialog id="dlgAdm" aria-labelledby="admT">
+  <div class="pn-head"><h2 id="admT">Administración</h2><button type="button" id="admClose" aria-label="Cerrar">&times;</button></div>
+  <p class="adm-note">Las cuentas nuevas se dan de alta en Supabase (Authentication, invitar usuario). Aquí se gestionan el rol, el estado y las provincias. Los cambios se aplican al instante y quedan en la auditoría.</p>
+  <div id="admMsg" role="status"></div>
+  <div id="admBody"></div>
 </dialog>
 <dialog id="dlg" aria-labelledby="addT">
   <form method="dialog" id="addForm">
@@ -2205,7 +2229,7 @@ $("#valor").addEventListener("change", refilter);
 $("#orden").addEventListener("change", renderList);
 (() => {
   const btn = $("#menuBtn"), panel = $("#menuPanel");
-  const items = () => [...panel.querySelectorAll('[role="menuitem"]')].filter((i) => !i.disabled);
+  const items = () => [...panel.querySelectorAll('[role="menuitem"]')].filter((i) => !i.disabled && !i.hidden);
   // Abrir con el teclado lleva el foco al primer (o último) elemento del menú.
   const set = (open, focusItem) => {
     panel.hidden = !open; btn.setAttribute("aria-expanded", open);
@@ -2360,6 +2384,119 @@ const csvCell = (value) => {
   body.addEventListener("change", (e) => { const d = e.target.closest("[data-wkdate]"); if (d && d.value) { wk = mondayOf(d.value); wkRender(); } });
   $("#panelBtn").addEventListener("click", () => { wk = mondayOf(today()); render(); dlg.showModal(); });
   $("#pnClose").addEventListener("click", () => dlg.close());
+})();
+
+// Administración (usuarios y provincias): solo para administradores. El alta de cuentas se hace en Supabase.
+(() => {
+  const dlgA = $("#dlgAdm"), bodyA = $("#admBody"), msgA = $("#admMsg"), openBtn = $("#admBtn"), admHead = $("#admMh"), menuBtnA = $("#menuBtn");
+  const isAdmin = () => window.mapaSession?.profile?.role === "admin";
+  const syncMenu = () => { const a = isAdmin(); openBtn.hidden = !a; admHead.hidden = !a; };
+  menuBtnA.addEventListener("click", syncMenu, true);
+  menuBtnA.addEventListener("keydown", syncMenu, true);
+  let users = [], provs = [], busy = false;
+  const sb = () => window.mapaSession.supabase;
+  const myId = () => window.mapaSession.user.id;
+  const fmtLast = (s) => (s ? new Date(s).toLocaleString("es-ES", { dateStyle: "short", timeStyle: "short" }) : "Nunca");
+  const say = (t, isErr) => { msgA.textContent = t || ""; msgA.classList.toggle("err", !!isErr); };
+  const errText = (e) => (e && e.code === "23514" ? "No se puede dejar el sistema sin administradores activos." : friendlyError(e, "No se pudo guardar el cambio."));
+  const label = (x) => x.email || x.display_name || x.id;
+
+  async function load() {
+    const [u, p] = await Promise.all([
+      sb().rpc("admin_list_users"),
+      sb().from("provinces").select("id, code, name, is_active").order("name")
+    ]);
+    if (u.error) throw u.error;
+    if (p.error) throw p.error;
+    users = u.data || [];
+    provs = p.data || [];
+  }
+
+  const rowHtml = (x) => {
+    const self = x.id === myId(), mail = esc(label(x)), ids = x.province_ids || [], n = ids.length;
+    return '<tr data-uid="' + esc(x.id) + '"><th scope="row">' + mail + (self ? ' <span class="adm-tag">tú</span>' : "") + "</th>" +
+      '<td><input type="text" data-f="name" maxlength="80" value="' + esc(x.display_name || "") + '" aria-label="Nombre visible de ' + mail + '"></td>' +
+      '<td><select data-f="role" aria-label="Rol de ' + mail + '"' + (self ? ' disabled title="No puedes cambiar tu propio rol"' : "") + '><option value="user"' + (x.role === "user" ? " selected" : "") + '>Usuario</option><option value="admin"' + (x.role === "admin" ? " selected" : "") + ">Administrador</option></select></td>" +
+      '<td><label class="adm-chk"><input type="checkbox" data-f="active"' + (x.is_active ? " checked" : "") + (self ? ' disabled title="No puedes desactivarte a ti mismo"' : "") + '> Activo<span class="adm-sr"> (' + mail + ")</span></label></td>" +
+      '<td><details><summary>' + n + (n === 1 ? " provincia" : " provincias") + '</summary><div class="adm-provs">' +
+      provs.map((p) => '<label class="adm-chk"><input type="checkbox" data-f="prov" data-pid="' + esc(p.id) + '"' + (ids.includes(p.id) ? " checked" : "") + "> " + esc(p.name) + (p.is_active ? "" : " (inactiva)") + '<span class="adm-sr"> para ' + mail + "</span></label>").join("") +
+      "</div></details></td><td>" + esc(fmtLast(x.last_sign_in_at)) + "</td></tr>";
+  };
+  const provHtml = (p) => {
+    const afectados = users.filter((x) => x.role !== "admin" && x.is_active && (x.province_ids || []).includes(p.id)).length;
+    return '<tr data-pid="' + esc(p.id) + '"><th scope="row">' + esc(p.name) + "</th><td>" + esc(p.code) + '</td><td><label class="adm-chk"><input type="checkbox" data-f="pactive"' + (p.is_active ? " checked" : "") + "> Activa" +
+      '<span class="adm-sr"> (' + esc(p.name) + ")</span></label></td><td>" + afectados + (afectados === 1 ? " usuario" : " usuarios") + "</td></tr>";
+  };
+  function render() {
+    const abiertos = new Set([...bodyA.querySelectorAll("tr[data-uid] details[open]")].map((d) => d.closest("tr").dataset.uid));
+    const a = document.activeElement, foco = a && bodyA.contains(a) ? { uid: a.closest("tr")?.dataset.uid, pid: a.closest("tr")?.dataset.pid, f: a.dataset.f, p: a.dataset.pid } : null;
+    bodyA.innerHTML = '<h3>Usuarios</h3><div class="adm-scroll"><table><thead><tr><th scope="col">Usuario</th><th scope="col">Nombre visible</th><th scope="col">Rol</th><th scope="col">Estado</th><th scope="col">Provincias</th><th scope="col">Último acceso</th></tr></thead><tbody>' +
+      users.map(rowHtml).join("") + "</tbody></table></div>" +
+      '<h3>Provincias</h3><div class="adm-scroll"><table><thead><tr><th scope="col">Provincia</th><th scope="col">Código</th><th scope="col">Estado</th><th scope="col">Usuarios afectados</th></tr></thead><tbody>' +
+      provs.map(provHtml).join("") + "</tbody></table></div>";
+    abiertos.forEach((uid) => { const d = bodyA.querySelector('tr[data-uid="' + uid + '"] details'); if (d) d.open = true; });
+    if (foco) {
+      const sel = foco.uid ? 'tr[data-uid="' + foco.uid + '"] [data-f="' + foco.f + '"]' + (foco.p ? '[data-pid="' + foco.p + '"]' : "") : 'tr[data-pid="' + foco.pid + '"] [data-f="' + foco.f + '"]';
+      bodyA.querySelector(sel)?.focus();
+    }
+  }
+
+  // Ejecuta una escritura, recarga desde Supabase y avisa del resultado. Nada se guarda en el navegador.
+  async function run(fn, okMsg) {
+    if (busy) return;
+    busy = true; bodyA.setAttribute("aria-busy", "true"); say("Guardando…");
+    try {
+      const r = await fn();
+      if (r && r.error) throw r.error;
+      if (r && Array.isArray(r.data) && !r.data.length) throw new Error("El cambio no se aplicó: no tienes permiso o el registro ya no existe.");
+      await load();
+      say(okMsg);
+    } catch (e) {
+      console.error(e);
+      say(errText(e), true);
+      try { await load(); } catch (e2) { console.error(e2); }
+    } finally {
+      busy = false; bodyA.removeAttribute("aria-busy"); render();
+    }
+  }
+
+  bodyA.addEventListener("change", (e) => {
+    const el = e.target, f = el.dataset.f, tr = el.closest("tr");
+    if (!f || !tr || busy) { if (busy) render(); return; }
+    if (tr.dataset.uid) {
+      const x = users.find((u) => u.id === tr.dataset.uid); if (!x) return;
+      const nombre = label(x);
+      if (f === "name") {
+        const v = el.value.trim();
+        if (v === (x.display_name || "")) return;
+        run(() => sb().from("profiles").update({ display_name: v || null }).eq("id", x.id).select("id"), "Nombre guardado.");
+      } else if (f === "role") {
+        const nuevo = el.value;
+        const txt = nuevo === "admin" ? "¿Dar el rol de administrador a " + nombre + "? Podrá ver y modificar todas las provincias y gestionar usuarios." : "¿Quitar el rol de administrador a " + nombre + "?";
+        if (!window.confirm(txt)) { render(); return; }
+        run(() => sb().from("profiles").update({ role: nuevo }).eq("id", x.id).select("id"), "Rol actualizado.");
+      } else if (f === "active") {
+        const activo = el.checked;
+        if (!activo && !window.confirm("¿Desactivar a " + nombre + "? No podrá acceder a la aplicación hasta que lo vuelvas a activar.")) { render(); return; }
+        run(() => sb().from("profiles").update({ is_active: activo }).eq("id", x.id).select("id"), activo ? "Usuario activado." : "Usuario desactivado.");
+      } else if (f === "prov") {
+        const pid = el.dataset.pid, marcar = el.checked;
+        run(() => (marcar ? sb().from("user_provinces").insert({ user_id: x.id, province_id: pid, assigned_by: myId() }) : sb().from("user_provinces").delete().eq("user_id", x.id).eq("province_id", pid).select("user_id")), marcar ? "Provincia asignada." : "Provincia retirada.");
+      }
+    } else if (tr.dataset.pid && f === "pactive") {
+      const p = provs.find((q) => q.id === tr.dataset.pid); if (!p) return;
+      const activa = el.checked;
+      const n = users.filter((x) => x.role !== "admin" && x.is_active && (x.province_ids || []).includes(p.id)).length;
+      if (!activa && !window.confirm("Desactivar «" + p.name + "» retira el acceso a sus puntos a " + n + (n === 1 ? " usuario" : " usuarios") + " hasta que la reactives. ¿Continuar?")) { render(); return; }
+      run(() => sb().from("provinces").update({ is_active: activa }).eq("id", p.id).select("id"), activa ? "Provincia activada." : "Provincia desactivada.");
+    }
+  });
+  openBtn.addEventListener("click", async () => {
+    bodyA.innerHTML = ""; say("Cargando…");
+    dlgA.showModal();
+    try { await load(); render(); say(""); } catch (e) { console.error(e); say(errText(e), true); }
+  });
+  $("#admClose").addEventListener("click", () => dlgA.close());
 })();
 
 function openLogros() {

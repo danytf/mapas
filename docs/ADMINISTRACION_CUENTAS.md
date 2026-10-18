@@ -12,6 +12,19 @@
 - La clave `service_role` no se introduce en `index.html`, GitHub Pages, mensajes, archivos compartidos ni herramientas del navegador. Las operaciones administrativas se realizan en la consola de Supabase o en un entorno servidor autorizado.
 - No se registran contraseñas, enlaces de recuperación, tokens ni datos de autenticación en incidencias o logs.
 
+## Panel de administración en la aplicación (desde 19/10/2026)
+
+Los administradores ven en el menú de la aplicación la opción «Usuarios y provincias» (Administración). Desde ahí, sin SQL:
+
+- Ver los usuarios con su correo, nombre visible, rol, estado, provincias y último acceso.
+- Cambiar el nombre visible, el rol (usuario o administrador) y activar o desactivar a un usuario.
+- Asignar y retirar provincias a cada usuario.
+- Activar o desactivar provincias (desactivar una provincia retira el acceso a todos sus usuarios; la pantalla pide confirmación y dice cuántos usuarios afecta).
+
+Protecciones: nadie puede cambiar su propio rol ni desactivarse desde la pantalla; la base de datos impide dejar el sistema sin ningún administrador activo (error explicado en pantalla); las acciones sensibles piden confirmación; todo cambio queda en la auditoría (`audit_log`). Los cambios se aplican al instante en la base; un usuario desactivado o sin provincia pierde el acceso en su siguiente consulta.
+
+**Lo que el panel no hace**: dar de alta cuentas (sigue siendo el procedimiento de la sección siguiente, en Supabase), borrar cuentas, ni editar el catálogo. La lectura de correos usa la función `admin_list_users()` (migraciones `20261018231945` y `20261018232107`), que solo responde a administradores activos.
+
 ## Alta de una cuenta
 
 1. En Supabase Dashboard, abre el proyecto correcto y la sección de autenticación de usuarios.

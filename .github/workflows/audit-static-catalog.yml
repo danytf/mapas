@@ -18,6 +18,7 @@ on:
       - "scripts/test-multiprovince.mjs"
       - "scripts/test-ui-fixes.mjs"
       - "scripts/test-list-performance.mjs"
+      - "scripts/test-admin-panel.mjs"
       - "scripts/test-a11y-fase-d.mjs"
       - ".github/workflows/audit-static-catalog.yml"
   pull_request:
@@ -54,6 +55,8 @@ jobs:
         run: node scripts/test-list-performance.mjs
       - name: Test accessibility beyond keyboard (contrast, names, live regions, focus)
         run: node scripts/test-a11y-fase-d.mjs index.html
+      - name: Test admin panel screen
+        run: node scripts/test-admin-panel.mjs
       - name: Run XSS regression audit
         run: node scripts/audit-xss.mjs index.html
       - name: Check keyboard access to statistics panel rows
