@@ -43,7 +43,7 @@ for f in roles.sql schema.sql data.sql; do
   [ -s "$f" ] || { echo "ERROR: $f está vacío. Copia NO válida: $DEST" >&2; exit 1; }
 done
 grep -q "CREATE SCHEMA private" schema.sql || { echo "ERROR: schema.sql no contiene el schema private (las políticas dependen de él). Copia NO válida." >&2; exit 1; }
-grep -q "^REVOKE|^GRANT" schema.sql || { echo "ERROR: schema.sql no contiene permisos (GRANT/REVOKE). Restaurarlo dejaría permisos por defecto más amplios. Copia NO válida." >&2; exit 1; }
+grep -Eq "^(REVOKE|GRANT) " schema.sql || { echo "ERROR: schema.sql no contiene permisos (GRANT/REVOKE). Restaurarlo dejaría permisos por defecto más amplios. Copia NO válida." >&2; exit 1; }
 grep -q "establishments" schema.sql || { echo "ERROR: schema.sql no contiene la tabla establishments. Copia NO válida." >&2; exit 1; }
 grep -q "establishments" data.sql || { echo "ERROR: data.sql no contiene datos de establishments. Copia NO válida." >&2; exit 1; }
 
