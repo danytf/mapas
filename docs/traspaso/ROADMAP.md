@@ -35,6 +35,7 @@ Pendiente:
 - Registrar el rol de base de datos en `audit_log` cuando no hay JWT (mejora de trazabilidad).
 - Hallazgos de la Fase C aplazados aquí por decisión del titular (18/10/2026), ver `HALLAZGOS.md`: H-15 (bloquear «Guardar dirección y ubicación» mientras guarda), H-16 (mensajes de error en español y espera de 27 s), H-17 (lista vacía sin mensaje, etiqueta de valoración, nombre del CSV), H-18 (flechas en el menú y foco al cerrar el panel), H-19 (doble escritura de `user_app_state` al entrar) y H-20 (recuadro fijo de Granada en los puntos personales: prioridad P2).
 - Preparación para varias provincias (registrado el 18/10/2026 a petición del titular): H-21 (app centrada en Granada: geocodificación, vista inicial, municipio por defecto y nombre del CSV; P2), H-22 (la base no tiene en cuenta si la provincia está activa; P3) y H-23 (límite de 5.000 filas sin paginar y máximo de 1.000 de la API; P2). Probar además en el navegador un usuario con dos provincias asignadas, que en la Fase C no se probó (las cuentas sintéticas tenían una cada una).
+- Prueba de volumen para el catálogo de toda España (más de 50.000 puntos previstos por el titular): en un entorno aislado, cargar unos 50.000 puntos sintéticos y medir con un usuario de una o dos provincias y con el administrador: tiempo hasta el mapa visible, bytes transferidos, fluidez de filtros y lista (`renderList` reconstruye la lista entera en cada filtro) y marcadores. Con esas cifras, decidir si hace falta carga progresiva de marcadores, lista paginada o carga por provincia. Referencias medidas el 18/10/2026: 791 puntos ocupan 744 kB con índices (unos 960 bytes por punto) y la base entera 14 MB; 50.000 puntos serían del orden de 50 MB más la auditoría de la carga.
 
 ## Fase E. Backup, restauración y despliegue
 
@@ -43,6 +44,7 @@ Pendiente:
 - Las exportaciones JSON/CSV de la app no son un backup completo.
 - Despliegue: documentar cómo revertir una publicación (revertir el commit en `main` y esperar al workflow de Pages) y comprobarlo en seco; confirmar que Pages despliega solo `index.html`.
 - `docs/import-export-backups.md` es el punto de partida.
+- H-24: documentar el plan de Supabase de producción y su efecto en la disponibilidad (pausa por inactividad del plan gratuito) y en las copias; según la decisión del titular sobre el plan, registrar cómo reactivar el proyecto si se pausa.
 
 ## Fase F. Cierre
 
@@ -51,7 +53,7 @@ Informe final con: resumen ejecutivo; matriz de 10 capas (el listado literal de 
 ## Pendientes de producto (fuera de la auditoría, decididos por el titular)
 
 - **Panel de administración** (decisión del titular, 18/10/2026: se desarrollará más adelante). Hoy el administrador no tiene pantallas propias: dar de alta usuarios, asignar provincias y editar el catálogo maestro (nombres, categorías, puntos nuevos) se hace por SQL (`docs/ADMINISTRACION_CUENTAS.md`). Cuando se aborde: diseño previo con el titular, sin debilitar la autorización (las escrituras deben seguir protegidas por RLS y `is_admin()`) y con pruebas en un entorno aislado.
-- **Ampliación del catálogo a toda España.** Hoy solo hay catálogo de Granada (791 puntos, aún por completar). La idea del titular es ir ampliándolo al resto de provincias. Antes de cargar otra provincia conviene tener resueltos H-20, H-21 y H-23, y cargar con el mismo procedimiento revisado que Granada (`supabase/seeds/`, `source_ref` único, sin inventar puntos ni coordenadas).
+- **Ampliación del catálogo a toda España.** Hoy solo hay catálogo de Granada (791 puntos, aún por completar). La idea del titular es ir ampliándolo al resto de provincias. Antes de cargar otra provincia conviene tener resueltos H-20, H-21 y H-23, y cargar con el mismo procedimiento revisado que Granada (`supabase/seeds/`, `source_ref` único, sin inventar puntos ni coordenadas). Volumen previsto: más de 50.000 puntos (ver la prueba de volumen de la Fase D). La geocodificación masiva no puede hacerse con el servicio público de Nominatim que usa la app (su política de uso limita a una petición por segundo y no admite usos masivos): hará falta otra fuente de coordenadas o un procedimiento por lotes acordado, siempre fuera de la app.
 
 ## Dependencias del titular (resumen)
 
@@ -59,3 +61,5 @@ Informe final con: resumen ejecutivo; matriz de 10 capas (el listado literal de 
 2. Proporcionar o autorizar la creación de cuentas sintéticas en la rama aislada (nunca las reales).
 3. Verificación visual final de lo que no se pueda automatizar.
 4. Decisiones de diseño que surjan (por ejemplo, migrar permisos a tablas normalizadas).
+5. Decidir el plan de Supabase de producción (H-24: el gratuito se pausa tras 7 días de poca actividad).
+6. Consultar en el panel de Supabase el ajuste *Data API > Max rows* del proyecto (no está en la base de datos; afecta a H-23).

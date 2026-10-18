@@ -40,7 +40,7 @@
 
 ## Hallazgos
 
-Ver `HALLAZGOS.md`. Cerrados en la Fase C: H-02, H-11, H-13, H-14 y H-05 (verificado). Abiertos para la Fase D: H-15 a H-18 (P3), H-19 (P3, por investigar), H-20 (P2, latente) y, para el uso en varias provincias, H-21 (P2), H-22 (P3) y H-23 (P2, latente). Pendientes de producto (ROADMAP): panel de administración y ampliación del catálogo a toda España (hoy solo Granada, aún por completar). Además: H-03 (P3, recomendación), H-08 (Fase E) y H-09 (P3, aceptado).
+Ver `HALLAZGOS.md`. Cerrados en la Fase C: H-02, H-11, H-13, H-14 y H-05 (verificado). Abiertos para la Fase D: H-15 a H-18 (P3), H-19 (P3, por investigar), H-20 (P2, latente) y, para el uso en varias provincias, H-21 (P2), H-22 (P3) y H-23 (P2, latente). Riesgo actual pendiente de decisión del titular: H-24 (P2, plan gratuito de Supabase: pausa tras 7 días de poca actividad). Pendientes de producto (ROADMAP): panel de administración y ampliación del catálogo a toda España (hoy solo Granada, aún por completar). Además: H-03 (P3, recomendación), H-08 (Fase E) y H-09 (P3, aceptado).
 
 ## Entorno aislado de la Fase C
 
