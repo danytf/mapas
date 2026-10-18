@@ -15,8 +15,8 @@
 
 ## Producción (Supabase `wwoczmihhupofwmlmgga`)
 
-- Migraciones: 29 registradas, última `20261018192324_audit_db_role_and_updated_at_search_path` (H-03 y rol de BD en la auditoría, aplicada el 18/10/2026; antes `20261018183559` de H-26). Coinciden una a una con `supabase/migrations/`.
-- Huellas del esquema público (comparables con `supabase/tools/schema_fingerprint.sql`, verificadas también en la restauración de prueba del 19/10/2026): políticas 51 `f12aa180`, permisos de tabla 57 `374f58c4`, funciones propias 19 `a06e6e20` (sin `rls_auto_enable`, función de la plataforma), funciones privadas 4 `8c6f87f4`, triggers 34 `6d0afe68`, tablas con RLS 17 `e9ad42c3`.
+- Migraciones: 31 registradas, última `20261018232107_admin_list_users_private_wrapper` (panel de administración, PR A: `admin_list_users()` y protección del último administrador; antes `20261018192324` de H-03). Coinciden una a una con `supabase/migrations/`.
+- Huellas del esquema público (comparables con `supabase/tools/schema_fingerprint.sql`, verificadas también en la restauración de prueba del 19/10/2026): políticas 51 `f12aa180`, permisos de tabla 57 `374f58c4`, funciones propias 21 `a3b79a0d` (sin `rls_auto_enable`, función de la plataforma), funciones privadas 5 `f09ad78b`, triggers 36 `bf342f42`, tablas con RLS 17 `e9ad42c3`.
 - 17 tablas, todas con RLS. Ninguna concede privilegios a `anon`.
 - Avisos del asesor de seguridad: solo "protección frente a contraseñas filtradas desactivada" (aceptado, no tocar).
 - Datos (consulta del 18/10/2026): 791 establecimientos, todos activos y con coordenadas; 3 perfiles (1 administrador); 2 filas de `user_provinces`; 3 filas de `establishment_app_state` (versión máxima 2; la tercera es de uso real del 18/10/2026); 3 de `user_app_state`; 0 en `permit_applications`, `permit_grants` y `followups` (el estado real de permisos vive en el JSONB de `establishment_app_state`); 856 filas de `audit_log`; 43 de `establishment_location_history`; 0 de `establishment_app_state_history` (aún no hubo sobrescrituras).

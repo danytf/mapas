@@ -8,10 +8,10 @@ Una pantalla «Administración», visible solo para administradores (`profiles.r
 
 1. **Ver los usuarios**: correo, nombre visible, rol, activo o inactivo, provincias asignadas, último acceso.
 2. **Cambiar el rol** (usuario o administrador) y **activar o desactivar** a un usuario.
-3. **Asignar y quitar provincias** a cada usuario (solo provincias activas y existentes).
+3. **Asignar y quitar provincias** a cada usuario, y **activar o desactivar provincias**.
 4. **Editar el nombre visible** (`profiles.display_name`, hoy sin uso).
 
-Fuera de la v1: dar de alta cuentas (se sigue haciendo en Supabase, Authentication → invitar usuario; procedimiento en `docs/ADMINISTRACION_CUENTAS.md`), borrar cuentas, editar el catálogo, ver la auditoría, activar o desactivar provincias, crear provincias.
+Fuera de la v1: dar de alta cuentas (se sigue haciendo en Supabase, Authentication → invitar usuario; procedimiento en `docs/ADMINISTRACION_CUENTAS.md`), borrar cuentas, editar el catálogo, ver la auditoría, crear provincias. Dentro, por decisión del titular: activar o desactivar provincias (ver sección 6).
 
 ## 2. Qué ya existe y sirve
 
@@ -54,8 +54,8 @@ Se aplicará en producción **solo con aprobación del titular** y el permiso te
 | Función nueva `SECURITY DEFINER` en `public` | `search_path` vacío, permisos mínimos, revisada en la huella `public_functions` y en `default_function_acl_smoke.sql` |
 | Cambios en producción | Migración con aprobación explícita y permiso temporal; PR con checks en verde antes de fusionar |
 
-## 6. Preguntas abiertas para el titular
+## 6. Decisiones del titular (19/10/2026)
 
-1. ¿Deben poder ver los administradores el último acceso de cada usuario? (propuesto: sí.)
-2. ¿Quieres que el panel permita también activar o desactivar provincias en la v1, o se deja para después? (propuesto: después.)
-3. ¿Se permite que un administrador degrade a otro administrador? (propuesto: sí, mientras quede al menos uno activo.)
+1. Los administradores ven el último acceso de cada usuario: **sí**.
+2. La v1 incluye **activar y desactivar provincias** (la política `provinces_admin_update` ya lo permite solo al administrador). Como desactivar una provincia retira el acceso a todos sus usuarios (H-22), la pantalla pedirá confirmación y mostrará cuántos usuarios afecta. Crear provincias sigue fuera de la v1.
+3. Un administrador puede degradar a otro **mientras quede al menos uno activo** (trigger `protect_last_admin`).
