@@ -53,7 +53,9 @@ jobs:
           CREATE SCHEMA auth;
           CREATE TABLE auth.users (
             id uuid PRIMARY KEY,
-            raw_user_meta_data jsonb NOT NULL DEFAULT '{}'::jsonb
+            raw_user_meta_data jsonb NOT NULL DEFAULT '{}'::jsonb,
+            email text,
+            last_sign_in_at timestamptz
           );
           CREATE FUNCTION auth.uid()
           RETURNS uuid
@@ -147,6 +149,8 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261018183559_rls_policy_performance.sql
       - name: Set search_path of set_updated_at and record the database role in audit rows without a user
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261018192324_audit_db_role_and_updated_at_search_path.sql
+      - name: Add admin panel user listing and last-administrator protection
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261019000000_admin_panel_users.sql
       - name: Verify every migration file is applied by this workflow
         shell: bash
         run: |
@@ -170,5 +174,7 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/rls_performance.sql
       - name: Run audit database-role tests
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/audit_db_role.sql
+      - name: Run admin panel tests
+        run: psql -v ON_ERROR_STOP=1 -f supabase/tests/admin_panel.sql
       - name: Run exhaustive authorization matrix
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/rls_matrix.sql
