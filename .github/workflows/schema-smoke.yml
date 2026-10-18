@@ -144,7 +144,7 @@ jobs:
       - name: Require active province in authorization
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261018172704_province_active_in_authorization.sql
       - name: Evaluate province access once per query in catalogue and state policies
-        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261018190000_rls_policy_performance.sql
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261018183559_rls_policy_performance.sql
       - name: Verify every migration file is applied by this workflow
         shell: bash
         run: |
