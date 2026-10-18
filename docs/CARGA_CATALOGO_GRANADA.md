@@ -21,7 +21,11 @@ Los datos de OpenStreetMap están bajo la licencia ODbL 1.0, © colaboradores de
 |---|---|---|---|---|
 | 19/10/2026 | Bricolaje | 1 (Brico Dépôt Pulianas) | OpenStreetMap, consulta Overpass del 19/10/2026 (base del 18/10/2026 23:32 UTC). Alcance elegido por el titular: grandes cadenas distintas de Leroy Merlin. No aparecen Bricomart, Bauhaus, AKI ni Bricor; no se ha verificado que no existan | `supabase/seeds/bricolaje-granada.json`, `supabase/seeds/import_bricolaje_granada.sql` |
 
-Categorías activas aún sin puntos en Granada: Estaciones, Eventos y Tiendas.
+| 19/10/2026 | Estaciones | 14 (7 autobús, 7 tren) | OpenStreetMap, consulta Overpass del 19/10/2026 (base 18/10/2026 23:41 UTC). Alcance elegido por el titular: tren y autobús; excluidos el Metro de Granada (26 paradas), los remontes de Sierra Nevada, la estación marítima de Motril y 2 estaciones en desuso de Gorafe. Municipio y calle con Nominatim (inverso). Iznalloz, Benalúa y Huéneja-Dólar se cargan con precisión `approximate` (por revisar) porque no se ha verificado que tengan servicio de viajeros | `supabase/seeds/estaciones-granada.json`, `supabase/seeds/import_estaciones_granada.sql` |
+
+Categorías activas aún sin puntos en Granada: Eventos y Tiendas.
+
+**«Por revisar».** La aplicación marca un punto como «por revisar» cuando su `location_precision` es `approximate`. Se usa también para señalar datos de origen dudosos (no solo coordenadas); quien lo revise lo confirma desde la ficha («Marcar como revisado») o lo corrige.
 
 ## Cómo repetirlo para otra categoría
 
