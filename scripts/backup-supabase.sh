@@ -33,7 +33,7 @@ else
   echo "Supabase CLI no disponible: usando pg_dump (schemas public y private)."
   echo "-- Sin volcado de roles en modo pg_dump (los roles de Supabase ya existen en un proyecto nuevo)." > roles.sql
   echo "Volcando esquema public y private..."
-  pg_dump "$DB_URL" --schema=public --schema=private --schema-only --no-owner --no-privileges -f schema.sql
+  pg_dump "$DB_URL" --schema=public --schema=private --schema-only --no-owner -f schema.sql
   echo "Volcando datos de public y private..."
   pg_dump "$DB_URL" --schema=public --schema=private --data-only --no-owner -f data.sql
 fi
@@ -43,6 +43,7 @@ for f in roles.sql schema.sql data.sql; do
   [ -s "$f" ] || { echo "ERROR: $f está vacío. Copia NO válida: $DEST" >&2; exit 1; }
 done
 grep -q "CREATE SCHEMA private" schema.sql || { echo "ERROR: schema.sql no contiene el schema private (las políticas dependen de él). Copia NO válida." >&2; exit 1; }
+grep -q "^REVOKE|^GRANT" schema.sql || { echo "ERROR: schema.sql no contiene permisos (GRANT/REVOKE). Restaurarlo dejaría permisos por defecto más amplios. Copia NO válida." >&2; exit 1; }
 grep -q "establishments" schema.sql || { echo "ERROR: schema.sql no contiene la tabla establishments. Copia NO válida." >&2; exit 1; }
 grep -q "establishments" data.sql || { echo "ERROR: data.sql no contiene datos de establishments. Copia NO válida." >&2; exit 1; }
 
