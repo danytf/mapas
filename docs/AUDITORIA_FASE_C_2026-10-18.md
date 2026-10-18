@@ -1,6 +1,6 @@
 # Auditoría Fase C: pruebas E2E en navegador (18/10/2026)
 
-Estado: **en curso**. Hechas las 11 pruebas del `docs/traspaso/ROADMAP.md`; H-11 corregido y desplegado (PR #89); la corrección de H-02 (prueba 10) está en el PR #90. Pendiente: la corrección de ubicación arrastrando el pin.
+Estado: **pendiente solo de cierre** (fusionar el PR de H-13/H-14 y eliminar `mapas-e2e`). Hechas las 11 pruebas del `docs/traspaso/ROADMAP.md` y la corrección de ubicación arrastrando el pin. H-11 (PR #89) y H-02 (PR #90) corregidos, desplegados y verificados en producción.
 
 ## Entorno
 
@@ -37,7 +37,8 @@ Estado: **en curso**. Hechas las 11 pruebas del `docs/traspaso/ROADMAP.md`; H-11
 | H-16 | P3 | Abierto | Mensajes de error: el aviso de tiempo agotado dice «17 segundos» y la espera real es de 27 s (`index.html` 1072 y 1085); al agotarse el tiempo se muestra «AbortError: The operation was aborted.» en lugar del texto en español previsto; si falla la carga del catálogo, se muestra el texto técnico del servidor | Pruebas 2 y 4 |
 | H-17 | P3 | Abierto | Usabilidad: una búsqueda sin resultados deja la lista vacía sin mensaje (`renderList`); la opción «★★★★★ (5)» del filtro de valoración parece un recuento; el CSV se llama siempre `permisos-captacion-granada.csv`, también para otras provincias | Prueba 3 y código |
 | H-18 | P3 | Abierto (Fase D) | Accesibilidad: el menú usa `role="menuitem"` pero no responde a las flechas, solo a Tab; al cerrar el «Panel resumen» el foco va al cuerpo de la página en vez de al botón de origen | Prueba 3 |
-| H-19 | P3 | Por investigar | Al iniciar sesión se envían dos `POST user_app_state` seguidos | Registro de red de la prueba 1 |
+| H-19 | P3 | Por investigar | Al iniciar sesión se envían dos `POST user_app_state` seguidos | Registro de red de la prueba 1; también en producción |
+| H-20 | P2 | Abierto (latente, Fase D) | Los puntos personales fuera del recuadro fijo de Granada (latitud 36,5-38,3; longitud -4,6 a -2,2) se descartan al cargar, y el siguiente guardado de puntos personales sobrescribe la lista sin ellos: pérdida para usuarios de otras provincias | Código de `loadPersonalState`; en producción hay 0 puntos personales (18/10) |
 
 Observaciones informativas, sin acción propuesta: recargar sin cerrar sesión deja viva la sesión anterior en el servidor hasta que caduca (el token solo estaba en memoria y se pierde). Chrome puede ofrecer guardar las credenciales de prueba de `127.0.0.1`; conviene borrarlas al terminar.
 
@@ -48,10 +49,25 @@ Observaciones informativas, sin acción propuesta: recargar sin cerrar sesión d
 - Pruebas: `supabase/tests/state_version.sql` (20 comprobaciones; paso nuevo en `schema-smoke.yml`); sin la migración falla. `scripts/audit-persistence.mjs` exige el guardado condicionado, prohíbe el upsert ciego sobre `establishment_app_state` y exige que la rama de conflicto no reescriba; con el `index.html` de `main` falla (control negativo). Reconstrucción local: humo, `state_history` (29), `state_version` (20) y matriz RLS (973 celdas, 0 discrepancias) en verde.
 - Huellas esperadas tras aplicar la migración (iguales en `mapas-e2e` y en la reconstrucción local): funciones públicas 19 `976fdf1e7a5a27d87a1716be11bb8460`, triggers 34 `6d0afe68c1d04f67df988a84211ed563`; el resto sin cambios.
 
-## Pendiente en esta fase
+## Despliegue y verificación en producción
 
-- H-11: cerrado. PR #89 fusionado y desplegado el 18/10/2026; la URL pública sirve el `index.html` de `main` (mismo SHA-256) y, con la sesión del titular y sin escribir, carga 791 puntos, lee `version` y no muestra errores. Las 2 filas de producción siguen en versión 1.
-- H-02: fusionar `security/h-02-csp` y, tras el despliegue, repetir en la URL pública la carga con sesión y comprobar 0 violaciones. La regresión es `scripts/audit-csp.mjs` (en CI): exige la `<meta>` como primer elemento de `<head>`, las directivas `default-src 'self'`, `object-src 'none'`, `base-uri 'none'` y `form-action 'none'`, prohíbe comodines y `'unsafe-eval'`, y exige que todo origen https del código esté permitido salvo los enlaces de navegación (`www.google.com`, `danytf.github.io`). Controles negativos: falla sin la `<meta>`, con un origen de geocodificación nuevo y con `'unsafe-eval'`. `'unsafe-inline'` sigue siendo necesario en `script-src` y `style-src` (3 scripts y 28 atributos `style` en línea); eliminarlo exigiría refactorizar.
-- Corrección de ubicación arrastrando el pin («Mover pin»).
-- Correcciones de H-13 a H-17 (y H-18 en la Fase D), cada una con su prueba de regresión.
-- Al cerrar: eliminar `mapas-e2e` con confirmación del titular.
+- H-11: PR #89 fusionado y desplegado el 18/10/2026; la URL pública sirve el `index.html` de `main` (mismo SHA-256) y, con la sesión del titular y sin escribir, carga 791 puntos, lee `version` y no muestra errores. Las 2 filas de producción siguen en versión 1.
+- H-02: PR #90 fusionado y desplegado el 18/10/2026; la URL pública sirve el `index.html` de `main` (mismo SHA-256) con la `<meta>`. Con un registrador de `securitypolicyviolation` instalado antes de entrar y la sesión del titular (solo lectura): 0 violaciones, 791 puntos, 30 teselas de `server.arcgisonline.com`, 3 scripts externos, 5 hojas de estilo y la fuente Figtree cargados, sin errores en consola; base de datos sin cambios. La regresión es `scripts/audit-csp.mjs` (en CI): exige la `<meta>` como primer elemento de `<head>`, las directivas `default-src 'self'`, `object-src 'none'`, `base-uri 'none'` y `form-action 'none'`, prohíbe comodines y `'unsafe-eval'`, y exige que todo origen https del código esté permitido salvo los enlaces de navegación (`www.google.com`, `danytf.github.io`). Controles negativos: falla sin la `<meta>`, con un origen de geocodificación nuevo y con `'unsafe-eval'`. `'unsafe-inline'` sigue siendo necesario en `script-src` y `style-src` (3 scripts y 28 atributos `style` en línea); eliminarlo exigiría refactorizar.
+
+## Correcciones de H-13 y H-14 (rama `fix/h-13-h-14-permisos-por-id`)
+
+- H-14: el estado de permisos se indexa con `permitKey(c)` (`id:<ID de Supabase>`; `custom:<nombre>` solo en puntos personales). `savePermits` recibe el punto, no su nombre. Se elimina `sharedPermitRecords` (se escribía y nunca se leía). La exportación JSON pasa a la versión 3: `permisos` es una lista con `establecimiento_id`, `nombre`, `punto_propio` y `estado_permiso`.
+- Reproducción con el código de `main` en `mapas-e2e` (dos puntos «[PRUEBA] Duplicado Psi»: e2e-023 en Granada y e2e-024 en Armilla): tras una solicitud en el de Armilla, el de Granada mostraba «Solicitado» con los datos de Armilla, y una nota escrita en el de Granada se guardó en la fila de Armilla. Con la corrección: el de Granada aparece sin solicitar y su nota se guarda en su propia fila; el de Armilla conserva lo suyo.
+- H-13: los permisos de los puntos personales se guardan en `user_app_state.state.customPermits` (por nombre del punto, saneados con `sanitizeSharedPermitState`), con la cola y la reversión de `mapaPersistUserState`. Se cargan solo para puntos personales existentes y se borran al eliminar el punto. `savePermits` ya no devuelve «ok» sin escribir.
+- Verificación en `mapas-e2e` (Granada 2): solicitud en «Punto personal Omega», `customPermits` en la base y, tras recargar, «Solicitado» con sus datos. Sin red: «No se pudo guardar…» y la nota no llega a la base. Punto personal temporal con permiso, eliminado: desaparece de `customs` y de `customPermits`.
+- Regresión: `scripts/audit-persistence.mjs` prohíbe indexar permisos por nombre (H-14) y exige `customPermits` y que `savePermits` no devuelva «ok» sin escribir (H-13); con el `index.html` de `main` falla en ambas reglas.
+
+## Corrección de ubicación arrastrando el pin
+
+Supera. «Gimnasio Zeta» (Granada): «Mover pin» y arrastre real con el ratón; aviso «Ubicación guardada en Supabase: 37.181914, -3.614840»; en la base, esas coordenadas, precisión `verified`, autor el usuario Granada y 1 fila de historial.
+
+## Pendiente para cerrar la fase
+
+- Fusionar el PR de H-13/H-14 y verificar en la URL pública.
+- Eliminar `mapas-e2e` con confirmación del titular.
+- H-15 a H-18 y H-20 pasan a la Fase D por decisión del titular (18/10/2026); H-19 queda por investigar en la Fase D.

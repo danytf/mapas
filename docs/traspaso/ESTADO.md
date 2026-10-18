@@ -8,7 +8,7 @@
 |---|---|
 | A. Reconstruir el estado real | Cerrada |
 | B. Seguridad y persistencia | Cerrada (H-11 aplazado a la C por decisión del titular) |
-| C. Pruebas E2E en navegador | **En curso**: 11 pruebas hechas (`docs/AUDITORIA_FASE_C_2026-10-18.md`); H-11 cerrado y desplegado (PR #89); H-02 en PR #90; pendientes H-13 a H-17 |
+| C. Pruebas E2E en navegador | **Pendiente solo de cierre**: 11 pruebas y arrastre del pin hechos (`docs/AUDITORIA_FASE_C_2026-10-18.md`); H-11 (PR #89) y H-02 (PR #90) desplegados y verificados; H-13 y H-14 corregidos en PR; falta eliminar `mapas-e2e`. H-15 a H-20 pasan a la Fase D |
 | D. Integridad, dependencias, accesibilidad, rendimiento | Parcial (ver ROADMAP) |
 | E. Backup, restauración y despliegue | Sin empezar |
 | F. Informe final | Sin empezar |
@@ -39,7 +39,7 @@
 
 ## Hallazgos
 
-Ver `HALLAZGOS.md`. Abiertos: H-02 (P2, en PR), H-13 (P1), H-14 (P2), H-15 a H-19 (P3), H-03 (P3, recomendación) y H-09 (P3, aceptado). H-05 verificado en navegador.
+Ver `HALLAZGOS.md`. Cerrados en la Fase C: H-02, H-11 y H-05 (verificado). Corregidos en PR: H-13 (P1) y H-14 (P2). Abiertos para la Fase D: H-15 a H-18 (P3), H-19 (P3, por investigar) y H-20 (P2, latente). Además: H-03 (P3, recomendación), H-08 (Fase E) y H-09 (P3, aceptado).
 
 ## Entorno aislado de la Fase C
 
@@ -51,5 +51,5 @@ Ver `HALLAZGOS.md`. Abiertos: H-02 (P2, en PR), H-13 (P1), H-14 (P2), H-15 a H-1
 ## Cosas verificadas por el titular o que dependen de él
 
 - Verificado por el titular: protección de `main`; plan gratuito de la organización tras crear `mapas-e2e`.
-- Verificado en la Fase C con cuenta sintética: H-05 (teclado en el panel).
-- Pendiente de él: fusionar el PR #90 (H-02); confirmar la eliminación de `mapas-e2e` al terminar; borrar del gestor de contraseñas de Chrome las credenciales de prueba de `127.0.0.1` si las guardó.
+- Verificado en la Fase C con cuenta sintética: H-05 (teclado en el panel). Verificado con la sesión del titular en producción (solo lectura): H-11 y H-02.
+- Pendiente de él: fusionar el PR de H-13/H-14; confirmar la eliminación de `mapas-e2e`; borrar del gestor de contraseñas de Chrome las credenciales de prueba de `127.0.0.1` si las guardó.

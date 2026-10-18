@@ -663,7 +663,9 @@ const chainOf = (c) => { const k = rawChain(c); return smallChains.has(k) ? "Ind
 /* Estado operativo del usuario: persistencia remota en Supabase. */
 const ESTADOS = [["sin", "Sin solicitar", "#ffffff"], ["solicitado", "Solicitado", "#fbbf24"], ["concedido", "Concedido", "#22c55e"], ["denegado", "Denegado", "#111827"], ["caducado", "Caducado", "#94a3b8"], ["cancelado", "Cancelado", "#ef4444"]];
 let permits = {};
-let sharedPermitRecords = new Map();
+// Clave estable del estado de permisos de un punto (H-14): el ID de Supabase en el catálogo maestro;
+// en los puntos personales, que no tienen ID, su nombre (único por usuario).
+const permitKey = (c) => c.databaseId ? "id:" + c.databaseId : "custom:" + c.name;
 // Versión leída de cada fila de establishment_app_state (por ID de establecimiento). La mantiene la base
 // de datos; se guarda solo si nadie la ha cambiado desde que se leyó (H-11).
 let sharedPermitVersions = new Map();
@@ -735,32 +737,35 @@ const saveSharedPermitRow = async (client, userId, row) => {
   }
   return "error";
 };
-const savePermits = async (onlyName = null) => {
+// Permisos de los puntos personales (H-13): no tienen fila en el catálogo maestro, así que se guardan
+// en el estado personal del usuario (user_app_state), indexados por el nombre del punto.
+const customPermitsSnapshot = () => Object.fromEntries(CENTERS
+  .filter(c => c.custom && permits[permitKey(c)])
+  .map(c => [c.name, sanitizeSharedPermitState(permits[permitKey(c)]) || {}]));
+const saveCustomPermits = async () => typeof window.mapaPersistUserState === "function" &&
+  await window.mapaPersistUserState("customPermits", customPermitsSnapshot()) ? "ok" : "error";
+// Guarda el estado de permisos de un punto. Devuelve "ok", "conflict" o "error"; nunca da por bueno
+// un guardado que no ha llegado a Supabase.
+const savePermits = async (c) => {
   const session = window.mapaSession;
   const client = session?.supabase;
   const userId = session?.user?.id;
-  if (!client || !userId) return "error";
-  // Un guardado normal solo toca el establecimiento editado; evita sobrescribir cambios concurrentes.
-  const names = onlyName ? [onlyName] : Object.keys(permits);
-  const rows = [...new Set(names)].map(name => {
-    const c = CENTERS.find(item => item.name === name && item.databaseId && item.provinceId);
-    if (!c) return null;
-    return { establishment_id: c.databaseId, province_id: c.provinceId, state: sanitizeSharedPermitState(permits[name]) || {}, updated_by: userId };
-  }).filter(Boolean);
-  if (!rows.length) return "ok";
+  if (!client || !userId || !c) return "error";
   const status = document.getElementById("status");
-  for (const row of rows) {
-    const result = await saveSharedPermitRow(client, userId, row);
-    if (result !== "ok") {
-      if (status) status.textContent = result === "conflict"
-        ? "Aviso: otra persona ha cambiado este punto mientras lo editabas; no se ha sobrescrito su cambio."
-        : "Aviso: no se pudo confirmar el guardado de los permisos compartidos en Supabase.";
-      return result;
-    }
-    const c = CENTERS.find(item => item.databaseId === row.establishment_id);
-    if (c) sharedPermitRecords.set(c.name, { establishment_id: row.establishment_id, province_id: row.province_id });
+  if (!c.databaseId) {
+    const result = c.custom ? await saveCustomPermits() : "error";
+    if (result !== "ok" && status) status.textContent = "Aviso: no se pudo guardar el permiso del punto personal en Supabase.";
+    return result;
   }
-  return "ok";
+  if (!c.provinceId) return "error";
+  const row = { establishment_id: c.databaseId, province_id: c.provinceId, state: sanitizeSharedPermitState(permits[permitKey(c)]) || {}, updated_by: userId };
+  const result = await saveSharedPermitRow(client, userId, row);
+  if (result !== "ok" && status) {
+    status.textContent = result === "conflict"
+      ? "Aviso: otra persona ha cambiado este punto mientras lo editabas; no se ha sobrescrito su cambio."
+      : "Aviso: no se pudo confirmar el guardado de los permisos compartidos en Supabase.";
+  }
+  return result;
 };
 // Relee de Supabase el estado compartido de un punto (tras un conflicto) y actualiza la memoria.
 const reloadSharedPermit = async (c) => {
@@ -773,14 +778,14 @@ const reloadSharedPermit = async (c) => {
   if (error) return false;
   if (!data) {
     sharedPermitVersions.delete(c.databaseId);
-    delete permits[c.name];
+    delete permits[permitKey(c)];
     return true;
   }
   if (data.province_id !== c.provinceId || !data.state || typeof data.state !== "object" || Array.isArray(data.state)) return false;
   sharedPermitVersions.set(c.databaseId, Number(data.version));
   const safePermitState = sanitizeSharedPermitState(data.state);
-  if (safePermitState && Object.keys(safePermitState).length) permits[c.name] = safePermitState;
-  else delete permits[c.name];
+  if (safePermitState && Object.keys(safePermitState).length) permits[permitKey(c)] = safePermitState;
+  else delete permits[permitKey(c)];
   return true;
 };
 let removed = new Set();
@@ -798,7 +803,7 @@ const normalizePersonalRefs = (value) => new Set((Array.isArray(value) ? value :
     return c ? personalStateKey(c) : ref;
   }));
 const isOut = (c) => hasPersonalRef(removed, c);
-const permOf = (c) => permits[c.name] || { estado: "sin", fecha: "", contacto: "", notas: "", valoracion: 0 };
+const permOf = (c) => permits[permitKey(c)] || { estado: "sin", fecha: "", contacto: "", notas: "", valoracion: 0 };
 const stars = (n) => "★".repeat(n) + "☆".repeat(5 - n);
 const fmtD = (d) => {
   if (!d) return "…";
@@ -867,7 +872,7 @@ const sanitizeSharedPermitState = (value) => {
 };
 const today = () => new Date().toISOString().slice(0, 10);
 const isVig = (h) => !h.cancelada && (!h.desde || h.desde <= today()) && (!h.hasta || h.hasta >= today());
-const histOf = (c) => ((permits[c.name] && permits[c.name].historial) || []).slice().sort((a, b) => (b.desde || "").localeCompare(a.desde || ""));
+const histOf = (c) => ((permits[permitKey(c)] && permits[permitKey(c)].historial) || []).slice().sort((a, b) => (b.desde || "").localeCompare(a.desde || ""));
 const vigs = (c) => histOf(c).filter(isVig);
 const vigente = (c) => histOf(c).find(isVig);
 const histTxt = (h) => fmtD(h.desde) + " – " + fmtD(h.hasta) + (h.ong ? " · " + h.ong : "") + (safeCount(h.captadores) ? " · " + safeCount(h.captadores) + " captador" + (safeCount(h.captadores) === 1 ? "" : "es") : "");
@@ -1023,7 +1028,7 @@ function popupFor(c, pos) {
     setCommitControlsDisabled(true);
     const sm = el.querySelector(".saved");
     const previous = {
-      permit: permits[c.name] === undefined ? undefined : JSON.parse(JSON.stringify(permits[c.name])),
+      permit: permits[permitKey(c)] === undefined ? undefined : JSON.parse(JSON.stringify(permits[permitKey(c)])),
       val,
       hist: hist.map(item => ({ ...item })),
       sols: sols.map(item => ({ ...item })),
@@ -1036,16 +1041,16 @@ function popupFor(c, pos) {
       if (sols.length) v.solicitudes = sols;
       if (sols.length || hist.length) { v.estado = estadoCalc(v); v.fecha = fechaCalc(v); const sg = segCalc(v); if (sg) v.seguimiento = sg; }
       else { v.estado = p.estado || "sin"; v.fecha = p.fecha || ""; if (p.seguimiento) v.seguimiento = p.seguimiento; }
-      if (v.estado === "sin" && !v.fecha && !v.contacto && !v.notas && !v.valoracion && !hist.length && !v.seguimiento && !sols.length) delete permits[c.name];
-      else permits[c.name] = v;
+      if (v.estado === "sin" && !v.fecha && !v.contacto && !v.notas && !v.valoracion && !hist.length && !v.seguimiento && !sols.length) delete permits[permitKey(c)];
+      else permits[permitKey(c)] = v;
 
-      const saved = await savePermits(c.name);
+      const saved = await savePermits(c);
       if (saved === "conflict") {
         // Otra persona guardó este punto después de que se leyera: no se sobrescribe ni se intenta
         // restaurar (eso también pisaría su cambio). Lo escrito sigue visible en la ficha hasta que
         // se cargue la versión actual.
-        if (previous.permit === undefined) delete permits[c.name];
-        else permits[c.name] = previous.permit;
+        if (previous.permit === undefined) delete permits[permitKey(c)];
+        else permits[permitKey(c)] = previous.permit;
         sm.style.color = "#b3261e";
         sm.textContent = "No se ha guardado: otra persona ha cambiado este punto mientras lo editabas. Anota lo que querías cambiar, carga la versión actual y vuelve a aplicarlo. ";
         const reload = document.createElement("button");
@@ -1070,8 +1075,8 @@ function popupFor(c, pos) {
       if (saved !== "ok") {
         // La operación puede haber fallado antes o después de que la petición llegara al servidor.
         // Restaurar el estado anterior en memoria y volver a persistirlo evita dejar una edición ambigua.
-        if (previous.permit === undefined) delete permits[c.name];
-        else permits[c.name] = previous.permit;
+        if (previous.permit === undefined) delete permits[permitKey(c)];
+        else permits[permitKey(c)] = previous.permit;
         val = previous.val;
         hist = previous.hist;
         sols = previous.sols;
@@ -1079,7 +1084,7 @@ function popupFor(c, pos) {
         el.querySelector(".f-notas").value = previous.notas;
         paint(); paintHist(); paintSols(); paintEf();
         setCommitControlsDisabled(true);
-        const rollbackSaved = await savePermits(c.name);
+        const rollbackSaved = await savePermits(c);
         if (markers[c.id]) markers[c.id].setIcon(makeIcon(c));
         refreshSelects(); renderList(); paintEf();
         sm.style.color = "#b3261e";
@@ -1211,6 +1216,11 @@ function popupFor(c, pos) {
         const status = document.getElementById("status");
         if (status) status.textContent = "No se pudo eliminar el punto de Supabase; se mantiene en el mapa.";
         return;
+      }
+      // Quitar también sus permisos para que no reaparezcan en otro punto con el mismo nombre (H-13).
+      if (permits[permitKey(c)]) {
+        delete permits[permitKey(c)];
+        await saveCustomPermits();
       }
       location.reload();
     } else {
@@ -1804,7 +1814,7 @@ function gamAfter(gained, label, big, mission) {
 }
 function gamPermit(c, prev) {
   if (!gamReady) return;
-  const p = permits[c.name] || {}, name = c.name, est = p.estado || "sin", pv = prev || {}, t = today();
+  const p = permits[permitKey(c)] || {}, name = c.name, est = p.estado || "sin", pv = prev || {}, t = today();
   let g = 0, big = false, lab = "";
   const add = (k, pts, kind, label, opt) => { const r = award(k, pts, kind, Object.assign({ label }, opt || {})); if (r) { g += r; lab = lab || label; } return r; };
   if (est !== "sin") add("sol:" + name, 10, "sol", "Permiso solicitado");
@@ -1824,7 +1834,7 @@ function gamBadges(nuevos) { if (!gamReady || !nuevos.length) return; let g = 0;
 function seedXP() {
   const sl = { silent: true };
   CENTERS.forEach((c) => {
-    const p = permits[c.name]; if (!p || isOut(c)) return;
+    const p = permits[permitKey(c)]; if (!p || isOut(c)) return;
     if (p.estado && p.estado !== "sin") award("sol:" + c.name, 10, null, sl);
     if (p.estado === "concedido") award("con:" + c.name, 50, null, sl);
     if (p.estado && p.estado !== "sin" && p.contacto) award("ctc:" + c.name, 8, null, sl);
@@ -2205,7 +2215,9 @@ $("#csv").addEventListener("click", () => {
 });
 $("#bak").addEventListener("click", () => {
   if (!window.confirm("Se exportará el estado operativo del mapa a un archivo JSON. Este archivo NO es una copia completa de Supabase ni contiene una copia íntegra del catálogo maestro. Guárdalo solo en una ubicación autorizada. ¿Continuar?")) return;
-  download("exportacion-estado-mapa.json", JSON.stringify({ version: 2, permisos: permits, puntos_propios: customs, quitados: [...removed], revisados: [...reviewed], logros, gamificacion: gam }, null, 2), "application/json");
+  const permisos = CENTERS.filter((c) => permits[permitKey(c)])
+    .map((c) => ({ establecimiento_id: c.databaseId || null, nombre: c.name, punto_propio: Boolean(c.custom), estado_permiso: permits[permitKey(c)] }));
+  download("exportacion-estado-mapa.json", JSON.stringify({ version: 3, permisos, puntos_propios: customs, quitados: [...removed], revisados: [...reviewed], logros, gamificacion: gam }, null, 2), "application/json");
 });
 
 
@@ -2408,9 +2420,8 @@ renderList();
       if (!c || row.province_id !== c.provinceId) return;
       if (Number.isFinite(Number(row.version))) sharedPermitVersions.set(row.establishment_id, Number(row.version));
       if (!row.state || typeof row.state !== "object" || Array.isArray(row.state)) return;
-      sharedPermitRecords.set(c.name, { establishment_id: row.establishment_id, province_id: row.province_id });
       const safePermitState = sanitizeSharedPermitState(row.state);
-      if (safePermitState && Object.keys(safePermitState).length) permits[c.name] = safePermitState;
+      if (safePermitState && Object.keys(safePermitState).length) permits[permitKey(c)] = safePermitState;
     });
     const customNames = new Set(CENTERS.map(c => c.name));
     customs = Array.isArray(state.customs) ? state.customs.filter(p => {
@@ -2447,6 +2458,14 @@ renderList();
       CENTERS.push(c);
       cache[c.id] = { lat: Number(p.lat), lon: Number(p.lon), approx: p.approx || undefined };
     });
+    // Permisos de los puntos personales (H-13): solo los de puntos que siguen existiendo y saneados.
+    const savedCustomPermits = state.customPermits && typeof state.customPermits === "object" && !Array.isArray(state.customPermits)
+      ? state.customPermits : {};
+    CENTERS.filter(c => c.custom && Object.prototype.hasOwnProperty.call(savedCustomPermits, c.name)).forEach(c => {
+      const safePermitState = sanitizeSharedPermitState(savedCustomPermits[c.name]);
+      if (safePermitState && Object.keys(safePermitState).length) permits[permitKey(c)] = safePermitState;
+    });
+    loadedPersonalState = { ...loadedPersonalState, customPermits: customPermitsSnapshot() };
     CENTERS.forEach(makeMarker);
     refreshSelects();
     renderList();
