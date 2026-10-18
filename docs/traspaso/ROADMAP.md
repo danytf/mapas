@@ -36,7 +36,7 @@ Pendiente:
 - Preparación para varias provincias (registrado el 18/10/2026 a petición del titular): H-21 (app centrada en Granada: geocodificación, vista inicial, municipio por defecto y nombre del CSV; P2), H-22 (la base no tiene en cuenta si la provincia está activa; P3) y H-23 (límite de 1.000 filas por petición de la API, confirmado, y la app no pagina; **P1, corregido en el PR #95**). H-20 y H-21 cerrados en el PR #96 y probados en el navegador con un Supabase simulado (usuarios de una y dos provincias, sin puntos y administrador) y en producción con la sesión del titular. H-25 (umbral de distancia al corregir ubicaciones): aceptado por ahora por el titular; revisar al ampliar el catálogo.
 - Prueba de volumen para el catálogo de toda España (más de 50.000 puntos previstos por el titular): **la parte de base de datos está hecha en una base local con 50.000 puntos (H-26, PR #99, `supabase/tools/volume/`); no hace falta un proyecto de Supabase.** **La parte del navegador también está hecha con el Supabase simulado (H-27, PR #100): 3,9 s hasta el mapa con 50.000 puntos tras la corrección (antes, minutos).** Medir con un usuario de una o dos provincias y con el administrador: tiempo hasta el mapa visible, bytes transferidos, fluidez de filtros y lista (`renderList` reconstruye la lista entera en cada filtro) y marcadores. Con esas cifras, decidir si hace falta carga progresiva de marcadores, lista paginada o carga por provincia. Referencias medidas el 18/10/2026: 791 puntos ocupan 744 kB con índices (unos 960 bytes por punto) y la base entera 14 MB; 50.000 puntos serían del orden de 50 MB más la auditoría de la carga.
 
-## Fase E. Backup, restauración y despliegue (EN CURSO; hecho y pendiente en `docs/AUDITORIA_FASE_E_2026-10-18.md`)
+## Fase E. Backup, restauración y despliegue (CERRADA el 19/10/2026; ver `docs/AUDITORIA_FASE_E_2026-10-18.md` y `docs/import-export-backups.md`)
 
 - Averiguar qué cobertura de copia tiene el plan de Supabase (copias diarias, PITR, retención) con `get_project` y la documentación; registrar lo que se pueda demostrar y marcar lo que no.
 - Prueba de restauración en un proyecto o rama aislados (coste: pedir aprobación antes). Registrar tiempos y qué se pierde.
@@ -54,11 +54,13 @@ Informe final con: resumen ejecutivo; matriz de 10 capas (el listado literal de 
 - **Panel de administración** (decisión del titular, 18/10/2026: se desarrollará más adelante). Hoy el administrador no tiene pantallas propias: dar de alta usuarios, asignar provincias y editar el catálogo maestro (nombres, categorías, puntos nuevos) se hace por SQL (`docs/ADMINISTRACION_CUENTAS.md`). Cuando se aborde: diseño previo con el titular, sin debilitar la autorización (las escrituras deben seguir protegidas por RLS y `is_admin()`) y con pruebas en un entorno aislado.
 - **Ampliación del catálogo a toda España.** Hoy solo hay catálogo de Granada (791 puntos, aún por completar). La idea del titular es ir ampliándolo al resto de provincias. Antes de cargar otra provincia conviene tener resueltos H-20, H-21 y H-23, y cargar con el mismo procedimiento revisado que Granada (`supabase/seeds/`, `source_ref` único, sin inventar puntos ni coordenadas). Volumen previsto: más de 50.000 puntos (ver la prueba de volumen de la Fase D). La geocodificación masiva no puede hacerse con el servicio público de Nominatim que usa la app (su política de uso limita a una petición por segundo y no admite usos masivos): hará falta otra fuente de coordenadas o un procedimiento por lotes acordado, siempre fuera de la app.
 
-## Dependencias del titular (resumen)
+## Dependencias del titular (resumen, 19/10/2026)
 
-1. Aprobar el coste de la rama aislada o elegir la alternativa con red simulada.
-2. Proporcionar o autorizar la creación de cuentas sintéticas en la rama aislada (nunca las reales).
-3. Verificación visual final de lo que no se pueda automatizar.
-4. Decisiones de diseño que surjan (por ejemplo, migrar permisos a tablas normalizadas).
-5. Decidir el plan de Supabase de producción (H-24: el gratuito se pausa tras 7 días de poca actividad).
-6. ~~Consultar el ajuste *Data API > Max rows*~~ Hecho por el titular el 18/10/2026: **1.000** (afecta a H-23, que pasa a prioridad P1).
+Hechas: coste de la rama aislada (se usaron proyectos aislados gratuitos, ya eliminados), cuentas sintéticas, plan de Supabase (seguir en gratuito, H-24), ajuste Data API > Max rows (1.000), verificación visual de colores, copia y restauración.
+
+Pendientes y recurrentes:
+1. **Copia mensual** con `scripts/backup-supabase.sh` (y antes de cada migración), guardada fuera de este ordenador, de GitHub y de Supabase.
+2. **Limpieza local**: borrar las copias de prueba antiguas de `~/backups-mapas` cuando exista una válida guardada a salvo; dejar `.claude/settings.local.json` en `{"permissions":{"allow":[]}}`; borrar de Chrome las credenciales de prueba de 127.0.0.1 si las hubiera.
+3. **Pruebas manuales no automatizables** (aplazadas, ver `docs/AUDITORIA_FASE_D_ACCESIBILIDAD_2026-10-18.md`): lectores de pantalla reales, zoom y objetivos táctiles.
+4. **Decisiones de producto**: panel de administración, ampliación del catálogo a toda España y revisar H-25 al ampliar; revisar el plan de pago si crece el uso (H-24).
+5. Repetir la consulta de índices sin uso con 8-12 semanas de estadísticas (H-36).
