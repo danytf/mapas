@@ -14,6 +14,7 @@
 | Recursos de terceros fijados y verificables | Pendiente de fusión | H-01, PR #80 |
 | Pérdida de datos por escritura concurrente | Parcial | H-11 sin resolver; H-12 resuelto (recuperable). Opción A pendiente |
 | Cabeceras HTTP de seguridad | No aplicable en GitHub Pages | Solo `<meta>`; ver H-02 |
+| Protección de `main` | Cumplido (verificado por el titular) | Ver sección 4 |
 
 ## 2. Hallazgos de la Fase B
 
@@ -42,7 +43,7 @@ No se aplica porque requiere validación en navegador con sesión iniciada (mapa
 
 1. ~~Fusionar los PR #79, #80, #81 y #82~~ Hecho el 18/10/2026; `main` en producción verificado en navegador.
 2. ~~Decidir H-04 y H-11~~ Decidido: H-04 se mantiene y se documenta; H-11 (opción A) pasa a la Fase C.
-3. Confirmar en GitHub que `main` exige los checks `audit` y `postgres-smoke` y PR obligatorio. Lo comprueba el titular (no verificable por API desde esta sesión); hasta entonces figura como no verificado.
+3. ~~Confirmar la protección de `main`~~ Verificado por el titular con capturas de la configuración el 18/10/2026: regla sobre `main` (aplica a 1 rama); PR obligatorio (sin aprobaciones requeridas, adecuado para un único titular); checks obligatorios `audit` y `postgres-smoke` (GitHub Actions); sin permitir saltarse las reglas, administradores incluidos; force push y borrado de rama desactivados. Coherente con lo observado: las fusiones de hoy solo fueron posibles con ambos checks en verde. Mejora opcional no activada: "Require branches to be up to date before merging" (un PR podría fusionarse con checks ejecutados sobre una base antigua; hoy el #81 tuvo que combinarse con `main` por conflicto).
 
 ## 5. Límites conocidos
 
