@@ -10,8 +10,9 @@
 --    concesiones, seguimientos, revisiones de ubicación e historial de ubicación, exige provincia
 --    activa para los usuarios no administradores.
 -- 2) Las políticas de establishment_app_state repetían la lógica a mano (sin mirar la provincia):
---    pasan a usar public.has_province_access, de modo que hay una sola regla. Mismos nombres, roles,
---    operaciones y condición updated_by.
+--    pasan a usar public.has_province_access, de modo que hay una sola regla. Se modifican con
+--    ALTER POLICY (sin borrarlas ni recrearlas): mismos nombres, roles, operaciones y condición updated_by, y sin un
+--    instante sin política.
 --
 -- No cambia datos, tablas, columnas ni permisos de tabla.
 
@@ -34,21 +35,15 @@ AS $function$
   );
 $function$;
 
-DROP POLICY IF EXISTS "Users can read state for assigned provinces" ON public.establishment_app_state;
-CREATE POLICY "Users can read state for assigned provinces"
+ALTER POLICY "Users can read state for assigned provinces"
   ON public.establishment_app_state
-  FOR SELECT TO authenticated
   USING (public.has_province_access(province_id));
 
-DROP POLICY IF EXISTS "Users can insert state for assigned provinces" ON public.establishment_app_state;
-CREATE POLICY "Users can insert state for assigned provinces"
+ALTER POLICY "Users can insert state for assigned provinces"
   ON public.establishment_app_state
-  FOR INSERT TO authenticated
   WITH CHECK (updated_by = (SELECT auth.uid()) AND public.has_province_access(province_id));
 
-DROP POLICY IF EXISTS "Users can update state for assigned provinces" ON public.establishment_app_state;
-CREATE POLICY "Users can update state for assigned provinces"
+ALTER POLICY "Users can update state for assigned provinces"
   ON public.establishment_app_state
-  FOR UPDATE TO authenticated
   USING (public.has_province_access(province_id))
   WITH CHECK (updated_by = (SELECT auth.uid()) AND public.has_province_access(province_id));
