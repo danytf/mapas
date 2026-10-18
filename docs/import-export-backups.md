@@ -54,6 +54,8 @@ sed '/^CREATE SCHEMA public;$/d' schema.sql | psql "$NEW_URL" -v ON_ERROR_STOP=1
 (echo "SET session_replication_role = replica;"; cat data.sql) | psql "$NEW_URL" -v ON_ERROR_STOP=1 -q
 ```
 
+**Segunda prueba (19/10/2026, copia con `private`):** esquema en 13 s y datos en 4 s, sin errores. Comparación con producción: coinciden las huellas de políticas (51), funciones privadas (4), triggers (34) y tablas con RLS (17), y los recuentos (791 puntos, 3 estados con versión máxima 2, 856 auditorías, 3 perfiles). **No coincidieron los permisos**: 238 permisos de tabla frente a 57 en producción, y las funciones de `public` con otra huella, porque la copia se hizo con `--no-privileges` y el proyecto nuevo aplicó los permisos por defecto de Supabase (anon y authenticated con todo). RLS sigue activo, pero se pierde el endurecimiento de privilegios. El script se corrigió para incluir `GRANT`/`REVOKE` y rechaza copias sin ellos; la restauración con esa corrección debe repetirse y volver a comparar.
+
 Después, comprobar las 6 huellas (`supabase/tools/schema_fingerprint.sql`) y los recuentos. Los usuarios de autenticación no van en esta copia.
 
 No pruebes una restauración sobre la base de datos usada por la aplicación. Restaura primero en un proyecto de desarrollo aislado y sigue la guía oficial compatible con los dumps generados: [Backup and restore using the CLI](https://supabase.com/docs/guides/platform/migrating-within-supabase/backup-restore).
