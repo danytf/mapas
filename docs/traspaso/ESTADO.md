@@ -15,8 +15,8 @@
 
 ## Producción (Supabase `wwoczmihhupofwmlmgga`)
 
-- Migraciones: 26 registradas, última `20261018145132_establishment_app_state_version` (H-11, aplicada el 18/10/2026). Coinciden una a una con `supabase/migrations/`.
-- Huellas del esquema público (comparables con `supabase/tools/schema_fingerprint.sql`): políticas 51 `7f65af3e`, permisos de tabla 57 `374f58c4`, funciones propias 19 `976fdf1e` (sin `rls_auto_enable`, función de la plataforma), funciones privadas 3 `de9d04b4`, triggers 34 `6d0afe68`, tablas con RLS 17 `e9ad42c3`.
+- Migraciones: 27 registradas, última `20261018172704_province_active_in_authorization` (H-22, aplicada el 18/10/2026; antes `20261018145132` de H-11). Coinciden una a una con `supabase/migrations/`.
+- Huellas del esquema público (comparables con `supabase/tools/schema_fingerprint.sql`): políticas 51 `9af6855f`, permisos de tabla 57 `374f58c4`, funciones propias 19 `976fdf1e` (sin `rls_auto_enable`, función de la plataforma), funciones privadas 3 `de9d04b4`, triggers 34 `6d0afe68`, tablas con RLS 17 `e9ad42c3`.
 - 17 tablas, todas con RLS. Ninguna concede privilegios a `anon`.
 - Avisos del asesor de seguridad: solo "protección frente a contraseñas filtradas desactivada" (aceptado, no tocar).
 - Datos (consulta del 18/10/2026): 791 establecimientos, todos activos y con coordenadas; 3 perfiles (1 administrador); 2 filas de `user_provinces`; 2 filas de `establishment_app_state`; 3 de `user_app_state`; 0 en `permit_applications`, `permit_grants` y `followups` (el estado real de permisos vive en el JSONB de `establishment_app_state`); 856 filas de `audit_log`; 43 de `establishment_location_history`; 0 de `establishment_app_state_history` (aún no hubo sobrescrituras).
@@ -40,7 +40,7 @@
 
 ## Hallazgos
 
-Ver `HALLAZGOS.md`. Cerrados en la Fase C: H-02, H-11, H-13, H-14 y H-05 (verificado). Abiertos para la Fase D: H-15 a H-18 (P3), H-19 (P3, por investigar), H-20 (P2, latente) y, para el uso en varias provincias, H-21 (P2), H-22 (P3) y H-23 (P2, latente). Riesgo actual pendiente de decisión del titular: H-24 (P2, plan gratuito de Supabase: pausa tras 7 días de poca actividad). Pendientes de producto (ROADMAP): panel de administración y ampliación del catálogo a toda España (hoy solo Granada, aún por completar). Además: H-03 (P3, recomendación), H-08 (Fase E) y H-09 (P3, aceptado).
+Ver `HALLAZGOS.md`. Cerrados en la Fase C: H-02, H-11, H-13, H-14 y H-05 (verificado). Abiertos para la Fase D: H-15 a H-18 (P3), H-19 (P3, por investigar), H-20 (P2, latente) y, para el uso en varias provincias, H-21 (P2), H-22 (cerrado, PR #94 y migración aplicada) y **H-23 (P1, latente e inminente: Max rows = 1.000 y hoy hay 791 puntos; es lo primero de la Fase D)**. Riesgo actual pendiente de decisión del titular: H-24 (P2, plan gratuito de Supabase: pausa tras 7 días de poca actividad). Pendientes de producto (ROADMAP): panel de administración y ampliación del catálogo a toda España (hoy solo Granada, aún por completar). Además: H-03 (P3, recomendación), H-08 (Fase E) y H-09 (P3, aceptado).
 
 ## Entorno aislado de la Fase C
 

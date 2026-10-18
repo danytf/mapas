@@ -141,6 +141,8 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261018124030_create_establishment_state_history.sql
       - name: Add establishment state version for conflict control
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261018145132_establishment_app_state_version.sql
+      - name: Require active province in authorization
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261018172704_province_active_in_authorization.sql
       - name: Verify every migration file is applied by this workflow
         shell: bash
         run: |
@@ -158,5 +160,7 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/state_history.sql
       - name: Run establishment state conflict-control tests
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/state_version.sql
+      - name: Run active-province authorization tests
+        run: psql -v ON_ERROR_STOP=1 -f supabase/tests/province_active.sql
       - name: Run exhaustive authorization matrix
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/rls_matrix.sql
