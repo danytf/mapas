@@ -8,7 +8,7 @@
 |---|---|
 | A. Reconstruir el estado real | Cerrada |
 | B. Seguridad y persistencia | Cerrada (H-11 aplazado a la C por decisión del titular) |
-| C. Pruebas E2E en navegador | **Siguiente, sin empezar** |
+| C. Pruebas E2E en navegador | **En curso**: pruebas 1-8 y 11 hechas (`docs/AUDITORIA_FASE_C_2026-10-18.md`); pendientes H-11 (diseño aprobado), H-02 (CSP) y las correcciones de H-13 a H-17 |
 | D. Integridad, dependencias, accesibilidad, rendimiento | Parcial (ver ROADMAP) |
 | E. Backup, restauración y despliegue | Sin empezar |
 | F. Informe final | Sin empezar |
@@ -41,7 +41,15 @@
 
 Ver `HALLAZGOS.md`. Abiertos: H-11 (conflicto de escritura, P1, se hará en la Fase C), H-02 (CSP, P2, depende de pruebas en navegador), H-03 (P3, recomendación), H-09 (P3, aceptado), y la verificación manual de H-05 en producción.
 
+## Entorno aislado de la Fase C
+
+- Proyecto Supabase `mapas-e2e` (`obqodndkzznrpuwxzbsi`, eu-west-1), creado el 18/10/2026 en la organización Wesser (plan gratuito, coste 0 confirmado por el titular). Las ramas de Supabase no están disponibles en el plan gratuito y el MCP no ofrece `get_cost`/`confirm_cost`: el coste lo presenta `create_project`/`create_branch` al llamarlas.
+- Esquema montado con `psql` desde el repositorio y huellas idénticas a producción (6 de 6). Datos sintéticos de `supabase/e2e/seed_synthetic.sql`.
+- Acceso del equipo del titular: `psql` por el pooler de sesión (`aws-0-eu-west-1.pooler.supabase.com:5432`, usuario `postgres.obqodndkzznrpuwxzbsi`) con la contraseña en `%APPDATA%\postgresql\pgpass.conf` (fuera del repositorio). Las contraseñas de las cuentas sintéticas están fuera del repositorio.
+- Se elimina al cerrar la Fase C, con confirmación del titular.
+
 ## Cosas verificadas por el titular o que dependen de él
 
-- Verificado por el titular: protección de `main`.
-- Pendiente de él: aprobar el coste de una rama aislada de Supabase (Fase C y prueba de restauración), y la verificación visual de H-05 con su sesión (o con una cuenta sintética en la Fase C).
+- Verificado por el titular: protección de `main`; plan gratuito de la organización tras crear `mapas-e2e`.
+- Verificado en la Fase C con cuenta sintética: H-05 (teclado en el panel).
+- Pendiente de él: aprobar la migración de H-11 en producción y la fusión de los PR de la Fase C; confirmar la eliminación de `mapas-e2e` al terminar; borrar del gestor de contraseñas de Chrome las credenciales de prueba de `127.0.0.1` si las guardó.
