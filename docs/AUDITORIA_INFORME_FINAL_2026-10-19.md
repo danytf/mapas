@@ -10,22 +10,36 @@ Este informe resume y enlaza la evidencia; el detalle de cada hallazgo (ID, capa
 - Aceptados por el titular: H-09 (origen compartido `danytf.github.io`), H-24 (plan gratuito de Supabase), H-25 (umbral de distancia al corregir ubicaciones), y el aviso de contraseñas filtradas de Supabase Auth.
 - La base de producción tiene hoy 29 migraciones registradas, coincidentes una a una con `supabase/migrations/`; las aplicadas durante la auditoría se probaron antes en local y se verificaron después en producción (huellas del esquema, recuentos y asesores).
 - Lo más relevante que se detectó y corrigió: pérdida silenciosa de datos al guardar permisos desde dos sesiones (H-11), permisos de puntos personales que no se guardaban (H-13), límite de 1.000 filas de la API que cortaría el catálogo (H-23), carga del mapa que se congelaba con miles de puntos (H-27), accesibilidad (H-28 a H-35) y una copia de seguridad que no era restaurable con seguridad (H-38).
+- Capas Cerradas: 1 a 7 y 9. Parciales: 8 y 10, más identidad y secretos. No cubiertas: privacidad y observabilidad (decisión del titular de auditarlas aparte).
 - Riesgo principal que queda: no hay copia automática de la base (plan gratuito); depende de la copia mensual manual del titular (H-24).
 
-## 2. Matriz de capas (propuesta; el listado literal del encargo original no se conservó y debe confirmarlo el titular)
+## 2. Matriz de capas (confirmada por el titular el 19/10/2026, con criterio ampliado)
 
-| Capa | Hallazgos | Estado | Evidencia principal |
+Escala de estado: **Cerrada** (evidencia suficiente y verificable en el entorno relevante), **Parcial** (parte de los controles acreditada, falta una prueba concreta), **No cubierta** (no se ha auditado) y **Bloqueada** (no se puede verificar por falta de acceso o de entorno). Una capa no se cierra porque exista código o un test que pase, sino porque la evidencia demuestra el comportamiento esperado.
+
+El listado literal de capas del encargo original no se conservó: la agrupación es nuestra, contrastada con una segunda opinión externa (ChatGPT, 19/10/2026) que propuso las dos renombres y las cuatro áreas transversales siguientes.
+
+| Capa | Hallazgos | Estado | Evidencia principal y límites |
 |---|---|---|---|
-| 1. Estado y reproducibilidad | H-01 (CDN con versión y SRI) | Cerrada | `docs/traspaso/ESTADO.md`, CI, `schema-smoke.yml` aplica todas las migraciones |
+| 1. Estado, trazabilidad y reproducibilidad | H-01 | Cerrada | `ESTADO.md`, CI, `schema-smoke.yml` aplica todas las migraciones; 594 commits, PR numerados |
 | 2. Base de datos y migraciones | H-03, H-10, H-22, H-26 | Cerrada | 29 migraciones en producción = `supabase/migrations/`; 6 huellas del esquema |
-| 3. Autorización (RLS) | H-04, H-22 | Cerrada | `supabase/tests/rls_matrix.sql`: 973 celdas, 0 discrepancias, 781 denegaciones; 17 tablas con RLS |
-| 4. Persistencia | H-13, H-14, H-19 | Cerrada | `scripts/audit-persistence.mjs` en CI; sin datos de negocio en el navegador |
-| 5. Concurrencia e integridad | H-11, H-12, H-10 | Cerrada | `state_version.sql`, `state_history.sql`; versión por fila e historial de estados |
-| 6. Aplicación y E2E | H-02, H-05, H-15 a H-21 | Cerrada | `docs/AUDITORIA_FASE_C_2026-10-18.md`; pruebas en navegador con Supabase aislado y simulado |
-| 7. Dependencias y cabeceras | H-01, H-02, H-37 | Cerrada | SRI sha384, CSP en `<meta>` sin violaciones, Pages publica solo `index.html` |
-| 8. Accesibilidad | H-05, H-18, H-28 a H-35 | Cerrada con pendientes | `scripts/test-a11y-fase-d.mjs`; pendiente lectores de pantalla reales, zoom y objetivos táctiles |
-| 9. Rendimiento y escala | H-23, H-26, H-27, H-36 | Cerrada | 50.000 puntos: 87 ms de consulta de catálogo y 4-7 s hasta el mapa en el navegador |
-| 10. Backup, restauración y despliegue | H-08, H-24, H-37, H-38 | Cerrada con riesgo aceptado | Restauración en proyecto aislado: 6 de 6 huellas y recuentos idénticos |
+| 3. Autorización (RLS) | H-04, H-22 | Cerrada | `rls_matrix.sql`: 973 celdas, 0 discrepancias, 781 denegaciones; límite: cuentas sintéticas, no cuentas reales |
+| 4. Persistencia | H-13, H-14, H-19 | Cerrada | `audit-persistence.mjs` en CI; sin datos de negocio en el navegador |
+| 5. Concurrencia e integridad | H-11, H-12, H-10 | Cerrada | `state_version.sql`, `state_history.sql`; conflicto verificado con la sesión del titular |
+| 6. Aplicación y E2E | H-02, H-05, H-15 a H-21 | Cerrada | `AUDITORIA_FASE_C_2026-10-18.md`; entorno aislado y Supabase simulado |
+| 7. Dependencias y seguridad | H-01, H-02, H-37 | Cerrada | SRI sha384, CSP en `<meta>` sin violaciones, Pages publica solo `index.html`; búsqueda de secretos en los 594 commits sin hallazgos (limitada a patrones concretos) |
+| 8. Accesibilidad | H-05, H-18, H-28 a H-35 | **Parcial** | `test-a11y-fase-d.mjs` y pruebas con teclado real; faltan lectores de pantalla reales, zoom y objetivos táctiles |
+| 9. Rendimiento y escala | H-23, H-26, H-27, H-36 | Cerrada | 50.000 puntos: 87 ms de consulta y 4-7 s hasta el mapa; paginación completa |
+| 10. Backup, restauración, despliegue y recuperación ante incidentes | H-08, H-24, H-37, H-38 | **Parcial** | Restauración real en proyecto aislado: 6 de 6 huellas y recuentos idénticos; la reversión del despliegue solo se probó en seco; sin copia automática (plan gratuito, riesgo aceptado) |
+
+Áreas transversales añadidas por la revisión externa:
+
+| Área | Estado | Qué se hizo y qué falta |
+|---|---|---|
+| Identidad y gestión de cuentas | **Parcial** | Hecho: baja de perfil con registros (H-10), provincia activa (H-22), sesión solo en memoria, mensajes de sesión caducada (H-16), altas y asignaciones por SQL documentadas (`ADMINISTRACION_CUENTAS.md`). Falta: recuperación de acceso y revocación de sesiones |
+| Secretos y exposición de información | **Parcial** | Hecho: búsqueda de JWT, `sb_secret_`, cadenas `postgres://` con contraseña y ficheros `.env`/`.pem` en los 594 commits (sin hallazgos); Pages sin ficheros internos; la app usa la clave publicable. Límite: no se usó un escáner especializado |
+| Privacidad y protección de datos | **No cubierta** | Existe `clasificacion-datos-y-exposicion-publica.md` (fase inicial). No se auditó conservación, derechos de acceso o supresión ni obligaciones legales; los datos de negocio incluyen contactos y notas |
+| Observabilidad y respuesta a incidentes | **No cubierta** | No hay detección de errores ni de caídas más allá de los avisos de la app |
 
 ## 3. Defectos confirmados y correcciones
 
@@ -89,4 +103,4 @@ Todo el trabajo se hizo en ramas con PR hacia `main` y squash. Los PR de la audi
 | C. E2E | Pruebas en navegador con cuentas sintéticas en entorno aislado | Sí |
 | D. Integridad, dependencias, accesibilidad, rendimiento | Hallazgos corregidos o aceptados; escala medida | Sí, con pendientes manuales declarados |
 | E. Backup, restauración, despliegue | Restauración demostrada con huellas; reversión documentada | Sí |
-| F. Informe final | Este documento, matriz confirmada por el titular | Pendiente de confirmar la matriz de capas |
+| F. Informe final | Este documento, matriz confirmada por el titular | Sí (19/10/2026). Quedan 2 capas y 2 áreas en estado Parcial y 2 áreas No cubiertas, declaradas arriba |
