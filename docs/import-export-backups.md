@@ -46,15 +46,25 @@ Protege la cadena de conexión y los archivos resultantes. No la pegues en el ch
 
 **Primera prueba real (19/10/2026, proyecto temporal `mapas-restore-test`, copia de `pg_dump`):** los datos se restauraron completos (791 puntos, 3 estados compartidos, 3 perfiles, 856 filas de auditoría; esquema `schema.sql` en unos 10 s y datos en unos 3 s por la red del titular). Pero **la primera copia solo volcaba el schema `public`, y las políticas RLS dependen de funciones del schema `private`: la restauración dejó 0 políticas y RLS desactivado**. El script se corrigió para volcar también `private` y negarse a dar la copia por válida si falta. Además, `schema.sql` empieza con `CREATE SCHEMA public;`, que falla en un proyecto Supabase nuevo.
 
-Pasos de restauración con la copia de `pg_dump` (en un proyecto aislado, nunca sobre producción):
+**Procedimiento de restauración probado (tercera prueba, 19/10/2026): las 6 huellas de `supabase/tools/schema_fingerprint.sql` y todos los recuentos coincidieron con producción.** En un proyecto Supabase aislado y recién creado, con la copia de `scripts/backup-supabase.sh`:
+
+1. Endurecer los permisos por defecto de `public`, igual que la migración `20261018002000` (un proyecto nuevo trae los amplios de Supabase y, si no, quedan 238 permisos de tabla en lugar de 57). En el editor SQL del proyecto aislado:
+
+```sql
+alter default privileges for role postgres in schema public revoke all on tables from anon, authenticated, service_role;
+alter default privileges for role postgres in schema public revoke all on sequences from anon, authenticated, service_role;
+alter default privileges for role postgres in schema public revoke execute on functions from anon, authenticated, service_role, public;
+```
+
+2. Restaurar quitando dos cosas que no se pueden aplicar en Supabase (el esquema `public` ya existe y los permisos por defecto de `supabase_admin` son de la plataforma):
 
 ```bash
 cd <carpeta de la copia>
-sed '/^CREATE SCHEMA public;$/d' schema.sql | psql "$NEW_URL" -v ON_ERROR_STOP=1 -q
+sed -e '/^CREATE SCHEMA public;$/d' -e '/^ALTER DEFAULT PRIVILEGES FOR ROLE supabase_admin/d' schema.sql | psql "$NEW_URL" -v ON_ERROR_STOP=1 -q
 (echo "SET session_replication_role = replica;"; cat data.sql) | psql "$NEW_URL" -v ON_ERROR_STOP=1 -q
 ```
 
-**Segunda prueba (19/10/2026, copia con `private`):** esquema en 13 s y datos en 4 s, sin errores. Comparación con producción: coinciden las huellas de políticas (51), funciones privadas (4), triggers (34) y tablas con RLS (17), y los recuentos (791 puntos, 3 estados con versión máxima 2, 856 auditorías, 3 perfiles). **No coincidieron los permisos**: 238 permisos de tabla frente a 57 en producción, y las funciones de `public` con otra huella, porque la copia se hizo con `--no-privileges` y el proyecto nuevo aplicó los permisos por defecto de Supabase (anon y authenticated con todo). RLS sigue activo, pero se pierde el endurecimiento de privilegios. El script se corrigió para incluir `GRANT`/`REVOKE` y rechaza copias sin ellos; la restauración con esa corrección debe repetirse y volver a comparar.
+Tiempos medidos con la conexión del titular: esquema 17,7 s y datos 3,1 s (base de 791 puntos). Resultado: políticas 51 (`f12aa180`), funciones privadas 4, funciones de `public` 19 (`a06e6e20`), permisos 57 (`374f58c4`), triggers 34 y RLS en 17 tablas, igual que producción; 791 puntos, 3 estados (versión máxima 2), 856 auditorías y 3 perfiles. **Lo que no se restaura:** usuarios de autenticación (`auth.users`) y sus contraseñas, la configuración de Auth y las claves de API del proyecto nuevo (la app apuntaría a otro proyecto: habría que cambiar URL y clave en `index.html`). Sin los usuarios, los perfiles y los estados quedan sin dueño hasta que se recreen las cuentas.
 
 Después, comprobar las 6 huellas (`supabase/tools/schema_fingerprint.sql`) y los recuentos. Los usuarios de autenticación no van en esta copia.
 
