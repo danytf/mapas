@@ -10,7 +10,7 @@ Este informe resume y enlaza la evidencia; el detalle de cada hallazgo (ID, capa
 - Aceptados por el titular: H-09 (origen compartido `danytf.github.io`), H-24 (plan gratuito de Supabase), H-25 (umbral de distancia al corregir ubicaciones), y el aviso de contraseñas filtradas de Supabase Auth.
 - La base de producción tiene hoy 29 migraciones registradas, coincidentes una a una con `supabase/migrations/`; las aplicadas durante la auditoría se probaron antes en local y se verificaron después en producción (huellas del esquema, recuentos y asesores).
 - Lo más relevante que se detectó y corrigió: pérdida silenciosa de datos al guardar permisos desde dos sesiones (H-11), permisos de puntos personales que no se guardaban (H-13), límite de 1.000 filas de la API que cortaría el catálogo (H-23), carga del mapa que se congelaba con miles de puntos (H-27), accesibilidad (H-28 a H-35) y una copia de seguridad que no era restaurable con seguridad (H-38).
-- Capas Cerradas: 1 a 7 y 9. Parciales: 8 y 10, más identidad y secretos. No cubiertas: privacidad y observabilidad (decisión del titular de auditarlas aparte).
+- Capas Cerradas: 1 a 7 y 9. Parciales: 8 y 10, más identidad, secretos y privacidad. No cubierta: observabilidad.
 - Riesgo principal que queda: no hay copia automática de la base (plan gratuito); depende de la copia mensual manual del titular (H-24).
 
 ## 2. Matriz de capas (confirmada por el titular el 19/10/2026, con criterio ampliado)
@@ -38,7 +38,7 @@ El listado literal de capas del encargo original no se conservó: la agrupación
 |---|---|---|
 | Identidad y gestión de cuentas | **Parcial** | Hecho: baja de perfil con registros (H-10), provincia activa (H-22), sesión solo en memoria, mensajes de sesión caducada (H-16), altas y asignaciones por SQL documentadas (`ADMINISTRACION_CUENTAS.md`). Falta: recuperación de acceso y revocación de sesiones |
 | Secretos y exposición de información | **Parcial** | Hecho: búsqueda de JWT, `sb_secret_`, cadenas `postgres://` con contraseña y ficheros `.env`/`.pem` en los 594 commits (sin hallazgos); Pages sin ficheros internos; la app usa la clave publicable. Límite: no se usó un escáner especializado |
-| Privacidad y protección de datos | **No cubierta** | Existe `clasificacion-datos-y-exposicion-publica.md` (fase inicial). No se auditó conservación, derechos de acceso o supresión ni obligaciones legales; los datos de negocio incluyen contactos y notas |
+| Privacidad y protección de datos | **Parcial** (auditada el 19/10/2026) | Inventario, accesos, retención técnica y terceros en `docs/AUDITORIA_PRIVACIDAD_2026-10-19.md` (H-39 y H-40 abiertos). Hoy los únicos datos personales reales son 3 correos de usuario. Falta la parte jurídica: base jurídica, aviso a usuarios, contratos con proveedores |
 | Observabilidad y respuesta a incidentes | **No cubierta** | No hay detección de errores ni de caídas más allá de los avisos de la app |
 
 ## 3. Defectos confirmados y correcciones
@@ -103,4 +103,4 @@ Todo el trabajo se hizo en ramas con PR hacia `main` y squash. Los PR de la audi
 | C. E2E | Pruebas en navegador con cuentas sintéticas en entorno aislado | Sí |
 | D. Integridad, dependencias, accesibilidad, rendimiento | Hallazgos corregidos o aceptados; escala medida | Sí, con pendientes manuales declarados |
 | E. Backup, restauración, despliegue | Restauración demostrada con huellas; reversión documentada | Sí |
-| F. Informe final | Este documento, matriz confirmada por el titular | Sí (19/10/2026). Quedan 2 capas y 2 áreas en estado Parcial y 2 áreas No cubiertas, declaradas arriba |
+| F. Informe final | Este documento, matriz confirmada por el titular | Sí (19/10/2026). Quedan 2 capas y 3 áreas en estado Parcial y 1 área No cubierta (observabilidad), declaradas arriba |

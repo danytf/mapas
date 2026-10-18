@@ -51,7 +51,7 @@ Informe final con: resumen ejecutivo; matriz de 10 capas (el listado literal de 
 
 ## Auditorías futuras (no cubiertas)
 
-- Privacidad y protección de datos (datos personales, conservación, derechos de acceso y supresión).
+- Privacidad: parte técnica auditada (`docs/AUDITORIA_PRIVACIDAD_2026-10-19.md`, H-39 y H-40 abiertos); falta la parte jurídica (base jurídica, aviso a usuarios, contratos con Supabase y GitHub) con quien lleve la protección de datos en Wesser.
 - Observabilidad y respuesta a incidentes.
 - Identidad: recuperación de acceso y revocación de sesiones.
 - Accesibilidad manual: lectores de pantalla reales, zoom y objetivos táctiles.
