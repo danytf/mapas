@@ -90,7 +90,7 @@ Los marca `validar.py`: posibles duplicados a menos de 150 m con otro nombre (Ba
 1. ~~Aprobar la carga en producción~~ Hecha.
 2. **Provincias**: solo Granada y Málaga están activas. Los puntos de Almería, Cádiz, Córdoba, Huelva, Jaén y Sevilla están cargados pero no son visibles hasta activar esas provincias en Administración y asignarlas a usuarios.
 3. ~~Calles~~ Completadas con Nominatim (ver «Calles completadas»).
-4. Revisar la lista «por revisar» y confirmar el criterio de tranvía-tren de Cádiz.
+4. ~~Revisar la lista «por revisar» y confirmar el criterio de tranvía-tren de Cádiz.~~ Hecho el 19/10/2026: 6 de los 8 archivados y 2 verificados con ubicación manual (lote: 240 activos, 6 archivados); los 3 tranvías-tren de Cádiz quedan fuera (criterio A del titular).
 
 ## Calles completadas con Nominatim (19/10/2026)
 
