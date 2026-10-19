@@ -81,3 +81,10 @@ Ver `HALLAZGOS.md`. Accesibilidad (H-28 a H-35): corregida en el PR #105 y verif
 ## Rediseño visual premium (PR #164, rama feat/rediseno-premium, sin fusionar)
 
 La gamificación se retiró en el PR #164 por error de interpretación y se restauró en el PR siguiente (decisión del titular). Paleta carbón/papel; cabecera de 56 px; «Limpiar filtros»; estados de la lista; buscador y lista más escaneables; pin seleccionado; «Guardando…» en la ficha; móvil con conmutador Mapa/Lista y filtros plegables; microinteracciones con un token de duración y `prefers-reduced-motion`. Detalle en `DESIGN.md`. Verificado en local con el Supabase simulado (1440×900, 1366×768, 768×1024 y 390×844; claro y oscuro). Pendiente del titular: móvil físico, lector de pantalla y sesión real.
+
+
+## Cierre del 19/10/2026
+
+- Rediseño premium (PR #164), gamificación restaurada (PR #165) y Wesser Spatial Canvas, el rediseño del mapa (PR #167), fusionados y desplegados.
+- Códigos postales: 918 escritos en producción (142 puntos siguen sin código). Detalle en `docs/traspaso/ROADMAP.md`.
+- Pendiente del titular: probar en móvil físico y con lector de pantalla; comprobar la licencia de Esri para uso comercial de las teselas; valorar los ~139 favoritos de Andalucía; copia mensual con `scripts/backup-supabase.sh`.
