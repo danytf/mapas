@@ -1,7 +1,7 @@
 """Control de calidad de un lote extraido con extraer.py: decide que entra, que se descarta y que entra "por revisar", y genera el informe.
 Uso: python validar.py <candidatos.json> <categoria.json> <existentes.json> <salida_dir> [--seed N] [--direcciones direcciones.json]
 - existentes.json: puntos ya en la base de la misma categoria [{"s": location_source, "t": subtipo, "lat":.., "lon":.., "n": nombre}] (consulta de solo lectura).
-- Reglas: provincia en excluir_provincias -> descarta (ya cubierta); sin nombre (si nombre_obligatorio) -> descarta; ya existe (mismo location_source, o mismo subtipo a menos de distancia_existente_m) -> descarta;
+- Reglas: provincia en excluir_provincias -> descarta (ya cubierta) salvo los ids de incluir_excepciones; sin nombre (si nombre_obligatorio) -> descarta; ya existe (mismo location_source, o mismo subtipo a menos de distancia_existente_m) -> descarta;
   duplicado en el lote (mismo subtipo y mismo nombre normalizado a menos de distancia_duplicado_m) -> se conserva uno (prefiere nodo, luego con calle);
   nombre dudoso (nombre_sospechoso_regex) -> entra por revisar; el municipio se anade al nombre si no aparece en el;
   mismo subtipo a menos de 150 m con otro nombre -> entra "por revisar" (approximate) como posible duplicado.
@@ -67,7 +67,7 @@ def descarta(r, motivo):
 
 
 for r in [r for r in cand if r["final"] == "incluir"]:
-    if r["ine"] and r["ine"][:2] in defn.get("excluir_provincias", []):
+    if r["ine"] and r["ine"][:2] in defn.get("excluir_provincias", []) and r["osm"] not in defn.get("incluir_excepciones", []):
         descarta(r, "provincia ya cubierta por el catalogo revisado a mano (%s)" % r["ine"][:2])
     elif nombre_obligatorio and not r["nombre_osm"]:
         descarta(r, "sin nombre en OpenStreetMap")
