@@ -169,6 +169,10 @@
     background: #0b7a68; border: 2px solid #fff; box-shadow: 0 2px 6px rgba(15,23,34,.45);
     display: grid; place-items: center;
   }
+  .pin { transition: transform .18s ease, box-shadow .18s ease; }
+  .leaflet-marker-icon.sel { z-index: 1000 !important; }
+  .leaflet-marker-icon.sel .pin { transform: rotate(-45deg) scale(1.3); box-shadow: 0 0 0 3px var(--accent), 0 4px 10px rgba(23,27,35,.5); }
+  @media (prefers-reduced-motion: reduce) { .pin { transition: none; } }
   .pin b { transform: rotate(45deg); color: #fff; font: 650 11px var(--font); }
   .pin svg { transform: rotate(45deg); width: 15px; height: 15px; stroke: #fff; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
   .legend-box i.gi { width: 19px; height: 19px; border-radius: var(--r-xs); display: grid; place-items: center; }
@@ -2016,6 +2020,16 @@ function renderList() {
   }
 }
 
+/* Pin seleccionado: se reaplica cuando el mapa termina de moverse o de agrupar, porque el marcador puede no estar dibujado todavía. */
+let selId = null;
+function applySel() {
+  document.querySelectorAll(".leaflet-marker-icon.sel").forEach((n) => n.classList.remove("sel"));
+  const m = selId != null && markers[selId];
+  const el = m && m.getElement && m.getElement();
+  if (el) el.classList.add("sel");
+}
+map.on("moveend zoomend", () => setTimeout(applySel, 0));
+cluster.on("animationend", applySel);
 function highlight(id, fly) {
   document.querySelectorAll("li.active").forEach((n) => n.classList.remove("active"));
   let li = document.querySelector('li[data-id="' + id + '"]');
@@ -2029,6 +2043,7 @@ function highlight(id, fly) {
   }
   if (li) { li.classList.add("active"); li.scrollIntoView({ block: "nearest" }); }
   const m = markers[id];
+  selId = id; applySel();
   if (fly && m && !cluster.hasLayer(m)) {
     // Punto desactivado: no tiene marcador en el mapa; se abre su ficha en su posición.
     const c = CENTERS.find((x) => x.id === id), pos = cache[id];
