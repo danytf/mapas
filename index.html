@@ -235,7 +235,7 @@
   #ficha input, #ficha textarea { font: inherit; font-weight: 400; font-size: var(--fs-body); padding: 8px 10px; min-height: 38px; border: 1px solid var(--line-2); border-radius: var(--r-control); background: var(--panel); color: var(--fg); width: 100%; }
   #ficha input:focus, #ficha textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); outline: 0; }
   #ficha textarea { resize: vertical; min-height: 60px; }
-  .fi-tabs { display: grid; gap: 12px; }
+  .fi-tabs { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
   #ficha .ptabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); }
   #ficha .ptabs button { height: 38px; padding: 0 12px; background: none; color: var(--muted); border: 0; border-bottom: 2px solid transparent; border-radius: 0; font-weight: 600; font-size: var(--fs-body); }
   #ficha .ptabs button:hover { background: none; color: var(--fg); }
@@ -253,7 +253,8 @@
   #ficha ul.fi-list li.fi-none { color: var(--muted); border-left-color: var(--line-2); }
   #ficha details.aform { border: 1px dashed var(--line-2); border-radius: var(--r-card); padding: 4px 12px 10px; display: grid; gap: 8px; }
   #ficha details.aform > summary { cursor: pointer; font-size: var(--fs-body); font-weight: 600; color: var(--accent); min-height: 34px; display: flex; align-items: center; }
-  #ficha .row3 { display: grid; grid-template-columns: 1fr 1fr 84px; gap: 8px; }
+  #ficha .row3 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 84px; gap: 8px; }
+  #ficha .row3 input { min-width: 0; }
   .fi-btns { display: flex; gap: 8px; flex-wrap: wrap; }
   .fi-msg { font-size: var(--fs-label); color: var(--err); min-height: 16px; }
   #ficha .loc { display: grid; gap: 10px; }
