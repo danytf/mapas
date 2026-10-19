@@ -32,6 +32,14 @@ assert.ok(bloque.includes("window.confirm("), "Las acciones sensibles deben pedi
 assert.ok(bloque.includes('e.code === "23514"'), "Debe explicarse el error de último administrador");
 assert.ok(bloque.includes("await load();"), "Tras cada cambio se recarga desde Supabase");
 
+// Archivar puntos (solo administradores): desde la ficha, y restaurar desde Administración.
+assert.ok(html.includes('class="f-arch danger">Archivar para todos</button>') && html.includes('window.mapaSession?.profile?.role === "admin" && c.databaseId'), "El botón de archivar solo debe verse a administradores y para puntos del catálogo");
+assert.ok(html.includes('status: "archived", archived_at: new Date().toISOString()'), "Archivar escribe status y archived_at");
+assert.ok(html.includes('const isOut = (c) => hasPersonalRef(removed, c) || isArchived(c);'), "Un archivado se oculta como uno quitado");
+assert.ok(html.includes('const nr = CENTERS.filter((c) => hasPersonalRef(removed, c)).length;'), "«Restaurar puntos quitados» no debe contar los archivados");
+assert.ok(bloque.includes('eq("status", "archived"), "id")') && bloque.includes('update({ status: "active", archived_at: null })'), "Administración lista (paginada) y restaura los archivados");
+assert.ok(bloque.includes('esc(p.name)') && bloque.includes('esc(p.notes || "")'), "Los datos de los archivados pasan por esc()");
+
 // El simulado debe cubrir las operaciones usadas.
 const mock = readFileSync("scripts/dev/mock-supabase.mjs", "utf8");
 for (const t of ["rpc/admin_list_users", '"23514"', "alta_provincia", "baja_provincia"]) assert.ok(mock.includes(t), "El simulado no cubre " + t);
