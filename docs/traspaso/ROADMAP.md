@@ -65,7 +65,7 @@ Informe final con: resumen ejecutivo; matriz de 10 capas (el listado literal de 
 - **Auditoría visual de la app** (decisión del titular, 19/10/2026; método y hallazgos en la sesión del 19/10/2026 con Impeccable 4.5.0, sistema documentado en `DESIGN.md` y `.impeccable/design.json`; puntuación inicial 14/20). **Hecho:** cabecera con indicadores agrupados, filtros plegables con contador y botón «Entrar» legible en oscuro (PR #140); texto mínimo de 12 px (PR #141); ficha del punto en panel lateral (PR #142, `docs/DISENO_FICHA_PUNTO.md`); calendario semanal (PR #137). **Pendiente, por orden de impacto:**
   1. Colores de estado y de gamificación como tokens con variante oscura (`extract`); hoy hay 157 colores fijos y el detector marca 44 fuera de `DESIGN.md`.
   2. Escala de radios (hoy ~20 distintos) y de tamaños de letra (hoy 20) en el resto de la app (`typeset`).
-  3. Objetivos táctiles de 44 px fuera de la ficha (`adapt`); los controles medidos van de 16 a 42 px.
+  3. Objetivos táctiles de 44 px fuera de la ficha (`adapt`). **Hecho el 19/10/2026** (búsqueda, filtros, menú, cierre de diálogos, calendario y acceso, en pantallas estrechas o táctiles; `test-tactil.mjs`).
   4. Panel resumen y Administración con el mismo lenguaje visual que el calendario y la ficha (hoy 8 tarjetas iguales llenas de ceros y tablas planas).
   5. Posible fallo de contraste de AA en los bordes de los campos (`--line-2` 1,48:1, criterio 1.4.11): comprobar si los campos tienen otra señal.
   6. Leyenda del mapa tapa la esquina inferior izquierda; dos `h1`; transición de ancho en 2 barras; calendario con scroll horizontal entre 900 y 1150 px.
