@@ -44,7 +44,7 @@ assert.ok(html.includes('fichaEl.addEventListener("keydown", (ev) => { if (ev.ke
 const css = html.slice(html.indexOf("  /* Ficha del punto: panel lateral derecho"), html.indexOf("    .fi-menu button { height: 46px; }"));
 assert.ok(!/background(-color)?: #[0-9a-f]{3,6}/i.test(css), "El panel no debe fijar fondos de color (rompe el modo oscuro)");
 assert.ok(/\.ef \{[^}]*border-left: 5px solid var\(--st/.test(css) && /s-concedido \{ --st: #22c55e/.test(css), "El estado se codifica con borde izquierdo y color de estado");
-assert.ok(/@media \(max-width: 900px\), \(pointer: coarse\)/.test(css) && /\.fi-close \{ width: 44px; height: 44px; \}/.test(css), "Objetivos táctiles de 44 px");
+assert.ok(/@media \(max-width: 900px\), \(pointer: coarse\)/.test(css) && /\.fi-close, \.fi-fav \{ width: 44px; height: 44px; \}/.test(css), "Objetivos táctiles de 44 px");
 assert.ok(/#ficha \{ position: fixed; inset: 54px 0 0 0;/.test(css), "En pantallas estrechas la ficha es una hoja a pantalla completa");
 assert.ok(/prefers-reduced-motion: no-preference\) \{ #ficha:not\(\[hidden\]\) \{ animation/.test(css), "La entrada del panel solo anima con movimiento permitido");
 assert.ok(!/font-size: (1[01](\.5)?|12\.5|13|13\.5|19)px/.test(css), "Los tamaños de letra de la ficha siguen la escala de DESIGN.md (12, 14, 17)");

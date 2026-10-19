@@ -84,6 +84,10 @@
   .tools input:hover, .tools select:hover { border-color: var(--muted); }
   .tools input:focus, .tools select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); outline: 0; }
   .row { display: flex; gap: 8px; }
+  .qrow > #q { flex: 1; min-width: 0; }
+  #favBtn { flex: 0 0 auto; height: 38px; padding: 0 12px; display: inline-flex; align-items: center; gap: 6px; font-size: 14px; white-space: nowrap; }
+  #favBtn:disabled { opacity: .6; cursor: default; }
+  #favBtn[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
   #moreF { display: grid; gap: 8px; }
   #moreF[hidden] { display: none; }
   #moreBtn { flex: 0 0 auto; height: 38px; padding: 0 12px; font-size: 13px; white-space: nowrap; }
@@ -177,7 +181,12 @@
   .fi-top { padding: 10px 18px 12px; border-bottom: 1px solid var(--line); display: grid; gap: 4px; }
   .fi-kicker { display: flex; align-items: center; gap: 8px; min-height: 32px; }
   .fi-type { font-size: 12px; font-weight: 600; color: var(--muted); }
-  .fi-close { margin-left: auto; width: 36px; height: 36px; padding: 0; font-size: 24px; line-height: 1; background: transparent; border: 0; color: var(--muted); border-radius: 8px; }
+  .fi-fav { margin-left: auto; width: 36px; height: 36px; padding: 0; display: grid; place-items: center; background: transparent; border: 0; border-radius: 8px; color: var(--muted); }
+  .fi-fav svg, #favBtn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; }
+  .fi-fav:hover { background: var(--ok-bg); color: var(--accent); }
+  .fi-fav[aria-pressed="true"] { color: var(--accent); }
+  .fi-fav[aria-pressed="true"] svg, #favBtn[aria-pressed="true"] svg { fill: currentColor; }
+  .fi-close { margin-left: 0; width: 36px; height: 36px; padding: 0; font-size: 24px; line-height: 1; background: transparent; border: 0; color: var(--muted); border-radius: 8px; }
   .fi-close:hover { background: var(--ok-bg); color: var(--fg); }
   .fi-title { margin: -2px 0 0; font-size: 17px; font-weight: 680; letter-spacing: -.02em; line-height: 1.2; overflow-wrap: anywhere; }
   .fi-title { width: fit-content; max-width: 100%; }
@@ -272,7 +281,7 @@
   @media (max-width: 760px) { main.fi-open { grid-template-columns: 1fr; } }
   /* Objetivos táctiles de 44 px en pantallas estrechas o táctiles. */
   @media (max-width: 900px), (pointer: coarse) {
-    .fi-close { width: 44px; height: 44px; }
+    .fi-close, .fi-fav { width: 44px; height: 44px; }
     #ficha a.how, #ficha .fi-flag button { min-height: 44px; }
     #ficha .stars button { min-width: 44px; height: 44px; }
     #ficha .ptabs button { height: 44px; }
@@ -638,7 +647,10 @@
 <main>
   <aside>
     <div class="tools">
-      <input id="q" type="search" placeholder="Buscar por nombre o calle" aria-label="Buscar centro">
+      <div class="row qrow">
+        <input id="q" type="search" placeholder="Buscar por nombre o calle" aria-label="Buscar centro">
+        <button id="favBtn" type="button" aria-pressed="false" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-8-4.7-8-10.5C4 7 6 5 8.5 5c1.5 0 2.8.8 3.5 2 .7-1.2 2-2 3.5-2C18 5 20 7 20 10c0 5.800-8 10.500-8 10.500z"/></svg><span>Favoritos (0)</span></button>
+      </div>
       <div class="row">
         <select id="provincia" aria-label="Filtrar por provincia">
           <option value="">Provincia: todas</option>
@@ -997,6 +1009,10 @@ const reloadSharedPermit = async (c) => {
 };
 let removed = new Set();
 let inactive = new Set();
+// Favoritos: lista personal de cada usuario (user_app_state.favorites); no se comparte con nadie.
+let favorites = new Set();
+const saveFavorites = () => typeof window.mapaPersistUserState === "function" ? window.mapaPersistUserState("favorites", [...favorites]) : Promise.resolve(false);
+const isFav = (c) => hasPersonalRef(favorites, c);
 const saveInactive = () => typeof window.mapaPersistUserState === "function" ? window.mapaPersistUserState("inactive", [...inactive]) : Promise.resolve(false);
 const saveRemoved = () => typeof window.mapaPersistUserState === "function" ? window.mapaPersistUserState("removed", [...removed]) : Promise.resolve(false);
 const saveCustoms = () => typeof window.mapaPersistUserState === "function" ? window.mapaPersistUserState("customs", customs) : Promise.resolve(false);
@@ -1181,7 +1197,7 @@ function fichaFor(c, pos) {
   el.innerHTML =
     '<div class="fi-top">' +
       '<div class="fi-kicker"><span class="fi-type">' + esc(c.tipo + (c.sub ? " · " + c.sub : "")) + "</span>" + (isInactive(c) ? '<span class="tag warn">Desactivado en el mapa</span>' : "") +
-      '<button type="button" class="fi-close" aria-label="Cerrar la ficha">&times;</button></div>' +
+      '<button type="button" class="fi-fav" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-8-4.7-8-10.5C4 7 6 5 8.5 5c1.5 0 2.8.8 3.5 2 .7-1.2 2-2 3.5-2C18 5 20 7 20 10c0 5.800-8 10.500-8 10.500z"/></svg></button><button type="button" class="fi-close" aria-label="Cerrar la ficha">&times;</button></div>' +
       '<h2 class="fi-title" tabindex="-1">' + esc(c.name) + "</h2>" +
       '<div class="fi-addrrow"><p class="fi-addr">' + esc(addrOf(c)) + "</p>" + (dir ? '<a class="how" target="_blank" rel="noopener" href="' + dir + '">Cómo llegar</a>' : "") + "</div>" + notas +
       aviso +
@@ -1248,6 +1264,21 @@ function fichaFor(c, pos) {
   });
   showTab("s");
   el.querySelector(".fi-close").addEventListener("click", () => map.closePopup());
+  const favBtn = el.querySelector(".fi-fav");
+  const paintFav = () => { const on = isFav(c); favBtn.setAttribute("aria-pressed", String(on)); favBtn.setAttribute("aria-label", on ? "Quitar de favoritos" : "Marcar como favorito"); favBtn.title = on ? "Quitar de favoritos" : "Marcar como favorito"; };
+  paintFav();
+  favBtn.addEventListener("click", async () => {
+    const era = isFav(c), status = document.getElementById("status");
+    if (era) deletePersonalRef(favorites, c); else addPersonalRef(favorites, c);
+    paintFav(); favBtn.disabled = true;
+    const ok = await saveFavorites();
+    if (!ok) {
+      if (era) addPersonalRef(favorites, c); else deletePersonalRef(favorites, c);
+      await saveFavorites();
+      if (status) status.textContent = "No se pudo guardar el favorito en Supabase; se queda como estaba.";
+    } else if (status) status.textContent = era ? "«" + c.name + "» ya no es favorito." : "«" + c.name + "» añadido a favoritos.";
+    favBtn.disabled = false; paintFav(); refreshSelects(); renderList();
+  });
   const dirty = (on) => { el.querySelector(".fi-dirty").hidden = !on; };
   ["f-contacto", "f-notas"].forEach((k) => el.querySelector("." + k).addEventListener("input", () => dirty(true)));
   // «Más acciones» se cierra con Escape y al pulsar fuera.
@@ -1827,13 +1858,13 @@ function renderList() {
   const okVal = (c) => !vf || (vf === "sin" ? !rate(c) : rate(c) >= +vf);
   const ul = $("#list");
   // Si cambian la búsqueda o los filtros, la lista vuelve a su primera página.
-  const key = JSON.stringify([q, provincia, muni, tipo, est, vf, ch, sb, onlyRev, onlySeg, $("#orden").value]);
+  const key = JSON.stringify([q, provincia, muni, tipo, est, vf, ch, sb, onlyRev, onlySeg, onlyFav, $("#orden").value]);
   if (key !== listKey) { listKey = key; listLimit = LIST_PAGE; }
   ul.innerHTML = "";
   const order = $("#orden").value === "val" ? [...CENTERS].sort((a, b) => rate(b) - rate(a) || a.id - b.id) : CENTERS;
   const shown = [], toAdd = [], toRemove = [];
   order.forEach((c) => {
-    const visible = !isOut(c) && (!muni || townOf(c) === muni) && (!provincia || (typeof c.province === "string" ? c.province : (typeof c.prov === "string" ? c.prov : "")) === provincia) && matchTipo(c, tipo) && (!ch || chainOf(c) === ch) && (!sb || c.sub === sb) && (!est || estadoOf(c) === est) && (!onlyRev || isRev(c)) && (!onlySeg || seguimientoDue(c)) && okVal(c) &&
+    const visible = !isOut(c) && (!muni || townOf(c) === muni) && (!provincia || (typeof c.province === "string" ? c.province : (typeof c.prov === "string" ? c.prov : "")) === provincia) && matchTipo(c, tipo) && (!ch || chainOf(c) === ch) && (!sb || c.sub === sb) && (!est || estadoOf(c) === est) && (!onlyRev || isRev(c)) && (!onlySeg || seguimientoDue(c)) && (!onlyFav || isFav(c)) && okVal(c) &&
       (!q || (c.name + " " + c.street + " " + townOf(c)).toLowerCase().includes(q));
     const m = markers[c.id];
     if (m) {
@@ -1992,7 +2023,7 @@ function searchViewbox() {
   return [Math.min(...lons) - m, Math.max(...lats) + m, Math.max(...lons) + m, Math.min(...lats) - m].map((x) => +x.toFixed(5)).join(",");
 }
 
-let fitTimer, onlyRev = false, onlySeg = false;
+let fitTimer, onlyRev = false, onlySeg = false, onlyFav = false;
 const refilter = () => { renderList(); clearTimeout(fitTimer); fitTimer = setTimeout(() => { touched = false; fitAll(); }, 200); };
 $("#q").addEventListener("input", refilter);
 $("#provincia").addEventListener("change", () => { refreshMuniSelect(); refilter(); });
@@ -2001,6 +2032,7 @@ $("#tipo").addEventListener("change", refilter);
 $("#cadena").addEventListener("change", refilter);
 $("#subtipo").addEventListener("change", refilter);
 $("#revBtn").addEventListener("click", () => { onlyRev = !onlyRev; $("#revBtn").setAttribute("aria-pressed", onlyRev); refilter(); });
+$("#favBtn").addEventListener("click", () => { onlyFav = !onlyFav; $("#favBtn").setAttribute("aria-pressed", onlyFav); refilter(); });
 $("#copy").addEventListener("click", async () => {
   if (!window.confirm("Se copiarán al portapapeles nombres, direcciones y coordenadas del catálogo. Trata esos datos como información operativa y compártelos solo si estás autorizado. ¿Continuar?")) return;
   const out = CENTERS.map((c) => ({
@@ -2516,6 +2548,11 @@ function refreshSelects() {
   $("#revBtn").style.display = nRev ? "" : "none";
   if (!nRev && onlyRev) { onlyRev = false; $("#revBtn").setAttribute("aria-pressed", "false"); setTimeout(refilter, 0); }
   $("#revBtn").textContent = (onlyRev ? "Mostrando solo " : "") + "Por revisar (" + nRev + ")";
+  const nFav = vis.filter(isFav).length, fb = $("#favBtn");
+  if (!nFav && onlyFav) { onlyFav = false; setTimeout(refilter, 0); }
+  fb.setAttribute("aria-pressed", String(onlyFav)); fb.disabled = !nFav;
+  fb.title = nFav ? (onlyFav ? "Volver a ver todos los puntos" : "Ver solo mis favoritos") : "Marca puntos como favoritos desde su ficha";
+  fb.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-8-4.7-8-10.5C4 7 6 5 8.5 5c1.5 0 2.8.8 3.5 2 .7-1.2 2-2 3.5-2C18 5 20 7 20 10c0 5.800-8 10.500-8 10.500z"/></svg><span>Favoritos (' + nFav + ")</span>";
 }
 refreshSelects();
 
@@ -3189,6 +3226,7 @@ renderList();
     removed = normalizePersonalRefs(state.removed);
     inactive = normalizePersonalRefs(state.inactive);
     reviewed = normalizePersonalRefs(state.reviewed);
+    favorites = normalizePersonalRefs(state.favorites);
     // Ignorar correcciones heredadas por usuario: la ubicación vigente procede del catálogo maestro Supabase.
     delete loadedPersonalState.locations;
     gam = Object.assign({ aw: {}, day: {}, dm: {}, wm: {}, lvl: 1, sound: true, log: [], fog: true, wsum: "" }, state.gamification || {});
