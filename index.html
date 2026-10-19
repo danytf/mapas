@@ -90,7 +90,7 @@
     width: 100%; height: 38px; padding: 0 12px; border: 1px solid var(--line-2); border-radius: var(--r-control);
     background: var(--panel); color: var(--fg); font: inherit; transition: border-color .12s, box-shadow .12s;
   }
-  .tools input[type=search] {
+  .tools input[type=search] { height: 44px; border-radius: var(--r-card);
     padding-left: 38px; border-color: transparent; background: var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%23697384' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") no-repeat 12px 50%;
     font-size: var(--fs-body);
   }
@@ -99,7 +99,7 @@
   .tools input:focus, .tools select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); outline: 0; }
   .row { display: flex; gap: 8px; }
   .qrow > #q { flex: 1; min-width: 0; }
-  #favBtn { flex: 0 0 auto; height: 38px; padding: 0 12px; display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-body); white-space: nowrap; }
+  #favBtn { flex: 0 0 auto; height: 44px; padding: 0 12px; display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-body); white-space: nowrap; }
   #favBtn:disabled { opacity: .6; cursor: default; }
   #favBtn[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); }
   #moreF { display: grid; gap: 8px; }
@@ -156,6 +156,9 @@
     font-size: var(--fs-label); font-weight: 560; background: var(--ok-bg); color: var(--muted); border: 1px solid var(--line);
   }
   .tag[style] { border-color: transparent; }
+  .tag.tt { display: block; margin: 2px 0 0; padding: 0; background: none; border: 0; border-radius: 0; font-weight: 500; }
+  .tag.tt + .tag { margin-top: 6px; }
+  li.active strong { font-weight: 680; }
   .tag.warn { background: var(--warn-bg); color: var(--warn); border-color: transparent; }
   .tag.ok { background: var(--ok-soft); color: var(--ok); border-color: transparent; }
   #map { min-height: 0; min-width: 0; background: #dfe3e8; }
@@ -1865,7 +1868,7 @@ function listItemFor(c) {
   li.innerHTML =
     '<div class="num" style="background:' + colorOf(c) + ';color:' + inkOn(colorOf(c)) + '">' + c.id + "</div><div><strong>" + esc(c.name) + '</strong><span class="addr">' +
     esc(addrOf(c)) + "</span><br>" +
-    '<span class="tag">' + esc(c.tipo + (c.sub ? " · " + c.sub : "")) + "</span>" +
+    '<span class="tag tt">' + esc(c.tipo + (c.sub ? " · " + c.sub : "")) + "</span>" +
     (permOf(c).valoracion ? '<span class="tag warn">' + stars(permOf(c).valoracion) + "</span>" : "") +
     (estadoOf(c) !== "sin" ? '<span class="tag" style="background:' + estadoInfo(estadoOf(c))[2] + ';color:' + inkOn(estadoInfo(estadoOf(c))[2]) + '">' + estadoInfo(estadoOf(c))[1] + (permOf(c).fecha && estadoOf(c) !== "concedido" && estadoOf(c) !== "caducado" ? " · " + esc(fmtD(permOf(c).fecha)) : "") + "</span>" : "") +
     (seguimientoDue(c) ? '<span class="tag warn">Seguimiento ' + (seguimientoDue(c) === today() ? "hoy" : "atrasado " + esc(fmtD(seguimientoDue(c)))) + "</span>" : "") +
