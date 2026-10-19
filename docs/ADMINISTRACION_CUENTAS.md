@@ -23,6 +23,8 @@ Los administradores ven en el menú de la aplicación la opción «Usuarios y pr
 
 Protecciones: nadie puede cambiar su propio rol ni desactivarse desde la pantalla; la base de datos impide dejar el sistema sin ningún administrador activo (error explicado en pantalla); las acciones sensibles piden confirmación; todo cambio queda en la auditoría (`audit_log`). Los cambios se aplican al instante en la base; un usuario desactivado o sin provincia pierde el acceso en su siguiente consulta.
 
+**Archivar puntos** (desde el 19/10/2026): en la ficha de un punto del catálogo, el administrador ve «Archivar para todos». Pide confirmación y un motivo opcional, que queda anotado en el punto; el punto deja de verse en el mapa y en la lista de todos los usuarios (queda en la base con `status = archived`). En Administración, la sección «Puntos archivados» lista los archivados y permite restaurarlos (hay que recargar la página para verlos de nuevo). La auditoría registra al administrador como autor.
+
 **Lo que el panel no hace**: dar de alta cuentas (sigue siendo el procedimiento de la sección siguiente, en Supabase), borrar cuentas, ni editar el catálogo. La lectura de correos usa la función `admin_list_users()` (migraciones `20261018231945` y `20261018232107`), que solo responde a administradores activos.
 
 ## Alta de una cuenta

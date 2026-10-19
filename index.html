@@ -897,7 +897,8 @@ const normalizePersonalRefs = (value) => {
       return c ? personalStateKey(c) : ref;
     }));
 };
-const isOut = (c) => hasPersonalRef(removed, c);
+const isArchived = (c) => c.archived === true;
+const isOut = (c) => hasPersonalRef(removed, c) || isArchived(c);
 // Desactivado (personal): sigue en la lista pero no se dibuja en el mapa.
 const isInactive = (c) => hasPersonalRef(inactive, c);
 const permOf = (c) => permits[permitKey(c)] || { estado: "sin", fecha: "", contacto: "", notas: "", valoracion: 0 };
@@ -1050,7 +1051,7 @@ function popupFor(c, pos) {
     '<div class="hist"><h4>Solicitudes</h4><div class="hint">Un mismo punto puede tener varias solicitudes, cada una con sus fechas.</div><ul class="s-list"></ul><details class="aform s-form"><summary>Añadir solicitud</summary><div class="row3"><label>Desde<input class="s-desde" type="date"></label><label>Hasta<input class="s-hasta" type="date"></label><label>Captadores<input class="s-n" type="number" min="1" step="1" placeholder="nº"></label></div><label>ONG<input class="s-ong" type="text" list="ongList" placeholder="AECC, Cruz Roja…" autocomplete="off"></label><label>Próximo seguimiento<input class="s-seg" type="date"></label><button type="button" class="s-add">Añadir solicitud</button><button type="button" class="s-cancel" hidden>Cancelar edición</button></details><div class="s-msg" role="status" style="font-size:11px;color:#b3261e;min-height:13px"></div><h4 style="margin-top:10px">Concesiones (historial)</h4><ul class="h-list"></ul><details class="aform h-form"><summary>Añadir concesión</summary><div class="row3"><label>Desde<input class="h-desde" type="date"></label><label>Hasta<input class="h-hasta" type="date"></label><label>Captadores<input class="h-n" type="number" min="1" step="1" placeholder="nº"></label></div><label>ONG<input class="h-ong" type="text" list="ongList" placeholder="AECC, Cruz Roja…" autocomplete="off"></label><button type="button" class="h-add">Añadir concesión al historial</button><button type="button" class="h-cancel" hidden>Cancelar edición</button></details><div class="h-msg" style="font-size:11px;color:#b3261e;min-height:13px"></div></div>' +
     (isRev(c) && !hasPersonalRef(reviewed, c) ? '<button type="button" class="f-rev" style="background:#fff;color:#c8102e">Marcar revisión visual</button>' : "") +
     (isApprox(c) && hasPersonalRef(reviewed, c) ? '<span class="tag warn">Revisada visualmente; ubicación aún sin verificar</span>' : "") +
-    '<button type="button" class="f-save">Guardar cambios</button><button type="button" class="f-inact">' + (isInactive(c) ? "Activar en el mapa" : "Desactivar en el mapa") + '</button><button type="button" class="f-del danger">' + (c.custom ? "Eliminar punto" : "Quitar del mapa") + '</button><div class="saved" role="status"></div></div>';
+    '<button type="button" class="f-save">Guardar cambios</button><button type="button" class="f-inact">' + (isInactive(c) ? "Activar en el mapa" : "Desactivar en el mapa") + '</button>' + (window.mapaSession?.profile?.role === "admin" && c.databaseId ? '<button type="button" class="f-arch danger">Archivar para todos</button>' : '') + '<button type="button" class="f-del danger">' + (c.custom ? "Eliminar punto" : "Quitar del mapa") + '</button><div class="saved" role="status"></div></div>';
   const pf = el.querySelector(".pform");
   const put = (n, t) => { if (n) n.setAttribute("data-tab", t); };
   put(pf.firstElementChild, "p"); put(el.querySelector(".ef"), "p");
@@ -1334,6 +1335,25 @@ function popupFor(c, pos) {
     map.closePopup(); renderList();
     const status = document.getElementById("status");
     if (status) status.textContent = activar ? "«" + c.name + "» vuelve a mostrarse en el mapa." : "«" + c.name + "» desactivado: sigue en la lista pero no se muestra en el mapa.";
+  });
+  const arch = el.querySelector(".f-arch");
+  if (arch) arch.addEventListener("click", async () => {
+    if (!window.confirm("¿Archivar «" + c.name + "» para todos los usuarios? Dejará de verse en el mapa y en la lista de todos. Podrás restaurarlo desde Administración.")) return;
+    const motivo = window.prompt("Motivo (opcional; queda anotado en el punto):", "");
+    if (motivo === null) return;
+    const status = document.getElementById("status");
+    const nota = motivo.trim().slice(0, 300);
+    const { data, error } = await window.mapaSession.supabase.from("establishments")
+      .update({ status: "archived", archived_at: new Date().toISOString(), notes: nota ? "Archivado: " + nota : "Archivado desde la aplicación." })
+      .eq("id", c.databaseId).select("id");
+    if (error || !data || !data.length) {
+      if (error) console.error(error);
+      if (status) status.textContent = error ? friendlyError(error, "No se pudo archivar el punto.") : "No se pudo archivar el punto: no tienes permiso o ya no existe.";
+      return;
+    }
+    c.archived = true;
+    map.closePopup(); refreshSelects(); renderList();
+    if (status) status.textContent = "«" + c.name + "» archivado para todos los usuarios.";
   });
   const del = el.querySelector(".f-del");
   del.addEventListener("click", async () => {
@@ -2251,7 +2271,7 @@ function refreshSelects() {
     TIPOS.filter(([i, t]) => vis.some((c) => c.tipo === t)).map(([i, t, col]) => '<div class="it"><i class="gi" style="background:' + col + '">' + glyphOf({ tipo: t }) + "</i>" + t + "</div>").join("") +
     "<h4>Borde: permiso</h4>" +
     ESTADOS.map(([k, t, col]) => '<div class="it"><i class="ring" style="border-color:' + (k === "sin" ? "#ffffff;box-shadow:0 0 0 1px #9aa8a4" : col) + '"></i>' + t + "</div>").join("");
-  const nr = CENTERS.filter(isOut).length;
+  const nr = CENTERS.filter((c) => hasPersonalRef(removed, c)).length;
   $("#restore").textContent = "Restaurar puntos quitados (" + nr + ")";
   $("#restore").disabled = !nr;
   {
@@ -2445,7 +2465,7 @@ const csvCell = (value) => {
   const syncMenu = () => { const a = isAdmin(); openBtn.hidden = !a; admHead.hidden = !a; };
   menuBtnA.addEventListener("click", syncMenu, true);
   menuBtnA.addEventListener("keydown", syncMenu, true);
-  let users = [], provs = [], busy = false;
+  let users = [], provs = [], archived = [], busy = false;
   const sb = () => window.mapaSession.supabase;
   const myId = () => window.mapaSession.user.id;
   const fmtLast = (s) => (s ? new Date(s).toLocaleString("es-ES", { dateStyle: "short", timeStyle: "short" }) : "Nunca");
@@ -2462,6 +2482,7 @@ const csvCell = (value) => {
     if (p.error) throw p.error;
     users = u.data || [];
     provs = p.data || [];
+    archived = await fetchAllRows((opts) => sb().from("establishments").select("id, name, notes, archived_at, municipalities(name)", opts).eq("status", "archived"), "id");
   }
 
   const rowHtml = (x) => {
@@ -2479,13 +2500,18 @@ const csvCell = (value) => {
     return '<tr data-pid="' + esc(p.id) + '"><th scope="row">' + esc(p.name) + "</th><td>" + esc(p.code) + '</td><td><label class="adm-chk"><input type="checkbox" data-f="pactive"' + (p.is_active ? " checked" : "") + "> Activa" +
       '<span class="adm-sr"> (' + esc(p.name) + ")</span></label></td><td>" + afectados + (afectados === 1 ? " usuario" : " usuarios") + "</td></tr>";
   };
+  const archHtml = () => "<h3>Puntos archivados</h3>" + (archived.length
+    ? '<div class="adm-scroll"><table><thead><tr><th scope="col">Punto</th><th scope="col">Municipio</th><th scope="col">Archivado</th><th scope="col">Motivo</th><th scope="col">Acción</th></tr></thead><tbody>' +
+      archived.map((p) => '<tr data-eid="' + esc(p.id) + '"><th scope="row">' + esc(p.name) + "</th><td>" + esc(p.municipalities?.name || "") + "</td><td>" + esc(fmtLast(p.archived_at)) + "</td><td>" + esc(p.notes || "") +
+        '</td><td><button type="button" data-f="restore" aria-label="Restaurar ' + esc(p.name) + '">Restaurar</button></td></tr>').join("") + "</tbody></table></div>"
+    : '<p class="adm-note">No hay puntos archivados.</p>');
   function render() {
     const abiertos = new Set([...bodyA.querySelectorAll("tr[data-uid] details[open]")].map((d) => d.closest("tr").dataset.uid));
     const a = document.activeElement, foco = a && bodyA.contains(a) ? { uid: a.closest("tr")?.dataset.uid, pid: a.closest("tr")?.dataset.pid, f: a.dataset.f, p: a.dataset.pid } : null;
     bodyA.innerHTML = '<h3>Usuarios</h3><div class="adm-scroll"><table><thead><tr><th scope="col">Usuario</th><th scope="col">Nombre visible</th><th scope="col">Rol</th><th scope="col">Estado</th><th scope="col">Provincias</th><th scope="col">Último acceso</th></tr></thead><tbody>' +
       users.map(rowHtml).join("") + "</tbody></table></div>" +
       '<h3>Provincias</h3><div class="adm-scroll"><table><thead><tr><th scope="col">Provincia</th><th scope="col">Código</th><th scope="col">Estado</th><th scope="col">Usuarios afectados</th></tr></thead><tbody>' +
-      provs.map(provHtml).join("") + "</tbody></table></div>";
+      provs.map(provHtml).join("") + "</tbody></table></div>" + archHtml();
     abiertos.forEach((uid) => { const d = bodyA.querySelector('tr[data-uid="' + uid + '"] details'); if (d) d.open = true; });
     if (foco) {
       const sel = foco.uid ? 'tr[data-uid="' + foco.uid + '"] [data-f="' + foco.f + '"]' + (foco.p ? '[data-pid="' + foco.p + '"]' : "") : 'tr[data-pid="' + foco.pid + '"] [data-f="' + foco.f + '"]';
@@ -2542,6 +2568,14 @@ const csvCell = (value) => {
       if (!activa && !window.confirm("Desactivar «" + p.name + "» retira el acceso a sus puntos a " + n + (n === 1 ? " usuario" : " usuarios") + " hasta que la reactives. ¿Continuar?")) { render(); return; }
       run(() => sb().from("provinces").update({ is_active: activa }).eq("id", p.id).select("id"), activa ? "Provincia activada." : "Provincia desactivada.");
     }
+  });
+  bodyA.addEventListener("click", (e) => {
+    const b = e.target.closest('[data-f="restore"]');
+    if (!b || busy) return;
+    const p = archived.find((x) => x.id === b.closest("tr[data-eid]")?.dataset.eid);
+    if (!p) return;
+    if (!window.confirm("¿Restaurar «" + p.name + "»? Volverá a verse para todos los usuarios de su provincia.")) return;
+    run(() => sb().from("establishments").update({ status: "active", archived_at: null }).eq("id", p.id).select("id"), "Punto restaurado. Recarga la página para verlo en el mapa.");
   });
   openBtn.addEventListener("click", async () => {
     bodyA.innerHTML = ""; say("Cargando…");
