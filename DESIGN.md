@@ -251,3 +251,9 @@ Siete columnas de lunes a domingo; sobre cada una, una silueta de barras (altura
 - Cabecera de 56 px con indicadores operativos sin relleno; sin Logros, niveles, rachas ni insignias.
 - Panel izquierdo: «Limpiar (n)» aparece solo con filtros activos y los restablece todos.
 - Leyenda del mapa plegada por defecto para que el mapa sea el protagonista.
+- Estados de la lista: cargando (esqueleto), error de carga (sin datos locales, con el motivo), ámbito vacío y sin coincidencias (con «Limpiar filtros» si hay filtros activos).
+- Lista: el tipo del punto es texto, no etiqueta; las etiquetas con caja quedan para estado, seguimiento, vigencia y avisos. Buscador de 44 px.
+- Mapa: el pin seleccionado crece un 30 % y lleva aro de acento; transición de 160–200 ms (`--t`), desactivada con `prefers-reduced-motion` (que también anula animaciones y desplazamiento suave).
+- Ficha: el botón de guardar pasa a «Guardando…» mientras espera a Supabase.
+- Móvil (hasta 760 px): mapa a pantalla completa, conmutador Mapa / Lista flotante (botones de 44 px) y filtros plegados tras un botón «Filtros (n)». La ficha sigue a pantalla completa.
+- No validado: móvil físico, teclado virtual, lector de pantalla y sesión real de administrador.
