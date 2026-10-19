@@ -248,7 +248,7 @@ Siete columnas de lunes a domingo; sobre cada una, una silueta de barras (altura
 ## Rediseño premium (paso 1, octubre 2026)
 
 - Paleta: carbón `#171b23` (cabecera), fondo `#f5f6f8`, texto secundario `#596478` (el `#64748b` propuesto da 4,45:1 sobre el fondo; este llega a 4,5:1 o más), rojo Wesser solo como acción y énfasis (filo de 2 px bajo la cabecera, botones primarios, «Limpiar»).
-- Cabecera de 56 px con indicadores operativos sin relleno; sin Logros, niveles, rachas ni insignias.
+- Cabecera de 56 px con indicadores operativos sin relleno. La gamificación (Mi progreso, Logros, niveles, rachas e insignias) se conserva y usa los mismos radios, tamaños y tokens.
 - Panel izquierdo: «Limpiar (n)» aparece solo con filtros activos y los restablece todos.
 - Leyenda del mapa plegada por defecto para que el mapa sea el protagonista.
 - Estados de la lista: cargando (esqueleto), error de carga (sin datos locales, con el motivo), ámbito vacío y sin coincidencias (con «Limpiar filtros» si hay filtros activos).
