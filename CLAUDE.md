@@ -77,6 +77,7 @@ node scripts/test-app-mejoras.mjs
 node scripts/test-calendario.mjs
 node scripts/test-cabecera-filtros.mjs
 node scripts/test-texto-minimo.mjs
+node scripts/test-ficha.mjs
 node scripts/test-a11y-fase-d.mjs index.html
 ```
 

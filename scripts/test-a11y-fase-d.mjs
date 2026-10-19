@@ -73,10 +73,14 @@ add("progreso: #177a40 sobre #fff (em.up)", "#177a40", light.panel);
 add("progreso: #b42318 sobre #fff (em.dn)", "#b42318", light.panel);
 add("progreso: #8a5a00 sobre #fff1c2 (chip activo)", "#8a5a00", "#fff1c2");
 // Gráficos que transmiten información (1.4.11, 3:1): estrellas de valoración.
-const starOff = html.match(/\.pform \.stars button \{[^}]*?color: (#[0-9a-f]{6})/i)?.[1];
-const starOn = html.match(/\.pform \.stars button\.on \{ color: (#[0-9a-f]{6})/i)?.[1];
-if (!starOff || !starOn) fail("no se encontraron los colores de las estrellas de valoración");
-else { add("estrella sin marcar sobre blanco (gráfico)", starOff, "#ffffff", G); add("estrella marcada sobre blanco (gráfico)", starOn, "#ffffff", G); }
+// La ficha (panel lateral) sigue el modo claro/oscuro del sistema: estrellas y color de error son tokens con variante oscura.
+if (!/#ficha \.stars button \{[^}]*color: var\(--star-off\)/.test(html) || !/#ficha \.stars button\.on \{ color: var\(--star-on\)/.test(html)) fail("las estrellas de la ficha deben usar --star-off / --star-on");
+for (const [mode, v] of [["claro", light], ["oscuro", dark]]) {
+  if (!v["star-off"] || !v["star-on"] || !v.err) { fail("faltan --star-off, --star-on o --err en modo " + mode); continue; }
+  add(`estrella sin marcar sobre --panel (gráfico, ${mode})`, v["star-off"], v.panel, G);
+  add(`estrella marcada sobre --panel (gráfico, ${mode})`, v["star-on"], v.panel, G);
+  add(`--err (errores de la ficha) sobre --panel (${mode})`, v.err, v.panel);
+}
 // Modo oscuro: sobreescrituras de la gamificación.
 const darkOv = (sel) => html.match(new RegExp(sel.replace(/[.#]/g, "\\$&") + " \\{ color: (#[0-9a-f]{6}); \\}"))?.[1];
 const up = darkOv("#dlgGam em.up"), dn = darkOv("#dlgGam em.dn");
@@ -88,14 +92,12 @@ if (!mxVar) fail("+XP y registro de XP deben usar var(--warn) (en modo oscuro #8
 if (!/#dlgGam \.alc\.full \{[^}]*var\(--warn-bg\)/.test(html)) fail("#dlgGam .alc.full no debe usar un degradado claro fijo (texto claro sobre fondo claro en modo oscuro)");
 if (!/\.kstrip \.k\.hot \{[^}]*\}/.test(html)) fail("falta .kstrip .k.hot");
 // Ficha del punto: sus colores deben quedar fijados a claros aunque el sistema esté en oscuro.
-const popupTok = html.match(/\.leaflet-popup-content \{ (--fg: [^}]*)\}/)?.[1];
-if (!popupTok) fail("la ficha del punto no fija sus variables a valores claros (en modo oscuro hereda --fg claro sobre fondo blanco)");
-else {
-  const pv = readVars(popupTok.replace(/--/g, "--").replace(/;\s*/g, "; ") + ";");
-  for (const k of ["fg", "muted", "panel"]) if (!pv[k]) fail("la ficha no fija --" + k);
-  if (pv.fg && pv.panel) add("ficha: --fg sobre --panel fijados", pv.fg, pv.panel);
-  if (pv.muted && pv.panel) add("ficha: --muted sobre --panel fijados", pv.muted, pv.panel);
-}
+// La ficha ya no es una burbuja de Leaflet siempre blanca: es un panel (#ficha) con los tokens de la app, que sí cambian en oscuro.
+// La etiqueta mínima sobre el pin sí va sobre la burbuja blanca de Leaflet, con colores fijos oscuros.
+if (!/\.leaflet-popup-content \{[^}]*color: #141b26/.test(html)) fail("la etiqueta mínima del mapa debe fijar un texto oscuro sobre la burbuja blanca de Leaflet");
+if (/#ficha[^{]*\{[^}]*background: #fff/i.test(html)) fail("el panel de la ficha no debe fijar un fondo blanco (rompe el modo oscuro)");
+add("etiqueta del mapa: #141b26 sobre #fff", "#141b26", "#ffffff");
+add("etiqueta del mapa: #5c6779 sobre #fff", "#5c6779", "#ffffff");
 if (!/input::placeholder, textarea::placeholder \{ color: var\(--muted\); opacity: 1; \}/.test(html)) fail("falta el color de ::placeholder con contraste (el predeterminado #757575 da 4,2:1 sobre --bg y menos en oscuro)");
 for (const [mode, v] of [["claro", light], ["oscuro", dark]]) {
   add(`placeholder (--muted) sobre --bg (${mode})`, v.muted, v.bg);
@@ -174,7 +176,9 @@ for (const [name, re] of [
   ["#status", /<div class="status" id="status" role="status">/],
   ["#n-msg (diálogo de alta)", /id="n-msg" role="status"/],
   ["#lgErr (acceso)", /id="lgErr" role="alert"/],
-  [".s-msg (solicitudes)", /class="s-msg" role="status"/],
+  [".s-msg (solicitudes)", /class="s-msg fi-msg" role="status"/],
+  [".h-msg (concesiones)", /class="h-msg fi-msg" role="status"/],
+  [".ef (estado del permiso)", /class="ef" aria-live="polite"/],
   [".saved (ficha)", /class="saved" role="status"/],
   [".lmsg (ubicación)", /class="lmsg" role="status"/],
   ["#toast", /t\.setAttribute\("role", "status"\)/],
@@ -182,10 +186,12 @@ for (const [name, re] of [
 
 // Foco: ficha del punto (abierta con Intro desde la lista) y aviso de nivel.
 if (!/popupFromKey = li; highlight\(c\.id, true\)/.test(html)) fail("la lista no marca la apertura de la ficha por teclado (popupFromKey)");
-if (!/map\.on\("popupopen"[\s\S]{0,500}box\.focus\(/.test(html)) fail("al abrir la ficha con el teclado el foco no pasa a ella");
-if (!/map\.on\("popupopen"[\s\S]{0,300}setAttribute\("role", "dialog"\)/.test(html)) fail("la ficha no expone role=dialog con nombre");
-if (!/map\.on\("popupopen"[\s\S]{0,500}ev\.key === "Escape"\) map\.closePopup\(\)/.test(html)) fail("la ficha no se cierra con Escape cuando el foco está dentro");
-if (!/map\.on\("popupclose"[\s\S]{0,400}ret\.focus\(/.test(html)) fail("al cerrar la ficha el foco no vuelve al elemento de la lista");
+if (!/function openFicha\(c\)[\s\S]{0,1200}\.fi-title"\)\.focus\(/.test(html)) fail("al abrir la ficha con el teclado el foco no pasa a ella");
+if (!/id="ficha" role="complementary" aria-label="Ficha del punto"/.test(html)) fail("la ficha no expone una región con nombre (role=complementary y aria-label)");
+if (!/fichaEl\.addEventListener\("keydown", \(ev\) => \{ if \(ev\.key === "Escape"\) map\.closePopup\(\)/.test(html)) fail("la ficha no se cierra con Escape cuando el foco está dentro");
+if (!/function closeFicha\(\)[\s\S]{0,700}ret\.focus\(/.test(html)) fail("al cerrar la ficha el foco no vuelve al elemento de la lista");
+if (!/class="ptabs" role="tablist"/.test(html) || !/e\.key === "ArrowRight"/.test(html) || !/b\.tabIndex = on \? 0 : -1/.test(html)) fail("las pestañas de la ficha deben seguir el patrón de pestañas (tablist, flechas y tabindex itinerante)");
+if (!/aria-label="Cerrar la ficha"/.test(html)) fail("el botón de cerrar la ficha necesita nombre accesible");
 if (!/o\.addEventListener\("keydown", \(ev\) => \{ if \(ev\.key === "Escape"\) close\(\); \}\)/.test(html)) fail("el aviso de nivel (alertdialog) no se cierra con Escape");
 if (!/const prev = document\.activeElement;[\s\S]{0,700}prev\.focus\(\)/.test(html)) fail("el aviso de nivel no devuelve el foco al cerrarse");
 

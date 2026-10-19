@@ -210,6 +210,9 @@ Esquinas moderadas y consistentes por nivel: 8 px en controles, 12 px en tarjeta
 ### Header
 Tinta con línea inferior de 3 px en rojo Wesser; título a la izquierda y, a la derecha, indicadores (puntos, permisos vigentes, captadores hoy, seguimientos), nivel y logros, y el menú.
 
+### Ficha del punto (componente de firma)
+Panel lateral derecho de 440 px (hoja a pantalla completa en estrecho) con el mapa visible. Cabecera con categoría, nombre, dirección y «Cómo llegar»; tarjeta de estado con borde izquierdo de 5 px por estado y texto; próximo seguimiento destacado en ámbar cuando toca; valoración, contacto y notas siempre visibles; pestañas Solicitudes, Concesiones y Ubicación; pie fijo con el botón rojo Guardar y «Más acciones» para lo destructivo. Usa los tokens en claro y oscuro.
+
 ### Calendario semanal (componente de firma)
 Siete columnas de lunes a domingo; sobre cada una, una silueta de barras (altura = captadores del día: verde los concedidos, trama ámbar los por aprobar), y debajo una tarjeta por permiso con estado en texto, punto, municipio, ONG con color propio y número de captadores.
 

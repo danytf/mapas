@@ -69,6 +69,7 @@ const freshState = (n = Number(process.env.MOCK_POINTS || 0), conEstados = proce
     categories: { name: cat }, municipalities: { name: muni }, provinces: { name: P(code).name, code }
   })),
   userState: {},
+  shared: {},
   log: []
 });
 let S = freshState();
@@ -227,7 +228,23 @@ createServer(async (req, res) => {
     }
     if (table === "establishment_app_state") {
       const visibles = new Set((u.role === "admin" ? S.establishments : S.establishments.filter((e) => u.provinces.some((c) => P(c).id === e.province_id))).map((e) => e.id));
-      return reply(S.conEstados ? applyFilters(estadosDe(S.establishments).filter((r) => visibles.has(r.establishment_id)), url.searchParams) : []);
+      // Escrituras con el mismo protocolo que la app (H-11): INSERT si no hay fila (23505 si ya existe) y UPDATE condicionado a la versión leída, que suma 1.
+      if (req.method === "POST") {
+        const fila = Array.isArray(body) ? body[0] : body;
+        if (!fila || !visibles.has(fila.establishment_id)) return send(res, 403, { code: "42501", message: "new row violates row-level security policy" });
+        if (S.shared[fila.establishment_id]) return send(res, 409, { code: "23505", message: "duplicate key value" });
+        S.shared[fila.establishment_id] = { establishment_id: fila.establishment_id, province_id: fila.province_id, state: fila.state, updated_by: fila.updated_by || u.id, version: 1 };
+        return send(res, 201, [{ establishment_id: fila.establishment_id, version: 1 }]);
+      }
+      if (req.method === "PATCH") {
+        const eid = eqParam("establishment_id"), ver = Number(eqParam("version"));
+        const fila = S.shared[eid];
+        if (!fila || fila.version !== ver) return send(res, 200, []);
+        fila.state = body.state; fila.updated_by = body.updated_by || u.id; fila.version += 1;
+        return send(res, 200, [{ establishment_id: eid, version: fila.version }]);
+      }
+      const base = (S.conEstados ? estadosDe(S.establishments).filter((r) => !S.shared[r.establishment_id]) : []).concat(Object.values(S.shared));
+      return reply(applyFilters(base.filter((r) => visibles.has(r.establishment_id)), url.searchParams));
     }
     return send(res, 404, { code: "MOCK404", message: "tabla no simulada: " + table });
   }
