@@ -1,6 +1,6 @@
 # Carga N2: grandes superficies de Andalucía
 
-Estado: **preparada y probada en local; NO cargada en producción. Pendiente de aprobación explícita del titular.** Lote: `supabase/seeds/grandes-superficies-andalucia/` (JSON de origen, `excepciones.csv` y un SQL por provincia). Definición: `scripts/catalogue/categorias/grandes-superficies.json`.
+Estado: **cargada en producción el 19/10/2026** con `cargar.sh` desde el equipo del titular (aprobación explícita) y verificada en solo lectura: 1.464 → 1.722 puntos (+258), reparto por provincia y categoría idéntico al lote, 0 `source_ref` repetidos, 0 puntos incompletos, 28 sin calle y 197 sin código postal, 263 altas en `audit_log` en las últimas 3 horas (258 de este lote más 5 altas puntuales anteriores), base de 15 MB. Antes de cargar se comprobó que producción solo tenía puntos de estas marcas en Granada. Lote: `supabase/seeds/grandes-superficies-andalucia/` (JSON de origen, `excepciones.csv` y un SQL por provincia). Definición: `scripts/catalogue/categorias/grandes-superficies.json`.
 
 Fuente: `andalucia-latest.osm.pbf` (base de OpenStreetMap del 17/10/2026 20:20:51 UTC). Origen: OpenStreetMap (ODbL 1.0, © colaboradores de OpenStreetMap).
 
@@ -37,12 +37,10 @@ Por provincia: Málaga 88, Sevilla 55, Cádiz 54, Almería 22, Córdoba 16, Huel
 - Carga de los 7 trozos en la base `mapas_test`: 258 puntos; segunda carga sin cambios (idempotente). Hay dos pares de nombres repetidos (Carrefour Algeciras y Carrefour Roquetas de Mar – Carretera de Alicún), en ubicaciones distintas a más de 150 m.
 - La generalización a varias categorías (columna `categoria` en `_carga`, comprobación de categorías por nombre) no altera las cadenas anteriores: la regeneración de estaciones y Correos debe seguir siendo idéntica byte a byte.
 
-## Para cargar (cuando el titular lo apruebe)
+## Cómo se cargó
 
 ```
 bash scripts/catalogue/cargar.sh supabase/seeds/grandes-superficies-andalucia grandes-superficies catalogo-andalucia:grandes-superficies:
 ```
-
-Pide la cadena de conexión sin eco y muestra el recuento antes y después (esperado: +258 en total y 258 con ese prefijo). Los puntos nacen con estado activo; revisar la muestra de `excepciones.csv` antes.
 
 Nota: OpenStreetMap puede tener tiendas cerradas, trasladadas o duplicadas, y no indica el horario vigente.
