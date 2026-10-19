@@ -260,6 +260,9 @@
   #ficha .loc-muni { display: grid; gap: 8px; border-top: 1px solid var(--line); padding-top: 12px; margin-top: 4px; }
   #ficha .loc-muni select { width: 100%; font: inherit; font-size: 14px; padding: 8px 10px; min-height: 38px; border: 1px solid var(--line-2); border-radius: 8px; background: var(--panel); color: var(--fg); }
   #ficha .loc-muni .m-save:disabled { opacity: .6; cursor: default; }
+  #ficha .loc-cp { display: grid; gap: 8px; border-top: 1px solid var(--line); padding-top: 12px; margin-top: 4px; }
+  #ficha .loc-cp input { width: 100%; font: inherit; font-size: 14px; padding: 8px 10px; min-height: 38px; border: 1px solid var(--line-2); border-radius: 8px; background: var(--panel); color: var(--fg); }
+  #ficha .loc-cp .cp-save:disabled { opacity: .6; cursor: default; }
   .fi-foot { border-top: 1px solid var(--line); padding: 10px 18px 12px; display: grid; gap: 6px; background: var(--panel); }
   .fi-status { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 18px; }
   #ficha .saved { font-size: 12px; color: var(--ok); }
@@ -292,7 +295,7 @@
     #ficha ul.fi-list li button { height: 40px; min-width: 44px; }
     #ficha details.aform > summary { min-height: 44px; }
     #ficha .loc .lb { min-height: 44px; }
-    #ficha .loc-muni select { min-height: 44px; }
+    #ficha .loc-muni select, #ficha .loc-cp input { min-height: 44px; }
     #ficha input, #ficha textarea { min-height: 44px; }
     #ficha .f-save, .fi-more > summary { height: 46px; }
     .fi-menu button { height: 46px; }
@@ -1236,6 +1239,7 @@ function fichaFor(c, pos) {
             '<p class="l-help">Importante: cambiar solo la dirección postal NO mueve el marcador. Para moverlo, pega aquí las coordenadas o la URL de Google Maps del lugar correcto, o usa «Mover pin». Después pulsa Guardar.</p>' +
             '<button type="button" class="lb l-save-location">Guardar dirección y ubicación en Supabase</button><div class="lmsg" role="status"></div>' +
             (admin && c.provinceId ? '<div class="loc-muni"><label>Municipio (solo administradores)<select class="m-sel" disabled><option value="">Cargando…</option></select></label><button type="button" class="lb m-save" disabled>Cambiar municipio</button><div class="lmsg m-msg" role="status"></div></div>' : "") +
+            (admin && c.databaseId ? '<div class="loc-cp"><label>Código postal (solo administradores)<input class="cp-in" type="text" inputmode="numeric" maxlength="5" autocomplete="off" placeholder="Cargando…" disabled></label><button type="button" class="lb cp-save" disabled>Guardar código postal</button><div class="lmsg cp-msg" role="status"></div></div>' : "") +
           "</div>" +
           "</div>" +
         "</section>" +
@@ -1260,10 +1264,12 @@ function fichaFor(c, pos) {
     pf.querySelector('[data-tab="' + k + '"]').removeAttribute("aria-label");
   });
   let cargaMuni = null;
+  let cargaCp = null;
   const showTab = (k, focus) => {
     pf.querySelectorAll("[data-tab]").forEach((n) => { n.hidden = n.dataset.tab !== k; });
     tb.querySelectorAll("button").forEach((b) => { const on = b.dataset.k === k; b.setAttribute("aria-selected", on); b.tabIndex = on ? 0 : -1; if (on && focus) b.focus(); });
     if (k === "l" && cargaMuni) cargaMuni();
+    if (k === "l" && cargaCp) cargaCp();
   };
   tb.addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) showTab(b.dataset.k); });
   tb.addEventListener("keydown", (e) => {
@@ -1585,6 +1591,47 @@ function fichaFor(c, pos) {
       const status = document.getElementById("status");
       if (status) status.textContent = "«" + c.name + "» ahora figura en " + c.town + ".";
       refreshSelects(); renderList();
+    });
+  }
+  const cb = el.querySelector(".loc-cp");
+  if (cb) {
+    const inp = cb.querySelector(".cp-in"), btn = cb.querySelector(".cp-save"), msg = cb.querySelector(".cp-msg");
+    let actual = "", cargado = false;
+    const valido = () => /^\d{5}$/.test(inp.value.trim()) && inp.value.trim() !== actual;
+    cargaCp = async () => {
+      if (cargado) return;
+      cargado = true;
+      let res;
+      try { res = await window.mapaSession.supabase.from("establishments").select("postal_code").eq("id", c.databaseId).maybeSingle(); }
+      catch (error) { res = { error }; }
+      if (res.error || !res.data) {
+        cargado = false;
+        inp.placeholder = "";
+        msg.style.color = "var(--err)";
+        msg.textContent = res.error ? friendlyError(res.error, "No se pudo leer el código postal.") : "No se pudo leer el código postal: el punto ya no existe.";
+        return;
+      }
+      actual = res.data.postal_code || "";
+      inp.value = actual; inp.placeholder = "5 cifras"; inp.disabled = false;
+    };
+    inp.addEventListener("input", () => { btn.disabled = !valido(); });
+    btn.addEventListener("click", async () => {
+      if (!valido()) return;
+      const nuevo = inp.value.trim();
+      btn.disabled = true; inp.disabled = true;
+      msg.style.color = "var(--muted)"; msg.textContent = "Guardando en Supabase…";
+      let res;
+      try { res = await window.mapaSession.supabase.from("establishments").update({ postal_code: nuevo }).eq("id", c.databaseId).select("id"); }
+      catch (error) { res = { error }; }
+      inp.disabled = false;
+      if (res.error || !res.data || res.data.length !== 1) {
+        msg.style.color = "var(--err)";
+        msg.textContent = res.error ? friendlyError(res.error, "No se pudo guardar el código postal.") : "No se pudo guardar el código postal: no tienes permiso o el punto ya no existe.";
+        btn.disabled = !valido();
+        return;
+      }
+      actual = nuevo;
+      msg.style.color = "var(--ok)"; msg.textContent = "Código postal guardado: " + nuevo + ".";
     });
   }
   const rv = el.querySelector(".f-rev");

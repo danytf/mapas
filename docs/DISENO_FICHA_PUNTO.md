@@ -27,3 +27,7 @@ Ninguna función ni regla de guardado: valoración, contacto, notas, solicitudes
 ## Límites
 
 No probado: lectores de pantalla reales, modo oscuro del sistema real, móvil físico ni las acciones de administrador (archivar) en el navegador. Cambiar de punto con ediciones sin guardar las descarta (igual que antes); el aviso «Cambios sin guardar» lo hace visible.
+
+## Código postal (solo administradores)
+
+En la pestaña Ubicación, debajo del municipio, un administrador ve «Código postal»: el valor se lee solo al abrir la pestaña (una consulta por punto, sin ampliar la carga del catálogo), admite 5 cifras y solo escribe `postal_code`. El disparador `guard_sensitive_updates` ya exige administrador para ese campo, de modo que un no administrador no ve el bloque y, aunque lo forzara, la base lo rechazaría. Motivo: los puntos de la carga nacional (OpenStreetMap) llegan sin código postal y por SQL no se pueden completar. Pruebas: comprobaciones estáticas en `scripts/test-ficha.mjs`; sin probar en navegador ni con un administrador real.

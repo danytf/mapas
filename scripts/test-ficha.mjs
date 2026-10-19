@@ -61,4 +61,14 @@ assert.ok(/class="lmsg m-msg" role="status"/.test(ficha), "El resultado se anunc
 const muni = html.slice(html.indexOf("const mb = el.querySelector(\".loc-muni\");"), html.indexOf("const mb = el.querySelector(\".loc-muni\");") + 3500);
 assert.ok(!/localStorage|sessionStorage|indexedDB|document\.cookie/.test(muni), "El cambio de municipio no guarda nada en el navegador");
 
+// Código postal (solo administradores): se lee solo al abrir la pestaña Ubicación, solo se escribe postal_code, 5 cifras, sin guardar nada en el navegador.
+const cpBloque = html.slice(html.indexOf('const cb = el.querySelector(".loc-cp");'), html.indexOf('const rv = el.querySelector(".f-rev");'));
+assert.ok(cpBloque.length > 500, "No se encuentra el manejador del código postal");
+assert.ok(ficha.includes("(admin && c.databaseId ? '<div class=\"loc-cp\">"), "El bloque «Código postal» solo se pinta para administradores");
+assert.ok(html.includes('if (k === "l" && cargaCp) cargaCp();'), "El código postal se lee al abrir la pestaña Ubicación, no al abrir cada ficha");
+assert.ok(cpBloque.includes('update({ postal_code: nuevo }).eq("id", c.databaseId).select("id")'), "Solo se escribe postal_code");
+assert.ok(cpBloque.includes("/^\\d{5}$/.test(inp.value.trim())"), "El código postal debe tener 5 cifras");
+assert.ok(cpBloque.includes("res.data.length !== 1") && cpBloque.includes('friendlyError(res.error, "No se pudo guardar el código postal.")'), "Un rechazo de la base se explica");
+assert.ok(!/localStorage|sessionStorage|indexedDB|document\.cookie/.test(cpBloque), "El código postal no guarda nada en el navegador");
+
 console.log("Ficha del punto: comprobaciones estáticas correctas.");
