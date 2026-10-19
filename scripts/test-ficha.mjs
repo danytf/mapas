@@ -75,4 +75,8 @@ assert.ok(!/localStorage|sessionStorage|indexedDB|document\.cookie/.test(cpBloqu
 assert.ok(/#ficha \.loc-muni \.lb, #ficha \.loc-cp \.lb \{[^}]*background: var\(--accent-soft\); color: var\(--accent\)/.test(css), "Los botones de municipio y código postal usan el fondo tintado de acento (el relleno pleno es de «Guardar cambios»)");
 assert.ok(/#ficha \.loc-muni \.lb:disabled, #ficha \.loc-cp \.lb:disabled \{[^}]*opacity: 1; background: var\(--bg\); color: var\(--muted\)/.test(css), "Desactivados se apagan sin parecer un campo de texto");
 
+// Los formularios de las pestañas no ensanchan el panel: la rejilla de pestañas y las columnas de fechas pueden encoger (antes salía una barra horizontal).
+assert.ok(/\.fi-tabs \{ display: grid; grid-template-columns: minmax\(0, 1fr\);/.test(html), "La rejilla de pestañas debe poder encoger");
+assert.ok(/#ficha \.row3 \{ display: grid; grid-template-columns: minmax\(0, 1fr\) minmax\(0, 1fr\) 84px;/.test(html) && html.includes("#ficha .row3 input { min-width: 0; }"), "Las columnas del formulario de solicitudes y concesiones deben poder encoger");
+
 console.log("Ficha del punto: comprobaciones estáticas correctas.");
