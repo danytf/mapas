@@ -36,6 +36,7 @@ Variables: `PGHOST=localhost PGPORT=5432 PGUSER=postgres PGPASSWORD=<la de tu in
 psql -v ON_ERROR_STOP=1 -f supabase/tests/schema_smoke.sql
 psql -v ON_ERROR_STOP=1 -f supabase/tests/state_history.sql
 psql -v ON_ERROR_STOP=1 -f supabase/tests/state_version.sql
+psql -v ON_ERROR_STOP=1 -f supabase/tests/admin_postal_codes.sql
 psql -v ON_ERROR_STOP=1 -f supabase/tests/rls_matrix.sql
 ```
 Resultado esperado: `state_history: 29 comprobaciones correctas`, `state_version: 20 comprobaciones correctas` y `Matriz RLS: 973 celdas, 0 discrepancias, 0 inconclusas, 781 denegaciones esperadas verificadas`. Todas terminan en `ROLLBACK`, salvo el humo, que deja datos de prueba en la base local.
