@@ -187,7 +187,7 @@ Capas tonales con elevación solo para lo que flota. En reposo las superficies s
 
 ## Shapes
 
-Esquinas moderadas y consistentes por nivel: 8 px en controles, 12 px en tarjetas e indicadores, 14 a 16 px en diálogos y ventanas emergentes, píldora completa en chips. Hoy hay unos veinte radios distintos en el código; la escala de cuatro pasos de arriba es la intención. Los bordes son siempre de 1 px; la excepción deliberada es la línea de 3 px bajo la cabecera y el borde izquierdo de 5 px que codifica el estado en las tarjetas del calendario.
+Esquinas moderadas y consistentes por nivel: 8 px en controles, 12 px en tarjetas e indicadores, 14 a 16 px en diálogos y ventanas emergentes, píldora completa en chips. La hoja de estilos usa los tokens `--r-xs` (4 px), `--r-control` (8 px), `--r-card` (12 px), `--r-surface` (16 px) y `--r-pill`; quedan fuera de la escala solo los círculos (50 %), las marcas de 2 a 3 px, las barras con la parte superior redondeada y los controles de Leaflet. Los tamaños de letra son `--fs-label` (12 px), `--fs-label-lg` (13 px), `--fs-body` (14 px), `--fs-title` (17 px) y `--fs-display` (20 px); los numerales (22 a 44 px), las cifras de la cabecera y los glifos grandes se quedan con su tamaño propio. Los bordes son siempre de 1 px; la excepción deliberada es la línea de 3 px bajo la cabecera y el borde izquierdo de 5 px que codifica el estado en las tarjetas del calendario.
 
 ## Components
 

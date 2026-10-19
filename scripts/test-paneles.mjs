@@ -10,7 +10,7 @@ const css = html.slice(a, b);
 
 assert.ok(!/background(-color)?: #[0-9a-f]{3,6}/i.test(css) && !/ (color|border[a-z-]*): #[0-9a-f]{3,6}/i.test(css), "Los paneles no deben fijar colores: usan los tokens (modo claro y oscuro)");
 assert.ok(/\.pn-head[^}]*position: sticky[^}]*border-bottom: 1px solid var\(--line\)/.test(css), "La cabecera del panel es fija y lleva filete");
-assert.ok(/h2 \{ font-size: 17px/.test(css), "Los títulos siguen la escala de la ficha (17 px)");
+assert.ok(/h2 \{ font-size: var\(--fs-title\)/.test(css), "Los títulos siguen la escala de la ficha (--fs-title, 17 px)");
 assert.ok(/\.kpi \{ border-left: 5px solid var\(--kpi/.test(css) && /--st-solicitado/.test(css) && /--st-concedido/.test(css) && /--st-denegado/.test(css) && /--st-caducado/.test(css), "Las tarjetas del resumen codifican el estado con borde izquierdo y los tokens de estado");
 assert.ok(/\.pn-scroll \{ max-height: none; overflow-x: auto; overflow-y: visible; \}/.test(css), "La tabla del resumen no crea una segunda barra de desplazamiento vertical");
 assert.ok(/dialog input\[type="checkbox"\] \{ width: 18px; height: 18px; min-height: 0;/.test(css), "Las casillas de verificación no heredan el alto de los campos de texto");

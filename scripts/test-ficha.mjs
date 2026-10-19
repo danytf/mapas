@@ -72,7 +72,7 @@ assert.ok(cpBloque.includes("res.data.length !== 1") && cpBloque.includes('frien
 assert.ok(!/localStorage|sessionStorage|indexedDB|document\.cookie/.test(cpBloque), "El código postal no guarda nada en el navegador");
 
 // Las acciones de administrador (municipio y código postal) tienen aspecto de botón: relleno de acento activo y apagado desactivado, ambos con tokens.
-assert.ok(/#ficha \.loc-muni \.lb, #ficha \.loc-cp \.lb \{[^}]*background: var\(--accent\); color: var\(--accent-fg\)/.test(css), "Los botones de municipio y código postal usan el relleno de acento");
+assert.ok(/#ficha \.loc-muni \.lb, #ficha \.loc-cp \.lb \{[^}]*background: var\(--accent-soft\); color: var\(--accent\)/.test(css), "Los botones de municipio y código postal usan el fondo tintado de acento (el relleno pleno es de «Guardar cambios»)");
 assert.ok(/#ficha \.loc-muni \.lb:disabled, #ficha \.loc-cp \.lb:disabled \{[^}]*opacity: 1; background: var\(--bg\); color: var\(--muted\)/.test(css), "Desactivados se apagan sin parecer un campo de texto");
 
 console.log("Ficha del punto: comprobaciones estáticas correctas.");
