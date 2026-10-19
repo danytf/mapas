@@ -9,6 +9,10 @@ Estado: **implementada en la rama `feat/ficha-panel-lateral`; pendiente de PR, c
 - **Estilo.** Tokens de la app en claro y oscuro (antes la ficha era siempre blanca); los colores de error y de estrellas pasan a tokens con variante oscura (`--err`, `--star-on`, `--star-off`); textos de 12, 14 y 17 px y radios de 8, 12 y 16 px de `DESIGN.md`; objetivos de 44 px en pantallas estrechas o táctiles.
 - **Accesibilidad.** Región con nombre, foco al título al abrir con teclado y retorno a la lista al cerrar, Escape cierra (y primero el menú «Más acciones»), pestañas con flechas, Inicio y Fin y tabindex itinerante, avisos en regiones `aria-live`.
 
+## Cambiar municipio (solo administradores)
+
+En la pestaña **Ubicación**, los administradores ven un bloque «Municipio» con un desplegable de los municipios **de la misma provincia** del punto (se cargan al abrir la pestaña) y el botón «Cambiar municipio», que pide confirmación («El cambio afecta a todos los usuarios») y escribe solo `municipality_id`. Existe porque `guard_sensitive_updates` solo deja cambiar el municipio a un administrador identificado desde la aplicación; por SQL de servicio no es válido y no se elude (se comprobó el 19/10/2026 con el «Lidl – Ctra. Gabia, 9», que la base asigna a Churriana de la Vega y está en Las Gabias). Un rechazo de la base se explica y no cambia nada; los usuarios normales no ven el bloque. La base no comprueba que el municipio pertenezca a la provincia del punto: lo garantiza la interfaz al ofrecer solo los de su provincia.
+
 ## Qué no cambia
 
 Ninguna función ni regla de guardado: valoración, contacto, notas, solicitudes, concesiones y seguimientos, corrección de ubicación, revisión visual, desactivar, quitar y archivar; XP y logros; control de conflicto de versión; avisos de error. Los manejadores se reutilizan tal cual y localizan los controles por clase.
