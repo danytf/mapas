@@ -33,6 +33,11 @@
     --cat-hospital: #c0392b; --cat-salud: #0b7a68; --cat-super: #b83280; --cat-centro: #2b6cb0; --cat-oficial: #475569; --cat-gimnasio: #d9730d;
     --cat-ikea: #e0a800; --cat-leroy: #65a30d; --cat-decathlon: #0891b2; --cat-carrefour: #7c3aed; --cat-correos: #a16207; --cat-eci: #15803d;
     --cat-bricolaje: #92400e; --cat-mediamarkt: #dc2626; --cat-estaciones: #78716c; --cat-tiendas: #be185d; --cat-eventos: #4f46e5; --cat-otra: #475569; --cat-defecto: #0b7a68;
+    /* Estado del pin y de la leyenda, confeti, niebla de conquista y cuadro de resultado de la ubicación */
+    --pin-sin: #ffffff; --pin-sin-line: #9aa8a4; --pin-solicitado: #fbbf24; --pin-concedido: #22c55e; --pin-denegado: #111827; --pin-caducado: #94a3b8; --pin-cancelado: #dc2626;
+    --confetti-1: #22c55e; --confetti-2: #fbbf24; --confetti-3: #ef4444; --confetti-4: #3b82f6; --confetti-5: #a855f7; --confetti-6: #f97316;
+    --fog-0: #64748b; --fog-1: #fbbf24; --fog-2: #22c55e; --fog-3: #e0a800;
+    --res-ok-bg: #dcfce7; --res-ok-line: #86efac; --res-err-bg: #fee2e2; --res-err-line: #fca5a5;
     --accent: #c8102e;
     --accent-d: #9f0c24;
     --accent-fg: #ffffff;
@@ -59,6 +64,7 @@
       --err: #ff7084; --star-off: #7f8da3; --star-on: #f59e0b;
       --st-concedido: #4ade80; --st-solicitado: #fbbf24; --st-caducado: #7c8aa0; --st-denegado: #e2e8f0; --st-cancelado: #ff7084;
       --gam-gold-soft: var(--warn-bg); --gam-gold-ink: var(--warn);
+      --pin-denegado: #e2e8f0; --res-ok-bg: #12341f; --res-ok-line: #2f6b45; --res-err-bg: #3a121b; --res-err-line: #7a2a36;
       --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.45);
     }
     #dlgGam em.up { color: #4ade80; }
@@ -539,7 +545,7 @@
   #dlgGam .snd { display: flex; align-items: flex-start; gap: 8px; margin: 12px 0 0; font-size: var(--fs-label); font-weight: 500; color: var(--fg); }
   #dlgGam .snd input { width: 16px; height: 16px; flex: none; margin: 1px 0 0; padding: 0; accent-color: var(--accent); }
   #dlgGam .gtabs { display: flex; gap: 4px; margin-bottom: 14px; border-bottom: 1px solid var(--line); }
-  #dlgGam .gtabs button { flex: 1; height: 36px; border: 0; border-bottom: 3px solid transparent; background: none; font: inherit; font-size: var(--fs-label-lg); font-weight: 600; color: var(--muted); cursor: pointer; }
+  #dlgGam .gtabs button { flex: 1 1 0; min-width: 0; height: 36px; padding: 0 4px; border: 0; border-bottom: 3px solid transparent; background: none; font: inherit; font-size: var(--fs-label-lg); font-weight: 600; color: var(--muted); cursor: pointer; }
   #dlgGam .gtabs button[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--accent); }
   #dlgGam .tr-h p, #dlgGam .al-h { margin: 0 0 6px; font-size: var(--fs-body); }
   #dlgGam .tr-h .bar { display: block; height: 8px; border-radius: var(--r-xs); background: var(--line); overflow: hidden; }
@@ -914,7 +920,8 @@ let smallChains = new Set();
 const chainOf = (c) => { const k = rawChain(c); return smallChains.has(k) ? "Independientes (rótulo único)" : k; };
 
 /* Estado operativo del usuario: persistencia remota en Supabase. */
-const ESTADOS = [["sin", "Sin solicitar", "#ffffff"], ["solicitado", "Solicitado", "#fbbf24"], ["concedido", "Concedido", "#22c55e"], ["denegado", "Denegado", "#111827"], ["caducado", "Caducado", "#94a3b8"], ["cancelado", "Cancelado", "#dc2626"]];
+// Colores de estado del pin y de la leyenda: tokens CSS (--pin-*), con versión oscura.
+const ESTADOS = [["sin", "Sin solicitar", "var(--pin-sin)"], ["solicitado", "Solicitado", "var(--pin-solicitado)"], ["concedido", "Concedido", "var(--pin-concedido)"], ["denegado", "Denegado", "var(--pin-denegado)"], ["caducado", "Caducado", "var(--pin-caducado)"], ["cancelado", "Cancelado", "var(--pin-cancelado)"]];
 let permits = {};
 // Clave estable del estado de permisos de un punto (H-14): el ID de Supabase en el catálogo maestro;
 // en los puntos personales, que no tienen ID, su nombre (único por usuario).
@@ -1592,8 +1599,8 @@ function fichaFor(c, pos) {
         position: "fixed", zIndex: "10000", left: "50%", bottom: "22px",
         transform: "translateX(-50%)", width: "min(560px, calc(100vw - 28px))",
         boxSizing: "border-box", padding: "12px 16px", borderRadius: "8px",
-        background: ok ? "#dcfce7" : "#fee2e2", color: resultColor,
-        border: "1px solid " + (ok ? "#86efac" : "#fca5a5"),
+        background: ok ? "var(--res-ok-bg)" : "var(--res-err-bg)", color: resultColor,
+        border: "1px solid " + (ok ? "var(--res-ok-line)" : "var(--res-err-line)"),
         boxShadow: "0 4px 18px #0003", fontSize: "14px", fontWeight: "600"
       });
       if (!notice.isConnected) document.body.appendChild(notice);
@@ -1974,7 +1981,7 @@ function listItemFor(c) {
     esc(addrOf(c)) + "</span><br>" +
     '<span class="tag">' + esc(c.tipo + (c.sub ? " · " + c.sub : "")) + "</span>" +
     (permOf(c).valoracion ? '<span class="tag warn">' + stars(permOf(c).valoracion) + "</span>" : "") +
-    (estadoOf(c) !== "sin" ? '<span class="tag" style="background:' + estadoInfo(estadoOf(c))[2] + ';color:' + (["concedido", "solicitado", "caducado"].includes(estadoOf(c)) ? "#111" : "#fff") + '">' + estadoInfo(estadoOf(c))[1] + (permOf(c).fecha && estadoOf(c) !== "concedido" && estadoOf(c) !== "caducado" ? " · " + esc(fmtD(permOf(c).fecha)) : "") + "</span>" : "") +
+    (estadoOf(c) !== "sin" ? '<span class="tag" style="background:' + estadoInfo(estadoOf(c))[2] + ';color:' + inkOn(estadoInfo(estadoOf(c))[2]) + '">' + estadoInfo(estadoOf(c))[1] + (permOf(c).fecha && estadoOf(c) !== "concedido" && estadoOf(c) !== "caducado" ? " · " + esc(fmtD(permOf(c).fecha)) : "") + "</span>" : "") +
     (seguimientoDue(c) ? '<span class="tag warn">Seguimiento ' + (seguimientoDue(c) === today() ? "hoy" : "atrasado " + esc(fmtD(seguimientoDue(c)))) + "</span>" : "") +
     (DUPS.has(c.name) && !hasPersonalRef(reviewed, c) ? '<span class="tag warn">Posible duplicado</span>' : "") +
     (estadoOf(c) === "solicitado" && solTxt(c) ? '<span class="tag warn">Pedido: ' + esc(solTxt(c)) + "</span>" : "") +
@@ -2402,7 +2409,7 @@ function confetti(n) {
   if (!cv) { cv = document.createElement("canvas"); cv.id = "confetti"; cv.setAttribute("aria-hidden", "true"); document.body.appendChild(cv); }
   cancelAnimationFrame(cv._r);
   cv.width = innerWidth; cv.height = innerHeight;
-  const ctx = cv.getContext("2d"), cols = ["#22c55e", "#fbbf24", "#ef4444", "#3b82f6", "#a855f7", "#f97316"];
+  const ctx = cv.getContext("2d"), cols = ["--confetti-1", "--confetti-2", "--confetti-3", "--confetti-4", "--confetti-5", "--confetti-6"].map((t) => resolveColor("var(" + t + ")"));
   const ps = Array.from({ length: n }, () => ({ x: innerWidth / 2 + (Math.random() - .5) * innerWidth * .3, y: innerHeight * .78, vx: (Math.random() - .5) * 15, vy: -(9 + Math.random() * 13), g: .35 + Math.random() * .15, s: 6 + Math.random() * 6, r: Math.random() * 6, vr: (Math.random() - .5) * .4, c: cols[(Math.random() * cols.length) | 0] }));
   let f = 0;
   (function step() {
@@ -2543,7 +2550,7 @@ function fogDraw() {
   fogSig = sig;
   if (fogLayer) map.removeLayer(fogLayer);
   fogLayer = L.layerGroup();
-  const COL = ["#64748b", "#fbbf24", "#22c55e", "#e0a800"];
+  const COL = ["--fog-0", "--fog-1", "--fog-2", "--fog-3"].map((t) => resolveColor("var(" + t + ")"));
   ts.forEach((o) => {
     if (!o.pts.length) return;
     const la = o.pts.reduce((a, q) => a + q[0], 0) / o.pts.length, lo = o.pts.reduce((a, q) => a + q[1], 0) / o.pts.length;
@@ -2686,7 +2693,7 @@ function refreshSelects() {
   $("#lgBody").innerHTML = "<h4>Color: categoría</h4>" +
     TIPOS.filter(([i, t]) => vis.some((c) => c.tipo === t)).map(([i, t, col]) => '<div class="it"><i class="gi" style="background:' + col + '">' + glyphOf({ tipo: t }) + "</i>" + t + "</div>").join("") +
     "<h4>Borde: permiso</h4>" +
-    ESTADOS.map(([k, t, col]) => '<div class="it"><i class="ring" style="border-color:' + (k === "sin" ? "#ffffff;box-shadow:0 0 0 1px #9aa8a4" : col) + '"></i>' + t + "</div>").join("");
+    ESTADOS.map(([k, t, col]) => '<div class="it"><i class="ring" style="border-color:' + (k === "sin" ? "var(--pin-sin);box-shadow:0 0 0 1px var(--pin-sin-line)" : col) + '"></i>' + t + "</div>").join("");
   const nr = CENTERS.filter((c) => hasPersonalRef(removed, c)).length;
   $("#restore").textContent = "Restaurar puntos quitados (" + nr + ")";
   $("#restore").disabled = !nr;

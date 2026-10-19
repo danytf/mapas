@@ -116,19 +116,25 @@ const tiposSrc = html.match(/const TIPOS = \[([\s\S]*?)\];/)?.[1];
 if (!inkSrc) fail("falta la función inkOn (texto legible sobre el color de categoría)");
 else if (!/color:' \+ inkOn\(colorOf\(c\)\)/.test(html)) fail("el número de la lista no usa inkOn");
 if (inkSrc && tiposSrc) {
-  const inkOn = new Function(inkSrc + "; return inkOn;")();
-  for (const m of tiposSrc.matchAll(/\[(\d+), "([^"]+)", "(#[0-9a-f]{6})"\]/gi)) {
-    const ink = inkOn(m[3]);
-    add(`categoría ${m[2]} ${m[3]}: número ${ink} sobre el color`, ink, m[3]);
+  // Los colores son tokens (--cat-*, --pin-*): se resuelven con el mapa claro u oscuro, como hace resolveColor en el navegador.
+  for (const [mode, v] of [["claro", light], ["oscuro", dark]]) {
+    const resolve = (c) => { const m = /^var\(--([\w-]+)\)$/.exec(c); return m ? v[m[1]] : c; };
+    const inkOn = new Function("resolveColor", inkSrc + "; return inkOn;")(resolve);
+    const cats = [...tiposSrc.matchAll(/\[(\d+), "([^"]+)", "(var\(--cat-[a-z]+\))"\]/gi)];
+    if (cats.length < 17) fail("no se leyeron las 17 categorías de TIPOS con tokens (" + cats.length + ")");
+    for (const m of cats) {
+      const col = resolve(m[3]), ink = inkOn(m[3]);
+      add(`categoría ${m[2]} ${col} (${mode}): número ${ink} sobre el color`, ink, col);
+    }
+    // Estados de permiso (etiqueta de la lista): la tinta se calcula con inkOn a partir del color resuelto.
+    const estados = [...(html.match(/const ESTADOS = \[([^\n]*)\];/)?.[1] || "").matchAll(/\["(\w+)", "([^"]+)", "(var\(--pin-[a-z-]+\))"\]/gi)];
+    if (estados.length < 6) fail("no se leyeron los 6 estados de ESTADOS con tokens");
+    for (const [, k, nombre, tok] of estados) {
+      if (k === "sin") continue;
+      const col = resolve(tok), ink = inkOn(tok);
+      add(`etiqueta de estado ${nombre} ${col} (${mode}): ${ink}`, ink, col);
+    }
   }
-}
-// Estados de permiso (etiqueta de la lista): el color de texto lo decide el código.
-const estados = [...(html.match(/const ESTADOS = \[([^\n]*)\];/)?.[1] || "").matchAll(/\["(\w+)", "([^"]+)", "(#[0-9a-f]{6})"\]/gi)];
-const darkText = html.match(/\[("concedido"[^\]]*)\]\.includes\(estadoOf\(c\)\)/)?.[1] || "";
-if (estados.length < 6) fail("no se leyeron los 6 estados de ESTADOS");
-for (const [, k, nombre, col] of estados) {
-  if (k === "sin") continue;
-  add(`etiqueta de estado ${nombre} ${col}: ${darkText.includes('"' + k + '"') ? "#111" : "#fff"}`, darkText.includes('"' + k + '"') ? "#111111" : "#ffffff", col);
 }
 // Barras del calendario semanal: color de texto y todos los colores del fondo.
 for (const m of html.matchAll(/\.wk-bar\.s-(\w+) \{ background: ([^;]+); color: (#[0-9a-f]{3,6});/gi)) {
