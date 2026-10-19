@@ -21,6 +21,7 @@ on:
       - "scripts/test-admin-panel.mjs"
       - "scripts/test-app-mejoras.mjs"
       - "scripts/test-calendario.mjs"
+      - "scripts/test-cabecera-filtros.mjs"
       - "scripts/test-a11y-fase-d.mjs"
       - ".github/workflows/audit-static-catalog.yml"
   pull_request:
@@ -63,6 +64,8 @@ jobs:
         run: node scripts/test-app-mejoras.mjs
       - name: Test weekly calendar section
         run: node scripts/test-calendario.mjs
+      - name: Test header indicators and collapsible filters
+        run: node scripts/test-cabecera-filtros.mjs
       - name: Run XSS regression audit
         run: node scripts/audit-xss.mjs index.html
       - name: Check keyboard access to statistics panel rows

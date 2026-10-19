@@ -80,6 +80,12 @@
   .tools input:hover, .tools select:hover { border-color: var(--muted); }
   .tools input:focus, .tools select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); outline: 0; }
   .row { display: flex; gap: 8px; }
+  #moreF { display: grid; gap: 8px; }
+  #moreF[hidden] { display: none; }
+  #moreBtn { flex: 0 0 auto; height: 38px; padding: 0 12px; font-size: 13px; white-space: nowrap; }
+  #moreBtn::after { content: "\25BE"; margin-left: 6px; display: inline-block; transition: transform .12s; }
+  #moreBtn[aria-expanded="true"]::after { transform: rotate(180deg); }
+  #moreBtn.on { border-color: var(--accent); color: var(--accent); }
   .row > * { flex: 1; min-width: 0; }
   button {
     font: inherit; font-weight: 550; height: 36px; padding: 0 14px; border-radius: 8px; cursor: pointer;
@@ -203,10 +209,16 @@
   .pform button.danger:hover { background: #fdecec; }
   .logo { height: 34px; width: auto; display: block; background: #fff; padding: 4px 8px; border-radius: 8px; flex: none; }
   header h1 { flex: 1; min-width: 0; }
-  .kstrip { display: flex; gap: 8px; margin-left: auto; }
+  .kstrip { display: flex; align-items: center; gap: 14px; margin-left: auto; }
+  .kg { display: flex; gap: 8px; }
+  .kg-gam { gap: 6px; padding-left: 14px; border-left: 1px solid #2b394d; }
   .kstrip .k { display: grid; gap: 1px; min-width: 96px; padding: 5px 12px; border-radius: 9px; background: var(--ink-2); border: 1px solid #2b394d; color: #fff; text-align: left; height: auto; font-weight: 400; }
   .kstrip .k b { font-size: 19px; line-height: 1.05; font-weight: 680; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
-  .kstrip .k span { font-size: 11px; color: #9fb0c6; }
+  .kstrip .k span { font-size: 12px; color: #aab9ce; }
+  .kg-op .k { min-width: 104px; }
+  .kg-op .k b { font-size: 22px; }
+  .kg-gam .k { min-width: 0; padding: 4px 10px; }
+  .kg-gam .k b { font-size: 15px; }
   .kstrip button.k { cursor: pointer; }
   .kstrip button.k:hover { background: #26354b; border-color: #3a4c66; }
   .kstrip .k.hot { background: var(--accent); border-color: var(--accent); }
@@ -488,7 +500,7 @@
   #login input[type=text], #login input[type=password] { font: inherit; font-weight: 400; height: 40px; padding: 0 12px; border: 1px solid var(--line-2); border-radius: 8px; background: var(--panel); color: var(--fg); width: 100%; box-sizing: border-box; }
   #login input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); outline: 0; }
   #login .rem { display: flex; flex-direction: row; align-items: center; gap: 8px; font-weight: 400; }
-  #login button { height: 42px; border: 0; border-radius: 9px; background: var(--accent); color: #fff; font: inherit; font-weight: 640; cursor: pointer; }
+  #login button { height: 42px; border: 0; border-radius: 9px; background: var(--accent); color: var(--accent-fg); font: inherit; font-weight: 640; cursor: pointer; }
   #login button:hover { filter: brightness(1.08); }
   #login .err { min-height: 16px; font-size: 12px; color: var(--warn, #b42318); margin: 0; }
   dialog h2 { margin: 0; font-size: 18px; font-weight: 680; letter-spacing: -.015em; }
@@ -505,7 +517,7 @@
   .legend-box i.ring { background: #9aa8a4; border: 3px solid; width: 15px; height: 15px; }
   .note { padding: 10px 16px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--line); }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
-  @media (max-width: 1180px) { .kstrip .k:nth-child(-n+2) { display: none; } }
+  @media (max-width: 1180px) { .kg-op .k:nth-child(-n+2) { display: none; } }
   @media (max-width: 900px) { .kstrip { display: none; } }
   @media (max-width: 760px) {
     h1 { font-size: 14px; }
@@ -571,18 +583,23 @@
         <select id="muni" aria-label="Filtrar por municipio"></select>
       </div>
       <div class="row">
-        <select id="tipo" aria-label="Filtrar por categoría"></select>
         <select id="permiso" aria-label="Filtrar por estado del permiso"></select>
+        <button id="moreBtn" type="button" aria-expanded="false" aria-controls="moreF">Más filtros</button>
       </div>
-      <div class="row">
-        <select id="valor" aria-label="Filtrar por valoración"></select>
-        <select id="orden" aria-label="Ordenar la lista"></select>
-      </div>
-      <div class="row" id="cadRow" style="grid-template-columns:1fr;display:none">
-        <select id="cadena" aria-label="Filtrar por cadena"></select>
-      </div>
-      <div class="row" id="subRow" style="grid-template-columns:1fr;display:none">
-        <select id="subtipo" aria-label="Filtrar por tipo de entidad"></select>
+      <div id="moreF" hidden>
+        <div class="row">
+          <select id="tipo" aria-label="Filtrar por categoría"></select>
+          <select id="valor" aria-label="Filtrar por valoración"></select>
+        </div>
+        <div class="row">
+          <select id="orden" aria-label="Ordenar la lista"></select>
+        </div>
+        <div class="row" id="cadRow" style="grid-template-columns:1fr;display:none">
+          <select id="cadena" aria-label="Filtrar por cadena"></select>
+        </div>
+        <div class="row" id="subRow" style="grid-template-columns:1fr;display:none">
+          <select id="subtipo" aria-label="Filtrar por tipo de entidad"></select>
+        </div>
       </div>
       <div class="bar" aria-hidden="true"><i id="prog"></i></div>
       <div class="status" id="status" role="status">Preparando…</div>
@@ -1644,6 +1661,19 @@ function listItemFor(c) {
   return li;
 }
 
+// «Más filtros»: categoría, valoración, orden y los filtros de cadena o tipo de entidad van plegados;
+// el botón cuenta cuántos hay activos para que un filtro oculto nunca pase desapercibido.
+function syncMore() {
+  const n = ["#tipo", "#valor", "#cadena", "#subtipo"].filter((s) => $(s).value).length + ($("#orden").selectedIndex > 0 ? 1 : 0);
+  $("#moreBtn").textContent = "Más filtros" + (n ? " (" + n + ")" : "");
+  $("#moreBtn").classList.toggle("on", n > 0);
+}
+$("#moreBtn").addEventListener("click", () => {
+  const abrir = $("#moreF").hidden;
+  $("#moreF").hidden = !abrir;
+  $("#moreBtn").setAttribute("aria-expanded", String(abrir));
+});
+
 function renderList() {
   const q = $("#q").value.trim().toLowerCase();
   const provincia = $("#provincia").value;
@@ -1657,6 +1687,7 @@ function renderList() {
   if (!subOn && $("#subtipo").value) $("#subtipo").value = "";
   const sb = $("#subtipo").value;
   const vf = $("#valor").value, ch = $("#cadena").value, muni = $("#muni").value;
+  syncMore();
   const rate = (c) => permOf(c).valoracion || 0;
   const okVal = (c) => !vf || (vf === "sin" ? !rate(c) : rate(c) >= +vf);
   const ul = $("#list");
@@ -2319,12 +2350,13 @@ function refreshSelects() {
     const con = vis.filter((c) => estadoOf(c) === "concedido").length;
     const capt = vis.reduce((a, c) => a + Math.max(0, ...vigs(c).map((h) => +h.captadores || 0)), 0);
     const seg = vis.filter(seguimientoDue).length;
-    $("#kstrip").innerHTML = '<div class="k"><b>' + vis.length + "</b><span>Puntos</span></div>" +
+    $("#kstrip").innerHTML = '<div class="kg kg-op" role="group" aria-label="Estado de la operación">' +
+      '<div class="k"><b>' + vis.length + "</b><span>Puntos</span></div>" +
       '<div class="k"><b>' + con + "</b><span>Permisos vigentes</span></div>" +
       '<div class="k"><b>' + capt + "</b><span>Captadores hoy</span></div>" +
-      '<button type="button" id="segBtn" class="k' + (seg ? " hot" : "") + '" aria-pressed="' + onlySeg + '" title="Mostrar solo los seguimientos de hoy o atrasados"><b>' + seg + "</b><span>Seguimientos</span></button>" +
-      gamTileHTML() +
-      '<button type="button" id="logrosK" class="k" title="Ver mis insignias"><b>' + Object.keys(logros.n).filter((k) => logros.n[k] > 0).length + "</b><span>Insignias</span></button>";
+      '<button type="button" id="segBtn" class="k' + (seg ? " hot" : "") + '" aria-pressed="' + onlySeg + '" title="Mostrar solo los seguimientos de hoy o atrasados"><b>' + seg + "</b><span>Seguimientos</span></button></div>" +
+      '<div class="kg kg-gam" role="group" aria-label="Mi progreso">' + gamTileHTML() +
+      '<button type="button" id="logrosK" class="k" title="Ver mis insignias"><b>' + Object.keys(logros.n).filter((k) => logros.n[k] > 0).length + "</b><span>Insignias</span></button></div>";
     $("#logrosK").addEventListener("click", openLogros);
     $("#gamK").addEventListener("click", openGam); gamMenu();
     $("#segBtn").addEventListener("click", () => { onlySeg = !onlySeg; $("#segBtn").setAttribute("aria-pressed", onlySeg); refilter(); });
