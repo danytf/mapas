@@ -19,6 +19,7 @@ on:
       - "scripts/test-ui-fixes.mjs"
       - "scripts/test-list-performance.mjs"
       - "scripts/test-admin-panel.mjs"
+      - "scripts/test-app-mejoras.mjs"
       - "scripts/test-a11y-fase-d.mjs"
       - ".github/workflows/audit-static-catalog.yml"
   pull_request:
@@ -57,6 +58,8 @@ jobs:
         run: node scripts/test-a11y-fase-d.mjs index.html
       - name: Test admin panel screen
         run: node scripts/test-admin-panel.mjs
+      - name: Test app improvements (municipality filter, add-point dropdowns, deactivate points)
+        run: node scripts/test-app-mejoras.mjs
       - name: Run XSS regression audit
         run: node scripts/audit-xss.mjs index.html
       - name: Check keyboard access to statistics panel rows

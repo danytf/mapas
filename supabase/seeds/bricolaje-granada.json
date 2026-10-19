@@ -1,0 +1,26 @@
+{
+  "format_version": 1,
+  "source": "openstreetmap",
+  "source_license": "ODbL 1.0 (c) OpenStreetMap contributors, https://www.openstreetmap.org/copyright",
+  "queried_at": "2026-10-19",
+  "osm_base_timestamp": "2026-10-18T23:32:49Z",
+  "selection_criteria": "Grandes cadenas de bricolaje de la provincia de Granada distintas de Leroy Merlin (decision del titular, 19/10/2026). Consulta Overpass: shop=doityourself, shop=hardware con nombre Brico/Bauhaus/AKI/Bricor y brand equivalente. Resultado: una sola cadena, Brico Depot. No aparecen Bricomart, Bauhaus, AKI ni Bricor; no se ha verificado que no existan.",
+  "province": "Granada",
+  "establishments": [
+    {
+      "source_ref": "catalogo-granada:bricolaje:brico-depot-pulianas-calle-de-orson-welles:pulianas:calle-de-orson-welles",
+      "name": "Brico Dépôt Pulianas – Calle de Orson Welles",
+      "category": "Bricolaje",
+      "subtype": null,
+      "municipality": "Pulianas",
+      "address": "Calle de Orson Welles",
+      "postal_code": "18197",
+      "latitude": 37.21284,
+      "longitude": -3.62294,
+      "location_precision": "address",
+      "location_source": "openstreetmap:way/311295370",
+      "province": "Granada",
+      "status": "active"
+    }
+  ]
+}
