@@ -153,6 +153,8 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261018231945_admin_panel_users.sql
       - name: Move privileged user listing to the private schema behind an invoker wrapper
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261018232107_admin_list_users_private_wrapper.sql
+      - name: Add bulk postal code function for administrators
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261019191833_admin_set_postal_codes.sql
       - name: Verify every migration file is applied by this workflow
         shell: bash
         run: |
@@ -178,5 +180,7 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/audit_db_role.sql
       - name: Run admin panel tests
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/admin_panel.sql
+      - name: Run bulk postal code tests
+        run: psql -v ON_ERROR_STOP=1 -f supabase/tests/admin_postal_codes.sql
       - name: Run exhaustive authorization matrix
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/rls_matrix.sql
