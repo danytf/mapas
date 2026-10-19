@@ -1,6 +1,6 @@
 # Carga N2: resto de categorías de Andalucía (7 categorías en un lote)
 
-Estado: **preparada y probada en local; pendiente de aplicar en producción.** Lote: `supabase/seeds/andalucia-resto/` (JSON de origen, `informe.md`, `excepciones.csv` y un SQL por provincia). Definición: `scripts/catalogue/categorias/andalucia-resto.json`. Se aplica con `cargar.sh` (ver abajo) bajo la aprobación permanente del titular para lotes que pasan los umbrales.
+Estado: **cargada en producción el 19/10/2026** con `cargar.sh` desde el equipo del titular (aprobación permanente para lotes que pasan los umbrales) y verificada en solo lectura: 1.722 → 5.897 puntos (+4.175), reparto por categoría y provincia idéntico al lote, 0 `source_ref` repetidos, 0 puntos incompletos, 0 códigos postales de otra provincia, 1.060 sin código postal y 78 sin calle (anotados), 4.175 altas en `audit_log`, base de 21 MB. Lote: `supabase/seeds/andalucia-resto/` (JSON de origen, `informe.md`, `excepciones.csv` y un SQL por provincia). Definición: `scripts/catalogue/categorias/andalucia-resto.json`.
 
 Fuente: `andalucia-latest.osm.pbf` (base de OpenStreetMap del 17/10/2026 20:20:51 UTC). Origen: OpenStreetMap (ODbL 1.0, © colaboradores de OpenStreetMap).
 
@@ -38,10 +38,10 @@ Por provincia: Málaga 857, Sevilla 894, Cádiz 688, Jaén 572, Almería 506, C�
 
 Carga de los 7 trozos en `mapas_test`: 4.175 puntos; segunda carga sin cambios (idempotente); 1.060 sin código postal y 78 sin calle, igual que el informe; sin duplicados de `source_ref`.
 
-## Para cargar en producción
+## Cómo se cargó
 
 ```
 bash scripts/catalogue/cargar.sh supabase/seeds/andalucia-resto andalucia-resto catalogo-andalucia:andalucia-resto:
 ```
 
-Pide la cadena de conexión sin eco y muestra el recuento antes y después (esperado: +4.175 en total y 4.175 con ese prefijo). Los SQL suman 1 MB, demasiado para pasarlos por el MCP sin riesgo de errores de transcripción; por eso los ejecuta el titular, un único comando.
+Los SQL suman 1 MB, demasiado para pasarlos por el MCP sin riesgo de errores de transcripción; por eso los ejecutó el titular, un único comando.
