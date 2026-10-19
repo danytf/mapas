@@ -84,3 +84,5 @@ Pendientes y recurrentes:
 3. **Pruebas manuales no automatizables** (aplazadas, ver `docs/AUDITORIA_FASE_D_ACCESIBILIDAD_2026-10-18.md`): lectores de pantalla reales, zoom y objetivos táctiles.
 4. **Decisiones de producto**: panel de administración, ampliación del catálogo a toda España y revisar H-25 al ampliar; revisar el plan de pago si crece el uso (H-24).
 5. Repetir la consulta de índices sin uso con 8-12 semanas de estadísticas (H-36).
+6. **Códigos postales pendientes de escribir (decisión del titular, 19/10/2026: se harán más adelante).** Hay unos 1.060 puntos activos sin código postal. `completar_cp_desde_base.py` ya terminó y su salida está en `~/osm-trabajo/cp-base2.json` (fuera del repositorio). Cuando el titular lo ordene: revisar ese fichero (solo valores de 5 cifras con el prefijo de la provincia) y escribirlos con `admin_set_postal_codes` desde la sesión de administrador (máximo 2.000 por llamada; ver `docs/CODIGOS_POSTALES_MASIVOS.md`). No se ha escrito nada en Supabase.
+7. **Favoritos de Andalucía por valorar** (~139: supermercados sin zona, puntos que no existen en la base, etc.); el titular no quiere revisarlos uno a uno.
