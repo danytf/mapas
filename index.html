@@ -123,6 +123,14 @@
   .linkbtn { height: 28px; padding: 0 10px; border: 0; background: transparent; color: var(--accent); font-size: var(--fs-label-lg); font-weight: 600; border-radius: var(--r-control); cursor: pointer; white-space: nowrap; }
   .linkbtn:hover { background: var(--accent-soft); border-color: transparent; }
   .linkbtn[hidden] { display: none; }
+  #list li.state { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 36px 24px; text-align: center; cursor: default; color: var(--muted); border-bottom: 0; }
+  #list li.state b { color: var(--fg); font-size: var(--fs-body); font-weight: 650; }
+  #list li.state span { font-size: var(--fs-label-lg); max-width: 30ch; }
+  #list li.state button { margin-top: 8px; height: 36px; padding: 0 16px; color: var(--accent); border-color: var(--accent); background: transparent; }
+  #list li.sk { display: grid; gap: 10px; padding: 16px; cursor: default; border-bottom: 0; }
+  li.sk i { display: block; height: 52px; border-radius: var(--r-card); background: linear-gradient(90deg, var(--ok-bg) 0, var(--line) 50%, var(--ok-bg) 100%); background-size: 200% 100%; animation: sk 1.2s linear infinite; }
+  @keyframes sk { to { background-position: -200% 0; } }
+  @media (prefers-reduced-motion: reduce) { li.sk i { animation: none; } }
   .status { font-size: var(--fs-label); color: var(--muted); font-variant-numeric: tabular-nums; }
   .bar { height: 2px; background: var(--line); border-radius: 2px; overflow: hidden; margin: 2px 0 0; }
   .bar i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .3s; }
@@ -1983,10 +1991,24 @@ function renderList() {
     ul.appendChild(mas);
   }
   if (!ul.children.length) {
+    // Estados de la lista: cargando, error de carga (sin datos locales), ámbito vacío y sin coincidencias.
     const empty = document.createElement("li");
-    empty.className = "grp";
+    empty.className = "state";
     empty.setAttribute("role", "presentation");
-    empty.textContent = CENTERS.length ? "Ningún punto coincide con la búsqueda y los filtros." : "No hay puntos que mostrar.";
+    const err = window.mapaSession && window.mapaSession.catalogueError;
+    if (window.mapaListLoading) {
+      ul.setAttribute("aria-busy", "true");
+      empty.className = "sk";
+      empty.innerHTML = "<i></i><i></i><i></i><i></i>";
+    } else if (err) {
+      empty.innerHTML = "<b>No se pudo cargar el mapa</b><span>" + esc(err) + " No se muestran datos antiguos. Vuelve a entrar para reintentar.</span>";
+    } else if (!CENTERS.length) {
+      empty.innerHTML = "<b>Este ámbito aún no tiene puntos</b><span>No hay establecimientos activos con coordenadas en Supabase para tu ámbito.</span>";
+    } else {
+      empty.innerHTML = "<b>Ningún punto coincide con la búsqueda y los filtros.</b><span>Prueba con menos filtros o con otra palabra.</span>";
+      if (nAct) { const b = document.createElement("button"); b.type = "button"; b.textContent = "Limpiar filtros"; b.addEventListener("click", () => $("#clrBtn").click()); empty.appendChild(b); }
+    }
+    if (!window.mapaListLoading) ul.removeAttribute("aria-busy");
     ul.appendChild(empty);
   }
 }
@@ -2891,6 +2913,7 @@ renderList();
   async function syncCatalogueFromSupabase() {
     const status = document.getElementById("status");
     const sessionInfo = window.mapaSession;
+    window.mapaListLoading = true; renderList();
     const clearDisplayedCatalogue = () => {
       cluster.clearLayers();
       Object.keys(markers).forEach(key => delete markers[key]);
@@ -2975,6 +2998,7 @@ renderList();
 
       makeMarkers(CENTERS);
       refreshSelects();
+      window.mapaListLoading = false;
       renderList();
       if (rows.length) fitAll();
       else map.setView(SPAIN_CENTER, 6);
@@ -2993,8 +3017,9 @@ renderList();
       }
       return true;
     } catch (error) {
-      clearDisplayedCatalogue();
+      window.mapaListLoading = false;
       window.mapaSession.catalogueError = friendlyError(error, "Error de lectura del catálogo.");
+      clearDisplayedCatalogue();
       if (status) status.textContent = "No se pudo cargar el mapa desde Supabase. No se muestran datos locales. " + window.mapaSession.catalogueError;
       console.error("[Mapa] Error cargando el catálogo de Supabase:", error);
       return false;
