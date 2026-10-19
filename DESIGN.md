@@ -157,7 +157,9 @@ La ficha, el calendario y sus chips usan `--st-concedido`, `--st-solicitado`, `-
 - **Categorías:** `--cat-hospital` … `--cat-eventos`, más `--cat-otra` (categoría desconocida) y `--cat-defecto`. La tabla `TIPOS` de `index.html` guarda el nombre del token (`var(--cat-…)`); el contraste del número de la lista se calcula resolviendo el token (`resolveColor`/`inkOn`). Los valores son los de siempre; ahora se pueden afinar en oscuro sin tocar el código.
 - **Gamificación:** `--gam-gold`, `--gam-gold-soft`, `--gam-gold-ink`, `--gam-green`, `--gam-green-bright`, `--gam-amber`, `--gam-xp-a`, `--gam-xp-b`, `--gam-spark`. En oscuro, el dorado suave y su tinta usan `--warn-bg` y `--warn`.
 - **Banda de la cabecera:** `--hd-line`, `--hd-line-2`, `--hd-line-3`, `--hd-fill`.
-- Sin migrar a propósito: los colores de estado del pin y de la leyenda (`ESTADOS`, en JS), las barras de los gráficos en `canvas` y los cuadros de resultado de la geocodificación.
+- **Estado del pin y de la leyenda:** `--pin-sin`, `--pin-sin-line`, `--pin-solicitado`, `--pin-concedido`, `--pin-denegado`, `--pin-caducado`, `--pin-cancelado`. En oscuro, `--pin-denegado` pasa a `#e2e8f0` para que se vea sobre el mapa oscuro. La tinta de la etiqueta de estado se calcula con `inkOn` a partir del color resuelto.
+- **Confeti, niebla de conquista y cuadro de resultado de la ubicación:** `--confetti-1…6`, `--fog-0…3` y `--res-ok-*` / `--res-err-*`. El confeti (`canvas`) y la niebla (Leaflet) necesitan un color real, así que se resuelven con `resolveColor` al dibujar.
+- Sin migrar a propósito: nada de lo que se dibuja con color fijo en la hoja de estilos de Leaflet.
 
 ## Typography
 
