@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-19T14:30:00Z",
+  "title": "Design System: Mapa del Responsable de Gestión de Recursos de Wesser",
+  "extensions": {
+    "colorMeta": {
+      "wesser-red": { "role": "primary", "displayName": "Rojo Wesser", "canonical": "#c8102e" },
+      "ink": { "role": "neutral", "displayName": "Tinta", "canonical": "#0f1722" },
+      "cool-paper": { "role": "neutral", "displayName": "Papel frío", "canonical": "#eef0f3" },
+      "panel-white": { "role": "neutral", "displayName": "Panel blanco", "canonical": "#ffffff" },
+      "state-granted": { "role": "data", "displayName": "Concedido", "canonical": "#22c55e" },
+      "state-requested": { "role": "data", "displayName": "Solicitado", "canonical": "#fbbf24" }
+    },
+    "typographyMeta": {
+      "headline": { "displayName": "Titular", "purpose": "Título de la app y de cada diálogo." },
+      "label": { "displayName": "Etiqueta", "purpose": "Etiquetas, chips y metadatos; el tamaño más usado." },
+      "numeral": { "displayName": "Cifra", "purpose": "Indicadores y números de día; siempre tabulares." }
+    },
+    "shadows": [
+      { "name": "flotante", "value": "0 1px 2px rgba(15,23,34,.06), 0 8px 24px rgba(15,23,34,.10)", "purpose": "Menú, controles del mapa, ventanas emergentes, leyenda y tarjetas al pasar el ratón." },
+      { "name": "borde-columna", "value": "4px 0 24px rgba(15,23,34,.06)", "purpose": "Separa la lista del mapa." },
+      { "name": "dialogo", "value": "0 24px 60px rgba(15,23,34,.35)", "purpose": "Diálogos modales sobre un velo desenfocado." },
+      { "name": "foco", "value": "0 0 0 3px var(--accent-soft)", "purpose": "Halo de campos enfocados." }
+    ],
+    "motion": [
+      { "name": "hover-rapido", "value": ".12s", "purpose": "Cambios de fondo y borde al pasar el ratón." },
+      { "name": "barra-calendario", "value": ".55s cubic-bezier(.2,.7,.2,1)", "purpose": "Crecimiento de la silueta del calendario; solo con movimiento permitido (prefers-reduced-motion)." }
+    ],
+    "breakpoints": [
+      { "name": "paneles-una-columna", "value": "900px" },
+      { "name": "intermedio", "value": "1180px" },
+      { "name": "movil", "value": "760px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botón",
+      "kind": "button",
+      "refersTo": "button-default",
+      "description": "Acción secundaria por defecto: blanco con borde firme.",
+      "html": "<button class=\"ds-btn\">Exportar CSV</button>",
+      "css": ".ds-btn { font: inherit; font-weight: 550; height: 36px; padding: 0 14px; border-radius: 8px; cursor: pointer; border: 1px solid #cfd5de; background: #fff; color: #141b26; transition: background .12s, border-color .12s; } .ds-btn:hover { background: #f3f5f8; border-color: #5c6779; } .ds-btn:focus-visible { outline: 2px solid #c8102e; outline-offset: 2px; }"
+    },
+    {
+      "name": "Botón principal",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "La acción que cierra un formulario (Entrar, Guardar).",
+      "html": "<button class=\"ds-btn-primary\">Entrar</button>",
+      "css": ".ds-btn-primary { font: inherit; font-weight: 640; height: 42px; padding: 0 18px; border: 0; border-radius: 9px; background: #c8102e; color: #fff; cursor: pointer; transition: background .12s; } .ds-btn-primary:hover { background: #9f0c24; } .ds-btn-primary:focus-visible { outline: 2px solid #c8102e; outline-offset: 2px; }"
+    },
+    {
+      "name": "Campo de texto",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Campo de búsqueda o formulario con halo de foco.",
+      "html": "<input class=\"ds-input\" placeholder=\"Buscar por nombre o calle\">",
+      "css": ".ds-input { font: inherit; height: 38px; width: 220px; padding: 0 12px; border: 1px solid #cfd5de; border-radius: 8px; background: #fff; color: #141b26; transition: border-color .12s, box-shadow .12s; } .ds-input:hover { border-color: #5c6779; } .ds-input:focus { border-color: #c8102e; box-shadow: 0 0 0 3px #fdecef; outline: 0; }"
+    },
+    {
+      "name": "Indicador",
+      "kind": "card",
+      "refersTo": "kpi-card",
+      "description": "Cifra grande con etiqueta; variante verde para lo concedido y ámbar para lo que requiere atención.",
+      "html": "<div class=\"ds-kpi\"><b>12</b><span>Captadores concedidos</span></div>",
+      "css": ".ds-kpi { border: 1px solid #e2e6ec; border-radius: 12px; padding: 12px 14px; background: #fff; width: 170px; } .ds-kpi b { display: block; font-size: 28px; font-weight: 680; line-height: 1.05; letter-spacing: -.02em; font-variant-numeric: tabular-nums; } .ds-kpi span { font-size: 12px; color: #5c6779; }"
+    },
+    {
+      "name": "Chip de filtro",
+      "kind": "chip",
+      "refersTo": "filter-chip",
+      "description": "Filtro de estado con punto de color y aria-pressed.",
+      "html": "<button class=\"ds-chip\" aria-pressed=\"true\"><i></i>Concedido</button>",
+      "css": ".ds-chip { height: 32px; padding: 0 13px; border-radius: 999px; font: inherit; font-size: 12.5px; display: inline-flex; align-items: center; gap: 7px; background: #fff; color: #141b26; border: 1px solid #141b26; cursor: pointer; } .ds-chip i { width: 10px; height: 10px; border-radius: 50%; background: #22c55e; border: 2px solid #22c55e; } .ds-chip:focus-visible { outline: 2px solid #c8102e; outline-offset: 2px; }"
+    },
+    {
+      "name": "Tarjeta de permiso",
+      "kind": "custom",
+      "refersTo": "kpi-card",
+      "description": "Permiso en el calendario: borde izquierdo de 5 px con el color del estado, estado en texto, punto, ONG y captadores.",
+      "html": "<button class=\"ds-perm\"><span class=\"st\">Concedido</span><strong>Hospital Almería Centro</strong><span class=\"wh\">Almería · Hospital</span><span class=\"meta\"><span class=\"ong\">AECC</span><span class=\"n\">4</span></span></button>",
+      "css": ".ds-perm { width: 220px; text-align: left; display: grid; gap: 3px; padding: 9px 10px 9px 12px; border: 1px solid #e2e6ec; border-left: 5px solid #22c55e; border-radius: 10px; background: #fff; color: #141b26; font: inherit; cursor: pointer; } .ds-perm .st { font-size: 11.5px; font-weight: 650; color: #14532d; } .ds-perm strong { font-size: 13.5px; font-weight: 650; } .ds-perm .wh { font-size: 12px; color: #5c6779; } .ds-perm .meta { display: flex; align-items: center; margin-top: 3px; } .ds-perm .ong { font-size: 11.5px; font-weight: 650; padding: 2px 9px; border-radius: 999px; background: hsl(150 65% 91%); color: hsl(150 55% 22%); } .ds-perm .n { margin-left: auto; font-weight: 700; } .ds-perm:hover { box-shadow: 0 1px 2px rgba(15,23,34,.06), 0 8px 24px rgba(15,23,34,.10); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "La sala de control",
+    "overview": "La usa una persona de oficina que solicita permisos, los sigue y decide dónde enviar a los equipos: su puesto de mando. Mapa casi a sangre, lista a la izquierda y paneles encima. Tinta y papel frío con un único acento, el rojo Wesser; el resto del color son datos. Tono cercano y motivador: la gamificación tiene presencia propia pero nunca compite con el flujo de permisos.",
+    "keyCharacteristics": [
+      "Fondo gris frío, paneles blancos con borde fino y sombra solo en lo que flota.",
+      "Un solo acento (rojo Wesser); el color restante son datos, no decoración.",
+      "Los estados de permiso se dicen siempre con texto además de con color.",
+      "Densidad alta pero ordenada: números tabulares, etiquetas pequeñas.",
+      "Modo claro y oscuro con los mismos roles."
+    ],
+    "rules": [
+      { "name": "The One Voice Rule", "body": "El rojo Wesser aparece en menos del 10 % de cualquier pantalla.", "section": "colors" },
+      { "name": "The Data Color Rule", "body": "Los colores de estado significan estado de permiso, y solo eso.", "section": "colors" },
+      { "name": "The Words Beside Color Rule", "body": "Un estado nunca se comunica solo con color.", "section": "colors" },
+      { "name": "The Tabular Rule", "body": "Toda cifra que se compara va en números tabulares.", "section": "typography" },
+      { "name": "The Flat-By-Default Rule", "body": "Una superficie es plana hasta que flota o responde.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do reservar el rojo Wesser (#c8102e) para acción, foco y «hoy».",
+      "Do decir cada estado con texto además de color, y mantener contraste de al menos 4,5:1 en texto y 3:1 en bordes de controles.",
+      "Do usar números tabulares para todo lo que se compara.",
+      "Do dar a la gamificación presencia propia sin mezclarla con el flujo de permisos.",
+      "Do mantener objetivos táctiles de 44 px en pantallas sin cursor.",
+      "Do definir modo claro y oscuro con los mismos roles."
+    ],
+    "donts": [
+      "Don't parecer una app de juego infantil: la herramienta sigue siendo seria y profesional.",
+      "Don't convertirse en un panel corporativo genérico de tarjetas iguales llenas de ceros.",
+      "Don't parecer una plantilla de IA: sin degradados decorativos, brillos de color, bordes de acento por costumbre ni sombras anchas bajo un borde fino.",
+      "Don't usar los colores de estado como decoración.",
+      "Don't añadir tamaños de letra o radios fuera de la escala sin una razón de jerarquía."
+    ]
+  }
+}
