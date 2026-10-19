@@ -144,6 +144,9 @@ Paleta fría y neutra con una sola voz cálida: el rojo Wesser sobre tinta y pap
 - **Concedido** (#22c55e), **Solicitado** (#fbbf24), **Denegado** (#111827), **Caducado** (#94a3b8), **Cancelado** (#dc2626); «sin solicitar» es blanco con borde gris. Cada uno lleva siempre su etiqueta de texto.
 - **Concedido profundo** (#14532d) sobre **tinte verde** (#dcfce7) y **pendiente profundo** (#8a5a00) sobre **tinte ámbar** (#fff3d6) para indicadores destacados.
 
+### Tokens de estado en paneles
+La ficha, el calendario y sus chips usan `--st-concedido`, `--st-solicitado`, `--st-caducado`, `--st-denegado` y `--st-cancelado`, con variante en modo oscuro; todos cumplen 3:1 sobre el panel en claro y oscuro (comprobado en `test-a11y-fase-d`). Los anillos de los pines del mapa siguen siendo los de la tabla de arriba porque el mapa es siempre claro.
+
 ### Named Rules
 **The One Voice Rule.** El rojo Wesser aparece en menos del 10 % de cualquier pantalla. Si todo es rojo, nada pide atención.
 **The Data Color Rule.** Verde, ámbar, gris, negro y rojo de estado significan estado de permiso, y solo eso. No se usan para decorar.

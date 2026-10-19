@@ -80,7 +80,13 @@ for (const [mode, v] of [["claro", light], ["oscuro", dark]]) {
   add(`estrella sin marcar sobre --panel (gráfico, ${mode})`, v["star-off"], v.panel, G);
   add(`estrella marcada sobre --panel (gráfico, ${mode})`, v["star-on"], v.panel, G);
   add(`--err (errores de la ficha) sobre --panel (${mode})`, v.err, v.panel);
+  // Color de estado del permiso en la ficha, el calendario y sus chips (borde o punto, 3:1; el estado también va en texto).
+  for (const k of ["concedido", "solicitado", "caducado", "denegado", "cancelado"]) {
+    if (!v["st-" + k]) { fail(`falta --st-${k} en modo ${mode}`); continue; }
+    add(`--st-${k} sobre --panel (gráfico, ${mode})`, v["st-" + k], v.panel, G);
+  }
 }
+if (/(\.cal-card|\.cal-chip|#ficha \.ef)\.s-[a-z]+ \{[^}]*--st: #[0-9a-f]{3,6}/i.test(html)) fail("los colores de estado de la ficha y el calendario deben usar los tokens --st-*, no literales");
 // Modo oscuro: sobreescrituras de la gamificación.
 const darkOv = (sel) => html.match(new RegExp(sel.replace(/[.#]/g, "\\$&") + " \\{ color: (#[0-9a-f]{6}); \\}"))?.[1];
 const up = darkOv("#dlgGam em.up"), dn = darkOv("#dlgGam em.dn");
