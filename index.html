@@ -31,6 +31,9 @@
     --ok-bg: #f3f5f8;
     --ok: #14532d;
     --ok-soft: #dcfce7;
+    --err: #b3261e;
+    --star-off: #8a94a3;
+    --star-on: #c47a00;
     --shadow: 0 1px 2px rgba(15,23,34,.06), 0 8px 24px rgba(15,23,34,.10);
     --r: 10px;
     --font: "Figtree", "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
@@ -41,6 +44,7 @@
       --line: #223046; --line-2: #2d3d56; --accent: #ff4d63; --accent-d: #ff7084; --accent-fg: #1a0509; --accent-soft: #3a121b;
       --warn: #f3c46b; --warn-bg: #33270d; --ok-bg: #19243a; --ok: #86efac; --ok-soft: #12341f;
       --ink: #070b12; --ink-2: #111a29;
+      --err: #ff7084; --star-off: #7f8da3; --star-on: #f59e0b;
       --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.45);
     }
     #dlgGam em.up { color: #4ade80; }
@@ -156,57 +160,129 @@
   .leaflet-control-layers { border: 0 !important; border-radius: 10px !important; box-shadow: var(--shadow) !important; background: var(--panel); color: var(--fg); }
   .leaflet-control-layers-expanded { padding: 8px 12px !important; font-size: 12.5px; }
   .leaflet-control-attribution { background: rgba(255,255,255,.82) !important; font-size: 10px; border-top-left-radius: 8px; }
-  /* Popup */
-  .leaflet-popup-content-wrapper { border-radius: 14px; box-shadow: var(--shadow); padding: 2px; }
-  .leaflet-popup-content { margin: 14px 16px; font: 13px/1.45 var(--font); color: #141b26; }
-  .leaflet-popup-content { max-height: min(780px, 88vh); overflow-y: auto; scrollbar-width: thin; padding-right: 4px; }
-  /* La ficha del punto es siempre clara (fondo blanco de Leaflet): fija sus colores aunque el sistema esté en oscuro. */
-  .leaflet-popup-content { --fg: #141b26; --muted: #5c6779; --panel: #ffffff; --bg: #eef0f3; --line: #e2e6ec; --line-2: #cfd5de; --accent: #c8102e; --accent-d: #9f0c24; --accent-soft: #fdecef; --warn: #8a5a00; --warn-bg: #fff3d6; --ok: #14532d; --ok-bg: #f3f5f8; --ok-soft: #dcfce7; }
+  /* Burbuja mínima del mapa: la ficha completa vive en el panel lateral (#ficha). */
+  .leaflet-popup-content-wrapper { border-radius: 12px; box-shadow: var(--shadow); padding: 2px; }
+  .leaflet-popup-content { margin: 8px 12px; font: 13px/1.35 var(--font); color: #141b26; }
+  .leaflet-popup-content .mini strong { display: block; font-size: 13.5px; font-weight: 650; letter-spacing: -.01em; }
+  .leaflet-popup-content .mini span { font-size: 12px; color: #5c6779; }
   input::placeholder, textarea::placeholder { color: var(--muted); opacity: 1; }
-  .leaflet-popup-content strong { font-size: 15px; font-weight: 650; letter-spacing: -.01em; line-height: 1.25; display: block; }
-  .leaflet-popup-close-button { top: 8px !important; right: 8px !important; }
-  .pform { display: grid; gap: 7px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #e2e6ec; }
-  .pform label { font-size: 12px; font-weight: 560; color: #697384; display: grid; gap: 3px; }
-  .pform select, .pform input, .pform textarea { font: inherit; font-weight: 400; padding: 6px 8px; border: 1px solid #cfd5de; border-radius: 7px; width: 100%; background: #fff; color: #141b26; }
-  .pform select:focus, .pform input:focus, .pform textarea:focus { border-color: #c8102e; box-shadow: 0 0 0 3px #fdecef; outline: 0; }
-  .pform textarea { resize: vertical; min-height: 48px; }
-  .pform button { height: 34px; padding: 0 12px; background: #c8102e; color: #fff; border-color: #c8102e; }
-  .pform button:hover { background: #9f0c24; border-color: #9f0c24; }
-  .stars { display: flex; align-items: center; gap: 2px; }
-  .pform .stars button { height: auto; padding: 0 1px; border: 0; background: none; color: #8a94a3; font-size: 24px; line-height: 1; cursor: pointer; }
-  .pform .stars button:hover { background: none; }
-  .pform .stars button.on { color: #c47a00; }
-  .pform .stars .sv { font-size: 12px; color: #697384; margin-left: 6px; }
-  a.how { display: inline-block; margin-top: 6px; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; color: #fff; background: #0f1722; text-decoration: none; }
-  a.how:hover { background: #1b2636; }
-  .pform .ef { padding: 6px 8px; background: #f3f5f8; border-radius: 7px; }
-  .pform .hist { border-top: 1px solid #e2e6ec; padding-top: 8px; display: grid; gap: 5px; }
-  .pform .hist h4 { margin: 0; font-size: 12px; color: #141b26; }
-  .pform .hist ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; max-height: none; overflow: visible; }
-  .pform .hist li { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 4px 6px; font-size: 12px; background: #f3f5f8; border-radius: 6px; padding: 4px 8px; border: 0; cursor: default; }
-  .pform .hist li::before { display: none; }
-  .pform .hist li:hover { background: #f3f5f8; }
-  .pform .hist li.vig { background: #dcfce7; }
-  .pform .hist li > span { flex: 1 1 100%; overflow-wrap: anywhere; }
-  .pform .hist li button { height: 22px; padding: 0 7px; background: #fff; color: #b3261e; border-color: #b3261e; font-size: 12px; }
-  .pform .pinfo { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 6px 0; }
-  .pform .pinfo > div { background: #f2f6f5; border-radius: 6px; padding: 5px 8px; display: flex; flex-direction: column; font-size: 12px; color: #5b726c; }
-  .pform .pinfo b { font-size: 13px; color: #141b26; font-weight: 600; }
-  .pform .phint { font-size: 12px; color: #5b726c; margin: 2px 0 6px; }
-  .pform .hist .hint { font-size: 12px; color: #5b726c; margin: 0 0 4px; }
-  .pform .hist details.aform { margin: 6px 0 2px; }
-  .pform .hist details.aform > summary { cursor: pointer; font-size: 12px; font-weight: 600; color: #8a1020; padding: 3px 0; }
-  .pform .hist details.aform[open] > summary { margin-bottom: 4px; }
-  .pform .hist .row3 { display: grid; grid-template-columns: 1fr 1fr 74px; gap: 5px; }
-  .pform .blk { display: grid; gap: 6px; padding: 8px; border: 1px solid #e2e6ec; border-radius: 8px; background: #fafbfc; }
-  .pform .blk.off { display: none !important; }
-  .pform .blk h4 { margin: 0; font-size: 12px; color: #141b26; }
-  .pform .blk .hint { font-size: 12px; color: #697384; }
-  .pform .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-  .pform .h-cancel { background: #fff; color: #5b6574; border-color: #cfd5de; }
-  .pform .saved { font-size: 12px; color: #14532d; min-height: 14px; }
-  .pform button.danger { background: #fff; color: #b3261e; border-color: #b3261e; }
-  .pform button.danger:hover { background: #fdecec; }
+
+  /* Ficha del punto: panel lateral derecho (hoja a pantalla completa en pantallas estrechas). */
+  main.fi-open { grid-template-columns: 408px 1fr 440px; }
+  #ficha { background: var(--panel); border-left: 1px solid var(--line); min-width: 0; min-height: 0; flex-direction: column; box-shadow: -4px 0 24px rgba(15,23,34,.06); z-index: 2; }
+  #ficha:not([hidden]) { display: flex; }
+  @media (prefers-reduced-motion: no-preference) { #ficha:not([hidden]) { animation: fiIn .18s ease-out; } }
+  @keyframes fiIn { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: none; } }
+  .fi { display: flex; flex-direction: column; min-height: 0; flex: 1; }
+  .fi-top { padding: 10px 18px 12px; border-bottom: 1px solid var(--line); display: grid; gap: 4px; }
+  .fi-kicker { display: flex; align-items: center; gap: 8px; min-height: 32px; }
+  .fi-type { font-size: 12px; font-weight: 600; color: var(--muted); }
+  .fi-close { margin-left: auto; width: 36px; height: 36px; padding: 0; font-size: 24px; line-height: 1; background: transparent; border: 0; color: var(--muted); border-radius: 8px; }
+  .fi-close:hover { background: var(--ok-bg); color: var(--fg); }
+  .fi-title { margin: -2px 0 0; font-size: 17px; font-weight: 680; letter-spacing: -.02em; line-height: 1.2; overflow-wrap: anywhere; }
+  .fi-title { width: fit-content; max-width: 100%; }
+  .fi-title:focus { outline: 0; }
+  .fi-title:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+  .fi-addr { margin: 0; font-size: 14px; }
+  .fi-note { margin: 0; font-size: 12px; color: var(--muted); }
+  .fi-addrrow { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .fi-addrrow a.how { flex: none; }
+  a.how { display: inline-flex; align-items: center; min-height: 34px; padding: 0 14px; border-radius: 8px; font-size: 14px; font-weight: 600; color: #fff; background: var(--ink); text-decoration: none; }
+  a.how:hover { background: var(--ink-2); }
+  .fi-flag { display: flex; align-items: center; gap: 8px 12px; flex-wrap: wrap; margin-top: 4px; padding: 8px 12px; border-radius: 12px; background: var(--warn-bg); color: var(--warn); font-size: 12px; font-weight: 560; }
+  .fi-flag button { height: 32px; padding: 0 12px; font-size: 12px; }
+  #ficha .pform { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+  .fi-scroll { flex: 1; min-height: 0; overflow: auto; padding: 12px 18px 16px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; align-content: start; scrollbar-width: thin; }
+  .fi-state { display: grid; gap: 8px; }
+  #ficha .ef { display: grid; gap: 2px; padding: 12px 14px 12px 16px; border: 1px solid var(--line); border-left: 5px solid var(--st, var(--line-2)); border-radius: 12px; background: var(--panel); }
+  #ficha .ef .st { font-size: 12px; font-weight: 650; color: var(--st-fg, var(--muted)); }
+  #ficha .ef strong { font-size: 17px; font-weight: 680; letter-spacing: -.015em; line-height: 1.25; }
+  #ficha .ef .meta { font-size: 14px; color: var(--muted); }
+  #ficha .ef.s-concedido { --st: #22c55e; --st-fg: var(--ok); }
+  #ficha .ef.s-solicitado { --st: #f59e0b; --st-fg: var(--warn); border-top-style: dashed; border-right-style: dashed; border-bottom-style: dashed; background-image: repeating-linear-gradient(135deg, transparent 0 10px, rgba(245, 158, 11, .09) 10px 20px); }
+  #ficha .ef.s-caducado { --st: #94a3b8; }
+  #ficha .ef.s-denegado { --st: #475569; }
+  #ficha .ef.s-cancelado { --st: #dc2626; }
+  #ficha .pinfo { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  #ficha .pinfo > div { min-width: 0; overflow-wrap: anywhere; background: var(--ok-bg); border-radius: 12px; padding: 8px 10px; display: grid; gap: 1px; font-size: 12px; color: var(--muted); }
+  #ficha .pinfo > div:first-child { grid-column: 1 / -1; }
+  #ficha .pinfo > div.due { background: var(--warn-bg); color: var(--warn); }
+  #ficha .pinfo b { font-size: 14px; font-weight: 650; color: var(--fg); font-variant-numeric: tabular-nums; }
+  #ficha .pinfo > div.due b { color: var(--warn); }
+  .fi-rate { display: flex; align-items: center; gap: 4px 12px; flex-wrap: wrap; }
+  .fi-lab { font-size: 12px; font-weight: 560; color: var(--muted); }
+  #ficha .stars { display: flex; align-items: center; gap: 0; }
+  #ficha .stars button { min-width: 34px; height: 34px; padding: 0; border: 0; background: none; color: var(--star-off); font-size: 24px; line-height: 1; cursor: pointer; }
+  #ficha .stars button:hover { background: none; color: var(--star-on); }
+  #ficha .stars button.on { color: var(--star-on); }
+  #ficha .sv { font-size: 12px; color: var(--muted); }
+  .fi-contact { display: grid; gap: 10px; }
+  #ficha label { display: grid; gap: 4px; font-size: 12px; font-weight: 560; color: var(--muted); }
+  #ficha input, #ficha textarea { font: inherit; font-weight: 400; font-size: 14px; padding: 8px 10px; min-height: 38px; border: 1px solid var(--line-2); border-radius: 8px; background: var(--panel); color: var(--fg); width: 100%; }
+  #ficha input:focus, #ficha textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); outline: 0; }
+  #ficha textarea { resize: vertical; min-height: 60px; }
+  .fi-tabs { display: grid; gap: 12px; }
+  #ficha .ptabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); }
+  #ficha .ptabs button { height: 38px; padding: 0 12px; background: none; color: var(--muted); border: 0; border-bottom: 2px solid transparent; border-radius: 0; font-weight: 600; font-size: 14px; }
+  #ficha .ptabs button:hover { background: none; color: var(--fg); }
+  #ficha .ptabs button[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); }
+  #ficha [data-tab] { display: grid; gap: 10px; align-content: start; }
+  #ficha [data-tab][hidden] { display: none; }
+  .fi-hint { margin: 0; font-size: 12px; color: var(--muted); }
+  #ficha ul.fi-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; overflow: visible; flex: none; }
+  #ficha ul.fi-list li { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 10px; border: 1px solid var(--line); border-left-width: 4px; border-radius: 12px; background: var(--panel); font-size: 12px; cursor: default; }
+  #ficha ul.fi-list li::before { display: none; }
+  #ficha ul.fi-list li:hover { background: var(--panel); }
+  #ficha ul.fi-list li.vig { border-left-color: #22c55e; background: var(--ok-soft); }
+  #ficha ul.fi-list li > span { flex: 1 1 100%; overflow-wrap: anywhere; }
+  #ficha ul.fi-list li button { height: 30px; padding: 0 10px; font-size: 12px; }
+  #ficha ul.fi-list li.fi-none { color: var(--muted); border-left-color: var(--line-2); }
+  #ficha details.aform { border: 1px dashed var(--line-2); border-radius: 12px; padding: 4px 12px 10px; display: grid; gap: 8px; }
+  #ficha details.aform > summary { cursor: pointer; font-size: 14px; font-weight: 600; color: var(--accent); min-height: 34px; display: flex; align-items: center; }
+  #ficha .row3 { display: grid; grid-template-columns: 1fr 1fr 84px; gap: 8px; }
+  .fi-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .fi-msg { font-size: 12px; color: var(--err); min-height: 16px; }
+  #ficha .loc { display: grid; gap: 10px; }
+  #ficha .loc .lrow { display: flex; gap: 8px; flex-wrap: wrap; }
+  #ficha .loc .lb { display: inline-flex; align-items: center; min-height: 34px; font: inherit; font-size: 12px; font-weight: 600; padding: 0 12px; border: 1px solid var(--line-2); border-radius: 8px; background: var(--panel); color: var(--fg); cursor: pointer; text-decoration: none; }
+  #ficha .loc .lb:hover { border-color: var(--accent); color: var(--accent); }
+  #ficha .loc .l-help { margin: 0; font-size: 12px; color: var(--muted); }
+  #ficha .loc .lmsg { font-size: 12px; color: var(--muted); min-height: 16px; }
+  .fi-foot { border-top: 1px solid var(--line); padding: 10px 18px 12px; display: grid; gap: 6px; background: var(--panel); }
+  .fi-status { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 18px; }
+  #ficha .saved { font-size: 12px; color: var(--ok); }
+  .fi-dirty { font-size: 12px; font-weight: 600; color: var(--warn); }
+  .fi-actions { display: flex; gap: 8px; align-items: stretch; }
+  #ficha .f-save { flex: 1; height: 42px; background: var(--accent); color: var(--accent-fg); border-color: var(--accent); font-weight: 640; }
+  #ficha .f-save:hover { background: var(--accent-d); border-color: var(--accent-d); }
+  #ficha .f-save:disabled { opacity: .6; cursor: default; }
+  .fi-more { position: relative; }
+  .fi-more > summary { list-style: none; height: 42px; padding: 0 14px; border: 1px solid var(--line-2); border-radius: 8px; display: flex; align-items: center; cursor: pointer; font-weight: 550; font-size: 14px; background: var(--panel); }
+  .fi-more > summary::-webkit-details-marker { display: none; }
+  .fi-more > summary:hover { border-color: var(--muted); }
+  .fi-more > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .fi-menu { position: absolute; right: 0; bottom: calc(100% + 8px); min-width: 250px; display: grid; gap: 2px; padding: 6px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); z-index: 3; }
+  .fi-menu button { text-align: left; height: 40px; border: 0; background: none; padding: 0 12px; font-size: 14px; }
+  .fi-menu button:hover { background: var(--ok-bg); }
+  .fi-menu button.danger { color: var(--err); }
+  @media (max-width: 900px) {
+    main.fi-open { grid-template-columns: 408px 1fr; }
+    #ficha { position: fixed; inset: 54px 0 0 0; z-index: 1500; border-left: 0; box-shadow: none; }
+  }
+  @media (max-width: 760px) { main.fi-open { grid-template-columns: 1fr; } }
+  /* Objetivos táctiles de 44 px en pantallas estrechas o táctiles. */
+  @media (max-width: 900px), (pointer: coarse) {
+    .fi-close { width: 44px; height: 44px; }
+    #ficha a.how, #ficha .fi-flag button { min-height: 44px; }
+    #ficha .stars button { min-width: 44px; height: 44px; }
+    #ficha .ptabs button { height: 44px; }
+    #ficha ul.fi-list li button { height: 40px; min-width: 44px; }
+    #ficha details.aform > summary { min-height: 44px; }
+    #ficha .loc .lb { min-height: 44px; }
+    #ficha input, #ficha textarea { min-height: 44px; }
+    #ficha .f-save, .fi-more > summary { height: 46px; }
+    .fi-menu button { height: 46px; }
+  }
   .logo { height: 34px; width: auto; display: block; background: #fff; padding: 4px 8px; border-radius: 8px; flex: none; }
   header h1 { flex: 1; min-width: 0; }
   .kstrip { display: flex; align-items: center; gap: 14px; margin-left: auto; }
@@ -224,11 +300,6 @@
   .kstrip .k.hot { background: var(--accent); border-color: var(--accent); }
   .kstrip .k.hot span { color: #ffd9de; }
   .kstrip .k[aria-pressed="true"] { box-shadow: 0 0 0 2px #fff inset; }
-  .ptabs { display: flex; gap: 2px; border-bottom: 1px solid #e2e6ec; margin: -2px 0 2px; }
-  .pform .ptabs button { height: 30px; padding: 0 10px; background: none; color: #697384; border: 0; border-bottom: 2px solid transparent; border-radius: 0; font-size: 12.5px; font-weight: 600; }
-  .pform .ptabs button:hover { background: none; color: #141b26; border-color: transparent; }
-  .pform .ptabs button[aria-selected="true"] { color: #c8102e; border-bottom-color: #c8102e; background: none; }
-  .pform [hidden] { display: none !important; }
   li.grp { display: block; cursor: default; padding: 9px 16px 7px; font-size: 12px; font-weight: 680; color: var(--muted); background: var(--bg); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 1; }
   li.grp::before { display: none; }
   li.grp:hover { background: var(--bg); }
@@ -272,7 +343,6 @@
   #admBody[aria-busy="true"] { opacity: .6; pointer-events: none; }
   li.inactive .num { filter: grayscale(1); }
   li.inactive strong { text-decoration: line-through; text-decoration-thickness: 1px; }
-  .pform .f-inact { background: #fff; color: #141b26; border: 1px solid #cfd5de; }
   .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); gap: 10px; margin-bottom: 18px; }
   .kpi { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; background: var(--panel); }
   .kpi b { display: block; font-size: 28px; font-weight: 680; line-height: 1.05; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
@@ -482,13 +552,6 @@
   @keyframes lupop { from { transform: scale(.6); opacity: 0; } }
   @media (prefers-reduced-motion: reduce) { #xpfly div, #lvlUp, #lvlUp .lu { animation: none; } }
   .lg-note { font-size: 12px; color: var(--muted); margin: 12px 0 0; }
-  details.loc { margin: 8px 0 4px; border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; font-size: 12px; }
-  details.loc summary { cursor: pointer; font-weight: 600; color: var(--fg); }
-  .loc .lrow { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0 6px; }
-  .loc .lb { font: inherit; font-size: 12px; font-weight: 600; padding: 5px 9px; border: 1px solid var(--line-2); border-radius: 7px; background: var(--panel); color: var(--fg); cursor: pointer; text-decoration: none; height: auto; }
-  .loc .lb:hover { border-color: var(--accent); color: var(--accent); }
-  .loc .l-in { width: 100%; font: inherit; font-size: 12px; padding: 6px 8px; border: 1px solid var(--line-2); border-radius: 7px; background: var(--panel); color: var(--fg); box-sizing: border-box; }
-  .loc .lmsg { font-size: 12px; color: var(--muted); min-height: 14px; margin-top: 4px; }
   html.lock header, html.lock main { visibility: hidden; }
   #login { display: none; position: fixed; inset: 0; z-index: 5000; background: var(--bg); place-items: center; padding: 16px; }
   html.lock #login { display: grid; }
@@ -608,6 +671,7 @@
     <ul id="list"></ul>
   </aside>
   <div id="map" role="region" aria-label="Mapa de centros sanitarios"></div>
+  <div id="ficha" role="complementary" aria-label="Ficha del punto" hidden></div>
 </main>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
@@ -1090,45 +1154,107 @@ function makeIcon(c) {
   });
 }
 
-function popupFor(c, pos) {
+// Burbuja mínima del mapa: la ficha completa vive en el panel lateral (#ficha), que se abre con el evento popupopen.
+function popupFor(c) {
+  const b = document.createElement("div");
+  b.className = "mini"; b.dataset.cid = String(c.id);
+  b.innerHTML = "<strong>" + esc(c.name.replace(/ – .*$/, "")) + "</strong><span>" + esc(townOf(c)) + "</span>";
+  return b;
+}
+
+// Ficha del punto (panel lateral): cabecera con dirección y avisos; estado, valoración, contacto y notas siempre visibles;
+// solicitudes, concesiones y ubicación en pestañas; Guardar fijo abajo y las acciones destructivas en «Más acciones».
+function fichaFor(c, pos) {
   const p = permOf(c);
   const el = document.createElement("div");
+  el.className = "fi";
+  const rev = isRev(c), revisada = hasPersonalRef(reviewed, c);
+  const dir = pos && pos.lat != null ? "https://www.google.com/maps/dir/?api=1&destination=" + pos.lat + "," + pos.lon : "";
+  const ver = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(pos && pos.lat != null ? pos.lat + "," + pos.lon : c.name.replace(/ – .*$/, "") + " " + addrOf(c) + " España");
+  const notas = (c.extra ? '<p class="fi-note">' + esc(c.extra) + "</p>" : "") +
+    (c.prov ? '<p class="fi-note">El catálogo oficial no incluye la calle' + (pos && pos.approx ? "; posición aproximada (centro del municipio)" : "") + ".</p>" : "") +
+    (c.conf ? "" : '<p class="fi-note">Dirección por confirmar.</p>');
+  const aviso = rev && !revisada
+    ? '<div class="fi-flag"><span>La ubicación está por revisar.</span><button type="button" class="f-rev">Marcar revisión visual</button></div>'
+    : (isApprox(c) && revisada ? '<div class="fi-flag"><span>Revisada visualmente; ubicación aún sin verificar.</span></div>' : "");
+  const admin = window.mapaSession?.profile?.role === "admin" && c.databaseId;
   el.innerHTML =
-    "<strong>" + esc(c.name) + "</strong><br>" + esc(addrOf(c)) + (c.sub ? "<br>" + esc(c.tipo + " · " + c.sub) : "") +
-    (c.extra ? "<br><em>" + esc(c.extra) + "</em>" : "") +
-    (c.prov ? "<br><em>El catálogo oficial no incluye la calle" + (pos.approx ? "; posición aproximada (centro del municipio)" : "") + "</em>" : "") +
-    (c.conf ? "" : "<br><em>Dirección por confirmar</em>") +
-    (pos && pos.lat != null ? '<br><a class="how" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=' + pos.lat + "," + pos.lon + '">Cómo llegar</a>' : "") +
-    '<details class="loc"' + (isRev(c) ? " open" : "") + '><summary>Ubicación' + (isRev(c) ? " (por revisar)" : "") + '</summary><div class="lrow"><a class="lb l-gm" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(pos && pos.lat != null ? pos.lat + "," + pos.lon : c.name.replace(/ – .*$/, "") + " " + addrOf(c) + " España") + '">Ver ubicación exacta en Google Maps</a><button type="button" class="lb l-mv">Mover pin</button><button type="button" class="lb l-cp">Copiar coordenadas actuales</button></div><label class="l-address-label">Dirección postal del establecimiento<input class="l-address" type="text" value="' + esc(c.street || "") + '"></label><label class="l-coords-label">Coordenadas o URL de Google Maps<input class="l-in" type="text" value="' + (cache[c.id] ? cache[c.id].lat.toFixed(6) + ", " + cache[c.id].lon.toFixed(6) : "") + '" placeholder="Pega 37.167041, -4.152314 o la URL de Google Maps" aria-label="Coordenadas o URL de Google Maps"></label><p class="l-help">Importante: cambiar solo la dirección postal NO mueve el marcador. Para moverlo, pega aquí las coordenadas o la URL de Google Maps del lugar correcto, o usa «Mover pin». Después pulsa Guardar.</p><button type="button" class="lb l-save-location">Guardar dirección y ubicación en Supabase</button><div class="lmsg" role="status"></div></details>' +
-    '<div class="pform"><div><span style="font-size:12px;color:#5b726c">Valoración para captación</span><div class="stars" role="group" aria-label="Valoración de 1 a 5 estrellas">' +
-    [1, 2, 3, 4, 5].map((n) => '<button type="button" data-n="' + n + '" aria-pressed="false" aria-label="' + n + (n === 1 ? ' estrella' : ' estrellas') + '">★</button>').join("") + '<span class="sv"></span></div></div>' +
-    '<div class="ef" style="font-size:12px"></div>' +
-    '<div class="pinfo"></div><div class="phint">El estado, la fecha de solicitud y el seguimiento se calculan solos a partir de lo que registres en la pestaña Solicitudes.</div>' +
-    '<label>Contacto (nombre, teléfono, email)<input class="f-contacto" type="text" value="' + esc(p.contacto || "") + '"></label>' +
-    '<label>Notas<textarea class="f-notas">' + esc(p.notas || "") + '</textarea></label>' +
-    '<div class="hist"><h4>Solicitudes</h4><div class="hint">Un mismo punto puede tener varias solicitudes, cada una con sus fechas.</div><ul class="s-list"></ul><details class="aform s-form"><summary>Añadir solicitud</summary><div class="row3"><label>Desde<input class="s-desde" type="date"></label><label>Hasta<input class="s-hasta" type="date"></label><label>Captadores<input class="s-n" type="number" min="1" step="1" placeholder="nº"></label></div><label>ONG<input class="s-ong" type="text" list="ongList" placeholder="AECC, Cruz Roja…" autocomplete="off"></label><label>Próximo seguimiento<input class="s-seg" type="date"></label><button type="button" class="s-add">Añadir solicitud</button><button type="button" class="s-cancel" hidden>Cancelar edición</button></details><div class="s-msg" role="status" style="font-size:12px;color:#b3261e;min-height:13px"></div><h4 style="margin-top:10px">Concesiones (historial)</h4><ul class="h-list"></ul><details class="aform h-form"><summary>Añadir concesión</summary><div class="row3"><label>Desde<input class="h-desde" type="date"></label><label>Hasta<input class="h-hasta" type="date"></label><label>Captadores<input class="h-n" type="number" min="1" step="1" placeholder="nº"></label></div><label>ONG<input class="h-ong" type="text" list="ongList" placeholder="AECC, Cruz Roja…" autocomplete="off"></label><button type="button" class="h-add">Añadir concesión al historial</button><button type="button" class="h-cancel" hidden>Cancelar edición</button></details><div class="h-msg" style="font-size:12px;color:#b3261e;min-height:13px"></div></div>' +
-    (isRev(c) && !hasPersonalRef(reviewed, c) ? '<button type="button" class="f-rev" style="background:#fff;color:#c8102e">Marcar revisión visual</button>' : "") +
-    (isApprox(c) && hasPersonalRef(reviewed, c) ? '<span class="tag warn">Revisada visualmente; ubicación aún sin verificar</span>' : "") +
-    '<button type="button" class="f-save">Guardar cambios</button><button type="button" class="f-inact">' + (isInactive(c) ? "Activar en el mapa" : "Desactivar en el mapa") + '</button>' + (window.mapaSession?.profile?.role === "admin" && c.databaseId ? '<button type="button" class="f-arch danger">Archivar para todos</button>' : '') + '<button type="button" class="f-del danger">' + (c.custom ? "Eliminar punto" : "Quitar del mapa") + '</button><div class="saved" role="status"></div></div>';
+    '<div class="fi-top">' +
+      '<div class="fi-kicker"><span class="fi-type">' + esc(c.tipo + (c.sub ? " · " + c.sub : "")) + "</span>" + (isInactive(c) ? '<span class="tag warn">Desactivado en el mapa</span>' : "") +
+      '<button type="button" class="fi-close" aria-label="Cerrar la ficha">&times;</button></div>' +
+      '<h2 class="fi-title" tabindex="-1">' + esc(c.name) + "</h2>" +
+      '<div class="fi-addrrow"><p class="fi-addr">' + esc(addrOf(c)) + "</p>" + (dir ? '<a class="how" target="_blank" rel="noopener" href="' + dir + '">Cómo llegar</a>' : "") + "</div>" + notas +
+      aviso +
+    "</div>" +
+    '<div class="pform">' +
+      '<div class="fi-scroll">' +
+        '<section class="fi-state" aria-label="Estado del permiso"><div class="ef" aria-live="polite"></div><div class="pinfo"></div></section>' +
+        '<section class="fi-rate"><span class="fi-lab">Valoración para captación</span><div class="stars" role="group" aria-label="Valoración de 1 a 5 estrellas">' +
+          [1, 2, 3, 4, 5].map((n) => '<button type="button" data-n="' + n + '" aria-pressed="false" aria-label="' + n + (n === 1 ? " estrella" : " estrellas") + '">★</button>').join("") + '</div><span class="sv"></span></section>' +
+        '<section class="fi-contact">' +
+          '<label>Contacto (nombre, teléfono, email)<input class="f-contacto" type="text" value="' + esc(p.contacto || "") + '"></label>' +
+          '<label>Notas<textarea class="f-notas">' + esc(p.notas || "") + "</textarea></label>" +
+        "</section>" +
+        '<section class="fi-tabs">' +
+          '<div class="ptabs" role="tablist" aria-label="Detalle del permiso"></div>' +
+          '<div data-tab="s" role="tabpanel" aria-label="Solicitudes">' +
+            '<p class="fi-hint">Un mismo punto puede tener varias solicitudes, cada una con sus fechas. El estado, la fecha de solicitud y el seguimiento se calculan solos a partir de ellas y de las concesiones.</p>' +
+            '<ul class="s-list fi-list"></ul>' +
+            '<details class="aform s-form"><summary>Añadir solicitud</summary><div class="row3"><label>Desde<input class="s-desde" type="date"></label><label>Hasta<input class="s-hasta" type="date"></label><label>Captadores<input class="s-n" type="number" min="1" step="1" placeholder="nº"></label></div><label>ONG<input class="s-ong" type="text" list="ongList" placeholder="AECC, Cruz Roja…" autocomplete="off"></label><label>Próximo seguimiento<input class="s-seg" type="date"></label><div class="fi-btns"><button type="button" class="s-add">Añadir solicitud</button><button type="button" class="s-cancel" hidden>Cancelar edición</button></div></details>' +
+            '<div class="s-msg fi-msg" role="status"></div>' +
+          "</div>" +
+          '<div data-tab="h" role="tabpanel" aria-label="Concesiones">' +
+            '<ul class="h-list fi-list"></ul>' +
+            '<details class="aform h-form"><summary>Añadir concesión</summary><div class="row3"><label>Desde<input class="h-desde" type="date"></label><label>Hasta<input class="h-hasta" type="date"></label><label>Captadores<input class="h-n" type="number" min="1" step="1" placeholder="nº"></label></div><label>ONG<input class="h-ong" type="text" list="ongList" placeholder="AECC, Cruz Roja…" autocomplete="off"></label><div class="fi-btns"><button type="button" class="h-add">Añadir concesión al historial</button><button type="button" class="h-cancel" hidden>Cancelar edición</button></div></details>' +
+            '<div class="h-msg fi-msg" role="status"></div>' +
+          "</div>" +
+          '<div data-tab="l" role="tabpanel" aria-label="Ubicación">' +
+            '<div class="loc"><div class="lrow"><a class="lb l-gm" target="_blank" rel="noopener" href="' + ver + '">Ver ubicación exacta en Google Maps</a><button type="button" class="lb l-mv">Mover pin</button><button type="button" class="lb l-cp">Copiar coordenadas actuales</button></div>' +
+            '<label class="l-address-label">Dirección postal del establecimiento<input class="l-address" type="text" value="' + esc(c.street || "") + '"></label>' +
+            '<label class="l-coords-label">Coordenadas o URL de Google Maps<input class="l-in" type="text" value="' + (cache[c.id] ? cache[c.id].lat.toFixed(6) + ", " + cache[c.id].lon.toFixed(6) : "") + '" placeholder="Pega 37.167041, -4.152314 o la URL de Google Maps" aria-label="Coordenadas o URL de Google Maps"></label>' +
+            '<p class="l-help">Importante: cambiar solo la dirección postal NO mueve el marcador. Para moverlo, pega aquí las coordenadas o la URL de Google Maps del lugar correcto, o usa «Mover pin». Después pulsa Guardar.</p>' +
+            '<button type="button" class="lb l-save-location">Guardar dirección y ubicación en Supabase</button><div class="lmsg" role="status"></div></div>' +
+          "</div>" +
+        "</section>" +
+      "</div>" +
+      '<div class="fi-foot">' +
+        '<div class="fi-status"><span class="saved" role="status"></span><span class="fi-dirty" hidden>Cambios sin guardar</span></div>' +
+        '<div class="fi-actions"><button type="button" class="f-save">Guardar cambios</button>' +
+          '<details class="fi-more"><summary>Más acciones</summary><div class="fi-menu">' +
+            '<button type="button" class="f-inact">' + (isInactive(c) ? "Activar en el mapa" : "Desactivar en el mapa") + "</button>" +
+            (admin ? '<button type="button" class="f-arch danger">Archivar para todos</button>' : "") +
+            '<button type="button" class="f-del danger">' + (c.custom ? "Eliminar punto" : "Quitar del mapa") + "</button>" +
+          "</div></details></div>" +
+      "</div>" +
+    "</div>";
   const pf = el.querySelector(".pform");
-  const put = (n, t) => { if (n) n.setAttribute("data-tab", t); };
-  put(pf.firstElementChild, "p"); put(el.querySelector(".ef"), "p");
-  put(el.querySelector(".pinfo"), "p"); put(el.querySelector(".phint"), "p");
-  ["f-contacto", "f-notas"].forEach((k) => put(el.querySelector("." + k).closest("label"), "n"));
-  put(el.querySelector(".hist"), "h");
-  const tb = document.createElement("div"); tb.className = "ptabs"; tb.setAttribute("role", "tablist");
-  [["p", "Permiso"], ["h", "Solicitudes"], ["n", "Contacto y notas"]].forEach(([k, t]) => {
-    const b = document.createElement("button"); b.type = "button"; b.textContent = t; b.dataset.k = k; b.setAttribute("role", "tab"); tb.appendChild(b);
+  const tb = el.querySelector(".ptabs");
+  const tabs = [["s", "Solicitudes"], ["h", "Concesiones"], ["l", "Ubicación"]];
+  tabs.forEach(([k, t]) => {
+    const b = document.createElement("button"); b.type = "button"; b.textContent = t; b.dataset.k = k; b.id = "fiTab" + k; b.setAttribute("role", "tab");
+    tb.appendChild(b);
+    pf.querySelector('[data-tab="' + k + '"]').setAttribute("aria-labelledby", b.id);
+    pf.querySelector('[data-tab="' + k + '"]').removeAttribute("aria-label");
   });
-  pf.insertBefore(tb, pf.firstChild);
-  const showTab = (k) => {
+  const showTab = (k, focus) => {
     pf.querySelectorAll("[data-tab]").forEach((n) => { n.hidden = n.dataset.tab !== k; });
-    tb.querySelectorAll("button").forEach((b) => b.setAttribute("aria-selected", b.dataset.k === k));
+    tb.querySelectorAll("button").forEach((b) => { const on = b.dataset.k === k; b.setAttribute("aria-selected", on); b.tabIndex = on ? 0 : -1; if (on && focus) b.focus(); });
   };
   tb.addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) showTab(b.dataset.k); });
-  showTab("p");
-  L.DomEvent.disableClickPropagation(el);
-  L.DomEvent.disableScrollPropagation(el);
+  tb.addEventListener("keydown", (e) => {
+    const ks = tabs.map((t) => t[0]), i = ks.indexOf(document.activeElement.dataset.k);
+    const next = e.key === "ArrowRight" ? ks[(i + 1) % ks.length] : e.key === "ArrowLeft" ? ks[(i - 1 + ks.length) % ks.length] : e.key === "Home" ? ks[0] : e.key === "End" ? ks[ks.length - 1] : null;
+    if (next) { e.preventDefault(); showTab(next, true); }
+  });
+  showTab("s");
+  el.querySelector(".fi-close").addEventListener("click", () => map.closePopup());
+  const dirty = (on) => { el.querySelector(".fi-dirty").hidden = !on; };
+  ["f-contacto", "f-notas"].forEach((k) => el.querySelector("." + k).addEventListener("input", () => dirty(true)));
+  // «Más acciones» se cierra con Escape y al pulsar fuera.
+  const more = el.querySelector(".fi-more");
+  more.addEventListener("keydown", (e) => { if (e.key === "Escape" && more.open) { e.stopPropagation(); more.open = false; more.querySelector("summary").focus(); } });
+  const fuera = (e) => { if (!el.isConnected) { document.removeEventListener("click", fuera); return; } if (more.open && !more.contains(e.target)) more.open = false; };
+  document.addEventListener("click", fuera);
   let val = p.valoracion || 0;
   let hist = (p.historial || []).slice().map((h) => Object.assign({}, h));
   let editH = -1, editS = -1;
@@ -1140,23 +1266,31 @@ function popupFor(c, pos) {
   const paintEf = () => {
     const cur = { historial: hist, solicitudes: sols, estado: p.estado }, ef = estadoCalc(cur), i = estadoInfo(ef), t = today();
     const vg = hist.filter(isVig).sort((a, b) => (b.desde || "").localeCompare(a.desde || ""))[0], fu = hist.filter((h) => !h.cancelada && h.desde && h.desde > t).sort((a, b) => (a.desde || "").localeCompare(b.desde || ""))[0];
-    el.querySelector(".ef").innerHTML = 'Estado actual: <b style="background:' + i[2] + ';color:#111;padding:1px 6px;border-radius:4px;border:1px solid #cfdcd8">' + esc(i[1]) + "</b>" +
-      (vg ? " · hasta " + fmtD(vg.hasta) + (vg.ong ? " · " + esc(vg.ong) : "") + (safeCount(vg.captadores) ? " · " + safeCount(vg.captadores) + " captadores" : "") : (fu ? " · concedido del " + esc(fmtD(fu.desde)) + " al " + esc(fmtD(fu.hasta)) : (ef === "caducado" ? " · solicitudes sin respuesta: las fechas pedidas ya pasaron" : (ef === "solicitado" ? " · " + sols.filter(solValid).length + " pendiente" + (sols.filter(solValid).length === 1 ? "" : "s") : ""))));
-    const fs = fechaCalc(cur), sg = segCalc(cur), np = sols.filter(solValid).length;
-    el.querySelector(".pinfo").innerHTML = '<div><span>Solicitado el</span><b>' + (fs ? esc(fmtD(fs)) : "—") + '</b></div><div><span>Próximo seguimiento</span><b>' + (sg ? esc(fmtD(sg)) + (sg <= t ? " (toca ya)" : "") : "—") + '</b></div><div><span>Solicitudes pendientes</span><b>' + np + '</b></div><div><span>Concesiones</span><b>' + hist.filter((h) => !h.cancelada).length + '</b></div>';
+    const pend = sols.filter(solValid).length;
+    const cap = (h) => (safeCount(h.captadores) ? [safeCount(h.captadores) + " captadores"] : []);
+    let titulo = "Sin solicitudes ni concesiones", meta = [];
+    if (vg) { titulo = vg.hasta ? "Vigente hasta " + fmtD(vg.hasta) : "Vigente, sin fecha de fin"; meta = (vg.ong ? [esc(vg.ong)] : []).concat(cap(vg)); }
+    else if (fu) { titulo = "Concedido del " + fmtD(fu.desde) + " al " + fmtD(fu.hasta); meta = (fu.ong ? [esc(fu.ong)] : []).concat(cap(fu)); }
+    else if (ef === "caducado") { titulo = "Solicitudes sin respuesta"; meta = ["Las fechas pedidas ya pasaron"]; }
+    else if (ef === "solicitado") { titulo = pend + (pend === 1 ? " solicitud pendiente" : " solicitudes pendientes"); }
+    else if (ef !== "sin") { titulo = i[1]; }
+    const card = el.querySelector(".ef"); card.className = "ef s-" + ef;
+    card.innerHTML = '<span class="st">' + esc(i[1]) + "</span><strong>" + esc(titulo) + "</strong>" + (meta.length ? '<span class="meta">' + meta.join(" · ") + "</span>" : "");
+    const fs = fechaCalc(cur), sg = segCalc(cur);
+    el.querySelector(".pinfo").innerHTML = '<div class="' + (sg && sg <= t ? "due" : "") + '"><span>Próximo seguimiento</span><b>' + (sg ? esc(fmtD(sg)) + (sg <= t ? " (toca ya)" : "") : "—") + '</b></div><div><span>Solicitado el</span><b>' + (fs ? esc(fmtD(fs)) : "—") + '</b></div><div><span>Pendientes</span><b>' + pend + '</b></div><div><span>Concesiones</span><b>' + hist.filter((h) => !h.cancelada).length + "</b></div>";
   };
   const paintHist = () => {
     const ul = el.querySelector(".h-list");
     const sorted = hist.map((h, i) => [h, i]).sort((a, b) => (b[0].desde || "").localeCompare(a[0].desde || ""));
-    ul.innerHTML = sorted.length ? "" : '<li style="background:none;color:#5b726c">Sin concesiones registradas</li>';
+    ul.innerHTML = sorted.length ? "" : '<li class="fi-none">Sin concesiones registradas</li>';
     sorted.forEach(([h, i]) => {
       const li = document.createElement("li"); if (isVig(h)) li.className = "vig";
       li.innerHTML = "<span>" + esc(histTxt(h)) + (h.cancelada ? " · <b>cancelada</b>" : (isVig(h) ? " · vigente" : "")) + "</span>"; if (h.cancelada) li.style.opacity = ".7";
-      const eb = document.createElement("button"); eb.type = "button"; eb.textContent = "Editar"; eb.title = "Cambiar fechas, ONG o captadores de esta concesión"; eb.style.cssText = "color:#14532d;border-color:#14532d;margin-left:auto";
+      const eb = document.createElement("button"); eb.type = "button"; eb.textContent = "Editar"; eb.title = "Cambiar fechas, ONG o captadores de esta concesión"; eb.style.cssText = "color:var(--ok);border-color:var(--ok);margin-left:auto";
       eb.addEventListener("click", () => { editH = i; el.querySelector(".h-desde").value = h.desde || ""; el.querySelector(".h-hasta").value = h.hasta || ""; el.querySelector(".h-n").value = h.captadores || ""; el.querySelector(".h-ong").value = h.ong || ""; el.querySelector(".h-add").textContent = "Guardar cambios de la concesión"; el.querySelector(".h-cancel").hidden = false; el.querySelector(".h-form").open = true; });
       const b = document.createElement("button"); b.type = "button"; b.textContent = "Quitar"; b.title = "Quitar esta concesión del historial";
       b.addEventListener("click", () => setTimeout(() => { hist.splice(i, 1); if (editH === i) resetH(); paintHist(); commit(); }, 0));
-      const cb = document.createElement("button"); cb.type = "button"; cb.textContent = h.cancelada ? "Reactivar" : "Cancelar"; cb.title = h.cancelada ? "Volver a dar por válida esta concesión" : "Marcar esta concesión como cancelada"; cb.style.cssText = "color:#7a2a00;border-color:#7a2a00";
+      const cb = document.createElement("button"); cb.type = "button"; cb.textContent = h.cancelada ? "Reactivar" : "Cancelar"; cb.title = h.cancelada ? "Volver a dar por válida esta concesión" : "Marcar esta concesión como cancelada"; cb.style.cssText = "color:var(--warn);border-color:var(--warn)";
       cb.addEventListener("click", () => setTimeout(() => { if (h.cancelada) delete h.cancelada; else h.cancelada = true; paintHist(); commit(); }, 0));
       li.appendChild(eb); li.appendChild(cb); li.appendChild(b); ul.appendChild(li);
     });
@@ -1165,20 +1299,20 @@ function popupFor(c, pos) {
   const paintSols = () => {
     const ul = el.querySelector(".s-list");
     const sorted = sols.map((x, i) => [x, i]).sort((a, b) => (b[0].desde || "").localeCompare(a[0].desde || ""));
-    ul.innerHTML = sorted.length ? "" : '<li style="background:none;color:#5b726c">Sin solicitudes registradas</li>';
+    ul.innerHTML = sorted.length ? "" : '<li class="fi-none">Sin solicitudes registradas</li>';
     sorted.forEach(([x, i]) => {
       const st = x.res === "denegada" ? "denegada" : (solValid(x) ? "pendiente" : "caducada");
       const li = document.createElement("li"); if (st !== "pendiente") li.style.opacity = ".7";
       li.innerHTML = "<span>" + esc(solRange(x) || "Sin datos") + " · <b>" + st + "</b>" + (x.fecha ? " · pedida el " + esc(fmtD(x.fecha)) : "") + (x.seg && !x.res ? " · seguimiento " + esc(fmtD(x.seg)) : "") + "</span>";
       const mk = (t, title, css, fn) => { const b = document.createElement("button"); b.type = "button"; b.textContent = t; b.title = title; if (css) b.style.cssText = css; b.addEventListener("click", () => setTimeout(fn, 0)); li.appendChild(b); return b; }; /* se rehace la lista fuera del clic para que Leaflet no cierre la ficha */
-      if (!x.res) mk("Conceder", "Pasar esta solicitud a concesión con las mismas fechas", "color:#14532d;border-color:#14532d;margin-left:auto", () => {
+      if (!x.res) mk("Conceder", "Pasar esta solicitud a concesión con las mismas fechas", "color:var(--ok);border-color:var(--ok);margin-left:auto", () => {
         hist.push({ desde: x.desde || "", hasta: x.hasta || "", captadores: x.captadores || 0, ong: x.ong || "" });
         sols.splice(i, 1); if (editS === i) resetS();
         paintSols(); paintHist(); commit();
-        el.querySelector(".s-msg").style.color = "#14532d"; el.querySelector(".s-msg").textContent = "Concedida. Si te dieron otras fechas o captadores, usa Editar en Concesiones.";
+        el.querySelector(".s-msg").style.color = "var(--ok)"; el.querySelector(".s-msg").textContent = "Concedida. Si te dieron otras fechas o captadores, usa Editar en Concesiones.";
       });
-      if (!x.res) mk("Denegar", "Marcar esta solicitud como denegada", "color:#7a2a00;border-color:#7a2a00", () => { x.res = "denegada"; paintSols(); commit(); });
-      mk("Editar", "Cambiar fechas, ONG o captadores de esta solicitud", "color:#14532d;border-color:#14532d", () => { editS = i; q("s-desde").value = x.desde || ""; q("s-hasta").value = x.hasta || ""; q("s-n").value = x.captadores || ""; q("s-ong").value = x.ong || ""; q("s-seg").value = x.seg || ""; q("s-add").textContent = "Guardar cambios de la solicitud"; q("s-cancel").hidden = false; q("s-add").closest("details").open = true; });
+      if (!x.res) mk("Denegar", "Marcar esta solicitud como denegada", "color:var(--warn);border-color:var(--warn)", () => { x.res = "denegada"; paintSols(); commit(); });
+      mk("Editar", "Cambiar fechas, ONG o captadores de esta solicitud", "color:var(--ok);border-color:var(--ok)", () => { editS = i; q("s-desde").value = x.desde || ""; q("s-hasta").value = x.hasta || ""; q("s-n").value = x.captadores || ""; q("s-ong").value = x.ong || ""; q("s-seg").value = x.seg || ""; q("s-add").textContent = "Guardar cambios de la solicitud"; q("s-cancel").hidden = false; q("s-add").closest("details").open = true; });
       mk("Quitar", "Quitar esta solicitud", "", () => { sols.splice(i, 1); if (editS === i) resetS(); paintSols(); commit(); });
       ul.appendChild(li);
     });
@@ -1220,7 +1354,7 @@ function popupFor(c, pos) {
         // se cargue la versión actual.
         if (previous.permit === undefined) delete permits[permitKey(c)];
         else permits[permitKey(c)] = previous.permit;
-        sm.style.color = "#b3261e";
+        sm.style.color = "var(--err)";
         sm.textContent = "No se ha guardado: otra persona ha cambiado este punto mientras lo editabas. Anota lo que querías cambiar, carga la versión actual y vuelve a aplicarlo. ";
         const reload = document.createElement("button");
         reload.type = "button";
@@ -1256,7 +1390,7 @@ function popupFor(c, pos) {
         const rollbackSaved = await savePermits(c);
         if (markers[c.id]) markers[c.id].setIcon(makeIcon(c));
         refreshSelects(); renderList(); paintEf();
-        sm.style.color = "#b3261e";
+        sm.style.color = "var(--err)";
         sm.textContent = rollbackSaved === "ok"
           ? "No se pudo guardar; se restauró el estado anterior."
           : "No se pudo guardar ni confirmar la restauración. Recupera la conexión antes de seguir editando.";
@@ -1267,8 +1401,9 @@ function popupFor(c, pos) {
       refreshSelects();
       renderList();
       paintEf();
-      sm.style.color = "#14532d";
+      sm.style.color = "var(--ok)";
       sm.textContent = "Guardado en Supabase";
+      dirty(false);
       gamPermit(c, previous.permit);
     } finally {
       commitBusy = false;
@@ -1279,7 +1414,7 @@ function popupFor(c, pos) {
   paint(); paintHist(); paintSols(); paintEf();
   q("s-add").addEventListener("click", () => {
     const d = q("s-desde").value, h = q("s-hasta").value, n = parseInt(q("s-n").value, 10) || 0, og = q("s-ong").value.trim(), msg = q("s-msg");
-    msg.style.color = "#b3261e"; msg.textContent = "";
+    msg.style.color = "var(--err)"; msg.textContent = "";
     if (!d && !h) { msg.textContent = "Indica al menos la fecha de inicio o la de fin."; return; }
     if (d && h && d > h) { msg.textContent = "La fecha de inicio es posterior a la de fin."; return; }
     const x = { fecha: today(), desde: d, hasta: h, captadores: n, ong: og, seg: q("s-seg").value };
@@ -1287,7 +1422,7 @@ function popupFor(c, pos) {
     if (editS >= 0 && sols[editS]) { x.fecha = sols[editS].fecha || x.fecha; if (sols[editS].res) x.res = sols[editS].res; sols[editS] = x; } else sols.push(x);
     resetS(); paintSols(); commit();
     const falta = [!og && "ONG", !n && "captadores"].filter(Boolean);
-    msg.style.color = "#14532d"; msg.textContent = falta.length ? "Solicitud guardada. Falta indicar: " + falta.join(" y ") + "." : "Solicitud guardada.";
+    msg.style.color = "var(--ok)"; msg.textContent = falta.length ? "Solicitud guardada. Falta indicar: " + falta.join(" y ") + "." : "Solicitud guardada.";
   });
   q("s-cancel").addEventListener("click", resetS);
   el.querySelector(".h-add").addEventListener("click", () => {
@@ -1310,7 +1445,7 @@ function popupFor(c, pos) {
       if (!r) { msg.textContent = "No reconozco las coordenadas ni la URL. Pega una URL de Google Maps que contenga @latitud,longitud o coordenadas como 37.1773, -3.5986."; return; }
       savingLocation = true;
       saveLocBtn.disabled = true;
-      msg.style.color = "#555";
+      msg.style.color = "var(--muted)";
       msg.textContent = "Guardando en Supabase…";
       const address = el.querySelector(".l-address").value;
       let timeoutId;
@@ -1337,7 +1472,7 @@ function popupFor(c, pos) {
         : "No se confirmó el guardado en Supabase. " + (window.mapaLastLocationError || (timedOut
           ? "La operación no respondió a tiempo (27 segundos). No vuelvas a pulsar todavía; revisa la conexión."
           : "Comprueba la sesión y los permisos del establecimiento."));
-      const resultColor = ok ? "#14532d" : "#b3261e";
+      const resultColor = ok ? "var(--ok)" : "var(--err)";
       window.mapaLastLocationError = "";
       msg.textContent = resultText;
       msg.style.color = resultColor;
@@ -1377,7 +1512,7 @@ function popupFor(c, pos) {
       if (status) status.textContent = "No se pudo guardar la revisión en Supabase; no se ha marcado como revisado.";
       return;
     }
-    rv.remove(); refreshSelects(); renderList(); el.querySelector(".saved").textContent = "Marcado como revisado"; gamRev(c);
+    (rv.closest(".fi-flag") || rv).remove(); refreshSelects(); renderList(); el.querySelector(".saved").textContent = "Marcado como revisado"; gamRev(c);
   });
   const inact = el.querySelector(".f-inact");
   inact.addEventListener("click", async () => {
@@ -1621,7 +1756,7 @@ function makeMarkers(list) {
     const pos = cache[c.id];
     if (!pos || markers[c.id] || isOut(c)) return;
     const m = L.marker([pos.lat, pos.lon], { icon: makeIcon(c), title: c.name, cat: colorOf(c) });
-    m.bindPopup(() => popupFor(c, cache[c.id]), { minWidth: 330, maxWidth: 380 });
+    m.bindPopup(() => popupFor(c, cache[c.id]), { closeButton: false, closeOnClick: false, minWidth: 80, maxWidth: 240 });
     m.on("click", () => highlight(c.id, false));
     markers[c.id] = m;
     if (!isInactive(c)) nuevos.push(m);
@@ -1794,28 +1929,43 @@ function highlight(id, fly) {
     if (c && pos) {
       touched = true;
       map.flyTo([pos.lat, pos.lon], Math.max(map.getZoom(), 16), { duration: 0.6 });
-      L.popup({ minWidth: 330, maxWidth: 380, ariaTitle: c.name }).setLatLng([pos.lat, pos.lon]).setContent(popupFor(c, pos)).openOn(map);
+      L.popup({ closeButton: false, closeOnClick: false, minWidth: 80, maxWidth: 240, ariaTitle: c.name }).setLatLng([pos.lat, pos.lon]).setContent(popupFor(c, pos)).openOn(map);
     }
     return;
   }
   if (m && fly) { touched = true; cluster.zoomToShowLayer(m, () => { map.flyTo(m.getLatLng(), Math.max(map.getZoom(), 16), { duration: 0.6 }); m.openPopup(); }); }
 }
 
-// Accesibilidad de la ficha: nombre de diálogo, foco en ella al abrirla con el teclado desde la lista y retorno del foco al cerrarla.
-let popupFromKey = null, popupReturn = null;
-map.on("popupopen", (e) => {
-  const box = e.popup.getElement();
-  if (!box) return;
-  box.setAttribute("role", "dialog");
-  box.setAttribute("aria-label", (e.popup._source && e.popup._source.options.title) || e.popup.options.ariaTitle || "Ficha del punto");
-  box.addEventListener("keydown", (ev) => { if (ev.key === "Escape") map.closePopup(); });
-  if (popupFromKey) { popupReturn = popupFromKey; popupFromKey = null; box.tabIndex = -1; box.focus({ preventScroll: true }); }
-});
-map.on("popupclose", (e) => {
-  const box = e.popup.getElement(), ret = popupReturn;
+// La ficha vive en un panel lateral. Su ciclo de vida sigue al del popup de Leaflet (ahora una etiqueta mínima sobre el pin),
+// así que todos los caminos que ya abrían o cerraban la ficha (lista, calendario, panel resumen, map.closePopup()) siguen funcionando.
+let popupFromKey = null, popupReturn = null, fichaToken = 0;
+const fichaEl = document.getElementById("ficha"), mainEl = document.querySelector("main");
+function openFicha(c) {
+  fichaToken++;
+  fichaEl.replaceChildren(fichaFor(c, cache[c.id] || {}));
+  fichaEl.hidden = false; mainEl.classList.add("fi-open");
+  map.invalidateSize({ pan: false });
+  const m = markers[c.id], at = m ? m.getLatLng() : (cache[c.id] ? L.latLng(cache[c.id].lat, cache[c.id].lon) : null);
+  if (at) map.panInside(at, { paddingTopLeft: [140, 100], paddingBottomRight: [140, 50] });
+  if (popupFromKey) { popupReturn = popupFromKey; popupFromKey = null; fichaEl.querySelector(".fi-title").focus({ preventScroll: true }); }
+}
+function closeFicha() {
+  if (fichaEl.hidden) return;
+  const ret = popupReturn, dentro = fichaEl.contains(document.activeElement);
   popupReturn = null;
-  if (ret && ret.isConnected && (document.activeElement === document.body || (box && box.contains(document.activeElement)))) ret.focus({ preventScroll: true });
+  fichaEl.hidden = true; fichaEl.replaceChildren(); mainEl.classList.remove("fi-open");
+  map.invalidateSize({ pan: false });
+  if (ret && ret.isConnected && (dentro || document.activeElement === document.body)) ret.focus({ preventScroll: true });
+}
+map.on("popupopen", (e) => {
+  const box = e.popup.getElement(), tag = box && box.querySelector("[data-cid]");
+  if (!tag) return;
+  box.setAttribute("aria-hidden", "true");
+  const c = CENTERS.find((x) => String(x.id) === tag.dataset.cid);
+  if (c) openFicha(c);
 });
+map.on("popupclose", () => { const t = fichaToken; setTimeout(() => { if (t === fichaToken) closeFicha(); }, 0); });
+fichaEl.addEventListener("keydown", (ev) => { if (ev.key === "Escape") map.closePopup(); });
 
 function fitAll() {
   const pts = Object.values(markers).filter((m) => cluster.hasLayer(m)).map((m) => m.getLatLng());

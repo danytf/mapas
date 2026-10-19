@@ -29,7 +29,7 @@ assert.ok(html.includes("enMapa = visible && !isInactive(c)"), "renderList debe 
 assert.ok(html.includes('class="f-inact"') && html.includes("Desactivar en el mapa") && html.includes("Activar en el mapa"), "Falta el botón de la ficha");
 assert.ok(html.includes("Desactivado en el mapa"), "La lista debe marcar los desactivados");
 assert.ok(html.includes("inactive = normalizePersonalRefs(state.inactive);"), "El estado de desactivados se carga al iniciar sesión");
-assert.ok(html.includes("L.popup({ minWidth: 330, maxWidth: 380, ariaTitle: c.name })"), "Un desactivado debe poder abrir su ficha desde la lista");
+assert.ok(html.includes("L.popup({ closeButton: false, closeOnClick: false, minWidth: 80, maxWidth: 240, ariaTitle: c.name })"), "Un desactivado debe poder abrir su ficha desde la lista");
 
 // Sin persistencia local nueva.
 const trozo = html.slice(html.indexOf("let inactive = new Set();"), html.indexOf("let inactive = new Set();") + 600);

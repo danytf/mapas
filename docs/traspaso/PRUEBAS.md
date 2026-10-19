@@ -18,6 +18,7 @@ node scripts/test-app-mejoras.mjs
 node scripts/test-calendario.mjs
 node scripts/test-cabecera-filtros.mjs
 node scripts/test-texto-minimo.mjs
+node scripts/test-ficha.mjs
 node scripts/test-a11y-fase-d.mjs index.html          # contraste WCAG AA claro/oscuro, nombres, aria-live y foco (Fase D)
 ```
 Cada una devuelve código distinto de cero si falla. `audit-a11y` y `audit-cdn-integrity` fallan en versiones anteriores a #81 y #80 (control negativo).

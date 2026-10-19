@@ -23,6 +23,7 @@ on:
       - "scripts/test-calendario.mjs"
       - "scripts/test-cabecera-filtros.mjs"
       - "scripts/test-texto-minimo.mjs"
+      - "scripts/test-ficha.mjs"
       - "scripts/test-a11y-fase-d.mjs"
       - ".github/workflows/audit-static-catalog.yml"
   pull_request:
@@ -69,6 +70,8 @@ jobs:
         run: node scripts/test-cabecera-filtros.mjs
       - name: Test minimum text size
         run: node scripts/test-texto-minimo.mjs
+      - name: Test point sheet side panel
+        run: node scripts/test-ficha.mjs
       - name: Run XSS regression audit
         run: node scripts/audit-xss.mjs index.html
       - name: Check keyboard access to statistics panel rows
