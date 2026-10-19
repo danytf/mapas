@@ -1346,7 +1346,8 @@ function fichaFor(c, pos) {
       contacto: el.querySelector(".f-contacto").value,
       notas: el.querySelector(".f-notas").value
     };
-    sm.style.color = "";
+    const saveBtn = el.querySelector(".f-save"), saveLabel = saveBtn.textContent;
+    sm.style.color = "var(--muted)"; sm.textContent = "Guardando en Supabase…"; saveBtn.textContent = "Guardando…";
     try {
       const v = { contacto: el.querySelector(".f-contacto").value.trim(), notas: el.querySelector(".f-notas").value.trim(), valoracion: val, historial: hist };
       if (sols.length) v.solicitudes = sols;
@@ -1415,6 +1416,7 @@ function fichaFor(c, pos) {
     } finally {
       commitBusy = false;
       setCommitControlsDisabled(false);
+      saveBtn.textContent = saveLabel;
     }
   };
   el.querySelectorAll(".stars button").forEach((b) => b.addEventListener("click", () => { val = val === +b.dataset.n ? 0 : +b.dataset.n; paint(); commit(); }));
