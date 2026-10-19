@@ -23,6 +23,12 @@
 - Catálogo limpio: sin duplicados reales; solo 2 pares de coordenadas coincidentes (un Mercadona y un centro comercial en el mismo edificio, Armilla y Granada), no son defectos.
 - Auditoría: 807 de 856 filas sin usuario (carga del catálogo, arranque de perfiles y 8 actualizaciones SQL del 16-17/10); toda edición desde la app lleva autor. Es una inferencia, no un defecto confirmado. Recomendación pendiente: registrar el rol de base de datos cuando no hay JWT.
 
+## Carga nacional (19/10/2026)
+
+- N0 (municipios de Andalucía con código INE) y N1 (246 estaciones de Andalucía, `docs/CARGA_N1_ESTACIONES_ANDALUCIA.md`) cargadas en producción y verificadas en solo lectura. Tras N1: 1.059 establecimientos (Estaciones 260). Los puntos de la N1 llevan `source_ref` `catalogo-andalucia:estaciones:<tipo>-<id>` y `location_source` `openstreetmap:<tipo>/<id>`; 8 están `approximate` («por revisar»).
+- Provincias activas: las 8 de Andalucía (activadas el 19/10/2026 por SQL con el procedimiento de `docs/ADMINISTRACION_CUENTAS.md`). Asignadas las 8 a `daniel.marrero@wesser.es` y `formacion@wesser.es` (administrador); `rsc@wesser.es` solo Málaga.
+- Límites conocidos: calles de la N1 orientativas (7 puntos sin calle); 225 sin código postal; OpenStreetMap no indica si una estación tiene servicio.
+
 ## Aplicación publicada
 
 - Panel de administración v1 (19/10/2026): menú «Usuarios y provincias» solo para administradores (rol, estado, nombre, provincias y activación de provincias; el alta de cuentas sigue en Supabase). Verificado: URL pública con el mismo SHA-256 que `main`, opción oculta sin sesión, prueba del titular como administrador (lectura). Las escrituras se probaron solo contra el Supabase simulado y en SQL local, nunca en producción. Diseño en `docs/DISENO_PANEL_ADMINISTRACION.md`, uso en `docs/ADMINISTRACION_CUENTAS.md`.
