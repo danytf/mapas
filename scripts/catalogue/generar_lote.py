@@ -20,7 +20,7 @@ a = ap.parse_args()
 
 defn = json.load(open(a.categoria, encoding="utf-8"))
 filas = json.load(open(a.validados, encoding="utf-8"))
-cod, cat = defn["codigo"], defn["categoria"]
+cod, cat = defn["codigo"], defn.get("categoria") or "(varias)"
 os.makedirs(a.dir_salida, exist_ok=True)
 q = lambda v: "NULL" if v in (None, "") else "'" + str(v).replace("'", "''") + "'"
 
@@ -34,7 +34,7 @@ json.dump({
     "queried_at": a.fecha, "osm_base_timestamp": a.osm_base, "selection_criteria": defn["criterio"],
     "province": "Andalucía",
     "establishments": [{
-        "source_ref": f["source_ref"], "name": f["nombre"], "category": cat, "subtype": f["subtipo"], "municipality": f["municipio"],
+        "source_ref": f["source_ref"], "name": f["nombre"], "category": f.get("categoria") or cat, "subtype": f["subtipo"], "municipality": f["municipio"],
         "municipality_ine": f["ine"], "address": f["calle"] or None, "postal_code": f["cp"] or None, "latitude": round(f["lat"], 5), "longitude": round(f["lon"], 5),
         "location_precision": f["precision"], "location_source": "openstreetmap:" + f["osm"], "province": PROV[f["ine"][:2]], "status": "active",
         **({"review_reason": f["revisar"]} if f["revisar"] else {})} for f in sorted(filas, key=lambda f: f["source_ref"])]},
@@ -44,7 +44,8 @@ open(os.path.join(a.dir_salida, cod + "-andalucia.json"), "a", encoding="utf-8",
 for ine, grupo in sorted(por_prov.items()):
     nombre = PROV[ine]
     n = len(grupo)
-    vals = ",\n".join("  (" + ", ".join([q(f["source_ref"]), q(f["nombre"]), q(f["subtipo"]), q(f["ine"]), q(f["calle"]), q(f["cp"]),
+    multi = not defn.get("categoria")  # definicion de varias categorias: cada fila lleva la suya
+    vals = ",\n".join("  (" + ", ".join(([q(f["categoria"])] if multi else []) + [q(f["source_ref"]), q(f["nombre"]), q(f["subtipo"]), q(f["ine"]), q(f["calle"]), q(f["cp"]),
                                          str(round(f["lat"], 5)), str(round(f["lon"], 5)), q(f["precision"]), q("openstreetmap:" + f["osm"])]) + ")"
                       for f in sorted(grupo, key=lambda f: f["source_ref"]))
     sql = f"""-- Carga de la categoría {cat} de {nombre} (provincia {ine}), trozo de la carga de Andalucía.
@@ -107,5 +108,15 @@ $$;
 
 COMMIT;
 """
+    if multi:
+        sql = sql.replace("CREATE TEMP TABLE _carga (\n  source_ref text,", "CREATE TEMP TABLE _carga (\n  categoria text, source_ref text,")
+        sql = sql.replace(f"""  IF NOT EXISTS (SELECT 1 FROM public.categories WHERE code = '{cod}' AND name = '{cat}') THEN
+    RAISE EXCEPTION 'Falta la categoría {cat}.';
+  END IF;""", """  SELECT string_agg(DISTINCT c.categoria, ', ') INTO faltan FROM _carga c WHERE NOT EXISTS (SELECT 1 FROM public.categories k WHERE k.name = c.categoria);
+  IF faltan IS NOT NULL THEN
+    RAISE EXCEPTION 'Faltan categorías: %', faltan;
+  END IF;""")
+        sql = sql.replace(f"JOIN public.categories cat ON cat.code = '{cod}'", "JOIN public.categories cat ON cat.name = c.categoria")
+        assert "cat.code" not in sql and "categoria text" in sql, "plantilla de varias categorias no aplicada"
     open(os.path.join(a.dir_salida, f"import_{cod}_{ine}_{nombre.lower().replace('í', 'i').replace('á', 'a').replace('é', 'e').replace('ó', 'o').replace('ú', 'u')}.sql"), "w", encoding="utf-8", newline="\n").write(sql)
     print(ine, nombre, n)
