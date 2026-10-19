@@ -25,6 +25,7 @@
 
 ## Aplicación publicada
 
+- Panel de administración v1 (19/10/2026): menú «Usuarios y provincias» solo para administradores (rol, estado, nombre, provincias y activación de provincias; el alta de cuentas sigue en Supabase). Verificado: URL pública con el mismo SHA-256 que `main`, opción oculta sin sesión, prueba del titular como administrador (lectura). Las escrituras se probaron solo contra el Supabase simulado y en SQL local, nunca en producción. Diseño en `docs/DISENO_PANEL_ADMINISTRACION.md`, uso en `docs/ADMINISTRACION_CUENTAS.md`.
 - https://danytf.github.io/mapas/ sirve exactamente `main` (verificado en navegador tras las fusiones del 18/10).
 - Recursos externos fijados con versión exacta y SRI sha384: Leaflet 1.9.4, leaflet.markercluster 1.5.3 (unpkg) y supabase-js 2.118.0 (jsdelivr). Google Fonts exento.
 - Cabeceras de seguridad: GitHub Pages no permite cabeceras HTTP; la CSP va como `<meta>` en `index.html` (H-02, PR #90, comprobada en producción sin violaciones). GitHub Pages publica solo `index.html` (H-37, PR #109).
