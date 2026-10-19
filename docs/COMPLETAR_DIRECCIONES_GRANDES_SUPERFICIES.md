@@ -6,7 +6,7 @@ Consulta a Nominatim inverso hecha por el titular el 19/10/2026 sobre los 198 pu
 
 `supabase/seeds/grandes-superficies-andalucia/calles_nominatim.sql`: 12 de las 28 calles que faltaban. Se descartaron 16 resultados que no son una calle del comercio: autovías, autopistas, circunvalaciones, códigos de carretera (A-2202, A-8082R1, A-376), accesos y «Ruta de las Alpujarras». Esos 16 puntos siguen sin calle (no se inventa).
 
-Solo rellena `address` si está vacío y aborta sin cambios si no actualiza exactamente 12 filas (por eso una segunda ejecución falla a propósito). Probado en local: 28 → 16 puntos sin calle. **Pendiente de aprobación; sin aplicar en producción.**
+Solo rellena `address` si está vacío y aborta sin cambios si no actualiza exactamente 12 filas (por eso una segunda ejecución falla a propósito). Probado en local: 28 → 16 puntos sin calle. **Aplicado en producción el 19/10/2026** por el titular y verificado en solo lectura: las 12 direcciones coinciden con el SQL, quedan 16 puntos sin calle, el total sigue en 1.722 y `audit_log` registra 12 actualizaciones.
 
 ## Códigos postales (a mano desde la ficha)
 
