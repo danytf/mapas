@@ -612,6 +612,30 @@
     ul { overflow: visible; }
     .legend-box { max-height: 34vh; overflow: auto; }
   }
+  /* Panel resumen y Administración con el lenguaje de la ficha: cabecera fija con filete, títulos de 17 px, secciones en etiqueta de 12 px,
+     tarjetas con borde izquierdo de estado, sin barras de desplazamiento anidadas y casillas de verificación a su tamaño. */
+  #dlgPanel, #dlgAdm { padding: 0; }
+  #dlgPanel .pn-head, #dlgAdm .pn-head { position: sticky; top: 0; z-index: 2; margin: 0; padding: 12px 18px 12px 22px; background: var(--panel); border-bottom: 1px solid var(--line); }
+  #dlgPanel h2, #dlgAdm h2 { font-size: 17px; font-weight: 680; letter-spacing: -.02em; line-height: 1.2; }
+  #pnBody { padding: 16px 22px 22px; }
+  #dlgAdm .adm-note, #dlgAdm #admMsg, #dlgAdm #admBody { margin-left: 22px; margin-right: 22px; }
+  #dlgAdm .adm-note { margin-top: 14px; }
+  #dlgAdm #admBody { padding-bottom: 22px; }
+  #pnBody h3, #admBody h3 { font-size: 12px; font-weight: 650; color: var(--muted); margin: 20px 0 8px; }
+  .kpi { border-left: 5px solid var(--kpi, var(--line-2)); padding-left: 16px; }
+  .kpi.hl { --kpi: var(--st-concedido); border-left-color: var(--kpi); }
+  .kpi.al { --kpi: var(--st-solicitado); border-left-color: var(--kpi); }
+  .kpis .kpi:nth-child(2) { --kpi: var(--st-solicitado); }
+  .kpis .kpi:nth-child(3) { --kpi: var(--st-concedido); }
+  .kpis .kpi:nth-child(4) { --kpi: var(--st-denegado); }
+  .kpis .kpi:nth-child(8) { --kpi: var(--st-caducado); }
+  .pn-scroll { max-height: none; overflow-x: auto; overflow-y: visible; }
+  #pnBody thead th { position: static; }
+  #pnBody tbody tr:last-child td, #admBody tbody tr:last-child td, #admBody tbody tr:last-child th { border-bottom: 0; }
+  #pnBody thead th, #admBody thead th { font-size: 12px; font-weight: 560; }
+  dialog input[type="checkbox"] { width: 18px; height: 18px; min-height: 0; padding: 0; flex: none; accent-color: var(--accent); }
+  .adm-chk { min-height: 32px; }
+  @media (max-width: 900px), (pointer: coarse) { .adm-chk { min-height: 44px; } }
   /* Objetivos táctiles de 44 px fuera de la ficha (WCAG 2.5.8 pide 24; 44 es el tamaño recomendado para el dedo). Va al final de la hoja para ganar a las reglas de cada componente. */
   @media (max-width: 900px), (pointer: coarse) {
     .tools input[type=search], .tools select, #moreBtn { min-height: 44px; }

@@ -80,6 +80,7 @@ node scripts/test-texto-minimo.mjs
 node scripts/test-ficha.mjs
 node scripts/test-favoritos.mjs
 node scripts/test-tactil.mjs
+node scripts/test-paneles.mjs
 node scripts/test-a11y-fase-d.mjs index.html
 ```
 
