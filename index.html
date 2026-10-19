@@ -280,49 +280,85 @@
   #pnBody .pn-rowbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   #pnBody tbody tr[data-k]:hover { background: var(--ok-bg); }
   #pnBody tr.tot td { font-weight: 700; }
-  .wk-nav { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
-  .wk-nav b { font-size: 13.5px; font-weight: 650; flex: 1 1 180px; text-align: center; }
-  .wk-nav button, .wk-nav input { height: 30px; border: 1px solid var(--line-2); border-radius: 8px; background: var(--panel); color: var(--fg); font: inherit; font-size: 13px; padding: 0 10px; cursor: pointer; }
-  .wk-nav input[type=date] { width: 150px; flex: none; }
-  .wk-nav button:hover { border-color: var(--muted); }
-  .wk-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); }
-  .wkg { min-width: 720px; }
-  .wkr { display: grid; grid-template-columns: 150px repeat(7, minmax(74px, 1fr)); align-items: stretch; position: relative; }
-  .wkr > .d { border-left: 1px solid var(--line); min-height: 34px; grid-row: 1; }
-  .wkr > .d.we { background: rgba(120, 130, 150, .07); }
-  .wkr > .d.today { background: var(--ok-soft); }
-  .wkr.hd > div { padding: 9px 4px 8px; text-align: center; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--line-2); }
-  .wkr.hd > div b { display: block; font-size: 17px; letter-spacing: 0; text-transform: none; color: var(--fg); font-weight: 650; }
-  .wkr.hd > div.today { background: var(--ok-soft); color: var(--ok); }
-  .wkr.hd > div.today b { color: var(--ok); }
-  .wkr .wk-n { grid-row: 1; padding: 7px 10px; font-size: 12px; line-height: 1.25; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
-  .wkr .wk-n small { color: var(--muted); font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .wkr .wk-n span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .wkr.og { background: var(--bg); border-top: 1px solid var(--line-2); }
-  .wkr.og .wk-n { font-weight: 700; font-size: 13px; }
-  .wkr.og > .d { display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; font-variant-numeric: tabular-nums; color: var(--ok); }
-  .wkr.og > .d.z { color: var(--muted); font-weight: 400; }
-  .wkr.tot { border-top: 0; }
-  .wkr.it { border-top: 1px solid var(--line); }
-  .wkr.it > .d { min-height: 44px; }
-  .wk-bar { grid-row: 1; align-self: center; margin: 5px 3px; height: 30px; padding: 0 10px; border: 0; border-radius: 8px; font: inherit; font-size: 12px; font-weight: 600; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 1px 2px rgba(20, 27, 38, .18); z-index: 1; }
-  .wk-bar:hover { filter: brightness(.95); transform: translateY(-1px); }
-  .wk-bar.cl { border-top-left-radius: 2px; border-bottom-left-radius: 2px; margin-left: 0; }
-  .wk-bar.cr { border-top-right-radius: 2px; border-bottom-right-radius: 2px; margin-right: 0; }
-  .wk-bar em { font-style: normal; background: none; padding: 0; color: inherit; }
-  .wk-bar .nn { text-decoration: none; margin-left: auto; background: rgba(255, 255, 255, .55); color: #141b26; border-radius: 999px; padding: 1px 8px; font-size: 11px; }
-  .wk-bar.s-concedido { background: #22c55e; color: #052e16; }
-  .wk-bar.s-solicitado { background: repeating-linear-gradient(135deg, #fde68a 0 8px, #fbbf24 8px 16px); color: #5b3a00; }
-  .wk-bar.s-caducado { background: #cbd5e1; color: #334155; }
-  .wk-bar.s-denegado { background: #1f2937; color: #fff; }
-  .wk-bar.s-cancelado { background: #dc2626; color: #fff; text-decoration: line-through; }
-  .wk-leg { display: flex; gap: 12px; flex-wrap: wrap; font-size: 11.5px; color: var(--muted); margin-top: 8px; }
-  .wk-leg i { display: inline-block; width: 12px; height: 12px; border-radius: 4px; margin-right: 5px; vertical-align: -2px; }
-  .wk-sub { font-size: 12px; color: var(--muted); margin: 8px 0 4px; }
-  .wk-ong { display: flex; gap: 6px; flex-wrap: wrap; margin: 6px 0 10px; }
-  .wk-ong span { font-size: 12px; background: var(--ok-bg); border-radius: 999px; padding: 3px 10px; }
-  #pnBody tr.wk-g td { background: var(--bg); font-weight: 650; font-size: 12px; text-align: left; }
-  #pnBody tr.wk-g i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 7px; border: 1px solid #0003; vertical-align: -1px; }
+  /* Calendario semanal: la silueta de barras de cada día va sobre su propia columna, así quedan alineadas por construcción. */
+  #dlgCal { width: min(1380px, 98vw); max-height: 94vh; overflow: auto; background: var(--bg); padding: 20px 22px 24px; --ong-bg-l: 91%; --ong-fg-l: 22%; }
+  @media (prefers-color-scheme: dark) { #dlgCal { --ong-bg-l: 24%; --ong-fg-l: 86%; } }
+  .cal-bar { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: end; margin-bottom: 12px; }
+  .cal-f { display: grid; gap: 4px; font-size: 12px; font-weight: 560; color: var(--muted); }
+  #dlgCal .cal-f select, #dlgCal .cal-f input { width: auto; min-width: 170px; }
+  .cal-nav { display: flex; align-items: center; gap: 6px; margin-left: auto; }
+  .cal-nav button, .cal-chip { font: inherit; color: var(--fg); background: var(--panel); border: 1px solid var(--line-2); cursor: pointer; }
+  .cal-nav button { height: 38px; min-width: 38px; padding: 0 12px; border-radius: 8px; font-size: 14px; }
+  .cal-nav button:hover, .cal-chip:hover { border-color: var(--muted); }
+  .cal-nav button:focus-visible, .cal-chip:focus-visible, .cal-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .cal-range { min-width: 15ch; text-align: center; font-size: 17px; font-weight: 680; letter-spacing: -.015em; font-variant-numeric: tabular-nums; }
+  .cal-sum { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 30px; margin: 4px 0 14px; }
+  .cal-sum div { display: flex; align-items: baseline; gap: 8px; }
+  .cal-sum b { font-size: 32px; font-weight: 700; letter-spacing: -.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .cal-sum span { font-size: 13px; color: var(--muted); }
+  .cal-sum .c b { color: var(--ok); }
+  .cal-sum .s b { color: var(--warn); }
+  .cal-sum .q { font-size: 12.5px; color: var(--muted); }
+  .cal-filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 14px; }
+  .cal-chip { height: 32px; padding: 0 13px; border-radius: 999px; font-size: 12.5px; display: inline-flex; align-items: center; gap: 7px; }
+  .cal-chip i { width: 10px; height: 10px; border-radius: 50%; background: var(--st); border: 2px solid var(--st); }
+  .cal-chip[aria-pressed="true"] { border-color: var(--fg); font-weight: 600; }
+  .cal-chip[aria-pressed="false"] { opacity: .6; }
+  .cal-chip[aria-pressed="false"] i { background: transparent; }
+  .cal-scroll { overflow-x: auto; padding-bottom: 4px; }
+  .cal-wk { display: grid; grid-template-columns: repeat(7, minmax(158px, 1fr)); gap: 10px; min-width: 1150px; }
+  .cal-day { display: flex; flex-direction: column; min-width: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  .cal-day.we { background: color-mix(in srgb, var(--panel) 92%, var(--muted)); }
+  .cal-day.today { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  .cal-sky { height: 92px; display: flex; align-items: flex-end; padding: 0 12px; border-bottom: 1px solid var(--line); background: linear-gradient(to top, var(--ok-bg), transparent 70%); }
+  .cal-stack { width: 100%; display: flex; flex-direction: column; justify-content: flex-end; transform-origin: bottom; border-radius: 8px 8px 0 0; overflow: hidden; }
+  .cal-stack i { display: block; min-height: 0; }
+  .cal-stack .c { background: linear-gradient(to top, #16a34a, #4ade80); }
+  .cal-stack .s { background: repeating-linear-gradient(135deg, #fde68a 0 6px, #f59e0b 6px 12px); }
+  @media (prefers-reduced-motion: no-preference) { .cal-stack { animation: calGrow .55s cubic-bezier(.2, .7, .2, 1) both; } }
+  @keyframes calGrow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+  .cal-hd { margin: 0; padding: 10px 12px 2px; display: flex; align-items: baseline; gap: 7px; font-weight: 400; }
+  .cal-hd .dn { font-size: 13px; font-weight: 600; color: var(--muted); }
+  .cal-hd .n { font-size: 28px; font-weight: 700; letter-spacing: -.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .cal-hd .m { font-size: 12.5px; color: var(--muted); }
+  .cal-hd .hoy { margin-left: auto; align-self: center; font-size: 11px; font-weight: 650; background: var(--accent); color: var(--accent-fg); border-radius: 999px; padding: 2px 9px; }
+  .cal-tot { margin: 0; padding: 0 12px 10px; font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .cal-tot b { color: var(--fg); font-weight: 680; }
+  .cal-list { list-style: none; margin: 0; padding: 0 8px 10px; display: grid; gap: 8px; align-content: start; flex: 1; overflow: visible; }
+  .cal-list > li { display: block; padding: 0; border: 0; cursor: default; background: none; }
+  .cal-list > li::before { display: none; }
+  .cal-list > li:hover { background: none; }
+  .cal-card { width: 100%; text-align: left; display: grid; gap: 3px; padding: 9px 10px 9px 12px; border: 1px solid var(--line); border-left: 5px solid var(--st); border-radius: 10px; background-color: var(--panel); color: var(--fg); font: inherit; font-weight: 400; height: auto; cursor: pointer; transition: transform .12s, box-shadow .12s; }
+  .cal-card:hover { transform: translateY(-1px); box-shadow: var(--shadow); background-color: var(--panel); border-color: var(--line-2); border-left-color: var(--st); }
+  .cal-card .st { font-size: 11.5px; font-weight: 650; color: var(--st-fg, var(--muted)); }
+  .cal-card strong { font-size: 13.5px; line-height: 1.25; font-weight: 650; overflow-wrap: anywhere; }
+  .cal-card .wh { font-size: 12px; color: var(--muted); overflow-wrap: anywhere; }
+  .cal-card .sp { font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .cal-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 3px; }
+  .cal-ong { font-size: 11.5px; font-weight: 650; padding: 2px 9px; border-radius: 999px; background: hsl(var(--h) 65% var(--ong-bg-l)); color: hsl(var(--h) 55% var(--ong-fg-l)); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .cal-n { margin-left: auto; display: inline-flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .cal-n svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .cal-card.s-concedido { --st: #22c55e; --st-fg: var(--ok); }
+  .cal-card.s-solicitado { --st: #f59e0b; --st-fg: var(--warn); border-top-style: dashed; border-right-style: dashed; border-bottom-style: dashed; background-image: repeating-linear-gradient(135deg, transparent 0 10px, rgba(245, 158, 11, .09) 10px 20px); }
+  .cal-card.s-caducado { --st: #94a3b8; opacity: .82; }
+  .cal-card.s-denegado { --st: #475569; opacity: .82; }
+  .cal-card.s-cancelado { --st: #dc2626; opacity: .82; }
+  .cal-card.s-cancelado strong { text-decoration: line-through; }
+  .cal-chip.s-concedido { --st: #22c55e; } .cal-chip.s-solicitado { --st: #f59e0b; } .cal-chip.s-caducado { --st: #94a3b8; } .cal-chip.s-denegado { --st: #475569; } .cal-chip.s-cancelado { --st: #dc2626; }
+  .cal-list > li.cal-empty { font-size: 12.5px; color: var(--muted); text-align: center; padding: 14px 6px; border: 1px dashed var(--line-2); border-radius: 10px; }
+  .cal-none { padding: 34px 16px; text-align: center; color: var(--muted); font-size: 14px; border: 1px dashed var(--line-2); border-radius: 14px; background: var(--panel); }
+  .cal-note { font-size: 11.5px; color: var(--muted); margin: 12px 0 0; }
+  @media (max-width: 900px) {
+    #dlgCal { padding: 16px 14px 20px; }
+    .cal-bar > .cal-f { flex: 1 1 140px; }
+    #dlgCal .cal-bar > .cal-f select { width: 100%; min-width: 0; }
+    .cal-nav { margin-left: 0; width: 100%; flex-wrap: wrap; justify-content: space-between; }
+    .cal-range { order: -1; flex: 1 1 100%; min-width: 0; }
+    .cal-nav > .cal-f { flex: 1 1 140px; }
+    #dlgCal .cal-nav > .cal-f input { width: 100%; min-width: 0; }
+    .cal-wk { grid-template-columns: 1fr; min-width: 0; }
+    .cal-sky { height: 56px; }
+  }
   .pn-note { font-size: 11.5px; color: var(--muted); margin-top: 10px; }
   .chipbtn { justify-self: start; height: 28px; font-size: 12px; padding: 0 12px; border-radius: 999px; border: 1px solid transparent; background: var(--warn-bg); color: var(--warn); cursor: pointer; }
   .chipbtn:hover { border-color: var(--warn); background: var(--warn-bg); }
@@ -506,6 +542,7 @@
     <div id="menuPanel" role="menu" hidden>
       <div class="mh">Informes</div>
       <button id="panelBtn" type="button" role="menuitem">Panel resumen</button>
+      <button id="calBtn" type="button" role="menuitem">Calendario semanal</button>
       <button id="gamBtn" type="button" role="menuitem">Mi progreso</button>
       <button id="logrosBtn" type="button" role="menuitem">Logros</button>
       <div class="mh">Puntos</div>
@@ -570,6 +607,10 @@
 <dialog id="dlgPanel" aria-labelledby="pnT">
   <div class="pn-head"><h2 id="pnT">Panel resumen</h2><button type="button" id="pnClose" aria-label="Cerrar">&times;</button></div>
   <div id="pnBody"></div>
+</dialog>
+<dialog id="dlgCal" aria-labelledby="calT">
+  <div class="pn-head"><h2 id="calT">Calendario semanal</h2><button type="button" id="calClose" aria-label="Cerrar">&times;</button></div>
+  <div id="calBody"></div>
 </dialog>
 <dialog id="dlgAdm" aria-labelledby="admT">
   <div class="pn-head"><h2 id="admT">Administración</h2><button type="button" id="admClose" aria-label="Cerrar">&times;</button></div>
@@ -2356,60 +2397,6 @@ const csvCell = (value) => {
   };
   const rowsHtml = (map, kind) => map.map(([k, r]) => '<tr data-kind="' + kind + '" data-k="' + esc(k) + '"><td><button type="button" class="pn-rowbtn">' + esc(k) + "</button></td><td>" + r.n + "</td><td>" + r.sol + "</td><td>" + r.con + "</td><td>" + r.den + "</td><td>" + r.vig + "</td><td>" + r.capt + "</td></tr>").join("");
   const thead = (first) => "<thead><tr><th>" + first + "</th><th>Puntos</th><th>Solicitados</th><th>Concedidos</th><th>Denegados</th><th>Con vigencia hoy</th><th>Captadores hoy</th></tr></thead>";
-  let wk = mondayOf(today());
-  const addD = (d, n) => { const t = new Date(d + "T12:00:00"); t.setDate(t.getDate() + n); return t.toISOString().slice(0, 10); };
-  const WK_ORDEN = ["concedido", "solicitado", "caducado", "denegado", "cancelado"];
-  const wkItems = (a, b) => {
-    const out = [];
-    CENTERS.filter((c) => !isOut(c)).forEach((c) => {
-      const p = permOf(c), ov = (d, h) => (d || h) && (!d || d <= b) && (!h || h >= a);
-      (p.historial || []).forEach((h) => { if (ov(h.desde, h.hasta)) out.push({ c, e: h.cancelada ? "cancelado" : "concedido", desde: h.desde, hasta: h.hasta, ong: h.ong, n: safeCount(h.captadores) }); });
-      solsOf(p).forEach((x) => { if (ov(x.desde, x.hasta)) out.push({ c, e: x.res ? "denegado" : (solValid(x) ? "solicitado" : "caducado"), desde: x.desde, hasta: x.hasta, ong: x.ong, n: safeCount(x.captadores) }); });
-    });
-    return out;
-  };
-  const wkRender = () => {
-    const box = body.querySelector("#wkBox"); if (!box) return;
-    const a = wk, b = addD(wk, 6), items = wkItems(a, b), t = today();
-    const per = (e) => { const m = new Map(); items.filter((i) => i.e === e).forEach((i) => m.set(i.c.id, Math.max(m.get(i.c.id) || 0, i.n))); return m; };
-    const con = per("concedido"), sol = per("solicitado");
-    const sum = (m) => [...m.values()].reduce((x, y) => x + y, 0);
-    const cnt = (e) => new Set(items.filter((i) => i.e === e).map((i) => i.c.id)).size;
-    const ongs = {}; items.filter((i) => i.e === "concedido").forEach((i) => { const k = i.ong || "Sin ONG"; (ongs[k] = ongs[k] || { pts: new Set(), n: 0 }); if (!ongs[k].pts.has(i.c.id)) { ongs[k].pts.add(i.c.id); ongs[k].n += i.n; } });
-    const lab = "Semana del " + fmtD(a).slice(0, 5) + " al " + fmtD(b) + (a <= t && t <= b ? " (esta semana)" : "");
-    let h = '<div class="wk-nav"><button type="button" data-wk="-1" aria-label="Semana anterior">&#8249;</button><b>' + lab + '</b><button type="button" data-wk="1" aria-label="Semana siguiente">&#8250;</button><button type="button" data-wk="0">Hoy</button><input type="date" data-wkdate value="' + a + '" aria-label="Ir a la semana de esta fecha"></div>' +
-      '<div class="kpis">' +
-      '<div class="kpi hl"><b>' + con.size + "</b><span>Puntos concedidos</span></div>" +
-      '<div class="kpi hl"><b>' + sum(con) + "</b><span>Captadores concedidos</span></div>" +
-      '<div class="kpi al"><b>' + sol.size + "</b><span>Puntos solicitados</span></div>" +
-      '<div class="kpi al"><b>' + sum(sol) + "</b><span>Captadores solicitados</span></div></div>" +
-      '<div class="wk-sub">Sin respuesta: ' + cnt("caducado") + " · Denegados: " + cnt("denegado") + " · Cancelados: " + cnt("cancelado") + "</div>";
-    if (!items.length) h += '<div class="pn-note">Ningún permiso con fechas en esta semana.</div>';
-    else {
-      const DN = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"], days = DN.map((n, k) => addD(a, k));
-      const cls = (k) => (k >= 5 ? " we" : "") + (days[k] === t ? " today" : "");
-      const cells = () => days.map((_, k) => '<i class="d' + cls(k) + '"></i>').join("");
-      const perDay = (arr) => days.map((d) => { const m = new Map(); arr.filter((i) => i.e === "concedido" && (!i.desde || i.desde <= d) && (!i.hasta || i.hasta >= d)).forEach((i) => m.set(i.c.id, Math.max(m.get(i.c.id) || 0, i.n))); return sum(m); });
-      const numCells = (arr) => perDay(arr).map((v, k) => '<div class="d' + cls(k) + (v ? "" : " z") + '">' + (v || "·") + "</div>").join("");
-      h += '<div class="wk-scroll"><div class="wkg">' +
-        '<div class="wkr hd"><div></div>' + days.map((d, k) => "<div" + (days[k] === t ? ' class="today"' : "") + ">" + DN[k] + "<b>" + (+d.slice(8)) + "</b></div>").join("") + "</div>" +
-        '<div class="wkr og tot"><div class="wk-n"><span>Captadores por día</span><small>concedidos, todas las ONG</small></div>' + numCells(items) + "</div>";
-      const byOng = {}; items.forEach((i) => { const k = i.ong || "Sin ONG"; (byOng[k] = byOng[k] || []).push(i); });
-      Object.keys(byOng).sort((x, y) => (x === "Sin ONG") - (y === "Sin ONG") || x.localeCompare(y)).forEach((k) => {
-        const arr = byOng[k], pts = new Set(arr.map((i) => i.c.id)).size;
-        h += '<div class="wkr og"><div class="wk-n"><span>' + esc(k) + "</span><small>" + pts + " punto" + (pts === 1 ? "" : "s") + "</small></div>" + numCells(arr) + "</div>";
-        arr.slice().sort((x, y) => WK_ORDEN.indexOf(x.e) - WK_ORDEN.indexOf(y.e) || (x.desde || "").localeCompare(y.desde || "") || x.c.name.localeCompare(y.c.name)).forEach((i) => {
-          const s0 = Math.max(0, i.desde && i.desde > a ? days.indexOf(i.desde) : 0), e0 = Math.min(6, i.hasta && i.hasta < b ? days.indexOf(i.hasta) : 6);
-          const clipL = i.desde && i.desde < a, clipR = i.hasta && i.hasta > b;
-          const tip = i.c.name + " (" + townOf(i.c) + ")\n" + estadoInfo(i.e)[1] + " · " + fmtD(i.desde) + " – " + fmtD(i.hasta) + (i.ong ? " · " + i.ong : "") + (i.n ? " · " + i.n + " captadores" : "");
-          h += '<div class="wkr it"><div class="wk-n"><span>' + esc(i.c.name) + "</span><small>" + esc(townOf(i.c)) + "</small></div>" + cells() +
-            '<button type="button" class="wk-bar s-' + i.e + (clipL ? " cl" : "") + (clipR ? " cr" : "") + '" data-pt="' + i.c.id + '" style="grid-column:' + (s0 + 2) + " / " + (e0 + 3) + '" title="' + esc(tip) + '"><em>' + (e0 - s0 >= 1 ? esc(estadoInfo(i.e)[1]) : "") + "</em>" + (i.n ? '<em class="nn">' + i.n + "</em>" : "") + "</button></div>";
-        });
-      });
-      h += "</div></div>" + '<div class="wk-leg">' + WK_ORDEN.map((e) => '<span><i style="background:' + estadoInfo(e)[2] + '"></i>' + esc(estadoInfo(e)[1]) + "</span>").join("") + "<span>Pulsa una barra para abrir el punto</span></div>";
-    }
-    box.innerHTML = h;
-  };
   const render = () => {
     const all = CENTERS.filter((c) => !isOut(c));
     const t = stat(all);
@@ -2434,28 +2421,149 @@ const csvCell = (value) => {
       '<div class="kpi hl"><b>' + t.capt + "</b><span>Captadores que se pueden enviar hoy</span></div>" +
       '<div class="kpi al"><b>' + soon.length + "</b><span>Caducan en 30 días</span></div>" +
       '<div class="kpi"><b>' + expired.length + "</b><span>Solicitud caducada</span></div></div>" +
-      '<h3>Permisos por semana</h3><div id="wkBox"></div>' +
       (soon.length ? "<h3>Caducan en los próximos 30 días</h3><div class=\"pn-scroll\"><table><thead><tr><th>Punto</th><th>Hasta</th><th>Captadores</th></tr></thead><tbody>" +
         soon.map(([c, end, n]) => '<tr data-kind="pt" data-k="' + c.id + '"><td><button type="button" class="pn-rowbtn">' + esc(c.name) + " · " + esc(townOf(c)) + "</button></td><td>" + fmtD(end) + "</td><td>" + n + "</td></tr>").join("") + "</tbody></table></div>" : "") +
       "<h3>Por categoría</h3><div class=\"pn-scroll\"><table>" + thead("Categoría") + "<tbody>" + rowsHtml(byTipo, "tipo") + '<tr class="tot"><td>Total</td><td>' + t.n + "</td><td>" + t.sol + "</td><td>" + t.con + "</td><td>" + t.den + "</td><td>" + t.vig + "</td><td>" + t.capt + "</td></tr></tbody></table></div>" +
       "<h3>Por municipio</h3><div class=\"pn-scroll\"><table>" + thead("Municipio") + "<tbody>" + rowsHtml(byTown, "town") + "</tbody></table></div>" +
-      '<div class="pn-note">Pulsa una fila para filtrar el mapa por esa categoría o municipio. El estado, la vigencia y los captadores se calculan con las solicitudes y concesiones de cada punto. En «Permisos por semana», un permiso entra si sus fechas tocan esa semana (lunes a domingo).</div>';
-    wkRender();
+      '<div class="pn-note">Pulsa una fila para filtrar el mapa por esa categoría o municipio. El estado, la vigencia y los captadores se calculan con las solicitudes y concesiones de cada punto. El calendario semanal está en el menú, en «Calendario semanal».</div>';
   };
   body.addEventListener("click", (e) => {
     const bar = e.target.closest("[data-pt]");
     if (bar) { const c = CENTERS.find((x) => String(x.id) === bar.dataset.pt); if (c) focusPoint(c); return; }
-    const wb = e.target.closest("[data-wk]");
-    if (wb) { wk = wb.dataset.wk === "0" ? mondayOf(today()) : addD(wk, 7 * +wb.dataset.wk); wkRender(); return; }
     const tr = e.target.closest("tr[data-k]"); if (!tr) return;
     const k = tr.dataset.k;
     if (tr.dataset.kind === "pt") { const c = CENTERS.find((x) => String(x.id) === k); if (c) focusPoint(c); return; }
     $("#tipo").value = tr.dataset.kind === "tipo" ? k : ""; $("#q").value = tr.dataset.kind === "town" ? k : ""; $("#permiso").value = ""; $("#valor").value = ""; $("#cadena").value = "";
     dlg.close(); refilter();
   });
-  body.addEventListener("change", (e) => { const d = e.target.closest("[data-wkdate]"); if (d && d.value) { wk = mondayOf(d.value); wkRender(); } });
-  $("#panelBtn").addEventListener("click", () => { wk = mondayOf(today()); render(); dlg.showModal(); });
+  $("#panelBtn").addEventListener("click", () => { render(); dlg.showModal(); });
   $("#pnClose").addEventListener("click", () => dlg.close());
+})();
+
+/* Calendario semanal: permisos de cada día de la semana en una provincia. Solo lee lo que ya hay en memoria (solicitudes y concesiones); no guarda nada. */
+(() => {
+  const dlg = $("#dlgCal"), body = $("#calBody");
+  const ORDEN = ["concedido", "solicitado", "caducado", "denegado", "cancelado"];
+  const DIAS = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+  const MES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
+  const PERSONA = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c.8-4 3.5-6 7-6s6.2 2 7 6"/></svg>';
+  const addD = (d, n) => { const t = new Date(d + "T12:00:00"); t.setDate(t.getDate() + n); return t.toISOString().slice(0, 10); };
+  const mesDe = (d) => MES[+d.slice(5, 7) - 1];
+  const hue = (s) => { let h = 7; for (const ch of s) h = (h * 31 + ch.codePointAt(0)) % 360; return h; };
+  let wk = mondayOf(today()), prov = "", ong = "";
+  const fEst = new Set(ORDEN);
+
+  const items = (a, b, provId) => {
+    const out = [];
+    CENTERS.filter((c) => !isOut(c) && (!provId || c.provinceId === provId)).forEach((c) => {
+      const p = permOf(c), ov = (d, h) => (d || h) && (!d || d <= b) && (!h || h >= a);
+      (p.historial || []).forEach((h) => { if (ov(h.desde, h.hasta)) out.push({ c, e: h.cancelada ? "cancelado" : "concedido", desde: h.desde, hasta: h.hasta, ong: h.ong, n: safeCount(h.captadores) }); });
+      solsOf(p).forEach((x) => { if (ov(x.desde, x.hasta)) out.push({ c, e: x.res ? "denegado" : (solValid(x) ? "solicitado" : "caducado"), desde: x.desde, hasta: x.hasta, ong: x.ong, n: safeCount(x.captadores) }); });
+    });
+    return out;
+  };
+  const provOpts = () => {
+    const m = new Map();
+    CENTERS.forEach((c) => { if (!isOut(c) && c.provinceId) m.set(c.provinceId, c.province || "Sin provincia"); });
+    return [...m].sort((x, y) => x[1].localeCompare(y[1], "es"));
+  };
+  // Al abrir se elige la provincia con más captadores esa semana; si no hay actividad, la primera por orden alfabético.
+  const provAuto = (opts) => {
+    const tot = new Map();
+    items(wk, addD(wk, 6), "").forEach((i) => { if (i.e === "concedido" || i.e === "solicitado") tot.set(i.c.provinceId, (tot.get(i.c.provinceId) || 0) + i.n); });
+    const best = [...tot].sort((x, y) => y[1] - x[1])[0];
+    return best && opts.some(([id]) => id === best[0]) ? best[0] : (opts[0] ? opts[0][0] : "");
+  };
+  // Captadores por punto: el mayor número declarado en las solicitudes o concesiones de ese estado.
+  const porPunto = (arr, e) => { const m = new Map(); arr.filter((i) => i.e === e).forEach((i) => m.set(i.c.id, Math.max(m.get(i.c.id) || 0, i.n))); return m; };
+  const suma = (m) => [...m.values()].reduce((x, y) => x + y, 0);
+  const plural = (n, uno, varios) => n + " " + (n === 1 ? uno : varios);
+
+  const tarjeta = (i) => {
+    const info = estadoInfo(i.e), og = i.ong || "Sin ONG";
+    const span = i.desde !== i.hasta ? fmtD(i.desde).slice(0, 5) + " → " + fmtD(i.hasta).slice(0, 5) : "";
+    return '<li><button type="button" class="cal-card s-' + i.e + '" data-pt="' + esc(String(i.c.id)) + '">' +
+      '<span class="st">' + esc(info[1]) + "</span><strong>" + esc(i.c.name) + "</strong>" +
+      '<span class="wh">' + esc(townOf(i.c)) + (i.c.tipo ? " · " + esc(i.c.tipo) : "") + "</span>" +
+      (span ? '<span class="sp">' + esc(span) + "</span>" : "") +
+      '<span class="cal-meta"><span class="cal-ong" style="--h:' + hue(og) + '">' + esc(og) + "</span>" +
+      (i.n ? '<span class="cal-n">' + PERSONA + "<span>" + i.n + '</span><span class="adm-sr"> captadores</span></span>' : "") + "</span></button></li>";
+  };
+
+  const draw = () => {
+    const a = wk, b = addD(wk, 6), t = today();
+    const todos = items(a, b, prov);
+    const ongs = [...new Set(todos.map((i) => i.ong || "Sin ONG"))].sort((x, y) => (x === "Sin ONG") - (y === "Sin ONG") || x.localeCompare(y, "es"));
+    if (ong && !ongs.includes(ong)) ong = "";
+    const its = todos.filter((i) => fEst.has(i.e) && (!ong || (i.ong || "Sin ONG") === ong));
+    body.querySelector("#calOng").innerHTML = '<option value="">Todas las ONG</option>' + ongs.map((o) => '<option value="' + esc(o) + '"' + (o === ong ? " selected" : "") + ">" + esc(o) + "</option>").join("");
+    body.querySelector("#calRange").textContent = (+a.slice(8)) + (mesDe(a) === mesDe(b) ? "" : " " + mesDe(a)) + " – " + (+b.slice(8)) + " " + mesDe(b) + " " + b.slice(0, 4);
+    body.querySelector("#calDate").value = a;
+    const con = porPunto(its, "concedido"), sol = porPunto(its, "solicitado");
+    const otros = [["caducado", "sin respuesta", "sin respuesta"], ["denegado", "denegado", "denegados"], ["cancelado", "cancelado", "cancelados"]]
+      .map(([e, uno, varios]) => [new Set(its.filter((i) => i.e === e).map((i) => i.c.id)).size, uno, varios]).filter(([n]) => n).map(([n, uno, varios]) => n + " " + (n === 1 ? uno : varios));
+    body.querySelector("#calSum").innerHTML =
+      '<div class="c"><b>' + suma(con) + "</b><span>captadores concedidos en " + plural(con.size, "punto", "puntos") + "</span></div>" +
+      '<div class="s"><b>' + suma(sol) + "</b><span>captadores por aprobar en " + plural(sol.size, "punto", "puntos") + "</span></div>" +
+      (otros.length ? '<div class="q">' + esc(otros.join(" · ")) + "</div>" : "");
+    const grid = body.querySelector("#calGrid");
+    if (!its.length) {
+      grid.innerHTML = '<div class="cal-none">No hay permisos con fechas en esta semana' + (todos.length ? " con los filtros elegidos" : "") + ". Cambia de semana, de provincia o activa más estados.</div>";
+      return;
+    }
+    const cols = DIAS.map((_, k) => {
+      const d = addD(a, k), arr = its.filter((i) => (!i.desde || i.desde <= d) && (!i.hasta || i.hasta >= d))
+        .sort((x, y) => ORDEN.indexOf(x.e) - ORDEN.indexOf(y.e) || (x.ong || "~").localeCompare(y.ong || "~", "es") || x.c.name.localeCompare(y.c.name, "es"));
+      const c = porPunto(arr, "concedido"), s = porPunto(arr, "solicitado");
+      return { d, arr, c: suma(c), s: suma(s) };
+    });
+    const max = Math.max(1, ...cols.map((x) => x.c + x.s));
+    grid.innerHTML = '<div class="cal-scroll"><div class="cal-wk" role="group" aria-label="Permisos de la semana por día">' + cols.map((x, k) => {
+      const pct = x.c + x.s ? Math.max(7, Math.round(100 * (x.c + x.s) / max)) : 0;
+      return '<section class="cal-day' + (k >= 5 ? " we" : "") + (x.d === t ? " today" : "") + '" aria-labelledby="calH' + k + '">' +
+        '<div class="cal-sky" aria-hidden="true">' + (pct ? '<div class="cal-stack" style="height:' + pct + '%">' + (x.s ? '<i class="s" style="flex:' + x.s + ' 1 0"></i>' : "") + (x.c ? '<i class="c" style="flex:' + x.c + ' 1 0"></i>' : "") + "</div>" : "") + "</div>" +
+        '<h3 class="cal-hd" id="calH' + k + '"><span class="dn">' + DIAS[k] + '</span><span class="n">' + (+x.d.slice(8)) + '</span><span class="m">' + mesDe(x.d) + "</span>" + (x.d === t ? '<span class="hoy">Hoy</span>' : "") + "</h3>" +
+        '<p class="cal-tot">' + (x.c || x.s ? "<b>" + x.c + "</b> captadores" + (x.s ? " · <b>" + x.s + "</b> por aprobar" : "") : "Sin captadores") + "</p>" +
+        '<ul class="cal-list">' + (x.arr.length ? x.arr.map(tarjeta).join("") : '<li class="cal-empty">Sin permisos</li>') + "</ul></section>";
+    }).join("") + "</div></div>";
+  };
+
+  const abrir = () => {
+    wk = mondayOf(today()); ong = ""; ORDEN.forEach((k) => fEst.add(k));
+    const opts = provOpts();
+    prov = provAuto(opts);
+    body.innerHTML =
+      '<div class="cal-bar">' +
+      '<label class="cal-f">Provincia<select id="calProv">' + (opts.length > 1 ? '<option value="">Todas las provincias</option>' : "") +
+      opts.map(([id, n]) => '<option value="' + esc(id) + '"' + (id === prov ? " selected" : "") + ">" + esc(n) + "</option>").join("") + "</select></label>" +
+      '<label class="cal-f">ONG<select id="calOng"></select></label>' +
+      '<div class="cal-nav"><button type="button" data-w="-1" aria-label="Semana anterior">&#8249;</button><span class="cal-range" id="calRange" role="status"></span>' +
+      '<button type="button" data-w="1" aria-label="Semana siguiente">&#8250;</button><button type="button" data-w="0">Hoy</button>' +
+      '<label class="cal-f"><span class="adm-sr">Ir a la semana de esta fecha</span><input type="date" id="calDate"></label></div></div>' +
+      '<div class="cal-sum" id="calSum"></div>' +
+      '<div class="cal-filters" role="group" aria-label="Estados que se muestran">' +
+      ORDEN.map((k) => '<button type="button" class="cal-chip s-' + k + '" data-st="' + k + '" aria-pressed="true"><i></i>' + esc(estadoInfo(k)[1]) + "</button>").join("") + "</div>" +
+      '<div id="calGrid"></div>' +
+      '<p class="cal-note">Un permiso aparece cada día entre su fecha de inicio y la de fin. Los captadores de un día suman los de cada punto; «por aprobar» son solicitudes que aún no tienen respuesta. Pulsa una tarjeta para ver el punto en el mapa.</p>';
+    draw();
+    dlg.showModal();
+    body.querySelector("#calProv").focus();
+  };
+  body.addEventListener("click", (e) => {
+    const w = e.target.closest("[data-w]");
+    if (w) { wk = w.dataset.w === "0" ? mondayOf(today()) : addD(wk, 7 * +w.dataset.w); draw(); return; }
+    const st = e.target.closest("[data-st]");
+    if (st) { const k = st.dataset.st; if (fEst.has(k)) fEst.delete(k); else fEst.add(k); st.setAttribute("aria-pressed", String(fEst.has(k))); draw(); return; }
+    const pt = e.target.closest("[data-pt]");
+    if (pt) { const c = CENTERS.find((x) => String(x.id) === pt.dataset.pt); if (c) { dlg.close(); if (markers[c.id]) cluster.zoomToShowLayer(markers[c.id], () => markers[c.id].openPopup()); } }
+  });
+  body.addEventListener("change", (e) => {
+    if (e.target.id === "calProv") { prov = e.target.value; ong = ""; draw(); }
+    else if (e.target.id === "calOng") { ong = e.target.value; draw(); }
+    else if (e.target.id === "calDate" && e.target.value) { wk = mondayOf(e.target.value); draw(); }
+  });
+  $("#calBtn").addEventListener("click", abrir);
+  $("#calClose").addEventListener("click", () => dlg.close());
 })();
 
 // Administración (usuarios y provincias): solo para administradores. El alta de cuentas se hace en Supabase.
