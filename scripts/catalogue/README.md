@@ -14,9 +14,12 @@ Entorno (aprobado por el titular el 19/10/2026): `python -m venv ~/osm-trabajo/v
 | `extraer.py` | Aplica una definición de categoría (`categorias/<categoria>.json`) a todo el fichero y asigna municipio/provincia (INE) por geometría. |
 | `validar.py` | Control de calidad: descarta sin nombre, ya existentes y duplicados; marca «por revisar»; genera `informe.md` y `excepciones.csv`. |
 | `generar_lote.py` | Genera el JSON de origen y un SQL por provincia (idempotente, transaccional) desde `validados.json`. |
-| `cargar.sh` | Aplica los SQL de un directorio con `psql` (conexión pedida sin eco), con recuento antes y después. |
+| `cargar.sh` | Aplica los SQL de un directorio con `psql` (conexión pedida sin eco), con recuento antes y después (tercer argumento opcional: prefijo de `source_ref` para lotes de varias categorías). |
+| `completar_direcciones_local.py` | Completa la calle con la vía con nombre más cercana del propio pbf (≤ 120 m), sin servicios externos; no completa código postal. |
 | `generar_municipios.py` | Genera el SQL de carga de municipios oficiales (idempotente, no cambia nombres ni borra). |
 
 Diseño completo en `docs/DISENO_CARGA_NACIONAL.md`.
 
 Cadena de una categoría para Andalucía (N1): `extraer.py` → `validar.py` → `generar_lote.py` → prueba local → `cargar.sh` con aprobación. Ejemplo y resultados en `docs/CARGA_N1_ESTACIONES_ANDALUCIA.md`.
+
+Una definición puede cubrir varias categorías (sin `categoria` raíz; cada regla lleva la suya y `nombre_por_categoria`): ver `categorias/grandes-superficies.json` y `docs/CARGA_N2_GRANDES_SUPERFICIES_ANDALUCIA.md`.
