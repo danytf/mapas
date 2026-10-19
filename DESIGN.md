@@ -1,0 +1,231 @@
+---
+name: Mapa del Responsable de Gestión de Recursos de Wesser
+description: Sala de control de oficina para solicitar y seguir permisos de captación en toda Andalucía, sobre un mapa.
+colors:
+  wesser-red: "#c8102e"
+  wesser-red-deep: "#9f0c24"
+  wesser-red-tint: "#fdecef"
+  ink: "#0f1722"
+  ink-raised: "#1b2636"
+  cool-paper: "#eef0f3"
+  panel-white: "#ffffff"
+  panel-quiet: "#f3f5f8"
+  text: "#141b26"
+  text-muted: "#5c6779"
+  line: "#e2e6ec"
+  line-strong: "#cfd5de"
+  granted-deep: "#14532d"
+  granted-tint: "#dcfce7"
+  pending-deep: "#8a5a00"
+  pending-tint: "#fff3d6"
+  state-requested: "#fbbf24"
+  state-granted: "#22c55e"
+  state-denied: "#111827"
+  state-expired: "#94a3b8"
+  state-cancelled: "#dc2626"
+typography:
+  headline:
+    fontFamily: "Figtree, Segoe UI Variable Text, Segoe UI, system-ui, sans-serif"
+    fontSize: "17px"
+    fontWeight: 650
+    lineHeight: 1.15
+    letterSpacing: "-0.015em"
+  title:
+    fontFamily: "Figtree, Segoe UI Variable Text, Segoe UI, system-ui, sans-serif"
+    fontSize: "14px"
+    fontWeight: 620
+    lineHeight: 1.3
+  body:
+    fontFamily: "Figtree, Segoe UI Variable Text, Segoe UI, system-ui, sans-serif"
+    fontSize: "14px"
+    fontWeight: 400
+    lineHeight: 1.45
+  label:
+    fontFamily: "Figtree, Segoe UI Variable Text, Segoe UI, system-ui, sans-serif"
+    fontSize: "12px"
+    fontWeight: 560
+    lineHeight: 1.3
+  numeral:
+    fontFamily: "Figtree, Segoe UI Variable Text, Segoe UI, system-ui, sans-serif"
+    fontSize: "28px"
+    fontWeight: 680
+    lineHeight: 1.05
+    letterSpacing: "-0.02em"
+    fontFeature: "tnum"
+rounded:
+  control: "8px"
+  card: "12px"
+  surface: "16px"
+  pill: "999px"
+spacing:
+  xs: "4px"
+  sm: "8px"
+  md: "12px"
+  lg: "16px"
+  xl: "22px"
+components:
+  button-default:
+    backgroundColor: "{colors.panel-white}"
+    textColor: "{colors.text}"
+    rounded: "{rounded.control}"
+    height: "36px"
+    padding: "0 14px"
+  button-primary:
+    backgroundColor: "{colors.wesser-red}"
+    textColor: "{colors.panel-white}"
+    rounded: "{rounded.control}"
+    height: "42px"
+  input-field:
+    backgroundColor: "{colors.panel-white}"
+    textColor: "{colors.text}"
+    rounded: "{rounded.control}"
+    height: "38px"
+    padding: "0 12px"
+  header:
+    backgroundColor: "{colors.ink}"
+    textColor: "{colors.panel-white}"
+    height: "60px"
+  kpi-card:
+    backgroundColor: "{colors.panel-white}"
+    rounded: "{rounded.card}"
+    padding: "12px 14px"
+  kpi-card-highlight:
+    backgroundColor: "{colors.granted-tint}"
+    textColor: "{colors.granted-deep}"
+  kpi-card-alert:
+    backgroundColor: "{colors.pending-tint}"
+    textColor: "{colors.pending-deep}"
+  dialog:
+    backgroundColor: "{colors.panel-white}"
+    rounded: "{rounded.surface}"
+    padding: "22px"
+  filter-chip:
+    backgroundColor: "{colors.panel-white}"
+    rounded: "{rounded.pill}"
+    height: "32px"
+---
+
+# Design System: Mapa del Responsable de Gestión de Recursos de Wesser
+
+## Overview
+
+**Creative North Star: "La sala de control"**
+
+La usa una persona de oficina que solicita permisos, los sigue y decide dónde enviar a los equipos. No es una app de calle ni de marketing: es su puesto de mando. Por eso el sistema prioriza que se vea mucho a la vez y que cada estado se lea de un golpe: un mapa que ocupa casi toda la pantalla, una lista a la izquierda, y paneles (resumen, calendario, administración) que se abren encima sin sacar a la persona de contexto.
+
+El carácter es de tinta y papel frío con un único acento, el rojo Wesser. El rojo se reserva para lo que pide atención o acción (la línea bajo la cabecera, el botón principal, el foco, «hoy»); el resto del color pertenece a los datos: categorías en los pines, estados de permiso en los bordes y las tarjetas. El tono es cercano y motivador: la gamificación (nivel, XP, logros, retos) tiene presencia propia en la cabecera y en sus diálogos, pero nunca se mezcla con el flujo de permisos ni compite con él.
+
+**Key Characteristics:**
+- Fondo gris frío, paneles blancos con borde fino y sombra solo en lo que flota.
+- Un solo acento (rojo Wesser); el color restante son datos, no decoración.
+- Los estados de permiso se dicen siempre con texto además de con color.
+- Densidad alta pero ordenada: números tabulares, etiquetas pequeñas, jerarquía por peso y tamaño.
+- Modo claro y oscuro con los mismos roles.
+
+## Colors
+
+Paleta fría y neutra con una sola voz cálida: el rojo Wesser sobre tinta y papel.
+
+### Primary
+- **Rojo Wesser** (#c8102e): acción principal (Entrar, Guardar), línea de 3 px bajo la cabecera, borde de foco y marca de «hoy». Su rareza es el punto.
+- **Rojo Wesser profundo** (#9f0c24): estado al pasar el ratón de la acción principal.
+- **Tinte Wesser** (#fdecef): halo de foco de 3 px de los campos y fondo de elemento activo.
+
+### Neutral
+- **Tinta** (#0f1722): cabecera, toasts y elementos de marca; en oscuro baja aún más.
+- **Tinta elevada** (#1b2636): segundo nivel sobre tinta (chips de la cabecera).
+- **Papel frío** (#eef0f3): fondo de la aplicación y de los paneles que se abren encima.
+- **Panel blanco** (#ffffff): superficie de lista, tarjetas, campos y diálogos.
+- **Panel quieto** (#f3f5f8): relleno de zonas secundarias (chips, filas al pasar el ratón).
+- **Texto** (#141b26) y **texto atenuado** (#5c6779): contraste verificado de 17,3:1 y 5,7:1 sobre blanco.
+- **Línea** (#e2e6ec) y **línea firme** (#cfd5de): separadores y bordes de campos.
+
+### Estados de permiso (datos, no decoración)
+- **Concedido** (#22c55e), **Solicitado** (#fbbf24), **Denegado** (#111827), **Caducado** (#94a3b8), **Cancelado** (#dc2626); «sin solicitar» es blanco con borde gris. Cada uno lleva siempre su etiqueta de texto.
+- **Concedido profundo** (#14532d) sobre **tinte verde** (#dcfce7) y **pendiente profundo** (#8a5a00) sobre **tinte ámbar** (#fff3d6) para indicadores destacados.
+
+### Named Rules
+**The One Voice Rule.** El rojo Wesser aparece en menos del 10 % de cualquier pantalla. Si todo es rojo, nada pide atención.
+**The Data Color Rule.** Verde, ámbar, gris, negro y rojo de estado significan estado de permiso, y solo eso. No se usan para decorar.
+**The Words Beside Color Rule.** Un estado nunca se comunica solo con color: va con su texto («Concedido», «Solicitado»…).
+
+## Typography
+
+**Display y cuerpo:** Figtree (400 a 700) con pila de respaldo Segoe UI Variable / Segoe UI / system-ui. Una sola familia.
+
+**Carácter:** neutro, geométrico y legible a tamaños pequeños. Con números tabulares activados, las cifras de captadores y fechas se alinean en columna.
+
+### Hierarchy
+- **Headline** (650, 17 px, 1,15): título de la aplicación y de cada diálogo (a 18 px en diálogos).
+- **Title** (620, 14 px, 1,3): nombre del punto en la lista, cabeceras de filas.
+- **Body** (400, 14 px, 1,45): texto corriente y campos.
+- **Label** (560, 12 a 13 px): etiquetas de campo, chips, metadatos; es el tamaño más usado de la interfaz.
+- **Numeral** (680, 28 px, 1,05, tabular): indicadores y números de día del calendario.
+
+### Named Rules
+**The Tabular Rule.** Toda cifra que se compara (captadores, fechas, recuentos) va en números tabulares.
+
+## Layout
+
+Rejilla de dos zonas: columna izquierda de 408 px (búsqueda, filtros y lista) y mapa a sangre en el resto, bajo una cabecera de 60 px. Los paneles (resumen, calendario, administración, progreso) son diálogos nativos que se abren sobre el mapa con anchos de 920 a 1380 px. La unidad de espaciado es de 4 px con pasos de 8, 12, 16 y 22. Puntos de corte observados: 1180, 900 y 760 px; por debajo de 900 los paneles pasan a una columna. Existe una regla para dispositivos sin cursor (`hover: none`).
+
+## Elevation & Depth
+
+Capas tonales con elevación solo para lo que flota. En reposo las superficies son planas: papel frío debajo, panel blanco encima, separados por un borde fino.
+
+### Shadow Vocabulary
+- **Flotante** (`0 1px 2px rgba(15,23,34,.06), 0 8px 24px rgba(15,23,34,.10)`): menú, controles del mapa, ventanas emergentes, leyenda y tarjetas al pasar el ratón.
+- **Borde lateral de la columna** (`4px 0 24px rgba(15,23,34,.06)`): separa la lista del mapa.
+- **Diálogo** (`0 24px 60px rgba(15,23,34,.35)`): solo en diálogos modales sobre un velo desenfocado.
+- **Halo de foco** (`0 0 0 3px` del tinte Wesser): campos enfocados.
+
+### Named Rules
+**The Flat-By-Default Rule.** Una superficie es plana hasta que flota o responde. Nada lleva sombra solo por decorar.
+
+## Shapes
+
+Esquinas moderadas y consistentes por nivel: 8 px en controles, 12 px en tarjetas e indicadores, 14 a 16 px en diálogos y ventanas emergentes, píldora completa en chips. Hoy hay unos veinte radios distintos en el código; la escala de cuatro pasos de arriba es la intención. Los bordes son siempre de 1 px; la excepción deliberada es la línea de 3 px bajo la cabecera y el borde izquierdo de 5 px que codifica el estado en las tarjetas del calendario.
+
+## Components
+
+### Buttons
+- **Shape:** esquinas de 8 px, altura de 36 px (42 px en el acceso).
+- **Default:** fondo blanco, borde de línea firme, texto de peso 550; al pasar el ratón, relleno tonal y borde atenuado.
+- **Primary:** relleno rojo Wesser con texto de acento; más oscuro al pasar el ratón.
+- **Focus:** contorno visible de 2 px en rojo con desplazamiento de 2 px.
+
+### Chips and filter chips
+- **Style:** píldora con borde de línea firme; un punto de color indica el estado que filtran.
+- **State:** `aria-pressed`; activo con borde de texto, inactivo con opacidad reducida y punto hueco.
+
+### Cards / Containers
+- **Corner Style:** 12 px en indicadores y tarjetas, 10 px en tarjetas de permiso del calendario.
+- **Background:** blanco sobre papel frío; los indicadores destacados usan tinte verde o ámbar.
+- **Border:** 1 px de línea; el estado de permiso se codifica con un borde izquierdo de 5 px y, si está pendiente, con trama rayada y borde discontinuo.
+
+### Inputs / Fields
+- **Style:** altura de 38 px, borde de línea firme, radio de 8 px; el buscador va sobre fondo de papel sin borde.
+- **Focus:** borde rojo y halo de 3 px del tinte Wesser.
+
+### Header
+Tinta con línea inferior de 3 px en rojo Wesser; título a la izquierda y, a la derecha, indicadores (puntos, permisos vigentes, captadores hoy, seguimientos), nivel y logros, y el menú.
+
+### Calendario semanal (componente de firma)
+Siete columnas de lunes a domingo; sobre cada una, una silueta de barras (altura = captadores del día: verde los concedidos, trama ámbar los por aprobar), y debajo una tarjeta por permiso con estado en texto, punto, municipio, ONG con color propio y número de captadores.
+
+## Do's and Don'ts
+
+### Do:
+- **Do** reservar el rojo Wesser (#c8102e) para acción, foco y «hoy».
+- **Do** decir cada estado con texto además de color, y mantener contraste de al menos 4,5:1 en texto y 3:1 en bordes de controles.
+- **Do** usar números tabulares para todo lo que se compara.
+- **Do** dar a la gamificación presencia propia (cabecera, logros, retos) sin mezclarla con el flujo de permisos.
+- **Do** mantener objetivos táctiles de 44 px en pantallas sin cursor.
+- **Do** definir modo claro y oscuro con los mismos roles.
+
+### Don't:
+- **Don't** parecer una app de juego infantil: la herramienta sigue siendo seria y profesional.
+- **Don't** convertirse en un panel corporativo genérico de tarjetas iguales llenas de ceros; el indicador importante debe pesar más que el resto.
+- **Don't** parecer una plantilla de IA: sin degradados decorativos, brillos de color, bordes de acento por costumbre ni sombras anchas bajo un borde fino.
+- **Don't** usar los colores de estado como decoración.
+- **Don't** añadir tamaños de letra o radios fuera de la escala sin una razón de jerarquía.
