@@ -1,6 +1,6 @@
 # Carga masiva de códigos postales (administradores)
 
-Estado: **migración y prueba preparadas y probadas en local; NO aplicada en producción. Pendiente de aprobación del titular.**
+Estado: **aplicada en producción el 19/10/2026** con la aprobación del titular (versión registrada `20261019191833`, función `SECURITY INVOKER`, `anon` sin `EXECUTE`, `authenticated` con `EXECUTE`).
 
 Problema: `guard_sensitive_updates` solo deja cambiar `postal_code` a un administrador identificado con JWT, así que por SQL (`psql`) no se puede y hasta ahora se escribía punto a punto desde la ficha (unos 1.000 puntos, ~45 minutos). La función `public.admin_set_postal_codes(p_items jsonb, p_only_empty boolean default true)` permite hacerlo en una sola llamada con la sesión del administrador.
 
@@ -28,7 +28,3 @@ Los candidatos salen de `scripts/catalogue/completar_cp_desde_base.py` (Nominati
 ## Pruebas
 
 `supabase/tests/admin_postal_codes.sql` (19 comprobaciones): permisos (anon y usuario normal), entrada no válida, rellenar vacíos, no pisar, `p_only_empty = false`, código de otra provincia, formatos e ids no válidos, límite de 2.000, que solo cambie `postal_code` y que quede en la auditoría. Probado en PostgreSQL 17 tras reconstruir el esquema con `scripts/dev/rebuild-local-db.sh` y con el resto de pruebas SQL en el orden de `schema-smoke.yml`. El paso está añadido al workflow.
-
-## Para aplicar en producción
-
-Requiere aprobación. La migración `supabase/migrations/20261019200000_admin_set_postal_codes.sql` debe renombrarse a la versión que registre Supabase al aplicarla (`list_migrations`), como el resto, y el nombre actualizarse en `schema-smoke.yml`. Después, comprobar los avisos del asesor de seguridad (la función es `SECURITY INVOKER`, no debería añadir ninguno).
