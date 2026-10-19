@@ -1,6 +1,6 @@
 # Calendario semanal
 
-Estado: **implementado en la rama `feat/calendario-semanal`; pendiente de PR, checks y verificación en producción** (19/10/2026). Decisión del titular (19/10/2026): sacar la vista semanal del panel resumen y crear una sección nueva, a pantalla completa y muy visual, con selector de semana y provincia.
+Estado: **hecho y desplegado el 19/10/2026** (PR #137, commit `fcde338`). Verificado: el despliegue de Pages terminó con éxito y la URL pública tiene el mismo SHA-256 que `index.html` de `main` (`d1499dbd934330e6`...), con la sección nueva y sin la vista semanal del panel. Pendiente: que el titular lo revise con sus permisos reales. Decisión del titular (19/10/2026): sacar la vista semanal del panel resumen y crear una sección nueva, a pantalla completa y muy visual, con selector de semana y provincia.
 
 ## Qué hace
 
