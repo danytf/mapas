@@ -26,6 +26,7 @@
 ## Carga nacional (19/10/2026)
 
 - N0 (municipios de Andalucía con código INE) y N1 (246 estaciones de Andalucía, `docs/CARGA_N1_ESTACIONES_ANDALUCIA.md`) cargadas en producción y verificadas en solo lectura. Tras N1: 1.059 establecimientos (Estaciones 260). Los puntos de la N1 llevan `source_ref` `catalogo-andalucia:estaciones:<tipo>-<id>` y `location_source` `openstreetmap:<tipo>/<id>`; los 8 que quedaron «por revisar» se resolvieron el mismo día (6 archivados, 2 verificados con ubicación manual), de modo que el lote tiene 240 activos y 6 archivados.
+- **Favoritos y altas de Granada (19/10/2026):** `formacion@wesser.es` tiene 59 favoritos de trabajo en Granada; se añadieron 5 puntos al catálogo para completarlos (1.464 puntos en total). Detalle y pendientes (municipio del «Lidl – Ctra. Gabia, 9», CS Padul por revisar) en `docs/CARGA_CATALOGO_GRANADA.md`.
 - N2 (Correos de Andalucía, 400 oficinas, `docs/CARGA_N2_CORREOS_ANDALUCIA.md`) cargada y verificada: 1.459 establecimientos (Correos 481).
 - Provincias activas: las 8 de Andalucía (activadas el 19/10/2026 por SQL con el procedimiento de `docs/ADMINISTRACION_CUENTAS.md`). Asignadas las 8 a `daniel.marrero@wesser.es` y `formacion@wesser.es` (administrador); `rsc@wesser.es` solo Málaga.
 - Límites conocidos: calles de la N1 orientativas (7 puntos sin calle); 225 sin código postal; OpenStreetMap no indica si una estación tiene servicio.
