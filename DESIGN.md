@@ -244,3 +244,10 @@ Siete columnas de lunes a domingo; sobre cada una, una silueta de barras (altura
 - **Don't** parecer una plantilla de IA: sin degradados decorativos, brillos de color, bordes de acento por costumbre ni sombras anchas bajo un borde fino.
 - **Don't** usar los colores de estado como decoración.
 - **Don't** añadir tamaños de letra o radios fuera de la escala sin una razón de jerarquía.
+
+## Rediseño premium (paso 1, octubre 2026)
+
+- Paleta: carbón `#171b23` (cabecera), fondo `#f5f6f8`, texto secundario `#596478` (el `#64748b` propuesto da 4,45:1 sobre el fondo; este llega a 4,5:1 o más), rojo Wesser solo como acción y énfasis (filo de 2 px bajo la cabecera, botones primarios, «Limpiar»).
+- Cabecera de 56 px con indicadores operativos sin relleno; sin Logros, niveles, rachas ni insignias.
+- Panel izquierdo: «Limpiar (n)» aparece solo con filtros activos y los restablece todos.
+- Leyenda del mapa plegada por defecto para que el mapa sea el protagonista.
