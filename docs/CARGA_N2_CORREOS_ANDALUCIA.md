@@ -1,6 +1,6 @@
 # Carga N2: Correos de Andalucía
 
-Estado: **preparada y probada en local; pendiente de aprobación del titular para producción** (19/10/2026). Cadena: la de la N1 (`scripts/catalogue/README.md`) con la definición `scripts/catalogue/categorias/correos.json`. Lote: `supabase/seeds/correos-andalucia/` (JSON de origen, `excepciones.csv` y un SQL por provincia).
+Estado: **cargada en producción el 19/10/2026** con `cargar.sh` desde el equipo del titular (aprobación explícita) y verificada en solo lectura: 1.059 → 1.459 puntos (Correos 81 → 481), 400 por provincia como en el lote (Almería 35, Cádiz 51, Córdoba 50, Granada 2, Huelva 45, Jaén 73, Málaga 69, Sevilla 75), sin duplicados de `source_ref` ni puntos incompletos, 3 sin calle y 26 sin código postal, 400 altas en `audit_log`, base de 15 MB. Cadena: la de la N1 (`scripts/catalogue/README.md`) con la definición `scripts/catalogue/categorias/correos.json`. Lote: `supabase/seeds/correos-andalucia/` (JSON de origen, `excepciones.csv` y un SQL por provincia).
 
 Fuente: `andalucia-latest.osm.pbf` (base de OpenStreetMap del 17/10/2026 20:20:51 UTC). Puntos ya existentes de la categoría en la base: 81 (todos de Granada, sin identificador de OpenStreetMap), comparados por distancia.
 
