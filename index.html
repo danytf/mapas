@@ -531,15 +531,29 @@
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
   @media (max-width: 1180px) { .kg-op .k:nth-child(-n+2) { display: none; } }
   @media (max-width: 900px) { .kstrip { display: none; } }
+  #filtros { display: grid; gap: 8px; }
+  #filtBtn, #vistaSw { display: none; }
   @media (max-width: 760px) {
     h1 { font-size: var(--fs-body); }
     header { height: 54px; gap: 10px; }
     .logo { height: 28px; }
-    body { height: auto; min-height: 100%; }
-    main { grid-template-columns: 1fr; grid-template-rows: 55vh auto; }
-    #map { order: -1; }
+    /* Móvil: el mapa ocupa toda la pantalla y la lista es una vista alternativa (conmutador Mapa / Lista); los filtros se pliegan. */
+    body { height: 100dvh; overflow: hidden; }
+    main { display: block; position: relative; }
+    #map, aside { position: absolute; inset: 0; }
+    main:not(.vista-lista) aside, main.vista-lista #map { display: none; }
     aside { border-right: 0; box-shadow: none; }
-    ul { overflow: visible; }
+    #filtBtn { display: block; width: 100%; height: 44px; text-align: left; padding: 0 14px; font-size: var(--fs-label-lg); }
+    #filtBtn::after { content: "BE"; float: right; transition: transform .18s; }
+    #filtBtn[aria-expanded="true"]::after { transform: rotate(180deg); }
+    #list { padding-bottom: 96px; }
+    #filtBtn.on { border-color: var(--accent); color: var(--accent); }
+    #filtros { display: none; }
+    #filtros.on { display: grid; }
+    #vistaSw { display: flex; position: absolute; left: 50%; bottom: 34px; transform: translateX(-50%); z-index: 1200; background: var(--ink); border-radius: var(--r-pill); padding: 4px; gap: 2px; box-shadow: var(--shadow); }
+    #vistaSw button { height: 44px; min-width: 96px; border: 0; border-radius: var(--r-pill); background: transparent; color: #cfd6e2; font-weight: 600; }
+    #vistaSw button[aria-pressed="true"] { background: #fff; color: var(--ink); }
+    main.fi-open #vistaSw { display: none; }
     .legend-box { max-height: 34vh; overflow: auto; }
   }
   /* Panel resumen y Administración con el lenguaje de la ficha: cabecera fija con filete, títulos de 17 px, secciones en etiqueta de 12 px,
@@ -626,6 +640,8 @@
         <input id="q" type="search" placeholder="Buscar por nombre o calle" aria-label="Buscar centro">
         <button id="favBtn" type="button" aria-pressed="false" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-8-4.7-8-10.5C4 7 6 5 8.5 5c1.5 0 2.8.8 3.5 2 .7-1.2 2-2 3.5-2C18 5 20 7 20 10c0 5.800-8 10.500-8 10.500z"/></svg><span>Favoritos (0)</span></button>
       </div>
+      <button id="filtBtn" type="button" aria-expanded="false" aria-controls="filtros">Filtros</button>
+      <div id="filtros">
       <div class="row">
         <select id="provincia" aria-label="Filtrar por provincia">
           <option value="">Provincia: todas</option>
@@ -651,12 +667,14 @@
           <select id="subtipo" aria-label="Filtrar por tipo de entidad"></select>
         </div>
       </div>
+      </div>
       <div class="bar" aria-hidden="true"><i id="prog"></i></div>
       <div class="srow"><div class="status" id="status" role="status">Preparando…</div><button id="clrBtn" type="button" class="linkbtn" hidden>Limpiar filtros</button></div>
       <button id="revBtn" type="button" class="chipbtn" aria-pressed="false">Por revisar (0)</button>
     </div>
     <ul id="list"></ul>
   </aside>
+  <div id="vistaSw" role="group" aria-label="Vista"><button id="vMapa" type="button" aria-pressed="true">Mapa</button><button id="vLista" type="button" aria-pressed="false">Lista</button></div>
   <div id="map" role="region" aria-label="Mapa de centros sanitarios"></div>
   <div id="ficha" role="complementary" aria-label="Ficha del punto" hidden></div>
 </main>
@@ -1941,6 +1959,9 @@ function renderList() {
     }
     if (visible) shown.push(c);
   });
+  $("#vLista").textContent = "Lista (" + shown.length + ")";
+  $("#filtBtn").textContent = nAct ? "Filtros (" + nAct + ")" : "Filtros";
+  $("#filtBtn").classList.toggle("on", nAct > 0);
   // Marcadores en bloque (uno a uno era muy lento con miles de puntos).
   if (toRemove.length) cluster.removeLayers(toRemove);
   if (toAdd.length) cluster.addLayers(toAdd);
@@ -2033,6 +2054,7 @@ function applySel() {
 map.on("moveend zoomend", () => setTimeout(applySel, 0));
 cluster.on("animationend", applySel);
 function highlight(id, fly) {
+  if (fly && window.innerWidth <= 760 && $("main").classList.contains("vista-lista")) setVista(false);
   document.querySelectorAll("li.active").forEach((n) => n.classList.remove("active"));
   let li = document.querySelector('li[data-id="' + id + '"]');
   if (!li) {
@@ -2123,6 +2145,19 @@ $("#muni").addEventListener("change", refilter);
 $("#tipo").addEventListener("change", refilter);
 $("#cadena").addEventListener("change", refilter);
 $("#subtipo").addEventListener("change", refilter);
+$("#filtBtn").addEventListener("click", () => {
+  const abrir = !$("#filtros").classList.contains("on");
+  $("#filtros").classList.toggle("on", abrir);
+  $("#filtBtn").setAttribute("aria-expanded", String(abrir));
+});
+function setVista(lista) {
+  $("main").classList.toggle("vista-lista", lista);
+  $("#vMapa").setAttribute("aria-pressed", String(!lista));
+  $("#vLista").setAttribute("aria-pressed", String(lista));
+  if (!lista) setTimeout(() => map.invalidateSize(), 0);
+}
+$("#vMapa").addEventListener("click", () => setVista(false));
+$("#vLista").addEventListener("click", () => setVista(true));
 $("#clrBtn").addEventListener("click", () => {
   ["#q", "#provincia", "#muni", "#tipo", "#permiso", "#valor", "#cadena", "#subtipo"].forEach((id) => { $(id).value = ""; });
   onlyRev = onlySeg = onlyFav = false;
