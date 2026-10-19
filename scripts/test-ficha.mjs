@@ -29,7 +29,7 @@ assert.ok(ficha.includes("Próximo seguimiento") === true && html.includes("(toc
 for (const k of ["pform", "ef", "pinfo", "stars", "sv", "f-contacto", "f-notas", "s-list", "h-list", "s-form", "h-form", "s-desde", "s-hasta", "s-n", "s-ong", "s-seg", "s-add", "s-cancel", "s-msg", "h-desde", "h-hasta", "h-n", "h-ong", "h-add", "h-cancel", "h-msg", "l-in", "l-address", "l-save-location", "l-mv", "l-cp", "lmsg", "l-gm", "f-save", "f-inact", "f-arch", "f-del", "f-rev", "saved"]) {
   assert.ok(ficha.includes(k), "Falta la clase " + k + " que usan los manejadores");
 }
-for (const k of ["setCommitControlsDisabled", "savePermits(c)", "gamPermit(c, previous.permit)", "gamRev(c)", "saveInactive()", "saveRemoved()", "reloadSharedPermit(c)", "dirty(false)", "setLoc(c, r[0], r[1], address)"]) {
+for (const k of ["setCommitControlsDisabled", "savePermits(c)", "saveInactive()", "saveRemoved()", "reloadSharedPermit(c)", "dirty(false)", "setLoc(c, r[0], r[1], address)"]) {
   assert.ok(html.slice(a).includes(k), "Se perdió la lógica: " + k);
 }
 assert.ok(ficha.includes('class="fi-menu"') && ficha.indexOf("f-inact") > ficha.indexOf('class="fi-menu"') && ficha.indexOf("f-del") > ficha.indexOf('class="fi-menu"'), "Desactivar y Quitar van dentro de «Más acciones»");

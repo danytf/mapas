@@ -5,7 +5,7 @@
 //  2. Nombres accesibles: diálogos con aria-labelledby válido, campos con etiqueta, botones solo-icono con aria-label,
 //     etiqueta visible contenida en el nombre accesible (2.5.3).
 //  3. Mensajes de estado/error en regiones aria-live (role=status|alert).
-//  4. Foco de la ficha del punto y del aviso de nivel.
+//  4. Foco de la ficha del punto.
 // No ejecuta el navegador: la verificación en navegador está descrita en docs/AUDITORIA_FASE_D_ACCESIBILIDAD_2026-10-18.md.
 import { readFileSync } from "node:fs";
 
@@ -44,7 +44,7 @@ for (const [mode, v] of [["claro", light], ["oscuro", dark]]) {
   add(n("--accent sobre --bg (grupo urgente)"), v.accent, v.bg);
   add(n("--accent sobre --panel"), v.accent, v.panel);
   add(n("--warn sobre --warn-bg (etiquetas, KPI de alerta, avisos)"), v.warn, v["warn-bg"]);
-  add(n("--warn sobre --panel (avisos, +XP)"), v.warn, v.panel);
+  add(n("--warn sobre --panel (avisos)"), v.warn, v.panel);
   add(n("--ok sobre --ok-soft (KPI destacado)"), v.ok, v["ok-soft"]);
   add(n("--panel sobre --warn (chip de revisión pulsado)"), v.panel, v.warn);
 }
@@ -53,8 +53,6 @@ add("cabecera: #9fb0c6 sobre --ink-2", "#9fb0c6", light["ink-2"]);
 add("cabecera: #fff sobre --ink-2", "#fff", light["ink-2"]);
 add("toast: #fff sobre --ink", "#fff", light.ink);
 add("toast: #fff sobre --ink (oscuro)", "#fff", dark.ink);
-add("insignia gamificación: #e8d9a8 sobre #1f2a3b", "#e8d9a8", "#1f2a3b");
-add("insignia gamificación: #e8d9a8 sobre #2a2412", "#e8d9a8", "#2a2412");
 add("indicador «Seguimientos» (claro): #ffd9de sobre --accent", "#ffd9de", light.accent);
 add("ficha: botón #fff sobre #c8102e", "#fff", "#c8102e");
 add("ficha: botón #fff sobre #9f0c24 (hover)", "#fff", "#9f0c24");
@@ -87,15 +85,7 @@ for (const [mode, v] of [["claro", light], ["oscuro", dark]]) {
   }
 }
 if (/(\.cal-card|\.cal-chip|#ficha \.ef)\.s-[a-z]+ \{[^}]*--st: #[0-9a-f]{3,6}/i.test(html)) fail("los colores de estado de la ficha y el calendario deben usar los tokens --st-*, no literales");
-// Modo oscuro: sobreescrituras de la gamificación.
-const darkOv = (sel) => html.match(new RegExp(sel.replace(/[.#]/g, "\\$&") + " \\{ color: (#[0-9a-f]{6}); \\}"))?.[1];
-const up = darkOv("#dlgGam em.up"), dn = darkOv("#dlgGam em.dn");
-if (!up || !dn) fail("faltan las sobreescrituras de #dlgGam em.up / em.dn en modo oscuro");
-else { add("oscuro: em.up sobre --panel", up, dark.panel); add("oscuro: em.dn sobre --panel", dn, dark.panel); }
-const mxVar = /#dlgGam \.ms \.mx \{[^}]*color: var\(--warn\)/.test(html) && /#dlgGam \.lgl li b \{[^}]*color: var\(--warn\)/.test(html);
 if (!/.kpi.al span {[^}]*opacity: .95/.test(html) || !/.kpi.hl span {[^}]*opacity: .95/.test(html)) fail("los rótulos de .kpi.al/.kpi.hl deben tener opacity .95 o más (con .85 dan 3,98:1)");
-if (!mxVar) fail("+XP y registro de XP deben usar var(--warn) (en modo oscuro #8a5a00 sobre el panel oscuro da 2,9:1)");
-if (!/#dlgGam \.alc\.full \{[^}]*var\(--warn-bg\)/.test(html)) fail("#dlgGam .alc.full no debe usar un degradado claro fijo (texto claro sobre fondo claro en modo oscuro)");
 if (!/\.kstrip \.k\.hot \{[^}]*\}/.test(html)) fail("falta .kstrip .k.hot");
 // Ficha del punto: sus colores deben quedar fijados a claros aunque el sistema esté en oscuro.
 // La ficha ya no es una burbuja de Leaflet siempre blanca: es un panel (#ficha) con los tokens de la app, que sí cambian en oscuro.
@@ -196,7 +186,7 @@ for (const [name, re] of [
   ["#toast", /t\.setAttribute\("role", "status"\)/],
 ]) if (!re.test(html)) fail(`${name} no es una región aria-live (role=status/alert)`);
 
-// Foco: ficha del punto (abierta con Intro desde la lista) y aviso de nivel.
+// Foco: ficha del punto (abierta con Intro desde la lista).
 if (!/popupFromKey = li; highlight\(c\.id, true\)/.test(html)) fail("la lista no marca la apertura de la ficha por teclado (popupFromKey)");
 if (!/function openFicha\(c\)[\s\S]{0,1200}\.fi-title"\)\.focus\(/.test(html)) fail("al abrir la ficha con el teclado el foco no pasa a ella");
 if (!/id="ficha" role="complementary" aria-label="Ficha del punto"/.test(html)) fail("la ficha no expone una región con nombre (role=complementary y aria-label)");
@@ -204,8 +194,6 @@ if (!/fichaEl\.addEventListener\("keydown", \(ev\) => \{ if \(ev\.key === "Escap
 if (!/function closeFicha\(\)[\s\S]{0,700}ret\.focus\(/.test(html)) fail("al cerrar la ficha el foco no vuelve al elemento de la lista");
 if (!/class="ptabs" role="tablist"/.test(html) || !/e\.key === "ArrowRight"/.test(html) || !/b\.tabIndex = on \? 0 : -1/.test(html)) fail("las pestañas de la ficha deben seguir el patrón de pestañas (tablist, flechas y tabindex itinerante)");
 if (!/aria-label="Cerrar la ficha"/.test(html)) fail("el botón de cerrar la ficha necesita nombre accesible");
-if (!/o\.addEventListener\("keydown", \(ev\) => \{ if \(ev\.key === "Escape"\) close\(\); \}\)/.test(html)) fail("el aviso de nivel (alertdialog) no se cierra con Escape");
-if (!/const prev = document\.activeElement;[\s\S]{0,700}prev\.focus\(\)/.test(html)) fail("el aviso de nivel no devuelve el foco al cerrarse");
 
 if (failures.length) {
   console.error("A11Y FASE D: FALLO (" + failures.length + ")");
