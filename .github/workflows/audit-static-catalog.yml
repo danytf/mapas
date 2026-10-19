@@ -27,6 +27,7 @@ on:
       - "scripts/test-favoritos.mjs"
       - "scripts/test-tactil.mjs"
       - "scripts/test-paneles.mjs"
+      - "scripts/test-escala.mjs"
       - "scripts/test-a11y-fase-d.mjs"
       - ".github/workflows/audit-static-catalog.yml"
   pull_request:
@@ -81,6 +82,8 @@ jobs:
         run: node scripts/test-tactil.mjs
       - name: Test summary and admin panels
         run: node scripts/test-paneles.mjs
+      - name: Test radius and font-size scale
+        run: node scripts/test-escala.mjs
       - name: Run XSS regression audit
         run: node scripts/audit-xss.mjs index.html
       - name: Check keyboard access to statistics panel rows

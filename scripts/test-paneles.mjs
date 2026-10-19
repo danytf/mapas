@@ -10,7 +10,7 @@ const css = html.slice(a, b);
 
 assert.ok(!/background(-color)?: #[0-9a-f]{3,6}/i.test(css) && !/ (color|border[a-z-]*): #[0-9a-f]{3,6}/i.test(css), "Los paneles no deben fijar colores: usan los tokens (modo claro y oscuro)");
 assert.ok(/\.pn-head[^}]*position: sticky[^}]*border-bottom: 1px solid var\(--line\)/.test(css), "La cabecera del panel es fija y lleva filete");
-assert.ok(/h2 \{ font-size: 17px/.test(css), "Los títulos siguen la escala de la ficha (17 px)");
+assert.ok(/h2 \{ font-size: var\(--fs-title\)/.test(css), "Los títulos siguen la escala de la ficha (--fs-title, 17 px)");
 assert.ok(/\.kpi \{ border-left: 5px solid var\(--kpi/.test(css) && /--st-solicitado/.test(css) && /--st-concedido/.test(css) && /--st-denegado/.test(css) && /--st-caducado/.test(css), "Las tarjetas del resumen codifican el estado con borde izquierdo y los tokens de estado");
 assert.ok(/\.pn-scroll \{ max-height: none; overflow-x: auto; overflow-y: visible; \}/.test(css), "La tabla del resumen no crea una segunda barra de desplazamiento vertical");
 assert.ok(/dialog input\[type="checkbox"\] \{ width: 18px; height: 18px; min-height: 0;/.test(css), "Las casillas de verificación no heredan el alto de los campos de texto");
@@ -21,5 +21,8 @@ const kp = html.slice(html.indexOf("'<div class=\"kpis\">'"), html.indexOf("'<di
 const orden = ["Puntos en el mapa", "Solicitados (pendientes)", "Concedidos", "Denegados", "Con concesión vigente hoy", "Captadores que se pueden enviar hoy", "Caducan en 30 días", "Solicitud caducada"].map((t) => kp.indexOf(t));
 assert.ok(orden.every((n, i) => n > 0 && (i === 0 || n > orden[i - 1])), "El orden de las tarjetas del resumen cambió: hay que revisar los nth-child de los bordes de estado");
 for (const n of [2, 3, 4, 8]) assert.ok(css.includes(`.kpis .kpi:nth-child(${n})`), "Falta el color de estado de la tarjeta " + n);
+
+// El botón de cerrar es el mismo en Panel resumen, Administración y Calendario (una «×» sin borde, como la de la ficha).
+assert.ok(/#pnClose, #admClose, #calClose \{ font-size: 24px;[^}]*border: 0;/.test(html), "Los tres diálogos comparten el botón de cerrar");
 
 console.log("Panel resumen y Administración: comprobaciones estáticas correctas.");
