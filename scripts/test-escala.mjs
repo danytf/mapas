@@ -28,4 +28,15 @@ for (const m of st.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
 }
 assert.deepEqual(malos, [], "Valores fuera de la escala (usa los tokens --r-* y --fs-*):\n" + malos.join("\n"));
 
+// Colores de categoría, gamificación y banda de la cabecera: tokens, no literales (solo se definen en :root).
+const fuera = st.replace(/:root\s*\{[^}]*\}/g, "");
+for (const lit of ["#e0a800", "#fff1c2", "#8a5a00", "#22a15a", "#f5c542", "#ffe28a", "#ffd966", "#fbbf24", "#22c55e", "#2b394d", "#3a4c66", "#26354b", "#1f2a3b"]) {
+  assert.ok(!fuera.toLowerCase().includes(lit), "El literal " + lit + " debe ser un token (--gam-*, --hd-*), no un valor suelto");
+}
+for (const t of ["--gam-gold:", "--gam-gold-soft:", "--gam-gold-ink:", "--gam-green:", "--hd-line:", "--cat-hospital:", "--cat-eventos:", "--cat-otra:", "--cat-defecto:"]) assert.ok(st.includes(t), "Falta el token " + t);
+const tipos = html.slice(html.indexOf("const TIPOS = ["), html.indexOf("];", html.indexOf("const TIPOS = [")));
+assert.ok(!/#[0-9a-f]{6}/i.test(tipos) && (tipos.match(/var\(--cat-/g) || []).length === 17, "Las 17 categorías usan tokens --cat-*");
+assert.ok(html.includes("const resolveColor = ") && /const inkOn = \(hex\) => \{\s*hex = resolveColor\(hex\);/.test(html), "El contraste del número de la lista resuelve el token antes de calcularlo");
+assert.ok(!/style="background:#(fff3d6|dcfce7)/.test(html), "Las etiquetas de la lista usan clases (.tag.warn / .tag.ok), no colores fijos");
+
 console.log("Escala de radios y tamaños de letra: comprobaciones estáticas correctas.");

@@ -152,6 +152,13 @@ La ficha, el calendario y sus chips usan `--st-concedido`, `--st-solicitado`, `-
 **The Data Color Rule.** Verde, ámbar, gris, negro y rojo de estado significan estado de permiso, y solo eso. No se usan para decorar.
 **The Words Beside Color Rule.** Un estado nunca se comunica solo con color: va con su texto («Concedido», «Solicitado»…).
 
+### Tokens de color añadidos (19/10/2026)
+
+- **Categorías:** `--cat-hospital` … `--cat-eventos`, más `--cat-otra` (categoría desconocida) y `--cat-defecto`. La tabla `TIPOS` de `index.html` guarda el nombre del token (`var(--cat-…)`); el contraste del número de la lista se calcula resolviendo el token (`resolveColor`/`inkOn`). Los valores son los de siempre; ahora se pueden afinar en oscuro sin tocar el código.
+- **Gamificación:** `--gam-gold`, `--gam-gold-soft`, `--gam-gold-ink`, `--gam-green`, `--gam-green-bright`, `--gam-amber`, `--gam-xp-a`, `--gam-xp-b`, `--gam-spark`. En oscuro, el dorado suave y su tinta usan `--warn-bg` y `--warn`.
+- **Banda de la cabecera:** `--hd-line`, `--hd-line-2`, `--hd-line-3`, `--hd-fill`.
+- Sin migrar a propósito: los colores de estado del pin y de la leyenda (`ESTADOS`, en JS), las barras de los gráficos en `canvas` y los cuadros de resultado de la geocodificación.
+
 ## Typography
 
 **Display y cuerpo:** Figtree (400 a 700) con pila de respaldo Segoe UI Variable / Segoe UI / system-ui. Una sola familia.

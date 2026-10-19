@@ -65,7 +65,7 @@ check("los enlaces dinámicos a Google Maps codifican el texto de búsqueda", ()
   assert.match(html, /encodeURIComponent\(pos\s*&&\s*pos\.lat\s*!=\s*null\s*\?\s*pos\.lat\s*\+\s*","\s*\+\s*pos\.lon\s*:\s*c\.name\.replace/);
 });
 check("los colores de marcadores usan la lista de tipos con fallback constante", () => {
-  assert.match(html, /const\s+colorOf\s*=\s*\(c\)\s*=>\s*\(TIPOS\.find\(\(t\)\s*=>\s*t\[1\]\s*===\s*c\.tipo\)\s*\|\|\s*\[0,\s*0,\s*["']#[0-9a-f]{6}["']\]\)\[2\]/i);
+  assert.match(html, /const\s+colorOf\s*=\s*\(c\)\s*=>\s*\(TIPOS\.find\(\(t\)\s*=>\s*t\[1\]\s*===\s*c\.tipo\)\s*\|\|\s*\[0,\s*0,\s*["'](?:#[0-9a-f]{6}|var\(--cat-[a-z-]+\))["']\]\)\[2\]/i);
 });
 check("los nombres de establecimientos se escapan en el renderizado de marcadores/lista", () => {
   assert.match(html, /esc\(c\.name\)/);
