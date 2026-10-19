@@ -1,6 +1,6 @@
 # Favoritos
 
-Estado: **implementados en la rama `feat/favoritos`; pendiente de verificación en navegador, PR y despliegue** (19/10/2026). Decisión del titular (19/10/2026): favoritos **personales de cada usuario**, marcados **desde la ficha del punto**, con un filtro **«Favoritos»** junto a la búsqueda.
+Estado: **implementados y probados en navegador; PR abierto, pendiente de fusión y despliegue** (19/10/2026). Decisión del titular (19/10/2026): favoritos **personales de cada usuario**, marcados **desde la ficha del punto**, con un filtro **«Favoritos»** junto a la búsqueda.
 
 ## Qué hace
 
@@ -15,7 +15,7 @@ Estado: **implementados en la rama `feat/favoritos`; pendiente de verificación 
 
 ## Pruebas
 
-`scripts/test-favoritos.mjs` (estática, en CI). Pendiente: prueba en navegador con el Supabase simulado (marcar y quitar, contador, filtro, error de guardado, recarga) y comprobación en producción por el titular.
+`scripts/test-favoritos.mjs` (estática, en CI). En el navegador con el Supabase simulado: marcar desde la ficha (contador y estado anunciado), filtro que deja solo los favoritos en la lista y el mapa, guardado en `user_app_state.favorites`, persistencia tras recargar y volver a entrar, quitar el último con el filtro activo (se apaga solo y vuelve la lista completa), error de guardado (el favorito vuelve a como estaba y se avisa), 0 errores de JavaScript y nada en `localStorage` / `sessionStorage`; fila de búsqueda sin desbordes a 375 px. Pendiente: comprobación en producción por el titular.
 
 ## Límites
 
