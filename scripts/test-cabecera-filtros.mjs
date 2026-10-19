@@ -17,10 +17,10 @@ assert.ok(html.includes("#moreF[hidden] { display: none; }"), "El atributo hidde
 assert.ok(html.includes('["#tipo", "#valor", "#cadena", "#subtipo"].filter((s) => $(s).value).length + ($("#orden").selectedIndex > 0 ? 1 : 0)'), "El contador debe contar los filtros ocultos activos");
 assert.ok(/function renderList\(\) \{[\s\S]*?syncMore\(\);/.test(html), "renderList debe actualizar el contador de filtros");
 
-// Cabecera: solo indicadores operativos, en un grupo con nombre; sin gamificación (nivel, experiencia, insignias).
-assert.ok(html.includes('class="kg kg-op" role="group" aria-label="Estado de la operación"'), "Los indicadores operativos deben ir en un grupo con nombre");
-assert.ok(html.includes('id="segBtn"'), "Debe conservarse el indicador #segBtn");
-assert.ok(!/gamTileHTML|logrosK|kg-gam|Mi progreso|Insignias/.test(html), "La cabecera no debe llevar nivel, experiencia ni insignias");
+// Cabecera: indicadores operativos y de progreso en grupos con nombre; las reglas responsive apuntan al grupo operativo.
+assert.ok(html.includes('class="kg kg-op" role="group" aria-label="Estado de la operación"') && html.includes('class="kg kg-gam" role="group" aria-label="Mi progreso"'), "Los indicadores deben ir en dos grupos con nombre");
+for (const id of ["segBtn", "logrosK"]) assert.ok(html.includes('id="' + id + '"'), "Debe conservarse el indicador #" + id);
+assert.ok(html.includes("gamTileHTML()"), "Debe conservarse el indicador de nivel");
 assert.ok(html.includes("@media (max-width: 1180px) { .kg-op .k:nth-child(-n+2) { display: none; } }"), "La regla de 1180 px debe afectar solo al grupo operativo");
 assert.ok(!/\.kstrip \.k span \{ font-size: 1[01](\.5)?px/.test(html), "Las etiquetas de los indicadores no deben bajar de 12 px");
 
