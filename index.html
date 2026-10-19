@@ -350,7 +350,8 @@
   dialog form { display: grid; gap: 12px; }
   #dlgPanel { width: min(920px, 96vw); max-height: 90vh; overflow: auto; background: var(--bg); }
   .pn-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-  #pnClose { font-size: 24px; line-height: 1; height: 34px; width: 34px; padding: 0; background: transparent; border: 0; color: var(--muted); cursor: pointer; border-radius: var(--r-control); }
+  #pnClose, #admClose, #calClose { font-size: 24px; line-height: 1; height: 34px; width: 34px; padding: 0; background: transparent; border: 0; color: var(--muted); cursor: pointer; border-radius: var(--r-control); }
+  #pnClose:hover, #admClose:hover, #calClose:hover { background: var(--ok-bg); color: var(--fg); }
   #dlgAdm { width: min(980px, 96vw); max-height: 90vh; overflow: auto; background: var(--bg); }
   #dlgAdm .adm-note { font-size: var(--fs-label); color: var(--muted); margin: 0 0 8px; }
   #admMsg { min-height: 18px; font-size: var(--fs-label); margin: 0 0 6px; color: var(--ok); }

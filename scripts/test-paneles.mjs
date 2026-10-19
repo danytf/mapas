@@ -22,4 +22,7 @@ const orden = ["Puntos en el mapa", "Solicitados (pendientes)", "Concedidos", "D
 assert.ok(orden.every((n, i) => n > 0 && (i === 0 || n > orden[i - 1])), "El orden de las tarjetas del resumen cambió: hay que revisar los nth-child de los bordes de estado");
 for (const n of [2, 3, 4, 8]) assert.ok(css.includes(`.kpis .kpi:nth-child(${n})`), "Falta el color de estado de la tarjeta " + n);
 
+// El botón de cerrar es el mismo en Panel resumen, Administración y Calendario (una «×» sin borde, como la de la ficha).
+assert.ok(/#pnClose, #admClose, #calClose \{ font-size: 24px;[^}]*border: 0;/.test(html), "Los tres diálogos comparten el botón de cerrar");
+
 console.log("Panel resumen y Administración: comprobaciones estáticas correctas.");
