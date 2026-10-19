@@ -170,19 +170,32 @@
   .tag.warn { background: var(--warn-bg); color: var(--warn); border-color: transparent; }
   .tag.ok { background: var(--ok-soft); color: var(--ok); border-color: transparent; }
   #map { min-height: 0; min-width: 0; background: #dfe3e8; }
-  .leaflet-tile-pane { filter: saturate(.72) contrast(.96) brightness(1.02); }
+  /* Wesser Spatial Canvas: cartografía atenuada, marcadores de precisión, agrupaciones en anillo y controles de instrumento. */
+  .bm-wesser .leaflet-wbase-pane { filter: saturate(.16) contrast(.94) brightness(1.04); }
+  .bm-dark .leaflet-wbase-pane { filter: brightness(.94) contrast(1.04); }
+  .bm-dark .leaflet-wlabels-pane { opacity: .85; }
   .leaflet-container { font-family: var(--font); }
-  .pin {
-    width: 26px; height: 26px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
-    background: #0b7a68; border: 2px solid #fff; box-shadow: 0 2px 6px rgba(15,23,34,.45);
-    display: grid; place-items: center;
-  }
-  .pin { transition: transform var(--t) ease, box-shadow var(--t) ease; }
+  .wm { position: relative; width: 36px; height: 50px; }
+  .wm-disc { position: absolute; left: 2px; top: 0; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center;
+    background: var(--c, var(--cat-defecto)); border: 2px solid var(--s, var(--pin-sin)); box-shadow: 0 0 0 2px #fff, 0 3px 8px rgba(23,27,35,.38);
+    transition: transform var(--t) ease; transform-origin: 50% 100%; }
+  .wm.st .wm-disc { border-width: 3px; }
+  .wm-disc svg { width: 16px; height: 16px; stroke: #fff; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+  .wm-stem { position: absolute; left: 17px; top: 34px; width: 2px; height: 9px; background: var(--ink); border-radius: var(--r-xs); transition: height var(--t) ease; }
+  .wm-dot { position: absolute; left: 14px; top: 42px; width: 8px; height: 8px; border-radius: 50%; background: var(--ink); border: 2px solid #fff; box-shadow: 0 1px 3px rgba(23,27,35,.4); box-sizing: border-box; }
+  .wm-halo { position: absolute; left: 2px; top: 0; width: 32px; height: 32px; border-radius: 50%; opacity: 0; pointer-events: none; transition: opacity var(--t) ease, transform var(--t) ease; transform: scale(.8); }
+  .wm.rev::after { content: "!"; position: absolute; right: -2px; top: -4px; width: 10px; height: 10px; border-radius: 50%; display: grid; place-items: center; background: var(--pin-solicitado); color: #111827; font: 800 9px/1 var(--font); border: 2px solid #fff; box-sizing: content-box; }
+  .bm-dark .wm-stem { background: #e7ecf3; }
+  .bm-dark .wm-dot { background: #e7ecf3; border-color: #121a26; }
+  .leaflet-marker-icon:hover .wm-disc { transform: scale(1.1); }
   .leaflet-marker-icon.sel { z-index: 1000 !important; }
-  .leaflet-marker-icon.sel .pin { transform: rotate(-45deg) scale(1.3); box-shadow: 0 0 0 3px var(--accent), 0 4px 10px rgba(23,27,35,.5); }
-  @media (prefers-reduced-motion: reduce) { .pin { transition: none; } }
-  .pin b { transform: rotate(45deg); color: #fff; font: 650 11px var(--font); }
-  .pin svg { transform: rotate(45deg); width: 15px; height: 15px; stroke: #fff; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+  .leaflet-marker-icon.sel .wm-halo { opacity: 1; transform: scale(1.16); transform-origin: 50% 100%; box-shadow: 0 0 0 3px var(--accent), 0 0 0 11px color-mix(in srgb, var(--accent) 24%, transparent); }
+  @media (prefers-reduced-motion: no-preference) { .leaflet-marker-icon.sel .wm-halo { animation: wmHalo .42s ease-out; } }
+  @keyframes wmHalo { from { opacity: 0; box-shadow: 0 0 0 3px var(--accent), 0 0 0 2px color-mix(in srgb, var(--accent) 40%, transparent); } }
+  .leaflet-marker-icon.sel .wm-disc { transform: scale(1.16); box-shadow: 0 0 0 2px #fff, 0 6px 14px rgba(23,27,35,.45); }
+  .leaflet-marker-icon.sel .wm-stem { background: var(--accent); }
+  .leaflet-marker-icon.sel .wm-dot { background: var(--accent); }
+  @media (prefers-reduced-motion: reduce) { .wm-disc, .wm-stem, .wm-halo { transition: none; } }
   .legend-box i.gi { width: 19px; height: 19px; border-radius: var(--r-xs); display: grid; place-items: center; }
   .legend-box i.gi svg { width: 13px; height: 13px; stroke: #fff; fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
   .qs { margin-top: 7px; height: 26px; padding: 0 6px; font: inherit; font-size: var(--fs-label); font-weight: 560; border: 1px solid var(--line-2); border-radius: var(--r-xs); background: var(--panel); color: var(--fg); max-width: 100%; cursor: pointer; }
@@ -190,22 +203,29 @@
   li:hover .qw, li.active .qw, li:focus-within .qw { display: block; }
   @media (hover: none) { .qw { display: block; } }
   .qs:hover { border-color: var(--muted); }
-  /* Agrupaciones del mapa */
-  .cl { width: 100%; height: 100%; border-radius: 50%; display: grid; place-items: center; box-shadow: 0 0 0 2px #fff, 0 2px 8px rgba(15,23,34,.45); }
-  .cl span { width: 68%; height: 68%; border-radius: 50%; background: var(--ink); color: #fff; display: grid; place-items: center; font: 650 12px var(--font); }
+  /* Agrupaciones: anillo con la mezcla de categorías y núcleo grafito con el recuento */
+  .cl-wrap { transition: transform var(--t) ease; }
+  .cl-wrap:hover { transform: scale(1.06); }
+  .cl { width: 100%; height: 100%; border-radius: 50%; display: grid; place-items: center; box-shadow: 0 0 0 2px #fff, 0 3px 10px rgba(23,27,35,.4); }
+  .cl span { width: 74%; height: 74%; border-radius: 50%; background: var(--ink); color: #fff; display: grid; place-items: center; font: 650 12px var(--font); font-variant-numeric: tabular-nums; box-shadow: 0 0 0 1.5px rgba(255,255,255,.9) inset; }
   .cl.big span { font-size: var(--fs-label-lg); }
-  .marker-cluster, .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large { background: rgba(15,23,34,.18); }
-  .marker-cluster div, .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {
-    background: var(--ink); color: #fff; font: 650 12px var(--font); box-shadow: 0 2px 8px rgba(15,23,34,.4);
-  }
-  .marker-cluster span { line-height: 30px; }
-  /* Controles de Leaflet */
-  .leaflet-bar { border: 0 !important; border-radius: 10px !important; box-shadow: var(--shadow) !important; overflow: hidden; }
-  .leaflet-bar a { width: 34px !important; height: 34px !important; line-height: 34px !important; color: var(--fg) !important; background: var(--panel) !important; border-bottom-color: var(--line) !important; }
+  .marker-cluster, .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large { background: transparent; }
+  .marker-cluster div, .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div { background: transparent; box-shadow: none; }
+  .leaflet-cluster-anim .leaflet-marker-icon, .leaflet-cluster-anim .leaflet-marker-shadow { transition: transform .22s ease-out, opacity .22s ease-in; }
+  .leaflet-cluster-spider-leg { stroke: var(--ink); stroke-width: 1.5; stroke-opacity: .55; }
+  /* Controles de mapa: un mismo instrumento, de 40 px (44 px en táctil) */
+  .leaflet-bar { border: 1px solid var(--line) !important; border-radius: var(--r-card) !important; box-shadow: var(--shadow) !important; overflow: hidden; background: var(--panel); }
+  .leaflet-bar a { width: 40px !important; height: 40px !important; line-height: 38px !important; font-size: 20px !important; font-weight: 500; color: var(--fg) !important; background: var(--panel) !important; border-bottom-color: var(--line) !important; transition: background var(--t); }
   .leaflet-bar a:hover { background: var(--ok-bg) !important; }
-  .leaflet-control-layers { border: 0 !important; border-radius: 10px !important; box-shadow: var(--shadow) !important; background: var(--panel); color: var(--fg); }
-  .leaflet-control-layers-expanded { padding: 8px 12px !important; font-size: 12.5px; }
-  .leaflet-control-attribution { background: rgba(255,255,255,.82) !important; font-size: 10px; border-top-left-radius: 8px; }
+  .leaflet-bar a.leaflet-disabled { color: var(--muted) !important; opacity: .5; }
+  .leaflet-bar a:focus-visible, .leaflet-control-layers-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
+  .leaflet-control-layers { border: 1px solid var(--line) !important; border-radius: var(--r-card) !important; box-shadow: var(--shadow) !important; background: var(--panel); color: var(--fg); }
+  .leaflet-control-layers-toggle { width: 40px !important; height: 40px !important; }
+  .leaflet-control-layers-expanded { padding: 10px 14px !important; font-size: var(--fs-label-lg); }
+  .leaflet-control-layers-expanded input { accent-color: var(--accent); }
+  @media (pointer: coarse) { .leaflet-bar a, .leaflet-control-layers-toggle { width: 44px !important; height: 44px !important; line-height: 42px !important; } }
+  .leaflet-control-attribution { background: color-mix(in srgb, var(--panel) 86%, transparent) !important; color: var(--muted) !important; font-size: 10px; border-top-left-radius: var(--r-control); }
+  .leaflet-control-attribution a { color: var(--fg) !important; }
   /* Burbuja mínima del mapa: la ficha completa vive en el panel lateral (#ficha). */
   .leaflet-popup-content-wrapper { border-radius: 12px; box-shadow: var(--shadow); padding: 2px; }
   .leaflet-popup-content { margin: 8px 12px; font: 13px/1.35 var(--font); color: #141b26; }
@@ -642,6 +662,7 @@
   .legend-box h4 { margin: 10px 0 4px; font-size: var(--fs-label); font-weight: 650; color: var(--muted); }
   .legend-box div.it { display: flex; align-items: center; gap: 7px; line-height: 1.55; }
   .legend-box i { display: inline-block; width: 11px; height: 11px; border-radius: 50%; flex: none; }
+  .legend-box i.rv { width: 15px; height: 15px; display: inline-grid; place-items: center; background: var(--pin-solicitado); color: #111827; font: 800 10px/1 var(--font); }
   .legend-box i.ring { background: #9aa8a4; border: 3px solid; width: 15px; height: 15px; }
   .note { padding: 10px 16px; font-size: var(--fs-label); color: var(--muted); border-top: 1px solid var(--line); }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
@@ -666,7 +687,7 @@
     #filtBtn.on { border-color: var(--accent); color: var(--accent); }
     #filtros { display: none; }
     #filtros.on { display: grid; }
-    #vistaSw { display: flex; position: absolute; left: 50%; bottom: 34px; transform: translateX(-50%); z-index: 1200; background: var(--ink); border-radius: var(--r-pill); padding: 4px; gap: 2px; box-shadow: var(--shadow); }
+    #vistaSw { display: flex; position: absolute; left: 50%; bottom: 52px; transform: translateX(-50%); z-index: 1200; background: var(--ink); border-radius: var(--r-pill); padding: 4px; gap: 2px; box-shadow: var(--shadow); }
     #vistaSw button { height: 44px; min-width: 96px; border: 0; border-radius: var(--r-pill); background: transparent; color: #cfd6e2; font-weight: 600; }
     #vistaSw button[aria-pressed="true"] { background: #fff; color: var(--ink); }
     main.fi-open #vistaSw { display: none; }
@@ -890,14 +911,23 @@ const saveCache = () => {};
 const map = L.map("map", { zoomControl: true }).setView(SPAIN_CENTER, 6);
 const ATTR = "Tiles © Esri — Source: Esri, HERE, Garmin, OpenStreetMap contributors | Geocodificación: © Instituto Geográfico Nacional de España (CartoCiudad) | Ubicaciones: © colaboradores de OpenStreetMap (ODbL)";
 const esriTiles = (svc, o) => L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/" + svc + "/MapServer/tile/{z}/{y}/{x}", Object.assign({ maxZoom: 19, attribution: ATTR }, o || {}));
+/* Cartografía "Wesser": los mismos teselas de Esri (proveedor y atribución sin cambios), con el color de calles, zonas urbanas, verdes y agua
+   atenuado por un filtro CSS en un panel propio, para que los establecimientos sean lo primero que se lee. */
+map.createPane("wbase"); map.getPane("wbase").style.zIndex = 200;
+map.createPane("wlabels"); map.getPane("wlabels").style.zIndex = 250; map.getPane("wlabels").style.pointerEvents = "none";
 const esri = esriTiles("World_Street_Map");
+const wesserClaro = esriTiles("World_Street_Map", { pane: "wbase" });
 const grisClaro = L.layerGroup([esriTiles("Canvas/World_Light_Gray_Base", { maxNativeZoom: 16 }), esriTiles("Canvas/World_Light_Gray_Reference", { maxNativeZoom: 16 })]);
-const grisOscuro = L.layerGroup([esriTiles("Canvas/World_Dark_Gray_Base", { maxNativeZoom: 16 }), esriTiles("Canvas/World_Dark_Gray_Reference", { maxNativeZoom: 16 })]);
-(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? grisOscuro : grisClaro).addTo(map);
+const grisOscuro = L.layerGroup([esriTiles("Canvas/World_Dark_Gray_Base", { maxNativeZoom: 16, pane: "wbase" }), esriTiles("Canvas/World_Dark_Gray_Reference", { maxNativeZoom: 16, pane: "wlabels" })]);
+const oscuroPref = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+const syncBaseClass = (dark) => { const c = map.getContainer(); c.classList.toggle("bm-dark", !!dark); c.classList.toggle("bm-wesser", !dark); };
+(oscuroPref ? grisOscuro : wesserClaro).addTo(map);
+syncBaseClass(oscuroPref);
+map.on("baselayerchange", (e) => syncBaseClass(e.layer === grisOscuro));
 const osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 19, attribution: "© OpenStreetMap contributors | Geocodificación: © Instituto Geográfico Nacional de España (CartoCiudad)"
 });
-L.control.layers({ "Gris claro (recomendado)": grisClaro, "Gris oscuro": grisOscuro, "Esri calles": esri, "OpenStreetMap (solo si sirves la página por http)": osm }, null, { position: "topright" }).addTo(map);
+L.control.layers({ "Wesser claro (recomendado)": wesserClaro, "Gris claro": grisClaro, "Gris oscuro": grisOscuro, "Esri calles (color)": esri, "OpenStreetMap (solo si sirves la página por http)": osm }, null, { position: "topright" }).addTo(map);
 
 const markers = {};
 const cluster = L.markerClusterGroup({
@@ -909,8 +939,8 @@ const cluster = L.markerClusterGroup({
     Object.entries(cnt).sort((a, b) => b[1] - a[1]).forEach(([col, n]) => {
       stops.push(col + " " + (acc / ms.length * 100).toFixed(1) + "% " + ((acc + n) / ms.length * 100).toFixed(1) + "%"); acc += n;
     });
-    const big = ms.length >= 50, z = big ? 46 : 38;
-    return L.divIcon({ className: "cl-wrap", iconSize: [z, z], html: '<div class="cl' + (big ? " big" : "") + '" style="background:conic-gradient(' + stops.join(",") + ')"><span>' + ms.length + "</span></div>" });
+    const n = ms.length, z = n >= 100 ? 56 : n >= 10 ? 46 : 38, big = n >= 10;
+    return L.divIcon({ className: "cl-wrap", iconSize: [z, z], html: '<div class="cl' + (big ? " big" : "") + '" style="background:conic-gradient(' + stops.join(",") + ')"><span>' + n + "</span></div>" });
   }
 }).addTo(map);
 let touched = false;
@@ -1280,8 +1310,8 @@ function makeIcon(c) {
   const e = estadoInfo(estadoOf(c));
   return L.divIcon({
     className: "",
-    html: '<div class="pin" style="background:' + colorOf(c) + ";border-color:" + e[2] + (e[0] === "sin" ? "" : ";border-width:3px") + '">' + glyphOf(c) + "</div>",
-    iconSize: [26, 26], iconAnchor: [13, 26], popupAnchor: [0, -24]
+    html: '<div class="wm' + (e[0] === "sin" ? "" : " st") + (isRev(c) ? " rev" : "") + '" style="--c:' + colorOf(c) + ";--s:" + e[2] + '"><span class="wm-halo"></span><span class="wm-disc">' + glyphOf(c) + '</span><i class="wm-stem"></i><i class="wm-dot"></i></div>',
+    iconSize: [36, 50], iconAnchor: [18, 46], popupAnchor: [0, -44]
   });
 }
 
@@ -2171,6 +2201,8 @@ function renderList() {
   }
 }
 
+/* El mapa recalcula su tamaño cuando el contenedor cambia (paneles, lista/mapa, ficha): sin zonas grises ni saltos de encuadre. */
+if (window.ResizeObserver) { let rz = 0; new ResizeObserver(() => { cancelAnimationFrame(rz); rz = requestAnimationFrame(() => map.invalidateSize({ pan: false })); }).observe(document.getElementById("map")); }
 /* Pin seleccionado: se reaplica cuando el mapa termina de moverse o de agrupar, porque el marcador puede no estar dibujado todavía. */
 let selId = null;
 function applySel() {
@@ -2784,6 +2816,7 @@ function refreshSelects() {
   $("#tipo").value = tv; $("#permiso").value = pv; $("#valor").value = vv; $("#orden").value = ov;
   $("#lgBody").innerHTML = "<h4>Color: categoría</h4>" +
     TIPOS.filter(([i, t]) => vis.some((c) => c.tipo === t)).map(([i, t, col]) => '<div class="it"><i class="gi" style="background:' + col + '">' + glyphOf({ tipo: t }) + "</i>" + t + "</div>").join("") +
+    '<h4>Aviso</h4><div class="it"><i class="rv">!</i>Ubicación por revisar</div>' +
     "<h4>Borde: permiso</h4>" +
     ESTADOS.map(([k, t, col]) => '<div class="it"><i class="ring" style="border-color:' + (k === "sin" ? "var(--pin-sin);box-shadow:0 0 0 1px var(--pin-sin-line)" : col) + '"></i>' + t + "</div>").join("");
   const nr = CENTERS.filter((c) => hasPersonalRef(removed, c)).length;
