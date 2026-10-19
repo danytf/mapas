@@ -168,6 +168,12 @@ createServer(async (req, res) => {
     S.log.push({ tipo: "rest", metodo: req.method, tabla: table, consulta: url.search.slice(0, 300) });
 
     const eqParam = (name) => { const v = url.searchParams.get(name); return v && v.startsWith("eq.") ? v.slice(3) : null; };
+    if (table === "municipalities") {
+      const prov = provinces.find((p) => p.id === eqParam("province_id"));
+      if (!prov) return reply([]);
+      const nombres = prov.code === "18" ? ["Granada", "Armilla", "Maracena", "Motril", "Albolote"] : ["Capital", "Norte", "Sur"].map((x) => x + " " + prov.code);
+      return reply(nombres.map((n, i) => ({ id: id(5000 + Number(prov.code) * 10 + i), name: n, province_id: prov.id })));
+    }
     if (table === "rpc/admin_list_users") {
       if (u.role !== "admin" || !ADM[u.id]?.is_active) return send(res, 403, { code: "42501", message: "No autorizado" });
       return send(res, 200, Object.entries(ADM).map(([uid, a]) => ({ id: uid, email: a.email, display_name: a.display_name, role: a.role, is_active: a.is_active, created_at: "2026-10-16T00:00:00Z", last_sign_in_at: a.last, province_ids: a.provs.map((c) => P(c).id) })));
