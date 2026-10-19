@@ -76,7 +76,7 @@ class Extraer(osmium.SimpleHandler):
         if not ine and not motivo:
             motivo = "fuera de los municipios oficiales cargados"
         self.res.append({
-            "osm": tipo + "/" + str(oid), "subtipo": r.get("subtipo"), "ine": ine, "municipio": mname,
+            "osm": tipo + "/" + str(oid), "subtipo": r.get("subtipo"), "categoria": r.get("categoria"), "ine": ine, "municipio": mname,
             "lat": round(pt.y, 6), "lon": round(pt.x, 6),
             "tags": {k: tags[k] for k in ETIQ if k in tags},
             "decision": "descartar" if motivo else "incluir", "motivo": motivo})
