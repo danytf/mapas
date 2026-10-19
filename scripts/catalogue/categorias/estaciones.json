@@ -73,5 +73,6 @@
     "salvo": "train",
     "operador_regex": "metro de|metro-|tranv|tram\\b|metro malaga|metro sevilla|metro granada"
   },
-  "nombre_sospechoso_regex": "^\\d+$|^bus$|parada|salidas|\\bS\\.?L\\.?\\b|^.{1,3}$"
+  "nombre_sospechoso_regex": "^\\d+$|^bus$|parada|salidas|\\bS\\.?L\\.?\\b|^.{1,3}$",
+  "nota_informe": "OpenStreetMap no indica si una estación tiene hoy servicio de viajeros; no se puede deducir de las etiquetas."
 }
