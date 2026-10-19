@@ -56,10 +56,21 @@ for r in cand:
     nom = direcciones.get(r["osm"])
     if nom and not r["calle"] and nom.get("calle") and not (no_calle and no_calle.search(nom["calle"])):
         r["calle"] = nom["calle"]
-        r["calle_origen"] = "nominatim"
+        r["calle_origen"] = nom.get("origen", "nominatim")
     if nom and not r["cp"] and nom.get("cp"):
         r["cp"] = nom["cp"]
-        r["cp_origen"] = "nominatim"
+        r["cp_origen"] = nom.get("origen", "nominatim")
+
+
+def contiene_municipio(nombre, municipio):
+    # El nombre ya nombra al municipio: sin articulo inicial; guiones, signos y «y» tratados como separadores.
+    def f(t):
+        t = "".join(c for c in unicodedata.normalize("NFD", t) if unicodedata.category(c) != "Mn").lower()
+        t = re.sub(r"[^a-z0-9]+", " ", t)
+        t = re.sub(r"\b(y|e)\b", " ", t)
+        return " " + re.sub(r"\s+", " ", t).strip() + " "
+    m = re.sub(r"^ (el|la|los|las|l) ", " ", f(municipio))
+    return f(municipio) in f(nombre) or m in f(nombre)
 
 
 def kr(x):
@@ -76,7 +87,9 @@ def descarta(r, motivo):
 
 
 for r in [r for r in cand if r["final"] == "incluir"]:
-    if r["ine"] and r["ine"][:2] in defn.get("excluir_provincias", []) and r["osm"] not in defn.get("incluir_excepciones", []):
+    if r["ine"] and defn.get("solo_provincias") and r["ine"][:2] not in defn["solo_provincias"]:
+        descarta(r, "fuera de las provincias del lote (%s)" % r["ine"][:2])
+    elif r["ine"] and r["ine"][:2] in defn.get("excluir_provincias", []) and r["osm"] not in defn.get("incluir_excepciones", []):
         descarta(r, "provincia ya cubierta por el catalogo revisado a mano (%s)" % r["ine"][:2])
     elif nombre_obligatorio and not r["nombre_osm"]:
         descarta(r, "sin nombre en OpenStreetMap")
@@ -111,8 +124,14 @@ for i, a in enumerate(guardados):
 
 for r in guardados:
     n = r["nombre_osm"]
+    # Criterio automatico (aprobado por el titular): un nombre generico o dudoso no entra en el lote, va a excepciones.
+    if defn.get("excluir_revisar") and sospechoso and r["nombre_osm"] and sospechoso.search(r["nombre_osm"]):
+        descarta(r, "nombre generico o dudoso en OpenStreetMap: " + r["nombre_osm"])
+        continue
     if defn.get("nombre_por_categoria") and r.get("categoria") in defn["nombre_por_categoria"]:
-        n = defn["nombre_por_categoria"][r["categoria"]].format(municipio=r["municipio"])
+        n = defn["nombre_por_categoria"][r["categoria"]].format(
+            municipio=r["municipio"], nombre=r["nombre_osm"],
+            nombre_municipio=r["nombre_osm"] + ("" if contiene_municipio(r["nombre_osm"], r["municipio"]) else " " + r["municipio"]))
     elif defn.get("nombre_fijo"):
         n = defn["nombre_fijo"].format(municipio=r["municipio"])
     elif r["subtipo"] in plantilla and not ya_nombre.search(n):
@@ -124,6 +143,7 @@ for r in guardados:
     r["nombre"] = n + (" – " + re.sub(r" \d+[a-z]?$", "", r["calle"]) if r["calle"] else "")
     r["precision"] = "approximate" if r["revisar"] else "address"
     r["source_ref"] = "catalogo-andalucia:%s:%s" % (defn["codigo"], r["osm"].replace("/", "-"))
+guardados = [r for r in guardados if r["final"] == "incluir"]
 refs = [r["source_ref"] for r in guardados]
 assert len(set(refs)) == len(refs), "source_ref duplicados"
 
@@ -158,7 +178,8 @@ L += ["- %s: %d" % (k, v) for k, v in desc.most_common()]
 L += ["", "## Datos que faltan en lo que entra", "",
       "- Sin calle (OpenStreetMap no la trae): %d de %d. El campo dirección queda vacío; no se inventa." % (sum(1 for r in guardados if not r["calle"]), len(guardados)),
       "- Sin código postal: %d de %d." % (sum(1 for r in guardados if not r["cp"]), len(guardados)),
-      "- Calle completada con Nominatim (via mas cercana, orientativa): %d de %d." % (sum(1 for r in guardados if r.get("calle_origen")), len(guardados)),
+      "- Calle completada desde la direccion o la via mas cercana (orientativa; origen osm-local o nominatim): %d de %d." % (sum(1 for r in guardados if r.get("calle_origen")), len(guardados)),
+      "- Codigo postal completado desde la direccion mas cercana (orientativo): %d de %d." % (sum(1 for r in guardados if r.get("cp_origen")), len(guardados)),
       "- " + defn.get("nota_informe", "OpenStreetMap puede estar incompleto o desactualizado."), "",
       "## Muestra aleatoria (semilla %d)" % semilla, "", "| Nombre | Subtipo | Municipio | Coordenadas | Origen |", "|---|---|---|---|---|"]
 for r in sorted(muestra, key=lambda r: r["nombre"]):

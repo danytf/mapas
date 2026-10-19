@@ -1,0 +1,1450 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/10001532328;;Dia;Granada;37.159323;-3.599053;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/10006133611;;Supermecados MAS;Granada;37.159885;-3.595721;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/10018663888;;Roquetas Boxing;Roquetas de Mar;36.775094;-2.610471;duplicado en el lote de node/13700768273 (11 m)
+descartado;node/10073768634;;Mercado de Abastos;Torredonjimeno;37.765386;-3.95504;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/10103054031;;;Níjar;36.938372;-2.135607;sin nombre en OpenStreetMap
+descartado;node/10106340146;;Carrefour Express;Marbella;36.483698;-4.987163;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/10117381225;;Mercado Municipal;Guadalcanal;38.092342;-5.81977;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/10142926467;;Shape Up;Granada;37.149418;-3.601086;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/10147894717;;Mercado de Abastos;Estepa;37.292006;-4.878367;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/10159170817;;Anytime Fitness;Granada;37.14987;-3.59808;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/10180199817;;Dia;Torrenueva Costa;36.704644;-3.490223;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/10180199818;;Covirán;Torrenueva Costa;36.703432;-3.489305;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/10188084234;;Hammer Box;Granada;37.150257;-3.602787;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/10188084300;;Yoga Shala;Granada;37.150101;-3.602017;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/10216539783;;Covirán;Chauchina;37.199384;-3.772457;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/10219560064;;Cora Lab;Atarfe;37.221321;-3.683124;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/10237547402;;Subdelegacion de Defensa en Granada;Granada;37.182307;-3.604226;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/10252622723;;Sano;Granada;37.170197;-3.596423;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/10284364932;;Market & Go!;Vegas del Genil;37.176102;-3.664121;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/10292015209;;Carrefour Express;Málaga;36.717834;-4.411343;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/10296851911;;El Corte Inglés;Sevilla;37.390298;-5.997074;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/1039521635;;;;36.144229;-5.353272;fuera de los municipios oficiales cargados
+descartado;node/10557425755;;Covirán;Los Guájares;36.840788;-3.581906;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/10581725652;;Delegación del Gobierno en Granada. Secretaría General Provincial de Hacienda y Financiación Europea;Granada;37.175925;-3.602969;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/10589642501;;Hipercor;Algeciras;36.138817;-5.448363;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/10608434091;;Covirán;Polopos;36.747158;-3.277205;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/10612168477;;Covirán;Albuñol;36.748241;-3.153352;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/10614350979;;The Box;Armilla;37.150156;-3.608474;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/10748386666;;Spar;Benalúa;37.352651;-3.162972;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/10748386680;;Covirán;Benalúa;37.352092;-3.166751;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/10763761905;;;Periana;36.926733;-4.188836;sin nombre en OpenStreetMap
+descartado;node/10784103778;;Covirán;Otívar;36.815836;-3.680826;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/10784103780;;Covirán;Lentegí;36.835865;-3.67405;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/10803959294;;Covirán El Rinconcillo;Nigüelas;36.980473;-3.538126;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/10803959295;;Covirán Franchi;Nigüelas;36.977637;-3.539049;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/10852803007;;;Benalmádena;36.597332;-4.53059;sin nombre en OpenStreetMap
+descartado;node/10852819905;;;Benalmádena;36.597216;-4.531473;sin nombre en OpenStreetMap
+descartado;node/10862114505;;;Benalmádena;36.59711;-4.529642;sin nombre en OpenStreetMap
+descartado;node/10862143806;;;Benalmádena;36.596656;-4.523871;sin nombre en OpenStreetMap
+descartado;node/10869050505;;;Benalmádena;36.592164;-4.526948;sin nombre en OpenStreetMap
+descartado;node/10869050506;;;Benalmádena;36.591749;-4.526759;sin nombre en OpenStreetMap
+descartado;node/1088181660;;Malaga Duty Free;Málaga;36.67728;-4.492667;texto excluido (aparcamiento|parking|duty free)
+descartado;node/10914932005;;;Benalmádena;36.599894;-4.528574;sin nombre en OpenStreetMap
+descartado;node/10914932206;;;Benalmádena;36.597679;-4.527121;sin nombre en OpenStreetMap
+descartado;node/10939824758;;;Manilva;36.365856;-5.226581;sin nombre en OpenStreetMap
+descartado;node/10970498812;;Covirán;Íllora;37.238504;-3.844563;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/10970498829;;Supermercado Alcaide Gutiérrez;Íllora;37.239348;-3.84667;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1098702005;;;San Juan de Aznalfarache;37.362665;-6.043916;sin nombre en OpenStreetMap
+descartado;node/11043753688;;El Jamón;Granada;37.187837;-3.607573;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11044072695;;Covirán;Ugíjar;36.962367;-3.053561;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1110304865;;;Nerja;36.746688;-3.880768;sin nombre en OpenStreetMap
+descartado;node/1110309526;;;Torrox;36.737784;-3.988919;sin nombre en OpenStreetMap
+descartado;node/1111755117;;Covirán;La Zubia;37.120146;-3.5847;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1111800770;;Tu Super;La Zubia;37.120283;-3.583554;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11161998653;;Supermercado Toñi;Vélez de Benaudalla;36.835742;-3.513508;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11162000536;;Covirán;Vélez de Benaudalla;36.831699;-3.515663;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11200392507;;;Roquetas de Mar;36.783764;-2.605779;sin nombre en OpenStreetMap
+descartado;node/11202158738;;;Sevilla;37.397796;-5.997697;sin nombre en OpenStreetMap
+descartado;node/11214159769;;Covirán;Motril;36.750417;-3.512116;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11217579149;;Tusuper;Granada;37.164938;-3.602432;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11240979345;;The Mecca;Granada;37.174051;-3.607961;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11250719852;;;Andújar;38.040829;-4.045891;sin nombre en OpenStreetMap
+descartado;node/11273890647;;Carrefour Express;Sevilla;37.401717;-5.994056;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/11297521101;;;Níjar;36.912089;-2.066031;sin nombre en OpenStreetMap
+descartado;node/11299533778;;Edificio Administración y Mantenimiento Hospital;Sevilla;37.36417;-5.978005;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento)
+descartado;node/11327874070;;Carrefour Express;Sevilla;37.399798;-5.983477;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/11369222034;;Covirán;Moraleda de Zafayona;37.169783;-3.967091;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11369222068;;Supermercados El Fede;Moraleda de Zafayona;37.170261;-3.966618;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11400833798;;Suma;Ogíjares;37.123398;-3.630597;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11404904492;;Carrefour Express;Málaga;36.707793;-4.435222;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/11416875813;;Gimnasio Impacto;Moraleda de Zafayona;37.182536;-3.95889;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11420656264;;Maderas Ubago;Granada;37.165683;-3.589283;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11425417924;;ALDI;Granada;37.178966;-3.611387;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11438363280;;El Jamón;Motril;36.743758;-3.522675;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11442924609;;Basic-Fit;Motril;36.745578;-3.509197;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11444189285;;Dia;Motril;36.752115;-3.514671;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11451785091;;Dia;Motril;36.743117;-3.520796;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1145989773;;Supersol;La Zubia;37.11799;-3.584096;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11468873513;;Aldi;Huétor Vega;37.140768;-3.569358;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11473117095;;Covirán;Motril;36.752227;-3.5187;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11473238761;;Covirán;Motril;36.745038;-3.517831;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11480635213;;Dia;Motril;36.747501;-3.518105;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11488155682;;Suma;Motril;36.753514;-3.524002;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11497342761;;;Mojácar;37.118077;-1.83645;sin nombre en OpenStreetMap
+descartado;node/1151926190;;Dia;Loja;37.163427;-4.139653;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11528906163;;Covirán;Polopos;36.740556;-3.298858;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11550897613;;;Tarifa;36.05062;-5.645388;sin nombre en OpenStreetMap
+descartado;node/11572367571;;alsara Expres;Huétor Tájar;37.198821;-4.048197;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11584554540;;Carrefour Express;Almería;36.830631;-2.45469;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/11599220299;;Synergym Granada Campus;Granada;37.184824;-3.609609;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11688230314;;Pingu;Monachil;37.097829;-3.397936;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11688230315;;Covirán;Monachil;37.097585;-3.397724;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11740706469;;;Málaga;36.740471;-4.432347;sin nombre en OpenStreetMap
+descartado;node/11801784912;;Covirán;Cortes de Baza;37.655133;-2.770629;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11921818274;;Basic-Fit;Granada;37.167994;-3.607943;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11928556613;;Covirán;Peligros;37.234254;-3.631084;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11936970740;;El Jamón;Cádiz;36.535542;-6.298857;duplicado en el lote de node/10284878909 (132 m)
+descartado;node/11955567756;;Dia;Huéscar;37.808006;-2.542079;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11955580789;;Eclipse;Huéscar;37.80173;-2.545114;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/11956148264;;Supermercado El Molino;Salobreña;36.73283;-3.587579;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1197386414;;Ayuntamiento de Gójar;Gójar;37.104466;-3.606012;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12005734669;;Carrefour Express;Málaga;36.71284;-4.43782;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/12097699204;;Supermercado asiático;Granada;37.170485;-3.606268;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12097759301;;Fitness Park;Armilla;37.148298;-3.612353;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12106681501;;Maxima Supermercado;Granada;37.174588;-3.607282;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12113279332;;Entidad Local Autónoma de Carchuna-Calahonda;Motril;36.70051;-3.428286;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12139687692;;Equilibrio Fitness;Baza;37.485895;-2.770657;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12143933401;;Covirán;Baza;37.486534;-2.777627;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12151461526;;Covirán;Baza;37.483913;-2.781143;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1215889282;;;Baeza;37.994238;-3.465792;sin nombre en OpenStreetMap
+descartado;node/12167830874;;Ecoshop Rama;Granada;37.176917;-3.601964;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12176572055;;Tu Super;Motril;36.744672;-3.516025;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12176618918;;Echwellness;Motril;36.742866;-3.514268;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12176698949;;Covirán;Motril;36.748961;-3.508882;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12181778571;;Lidl;Granada;37.157891;-3.606789;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1219410123;;Covirán;Granada;37.182576;-3.592884;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1219410127;;Covirán;Granada;37.183019;-3.594068;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12246074090;;Covirán;Cádiar;36.944852;-3.179847;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12258246725;;Alacena de la Sierra;Alpujarra de la Sierra;36.982213;-3.15499;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12258246733;;Covirán;Alpujarra de la Sierra;36.983696;-3.154738;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12319010840;;Carrefour express;Córdoba;37.88005;-4.781081;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/12323135569;;Mercadona;Huércal de Almería;36.883334;-2.434572;duplicado en el lote de node/4635207290 (14 m)
+descartado;node/12331611105;;;Morón de la Frontera;37.12028;-5.459023;sin nombre en OpenStreetMap
+descartado;node/1234375243;;Carrefour Market;Granada;37.185678;-3.606362;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/12364796542;;Ayuntamiento de Granada;Granada;37.174192;-3.59862;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12404668618;;Komo Komo;Motril;36.724007;-3.535945;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12411782291;;Supermercado;Cantoria;37.353228;-2.190831;nombre generico o dudoso en OpenStreetMap: Supermercado
+descartado;node/12411837498;;Supremo;Albuñol;36.749142;-3.173229;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12411853924;;Covirán;Albuñol;36.74789;-3.170643;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12424277801;;Carrefour;Estepona;36.425025;-5.146802;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/12431151070;;;Roquetas de Mar;36.814362;-2.573736;sin nombre en OpenStreetMap
+descartado;node/12433307736;;;El Ejido;36.774825;-2.8057;sin nombre en OpenStreetMap
+descartado;node/12435806825;;;Albuñol;36.747983;-3.169093;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12438605979;;;Almuñécar;36.731176;-3.686454;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12447372477;;Supermercado Martín;Polopos;36.748096;-3.274927;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12452923683;;;Estepona;36.465006;-5.033374;sin nombre en OpenStreetMap
+descartado;node/12456255750;;;Los Barrios;36.199051;-5.426334;sin nombre en OpenStreetMap
+descartado;node/12458799478;;;Algeciras;36.149072;-5.460915;sin nombre en OpenStreetMap
+descartado;node/12458826581;;;Algeciras;36.14426;-5.449036;sin nombre en OpenStreetMap
+descartado;node/12463680802;;;Tarifa;36.018118;-5.609023;sin nombre en OpenStreetMap
+descartado;node/12469726190;;Centro de Salud;Somontín;37.391372;-2.388804;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;node/12471921074;;Mercado Virgen del Rosario;Cádiz;36.518194;-6.281384;duplicado en el lote de node/12471921073 (45 m)
+descartado;node/1248133099;;;Baeza;37.994667;-3.467737;sin nombre en OpenStreetMap
+descartado;node/12487022337;;Gimnasio Municipal La Tercia;Castilléjar;37.714616;-2.642959;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12487022340;;Supermercado Majo;Castilléjar;37.714517;-2.642794;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12487022802;;Supermercado Cecilia;Castilléjar;37.716512;-2.640941;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12488453967;;;Tarifa;36.013966;-5.606096;sin nombre en OpenStreetMap
+descartado;node/12488518165;;;Tarifa;36.014789;-5.606569;sin nombre en OpenStreetMap
+descartado;node/12488566653;;The Food Co.;;36.148381;-5.352231;fuera de los municipios oficiales cargados
+descartado;node/12496243568;;Carrefour;Cádiz;36.508929;-6.275894;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/12497699153;;Covirán;Chimeneas;37.131544;-3.822169;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12497699177;;Ayuntamiento de Chimeneas;Chimeneas;37.131131;-3.823278;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12500932907;;;Las Cabezas de San Juan;36.98606;-5.936948;sin nombre en OpenStreetMap
+descartado;node/12504352967;;;Los Palacios y Villafranca;37.160337;-5.924122;sin nombre en OpenStreetMap
+descartado;node/12504616875;;;Dos Hermanas;37.292934;-5.940647;sin nombre en OpenStreetMap
+descartado;node/12504888066;;;Sevilla;37.328796;-5.966988;sin nombre en OpenStreetMap
+descartado;node/12504941084;;;Sevilla;37.330407;-5.967758;sin nombre en OpenStreetMap
+descartado;node/12507956748;;Carrefour;Cádiz;36.511091;-6.274428;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/12514011838;;Covirán;Ugíjar;36.965402;-3.050735;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12518714091;;Carrefour;Cartaya;37.289884;-7.14008;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/12526275084;;Alimentación y Bazar;Baza;37.493255;-2.77342;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12526323577;;Juzgados;Baza;37.492657;-2.773299;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12526343629;;Fitlife;Baza;37.494337;-2.774884;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12527079687;;Carrefour;San Juan de Aznalfarache;37.367146;-6.035589;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/12529801995;;;Tomares;37.376867;-6.030604;sin nombre en OpenStreetMap
+descartado;node/12531371219;;Carrefour;Sevilla;37.407337;-5.939342;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/12533914732;;Covirán;Guadix;37.304451;-3.133692;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12533932954;;Administración de la Seguridad Social;Guadix;37.305046;-3.133215;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12539387340;;Supermercado Municipal La Candelaria;Marchal;37.296471;-3.202343;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/12539636673;;;Pilas;37.303145;-6.291118;sin nombre en OpenStreetMap
+descartado;node/12543503183;;Komo Komo Gracita;Ugíjar;36.962322;-3.053104;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12556407037;;Ayuntamiento de Albolote;Albolote;37.230543;-3.657217;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12564017826;;El Corte Inglés;Córdoba;37.887696;-4.783105;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/12582664136;;Ven y Verás;Castilléjar;37.704374;-2.656768;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12583203057;;Elemen;Motril;36.723343;-3.557858;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12591304502;;Alimentación El Elvira;Granada;37.179825;-3.598968;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1260492532;;"Carpinteria metálica ""Hermanos Soto""";Baeza;37.998311;-3.473329;duplicado en el lote de node/1260491649 (39 m)
+descartado;node/12606522821;;Mawashi Motril;Motril;36.746953;-3.51398;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1262577018;;;Zuheros;37.542563;-4.315516;sin nombre en OpenStreetMap
+descartado;node/12626331894;;Boosstrainer;Motril;36.743718;-3.508788;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12633173194;;Super Cash Costo;Guadix;37.300772;-3.129865;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12643619250;;IFIT Electrofitness;Motril;36.743793;-3.507762;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12645272087;;Mercasol;Motril;36.724093;-3.523803;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12645627601;;Lidl;Alhendín;37.103666;-3.638558;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12657415018;;Halal Market;Motril;36.743909;-3.515341;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12658364845;;Juzgado de Primera Instancia e Instrucción de Santa Fe Nº2;Santa Fe;37.18703;-3.710965;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12691969865;;Covirán;Motril;36.74621;-3.521717;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12691969889;;Super family;Motril;36.747939;-3.519699;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12692603429;;Covirán;Motril;36.74276;-3.520516;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12692603480;;Henko;Motril;36.743805;-3.524603;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12705262901;;;Antequera;37.019314;-4.555578;sin nombre en OpenStreetMap
+descartado;node/12709328641;;Bullgym Centro Fitness;Motril;36.747451;-3.528459;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12714280946;;Covirán;Motril;36.749817;-3.517888;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12714344661;;Synergym;Motril;36.750875;-3.520574;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12714409777;;Black Box Pro;Motril;36.751993;-3.522625;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12715633140;;El Barrio;Atarfe;37.227066;-3.687714;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12715705401;;TNT;Granada;37.165548;-3.601714;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12726198565;;Arnold Gym;Motril;36.746787;-3.512899;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12726198572;;Covirán;Motril;36.746653;-3.513639;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12726305617;;Covirán;Motril;36.747699;-3.513204;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12729667716;;Covirán;Motril;36.745951;-3.512151;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12735253142;;;Torremolinos;36.621404;-4.498732;sin nombre en OpenStreetMap
+descartado;node/12735315917;;;Torremolinos;36.622301;-4.496083;sin nombre en OpenStreetMap
+descartado;node/12736382910;;Open Fit;La Zubia;37.12947;-3.584369;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12737066802;;Ecotienda Valle Monachil;Granada;37.169925;-3.600247;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12744812001;;Ecoriche;Órgiva;36.902507;-3.42359;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12769819466;;Synergym;Motril;36.742215;-3.525935;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12770079335;;;Estepona;36.47021;-5.074536;sin nombre en OpenStreetMap
+descartado;node/12787824601;;Camac Wholefoods;Órgiva;36.901435;-3.423767;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12797536463;;Covirán;Guadahortuna;37.558613;-3.398843;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12801597031;;Aldi;Córdoba;37.884439;-4.778514;duplicado en el lote de node/8595048675 (0 m)
+descartado;node/12819964712;;;Siles;38.388211;-2.583521;sin nombre en OpenStreetMap
+descartado;node/12819966146;;;Cortes de Baza;37.73745;-2.857718;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12823647524;;Covirán;Baza;37.490445;-2.770462;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12825762033;;365 Market Tao;Motril;36.741204;-3.507507;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12847056106;;Totem Pilates Studio;Motril;36.745875;-3.519624;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1286677448;;Malagón;Huétor Tájar;37.19713;-4.043465;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12872915819;;Spar;Torvizcón;36.878923;-3.298516;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12874907666;;Gimnasio Orce;Orce;37.720776;-2.47923;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12874942319;;CAD PUEBLA;Puebla de Don Fadrique;37.959371;-2.430888;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12877036487;;Gimnasio Tropical;Motril;36.741967;-3.519868;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12877075117;;Shama Yoga Studio;Motril;36.745845;-3.519782;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12891665574;;Supermercado María Eldona;Huéscar;37.806665;-2.547843;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12946477275;;La Mengrana Ecotienda;Granada;37.158351;-3.590865;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12992189749;;Tu Super Fuente Vaqueros;Fuente Vaqueros;37.220034;-3.783306;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/12996326514;;Mawashi Garage;Motril;36.741762;-3.512082;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13006007747;;Tu Super;Motril;36.720087;-3.54402;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13073836297;;Covirán;Granada;37.188582;-3.612599;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13073836298;;Supermercado Max;Granada;37.186282;-3.614615;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13074079979;;Covirán;Lecrín;36.948274;-3.552113;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13081539381;;Covirán;Motril;36.727152;-3.538998;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13092533244;;Covirán;Torrenueva Costa;36.706426;-3.493;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13096773720;;Covirán;Motril;36.701573;-3.440127;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13104553131;;Covirán;Las Gabias;37.131797;-3.673754;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13107622801;;Supermercado Covirán María José;Motril;36.701362;-3.415635;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13109000158;;Loal Fit;Motril;36.701929;-3.420365;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13124549824;;Suma;Gualchos;36.722693;-3.359947;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13124922440;;Paradise Gym;Gualchos;36.72496;-3.356321;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13125286686;;Covirán;Salobreña;36.77237;-3.563949;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13125286687;;Covirán;Salobreña;36.770734;-3.565519;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13136295701;;Carrefour Express;Chiclana de la Frontera;36.423105;-6.144578;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/13141081387;;Alimentación Maricarmen;Molvízar;36.78709;-3.607985;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13141081389;;Supermercado Carolina;Molvízar;36.785755;-3.60705;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13156003186;;Covirán;Ítrabo;36.799568;-3.639611;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13156058849;;Tienda de Noa;Ítrabo;36.798958;-3.639511;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13158551686;;Komo Komo;Otívar;36.815394;-3.679773;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13174017669;;Entrenando Pilates;Motril;36.746916;-3.517951;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13174923990;;Juzgados de Motril;Motril;36.749762;-3.520319;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13175175424;;Centro de Pilates;Motril;36.74406;-3.518305;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13175348519;;Oficina Integral de la Seguridad Social;Motril;36.739659;-3.521418;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13175348546;;Pádel Center San Merino;Motril;36.727961;-3.524054;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13186484742;;Time Centro Deportivo;Motril;36.750386;-3.509332;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13189377961;;Ayuntamiento de Lújar;Lújar;36.786645;-3.404525;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13226640410;;DeGood;Motril;36.745636;-3.517643;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13230524405;;;Nerja;36.748158;-3.883694;sin nombre en OpenStreetMap
+descartado;node/13241483879;;Centro de Salud Albuñol;Albuñol;36.792341;-3.208488;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13243451799;;Dia;Albuñol;36.787911;-3.199989;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13273096322;;;Motril;36.754015;-3.514511;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13274570543;;;Motril;36.748233;-3.510178;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13275260290;;Centro de Salud Doctora Carmen Contreras;Salobreña;36.745982;-3.586784;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13286885307;;;Chiclana de la Frontera;36.341214;-6.163612;sin nombre en OpenStreetMap
+descartado;node/13321711198;;Sm Entrena;Motril;36.752154;-3.521366;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13327427998;;Dia;Dúrcal;36.980113;-3.562213;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13327520410;;Dia;Santa Fe;37.193159;-3.709625;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13327522359;;Dia;Granada;37.154156;-3.600494;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13328570752;;Fitness Park;Pulianas;37.215183;-3.61843;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13333644360;;;Torremolinos;36.635119;-4.487457;sin nombre en OpenStreetMap
+descartado;node/13338984150;;Basic-Fit;Granada;37.187881;-3.61455;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13341247650;;Centro Bosukha;Motril;36.745382;-3.519124;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13357205854;;CrossFit;Granada;37.195736;-3.61071;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13357255936;;Nueva Tierra;Granada;37.200084;-3.611292;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13357273622;;Boxeo;Granada;37.199633;-3.610981;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13363386173;;Flow;Granada;37.187759;-3.610861;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13372392905;;Enma;Baza;37.485537;-2.768566;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13388338634;;Brooklyn Fitbox;Granada;37.172557;-3.608723;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13388344430;;Entrenalia (entre. Personal);Granada;37.171545;-3.608127;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13388351767;;;Granada;37.180746;-3.612477;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13390586288;;El Jamón;Salobreña;36.745412;-3.584616;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13390648625;;Dia;Salobreña;36.746492;-3.587833;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13390648685;;Súper Jal;Salobreña;36.745789;-3.584511;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13392820939;;Covirán;Salobreña;36.741354;-3.584848;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13393660060;;Mixed Sport Center;Salobreña;36.748044;-3.585247;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13432996119;;Centro Yoga y Arte;Padul;37.024947;-3.624455;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13439526301;;Día;Cádiz;36.519073;-6.282142;duplicado en el lote de node/13439521001 (1 m)
+descartado;node/13439563201;;;Cádiz;36.521028;-6.286246;sin nombre en OpenStreetMap
+descartado;node/13457419111;;Centro Regional de Tranfusión Sanguínea;Granada;37.189242;-3.608845;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13457869642;;Ayuntamiento de Cájar;Cájar;37.134005;-3.569403;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13460210656;;Beone;Granada;37.19068;-3.611524;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13507855601;;Autoservicio;Chiclana de la Frontera;36.374894;-6.189016;nombre generico o dudoso en OpenStreetMap: Autoservicio
+descartado;node/13520188278;;;Vélez-Málaga;36.724978;-4.135508;sin nombre en OpenStreetMap
+descartado;node/1352744630;;Centro de Salud Fortuny-Velutti;Granada;37.181391;-3.601046;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13573008709;;;La Lantejuela;37.351817;-5.220181;sin nombre en OpenStreetMap
+descartado;node/13574021952;;;Viñuela;36.869448;-4.197359;sin nombre en OpenStreetMap
+descartado;node/13585282039;;Zona Zero;Granada;37.16114;-3.597006;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13595532750;;Centro Deportivo Línea;Gójar;37.11502;-3.602547;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13601836220;;Dani;Granada;37.201235;-3.607612;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13606553401;;Eroski;;36.147751;-5.356378;fuera de los municipios oficiales cargados
+descartado;node/13615232773;;Dia;Motril;36.744728;-3.518857;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13622753117;;Tesorería General de la Seguridad Social;Granada;37.178427;-3.599171;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13634827240;;Dia;Granada;37.201404;-3.618389;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1363969929;;Dani;La Zubia;37.116159;-3.582395;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13649509640;;Covirán;Armilla;37.144847;-3.621907;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1366913038;;Carrefour express;Sevilla;37.377975;-5.997552;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/13677083756;;Audiencia Provincial de Granada;Granada;37.174958;-3.597561;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13702663005;;;Fuengirola;36.537435;-4.622537;sin nombre en OpenStreetMap
+descartado;node/13703319017;;Mercadona;Santa Fe;37.188584;-3.724079;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13705058296;;;Roquetas de Mar;36.766429;-2.616279;sin nombre en OpenStreetMap
+descartado;node/13737304080;;Covirán;Loja;37.157048;-4.209041;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13742133517;;Nature Yoga;Granada;37.168039;-3.60312;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13767828101;;Supermecados Discor Selex;La Peza;37.27494;-3.285308;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13789652713;;Carrefour;Guadix;37.304145;-3.137059;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/13800798501;;Eroski City;La Calahorra;37.178567;-3.061341;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13807844101;;Coviran;Purullena;37.316335;-3.190183;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1381378844;;Ayuntamiento de La Zubia;La Zubia;37.120605;-3.584937;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13831341602;;;Baena;37.616636;-4.319989;sin nombre en OpenStreetMap
+descartado;node/13893782220;;Box Fénix;Motril;36.734732;-3.510029;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13906257732;;Minimarket;Lanjarón;36.916974;-3.485112;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13912060201;;;Benalmádena;36.593877;-4.534414;sin nombre en OpenStreetMap
+descartado;node/13953747833;;;Málaga;36.696204;-4.44204;sin nombre en OpenStreetMap
+descartado;node/13964385812;;Sergio Peralta;Granada;37.16372;-3.571611;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13978105377;;Gimnasio Ludus;Salobreña;36.745057;-3.580091;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13978105378;;Origen Training;Salobreña;36.745001;-3.58019;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/13983088601;;Carrefour Express;Rota;36.622116;-6.360764;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/1400856590;;Aliprox;Zafarraya;36.972904;-4.141127;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1400856591;;Ayuntamiento de Zafarraya;Zafarraya;36.973603;-4.141659;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/14019578504;;Escudero Training;Motril;36.744858;-3.52468;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/14053466428;;Casa Rosa;Cáñar;36.926405;-3.427374;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/14056032150;;Fit 33;Atarfe;37.22351;-3.684004;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/14063415470;;"Tienda ""A ca Emilia""";Busquístar;36.937648;-3.294595;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1407027559;;;Huelva;37.282839;-6.942718;sin nombre en OpenStreetMap
+descartado;node/14085086714;;Centro fitness Henko;Motril;36.744108;-3.525919;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/14094322048;;Al-Noor Supermercado;Armilla;37.139618;-3.624337;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/14094322057;;Super Hermanos de Leche;Armilla;37.14027;-3.627519;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/14094322076;;Gurman;Armilla;37.14557;-3.622308;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/14109559917;;PrimaPrix;Granada;37.186426;-3.608114;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/14163027432;;Global Fit;Granada;37.188843;-3.622857;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/14206984942;;;Cartaya;37.225124;-7.137692;sin nombre en OpenStreetMap
+descartado;node/14239187806;;Carrefour express;Granada;37.175442;-3.596783;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/14243793795;;;Granada;37.187689;-3.606846;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/14267179595;;Komo Komo;Bérchules;36.974514;-3.19043;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1427182658;;Mercadona;Granada;37.186036;-3.603249;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/14272971630;;Carrefour Market;Huelva;37.257737;-6.95174;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/1432601090;;Supermercado Rosario;Monachil;37.132656;-3.541076;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1433868032;;St Bernard's Hospital;;36.143225;-5.35949;fuera de los municipios oficiales cargados
+descartado;node/1444950212;;Ayuntamiento de Maracena;Maracena;37.207575;-3.632971;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1454886102;;Ayuntamiento de Güevéjar;Güevéjar;37.256828;-3.597719;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1456056127;;;Sevilla;37.382883;-5.953627;sin nombre en OpenStreetMap
+descartado;node/1457162876;;Carrefour;Arcos de la Frontera;36.747937;-5.824426;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/1474258856;;Gimnasio;Cortes de la Frontera;36.620268;-5.341491;nombre generico o dudoso en OpenStreetMap: Gimnasio
+descartado;node/1516411417;;Residencia San Francisco;Morón de la Frontera;37.117415;-5.454458;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento)
+descartado;node/1537230572;;Carrefour Express;Sevilla;37.390048;-6.000742;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/1538008340;;Mercadona;Granada;37.159214;-3.605814;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1541673675;;Covirán;Huétor Tájar;37.194023;-4.048857;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1568400581;;Vinuesa;La Zubia;37.118741;-3.585324;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1568479557;;Covirán;La Zubia;37.116733;-3.590212;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1575258866;;Supermercado Pepe Campaña;Huétor Tájar;37.199728;-4.046141;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1623969358;;Mercadona;Granada;37.160919;-3.596393;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1668437838;;Ayuntamiento de Almuñécar;Almuñécar;36.733797;-3.691108;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1669994692;;José Días;Almuñécar;36.737587;-3.683968;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1669994743;;Carbonell;Almuñécar;36.737316;-3.684263;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1671479578;;;La Carolina;38.272942;-3.615522;sin nombre en OpenStreetMap
+descartado;node/1671479579;;;La Carolina;38.274109;-3.61646;sin nombre en OpenStreetMap
+descartado;node/1671479580;;;La Carolina;38.274187;-3.616259;sin nombre en OpenStreetMap
+descartado;node/1676609210;;Carrefour express;Estepona;36.429694;-5.14287;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/1690160429;;;Lubrín;37.215372;-2.066832;sin nombre en OpenStreetMap
+descartado;node/1699781833;;The Paint Box;;36.145729;-5.353364;fuera de los municipios oficiales cargados
+descartado;node/1713990035;;Covirán;La Calahorra;37.179775;-3.062542;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1722850413;;Carrefour;Huelva;37.271377;-6.919473;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/1737702110;;Supermercado;Almería;36.833654;-2.314164;nombre generico o dudoso en OpenStreetMap: Supermercado
+descartado;node/1752157720;;Carrefour Market;Sevilla;37.392683;-5.981803;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/1768443500;;Mercadona;Loja;37.163543;-4.129858;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1831292652;;Covirán;Lanjarón;36.917974;-3.485067;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1837577078;;;Mojácar;37.14667;-1.825962;sin nombre en OpenStreetMap
+descartado;node/1843124906;;Hipercor;Córdoba;37.894153;-4.808645;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/1869284546;;;Almonte;36.999027;-6.552892;sin nombre en OpenStreetMap
+descartado;node/1876479262;;;Almonte;37.005937;-6.559596;sin nombre en OpenStreetMap
+descartado;node/1897894616;;Centro de Salud Poeta Manuel de Góngora;Granada;37.166367;-3.594829;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1904113440;;Mercadona;Granada;37.168522;-3.596771;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1914416144;;Dani;Granada;37.158791;-3.597221;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1918871533;;Dia;Gualchos;36.722359;-3.363303;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1935809226;;"Gimnasio ""Sierra Nevada""";Granada;37.165378;-3.583286;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1941566902;;Covirán;Granada;37.17012;-3.602999;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1941566911;;TuSuper;Granada;37.171024;-3.605377;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/1999643922;;Ayuntamiento de Peligros;Peligros;37.230859;-3.628683;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2024492583;;Gimnasio;Sevilla;37.387351;-5.968403;nombre generico o dudoso en OpenStreetMap: Gimnasio
+descartado;node/2024492584;;Supermercado;Sevilla;37.387686;-5.967322;nombre generico o dudoso en OpenStreetMap: Supermercado
+descartado;node/2035460105;;Carrefour;Andújar;38.038031;-4.038955;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/2067025347;;;Linares;38.089841;-3.639447;sin nombre en OpenStreetMap
+descartado;node/2071364971;;;Cumbres Mayores;38.062119;-6.646934;sin nombre en OpenStreetMap
+descartado;node/2083686171;;Carrefour;San Fernando;36.471057;-6.209225;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/2087473640;;Carrefour Market;Chiclana de la Frontera;36.339881;-6.147806;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/2094641454;;Carrefour;Roquetas de Mar;36.774341;-2.614414;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/2116315637;;Supermercado;Torrox;36.757477;-3.951077;nombre generico o dudoso en OpenStreetMap: Supermercado
+descartado;node/2121958901;;;La Guardia de Jaén;37.742739;-3.693729;sin nombre en OpenStreetMap
+descartado;node/2121958942;;;La Guardia de Jaén;37.742784;-3.693796;sin nombre en OpenStreetMap
+descartado;node/2131539012;;Carrefour;Jaén;37.780709;-3.766063;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/2144247045;;;Alcaudete;37.589004;-4.078727;sin nombre en OpenStreetMap
+descartado;node/2144247046;;;Alcaudete;37.587354;-4.080546;sin nombre en OpenStreetMap
+descartado;node/2152926422;;Dia;Albolote;37.220591;-3.643612;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2159764099;;Supermercado Valle Tropical;Jete;36.795268;-3.668628;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2177176975;;;Torrox;36.749063;-3.954073;sin nombre en OpenStreetMap
+descartado;node/2188605547;;Alcampo;Granada;37.198173;-3.608769;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2188934115;;Covirán;Granada;37.177746;-3.608536;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2260247012;;Ayuntamiento de Villa de Otura;Villa de Otura;37.094313;-3.6348;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2262647756;;Carrefour;Málaga;36.735017;-4.432198;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/2269984207;;;Nerja;36.752921;-3.872321;sin nombre en OpenStreetMap
+descartado;node/2283233684;;Covirán;Jaén;37.763785;-3.790407;duplicado en el lote de node/2283223106 (145 m)
+descartado;node/2283354073;;;El Puerto de Santa María;36.599256;-6.273776;sin nombre en OpenStreetMap
+descartado;node/2292161177;;Supermercado Alba;Huétor Tájar;37.197508;-4.049499;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2303940868;;Ayuntamiento de Purullena;Purullena;37.314776;-3.189396;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2305519826;;SuperSur Hnos. Álvarez;Huétor Tájar;37.195618;-4.045555;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2311415675;;Covirán;Bubión;36.95011;-3.355655;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2325333939;;Casa Lizana;Loja;37.164483;-4.124216;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2335360756;;Ayuntamiento de Quéntar;Quéntar;37.192086;-3.466586;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2354555260;;Tienda;Estepona;36.462;-5.053415;nombre generico o dudoso en OpenStreetMap: Tienda
+descartado;node/2375982262;;Con-sumo Cuidado;Granada;37.178643;-3.60762;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2376008877;;Economato Ecológico;La Zubia;37.114103;-3.589167;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2376435473;;Carrefour Market;Benalmádena;36.603438;-4.54179;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/2386319606;;;Alcalá de Guadaíra;37.328376;-5.853273;sin nombre en OpenStreetMap
+descartado;node/2388625514;;Supermecado Manolo González;Huétor Tájar;37.196368;-4.04383;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2393654927;;Carrefour;Fuengirola;36.528596;-4.632295;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/2400978474;;;Alcalá del Río;37.516162;-5.981372;sin nombre en OpenStreetMap
+descartado;node/2408945732;;;Benalmádena;36.586725;-4.590988;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/2415332553;;;Gualchos;36.743721;-3.389527;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2431921151;;Covirán;Capileira;36.962011;-3.359526;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2432603583;;Ayuntamiento de Guadix;Guadix;37.300454;-3.134501;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2434258904;;Mercadona;Granada;37.167304;-3.60487;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2461396573;;Ayuntamiento de Láchar;Láchar;37.195104;-3.833977;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2479507301;;Covirán;La Taha;36.935639;-3.325637;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2479515567;;Ayuntamiento de La Taha;La Taha;36.93604;-3.325634;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2480677143;;Spar;Bérchules;36.975259;-3.190124;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2481615045;;Ayuntamiento de Trevélez;Trevélez;37.002416;-3.266659;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2496240026;;Carrefour;Marbella;36.481895;-4.993756;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/2500340638;;Lidl;Loja;37.163655;-4.127509;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2502770511;;Ayuntamiento de Villanueva Mesía;Villanueva Mesía;37.214751;-4.012691;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2506844258;;;Torrox;36.745869;-3.955756;sin nombre en OpenStreetMap
+descartado;node/2510240458;;;El Puerto de Santa María;36.611214;-6.23102;sin nombre en OpenStreetMap
+descartado;node/2510249900;;;El Puerto de Santa María;36.608391;-6.227837;sin nombre en OpenStreetMap
+descartado;node/2529828495;;Supermercado Hrnas. Rodríguez Peso;Huétor Tájar;37.185933;-4.039777;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2531125366;;Supermercado Super Sur;Huétor Tájar;37.184895;-4.039424;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2534147656;;Supermercado Gourmet;Huétor Tájar;37.1973;-4.045851;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2534955679;;Bricoplant;Huétor Tájar;37.198658;-4.046497;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2535496908;;Mercadona;Huétor Tájar;37.192048;-4.049249;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2536192450;;Juzgado de Paz;Huétor Tájar;37.198879;-4.048225;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2536568396;;Dia;Huétor Tájar;37.197645;-4.046884;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2537326231;;Super Saavedra;Huétor Tájar;37.198766;-4.051257;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2549442733;;Carrefour Market;Marbella;36.496011;-4.777035;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/2554243484;;Covirán;Quéntar;37.192701;-3.465602;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2554243491;;Spar;Quéntar;37.192641;-3.464851;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2574272149;;Carrefour;El Ejido;36.751979;-2.805785;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/2601704587;;;Almuñécar;36.732848;-3.739896;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2601704603;;Dia;Almuñécar;36.735642;-3.738815;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2614738440;;Covirán;Albuñol;36.772057;-3.186666;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2615763956;;Corvirán;Jun;37.221644;-3.594994;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2643518374;;Carrefour;Antequera;37.026235;-4.571839;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/2645223332;;Carrefour;Écija;37.530443;-5.08568;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/2663350043;;Carrefour Express;Torremolinos;36.622171;-4.497803;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/2665197234;;Leroy Merlin;Roquetas de Mar;36.775423;-2.61319;texto excluido (leroy merlin|click|recogida)
+descartado;node/2667293218;;Ayuntamiento de Nigüelas;Nigüelas;36.976408;-3.540625;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2722970677;;Covirán;Morelábor;37.439603;-3.331065;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2723233694;;Ayuntamiento de Beas de Granada;Beas de Granada;37.218677;-3.481148;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2790946281;;;Peal de Becerro;37.91126;-3.121431;sin nombre en OpenStreetMap
+descartado;node/2833578551;;Dia;Las Gabias;37.13469;-3.669635;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2883806802;;;Sevilla;37.390138;-5.970671;sin nombre en OpenStreetMap
+descartado;node/2884939939;;Covirán;Alpujarra de la Sierra;36.982106;-3.118305;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/2953578597;;Carrefour Market;Benalmádena;36.59828;-4.518227;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/2984462877;;;Fuente Obejuna;38.18975;-5.277886;sin nombre en OpenStreetMap
+descartado;node/298503254;;Lidl;Almuñécar;36.735801;-3.687018;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/298503262;;Aldi;Almuñécar;36.735917;-3.687524;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3007470395;;;Marinaleda;37.370427;-4.959488;sin nombre en OpenStreetMap
+descartado;node/3007480783;;;Marinaleda;37.370952;-4.957728;sin nombre en OpenStreetMap
+descartado;node/3009176534;;;Marinaleda;37.371821;-4.959247;sin nombre en OpenStreetMap
+descartado;node/3009180817;;;Marinaleda;37.376466;-4.943649;sin nombre en OpenStreetMap
+descartado;node/3009330379;;;Marinaleda;37.377278;-4.946395;sin nombre en OpenStreetMap
+descartado;node/301152790;;Carrefour Market;Nerja;36.747646;-3.880739;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/3012209026;;;Tarifa;36.069448;-5.680448;sin nombre en OpenStreetMap
+descartado;node/3013028130;;Ayuntamiento de Ventas de Zafarraya;Alhama de Granada;36.95744;-4.120581;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3014132746;;Dia;Granada;37.165688;-3.594632;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3014684699;;Don Market;Jun;37.221714;-3.593967;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/301486861;;Ayuntamiento de Nívar;Nívar;37.257872;-3.577974;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3023186895;;;Fuente de Piedra;37.135617;-4.733274;sin nombre en OpenStreetMap
+descartado;node/3046516008;;Covirán;Alamedilla;37.580938;-3.244526;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3070901281;;Dia;Granada;37.188741;-3.619803;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3086684036;;Ayuntamiento de Víznar;Víznar;37.231248;-3.553835;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3089339061;;Ayuntamiento de Alhama de Granada;Alhama de Granada;37.002589;-3.98795;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3089356045;;Ayuntamiento de Valderrubio;Valderrubio;37.2344;-3.823753;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3096951658;;Covirán;Granada;37.181721;-3.605742;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3097102085;;Carrefour;El Puerto de Santa María;36.617506;-6.210748;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/3143490497;;Dani;Guadix;37.304071;-3.142566;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3158475398;;Covirán;Huétor Tájar;37.196194;-4.042849;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3163390801;;Carrefour express;Sevilla;37.397917;-5.997991;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/321316164;;Carrefour;Estepona;36.428485;-5.130973;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/321346094;;Centro Comercial;Estepona;36.459341;-5.049179;nombre generico o dudoso en OpenStreetMap: Centro Comercial
+descartado;node/3249998214;;La Despensa de Granada;Huétor Tájar;37.200579;-4.045133;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3340446018;;Panadería Pastelería Mari Sol;Armilla;37.143861;-3.62735;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3340729470;;Ayuntamiento de Cogollos de la Vega;Cogollos de la Vega;37.275439;-3.573462;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3421390872;;Carrefour Market;Almería;36.840183;-2.463788;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/3428580760;;;Benalmádena;36.600151;-4.544018;sin nombre en OpenStreetMap
+descartado;node/3430896877;;Carrefour Market;Benalmádena;36.598456;-4.539051;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/3441711515;;Carrefour Express;Málaga;36.720791;-4.356499;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/3441711516;;Carrefour Express;Málaga;36.720141;-4.362916;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/3461661783;;Cash Fresh;Granada;37.162754;-3.599036;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3500778376;;Covirán;Granada;37.194582;-3.611673;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3507485385;;Komo Komo;Órgiva;36.900526;-3.424931;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3507487842;;Covirán;Órgiva;36.901916;-3.423106;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3507494580;;Dia;Órgiva;36.898983;-3.42172;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3508455054;;;La Rinconada;37.483678;-5.94712;sin nombre en OpenStreetMap
+descartado;node/3508458709;;;La Rinconada;37.484452;-5.947549;sin nombre en OpenStreetMap
+descartado;node/3576635457;;Carrefour Express;Vélez-Málaga;36.743229;-4.094011;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/3579594925;;Covirán;Granada;37.174209;-3.604305;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3627814457;;;Barbate;36.196016;-5.917857;sin nombre en OpenStreetMap
+descartado;node/366061853;;Dia;Algodonales;36.87998;-5.405801;duplicado en el lote de node/11775710577 (39 m)
+descartado;node/3700931854;;Carrefour Market;Marbella;36.504345;-4.809488;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/3709012325;;Ayuntamiento de Aldeire;Aldeire;37.163523;-3.072074;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3709012726;;Covirán;Aldeire;37.160622;-3.072589;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3735959233;;Covirán;Jérez del Marquesado;37.184436;-3.160728;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3758649804;;Dia;Granada;37.185699;-3.611831;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3765641775;;TuSuper;Granada;37.185837;-3.610356;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3783580200;;Covirán;Granada;37.173244;-3.592996;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3811372039;;Carrefour Market;Cádiz;36.530877;-6.298512;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/3811372505;;La Gloria;Guadix;37.297821;-3.13577;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3811372600;;Dia;Guadix;37.300415;-3.131993;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3812156069;;Mari;Diezma;37.319703;-3.331694;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3815330814;;Dani;Granada;37.154254;-3.600472;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3834538862;;Leroy Merlin;Armilla;37.144894;-3.613164;texto excluido (leroy merlin|click|recogida)
+descartado;node/3835498761;;Supeco;Gines;37.379804;-6.083678;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/3862617493;;Minimarket;Écija;37.449461;-4.882397;nombre generico o dudoso en OpenStreetMap: Minimarket
+descartado;node/3890930415;;Juzgado;Lora del Río;37.656475;-5.524609;nombre generico o dudoso en OpenStreetMap: Juzgado
+descartado;node/3898762079;;Ayuntamiento de Domingo Pérez de Granada;Domingo Pérez de Granada;37.497219;-3.508475;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3899060254;;Supermercado Los Montes;Domingo Pérez de Granada;37.496912;-3.508885;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3899094713;;Supermercado Silvia;Domingo Pérez de Granada;37.497289;-3.509499;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3919388658;;Al Sur de Granada;Granada;37.182092;-3.599317;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3933167361;;;Cortelazor;37.935713;-6.625147;sin nombre en OpenStreetMap
+descartado;node/3933167362;;;Cortelazor;37.935554;-6.625299;sin nombre en OpenStreetMap
+descartado;node/3990053465;;Aldi;Granada;37.197089;-3.604737;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3990452699;;Supermercado Cash Zurita;Churriana de la Vega;37.147354;-3.630571;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/3999320133;;;Torremolinos;36.615972;-4.499821;sin nombre en OpenStreetMap
+descartado;node/4000828790;;;Los Gallardos;37.184446;-1.923919;sin nombre en OpenStreetMap
+descartado;node/4043585238;;Carrefour Market;Estepona;36.424741;-5.151168;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/4051772475;;Dia;Granada;37.189666;-3.609027;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4051778820;;Dani;Granada;37.189924;-3.608112;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4086679980;;Covirán;Freila;37.52983;-2.908129;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4086679981;;Ayuntamiento de Freila;Freila;37.528959;-2.906887;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4102400475;;;Dos Hermanas;37.277522;-5.920495;sin nombre en OpenStreetMap
+descartado;node/4117413243;;Carrefour Market;Jerez de la Frontera;36.682092;-6.135349;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/4125213270;;;Minas de Riotinto;37.692738;-6.592867;sin nombre en OpenStreetMap
+descartado;node/4125719071;;;Aracena;37.895896;-6.563471;sin nombre en OpenStreetMap
+descartado;node/4167435074;;Covirán;Trevélez;37.002333;-3.26724;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4169609989;;Covirán;Lanjarón;36.918372;-3.482249;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4169815823;;Covirán;Órgiva;36.902856;-3.423227;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4169840394;;Juzgado de 1a Instancia;Órgiva;36.90203;-3.424141;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4171641381;;Covirán;Torre-Cardela;37.504476;-3.355774;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4176335953;;;Almuñécar;36.727606;-3.727253;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4195173389;;Delegación de la Agencia Tributaria de Granada;Granada;37.1829;-3.602616;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4195713489;;Covirán;Zafarraya;36.975938;-4.144143;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4221234507;;Minimarket;Frigiliana;36.794931;-3.90055;nombre generico o dudoso en OpenStreetMap: Minimarket
+descartado;node/4236850792;;Dia;Granada;37.176015;-3.60967;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4237453089;;Hipercor;Cádiz;36.521229;-6.277508;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/4247071237;;Carrefour Express;Chiclana de la Frontera;36.420136;-6.149568;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/4256823674;;Carrefour;Estepona;36.41679;-5.159288;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/4261199393;;Covirán;Chiclana de la Frontera;36.419236;-6.147517;duplicado en el lote de node/4261032596 (93 m)
+descartado;node/4291298760;;Covirán;Granada;37.178582;-3.598168;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4294643760;;Covirán;Orce;37.72152;-2.479023;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4294643761;;Ayuntamiento de Orce;Orce;37.721259;-2.479292;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4313281589;;Dia;Ugíjar;36.959947;-3.053153;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4336924169;;Carrefour City;Sevilla;37.389523;-5.995082;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/4341415291;;Juzgado;Aguilar de la Frontera;37.516077;-4.655216;nombre generico o dudoso en OpenStreetMap: Juzgado
+descartado;node/439176128;;Mercadona;Almuñécar;36.735352;-3.686455;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4424626074;;;Los Corrales;37.100331;-4.984529;sin nombre en OpenStreetMap
+descartado;node/443924559;;Carrefour;Córdoba;37.896098;-4.791636;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/4443027189;;Mercadona;Granada;37.193197;-3.638244;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4450714089;;Carrefour Market;Conil de la Frontera;36.340451;-6.093842;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/4469781399;;Covirán;Granada;37.180846;-3.600664;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4528196294;;Supermercado;Almería;36.841513;-2.322021;nombre generico o dudoso en OpenStreetMap: Supermercado
+descartado;node/4528255460;;Ayuntamiento de Jérez del Marquesado;Jérez del Marquesado;37.183904;-3.159822;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4543506905;;Mercadona;Granada;37.150227;-3.606373;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4546348114;;;Cañaveral de León;38.014922;-6.528343;sin nombre en OpenStreetMap
+descartado;node/4569906669;;Covirán;Cuevas del Campo;37.605757;-2.929987;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4569906765;;Mercadona;Baza;37.495227;-2.763623;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4569906766;;Lidl;Baza;37.494271;-2.760764;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4591260495;;Ayuntamiento de Dúdar;Dúdar;37.185984;-3.483632;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4591294107;;Centro de Salud La Herradura;Almuñécar;36.734416;-3.741972;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4594144601;;;Vélez-Málaga;36.818491;-4.166289;sin nombre en OpenStreetMap
+descartado;node/4614863725;;;Almáchar;36.806778;-4.215945;sin nombre en OpenStreetMap
+descartado;node/4620187553;;Ayuntamiento de Pinos Puente;Pinos Puente;37.250856;-3.752265;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4623388516;;;Cortelazor;37.936187;-6.625307;sin nombre en OpenStreetMap
+descartado;node/4632538796;;Consum;Baza;37.492794;-2.765464;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4635824889;;Mercadona;Almuñécar;36.732566;-3.696952;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4636358389;;Mercadona;Villa de Otura;37.090134;-3.628649;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4638128490;;Mercadona;Ogíjares;37.124805;-3.604521;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4638128494;;Ayuntamiento de Albuñol;Albuñol;36.791277;-3.203334;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4638169389;;Mercadona;Monachil;37.137478;-3.569303;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4638169390;;Mercadona;Granada;37.157111;-3.583235;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4638169589;;Mercadona;Armilla;37.140535;-3.621295;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4674422009;;;Torremolinos;36.622389;-4.495023;sin nombre en OpenStreetMap
+descartado;node/4674422019;;;Torremolinos;36.622675;-4.496173;sin nombre en OpenStreetMap
+descartado;node/4676522492;;Beehive;;36.146139;-5.357017;fuera de los municipios oficiales cargados
+descartado;node/4678685192;;Carrefour Express;Rincón de la Victoria;36.715094;-4.283518;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/4694149473;;Juzgado;Prado del Rey;36.787804;-5.555965;nombre generico o dudoso en OpenStreetMap: Juzgado
+descartado;node/4718246840;;Carrefour Express;Málaga;36.723573;-4.396619;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/4745145424;;;Sevilla;37.391184;-5.980415;sin nombre en OpenStreetMap
+descartado;node/4756043232;;Covirán;Pedro Martínez;37.501208;-3.228926;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4756128843;;Supermercado Encarnita;Pedro Martínez;37.502965;-3.22906;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4758760477;;Covirán;Nevada;37.009791;-3.01557;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4764897989;;Covirán;Cúllar;37.587354;-2.584036;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4764897990;;Covirán;Huéscar;37.808913;-2.539516;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4764898116;;Ayuntamiento de Benamaurel;Benamaurel;37.608886;-2.698811;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4764898117;;Covirán;Benamaurel;37.606816;-2.698958;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4764899619;;Covirán;Zújar;37.539811;-2.838601;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4764901121;;Don Market;Huéscar;37.810365;-2.539211;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4764901122;;Spar;Huéscar;37.80084;-2.54442;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4771510008;;Covirán;Puebla de Don Fadrique;37.959329;-2.437059;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4805751021;;Covirán;Granada;37.178211;-3.601278;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4817489522;;Carrefour Market;Cádiz;36.531868;-6.303144;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/4819508183;;;Sevilla;37.374204;-6.00284;sin nombre en OpenStreetMap
+descartado;node/4841024502;;Covirán;Santa Fe;37.186644;-3.717642;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/484320044;;Lidl;Granada;37.188703;-3.621073;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4859421881;;Training Co.;Málaga;36.732493;-4.402999;duplicado en el lote de node/10271803535 (32 m)
+descartado;node/4861794207;;Carrefour Market;Málaga;36.729291;-4.415993;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/4903705479;;Ayuntamiento de Galera;Galera;37.742834;-2.551271;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4903705494;;Covirán;Galera;37.743144;-2.552347;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4903705498;;Chuchaina;Galera;37.742511;-2.551588;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4904844447;;Ayuntamiento de Dílar;Dílar;37.075188;-3.602157;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4917175598;;;Olivares;37.414817;-6.161462;sin nombre en OpenStreetMap
+descartado;node/4928899821;;Supermercado Jiménez-Guillén;Almuñécar;36.735584;-3.743908;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4947455117;;;El Gastor;36.854651;-5.322706;sin nombre en OpenStreetMap
+descartado;node/4947455364;;Micro Dur;Diezma;37.32031;-3.332002;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4947457481;;Covirán;Puebla de Don Fadrique;37.957396;-2.432758;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4947457482;;Super Sur;Puebla de Don Fadrique;37.957315;-2.434989;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4947459324;;Dia;Puebla de Don Fadrique;37.958;-2.435505;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4947460099;;;Alcalá de los Gazules;36.461513;-5.726664;sin nombre en OpenStreetMap
+descartado;node/4947460133;;;Conil de la Frontera;36.273266;-6.086925;sin nombre en OpenStreetMap
+descartado;node/4962762724;;Dani;Granada;37.178203;-3.607382;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/4963741242;;Centro de Salud Belén;Jaén;37.769643;-3.783451;etiqueta disused:amenity
+descartado;node/497163616;;Mercadona;Santa Fe;37.189839;-3.722909;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/499570014;;Carrefour;Los Barrios;36.180815;-5.442269;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/4998009433;;Ayuntamiento de Ogíjares;Ogíjares;37.120058;-3.606912;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5007509972;;Ayuntamiento de Castilléjar;Castilléjar;37.714667;-2.643062;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5007509974;;Covirán;Castilléjar;37.714852;-2.642722;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5007607525;;;Sevilla;37.390581;-5.979949;sin nombre en OpenStreetMap
+descartado;node/5020169616;;;Almuñécar;36.732669;-3.692337;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5020169619;;;Almuñécar;36.73356;-3.691829;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5039778768;;Forus;Granada;37.157056;-3.583008;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5058507492;;Covirán;Huétor Vega;37.14769;-3.568438;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5060092816;;Covirán;Huétor Vega;37.144557;-3.564815;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5123325054;;Mercadona;Granada;37.190366;-3.611012;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5126998557;;Covirán;Marbella;36.508943;-4.883271;duplicado en el lote de node/1405106348 (74 m)
+descartado;node/5131417122;;;Puente Genil;37.388958;-4.768808;sin nombre en OpenStreetMap
+descartado;node/5154074451;;;Conil de la Frontera;36.276196;-6.088715;sin nombre en OpenStreetMap
+descartado;node/5173172439;;;Granada;37.187917;-3.614134;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5191693787;;Supermercado Komo Komo;Benalúa;37.35219;-3.165629;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5232325927;;Covirán;Atarfe;37.206136;-3.664738;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5235407522;;Carrefour Market;Cádiz;36.514719;-6.27727;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/5270990911;;Carrefour Market;Martos;37.717261;-3.971611;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/5301150088;;Covirán;Granada;37.162732;-3.558022;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5305230123;;Galaxy;Granada;37.17638;-3.604085;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5305405124;;Covirán;Granada;37.177966;-3.604389;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5307044026;;La Trinidad;Granada;37.176459;-3.601546;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5308241128;;Dia;Granada;37.176793;-3.605588;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5320786334;;;Frigiliana;36.789767;-3.894958;sin nombre en OpenStreetMap
+descartado;node/5320786337;;;Frigiliana;36.791537;-3.89686;sin nombre en OpenStreetMap
+descartado;node/5320786338;;;Frigiliana;36.791916;-3.896912;sin nombre en OpenStreetMap
+descartado;node/5320786339;;;Frigiliana;36.792229;-3.897879;sin nombre en OpenStreetMap
+descartado;node/5321986100;;;Frigiliana;36.791691;-3.898814;sin nombre en OpenStreetMap
+descartado;node/5373729000;;Ayuntamiento de Atarfe;Atarfe;37.222699;-3.686475;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5377744125;;Spar;Vegas del Genil;37.175037;-3.68986;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5390789823;;Gimnasio Acidesa;Atarfe;37.219329;-3.690618;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5403772176;;Cada Día;Castril;37.795264;-2.779122;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5403772199;;Covirán;Castril;37.796044;-2.779098;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5403772468;;Mikrosur;Castril;37.818439;-2.732979;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5403772503;;Covirán;Castril;37.818173;-2.730161;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5410489995;;Ayuntamiento de Lugros;Lugros;37.229355;-3.241343;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5410499495;;Ayuntamiento de Polícar;Polícar;37.257448;-3.23308;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5410545787;;Ayuntamiento de Albuñán;Albuñán;37.227066;-3.133407;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5412653302;;Cash El Reloj;Atarfe;37.221426;-3.692104;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5415269974;;Supermercado Elena;Atarfe;37.224263;-3.68462;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5416745543;;Súper 24h El Paraíso;Atarfe;37.222117;-3.683781;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5419781247;;Supermercado Trady's;Atarfe;37.222664;-3.686909;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5419781256;;Super Cash Darvi;Atarfe;37.216784;-3.692256;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5426665435;;Supermercado Agustín;Beas de Guadix;37.279284;-3.205707;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5426744838;;Covirán;Cogollos de Guadix;37.224162;-3.163397;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/543618830;;;Torrox;36.740207;-3.951391;sin nombre en OpenStreetMap
+descartado;node/544475579;;Dani;Granada;37.160272;-3.594378;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/544506020;;Covirán;Granada;37.189912;-3.605134;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/544605817;;Covirán;Granada;37.198378;-3.601944;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5458487807;;Ayuntamiento de Alhendín;Alhendín;37.107895;-3.645946;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5458649982;;Ayuntamiento de Armilla;Armilla;37.142831;-3.627804;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5458666739;;Ayuntamiento de Baza;Baza;37.490617;-2.774217;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5466195782;;Ayuntamiento de Busquístar;Busquístar;36.937865;-3.294428;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5466219742;;Ayuntamiento de Cacín;Cacín;37.059934;-3.917028;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5466262793;;Ayuntamiento de Cádiar;Cádiar;36.946414;-3.180379;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5466340893;;Ayuntamiento de Castril;Castril;37.795742;-2.779142;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5475634952;;Ayuntamiento de Deifontes;Deifontes;37.326547;-3.594305;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5477193303;;Ayuntamiento de Padul;Padul;37.022376;-3.627194;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5477211008;;Ayuntamiento de Escúzar;Escúzar;37.062032;-3.761263;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5477276164;;Ayuntamiento de Fuente Vaqueros;Fuente Vaqueros;37.219407;-3.783017;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5477511994;;Ayuntamiento de Gobernador;Gobernador;37.477373;-3.319941;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5477683361;;Ayuntamiento de Guadahortuna;Guadahortuna;37.556521;-3.40082;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5477734131;;Ayuntamiento de Güéjar Sierra;Güéjar Sierra;37.159919;-3.43856;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5477918357;;Ayuntamiento de Huétor de Santillán;Huétor de Santillán;37.218406;-3.517216;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5479655205;;Ayuntamiento de Huétor Tájar;Huétor Tájar;37.194058;-4.046916;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5479687186;;Ayuntamiento de Íllora;Íllora;37.288433;-3.87963;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5479842335;;Ayuntamiento de Iznalloz;Iznalloz;37.392956;-3.527692;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5480417116;;Ayuntamiento de La Malahá;La Malahá;37.101463;-3.723028;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5480671021;;Carrefour Market;Cádiz;36.52018;-6.285572;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/5482083725;;Ayuntamiento de Lanjarón;Lanjarón;36.918063;-3.480441;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5482471089;;Ayuntamiento de Las Gabias;Las Gabias;37.136431;-3.669301;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5487944655;;Ayuntamiento de Lecrín;Lecrín;36.948011;-3.55065;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5487951601;;Ayuntamiento de Loja;Loja;37.166483;-4.149892;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5488034826;;Ayuntamiento de Marchal;Marchal;37.29632;-3.202298;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5488069145;;Ayuntamiento de Moclín;Moclín;37.340106;-3.785793;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5488479453;;Ayuntamiento de Montefrío;Montefrío;37.320902;-4.011269;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5488491190;;Ayuntamiento de Moraleda de Zafayona;Moraleda de Zafayona;37.1699;-3.964972;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5488673754;;Ayuntamiento de Morelábor;Morelábor;37.439938;-3.33215;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5488761652;;Ayuntamiento de Motril;Motril;36.745218;-3.520627;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5489406764;;Centro de Salud Atarfe;Atarfe;37.221166;-3.690406;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5491089522;;Ayuntamiento de Órgiva;Órgiva;36.900492;-3.423963;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5491193524;;Ayuntamiento de Pedro Martínez;Pedro Martínez;37.501604;-3.230549;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5492879755;;Ayuntamiento de Pinos Genil;Pinos Genil;37.163726;-3.502012;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5492893767;;Ayuntamiento de Pinos Puente;Pinos Puente;37.251602;-3.749375;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5495596410;;Ayuntamiento de Píñar;Píñar;37.442584;-3.440495;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5495677234;;Ayuntamiento de Puebla de Don Fadrique;Puebla de Don Fadrique;37.958001;-2.434829;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5495952591;;Ayuntamiento de Pulianas;Pulianas;37.219429;-3.607522;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5496003894;;Ayuntamiento de Salar;Salar;37.152309;-4.06691;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5496093333;;Ayuntamiento de Salobreña;Salobreña;36.746616;-3.586955;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/550166521;;Mercadona;Granada;37.181976;-3.612831;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5505493238;;Ayuntamiento de Zújar;Zújar;37.541361;-2.841728;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5522060354;;Ayuntamiento de Agrón;Agrón;37.030653;-3.830026;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5525842922;;Covirán;Monachil;37.09522;-3.398998;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5526884618;;Ayuntamiento de Alamedilla;Alamedilla;37.581577;-3.244498;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5526896352;;Ayuntamiento de Albondón;Albondón;36.828289;-3.210897;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5526991847;;Ayuntamiento de Albuñuelas;Albuñuelas;36.928589;-3.623221;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5527235222;;Ayuntamiento de Algarinejo;Algarinejo;37.324848;-4.158713;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5527291538;;Ayuntamiento de Alicún de Ortega;Alicún de Ortega;37.608021;-3.137316;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5527452898;;Ayuntamiento de Almegíjar;Almegíjar;36.902509;-3.299669;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5530063251;;Ayuntamiento de Alpujarra de la Sierra;Alpujarra de la Sierra;36.980874;-3.155543;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5530548988;;Ayuntamiento de Bácor-Olivar;Guadix;37.531919;-2.953966;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5531219261;;Ayuntamiento de Ferreira;Ferreira;37.172438;-3.036067;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5539442558;;Ayuntamiento de Benalúa;Benalúa;37.350093;-3.169054;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5539500380;;Ayuntamiento de Benalúa de las Villas;Benalúa de las Villas;37.431646;-3.682528;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5539783712;;Ayuntamiento de Bubión;Bubión;36.948843;-3.356805;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5540019571;;Ayuntamiento de Calicasas;Calicasas;37.273244;-3.618508;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5540112805;;Ayuntamiento de Campotéjar;Campotéjar;37.481462;-3.616613;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5541989035;;Ayuntamiento de Caniles;Caniles;37.436306;-2.722208;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5542021938;;Ayuntamiento de Cáñar;Cáñar;36.926145;-3.427724;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5542060483;;Ayuntamiento de Capileira;Capileira;36.96141;-3.358536;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5542465982;;Ayuntamiento de Carataunas;Carataunas;36.922892;-3.408263;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5542498654;;Ayuntamiento de Cástaras;Cástaras;36.931392;-3.253709;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5542798063;;Ayuntamiento de Churriana de la Vega;Churriana de la Vega;37.147697;-3.646098;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5544339840;;Ayuntamiento de Cijuela;Cijuela;37.199933;-3.81058;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5544360534;;Ayuntamiento de Cogollos de Guadix;Cogollos de Guadix;37.224167;-3.160913;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5544375726;;Ayuntamiento de Colomera;Colomera;37.369054;-3.712651;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5544474921;;Ayuntamiento de Cortes y Graena;Cortes y Graena;37.303762;-3.218803;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5544507617;;Ayuntamiento de Cuevas del Campo;Cuevas del Campo;37.608534;-2.930636;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5544810928;;Ayuntamiento de Cúllar;Cúllar;37.583624;-2.576468;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5544892676;;Ayuntamiento de Dehesas Viejas;Dehesas Viejas;37.4726;-3.55184;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5544956453;;Ayuntamiento de Dólar;Dólar;37.178359;-2.99145;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5545015758;;Ayuntamiento de Dúrcal;Dúrcal;36.987913;-3.566052;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5547240350;;Ayuntamiento de El Turro;Cacín;37.133257;-3.942241;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5547472849;;Ayuntamiento de El Valle;El Valle;36.929029;-3.5829;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5549740892;;Ayuntamiento de Fonelas;Fonelas;37.413485;-3.173403;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5550071004;;Ayuntamiento de Fornes;Fornes;36.954428;-3.85547;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5551589401;;Covirán;Granada;37.164817;-3.58172;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5558493130;;Ayuntamiento de Gualchos;Gualchos;36.722524;-3.35929;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5559048644;;Ayuntamiento de Ítrabo;Ítrabo;36.79962;-3.638709;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5561064194;;Ayuntamiento de Játar;Játar;36.934157;-3.909377;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5561083782;;Ayuntamiento de Jayena;Jayena;36.948903;-3.822821;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5561123678;;Ayuntamiento de Jete;Jete;36.797345;-3.667938;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5561148280;;Ayuntamiento de Jun;Jun;37.221949;-3.594359;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5561795643;;Ayuntamiento de Juviles;Juviles;36.948098;-3.225557;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5563502104;;Ayuntamiento de La Calahorra;La Calahorra;37.181424;-3.064237;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5563511587;;Ayuntamiento de La Peza;La Peza;37.27563;-3.284811;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5563578348;;Ayuntamiento de Lanteira;Lanteira;37.168902;-3.13848;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5563615645;;Ayuntamiento de Lentegí;Lentegí;36.83439;-3.674542;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5563971107;;Ayuntamiento de Lobras;Lobras;36.929255;-3.212626;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5564044374;;Ayuntamiento de Los Guájares;Los Guájares;36.841545;-3.584218;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5566663193;;Ayuntamiento de Molvízar;Molvízar;36.789504;-3.60865;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5568874090;;La Artesana Alimentación;Las Gabias;37.124836;-3.654349;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5573377104;;Ayuntamiento de Montejícar;Montejícar;37.571885;-3.504448;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5575266209;;Ayuntamiento de Montillana;Montillana;37.499982;-3.672272;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5575297302;;Ayuntamiento de Murtas;Murtas;36.887293;-3.108298;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5575598809;;Ayuntamiento de Nevada;Nevada;37.008348;-3.014567;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5579829475;;Ayuntamiento de Otívar;Otívar;36.813192;-3.679222;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5579849633;;Ayuntamiento de Pampaneira;Pampaneira;36.940093;-3.361354;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5580118640;;Ayuntamiento de Polopos;Polopos;36.747866;-3.275714;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5580264157;;Ayuntamiento de Pórtugos;Pórtugos;36.942395;-3.310329;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5581880607;;Ayuntamiento de Rubite;Rubite;36.809359;-3.347952;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5581891769;;Ayuntamiento de Santa Cruz del Comercio;Santa Cruz del Comercio;37.060573;-3.97642;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5581935413;;Ayuntamiento de Santa Fe;Santa Fe;37.189561;-3.718161;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5581955942;;Ayuntamiento de Soportújar;Soportújar;36.928449;-3.405053;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5582116865;;Ayuntamiento de Torre-Cardela;Torre-Cardela;37.504773;-3.355875;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5582295065;;Ayuntamiento de Torrenueva Costa;Torrenueva Costa;36.701911;-3.485761;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5587831532;;Ayuntamiento de Torvizcón;Torvizcón;36.87856;-3.298702;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5587916866;;Ayuntamiento de Turón;Turón;36.863656;-3.057744;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5587959072;;Ayuntamiento de Ugíjar;Ugíjar;36.961088;-3.054538;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5588139457;;Ayuntamiento de Válor;Válor;36.996321;-3.080826;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5588181579;;Ayuntamiento de Vegas del Genil;Vegas del Genil;37.171639;-3.6674;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5588196043;;Ayuntamiento de Vélez de Benaudalla;Vélez de Benaudalla;36.83109;-3.515608;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5588214961;;Ayuntamiento de Ventas de Huelma;Ventas de Huelma;37.066821;-3.821107;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5588276395;;Ayuntamiento de Villamena;Villamena;36.991036;-3.589202;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5588307058;;Ayuntamiento de Villanueva de las Torres;Villanueva de las Torres;37.556676;-3.089632;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/558841777;;Covirán;Alpujarra de la Sierra;36.981305;-3.15565;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5597587127;;Autoservicios Batista;Huelva;37.29205;-6.897872;duplicado en el lote de node/5567086926 (149 m)
+descartado;node/561298926;;Supermercado;Estepona;36.465926;-5.029045;nombre generico o dudoso en OpenStreetMap: Supermercado
+descartado;node/5628841048;;Agencia Tributaria Provincial de Granada;Granada;37.17193;-3.597168;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5635642422;;;Málaga;36.731273;-4.436942;sin nombre en OpenStreetMap
+descartado;node/5639351671;;Supermercado Ecológico Herboteca;Sevilla;37.381944;-6.003957;duplicado en el lote de node/4748622026 (5 m)
+descartado;node/5645685334;;Ayuntamiento de El Chaparral;Albolote;37.257832;-3.657996;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5649721837;;;Fuengirola;36.542414;-4.624384;sin nombre en OpenStreetMap
+descartado;node/5678416920;;Covirán;Cádiz;36.505438;-6.270271;duplicado en el lote de node/5678416919 (11 m)
+descartado;node/5687913739;;;Yunquera;36.735168;-4.917881;sin nombre en OpenStreetMap
+descartado;node/5759316486;;Lidl;Las Gabias;37.139258;-3.653995;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5760357991;;Dani;Granada;37.189755;-3.627659;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5760515441;;Covirán;Las Gabias;37.135505;-3.667539;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5760515460;;Stimula-T;Las Gabias;37.137312;-3.660782;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5820725053;;Dani;Armilla;37.142808;-3.626958;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5826092461;;Covirán;Pinos Puente;37.250888;-3.751854;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5829741950;;Covirán;Pinos Puente;37.251666;-3.747624;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5832000920;;Covirán;Salobreña;36.743419;-3.598543;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5837953494;;;Armilla;37.14466;-3.621869;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5904979990;;DFH Salud y Bienestar;Atarfe;37.224079;-3.685901;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5907973913;;Covirán;Atarfe;37.22505;-3.680933;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5908467112;;Covirán;Atarfe;37.227492;-3.684592;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5913189322;;Supermercado Juanita;Almuñécar;36.746432;-3.663143;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5914526393;;;Beas de Granada;37.218622;-3.481721;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5951642136;;Supermercado Ferretería Mónica;Trevélez;37.002381;-3.268277;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5952115144;;;Úbeda;38.01578;-3.37975;sin nombre en OpenStreetMap
+descartado;node/5958591887;;Dia;Lanjarón;36.918422;-3.478676;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5964913352;;Juzgado de Menores Número 1;Granada;37.168608;-3.605729;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/5967526946;;;Alcalá del Río;37.573732;-5.915384;sin nombre en OpenStreetMap
+descartado;node/5986984879;;;Torremolinos;36.618907;-4.499378;sin nombre en OpenStreetMap
+descartado;node/5991712986;;Covirán;Granada;37.171766;-3.605383;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/6046760699;;Hipercor Bahía de Málaga;Málaga;36.709756;-4.461622;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/6046760700;;Hipercor;El Ejido;36.772914;-2.805405;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/6061790951;;;Sevilla;37.393013;-5.983126;sin nombre en OpenStreetMap
+descartado;node/6065966053;;Hipercor;Huelva;37.255868;-6.942554;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/6065966054;;Hipercor;Jerez de la Frontera;36.705084;-6.117104;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/6125451097;;Tu Super;Armilla;37.137983;-3.624681;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/6140229549;;Mercadona;Armilla;37.145835;-3.615269;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/6216837606;;Supermercado Autoservicio Merida;Moclín;37.331553;-3.76689;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/6218559645;;;Nevada;37.009463;-3.012502;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/6257701186;;Covirán;Granada;37.190218;-3.626797;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/6257701187;;Covirán;Granada;37.181377;-3.615768;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/6269893387;;;Marbella;36.489897;-4.961246;sin nombre en OpenStreetMap
+descartado;node/6304468072;;Mercadona;Las Gabias;37.149137;-3.672878;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/6355741759;;Mercadona;Albolote;37.229616;-3.654003;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/6385391352;;;Villafranca de Córdoba;37.959635;-4.54711;sin nombre en OpenStreetMap
+descartado;node/6390231632;;;Villafranca de Córdoba;37.961677;-4.54844;sin nombre en OpenStreetMap
+descartado;node/6390231919;;;Córdoba;37.933926;-4.66946;sin nombre en OpenStreetMap
+descartado;node/6399390101;;;Fuentes de Andalucía;37.464301;-5.343879;sin nombre en OpenStreetMap
+descartado;node/6410027529;;;Santiago de Calatrava;37.752303;-4.173228;sin nombre en OpenStreetMap
+descartado;node/6410027530;;;Santiago de Calatrava;37.752293;-4.173233;sin nombre en OpenStreetMap
+descartado;node/6410027531;;;Santiago de Calatrava;37.752127;-4.173271;sin nombre en OpenStreetMap
+descartado;node/6410027532;;;Santiago de Calatrava;37.752127;-4.17323;sin nombre en OpenStreetMap
+descartado;node/6410027534;;;Santiago de Calatrava;37.752046;-4.173281;sin nombre en OpenStreetMap
+descartado;node/6410027535;;;Santiago de Calatrava;37.751991;-4.173289;sin nombre en OpenStreetMap
+descartado;node/6410027536;;;Santiago de Calatrava;37.751949;-4.173319;sin nombre en OpenStreetMap
+descartado;node/6426634372;;Unity Cross Box;Atarfe;37.216134;-3.688632;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/6432692286;;Covirán;Monachil;37.094532;-3.400578;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/6505752587;;Covirán;Bérchules;36.97414;-3.191166;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/6506230830;;Centro de Salud Castell de Ferro;Gualchos;36.723883;-3.360833;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/6511778845;;Carrefour;Coín;36.674801;-4.733234;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/6512232684;;Covirán;Pórtugos;36.942334;-3.311733;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/6512232885;;Covirán;Busquístar;36.938224;-3.293915;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/6532475014;;Supermercado Morales Rodríguez;Íllora;37.237137;-3.968279;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/6532475023;;Ayuntamiento de Tocón;Íllora;37.237596;-3.968105;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/6544099471;;;Sevilla;37.379561;-5.918837;sin nombre en OpenStreetMap
+descartado;node/6579699885;;Tucuerpoenforma.es;Granada;37.150702;-3.603428;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/6603081786;;MAS;Sevilla;37.375154;-5.998353;duplicado en el lote de node/6644413887 (30 m)
+descartado;node/6657437676;;Gimnasio Elite;Granada;37.187204;-3.614573;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/668210664;;;Los Barrios;36.188636;-5.4331;sin nombre en OpenStreetMap
+descartado;node/6711057178;;Dani;Granada;37.173626;-3.606717;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/6715434071;;Leroy Merlin;Mijas;36.53567;-4.636166;texto excluido (leroy merlin|click|recogida)
+descartado;node/6776091567;;El Jamón;Dos Hermanas;37.285894;-5.915733;duplicado en el lote de node/1270122675 (99 m)
+descartado;node/6782547884;;;Algarrobo;36.746262;-4.04665;sin nombre en OpenStreetMap
+descartado;node/6806127903;;Dia;Montefrío;37.323609;-4.006112;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/6814229568;;Spar;Montefrío;37.32136;-4.010044;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/6817142518;;;Bubión;36.948009;-3.354328;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/6884846950;;;Benahavís;36.480371;-5.041575;sin nombre en OpenStreetMap
+descartado;node/6898521689;;Brooklyn Fitboxing;Granada;37.176649;-3.611119;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/691037437;;;Almería;36.847694;-2.456674;sin nombre en OpenStreetMap
+descartado;node/6914471685;;Mercadona;Granada;37.198176;-3.612299;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/6928098732;;Planet Life;Atarfe;37.21767;-3.692807;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/6945779785;;El Corte Ingles;Sevilla;37.393456;-5.996518;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/6952310856;;;Cómpeta;36.832909;-3.974073;sin nombre en OpenStreetMap
+descartado;node/6957149811;;;Cómpeta;36.833705;-3.971444;sin nombre en OpenStreetMap
+descartado;node/6978079244;;;Puerto Real;36.527743;-6.185119;sin nombre en OpenStreetMap
+descartado;node/7002749939;;Juzgados;Cómpeta;36.832917;-3.97493;nombre generico o dudoso en OpenStreetMap: Juzgados
+descartado;node/7013689200;;Mi Puerto Market;Almuñécar;36.726236;-3.726952;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7060381186;;Lidl;Atarfe;37.220076;-3.698786;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7100336812;;Covirán;Jete;36.797274;-3.667984;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7130416493;;Covirán;Almuñécar;36.736465;-3.745599;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7130480442;;TuSúper;Granada;37.161466;-3.5866;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7140785181;;Covirán;Calicasas;37.272939;-3.616324;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7196865085;;Supermercado;Jerez de la Frontera;36.691912;-6.12917;nombre generico o dudoso en OpenStreetMap: Supermercado
+descartado;node/7379665977;;Dia;Maracena;37.207766;-3.63281;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7379665978;;Covirán;Maracena;37.20751;-3.633743;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7379665983;;Yeyo 2.0;Maracena;37.205712;-3.633876;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7379685890;;;Maracena;37.210007;-3.6306;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7379685891;;Tienda Alicia;Maracena;37.212412;-3.626528;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7379685892;;Yeyo;Maracena;37.204344;-3.634278;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7446702486;;Ayuntamiento de Malcocinado;Malcocinado;38.121913;-5.690926;fuera de las provincias del lote (06)
+descartado;node/7475702010;;Okeymas;Granada;37.158352;-3.605975;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/747666066;;MAS;Sevilla;37.392808;-5.986371;duplicado en el lote de node/4594520192 (7 m)
+descartado;node/7525267485;;Covirán;Motril;36.700588;-3.419374;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7540233886;;Covirán;Motril;36.699105;-3.418356;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7614921488;;Mercadona;Pulianas;37.211352;-3.622304;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7652194453;;Juzgado de Primera Instancia Número 3;Granada;37.186971;-3.611371;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7652194454;;Juzgado de Primera Instancia Número 5;Granada;37.186955;-3.611379;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7652194455;;Juzgado de Primera Instancia Número 10;Granada;37.186938;-3.611387;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7652194456;;Juzgado de Primera Instancia Número 11;Granada;37.186919;-3.611397;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7652194457;;Juzgado de Primera Instancia Número 14;Granada;37.186899;-3.611407;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7652194458;;Juzgado de Primera Instancia Número 15;Granada;37.18688;-3.611416;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7652194459;;Juzgado de Primera Instancia Número 16;Granada;37.186861;-3.611425;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7652194460;;Juzgado de Primera Instancia Número 17;Granada;37.18684;-3.611435;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7652194461;;Juzgado de Primera Instancia Número 19;Granada;37.186819;-3.611445;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7734520219;;;Arquillos;38.222835;-3.416273;sin nombre en OpenStreetMap
+descartado;node/7744631120;;;Cabra;37.475246;-4.425705;sin nombre en OpenStreetMap
+descartado;node/7803821442;;Carrefour;Sevilla;37.41866;-5.974322;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/7855460235;;Covirán;Dúrcal;36.992275;-3.566296;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7888309654;;Covirán;Padul;37.024965;-3.623884;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7903279426;;E-Fit Gibraltar;;36.142696;-5.353157;fuera de los municipios oficiales cargados
+descartado;node/7904647420;;Covirán;Padul;37.023326;-3.625549;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7944342385;;Covirán;Granada;37.169588;-3.599509;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7954637486;;Covirán;Padul;37.026295;-3.632305;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7966141506;;El Jamón;Motril;36.747889;-3.517725;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7988299175;;Dia;Padul;37.025164;-3.630073;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/7999257633;;Leroy Merlin;Dos Hermanas;37.284843;-5.939231;texto excluido (leroy merlin|click|recogida)
+descartado;node/8006383969;;Centro Deportivo Kronos;Atarfe;37.225318;-3.685151;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/8025134473;;;Dos Hermanas;37.284439;-5.909694;sin nombre en OpenStreetMap
+descartado;node/8035767398;;Covirán;Atarfe;37.225628;-3.687117;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/806510609;;;Sevilla;37.422331;-5.961376;sin nombre en OpenStreetMap
+descartado;node/807587929;;;Almonte;37.00796;-6.562682;sin nombre en OpenStreetMap
+descartado;node/8088979393;;;Baeza;37.951441;-3.540376;sin nombre en OpenStreetMap
+descartado;node/8098673804;;Alcampo;Granada;37.166988;-3.603115;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/8132367403;;;Sevilla;37.378387;-5.945804;sin nombre en OpenStreetMap
+descartado;node/8151312696;;Leroy Merlin;Jaén;37.790105;-3.773171;texto excluido (leroy merlin|click|recogida)
+descartado;node/8153815227;;Dani;Motril;36.744463;-3.52527;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/8153815228;;Dani;Granada;37.180644;-3.61383;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/818002148;;;Sevilla;37.415844;-5.970007;sin nombre en OpenStreetMap
+descartado;node/819727031;;;Sevilla;37.416298;-5.964456;sin nombre en OpenStreetMap
+descartado;node/8209577153;;Covirán;Atarfe;37.2236;-3.689656;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/829576872;;;Sevilla;37.432293;-5.979332;sin nombre en OpenStreetMap
+descartado;node/829576876;;;Sevilla;37.426545;-5.986009;sin nombre en OpenStreetMap
+descartado;node/8321142230;;;Benarrabá;36.551088;-5.272044;sin nombre en OpenStreetMap
+descartado;node/8321207917;;;Algatocín;36.573348;-5.276607;sin nombre en OpenStreetMap
+descartado;node/835821494;;;Sevilla;37.40321;-5.968393;sin nombre en OpenStreetMap
+descartado;node/835821577;;;Sevilla;37.404057;-5.965404;sin nombre en OpenStreetMap
+descartado;node/837160634;;;Sevilla;37.376734;-5.980339;sin nombre en OpenStreetMap
+descartado;node/8393603508;;Covirán;Alhama de Granada;36.955901;-4.121892;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/8499774008;;Covirán;Albondón;36.828434;-3.212806;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/8499774009;;Supermercado Covirán Moreno;Albondón;36.826522;-3.211208;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/8499774011;;Supermercado donde siempre;Albondón;36.828125;-3.214234;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/8502968134;;Covirán;Alquife;37.179546;-3.116703;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/8503618168;;Covirán;Arenas del Rey;36.958763;-3.892442;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/8540522118;;Supermercado;Guillena;37.576551;-6.105145;nombre generico o dudoso en OpenStreetMap: Supermercado
+descartado;node/8628076886;;Covirán;Játar;36.935361;-3.910975;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/864119301;;;Sevilla;37.382828;-5.965485;sin nombre en OpenStreetMap
+descartado;node/873831871;;Carrefour;La Línea de la Concepción;36.174456;-5.363526;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/878617160;;Komo Komo;Almuñécar;36.75946;-3.689778;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/8894968930;;La Abacera;Huétor Vega;37.1498;-3.565185;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/889531833;;;Sevilla;37.383879;-5.946945;sin nombre en OpenStreetMap
+descartado;node/895677671;;;Sevilla;37.401035;-5.940632;sin nombre en OpenStreetMap
+descartado;node/897251401;;;Sevilla;37.395865;-5.924155;sin nombre en OpenStreetMap
+descartado;node/8975075235;;;Oria;37.485778;-2.287784;sin nombre en OpenStreetMap
+descartado;node/8976826379;;Barranco;Vegas del Genil;37.171897;-3.666818;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/8985553059;;Covirán;Vegas del Genil;37.171868;-3.664854;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/8997924821;;Covirán;Gójar;37.105218;-3.604695;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9006893817;;Supermercado;Vera;37.210787;-1.813283;nombre generico o dudoso en OpenStreetMap: Supermercado
+descartado;node/9011027158;;Covirán;Albuñuelas;36.928877;-3.626281;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9011027170;;Gimnasio Municipal;Albuñuelas;36.929128;-3.62712;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9011027172;;Supermercado Lucena;Albuñuelas;36.928986;-3.628401;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9040178124;;Autoservicio Loma Verde;Albolote;37.24657;-3.651058;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9095249754;;ALDI;Cádiz;36.52436;-6.286948;duplicado en el lote de node/4245222289 (62 m)
+descartado;node/9101341924;;Dia;Baza;37.488904;-2.77258;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/912049203;;Carrefour;Camas;37.391863;-6.030857;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/912083886;;Hipercor;San Juan de Aznalfarache;37.373167;-6.030059;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/917045302;;;Sevilla;37.399303;-5.9711;sin nombre en OpenStreetMap
+descartado;node/9231019056;;;Arriate;36.795763;-5.137753;sin nombre en OpenStreetMap
+descartado;node/9251458348;;Carrefour Market;Rota;36.627129;-6.365177;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/9263131066;;Super Kedy;Granada;37.178497;-3.61109;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9282688558;;Covirán;Almuñécar;36.731877;-3.689309;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9282688562;;Gimnasio Montes;Almuñécar;36.733971;-3.694358;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9282688564;;Covirán;Almuñécar;36.733288;-3.69466;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9282688578;;Covirán;Almuñécar;36.734013;-3.70427;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9350671874;;;Sevilla;37.387869;-5.974535;sin nombre en OpenStreetMap
+descartado;node/9368525391;;Quickshop;Loja;37.166974;-4.15809;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9373406530;;Carrefour Market;Marbella;36.510676;-4.888832;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/9399188114;;;Almuñécar;36.739279;-3.753375;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9415262637;;Isidro;Jayena;36.948304;-3.821158;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9415262639;;Autoservicio Adrián;Jayena;36.949094;-3.82388;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/942627505;;;Sevilla;37.361292;-5.960106;sin nombre en OpenStreetMap
+descartado;node/945494862;;Carrefour;Rincón de la Victoria;36.723911;-4.313933;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/9486991144;;;Estepona;36.431858;-5.11962;sin nombre en OpenStreetMap
+descartado;node/9490991606;;Covirán;Cájar;37.126626;-3.568941;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9522550739;;Covirán;La Zubia;37.121152;-3.582635;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9528410086;;Covirán;Huétor Vega;37.144282;-3.571458;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9528424734;;VidaFit Gym;Huétor Vega;37.145164;-3.570847;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9532394879;;Covirán;Granada;37.163472;-3.587809;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9532397128;;Covirán;Granada;37.165162;-3.593755;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9532410587;;Tu Súper;Granada;37.164682;-3.588798;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9547233162;;El Jamón;Granada;37.168914;-3.602697;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9547233574;;Family Market;Granada;37.168911;-3.602124;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9550249345;;El Curro;Granada;37.152096;-3.581364;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9550725524;;Sano Goodlife;Huétor Vega;37.151565;-3.580375;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9560871383;;Virgen del Valle;Granada;37.161984;-3.593348;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9563213153;;Club Ortiz;Granada;37.16618;-3.596985;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9566492315;;Selected Trainers;Granada;37.164837;-3.595093;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9581048166;;Supermercado Covirán Manu y Eloy;Lecrín;36.949816;-3.549717;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9585467603;;TuSuper;Granada;37.166959;-3.600149;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9585970070;;Covirán;Granada;37.17091;-3.600972;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9591703696;;Covirán;Huétor Vega;37.149752;-3.572505;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9599541814;;Multiservicios Miguel García Alcalde;Granada;37.163203;-3.587891;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9600860821;;Pavisuelos;Granada;37.162281;-3.596485;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9600864235;;Inbo Pilates;Granada;37.166478;-3.595656;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9600871059;;Move It Center;Granada;37.166107;-3.596288;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9603779652;;Heycor;Motril;36.737884;-3.512628;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9615435617;;Mercado Municipal;Torrox;36.758968;-3.951638;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/9628765605;;;Almonte;37.25609;-6.524637;sin nombre en OpenStreetMap
+descartado;node/9651064276;;Do It!;Granada;37.170761;-3.601415;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9663688677;;Hipercor Arabial;Granada;37.177968;-3.61344;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/9707689196;;Carrefour Expres;Sevilla;37.38634;-6.007975;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/9710854078;;TuSuper;Granada;37.154297;-3.602642;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9710878746;;Dia;Granada;37.170889;-3.604025;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/975925626;;Mercadona;Almería;36.823759;-2.4404;duplicado en el lote de node/4635207389 (70 m)
+descartado;node/9759620260;;Covirán;Monachil;37.133126;-3.558607;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9767513533;;Carrefour Express;Sevilla;37.393974;-5.992695;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/979976817;;Carrefour;Mijas;36.492616;-4.714621;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/9814370017;;Don Market;Huétor Vega;37.146556;-3.567723;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9830712059;;Covirán;Pinos Puente;37.256518;-3.794551;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9873199189;;;Málaga;36.725359;-4.420418;sin nombre en OpenStreetMap
+descartado;node/9874242321;;Covirán;Motril;36.725115;-3.533967;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9890186621;;Sankalpa Bienestar;Córdoba;37.881513;-4.789801;duplicado en el lote de node/9890152923 (4 m)
+descartado;node/9900109225;;Covirán;Pulianas;37.217402;-3.606227;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9900109320;;Covirán;Pulianas;37.222631;-3.607464;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9900532423;;EcoTienda El Agua;Granada;37.183395;-3.593203;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9904102418;;Rapid;Granada;37.175372;-3.596225;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9907217213;;Covirán;Granada;37.185321;-3.609962;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9918753336;;Centro de Salud Loja;Loja;37.170883;-4.154001;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9920717785;;Covirán;Válor;36.996067;-3.084125;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9927883833;;Centro de Salud Doctor Salvador Caballero García;Granada;37.189035;-3.609321;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9927883834;;Centro de Salud Fígares;Granada;37.168515;-3.603649;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9928093888;;Centro de Salud Realejo;Granada;37.173196;-3.59087;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9935719243;;;Guillena;37.511615;-6.02571;sin nombre en OpenStreetMap
+descartado;node/9948836234;;Carrefour Market;Granada;37.187934;-3.614181;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/9966703973;;Covirán;Granada;37.158467;-3.587932;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9966737926;;Centro Wudang;Granada;37.157638;-3.590066;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9984863328;;Centro de Salud Carretera de la Sierra;Granada;37.16576;-3.583566;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9992537426;;Suma Supermercado;Alhama de Granada;37.003572;-3.990609;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9992574015;;Spar express;Alhama de Granada;37.003178;-3.990669;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9992588061;;Covirán;Alhama de Granada;37.005991;-3.990562;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;node/9999259764;;Ayuntamiento de El Pinar;El Pinar;36.91291;-3.553806;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;relation/11557457;;Juzgados;Jerez de la Frontera;36.6969;-6.136897;nombre generico o dudoso en OpenStreetMap: Juzgados
+descartado;relation/14318378;;Ayuntamiento de Huétor Vega;Huétor Vega;37.145523;-3.569693;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;relation/14402813;;Centro de Salud de Dúrcal;Dúrcal;36.992451;-3.566802;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;relation/17083666;;;San Roque;36.286387;-5.312542;sin nombre en OpenStreetMap
+descartado;relation/19529557;;Hipercor;Mijas;36.548202;-4.63231;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;relation/20281693;;Audiencia Provincial de Granada;Granada;37.177553;-3.595844;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;relation/20358301;;;Almensilla;37.308036;-6.108677;sin nombre en OpenStreetMap
+descartado;relation/20453161;;Centro de Salud Peligros;Peligros;37.23039;-3.625757;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;relation/20602565;;Centro de Salud San Antonio;Motril;36.755704;-3.517863;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;relation/3029573;;Juzgados de Sevilla;Sevilla;37.381662;-5.987035;duplicado en el lote de relation/3029572 (57 m)
+descartado;way/1023034103;;Supeco;San Fernando;36.453019;-6.208355;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/1030912900;;;Sevilla;37.398714;-5.968869;sin nombre en OpenStreetMap
+descartado;way/103132580;;;Utrera;37.180057;-5.786058;sin nombre en OpenStreetMap
+descartado;way/1051327101;;Carrefour;Marbella;36.473849;-5.005047;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/1060451741;;Lidl;Granada;37.197846;-3.611814;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1071530414;;Gimnasio Tijuana;La Zubia;37.131172;-3.582665;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1071530449;;Hammer Box;La Zubia;37.130119;-3.584708;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1072391718;;Carrefour;Mairena del Alcor;37.381005;-5.735299;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/1073519054;;Ayuntamiento de Valle del Zalabí;Valle del Zalabí;37.262537;-3.100089;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1073605244;;Ayuntamiento de Arenas del Rey;Arenas del Rey;36.95784;-3.894081;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1073612335;;Ayuntamiento de Beas de Guadix;Beas de Guadix;37.279718;-3.204972;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1073621659;;Ayuntamiento de Bérchules;Bérchules;36.974202;-3.190227;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1073625704;;Ayuntamiento de Dehesas de Guadix;Dehesas de Guadix;37.589968;-3.102624;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1073811768;;Gimnasio Municipal;Freila;37.530809;-2.908419;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1075292542;;Ayuntamiento de Huélago;Huélago;37.420741;-3.262133;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1075295680;;Ayuntamiento de Huéneja;Huéneja;37.177063;-2.948374;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1078463188;;Ayuntamiento de Cortes de Baza;Cortes de Baza;37.654115;-2.769665;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1081621944;;Ayuntamiento de Sorvilán;Sorvilán;36.794676;-3.265349;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1082272071;;Centro de Salud Iznalloz;Iznalloz;37.3905;-3.521922;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1082272073;;Centro de Salud Albayda La Cruz;Granada;37.197453;-3.617391;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1082272074;;Centro de Salud Bola de Oro;Granada;37.160421;-3.585461;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1082491700;;Centro de Salud Baza;Baza;37.492564;-2.778951;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1082496121;;Centro de Salud Almuñécar;Almuñécar;36.733202;-3.684068;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1082825071;;Centro de Salud Albaycín;Granada;37.181625;-3.592514;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1082826275;;Centro de Salud Montefrío;Montefrío;37.325431;-4.005473;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1082827468;;;Albuñol;36.792256;-3.208496;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1082861184;;Centro de Salud Pinos Puente;Pinos Puente;37.249915;-3.749566;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1082861187;;Centro de Salud Motril Centro;Motril;36.744493;-3.523238;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1082861188;;Centro de Salud La Zubia;La Zubia;37.114913;-3.581673;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1082861189;;Centro de Salud La Chana;Granada;37.192353;-3.627698;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1082861190;;Centro de Salud Huétor Vega;Huétor Vega;37.147966;-3.568716;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1082914785;;Centro de Salud Alfacar;Alfacar;37.237478;-3.561304;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1083108801;;Centro de Salud Alhama de Granada;Alhama de Granada;37.005455;-3.988076;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1083110006;;Centro de Salud Alquife;Alquife;37.180349;-3.107229;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1083111187;;Centro de Salud Benamaurel;Benamaurel;37.606765;-2.697725;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1083113441;;Centro de Salud Cádiar;Cádiar;36.946567;-3.179656;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1083318918;;Centro de Salud Cenes de la Vega;Cenes de la Vega;37.160452;-3.538894;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1083320636;;Centro de Salud Íllora;Íllora;37.287989;-3.874437;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1083322051;;Centro de Salud Motril-Este;Motril;36.746197;-3.514107;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1083326363;;Centro de Salud Doctor Baldomero Villanueva;Órgiva;36.903624;-3.421077;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1083327915;;Centro de Salud Pedro Martínez;Pedro Martínez;37.498515;-3.231652;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1083328477;;Centro de Salud Ugíjar;Ugíjar;36.964763;-3.055359;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1084382729;;;Guillena;37.512345;-6.02618;sin nombre en OpenStreetMap
+descartado;way/1085534719;;Mercadona;Motril;36.741641;-3.510255;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1086701291;;Mercadona;Morón de la Frontera;37.129378;-5.455841;duplicado en el lote de node/9904899921 (19 m)
+descartado;way/1086750508;;Centro de Salud Ogíjares;Ogíjares;37.116577;-3.608133;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1090277976;;Lidl;Guadix;37.308942;-3.14541;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1090821982;;Centro de Salud Villa de Otura;Villa de Otura;37.091291;-3.635637;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1094446065;;Hospital Materno-Infantil del Hospital Universitario Virgen de las Nieves;Granada;37.188774;-3.611013;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1095852549;;Hospital de Alta Resolución de Loja;Loja;37.170922;-4.154601;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1104095453;;Dia;Níjar;36.927789;-2.145297;duplicado en el lote de node/9928444236 (4 m)
+descartado;way/1104095484;;Mercadona;Níjar;36.924;-2.150191;duplicado en el lote de node/4318711198 (47 m)
+descartado;way/1105145506;;Carrefour;Mijas;36.506498;-4.683606;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/1105942271;;Mercadona;Chauchina;37.19279;-3.778685;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1105942286;;Body Fitness;Chauchina;37.195084;-3.774193;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1106028434;;;Chauchina;37.193002;-3.77947;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1106401943;;Covirán;Láchar;37.194781;-3.835525;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1106711931;;Covirán;Chauchina;37.20174;-3.773759;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1122753827;;Hospital Doctor Olóriz;Granada;37.187809;-3.605585;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1133141064;;;Villamartín;36.862512;-5.650173;sin nombre en OpenStreetMap
+descartado;way/1136290191;;;San Roque;36.290786;-5.302034;sin nombre en OpenStreetMap
+descartado;way/1137936892;;Lidl;Salobreña;36.748528;-3.586209;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1147909499;;;Mairena del Aljarafe;37.345067;-6.064569;sin nombre en OpenStreetMap
+descartado;way/116869640;;Impulse Fitness Club;Huétor Tájar;37.204652;-4.041841;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/117200039;;;Alcalá de Guadaíra;37.351911;-5.84552;sin nombre en OpenStreetMap
+descartado;way/1198626342;;Ayuntamiento;Lupión;38.021315;-3.612973;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/1203780927;;Lidl;Motril;36.741364;-3.509792;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/120426894;;Centro de Salud La Caleta;Granada;37.187293;-3.612266;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/120708858;;;Granada;37.197285;-3.620195;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/120712445;;;Sevilla;37.40376;-5.9606;sin nombre en OpenStreetMap
+descartado;way/120712448;;;Sevilla;37.404721;-5.958019;sin nombre en OpenStreetMap
+descartado;way/120715336;;Aldi;Granada;37.201171;-3.615447;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/120731864;;Hospital HLA Inmaculada;Granada;37.164204;-3.608077;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1209707163;;Ayuntamiento de Alquife;Alquife;37.178851;-3.115111;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1213304916;;;Málaga;36.747019;-4.485565;sin nombre en OpenStreetMap
+descartado;way/1213903966;;;Níjar;36.935931;-2.13391;sin nombre en OpenStreetMap
+descartado;way/1214412891;;;El Puerto de Santa María;36.600599;-6.243951;sin nombre en OpenStreetMap
+descartado;way/1214412898;;;El Puerto de Santa María;36.600248;-6.242888;sin nombre en OpenStreetMap
+descartado;way/1215719336;;ALDI;Armilla;37.152852;-3.621996;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/121794647;;Centro de Salud Zaidín Centro-Este;Granada;37.160963;-3.600054;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/121820687;;Hospital Universitario Clínico San Cecilio;Granada;37.14643;-3.605211;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1219395158;;;Puerto Serrano;36.922081;-5.544579;sin nombre en OpenStreetMap
+descartado;way/1220002279;;Lidl;Armilla;37.14301;-3.615271;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1225371216;;Dia;Cúllar Vega;37.159187;-3.673044;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1235205230;;Covirán;Motril;36.754264;-3.516995;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1235477789;;Consum;Huétor Vega;37.142044;-3.568746;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/123580975;;Centro de Salud Zaidín Sur;Granada;37.153728;-3.598994;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/124016670;;La Zubia Plaza;La Zubia;37.129426;-3.584719;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/124016730;;Dia;La Zubia;37.129796;-3.585314;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/124046861;;ALDI;Granada;37.1595;-3.595709;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/124059430;;Centro de Salud Gran Capitán;Granada;37.178721;-3.604031;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/124082299;;Hospital General del Hospital Universitario Virgen de las Nieves;Granada;37.18831;-3.609664;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/124082792;;Hospital Universitario Virgen de las Nieves;Granada;37.192934;-3.607181;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1243588974;;;San Roque;36.303202;-5.292033;sin nombre en OpenStreetMap
+descartado;way/124878303;;Eroski;;36.152703;-5.349227;fuera de los municipios oficiales cargados
+descartado;way/1253224522;;;Mijas;36.504527;-4.723881;sin nombre en OpenStreetMap
+descartado;way/1257804261;;Gimnasio Municipal Pampaneira;Pampaneira;36.93882;-3.358987;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1258219409;;Centro de Salud Doctor Bernabé Galán;Fuente Palmera;37.705967;-5.106999;duplicado en el lote de way/1258219408 (40 m)
+descartado;way/1270197000;;Gimnasio Río San Pedro;Puerto Real;36.52392;-6.231648;etiqueta abandoned=yes
+descartado;way/1280221243;;Ayuntamiento de Gorafe;Gorafe;37.479507;-3.04292;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1292321364;;Aldi;Granada;37.187481;-3.623333;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1292321365;;Mercadona;Granada;37.187824;-3.623245;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/129286126;;Leroy Merlin Alcalá de Guadaíra;Alcalá de Guadaíra;37.377369;-5.894253;texto excluido (leroy merlin|click|recogida)
+descartado;way/129506026;;Mercadona;Peligros;37.228335;-3.635882;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/129842113;;Nevada Shopping;Armilla;37.146527;-3.61355;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1302028833;;;Benacazón;37.354094;-6.195908;sin nombre en OpenStreetMap
+descartado;way/130441657;;Mercadona;Granada;37.156992;-3.59041;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1310418050;;Covirán;Baza;37.504767;-2.771064;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/131291082;;Lidl;Granada;37.15147;-3.591976;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1315965813;;;Jerez de la Frontera;36.6736;-6.112398;sin nombre en OpenStreetMap
+descartado;way/1341633836;;Centro de Salud;Olula del Río;37.35924;-2.301357;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/1351940309;;;Jaén;37.785139;-3.783903;sin nombre en OpenStreetMap
+descartado;way/1352280400;;;Huelva;37.272607;-6.919526;sin nombre en OpenStreetMap
+descartado;way/1352280404;;;Huelva;37.271986;-6.920639;sin nombre en OpenStreetMap
+descartado;way/1352502186;;Centro de Salud;Hinojosa del Duque;38.49466;-5.141562;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/1352649533;;Leroy Merlin;Lepe;37.252159;-7.195746;texto excluido (leroy merlin|click|recogida)
+descartado;way/1354598652;;ALDI;Guadix;37.30618;-3.14437;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1366652772;;Mercadona;La Algaba;37.462229;-6.018506;duplicado en el lote de node/12657630835 (26 m)
+descartado;way/1380641448;;Carrefour;Chipiona;36.737762;-6.439298;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/1389653526;;;Alcalá del Río;37.521355;-5.984274;sin nombre en OpenStreetMap
+descartado;way/1391559544;;Dia;Almensilla;37.309787;-6.106738;duplicado en el lote de node/3829229860 (36 m)
+descartado;way/1391856788;;;Aznalcázar;37.302276;-6.247711;sin nombre en OpenStreetMap
+descartado;way/1393600308;;;Marbella;36.493775;-4.950889;sin nombre en OpenStreetMap
+descartado;way/1396085566;;;Aznalcóllar;37.515315;-6.266509;sin nombre en OpenStreetMap
+descartado;way/1414529896;;Dia Market;Níjar;36.93776;-2.132886;duplicado en el lote de node/10612321540 (10 m)
+descartado;way/1426178312;;Dia;Motril;36.742699;-3.512502;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1458095435;;Instituto Nacional de la Seguridad Social;Alhama de Granada;37.002229;-3.98799;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1460171361;;;Jerez de la Frontera;36.710988;-6.123178;sin nombre en OpenStreetMap
+descartado;way/1482537736;;;Gójar;37.115015;-3.602502;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1494595669;;Consultorio María;María;37.71326;-2.163843;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento)
+descartado;way/1498269898;;Mercadona;Pinos Puente;37.248777;-3.754586;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1498459388;;Consum;Vegas del Genil;37.173595;-3.672011;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1499689480;;Ayuntamiento de Monachil;Monachil;37.132272;-3.539752;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1501223962;;;Lupión;37.997228;-3.545556;sin nombre en OpenStreetMap
+descartado;way/1506031918;;Consum;Motril;36.748289;-3.526017;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/152976219;;Juzgados de Granada;Granada;37.176855;-3.59534;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1530020245;;Super Chisma;Granada;37.157011;-3.604465;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1533874140;;;Utrera;37.17615;-5.784748;sin nombre en OpenStreetMap
+descartado;way/1540200189;;Mercadona;Salobreña;36.746107;-3.583756;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1544606420;;Consum;Órgiva;36.899102;-3.421155;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1546269911;;;Linares;38.102987;-3.625516;sin nombre en OpenStreetMap
+descartado;way/154741765;;Carrefour;Jerez de la Frontera;36.695649;-6.115045;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/1548187885;;Lidl;Dos Hermanas;37.312062;-5.940342;duplicado en el lote de node/12529526546 (3 m)
+descartado;way/1549718470;;;Aljaraque;37.292782;-7.001068;sin nombre en OpenStreetMap
+descartado;way/155004951;;Serrallo Shopping;Granada;37.157091;-3.583426;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/1554791366;;;Villaverde del Río;37.59784;-5.880336;sin nombre en OpenStreetMap
+descartado;way/1554791367;;;Villaverde del Río;37.59798;-5.88014;sin nombre en OpenStreetMap
+descartado;way/1554791368;;;Villaverde del Río;37.597869;-5.880021;sin nombre en OpenStreetMap
+descartado;way/1554791369;;;Villaverde del Río;37.597736;-5.880225;sin nombre en OpenStreetMap
+descartado;way/1556714727;;Leroy Merlin;Almería;36.860335;-2.436345;texto excluido (leroy merlin|click|recogida)
+descartado;way/159320773;;Factory Box;Granada;37.162862;-3.592913;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/163760428;;;Rota;36.638287;-6.357733;sin nombre en OpenStreetMap
+descartado;way/175206691;;;Almonte;37.004394;-6.560323;sin nombre en OpenStreetMap
+descartado;way/179256133;;Dia;Granada;37.19912;-3.605007;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/182726611;;;Puerto Real;36.532165;-6.198676;sin nombre en OpenStreetMap
+descartado;way/182902298;;;Sevilla;37.405425;-5.956921;sin nombre en OpenStreetMap
+descartado;way/182902300;;;Sevilla;37.405617;-5.956589;sin nombre en OpenStreetMap
+descartado;way/183837535;;Carrefour Express;Málaga;36.717705;-4.424756;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/183880938;;;Sevilla;37.386386;-5.910586;sin nombre en OpenStreetMap
+descartado;way/186116042;;;Tarifa;36.069908;-5.683369;sin nombre en OpenStreetMap
+descartado;way/192912500;;Centro de Salud Armilla;Armilla;37.141553;-3.623849;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/194515289;;Carrefour;Puente Genil;37.397723;-4.762897;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/198458093;;Carrefour;Almería;36.841327;-2.44379;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/199197431;;;Sevilla;37.410536;-5.933498;sin nombre en OpenStreetMap
+descartado;way/203160093;;;Jaén;37.782297;-3.782939;sin nombre en OpenStreetMap
+descartado;way/203417800;;Morrisons;;36.144634;-5.360527;fuera de los municipios oficiales cargados
+descartado;way/205384276;;Centro de Salud Las Gabias;Las Gabias;37.133801;-3.667132;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/205612349;;;Dos Hermanas;37.289666;-5.914594;sin nombre en OpenStreetMap
+descartado;way/205664257;;;Cúllar Vega;37.159253;-3.67767;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/208268688;;Hospital Santa Ana;Motril;36.755355;-3.520434;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/208580343;;Lidl;Motril;36.742376;-3.527157;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/210278580;;Carrefour;Granada;37.154589;-3.608317;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/210585690;;Centro de Consultas Externas;Granada;37.189249;-3.609056;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/210585693;;Hospital de Neurotraumatología y Rehabilitación;Granada;37.193021;-3.607197;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/215617990;;Mercadona;Atarfe;37.219117;-3.687872;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/218338738;;Hospital de San Juan de Dios;Granada;37.180445;-3.603375;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/218338739;;Hospital de San Rafael;Granada;37.180972;-3.60306;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/219492366;;Hipercor;Sevilla;37.388802;-5.940301;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/221348150;;Centro de Salud Purullena;Purullena;37.31524;-3.189288;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/223532292;;Mercadona;Marchena;37.325737;-5.411834;duplicado en el lote de way/223532291 (10 m)
+descartado;way/223533686;;Leroy Merlin;Málaga;36.667473;-4.46871;texto excluido (leroy merlin|click|recogida)
+descartado;way/223768549;;;Marchena;37.323495;-5.414471;sin nombre en OpenStreetMap
+descartado;way/224741608;;Centro de Salud;Cártama;36.73573;-4.612712;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/226263896;;Carrefour;Mijas;36.54484;-4.635403;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/226727622;;;Mijas;36.505369;-4.679897;sin nombre en OpenStreetMap
+descartado;way/230896657;;Dia;Íllora;37.281914;-3.88024;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/232502766;;;Guillena;37.545235;-6.05683;sin nombre en OpenStreetMap
+descartado;way/232568735;;Carrefour;Baena;37.62158;-4.308362;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/233734053;;Mercadona;Utrera;37.187816;-5.78758;duplicado en el lote de node/1148290956 (22 m)
+descartado;way/233740076;;BigMat;Mijas;36.552546;-4.690946;duplicado en el lote de way/1034152255 (41 m)
+descartado;way/235182087;;Mercadona;Guadix;37.296947;-3.128979;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/235217702;;Dia;Guadix;37.304626;-3.144484;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/243192406;;Lidl;Carmona;37.462549;-5.656181;duplicado en el lote de way/243192405 (16 m)
+descartado;way/243318290;;Ayuntamiento de Zagra;Zagra;37.253597;-4.168061;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/245843738;;Leroy Merlin Alcalá de Guadaíra;Alcalá de Guadaíra;37.377432;-5.894217;texto excluido (leroy merlin|click|recogida)
+descartado;way/246229542;;Centro de Salud Huétor Tájar;Huétor Tájar;37.195086;-4.048717;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/252139902;;Juzgados;Alcalá la Real;37.459521;-3.924538;nombre generico o dudoso en OpenStreetMap: Juzgados
+descartado;way/256578780;;;Osuna;37.233846;-5.094271;sin nombre en OpenStreetMap
+descartado;way/257026797;;;Sanlúcar de Barrameda;36.748563;-6.336731;sin nombre en OpenStreetMap
+descartado;way/260279942;;Hospital de Baza;Baza;37.500305;-2.752094;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/260907594;;Hospital de Alta Resolución de Guadix;Guadix;37.309872;-3.145454;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/261091899;;Carrefour;Vícar;36.81658;-2.601642;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/263282781;;Mercadona;Carboneras;36.997611;-1.896004;duplicado en el lote de way/263282764 (7 m)
+descartado;way/266775449;;Ayuntamiento de Darro;Darro;37.349144;-3.292565;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/266789443;;Ayuntamiento de Diezma;Diezma;37.319579;-3.332495;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/267200593;;Mercadona;La Zubia;37.128935;-3.584136;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/274261386;;;Dos Hermanas;37.33867;-5.926406;sin nombre en OpenStreetMap
+descartado;way/274935322;;;Conil de la Frontera;36.340363;-6.093751;sin nombre en OpenStreetMap
+descartado;way/276334012;;;Dos Hermanas;37.289388;-5.932642;sin nombre en OpenStreetMap
+descartado;way/283080109;;;Algeciras;36.134806;-5.463137;sin nombre en OpenStreetMap
+descartado;way/285981920;;Centro de Salud Pulianas;Pulianas;37.221598;-3.608588;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/297139807;;Leroy Merlin;Motril;36.741411;-3.530741;texto excluido (leroy merlin|click|recogida)
+descartado;way/297610696;;Carrefour Market;Rincón de la Victoria;36.71617;-4.308709;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/299470562;;Ayuntamiento de Cúllar Vega;Cúllar Vega;37.153322;-3.670482;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/309228241;;Dia;Iznalloz;37.39036;-3.519821;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/311295370;;Brico Dépôt;Pulianas;37.212803;-3.62296;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/317485279;;;Morón de la Frontera;37.128315;-5.458601;sin nombre en OpenStreetMap
+descartado;way/320836660;;;Jerez de la Frontera;36.680007;-6.118064;sin nombre en OpenStreetMap
+descartado;way/322625755;;Leroy Merlin;Marbella;36.521938;-4.876849;texto excluido (leroy merlin|click|recogida)
+descartado;way/332141390;;;Barbate;36.201172;-6.034944;sin nombre en OpenStreetMap
+descartado;way/335683619;;;Úbeda;38.019981;-3.370433;sin nombre en OpenStreetMap
+descartado;way/336956254;;;Benalmádena;36.596905;-4.531887;sin nombre en OpenStreetMap
+descartado;way/338304639;;;Mijas;36.488968;-4.712364;sin nombre en OpenStreetMap
+descartado;way/340247881;;;Córdoba;37.88241;-4.764491;sin nombre en OpenStreetMap
+descartado;way/349091092;;Centro de Salud Maracena;Maracena;37.208821;-3.643863;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/349091130;;Lidl;Pulianas;37.213176;-3.619103;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/352368707;;Juzgados;Pozoblanco;38.380544;-4.8541;nombre generico o dudoso en OpenStreetMap: Juzgados
+descartado;way/359334167;;Consultorio Local de Cazalilla;Cazalilla;37.985919;-3.882135;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento)
+descartado;way/369825844;;;Pulianas;37.21241;-3.621476;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/390432886;;;Jerez de la Frontera;36.697088;-6.148474;sin nombre en OpenStreetMap
+descartado;way/391172609;;;Lepe;37.26991;-7.264916;sin nombre en OpenStreetMap
+descartado;way/392669237;;Carrefour;Torremolinos;36.612192;-4.513126;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/396625918;;Leroy Merlin;Jerez de la Frontera;36.709205;-6.127267;texto excluido (leroy merlin|click|recogida)
+descartado;way/397274505;;;Los Gallardos;37.184347;-1.923999;sin nombre en OpenStreetMap
+descartado;way/40435560;;Centro Comercial Alcampo;Granada;37.19831;-3.608905;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/409253098;;Juzgados;Moguer;37.27658;-6.842305;nombre generico o dudoso en OpenStreetMap: Juzgados
+descartado;way/409525565;;Leroy Merlin;Córdoba;37.877196;-4.835478;texto excluido (leroy merlin|click|recogida)
+descartado;way/415262899;;;Punta Umbría;37.207135;-7.023665;sin nombre en OpenStreetMap
+descartado;way/437108587;;Lidl;Algarrobo;36.748934;-4.054453;duplicado en el lote de node/535212084 (3 m)
+descartado;way/439554024;;Juzgado de Paz;El Ronquillo;37.724581;-6.177097;duplicado en el lote de node/4371984184 (91 m)
+descartado;way/44004542;;Centro Comercial Neptuno;Granada;37.168192;-3.607334;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/441631811;;Supersol;Sevilla;37.380985;-5.97138;duplicado en el lote de way/441631806 (35 m)
+descartado;way/44216894;;Carrefour;Jerez de la Frontera;36.672684;-6.149839;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/449335220;;;Mijas;36.507215;-4.652404;sin nombre en OpenStreetMap
+descartado;way/451513309;;;Jerez de la Frontera;36.679688;-6.109159;sin nombre en OpenStreetMap
+descartado;way/452722999;;Leroy Merlin;Tomares;37.378017;-6.028284;texto excluido (leroy merlin|click|recogida)
+descartado;way/458334912;;Leroy Merlin;Armilla;37.15271;-3.614906;texto excluido (leroy merlin|click|recogida)
+descartado;way/458952707;;Ayuntamiento de Cenes de la Vega;Cenes de la Vega;37.159501;-3.538562;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/460373065;;Pabellón Municipal de Deportes de Vícar;Vícar;36.807605;-2.621715;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/465467315;;Pabellón Municipal de Deportes;Herrera;37.357618;-4.850475;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/466072489;;Pabellón Municipal de Deportes;Lora de Estepa;37.269324;-4.830606;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/466408140;;Pabellón Municipal de Deportes;Casariche;37.290602;-4.763791;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/468545757;;Mercadona;Linares;38.095805;-3.62368;duplicado en el lote de node/12015386995 (1 m)
+descartado;way/468885045;;Ayuntamiento de Chauchina;Chauchina;37.201329;-3.772415;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/469048692;;Ayuntamiento de Alfacar;Alfacar;37.236739;-3.570732;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/472150861;;Pabellón Municipal de Deportes;Coripe;36.973236;-5.439056;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/475499073;;Pabellón Municipal de Deportes;Prado del Rey;36.775827;-5.561204;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/478916580;;Piscina Municipal Cubierta;Villamartín;36.857186;-5.657317;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/478916587;;Pabellón Municipal de Deportes;Villamartín;36.858087;-5.658649;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/479765892;;Pabellón Municipal de Deportes;Bornos;36.82284;-5.733631;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/480270299;;;San José del Valle;36.609543;-5.801397;sin nombre en OpenStreetMap
+descartado;way/481849128;;Leroy Merlin;Los Barrios;36.182059;-5.438312;texto excluido (leroy merlin|click|recogida)
+descartado;way/485711004;;Pabellón Municipal de Deportes;Jerez de la Frontera;36.756115;-6.031216;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/488073225;;Pabellón de Deportes;Paterna de Rivera;36.523854;-5.868782;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/488081267;;Pabellón Municipal de Deportes;Paterna de Rivera;36.526161;-5.867634;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/488660437;;Pabellón Municipal de Deportes;Alozaina;36.729178;-4.859121;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/488891215;;Pabellón Municipal de Deportes;Humilladero;37.114081;-4.697755;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/489103719;;Maxi Dia;Albolote;37.22688;-3.64934;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/491807796;;Supercor;Málaga;36.73317;-4.396899;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/498111622;;Mercadona;Torremolinos;36.624749;-4.499074;duplicado en el lote de node/13288974172 (35 m)
+descartado;way/502660316;;Leroy Merlin;Puerto Real;36.469165;-6.170443;texto excluido (leroy merlin|click|recogida)
+descartado;way/506444070;;Pabellón Municipal de Deportes;Cuevas del Almanzora;37.293537;-1.873415;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/506527173;;Pabellón de Deportes;Cuevas del Almanzora;37.292687;-1.877648;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/507043903;;Carrefour Market;Marbella;36.513604;-4.877093;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/507394943;;Pabellón Municipal de Deportes;Los Gallardos;37.174173;-1.943275;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/507397627;;Pabellón de Deportes;Los Gallardos;37.168634;-1.942754;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/51327348;;Alcampo;Motril;36.741597;-3.529538;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/51368847;;Carrefour;Algeciras;36.143868;-5.460058;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/519586685;;;Cádiz;36.499502;-6.269719;sin nombre en OpenStreetMap
+descartado;way/521187407;;Juzgados de Guardia de Guadix;Guadix;37.299137;-3.129517;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/522598129;;;Huelva;37.270217;-6.9185;texto excluido (leroy merlin|click|recogida)
+descartado;way/532932977;;Vithas Granada;Granada;37.164671;-3.572761;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/544918302;;Mercado Municipal de la Plaza;Martos;37.722449;-3.965826;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/546304672;;;Macael;37.338504;-2.301379;sin nombre en OpenStreetMap
+descartado;way/549070931;;;Sevilla;37.414545;-5.974383;sin nombre en OpenStreetMap
+descartado;way/549266051;;;Sevilla;37.411532;-5.974942;sin nombre en OpenStreetMap
+descartado;way/550901663;;;San José del Valle;36.608882;-5.803572;sin nombre en OpenStreetMap
+descartado;way/550907210;;Super Arcos;San José del Valle;36.604549;-5.799113;duplicado en el lote de node/5320492199 (0 m)
+descartado;way/551056572;;Centro de Salud Churriana de la Vega;Churriana de la Vega;37.142966;-3.640102;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/551056580;;Mercadona;Churriana de la Vega;37.142063;-3.641163;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/551056583;;Dia;Churriana de la Vega;37.14458;-3.642917;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/552887734;;Centro de Salud La Algaba;La Algaba;37.465447;-6.013883;duplicado en el lote de node/2513374496 (18 m)
+descartado;way/553864816;;Maxi Dia;La Algaba;37.461389;-6.009239;duplicado en el lote de node/1147593319 (35 m)
+descartado;way/557785475;;;Atarfe;37.219412;-3.689896;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/558011876;;;Atarfe;37.216825;-3.690163;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/558011895;;Cash Fresh;Atarfe;37.216228;-3.689616;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/558011958;;Consum;Atarfe;37.221426;-3.693199;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/558607254;;;Atarfe;37.22898;-3.683012;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/565653605;;;Utrera;37.222151;-5.815091;sin nombre en OpenStreetMap
+descartado;way/580099793;;Mercado de Abastos;Belmez;38.27244;-5.210369;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/580957230;;;Belmez;38.273326;-5.206711;sin nombre en OpenStreetMap
+descartado;way/582373481;;;Huelva;37.272796;-6.920812;sin nombre en OpenStreetMap
+descartado;way/585205486;;Centro de Salud Las Flores;Granada;37.167917;-3.605019;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/589068230;;;Sanlúcar de Barrameda;36.77151;-6.356018;sin nombre en OpenStreetMap
+descartado;way/589501857;;Instituto Nacional de la Seguridad Social;Granada;37.204063;-3.619548;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/596294740;;;Viñuela;36.866;-4.142728;sin nombre en OpenStreetMap
+descartado;way/597301502;;;Sevilla;37.390598;-5.957452;sin nombre en OpenStreetMap
+descartado;way/603738740;;Carrefour;La Palma del Condado;37.364184;-6.541831;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/60777373;;Carrefour;Mijas;36.544576;-4.635499;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/610014706;;;Terque;36.984796;-2.597678;sin nombre en OpenStreetMap
+descartado;way/615894722;;Juzgado;Lebrija;36.921115;-6.076803;nombre generico o dudoso en OpenStreetMap: Juzgado
+descartado;way/616644122;;Juzgado de Paz de Pinos Puente;Pinos Puente;37.251176;-3.750681;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/618806331;;;Gelves;37.332084;-6.032822;sin nombre en OpenStreetMap
+descartado;way/623233847;;Dani;Armilla;37.156696;-3.622506;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/628282716;;;Chipiona;36.735582;-6.423692;sin nombre en OpenStreetMap
+descartado;way/628527106;;Digsa Castillo;Loja;37.16327;-4.126247;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/629393669;;Lidl;Almería;36.849198;-2.461454;duplicado en el lote de node/4432475572 (38 m)
+descartado;way/632853231;;Juzgados de Loja;Loja;37.166639;-4.153215;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/636961880;;;Atarfe;37.223175;-3.682288;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/640685125;;;Córdoba;37.893272;-4.802226;sin nombre en OpenStreetMap
+descartado;way/65234838;;;Huelva;37.271081;-6.919384;sin nombre en OpenStreetMap
+descartado;way/659339403;;Ayuntamiento de Huéscar;Huéscar;37.809567;-2.539575;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/659339405;;Centro de Salud Huéscar;Huéscar;37.806275;-2.545229;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/659339413;;Juzgados;Huéscar;37.805912;-2.542979;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/659763731;;Instituto Nacional de la Seguridad Social;Huéscar;37.806904;-2.541764;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/660923365;;;La Línea de la Concepción;36.174085;-5.363387;sin nombre en OpenStreetMap
+descartado;way/666709388;;Covirán;Iznalloz;37.394848;-3.525661;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/66771893;;;Sevilla;37.422731;-5.965899;sin nombre en OpenStreetMap
+descartado;way/673214153;;Consum;Las Gabias;37.137994;-3.666127;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/67805054;;;Sevilla;37.416391;-5.964472;sin nombre en OpenStreetMap
+descartado;way/680399321;;Aldi;Motril;36.742853;-3.526634;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/681500584;;;Dos Hermanas;37.337053;-5.926322;sin nombre en OpenStreetMap
+descartado;way/683385742;;;Santiago de Calatrava;37.755084;-4.166852;sin nombre en OpenStreetMap
+descartado;way/683982381;;Lidl;Albolote;37.226721;-3.648174;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/684992989;;;Canillas de Albaida;36.845418;-3.986347;sin nombre en OpenStreetMap
+descartado;way/689291057;;Carrefour;Lucena;37.415356;-4.506837;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/695258289;;Ayuntamiento de Gor;Gor;37.369584;-2.969454;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/698216188;;;Hinojosa del Duque;38.494671;-5.14155;sin nombre en OpenStreetMap
+descartado;way/700141782;;;Torremolinos;36.631539;-4.489073;sin nombre en OpenStreetMap
+descartado;way/71136627;;;Sevilla;37.364227;-5.989191;sin nombre en OpenStreetMap
+descartado;way/718336156;;Centro de Salud Albolote;Albolote;37.226904;-3.652991;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/733022460;;;Tocina;37.593926;-5.735699;sin nombre en OpenStreetMap
+descartado;way/75110203;;;Sevilla;37.383913;-5.955816;sin nombre en OpenStreetMap
+descartado;way/756628136;;Lidl;Málaga;36.687679;-4.456879;duplicado en el lote de node/8894877962 (142 m)
+descartado;way/75876831;;;Sevilla;37.410656;-5.925388;sin nombre en OpenStreetMap
+descartado;way/761479900;;;Alhabia;36.988625;-2.586149;sin nombre en OpenStreetMap
+descartado;way/762076132;;Mercadona;Motril;36.741459;-3.531711;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/766535224;;;Sevilla;37.425683;-5.976767;sin nombre en OpenStreetMap
+descartado;way/768238160;;;Dalías;36.83331;-2.869564;sin nombre en OpenStreetMap
+descartado;way/771496106;;Pabellón Maestro Juan Pérez;Úbeda;38.019012;-3.360594;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/771891429;;;Almería;36.849272;-2.451338;sin nombre en OpenStreetMap
+descartado;way/77492797;;Leroy Merlin;Tomares;37.374805;-6.032213;texto excluido (leroy merlin|click|recogida)
+descartado;way/775619074;;Centro de Salud de Salobreña;Salobreña;36.739222;-3.588843;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/776027117;;Carrefour;Salobreña;36.741108;-3.583096;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/780293431;;;Moclinejo;36.770069;-4.257265;sin nombre en OpenStreetMap
+descartado;way/782374297;;;Arcos de la Frontera;36.763912;-5.779494;sin nombre en OpenStreetMap
+descartado;way/785626272;;Mercadona;Maracena;37.203947;-3.639927;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/804919089;;Centro de Salud Almanjáyar;Granada;37.208157;-3.609081;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/804919094;;Centro de Salud Cartuja;Granada;37.207837;-3.608753;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/810748712;;Centro de Salud;Los Barrios;36.182991;-5.481398;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/81519658;;Carrefour Market;Nerja;36.758732;-3.870303;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/816774997;;;Maracena;37.209985;-3.628314;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/823704912;;Carrefour;Málaga;36.686227;-4.459545;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/827646779;;Mercadona;Marbella;36.493388;-4.991629;duplicado en el lote de node/6539414970 (146 m)
+descartado;way/835255697;;;Corteconcepción;37.896156;-6.506532;sin nombre en OpenStreetMap
+descartado;way/836419907;;Supermercado Noelia;Alhabia;36.989802;-2.588144;duplicado en el lote de node/8567661499 (0 m)
+descartado;way/842264381;;Mercadona;Nigüelas;36.974593;-3.556182;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/87413724;;Carrefour;Pulianas;37.212753;-3.617587;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/87413773;;Centro Comercial Kinépolis;Pulianas;37.214697;-3.616856;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/880406117;;Centro de Salud Mojácar Pueblo;Mojácar;37.139626;-1.852675;duplicado en el lote de node/4323072091 (0 m)
+descartado;way/88220443;;Carrefour;Dos Hermanas;37.284396;-5.937816;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/90182698;;Carrefour Market;Benalmádena;36.600909;-4.531562;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/903923241;;Centro de Salud Santa Fe;Santa Fe;37.185766;-3.720521;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/903923242;;;Santa Fe;37.185767;-3.720902;etiqueta abandoned=yes
+descartado;way/904414318;;Ayuntamiento;Villaluenga del Rosario;36.696175;-5.387229;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/91315402;;Carrefour;Sevilla;37.353457;-5.952595;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/91874737;;Centro Comercial Bahía Sur;San Fernando;36.471401;-6.209078;duplicado en el lote de way/159195050 (100 m)
+descartado;way/935388654;;;Fuengirola;36.549839;-4.618515;sin nombre en OpenStreetMap
+descartado;way/935388655;;;Fuengirola;36.550438;-4.618103;sin nombre en OpenStreetMap
+descartado;way/935388656;;;Fuengirola;36.551452;-4.617367;sin nombre en OpenStreetMap
+descartado;way/97090768;;Carrefour;Córdoba;37.893495;-4.747748;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/975589197;;Autoservicio Cristina;Albolote;37.283637;-3.666872;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/975596767;;Five Crosfit;Peligros;37.226655;-3.639659;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/975654788;;Marae;Almuñécar;36.737837;-3.745867;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/982287616;;Abarlés Squash Granada;Granada;37.179646;-3.613649;provincia ya cubierta por el catalogo revisado a mano (18)
+descartado;way/99196972;;Centro de Salud 'Virgen del Gavellar';Úbeda;38.013539;-3.374626;duplicado en el lote de way/1286421739 (6 m)
+descartado;way/99204493;;Carrefour;Úbeda;38.016013;-3.381467;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)

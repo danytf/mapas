@@ -15,7 +15,8 @@ Entorno (aprobado por el titular el 19/10/2026): `python -m venv ~/osm-trabajo/v
 | `validar.py` | Control de calidad: descarta sin nombre, ya existentes y duplicados; marca «por revisar»; genera `informe.md` y `excepciones.csv`. |
 | `generar_lote.py` | Genera el JSON de origen y un SQL por provincia (idempotente, transaccional) desde `validados.json`. |
 | `cargar.sh` | Aplica los SQL de un directorio con `psql` (conexión pedida sin eco), con recuento antes y después (tercer argumento opcional: prefijo de `source_ref` para lotes de varias categorías). |
-| `completar_direcciones_local.py` | Completa la calle con la vía con nombre más cercana del propio pbf (≤ 120 m), sin servicios externos; no completa código postal. |
+| `completar_direcciones_local.py` | Completa calle (punto con dirección o vía más cercana) y código postal (punto con dirección más cercano, de la provincia) con el propio pbf, sin servicios externos. |
+| `inferir_cp_municipio.py` | Asigna el código postal a los puntos que no lo tienen en municipios con un único código observado en el lote (origen anotado). |
 | `generar_municipios.py` | Genera el SQL de carga de municipios oficiales (idempotente, no cambia nombres ni borra). |
 
 Diseño completo en `docs/DISENO_CARGA_NACIONAL.md`.
