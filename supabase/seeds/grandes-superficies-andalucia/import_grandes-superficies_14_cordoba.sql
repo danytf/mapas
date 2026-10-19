@@ -1,6 +1,6 @@
 -- Carga de la categoría (varias) de Córdoba (provincia 14), trozo de la carga de Andalucía.
 -- Origen: grandes-superficies-andalucia.json (OpenStreetMap, ODbL, consulta del 2026-10-19, base 2026-10-17T20:20:51Z).
--- 6 filas. No toca nada existente: si el source_ref ya existe, no hace nada.
+-- 16 filas. No toca nada existente: si el source_ref ya existe, no hace nada.
 -- El municipio se asigna por código INE oficial (municipalities.official_code).
 -- Transaccional: si falta la categoría o algún municipio, aborta sin cambios.
 
@@ -12,12 +12,22 @@ CREATE TEMP TABLE _carga (
 ) ON COMMIT DROP;
 
 INSERT INTO _carga VALUES
+  ('Carrefour', 'catalogo-andalucia:grandes-superficies:node-12319010840', 'Carrefour Córdoba – Calle Deanes', NULL, '14021', 'Calle Deanes 5', NULL, 37.88005, -4.78108, 'address', 'openstreetmap:node/12319010840'),
+  ('Carrefour', 'catalogo-andalucia:grandes-superficies:node-12570978904', 'Carrefour Córdoba – Calle Jesús y María', NULL, '14021', 'Calle Jesús y María', NULL, 37.88397, -4.77996, 'address', 'openstreetmap:node/12570978904'),
   ('El Corte Inglés', 'catalogo-andalucia:grandes-superficies:node-13099130976', 'El Corte Inglés Córdoba – Avenida Ronda de los Tejares', NULL, '14021', 'Avenida Ronda de los Tejares', NULL, 37.88769, -4.7829, 'address', 'openstreetmap:node/13099130976'),
+  ('Carrefour', 'catalogo-andalucia:grandes-superficies:node-443924559', 'Carrefour Córdoba – Calle Margarita Xirgú', NULL, '14021', 'Calle Margarita Xirgú', '14011', 37.8961, -4.79164, 'address', 'openstreetmap:node/443924559'),
+  ('Carrefour', 'catalogo-andalucia:grandes-superficies:node-5537552710', 'Carrefour Córdoba – Calle del Doctor Ruiz Maya', NULL, '14021', 'Calle del Doctor Ruiz Maya', NULL, 37.87805, -4.78905, 'address', 'openstreetmap:node/5537552710'),
+  ('Carrefour', 'catalogo-andalucia:grandes-superficies:node-6272823325', 'Carrefour Córdoba – Calle San Fernando', NULL, '14021', 'Calle San Fernando', NULL, 37.88017, -4.77554, 'address', 'openstreetmap:node/6272823325'),
+  ('Carrefour', 'catalogo-andalucia:grandes-superficies:node-6282728257', 'Carrefour Córdoba – Calle Pedro López', NULL, '14021', 'Calle Pedro López', NULL, 37.88428, -4.77541, 'address', 'openstreetmap:node/6282728257'),
   ('MediaMarkt', 'catalogo-andalucia:grandes-superficies:node-9984065361', 'MediaMarkt Córdoba – Los Patios de Azahara', NULL, '14021', 'Los Patios de Azahara', NULL, 37.8765, -4.83777, 'address', 'openstreetmap:node/9984065361'),
   ('El Corte Inglés', 'catalogo-andalucia:grandes-superficies:way-180105552', 'El Corte Inglés Córdoba – Carretera Santa María de Trassierra', NULL, '14021', 'Carretera Santa María de Trassierra', NULL, 37.89454, -4.80872, 'address', 'openstreetmap:way/180105552'),
-  ('Decathlon', 'catalogo-andalucia:grandes-superficies:way-194515292', 'Decathlon Puente Genil – Carretera de La Rambla', NULL, '14056', 'Carretera de La Rambla', NULL, 37.3972, -4.7658, 'address', 'openstreetmap:way/194515292'),
+  ('Carrefour', 'catalogo-andalucia:grandes-superficies:way-194515289', 'Carrefour Puente Genil – Calle Mimosa', NULL, '14056', 'Calle Mimosa', NULL, 37.39772, -4.7629, 'address', 'openstreetmap:way/194515289'),
+  ('Decathlon', 'catalogo-andalucia:grandes-superficies:way-194515292', 'Decathlon Puente Genil – Calle Montalbán', NULL, '14056', 'Calle Montalbán', NULL, 37.3972, -4.7658, 'address', 'openstreetmap:way/194515292'),
+  ('Carrefour', 'catalogo-andalucia:grandes-superficies:way-232568735', 'Carrefour Baena – Calle Hazas del Relos', NULL, '14007', 'Calle Hazas del Relos', NULL, 37.62158, -4.30836, 'address', 'openstreetmap:way/232568735'),
   ('Decathlon', 'catalogo-andalucia:grandes-superficies:way-409525276', 'Decathlon Córdoba – Calle Compositor Bellini', NULL, '14021', 'Calle Compositor Bellini', NULL, 37.87567, -4.83417, 'address', 'openstreetmap:way/409525276'),
-  ('Leroy Merlin', 'catalogo-andalucia:grandes-superficies:way-409525565', 'Leroy Merlin Córdoba – Carretera de Palma del Río', NULL, '14021', 'Carretera de Palma del Río', NULL, 37.8772, -4.83548, 'address', 'openstreetmap:way/409525565');
+  ('Leroy Merlin', 'catalogo-andalucia:grandes-superficies:way-409525565', 'Leroy Merlin Córdoba – Carretera de Palma del Río', NULL, '14021', 'Carretera de Palma del Río', NULL, 37.8772, -4.83548, 'address', 'openstreetmap:way/409525565'),
+  ('Carrefour', 'catalogo-andalucia:grandes-superficies:way-689291057', 'Carrefour Lucena – Calle Elena Castrillo Castrillo', NULL, '14038', 'Calle Elena Castrillo Castrillo', NULL, 37.41536, -4.50684, 'address', 'openstreetmap:way/689291057'),
+  ('Carrefour', 'catalogo-andalucia:grandes-superficies:way-97090768', 'Carrefour Córdoba – Calle Oro', NULL, '14021', 'Calle Oro', NULL, 37.8935, -4.74775, 'address', 'openstreetmap:way/97090768');
 
 DO $$
 DECLARE faltan text;
@@ -56,8 +66,8 @@ DO $$
 DECLARE n integer;
 BEGIN
   SELECT count(*) INTO n FROM public.establishments e WHERE e.source_ref IN (SELECT source_ref FROM _carga);
-  IF n <> 6 THEN
-    RAISE EXCEPTION 'Se esperaban 6 puntos de (varias) en Córdoba, hay %', n;
+  IF n <> 16 THEN
+    RAISE EXCEPTION 'Se esperaban 16 puntos de (varias) en Córdoba, hay %', n;
   END IF;
 END;
 $$;
