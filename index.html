@@ -610,6 +610,19 @@
     ul { overflow: visible; }
     .legend-box { max-height: 34vh; overflow: auto; }
   }
+  /* Objetivos táctiles de 44 px fuera de la ficha (WCAG 2.5.8 pide 24; 44 es el tamaño recomendado para el dedo). Va al final de la hoja para ganar a las reglas de cada componente. */
+  @media (max-width: 900px), (pointer: coarse) {
+    .tools input[type=search], .tools select, #moreBtn { min-height: 44px; }
+    .chipbtn { height: 44px; padding: 0 16px; }
+    #menuBtn { width: 44px; height: 44px; }
+    #menuPanel button { min-height: 44px; }
+    #pnClose, #admClose, #calClose { width: 44px; height: 44px; }
+    .lg-h button { min-height: 44px; }
+    dialog input, dialog select, dialog button { min-height: 44px; }
+    .cal-nav button, .cal-chip { min-height: 44px; }
+    .cal-nav button { min-width: 44px; }
+    #login input, #login button { min-height: 44px; }
+  }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0" integrity="sha384-UagCvVPT5XXA0Hx+nJYUAGBFseHT9zBgpJMSebsAxl9lciTwbT+39j5VfRjdP5Tp" crossorigin="anonymous"></script>
 </head>
