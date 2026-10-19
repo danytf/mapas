@@ -31,3 +31,7 @@ No probado: lectores de pantalla reales, modo oscuro del sistema real, móvil f�
 ## Código postal (solo administradores)
 
 En la pestaña Ubicación, debajo del municipio, un administrador ve «Código postal»: el valor se lee solo al abrir la pestaña (una consulta por punto, sin ampliar la carga del catálogo), admite 5 cifras y solo escribe `postal_code`. El disparador `guard_sensitive_updates` ya exige administrador para ese campo, de modo que un no administrador no ve el bloque y, aunque lo forzara, la base lo rechazaría. Motivo: los puntos de la carga nacional (OpenStreetMap) llegan sin código postal y por SQL no se pueden completar. Pruebas: comprobaciones estáticas en `scripts/test-ficha.mjs`; sin probar en navegador ni con un administrador real.
+
+## Panel resumen y Administración con el mismo lenguaje
+
+Solo CSS (sin cambiar marcado ni lógica): cabecera fija con filete y título de 17 px, secciones con etiqueta de 12 px, tarjetas del resumen con borde izquierdo de estado (`--st-*`), tabla sin segunda barra de desplazamiento y casillas de verificación a 18 px (antes heredaban el alto de 38 px de los campos de texto y se veían como cuadros enormes en Administración). Prueba: `scripts/test-paneles.mjs`. Comprobado a ojo en navegador, en claro, sobre la web con la hoja inyectada; sin probar en oscuro ni en móvil.

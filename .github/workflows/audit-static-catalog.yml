@@ -26,6 +26,7 @@ on:
       - "scripts/test-ficha.mjs"
       - "scripts/test-favoritos.mjs"
       - "scripts/test-tactil.mjs"
+      - "scripts/test-paneles.mjs"
       - "scripts/test-a11y-fase-d.mjs"
       - ".github/workflows/audit-static-catalog.yml"
   pull_request:
@@ -78,6 +79,8 @@ jobs:
         run: node scripts/test-favoritos.mjs
       - name: Test touch targets
         run: node scripts/test-tactil.mjs
+      - name: Test summary and admin panels
+        run: node scripts/test-paneles.mjs
       - name: Run XSS regression audit
         run: node scripts/audit-xss.mjs index.html
       - name: Check keyboard access to statistics panel rows
