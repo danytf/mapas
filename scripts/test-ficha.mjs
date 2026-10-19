@@ -49,4 +49,16 @@ assert.ok(/#ficha \{ position: fixed; inset: 54px 0 0 0;/.test(css), "En pantall
 assert.ok(/prefers-reduced-motion: no-preference\) \{ #ficha:not\(\[hidden\]\) \{ animation/.test(css), "La entrada del panel solo anima con movimiento permitido");
 assert.ok(!/font-size: (1[01](\.5)?|12\.5|13|13\.5|19)px/.test(css), "Los tamaños de letra de la ficha siguen la escala de DESIGN.md (12, 14, 17)");
 
+// Cambiar municipio (solo administradores): solo si hay administrador y provincia, solo entre los municipios de su provincia,
+// con confirmación, escribiendo únicamente municipality_id (la base ya exige ser administrador) y sin guardar nada en el navegador.
+assert.ok(ficha.includes("(admin && c.provinceId ? '<div class=\"loc-muni\">"), "El bloque «Municipio» solo se pinta para administradores");
+assert.ok(html.includes('.from("municipalities").select("id, name", opts).eq("province_id", provId), "id")') && html.includes("municipiosConId(c.provinceId)"), "Los municipios ofrecidos son solo los de la provincia del punto");
+assert.ok(html.includes('if (k === "l" && cargaMuni) cargaMuni();'), "Los municipios se cargan al abrir la pestaña Ubicación, no al abrir cada ficha");
+assert.ok(ficha.includes('update({ municipality_id: sel.value }).eq("id", c.databaseId).select("id")'), "Solo se escribe municipality_id");
+assert.ok(ficha.includes("El cambio afecta a todos los usuarios.") && ficha.includes("window.confirm("), "El cambio pide confirmación");
+assert.ok(ficha.includes("res.data.length !== 1") && ficha.includes('friendlyError(res.error, "No se pudo cambiar el municipio.")'), "Un rechazo de la base se explica y no cambia nada en pantalla");
+assert.ok(/class="lmsg m-msg" role="status"/.test(ficha), "El resultado se anuncia en una región de estado");
+const muni = html.slice(html.indexOf("const mb = el.querySelector(\".loc-muni\");"), html.indexOf("const mb = el.querySelector(\".loc-muni\");") + 3500);
+assert.ok(!/localStorage|sessionStorage|indexedDB|document\.cookie/.test(muni), "El cambio de municipio no guarda nada en el navegador");
+
 console.log("Ficha del punto: comprobaciones estáticas correctas.");

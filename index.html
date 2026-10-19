@@ -257,6 +257,9 @@
   #ficha .loc .lb:hover { border-color: var(--accent); color: var(--accent); }
   #ficha .loc .l-help { margin: 0; font-size: 12px; color: var(--muted); }
   #ficha .loc .lmsg { font-size: 12px; color: var(--muted); min-height: 16px; }
+  #ficha .loc-muni { display: grid; gap: 8px; border-top: 1px solid var(--line); padding-top: 12px; margin-top: 4px; }
+  #ficha .loc-muni select { width: 100%; font: inherit; font-size: 14px; padding: 8px 10px; min-height: 38px; border: 1px solid var(--line-2); border-radius: 8px; background: var(--panel); color: var(--fg); }
+  #ficha .loc-muni .m-save:disabled { opacity: .6; cursor: default; }
   .fi-foot { border-top: 1px solid var(--line); padding: 10px 18px 12px; display: grid; gap: 6px; background: var(--panel); }
   .fi-status { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 18px; }
   #ficha .saved { font-size: 12px; color: var(--ok); }
@@ -289,6 +292,7 @@
     #ficha ul.fi-list li button { height: 40px; min-width: 44px; }
     #ficha details.aform > summary { min-height: 44px; }
     #ficha .loc .lb { min-height: 44px; }
+    #ficha .loc-muni select { min-height: 44px; }
     #ficha input, #ficha textarea { min-height: 44px; }
     #ficha .f-save, .fi-more > summary { height: 46px; }
     .fi-menu button { height: 46px; }
@@ -1230,7 +1234,9 @@ function fichaFor(c, pos) {
             '<label class="l-address-label">Dirección postal del establecimiento<input class="l-address" type="text" value="' + esc(c.street || "") + '"></label>' +
             '<label class="l-coords-label">Coordenadas o URL de Google Maps<input class="l-in" type="text" value="' + (cache[c.id] ? cache[c.id].lat.toFixed(6) + ", " + cache[c.id].lon.toFixed(6) : "") + '" placeholder="Pega 37.167041, -4.152314 o la URL de Google Maps" aria-label="Coordenadas o URL de Google Maps"></label>' +
             '<p class="l-help">Importante: cambiar solo la dirección postal NO mueve el marcador. Para moverlo, pega aquí las coordenadas o la URL de Google Maps del lugar correcto, o usa «Mover pin». Después pulsa Guardar.</p>' +
-            '<button type="button" class="lb l-save-location">Guardar dirección y ubicación en Supabase</button><div class="lmsg" role="status"></div></div>' +
+            '<button type="button" class="lb l-save-location">Guardar dirección y ubicación en Supabase</button><div class="lmsg" role="status"></div>' +
+            (admin && c.provinceId ? '<div class="loc-muni"><label>Municipio (solo administradores)<select class="m-sel" disabled><option value="">Cargando…</option></select></label><button type="button" class="lb m-save" disabled>Cambiar municipio</button><div class="lmsg m-msg" role="status"></div></div>' : "") +
+          "</div>" +
           "</div>" +
         "</section>" +
       "</div>" +
@@ -1253,9 +1259,11 @@ function fichaFor(c, pos) {
     pf.querySelector('[data-tab="' + k + '"]').setAttribute("aria-labelledby", b.id);
     pf.querySelector('[data-tab="' + k + '"]').removeAttribute("aria-label");
   });
+  let cargaMuni = null;
   const showTab = (k, focus) => {
     pf.querySelectorAll("[data-tab]").forEach((n) => { n.hidden = n.dataset.tab !== k; });
     tb.querySelectorAll("button").forEach((b) => { const on = b.dataset.k === k; b.setAttribute("aria-selected", on); b.tabIndex = on ? 0 : -1; if (on && focus) b.focus(); });
+    if (k === "l" && cargaMuni) cargaMuni();
   };
   tb.addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) showTab(b.dataset.k); });
   tb.addEventListener("keydown", (e) => {
@@ -1533,6 +1541,51 @@ function fichaFor(c, pos) {
       try { await navigator.clipboard.writeText(t); msg.textContent = "Copiado: " + t; } catch (e) { inp.value = t; inp.select(); msg.textContent = "Copia con Ctrl+C: " + t; }
     });
     el.querySelector(".l-mv").addEventListener("click", () => startMove(c));
+  }
+  // Corregir el municipio de un punto: solo administradores (la base lo exige con guard_sensitive_updates) y solo entre los municipios de su provincia.
+  const mb = el.querySelector(".loc-muni");
+  if (mb) {
+    const sel = mb.querySelector(".m-sel"), btn = mb.querySelector(".m-save"), msg = mb.querySelector(".m-msg");
+    let cargado = false;
+    cargaMuni = async () => {
+      if (cargado) return;
+      cargado = true;
+      try {
+        const lista = await municipiosConId(c.provinceId);
+        const hay = lista.some((m) => m.name === c.town);
+        sel.innerHTML = (hay ? "" : '<option value="">Elige el municipio…</option>') + lista.map((m) => '<option value="' + esc(m.id) + '"' + (m.name === c.town ? " selected" : "") + ">" + esc(m.name) + "</option>").join("");
+        sel.disabled = false;
+      } catch (error) {
+        cargado = false;
+        msg.style.color = "var(--err)";
+        msg.textContent = friendlyError(error, "No se pudieron cargar los municipios.");
+      }
+    };
+    sel.addEventListener("change", () => { btn.disabled = !sel.value || sel.options[sel.selectedIndex].text === c.town; });
+    btn.addEventListener("click", async () => {
+      const nuevo = sel.options[sel.selectedIndex];
+      if (!sel.value || nuevo.text === c.town) return;
+      if (!window.confirm("¿Cambiar el municipio de «" + c.name + "» de " + c.town + " a " + nuevo.text + "? El cambio afecta a todos los usuarios.")) return;
+      btn.disabled = true; sel.disabled = true;
+      msg.style.color = "var(--muted)"; msg.textContent = "Guardando en Supabase…";
+      let res;
+      try { res = await window.mapaSession.supabase.from("establishments").update({ municipality_id: sel.value }).eq("id", c.databaseId).select("id"); }
+      catch (error) { res = { error }; }
+      sel.disabled = false;
+      if (res.error || !res.data || res.data.length !== 1) {
+        msg.style.color = "var(--err)";
+        msg.textContent = res.error ? friendlyError(res.error, "No se pudo cambiar el municipio.") : "No se pudo cambiar el municipio: no tienes permiso o el punto ya no existe.";
+        btn.disabled = false;
+        return;
+      }
+      const antes = c.town;
+      c.town = nuevo.text;
+      el.querySelector(".fi-addr").textContent = addrOf(c);
+      msg.style.color = "var(--ok)"; msg.textContent = "Municipio cambiado de " + antes + " a " + c.town + ".";
+      const status = document.getElementById("status");
+      if (status) status.textContent = "«" + c.name + "» ahora figura en " + c.town + ".";
+      refreshSelects(); renderList();
+    });
   }
   const rv = el.querySelector(".f-rev");
   if (rv) rv.addEventListener("click", async () => {
@@ -3017,6 +3070,15 @@ async function altaMunicipios(provId) {
   const names = rows.map((m) => m.name).sort((x, y) => x.localeCompare(y, "es"));
   muniCache.set(provId, names);
   return names;
+}
+// Municipios de una provincia con su id, para que un administrador corrija el municipio de un punto.
+const muniIdCache = new Map();
+async function municipiosConId(provId) {
+  if (muniIdCache.has(provId)) return muniIdCache.get(provId);
+  const rows = await fetchAllRows((opts) => window.mapaSession.supabase.from("municipalities").select("id, name", opts).eq("province_id", provId), "id");
+  const lista = rows.map((m) => ({ id: m.id, name: m.name })).sort((x, y) => x.name.localeCompare(y.name, "es"));
+  muniIdCache.set(provId, lista);
+  return lista;
 }
 async function llenaMunicipios() {
   const sel = $("#n-town"), pid = $("#n-prov").value;
