@@ -16,7 +16,7 @@ Reproducir: fichero `andalucia-latest.osm.pbf` (MD5 `fc5f4003e4840d4f91e702005cc
 - **Granada**: la cadena reproduce exactamente los 14 puntos cargados a mano (12 por el identificador de OpenStreetMap y 2 por distancia: Iznalloz y Apeadero de Benalúa tienen la ubicación corregida a mano, `manual_google_maps`, por eso el filtro de existentes usa también la distancia). Granada no recibe puntos nuevos.
 - **Tranvía-tren de la bahía de Cádiz** (Venta de Vargas, Alameda Solano, Plaza de la Iglesia): están etiquetados `light_rail=yes` sin `train=yes` (Renfe, red Cercanías Cádiz). Se excluyen como tren ligero, igual que el Metro de Granada. Los demás con `light_rail=yes` y `train=yes` (p. ej. Río Arillo) entran.
 - El nombre se compone con el tipo cuando OpenStreetMap solo da el topónimo («Granada» → «Estación de tren de Granada») y se añade el municipio entre paréntesis si no aparece en el nombre (106 de 246 puntos; por ejemplo, 18 se llaman solo «Estación de Autobuses» en OpenStreetMap). Es una etiqueta de presentación; el nombre original está en `location_source`.
-- La dirección queda vacía cuando OpenStreetMap no trae calle (223 de 246). No se ha enriquecido con Nominatim (ver «Decisiones pendientes»).
+- La dirección queda vacía cuando OpenStreetMap no trae calle (223 de 246); después se completó con Nominatim (ver «Calles completadas»).
 
 
 Origen: OpenStreetMap (ODbL 1.0, © colaboradores de OpenStreetMap). Criterio: Estaciones de tren (railway=station/halt de ferrocarril convencional) y de autobus (amenity=bus_station). Excluidos: metro, tren ligero, tranvia, funicular, estaciones maritimas, elementos en desuso, abandonados o en construccion, y elementos de autobus que son andenes o paradas (public_transport=platform/stop_position). Sin nombre se descarta. Mismo tipo y mismo nombre a menos de 300 m: se conserva uno.
@@ -89,5 +89,11 @@ Los marca `validar.py`: posibles duplicados a menos de 150 m con otro nombre (Ba
 
 1. ~~Aprobar la carga en producción~~ Hecha.
 2. **Provincias**: solo Granada y Málaga están activas. Los puntos de Almería, Cádiz, Córdoba, Huelva, Jaén y Sevilla están cargados pero no son visibles hasta activar esas provincias en Administración y asignarlas a usuarios.
-3. **Calles**: 223 de 246 sin calle. Opción: completarlas con Nominatim inverso (~4 minutos a 1 petición por segundo, `enriquecer.py`, que envía el correo de contacto del titular en el User-Agent) o dejarlas vacías.
+3. ~~Calles~~ Completadas con Nominatim (ver «Calles completadas»).
 4. Revisar la lista «por revisar» y confirmar el criterio de tranvía-tren de Cádiz.
+
+## Calles completadas con Nominatim (19/10/2026)
+
+- Autorizado por el titular. `completar_direcciones.py` consultó Nominatim inverso (1 petición cada 1,2 s, 230 puntos, sin errores) y `generar_direcciones.py` produjo `supabase/seeds/estaciones-andalucia/update_direcciones_estaciones.sql`: 216 calles, solo donde `address` era NULL. Aplicado en producción por el titular y verificado: calles vacías 223 → 7, 216 `update` en `audit_log`, total de puntos sin cambios (1.059), 8 `approximate` intactos.
+- **Calidad**: Nominatim devuelve la vía más cercana, no una dirección postal. En estaciones rurales salen códigos de carretera («CA-4404»), topónimos («Valdelamusa») o caminos. Se descartaron 7 resultados que no eran una calle (carriles, accesos, salida de parking, rotonda); esos puntos siguen sin calle. Las calles de este lote son orientativas, no una dirección verificada.
+- **Código postal**: no se actualiza. `guard_sensitive_updates` solo permite a un no administrador cambiar `address` y la ubicación y no se elude. 225 de 246 puntos siguen sin código postal.
