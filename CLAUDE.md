@@ -74,6 +74,7 @@ node scripts/test-ui-fixes.mjs
 node scripts/test-list-performance.mjs
 node scripts/test-admin-panel.mjs
 node scripts/test-app-mejoras.mjs
+node scripts/test-calendario.mjs
 node scripts/test-a11y-fase-d.mjs index.html
 ```
 
