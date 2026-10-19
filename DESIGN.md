@@ -257,3 +257,13 @@ Siete columnas de lunes a domingo; sobre cada una, una silueta de barras (altura
 - Ficha: el botón de guardar pasa a «Guardando…» mientras espera a Supabase.
 - Móvil (hasta 760 px): mapa a pantalla completa, conmutador Mapa / Lista flotante (botones de 44 px) y filtros plegados tras un botón «Filtros (n)». La ficha sigue a pantalla completa.
 - No validado: móvil físico, teclado virtual, lector de pantalla y sesión real de administrador.
+
+## Wesser Spatial Canvas (mapa)
+
+- Cartografía: mismo proveedor y atribución que antes (teselas de Esri; sin proveedores nuevos, claves ni cambios de CSP). Por defecto «Wesser claro» = Esri World Street Map con color atenuado por un filtro CSS en un panel propio (`wbase`): se leen carreteras, zonas urbanas, verdes, relieve y fronteras sin saturar. En oscuro, Esri Dark Gray con la referencia (rótulos) en un panel aparte. «Gris claro», «Gris oscuro», «Esri calles (color)» y OpenStreetMap siguen en el selector de capas.
+- Marcador `.wm`: disco de 32 px con el color de la categoría y su glifo, anillo de estado de permiso (como antes) y un tallo con punto de anclaje en la coordenada exacta. Aviso «!» ámbar cuando la ubicación está por revisar (`isRev`, información ya existente).
+- Seleccionado: halo de acento de 3 px más corona difusa, disco un 16 % mayor y tallo en acento; pulso único de 420 ms (sin él con `prefers-reduced-motion`).
+- Agrupaciones: anillo con la mezcla de categorías y núcleo grafito con el recuento; tres tamaños (38, 46 y 56 px).
+- Controles: zoom y capas como un mismo instrumento (40 px; 44 px en táctil), foco visible, atribución compacta (el texto completo se conserva).
+- El mapa recalcula su tamaño con un `ResizeObserver` al abrir o cerrar paneles o cambiar de vista.
+- Limitación: el color de zonas verdes y carreteras lo fija Esri; solo se atenúa, no se recolorea por capa. No hay capa de límites provinciales (no hay datos fiables en la aplicación y no se inventan).
