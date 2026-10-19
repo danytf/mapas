@@ -1,6 +1,6 @@
 # Carga N1: Estaciones de Andalucía (piloto de la carga nacional)
 
-Estado: **preparada y probada en local; pendiente de aprobación del titular para producción** (19/10/2026). Cadena: `extraer.py` → `validar.py` → `generar_lote.py` → `cargar.sh` (`scripts/catalogue/README.md`). Definición de la categoría: `scripts/catalogue/categorias/estaciones.json`. Ficheros del lote: `supabase/seeds/estaciones-andalucia/`.
+Estado: **cargada en producción el 19/10/2026** con `cargar.sh` desde el equipo del titular (aprobación explícita del titular) y verificada. Cadena: `extraer.py` → `validar.py` → `generar_lote.py` → `cargar.sh` (`scripts/catalogue/README.md`). Definición de la categoría: `scripts/catalogue/categorias/estaciones.json`. Ficheros del lote: `supabase/seeds/estaciones-andalucia/`.
 
 Reproducir: fichero `andalucia-latest.osm.pbf` (MD5 `fc5f4003e4840d4f91e702005cc25e40`, base de OpenStreetMap del 17/10/2026 20:20:51 UTC), `ref-andalucia.json` (de `referencia.py`) y los puntos ya existentes de la categoría (consulta de solo lectura).
 
@@ -75,13 +75,19 @@ Origen: OpenStreetMap (ODbL 1.0, © colaboradores de OpenStreetMap). Criterio: E
 | Estación de tren de Villanueva del Ariscal y Olivares | Tren | Villanueva del Ariscal | 37.407225, -6.148288 | node/7779139705 |
 | Jaén, Estación de Autobuses – Avenida de Madrid | Autobús | Jaén | 37.771465, -3.787598 | way/237977926 |
 
+## Carga en producción y verificación (19/10/2026)
+
+- `cargar.sh`: antes 813 puntos (14 de la categoría), después 1.059 (260). Los 7 trozos se aplicaron sin error.
+- Verificado en solo lectura: 246 filas con `source_ref` `catalogo-andalucia:estaciones:%` (Almería 19, Cádiz 39, Córdoba 22, Huelva 29, Jaén 35, Málaga 48, Sevilla 54), 8 `approximate`, ninguna sin municipio o coordenadas, todas activas, 0 `source_ref` duplicados, 246 altas nuevas en `audit_log` (885 → 1.131 filas), base de datos de 14 MB.
+- Visibilidad: solo Málaga (activa) pasa a mostrar sus 48 puntos; el resto de provincias sigue inactiva (decisión del titular pendiente).
+
 ## Por revisar (8 puntos, `approximate`)
 
 Los marca `validar.py`: posibles duplicados a menos de 150 m con otro nombre (Baeza, Huelva/«Zafra») y nombres dudosos («111», «Bus», «Autobuses Salidas», «Parada de autobús», «Jaén»). Lista con motivo en `excepciones.csv`. El resto entra con precisión `address`, igual que Granada.
 
 ## Decisiones pendientes del titular
 
-1. **Aprobar la carga en producción** de los 7 trozos (246 puntos). Se aplicaría con `bash scripts/catalogue/cargar.sh supabase/seeds/estaciones-andalucia estaciones` desde su equipo (la cadena de conexión no se guarda). Solo inserta; ningún punto existente cambia.
-2. **Provincias**: solo Granada y Málaga están activas. Los puntos de Almería, Cádiz, Córdoba, Huelva, Jaén y Sevilla se cargarían pero no serían visibles hasta activar esas provincias en Administración. Los de Málaga (48) sí serían visibles desde la carga para los usuarios de esa provincia (hoy sin puntos).
+1. ~~Aprobar la carga en producción~~ Hecha.
+2. **Provincias**: solo Granada y Málaga están activas. Los puntos de Almería, Cádiz, Córdoba, Huelva, Jaén y Sevilla están cargados pero no son visibles hasta activar esas provincias en Administración y asignarlas a usuarios.
 3. **Calles**: 223 de 246 sin calle. Opción: completarlas con Nominatim inverso (~4 minutos a 1 petición por segundo, `enriquecer.py`, que envía el correo de contacto del titular en el User-Agent) o dejarlas vacías.
 4. Revisar la lista «por revisar» y confirmar el criterio de tranvía-tren de Cádiz.
