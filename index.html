@@ -34,6 +34,7 @@
     --err: #b3261e;
     --star-off: #8a94a3;
     --star-on: #c47a00;
+    --st-concedido: #16a34a; --st-solicitado: #d97706; --st-caducado: #7c8aa0; --st-denegado: #475569; --st-cancelado: #dc2626;
     --shadow: 0 1px 2px rgba(15,23,34,.06), 0 8px 24px rgba(15,23,34,.10);
     --r: 10px;
     --font: "Figtree", "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
@@ -45,6 +46,7 @@
       --warn: #f3c46b; --warn-bg: #33270d; --ok-bg: #19243a; --ok: #86efac; --ok-soft: #12341f;
       --ink: #070b12; --ink-2: #111a29;
       --err: #ff7084; --star-off: #7f8da3; --star-on: #f59e0b;
+      --st-concedido: #4ade80; --st-solicitado: #fbbf24; --st-caducado: #7c8aa0; --st-denegado: #e2e8f0; --st-cancelado: #ff7084;
       --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.45);
     }
     #dlgGam em.up { color: #4ade80; }
@@ -207,11 +209,11 @@
   #ficha .ef .st { font-size: 12px; font-weight: 650; color: var(--st-fg, var(--muted)); }
   #ficha .ef strong { font-size: 17px; font-weight: 680; letter-spacing: -.015em; line-height: 1.25; }
   #ficha .ef .meta { font-size: 14px; color: var(--muted); }
-  #ficha .ef.s-concedido { --st: #22c55e; --st-fg: var(--ok); }
-  #ficha .ef.s-solicitado { --st: #f59e0b; --st-fg: var(--warn); border-top-style: dashed; border-right-style: dashed; border-bottom-style: dashed; background-image: repeating-linear-gradient(135deg, transparent 0 10px, rgba(245, 158, 11, .09) 10px 20px); }
-  #ficha .ef.s-caducado { --st: #94a3b8; }
-  #ficha .ef.s-denegado { --st: #475569; }
-  #ficha .ef.s-cancelado { --st: #dc2626; }
+  #ficha .ef.s-concedido { --st: var(--st-concedido); --st-fg: var(--ok); }
+  #ficha .ef.s-solicitado { --st: var(--st-solicitado); --st-fg: var(--warn); border-top-style: dashed; border-right-style: dashed; border-bottom-style: dashed; background-image: repeating-linear-gradient(135deg, transparent 0 10px, rgba(245, 158, 11, .09) 10px 20px); }
+  #ficha .ef.s-caducado { --st: var(--st-caducado); }
+  #ficha .ef.s-denegado { --st: var(--st-denegado); }
+  #ficha .ef.s-cancelado { --st: var(--st-cancelado); }
   #ficha .pinfo { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
   #ficha .pinfo > div { min-width: 0; overflow-wrap: anywhere; background: var(--ok-bg); border-radius: 12px; padding: 8px 10px; display: grid; gap: 1px; font-size: 12px; color: var(--muted); }
   #ficha .pinfo > div:first-child { grid-column: 1 / -1; }
@@ -242,7 +244,7 @@
   #ficha ul.fi-list li { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 10px; border: 1px solid var(--line); border-left-width: 4px; border-radius: 12px; background: var(--panel); font-size: 12px; cursor: default; }
   #ficha ul.fi-list li::before { display: none; }
   #ficha ul.fi-list li:hover { background: var(--panel); }
-  #ficha ul.fi-list li.vig { border-left-color: #22c55e; background: var(--ok-soft); }
+  #ficha ul.fi-list li.vig { border-left-color: var(--st-concedido); background: var(--ok-soft); }
   #ficha ul.fi-list li > span { flex: 1 1 100%; overflow-wrap: anywhere; }
   #ficha ul.fi-list li button { height: 30px; padding: 0 10px; font-size: 12px; }
   #ficha ul.fi-list li.fi-none { color: var(--muted); border-left-color: var(--line-2); }
@@ -434,13 +436,13 @@
   .cal-ong { font-size: 12px; font-weight: 650; padding: 2px 9px; border-radius: 999px; background: hsl(var(--h) 65% var(--ong-bg-l)); color: hsl(var(--h) 55% var(--ong-fg-l)); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .cal-n { margin-left: auto; display: inline-flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
   .cal-n svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-  .cal-card.s-concedido { --st: #22c55e; --st-fg: var(--ok); }
-  .cal-card.s-solicitado { --st: #f59e0b; --st-fg: var(--warn); border-top-style: dashed; border-right-style: dashed; border-bottom-style: dashed; background-image: repeating-linear-gradient(135deg, transparent 0 10px, rgba(245, 158, 11, .09) 10px 20px); }
-  .cal-card.s-caducado { --st: #94a3b8; opacity: .82; }
-  .cal-card.s-denegado { --st: #475569; opacity: .82; }
-  .cal-card.s-cancelado { --st: #dc2626; opacity: .82; }
+  .cal-card.s-concedido { --st: var(--st-concedido); --st-fg: var(--ok); }
+  .cal-card.s-solicitado { --st: var(--st-solicitado); --st-fg: var(--warn); border-top-style: dashed; border-right-style: dashed; border-bottom-style: dashed; background-image: repeating-linear-gradient(135deg, transparent 0 10px, rgba(245, 158, 11, .09) 10px 20px); }
+  .cal-card.s-caducado { --st: var(--st-caducado); opacity: .82; }
+  .cal-card.s-denegado { --st: var(--st-denegado); opacity: .82; }
+  .cal-card.s-cancelado { --st: var(--st-cancelado); opacity: .82; }
   .cal-card.s-cancelado strong { text-decoration: line-through; }
-  .cal-chip.s-concedido { --st: #22c55e; } .cal-chip.s-solicitado { --st: #f59e0b; } .cal-chip.s-caducado { --st: #94a3b8; } .cal-chip.s-denegado { --st: #475569; } .cal-chip.s-cancelado { --st: #dc2626; }
+  .cal-chip.s-concedido { --st: var(--st-concedido); } .cal-chip.s-solicitado { --st: var(--st-solicitado); } .cal-chip.s-caducado { --st: var(--st-caducado); } .cal-chip.s-denegado { --st: var(--st-denegado); } .cal-chip.s-cancelado { --st: var(--st-cancelado); }
   .cal-list > li.cal-empty { font-size: 12.5px; color: var(--muted); text-align: center; padding: 14px 6px; border: 1px dashed var(--line-2); border-radius: 10px; }
   .cal-none { padding: 34px 16px; text-align: center; color: var(--muted); font-size: 14px; border: 1px dashed var(--line-2); border-radius: 14px; background: var(--panel); }
   .cal-note { font-size: 12px; color: var(--muted); margin: 12px 0 0; }
