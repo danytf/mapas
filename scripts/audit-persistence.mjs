@@ -208,9 +208,8 @@ if (commitStart < 0 || commitEnd < 0) {
       !/const rollbackSaved = await savePermits\(c\)/.test(permitCommit) ||
       !/setCommitControlsDisabled\(true\)/.test(permitCommit) ||
       !/setCommitControlsDisabled\(false\)/.test(permitCommit) ||
-      !/paint\(\); paintHist\(\); paintSols\(\); paintEf\(\);\s*setCommitControlsDisabled\(true\);\s*const rollbackSaved = await savePermits\(c\)/.test(permitCommit) ||
-      !/gamPermit\(c, previous\.permit\)/.test(permitCommit)) {
-    failures.push("El guardado de permisos debe bloquear ediciones concurrentes, revertir el estado ante fallo y otorgar progreso solo tras guardar.");
+      !/paint\(\); paintHist\(\); paintSols\(\); paintEf\(\);\s*setCommitControlsDisabled\(true\);\s*const rollbackSaved = await savePermits\(c\)/.test(permitCommit)) {
+    failures.push("El guardado de permisos debe bloquear ediciones concurrentes y revertir el estado ante fallo.");
   }
 }
 forbidMatch(/\$\(["']#impf["']\)\.addEventListener\s*\(/,

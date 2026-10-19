@@ -28,12 +28,12 @@ for (const m of st.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
 }
 assert.deepEqual(malos, [], "Valores fuera de la escala (usa los tokens --r-* y --fs-*):\n" + malos.join("\n"));
 
-// Colores de categoría, gamificación y banda de la cabecera: tokens, no literales (solo se definen en :root).
+// Colores de categoría y banda de la cabecera: tokens, no literales (solo se definen en :root).
 const fuera = st.replace(/:root\s*\{[^}]*\}/g, "");
 for (const lit of ["#e0a800", "#fff1c2", "#8a5a00", "#22a15a", "#f5c542", "#ffe28a", "#ffd966", "#fbbf24", "#22c55e", "#2b394d", "#3a4c66", "#26354b", "#1f2a3b"]) {
-  assert.ok(!fuera.toLowerCase().includes(lit), "El literal " + lit + " debe ser un token (--gam-*, --hd-*), no un valor suelto");
+  assert.ok(!fuera.toLowerCase().includes(lit), "El literal " + lit + " debe ser un token (--cat-*, --hd-*), no un valor suelto");
 }
-for (const t of ["--gam-gold:", "--gam-gold-soft:", "--gam-gold-ink:", "--gam-green:", "--hd-line:", "--cat-hospital:", "--cat-eventos:", "--cat-otra:", "--cat-defecto:"]) assert.ok(st.includes(t), "Falta el token " + t);
+for (const t of ["--hd-line:", "--cat-hospital:", "--cat-eventos:", "--cat-otra:", "--cat-defecto:"]) assert.ok(st.includes(t), "Falta el token " + t);
 const tipos = html.slice(html.indexOf("const TIPOS = ["), html.indexOf("];", html.indexOf("const TIPOS = [")));
 assert.ok(!/#[0-9a-f]{6}/i.test(tipos) && (tipos.match(/var\(--cat-/g) || []).length === 17, "Las 17 categorías usan tokens --cat-*");
 assert.ok(html.includes("const resolveColor = ") && /const inkOn = \(hex\) => \{\s*hex = resolveColor\(hex\);/.test(html), "El contraste del número de la lista resuelve el token antes de calcularlo");
@@ -42,9 +42,8 @@ assert.ok(!/style="background:#(fff3d6|dcfce7)/.test(html), "Las etiquetas de la
 // Estado del pin y de la leyenda, confeti, niebla y cuadro de resultado: tokens, con el valor resuelto donde hace falta (canvas y Leaflet).
 const estados = html.slice(html.indexOf("const ESTADOS = ["), html.indexOf("];", html.indexOf("const ESTADOS = [")));
 assert.ok(!/#[0-9a-f]{6}/i.test(estados) && (estados.match(/var\(--pin-/g) || []).length === 6, "Los 6 estados usan tokens --pin-*");
-assert.ok(html.includes('["--confetti-1"') && html.includes('["--fog-0"') && html.includes("resolveColor"), "El confeti (canvas) y la niebla (Leaflet) resuelven los tokens antes de usarlos");
+assert.ok(!/--confetti-|--fog-/.test(html), "Sin confeti ni niebla de gamificación");
 assert.ok(html.includes('"var(--res-ok-bg)"') && !html.includes('"#dcfce7"') && !html.includes('"#fee2e2"'), "El cuadro de resultado de la ubicación usa tokens");
 assert.ok(html.includes("inkOn(estadoInfo(estadoOf(c))[2])"), "La tinta de la etiqueta de estado se calcula a partir del color resuelto (vale en oscuro)");
-assert.ok(/#dlgGam \.gtabs button \{ flex: 1 1 0; min-width: 0;/.test(html), "Las pestañas de «Mi progreso» pueden encoger (antes desbordaban en móvil)");
 
 console.log("Escala de radios y tamaños de letra: comprobaciones estáticas correctas.");

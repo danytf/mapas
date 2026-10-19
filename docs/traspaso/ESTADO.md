@@ -76,3 +76,8 @@ Ver `HALLAZGOS.md`. Accesibilidad (H-28 a H-35): corregida en el PR #105 y verif
 - Verificado por el titular: protección de `main`; plan gratuito de la organización tras crear `mapas-e2e`.
 - Verificado en la Fase C con cuenta sintética: H-05 (teclado en el panel). Verificado con la sesión del titular en producción (solo lectura): H-11 y H-02.
 - Pendiente de él (limpieza local tras la Fase C): quitar los permisos temporales de `.claude/settings.local.json`, borrar `%APPDATA%\postgresql\pgpass.conf` (contraseña del proyecto ya eliminado); borrar del gestor de contraseñas de Chrome las credenciales de prueba de `127.0.0.1` si las guardó.
+
+
+## Rediseño visual premium (PR #164, rama feat/rediseno-premium, sin fusionar)
+
+Retirada de Logros, Mi progreso, niveles e insignias; paleta carbón/papel; cabecera de 56 px; «Limpiar filtros»; estados de la lista; buscador y lista más escaneables; pin seleccionado; «Guardando…» en la ficha; móvil con conmutador Mapa/Lista y filtros plegables; microinteracciones con un token de duración y `prefers-reduced-motion`. Detalle en `DESIGN.md`. Verificado en local con el Supabase simulado (1440×900, 1366×768, 768×1024 y 390×844; claro y oscuro). Pendiente del titular: móvil físico, lector de pantalla y sesión real.
