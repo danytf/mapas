@@ -8,6 +8,9 @@ Entorno (aprobado por el titular el 19/10/2026): `python -m venv ~/osm-trabajo/v
 |---|---|
 | `explorar_limites.py` | Cuenta los límites administrativos por nivel (exploración, solo lectura). |
 | `referencia.py` | Extrae municipios con código INE y su geometría; compara con los nombres de una provincia de la base. |
+| `buscar.py` | Busca puntos por etiqueta y nombre dentro de una provincia y les asigna el municipio oficial (INE) por geometría. |
+| `enriquecer.py` | Completa calle y código postal con Nominatim inverso (1 petición por segundo, solo lo que falta). |
+| `generar_carga.py` | Genera el JSON de origen y el SQL de carga de una categoría desde candidatos revisados. |
 | `generar_municipios.py` | Genera el SQL de carga de municipios oficiales (idempotente, no cambia nombres ni borra). |
 
 Diseño completo en `docs/DISENO_CARGA_NACIONAL.md`.

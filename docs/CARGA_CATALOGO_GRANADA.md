@@ -25,9 +25,11 @@ Los datos de OpenStreetMap están bajo la licencia ODbL 1.0, © colaboradores de
 
 | 19/10/2026 | Referencia: municipios de Andalucía | 785 municipios con código INE (Almería 103, Cádiz 45, Córdoba 77, Granada 174, Huelva 80, Jaén 97, Málaga 103, Sevilla 106) | OpenStreetMap (áreas administrativas de nivel 8 con `ine:municipio`), fichero de Andalucía del 18/10/2026; los totales por provincia coinciden con los oficiales. En Granada se asigna el código INE a 173 municipios existentes y se crea Valderrubio | `supabase/seeds/import_municipios_andalucia.sql`, `scripts/catalogue/`. **Cargado en producción el 19/10/2026** con `psql` desde el equipo del titular y verificado: 797 municipios, 785 con INE distintos, 806 puntos intactos |
 
+| 19/10/2026 | Tiendas (mascotas) | 7 (Tiendanimal 1, Kiwoko 2, Cash Mascota 3, Mundo Animal 1) | OpenStreetMap (`shop=pet`), fichero de Andalucía del 18/10/2026; municipio por geometría (INE); calle y código postal que faltaban con Nominatim inverso. Alcance elegido por el titular: cadenas tipo Tiendanimal. OpenStreetMap recoge solo 1 Tiendanimal en la provincia (incompleto); no se verificó que Cash Mascota y Mundo Animal sean cadenas. Se ampliará con una lista del titular si la facilita | `supabase/seeds/tiendas-granada.json`, `supabase/seeds/import_tiendas_granada.sql` |
+
 **Granada: 12 localidades que no son municipios oficiales.** La base tenía 185 «municipios» en Granada y los oficiales son 174; tras la carga hay 186 (174 con código INE, incluido Valderrubio, más estas 12). Las 12 filas extra (Alcudia de Guadix, Bácor-Olivar, Castillo de Baños, El Turro, Fuentes de Cesna, Híjar, La Herradura, Loreto, Otura, Pitres, Ventas de Zafarraya, Ventorros de San José) vienen del catálogo inicial, tienen puntos y no se tocan; la carga nacional asignará los puntos nuevos al municipio oficial por geometría. **Málaga figura como provincia activa sin municipios ni puntos**: conviene revisarlo en el panel de administración.
 
-Categorías activas aún sin puntos en Granada: Eventos y Tiendas.
+Categorías activas aún sin puntos en Granada: Eventos (de momento vacía por decisión del titular).
 
 **«Por revisar».** La aplicación marca un punto como «por revisar» cuando su `location_precision` es `approximate`. Se usa también para señalar datos de origen dudosos (no solo coordenadas); quien lo revise lo confirma desde la ficha («Marcar como revisado») o lo corrige.
 
