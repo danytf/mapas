@@ -38,8 +38,8 @@ json.dump({
         "municipality_ine": f["ine"], "address": f["calle"] or None, "postal_code": f["cp"] or None, "latitude": round(f["lat"], 5), "longitude": round(f["lon"], 5),
         "location_precision": f["precision"], "location_source": "openstreetmap:" + f["osm"], "province": PROV[f["ine"][:2]], "status": "active",
         **({"review_reason": f["revisar"]} if f["revisar"] else {})} for f in sorted(filas, key=lambda f: f["source_ref"])]},
-    open(os.path.join(a.dir_salida, cod + "-andalucia.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
-open(os.path.join(a.dir_salida, cod + "-andalucia.json"), "a", encoding="utf-8").write("\n")
+    open(os.path.join(a.dir_salida, cod + "-andalucia.json"), "w", encoding="utf-8", newline="\n"), ensure_ascii=False, indent=1)
+open(os.path.join(a.dir_salida, cod + "-andalucia.json"), "a", encoding="utf-8", newline="\n").write("\n")
 
 for ine, grupo in sorted(por_prov.items()):
     nombre = PROV[ine]
@@ -107,5 +107,5 @@ $$;
 
 COMMIT;
 """
-    open(os.path.join(a.dir_salida, f"import_{cod}_{ine}_{nombre.lower().replace('í', 'i').replace('á', 'a').replace('é', 'e').replace('ó', 'o').replace('ú', 'u')}.sql"), "w", encoding="utf-8").write(sql)
+    open(os.path.join(a.dir_salida, f"import_{cod}_{ine}_{nombre.lower().replace('í', 'i').replace('á', 'a').replace('é', 'e').replace('ó', 'o').replace('ú', 'u')}.sql"), "w", encoding="utf-8", newline="\n").write(sql)
     print(ine, nombre, n)

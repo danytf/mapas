@@ -32,10 +32,17 @@ def municipio(pt):
     return None, None
 
 
+def texto(tags):
+    return " ".join(tags.get(k, "") for k in ("name", "official_name", "operator", "brand", "network"))
+
+
 def regla(tags):
     for r in defn["reglas"]:
-        if all(tags.get(k) in v for k, v in r["etiquetas"].items()):
-            return r
+        if not all(tags.get(k) in v for k, v in r["etiquetas"].items()):
+            continue
+        if r.get("exigir_texto") and not re.search(r["exigir_texto"], texto(tags), re.I):
+            continue
+        return r
     return None
 
 
@@ -49,6 +56,8 @@ class Extraer(osmium.SimpleHandler):
         if not r:
             return
         motivo = None
+        if r.get("excluir_texto") and re.search(r["excluir_texto"], texto(tags), re.I):
+            motivo = "texto excluido (%s)" % r["excluir_texto"]
         for k, v in r.get("excluir_si", {}).items():
             if tags.get(k) in v:
                 motivo = motivo or "etiqueta %s=%s" % (k, tags.get(k))
@@ -56,7 +65,7 @@ class Extraer(osmium.SimpleHandler):
             if k in tags:
                 motivo = motivo or "etiqueta %s" % k
         fl = defn.get("excluir_flags")
-        if fl and r["subtipo"] in fl.get("subtipos", []):
+        if fl and r.get("subtipo") in fl.get("subtipos", []):
             for k in fl["cualquiera"]:
                 if tags.get(k) == "yes" and tags.get(fl["salvo"]) != "yes":
                     motivo = motivo or "etiqueta %s=yes sin %s=yes" % (k, fl["salvo"])
@@ -67,7 +76,7 @@ class Extraer(osmium.SimpleHandler):
         if not ine and not motivo:
             motivo = "fuera de los municipios oficiales cargados"
         self.res.append({
-            "osm": tipo + "/" + str(oid), "subtipo": r["subtipo"], "ine": ine, "municipio": mname,
+            "osm": tipo + "/" + str(oid), "subtipo": r.get("subtipo"), "ine": ine, "municipio": mname,
             "lat": round(pt.y, 6), "lon": round(pt.x, 6),
             "tags": {k: tags[k] for k in ETIQ if k in tags},
             "decision": "descartar" if motivo else "incluir", "motivo": motivo})
