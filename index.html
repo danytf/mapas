@@ -265,6 +265,10 @@
   #ficha .loc-cp { display: grid; gap: 8px; border-top: 1px solid var(--line); padding-top: 12px; margin-top: 4px; }
   #ficha .loc-cp input { width: 100%; font: inherit; font-size: 14px; padding: 8px 10px; min-height: 38px; border: 1px solid var(--line-2); border-radius: 8px; background: var(--panel); color: var(--fg); }
   #ficha .loc-cp .cp-save:disabled { opacity: .6; cursor: default; }
+  /* Las acciones de administrador (municipio y código postal) se ven como botones: relleno de acento al poder usarse, y apagadas y sin relieve cuando no. */
+  #ficha .loc-muni .lb, #ficha .loc-cp .lb { justify-content: center; width: 100%; min-height: 38px; font-size: 14px; font-weight: 640; background: var(--accent); color: var(--accent-fg); border-color: var(--accent); }
+  #ficha .loc-muni .lb:hover:not(:disabled), #ficha .loc-cp .lb:hover:not(:disabled) { background: var(--accent-d); border-color: var(--accent-d); color: var(--accent-fg); }
+  #ficha .loc-muni .lb:disabled, #ficha .loc-cp .lb:disabled { opacity: 1; background: var(--bg); color: var(--muted); border-color: var(--line-2); cursor: default; }
   .fi-foot { border-top: 1px solid var(--line); padding: 10px 18px 12px; display: grid; gap: 6px; background: var(--panel); }
   .fi-status { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 18px; }
   #ficha .saved { font-size: 12px; color: var(--ok); }
