@@ -267,3 +267,10 @@ Siete columnas de lunes a domingo; sobre cada una, una silueta de barras (altura
 - Controles: zoom y capas como un mismo instrumento (40 px; 44 px en táctil), foco visible, atribución compacta (el texto completo se conserva).
 - El mapa recalcula su tamaño con un `ResizeObserver` al abrir o cerrar paneles o cambiar de vista.
 - Limitación: el color de zonas verdes y carreteras lo fija Esri; solo se atenúa, no se recolorea por capa. No hay capa de límites provinciales (no hay datos fiables en la aplicación y no se inventan).
+
+## Jerarquía visual (crítica del 20/10/2026, PR de la rama feat/jerarquia-visual)
+
+- Lista: el estado es un punto de color más texto y una sola línea de aviso en color de tinta; sin etiquetas con caja repetidas en cada fila (fila de ~214 a ~159 px con datos de prueba realistas). Los avisos de ubicación (aproximada, por confirmar, sin ubicar, duplicado, desactivado) son texto, no etiqueta.
+- Agrupaciones del mapa neutras (grafito con recuento); el color de categoría solo vive en los marcadores individuales.
+- Cabecera: «Seguimientos» pasa de relleno rojo sólido a contorno rojo (`--hd-hot`); el nivel de gamificación pierde el degradado dorado y queda como un indicador más, con barra de experiencia de 3 px.
+- Pendiente de decisión del titular: estilo cartográfico propio (teselas vectoriales y fronteras provinciales).
