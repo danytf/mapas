@@ -44,7 +44,7 @@ const estados = html.slice(html.indexOf("const ESTADOS = ["), html.indexOf("];",
 assert.ok(!/#[0-9a-f]{6}/i.test(estados) && (estados.match(/var\(--pin-/g) || []).length === 6, "Los 6 estados usan tokens --pin-*");
 assert.ok(html.includes('["--confetti-1"') && html.includes('["--fog-0"') && html.includes("resolveColor"), "El confeti (canvas) y la niebla (Leaflet) resuelven los tokens antes de usarlos");
 assert.ok(html.includes('"var(--res-ok-bg)"') && !html.includes('"#dcfce7"') && !html.includes('"#fee2e2"'), "El cuadro de resultado de la ubicación usa tokens");
-assert.ok(html.includes("inkOn(estadoInfo(estadoOf(c))[2])"), "La tinta de la etiqueta de estado se calcula a partir del color resuelto (vale en oscuro)");
+assert.ok(html.includes("rs-st") && /<i style="background:' \+ estadoInfo\(estadoOf\(c\)\)\[2\]/.test(html), "El estado de la lista es un punto con el color-token del estado");
 assert.ok(/#dlgGam \.gtabs button \{ flex: 1 1 0; min-width: 0;/.test(html), "Las pestañas de «Mi progreso» pueden encoger (antes desbordaban en móvil)");
 
 console.log("Escala de radios y tamaños de letra: comprobaciones estáticas correctas.");

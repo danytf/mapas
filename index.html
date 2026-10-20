@@ -28,7 +28,7 @@
     /* Gamificación y banda de la cabecera */
     --gam-gold: #e0a800; --gam-gold-soft: #fff1c2; --gam-gold-ink: #8a5a00; --gam-green: #22a15a; --gam-green-bright: #22c55e; --gam-amber: #fbbf24;
     --gam-xp-a: #f5c542; --gam-xp-b: #ffe28a; --gam-spark: #ffd966;
-    --hd-line: #2f3846; --hd-line-2: #424d5f; --hd-line-3: #2a3341; --hd-fill: #222a36;
+    --hd-hot: #ff7385; --hd-line: #2f3846; --hd-line-2: #424d5f; --hd-line-3: #2a3341; --hd-fill: #222a36;
     /* Categorías (pin, número de la lista y leyenda) */
     --cat-hospital: #c0392b; --cat-salud: #0b7a68; --cat-super: #b83280; --cat-centro: #2b6cb0; --cat-oficial: #475569; --cat-gimnasio: #d9730d;
     --cat-ikea: #e0a800; --cat-leroy: #65a30d; --cat-decathlon: #0891b2; --cat-carrefour: #7c3aed; --cat-correos: #a16207; --cat-eci: #15803d;
@@ -70,7 +70,6 @@
     }
     #dlgGam em.up { color: #4ade80; }
     #dlgGam em.dn { color: #ff7084; }
-    .kstrip .k.hot { background: #c8102e; border-color: #c8102e; }
   }
   * { box-sizing: border-box; }
   html, body { height: 100%; margin: 0; }
@@ -166,6 +165,12 @@
   .tag[style] { border-color: transparent; }
   .tag.tt { display: block; margin: 2px 0 0; padding: 0; background: none; border: 0; border-radius: 0; font-weight: 500; }
   .tag.tt + .tag { margin-top: 6px; }
+  .rs { display: flex; flex-wrap: wrap; gap: 2px 10px; margin-top: 5px; font-size: var(--fs-label); color: var(--muted); line-height: 1.4; }
+  .rs-st { display: inline-flex; align-items: center; gap: 6px; font-weight: 640; color: var(--fg); }
+  .rs-st i { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+  .rs-w { color: var(--warn); font-weight: 640; }
+  .rs-ok { color: var(--ok); font-weight: 640; }
+  .rs-f { color: var(--warn); font-weight: 500; }
   li.active strong { font-weight: 680; }
   .tag.warn { background: var(--warn-bg); color: var(--warn); border-color: transparent; }
   .tag.ok { background: var(--ok-soft); color: var(--ok); border-color: transparent; }
@@ -206,9 +211,9 @@
   /* Agrupaciones: anillo con la mezcla de categorías y núcleo grafito con el recuento */
   .cl-wrap { transition: transform var(--t) ease; }
   .cl-wrap:hover { transform: scale(1.06); }
-  .cl { width: 100%; height: 100%; border-radius: 50%; display: grid; place-items: center; box-shadow: 0 0 0 2px #fff, 0 3px 10px rgba(23,27,35,.4); }
-  .cl span { width: 74%; height: 74%; border-radius: 50%; background: var(--ink); color: #fff; display: grid; place-items: center; font: 650 12px var(--font); font-variant-numeric: tabular-nums; box-shadow: 0 0 0 1.5px rgba(255,255,255,.9) inset; }
-  .cl.big span { font-size: var(--fs-label-lg); }
+  .cl { width: 100%; height: 100%; border-radius: 50%; display: grid; place-items: center; background: var(--ink); color: #fff; border: 3px solid #fff; box-sizing: border-box; box-shadow: 0 3px 10px rgba(23,27,35,.38); font: 650 12px var(--font); font-variant-numeric: tabular-nums; }
+  .cl span { display: block; }
+  .cl.big { font-size: var(--fs-label-lg); }
   .marker-cluster, .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large { background: transparent; }
   .marker-cluster div, .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div { background: transparent; box-shadow: none; }
   .leaflet-cluster-anim .leaflet-marker-icon, .leaflet-cluster-anim .leaflet-marker-shadow { transition: transform .22s ease-out, opacity .22s ease-in; }
@@ -381,8 +386,8 @@
   .kg-gam .k b { font-size: var(--fs-body); }
   .kstrip button.k { cursor: pointer; }
   .kstrip button.k:hover { background: var(--hd-line-3); border-color: var(--hd-line-2); }
-  .kstrip .k.hot { background: var(--accent); border-color: var(--accent); }
-  .kstrip .k.hot span { color: #ffd9de; }
+  .kstrip .k.hot { background: transparent; border-color: var(--hd-hot); }
+  .kstrip .k.hot b { color: var(--hd-hot); }
   .kstrip .k[aria-pressed="true"] { box-shadow: 0 0 0 2px #fff inset; }
   li.grp { display: block; cursor: default; padding: 9px 16px 7px; font-size: var(--fs-label); font-weight: 680; color: var(--muted); background: var(--bg); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 1; }
   li.grp::before { display: none; }
@@ -549,10 +554,10 @@
   .lg.l0 b, .lg.l0 .pr { opacity: .65; }
   .lg .bar { grid-column: 2; height: 4px; border-radius: 2px; background: var(--line); overflow: hidden; }
   .lg .bar i { display: block; height: 100%; background: var(--accent); }
-  .kstrip .k.gam { min-width: 150px; max-width: 200px; position: relative; overflow: hidden; border-color: #5b4a1a; background: linear-gradient(135deg, var(--hd-fill), #2a2412); }
-  .kstrip .k.gam span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #e8d9a8; }
-  .kstrip .k.gam .xpb { display: block; height: 4px; border-radius: 2px; background: #3a3320; margin-top: 3px; overflow: hidden; }
-  .kstrip .k.gam .xpb u { display: block; height: 100%; background: linear-gradient(90deg, var(--gam-xp-a), var(--gam-xp-b)); transition: width .6s ease; }
+  .kstrip .k.gam { min-width: 140px; max-width: 190px; position: relative; overflow: hidden; }
+  .kstrip .k.gam span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .kstrip .k.gam .xpb { display: block; height: 3px; border-radius: var(--r-xs); background: var(--hd-line); margin-top: 3px; overflow: hidden; }
+  .kstrip .k.gam .xpb u { display: block; height: 100%; background: var(--gam-xp-a); transition: width .6s ease; }
   #dlgGam { width: min(560px, 94vw); max-height: 90vh; overflow-y: auto; }
   #dlgGam .gh { display: flex; gap: 18px; align-items: center; margin-bottom: 12px; }
   #dlgGam .gring { width: 104px; height: 104px; flex: none; transform: rotate(-90deg); }
@@ -933,14 +938,9 @@ const markers = {};
 const cluster = L.markerClusterGroup({
   maxClusterRadius: 38, showCoverageOnHover: false, disableClusteringAtZoom: 17,
   iconCreateFunction: (cl) => {
-    const ms = cl.getAllChildMarkers(), cnt = {};
-    ms.forEach((m) => { const k = m.options.cat || "var(--cat-otra)"; cnt[k] = (cnt[k] || 0) + 1; });
-    let acc = 0; const stops = [];
-    Object.entries(cnt).sort((a, b) => b[1] - a[1]).forEach(([col, n]) => {
-      stops.push(col + " " + (acc / ms.length * 100).toFixed(1) + "% " + ((acc + n) / ms.length * 100).toFixed(1) + "%"); acc += n;
-    });
-    const n = ms.length, z = n >= 100 ? 56 : n >= 10 ? 46 : 38, big = n >= 10;
-    return L.divIcon({ className: "cl-wrap", iconSize: [z, z], html: '<div class="cl' + (big ? " big" : "") + '" style="background:conic-gradient(' + stops.join(",") + ')"><span>' + n + "</span></div>" });
+    // Agrupación neutra: el recuento es lo que importa; el color de categoría vive solo en los marcadores.
+    const n = cl.getChildCount(), z = n >= 100 ? 54 : n >= 10 ? 44 : 36;
+    return L.divIcon({ className: "cl-wrap", iconSize: [z, z], html: '<div class="cl' + (n >= 10 ? " big" : "") + '"><span>' + n + "</span></div>" });
   }
 }).addTo(map);
 let touched = false;
@@ -2050,17 +2050,17 @@ function listItemFor(c) {
   li.innerHTML =
     '<div class="num" style="background:' + colorOf(c) + ';color:' + inkOn(colorOf(c)) + '">' + c.id + "</div><div><strong>" + esc(c.name) + '</strong><span class="addr">' +
     esc(addrOf(c)) + "</span><br>" +
-    '<span class="tag tt">' + esc(c.tipo + (c.sub ? " · " + c.sub : "")) + "</span>" +
-    (permOf(c).valoracion ? '<span class="tag warn">' + stars(permOf(c).valoracion) + "</span>" : "") +
-    (estadoOf(c) !== "sin" ? '<span class="tag" style="background:' + estadoInfo(estadoOf(c))[2] + ';color:' + inkOn(estadoInfo(estadoOf(c))[2]) + '">' + estadoInfo(estadoOf(c))[1] + (permOf(c).fecha && estadoOf(c) !== "concedido" && estadoOf(c) !== "caducado" ? " · " + esc(fmtD(permOf(c).fecha)) : "") + "</span>" : "") +
-    (seguimientoDue(c) ? '<span class="tag warn">Seguimiento ' + (seguimientoDue(c) === today() ? "hoy" : "atrasado " + esc(fmtD(seguimientoDue(c)))) + "</span>" : "") +
-    (DUPS.has(c.name) && !hasPersonalRef(reviewed, c) ? '<span class="tag warn">Posible duplicado</span>' : "") +
-    (estadoOf(c) === "solicitado" && solTxt(c) ? '<span class="tag warn">Pedido: ' + esc(solTxt(c)) + "</span>" : "") +
-    (vigente(c) ? '<span class="tag ok">Vigente hasta ' + fmtD(vigente(c).hasta) + (vigente(c).ong ? " · " + esc(vigente(c).ong) : "") + (safeCount(vigente(c).captadores) ? " · " + safeCount(vigente(c).captadores) + " capt." : "") + "</span>" : (futura(c) ? '<span class="tag ok">Concedido del ' + esc(fmtD(futura(c).desde)) + " al " + esc(fmtD(futura(c).hasta)) + (futura(c).ong ? " · " + esc(futura(c).ong) : "") + (safeCount(futura(c).captadores) ? " · " + safeCount(futura(c).captadores) + " capt." : "") + "</span>" : "")) +
-    (isApprox(c) ? '<span class="tag warn">Ubicación aproximada</span>' : "") +
-    (c.conf ? "" : '<span class="tag warn">Por confirmar</span>') +
-    (cache[c.id] ? "" : '<span class="tag warn">Sin ubicar</span>') +
-    (isInactive(c) ? '<span class="tag warn">Desactivado en el mapa</span>' : "") + "</div>";
+    '<span class="tag tt">' + esc(c.tipo + (c.sub ? " · " + c.sub : "")) + '</span><div class="rs">' +
+    (permOf(c).valoracion ? '<span class="rs-w">' + stars(permOf(c).valoracion) + "</span>" : "") +
+    (estadoOf(c) !== "sin" ? '<span class="rs-st"><i style="background:' + estadoInfo(estadoOf(c))[2] + '"></i>' + estadoInfo(estadoOf(c))[1] + (permOf(c).fecha && estadoOf(c) !== "concedido" && estadoOf(c) !== "caducado" ? " · " + esc(fmtD(permOf(c).fecha)) : "") + "</span>" : "") +
+    (seguimientoDue(c) ? '<span class="rs-w">Seguimiento ' + (seguimientoDue(c) === today() ? "hoy" : "atrasado " + esc(fmtD(seguimientoDue(c)))) + "</span>" : "") +
+    (DUPS.has(c.name) && !hasPersonalRef(reviewed, c) ? '<span class="rs-f">Posible duplicado</span>' : "") +
+    (estadoOf(c) === "solicitado" && solTxt(c) ? '<span class="rs-t">Pedido: ' + esc(solTxt(c)) + "</span>" : "") +
+    (vigente(c) ? '<span class="rs-ok">Vigente hasta ' + fmtD(vigente(c).hasta) + (vigente(c).ong ? " · " + esc(vigente(c).ong) : "") + (safeCount(vigente(c).captadores) ? " · " + safeCount(vigente(c).captadores) + " capt." : "") + "</span>" : (futura(c) ? '<span class="rs-ok">Concedido del ' + esc(fmtD(futura(c).desde)) + " al " + esc(fmtD(futura(c).hasta)) + (futura(c).ong ? " · " + esc(futura(c).ong) : "") + (safeCount(futura(c).captadores) ? " · " + safeCount(futura(c).captadores) + " capt." : "") + "</span>" : "")) +
+    (isApprox(c) ? '<span class="rs-f">Ubicación aproximada</span>' : "") +
+    (c.conf ? "" : '<span class="rs-f">Por confirmar</span>') +
+    (cache[c.id] ? "" : '<span class="rs-f">Sin ubicar</span>') +
+    (isInactive(c) ? '<span class="rs-f">Desactivado en el mapa</span>' : "") + "</div></div>";
   if (isInactive(c)) li.classList.add("inactive");
   li.addEventListener("click", (e) => { highlight(c.id, true); });
   li.addEventListener("keydown", (e) => { if (e.key === "Enter") { popupFromKey = li; highlight(c.id, true); } });
