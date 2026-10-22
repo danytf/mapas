@@ -274,3 +274,7 @@ Siete columnas de lunes a domingo; sobre cada una, una silueta de barras (altura
 - Agrupaciones del mapa neutras (grafito con recuento); el color de categoría solo vive en los marcadores individuales.
 - Cabecera: «Seguimientos» pasa de relleno rojo sólido a contorno rojo (`--hd-hot`); el nivel de gamificación pierde el degradado dorado y queda como un indicador más, con barra de experiencia de 3 px.
 - Pendiente de decisión del titular: estilo cartográfico propio (teselas vectoriales y fronteras provinciales).
+
+## Filtros compactos (22/10/2026)
+
+- «Por revisar» pasa a la misma fila que el estado y «Más filtros», y el panel reduce el relleno: una fila menos sin esconder provincia, municipio ni estado (decisión previa del titular: siempre a la vista).
