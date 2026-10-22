@@ -84,6 +84,10 @@ jobs:
         run: node scripts/test-paneles.mjs
       - name: Test radius and font-size scale
         run: node scripts/test-escala.mjs
+      - name: Test province outlines
+        run: node scripts/test-provincias.mjs
+      - name: Test bulk actions guarantees
+        run: node scripts/test-acciones-masivas.mjs
       - name: Run XSS regression audit
         run: node scripts/audit-xss.mjs index.html
       - name: Check keyboard access to statistics panel rows

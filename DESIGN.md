@@ -33,6 +33,13 @@ colors:
   dark-paper: "#0b111a"
   dark-panel: "#121a26"
   dark-red: "#ff4d63"
+  header-line: "#2f3846"
+  dark-line: "#223046"
+  dark-line-strong: "#2d3d56"
+  dark-text: "#e7ecf3"
+  dark-quiet: "#19243a"
+  dark-field-line: "#66758c"
+  dark-accent-ink: "#1a0509"
 typography:
   headline:
     fontFamily: "Figtree, Segoe UI Variable Text, Segoe UI, system-ui, sans-serif"
@@ -344,4 +351,11 @@ Según el texto que aportó el titular (no verificado por mí contra su web): el
 - Colores sueltos de la gamificación, las medallas, el calendario y la cabecera pasan a tokens (`--gam-up`, `--gam-dn`, `--gam-ink`, `--md1-*`, `--md2-*`, `--cal-*`, `--hd-sub`, `--shadow-pop`); la paleta documentada arriba se actualiza a los valores vigentes.
 - Densidad: índice espacial por celdas de 0,25° (solo se recorren las celdas que cubren cada tesela).
 - Resalte de provincia: trazo más ancho, suave y difuminado, y relleno al 8 %, para que la diferencia con la frontera del mapa base no se note; los contornos siguen siendo de Natural Earth 1:10 m.
+
+## Excepciones deliberadas a la escala (22/10/2026)
+
+- Tamaños de letra fuera de la escala de 12, 13, 14, 17 y 20 px, a propósito: 24 px (símbolo × de cierre de diálogos), 32 y 34 px (cifras grandes del calendario y del anillo de nivel), 44 px (número de nivel en el aviso de subida) y 10 px (atribución del mapa, con texto legal que ocupa mucho). El 20 px `!important` de los botones del zoom es un símbolo, no texto.
+- El rayado diagonal de «Solicitado» en el calendario es un patrón que codifica el estado además del color, no decoración.
+- Los 12 avisos «borde de acento sobre elemento redondeado» del detector son subrayados de 2 px de las pestañas y el filo de 3 px de la tarjeta de acceso; se mantienen.
+- Los avisos de «sombra ancha con borde fino» corresponden a la elevación de paneles y diálogos con un borde de 1 px; se mantiene un solo sistema de elevación (borde más sombra de `--shadow`).
 
