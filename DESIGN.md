@@ -295,3 +295,8 @@ Siete columnas de lunes a domingo; sobre cada una, una silueta de barras (altura
 ### Licencia de OpenFreeMap (22/10/2026)
 
 Según el texto que aportó el titular (no verificado por mí contra su web): el software es MIT, el uso comercial está permitido, no hay registro, claves ni cobro por volumen, la atribución a OpenStreetMap (y a OpenFreeMap) es obligatoria (cumplida en el mapa) y se puede alojar en servidor propio. Sin SLA: servicio gratuito financiado con donaciones. Los datos del mapa siguen siendo de OpenStreetMap (ODbL). Riesgo vivo: si el servicio cae, la app cambia sola a Esri, cuya licencia comercial tampoco está confirmada.
+
+## Revisión de oscuro y móvil con la capa vectorial (22/10/2026)
+
+- Oscuro: la paleta recolorea ahora todas las capas de carretera, puente, túnel, camino, ferrocarril, pista y cauce (antes quedaban las vías secundarias en blanco brillante).
+- Controles: la leyenda sube 26 px sobre la atribución y la atribución se limita al 72 % del ancho (78 % y 9 px en móvil) para que no se tapen en anchos pequeños; el conmutador Mapa/Lista no parte «Lista (n)» en dos líneas.
