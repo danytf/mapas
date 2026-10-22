@@ -8,7 +8,7 @@ import json
 import os
 from collections import defaultdict
 
-PROV = {"04": "Almería", "11": "Cádiz", "14": "Córdoba", "18": "Granada", "21": "Huelva", "23": "Jaén", "29": "Málaga", "41": "Sevilla"}
+PROV = {"04": "Almería", "06": "Badajoz", "10": "Cáceres", "11": "Cádiz", "14": "Córdoba", "18": "Granada", "21": "Huelva", "23": "Jaén", "29": "Málaga", "41": "Sevilla"}
 
 ap = argparse.ArgumentParser()
 ap.add_argument("validados")
@@ -16,7 +16,9 @@ ap.add_argument("categoria")
 ap.add_argument("--osm-base", required=True)
 ap.add_argument("--fecha", default="2026-10-19")
 ap.add_argument("--dir-salida", required=True)
+ap.add_argument("--sufijo", default="-andalucia", help="sufijo del fichero de origen, p. ej. -extremadura")
 a = ap.parse_args()
+SUFIJO = a.sufijo
 
 defn = json.load(open(a.categoria, encoding="utf-8"))
 filas = json.load(open(a.validados, encoding="utf-8"))
@@ -38,8 +40,8 @@ json.dump({
         "municipality_ine": f["ine"], "address": f["calle"] or None, "postal_code": f["cp"] or None, "latitude": round(f["lat"], 5), "longitude": round(f["lon"], 5),
         "location_precision": f["precision"], "location_source": "openstreetmap:" + f["osm"], "province": PROV[f["ine"][:2]], "status": "active",
         **({"review_reason": f["revisar"]} if f["revisar"] else {})} for f in sorted(filas, key=lambda f: f["source_ref"])]},
-    open(os.path.join(a.dir_salida, cod + "-andalucia.json"), "w", encoding="utf-8", newline="\n"), ensure_ascii=False, indent=1)
-open(os.path.join(a.dir_salida, cod + "-andalucia.json"), "a", encoding="utf-8", newline="\n").write("\n")
+    open(os.path.join(a.dir_salida, cod + SUFIJO + ".json"), "w", encoding="utf-8", newline="\n"), ensure_ascii=False, indent=1)
+open(os.path.join(a.dir_salida, cod + SUFIJO + ".json"), "a", encoding="utf-8", newline="\n").write("\n")
 
 for ine, grupo in sorted(por_prov.items()):
     nombre = PROV[ine]
@@ -49,7 +51,7 @@ for ine, grupo in sorted(por_prov.items()):
                                          str(round(f["lat"], 5)), str(round(f["lon"], 5)), q(f["precision"]), q("openstreetmap:" + f["osm"])]) + ")"
                       for f in sorted(grupo, key=lambda f: f["source_ref"]))
     sql = f"""-- Carga de la categoría {cat} de {nombre} (provincia {ine}), trozo de la carga de Andalucía.
--- Origen: {cod}-andalucia.json (OpenStreetMap, ODbL, consulta del {a.fecha}, base {a.osm_base}).
+-- Origen: {cod}{SUFIJO}.json (OpenStreetMap, ODbL, consulta del {a.fecha}, base {a.osm_base}).
 -- {n} filas. No toca nada existente: si el source_ref ya existe, no hace nada.
 -- El municipio se asigna por código INE oficial (municipalities.official_code).
 -- Transaccional: si falta la categoría o algún municipio, aborta sin cambios.

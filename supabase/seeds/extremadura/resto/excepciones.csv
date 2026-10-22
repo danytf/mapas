@@ -1,0 +1,118 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/10552592128;;Carrefour;Cáceres;39.466855;-6.395623;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/10762020280;;;Montánchez;39.226019;-6.14819;sin nombre en OpenStreetMap
+descartado;node/10779469832;;Carrefour Express;Mérida;38.923241;-6.329286;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/11025103246;;Juzgado;Logrosán;39.335652;-5.495281;nombre generico o dudoso en OpenStreetMap: Juzgado
+descartado;node/11176822751;;Hipercor;Badajoz;38.877723;-6.972332;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/11176822752;;Hipercor;Badajoz;38.872908;-6.974757;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/11274449707;;;Alconchel;38.517081;-7.070158;sin nombre en OpenStreetMap
+descartado;node/1156515323;;;Alcántara;39.718714;-6.883981;sin nombre en OpenStreetMap
+descartado;node/11950004488;;;Malpartida de Plasencia;39.883057;-6.276216;sin nombre en OpenStreetMap
+descartado;node/12380348694;;;Valverde del Fresno;40.218653;-6.877978;sin nombre en OpenStreetMap
+descartado;node/14297389601;;Carrefour Express;Mérida;38.911327;-6.336516;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/1539638993;;Centro de Salud;Santa Cruz de Paniagua;40.192054;-6.337741;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;node/1763631375;;Centro de salud;Aliseda;39.421628;-6.692405;nombre generico o dudoso en OpenStreetMap: Centro de salud
+descartado;node/1798213668;;;Jerte;40.222413;-5.751823;sin nombre en OpenStreetMap
+descartado;node/1949144028;;Mercadona;Plasencia;40.024006;-6.095622;duplicado en el lote de node/1410539630 (76 m)
+descartado;node/2411991245;;Leroy Merlin;Mérida;38.906756;-6.351069;texto excluido (leroy merlin|click|recogida)
+descartado;node/2423960598;;Juzgados;Zafra;38.431078;-6.411838;nombre generico o dudoso en OpenStreetMap: Juzgados
+descartado;node/2775510001;;;Mesas de Ibor;39.75632;-5.547421;sin nombre en OpenStreetMap
+descartado;node/2818714982;;Centro de Salud;Villafranca de los Barros;38.556538;-6.338896;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;node/3643289485;;Carrefour Express;Jarandilla de la Vera;40.129647;-5.663235;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/3757610421;;;Fuentes de León;38.066598;-6.540682;sin nombre en OpenStreetMap
+descartado;node/4138123294;;;Cáceres;39.477832;-6.374076;sin nombre en OpenStreetMap
+descartado;node/431557517;;Carrefour;Mérida;38.905839;-6.361179;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/4587878488;;;Aldehuela del Jerte;40.01132;-6.239024;sin nombre en OpenStreetMap
+descartado;node/4831663221;;Centro de Salud;Cáceres;39.473004;-6.379036;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;node/4947460146;;;Torrejón el Rubio;39.770399;-6.012445;sin nombre en OpenStreetMap
+descartado;node/5443532322;;Supermercado;Zafra;38.424702;-6.412614;nombre generico o dudoso en OpenStreetMap: Supermercado
+descartado;node/5465031914;;;Villafranca de los Barros;38.562555;-6.334895;sin nombre en OpenStreetMap
+descartado;node/5465035424;;;Villafranca de los Barros;38.560875;-6.342583;sin nombre en OpenStreetMap
+descartado;node/5617531054;;;Don Benito;39.085624;-5.892923;sin nombre en OpenStreetMap
+descartado;node/5958140287;;Centro de Salud;Aceuchal;38.645466;-6.486221;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;node/6133669165;;Tambo;Cáceres;39.458885;-6.377028;duplicado en el lote de node/14163007066 (123 m)
+descartado;node/6156531847;;Supermercado;Montijo;38.910492;-6.609946;nombre generico o dudoso en OpenStreetMap: Supermercado
+descartado;node/6159257896;;;Montijo;38.908815;-6.624152;sin nombre en OpenStreetMap
+descartado;node/6244365970;;;Puebla del Maestre;38.084627;-6.078203;sin nombre en OpenStreetMap
+descartado;node/710745597;;Ayuntamiento;Casar de Cáceres;39.561467;-6.416968;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/776271380;;Centro de Salud;Alburquerque;39.220188;-6.996156;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;node/8377821947;;Ayuntamiento;Brozas;39.612039;-6.779474;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/906071651;;Centro de salud;Fuente de Cantos;38.242495;-6.305786;nombre generico o dudoso en OpenStreetMap: Centro de salud
+descartado;node/9111457518;;Unide;Cañamero;39.381478;-5.388777;duplicado en el lote de node/4195075915 (28 m)
+descartado;node/9625710797;;;Cáceres;39.471324;-6.373742;sin nombre en OpenStreetMap
+descartado;way/1118795477;;Ayuntamiento;Villar de Rena;39.11096;-5.739289;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/1122004877;;Centro de Salud;Cilleros;40.116817;-6.788221;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/122541982;;Carrefour;Badajoz;38.860297;-6.970032;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/1342403808;;Centro de Salud;Zafra;38.425927;-6.415483;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/1346970216;;;Cáceres;39.472926;-6.377365;sin nombre en OpenStreetMap
+descartado;way/1358344392;;Centro de Salud;Barcarrota;38.521057;-6.851082;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/1499584390;;Ayuntamiento de Valdemanco del Esteras;;38.938234;-4.830576;fuera de los municipios oficiales cargados
+descartado;way/1518449523;;Centro de Salud;Fregenal de la Sierra;38.165074;-6.658062;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/176988844;;Ayuntamiento;Plasencia;39.972947;-6.246831;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/179623853;;Centro de Salud;Guareña;38.860749;-6.097033;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/198639121;;Centro de Salud;Valdefuentes;39.28054;-6.125023;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/220878090;;;Fuente de Cantos;38.244641;-6.300856;sin nombre en OpenStreetMap
+descartado;way/237543086;;Carrefour;Villanueva de la Serena;38.971379;-5.80999;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/237543096;;Leroy Merlin;Villanueva de la Serena;38.968724;-5.808049;texto excluido (leroy merlin|click|recogida)
+descartado;way/239209802;;Centro de Salud;Serradilla;39.82657;-6.144467;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/259920555;;Centro de salud;Tamurejo;38.989325;-4.945821;nombre generico o dudoso en OpenStreetMap: Centro de salud
+descartado;way/298398346;;Carrefour;Almendralejo;38.693;-6.411847;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/383029268;;Leroy Merlin;Cáceres;39.464567;-6.386593;texto excluido (leroy merlin|click|recogida)
+descartado;way/385026949;;Centro de Salud;Trujillo;39.456362;-5.883574;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/413850113;;Leroy Merlin;Badajoz;38.902676;-6.997423;texto excluido (leroy merlin|click|recogida)
+descartado;way/454590042;;Ayuntamiento de Navalmoralejo;;39.738781;-5.143052;fuera de los municipios oficiales cargados
+descartado;way/467242491;;;Llerena;38.237035;-6.020652;sin nombre en OpenStreetMap
+descartado;way/489331001;;Mercado de Abastos;Burguillos del Cerro;38.380025;-6.589888;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/539515549;;Centro de Salud;Campanario;38.861499;-5.620369;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/540496103;;;Valencia de las Torres;38.40642;-6.001396;sin nombre en OpenStreetMap
+descartado;way/548883933;;Juzgado;Castuera;38.720648;-5.546618;nombre generico o dudoso en OpenStreetMap: Juzgado
+descartado;way/549336566;;Centro de Salud;Esparragosa de la Serena;38.649545;-5.606622;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/549941270;;Centro de Salud;Monesterio;38.088439;-6.275293;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/553108950;;;Segura de León;38.119643;-6.523051;sin nombre en OpenStreetMap
+descartado;way/554247499;;Centro de Salud;Casas del Castañar;40.107509;-5.90647;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/554541591;;;Fregenal de la Sierra;38.173878;-6.658657;sin nombre en OpenStreetMap
+descartado;way/557728830;;;Zalamea de la Serena;38.652523;-5.655358;sin nombre en OpenStreetMap
+descartado;way/557728831;;Centro de Salud;Zalamea de la Serena;38.652362;-5.655155;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/559102918;;;Badajoz;38.878977;-6.950446;sin nombre en OpenStreetMap
+descartado;way/574460032;;Juzgados;Villanueva de la Serena;38.973371;-5.796433;nombre generico o dudoso en OpenStreetMap: Juzgados
+descartado;way/577828491;;Centro de Salud;Santa Amalia;39.008109;-6.007461;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/593123133;;Mercado de Abastos;La Zarza;38.817722;-6.215418;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/593126619;;Centro de Salud;La Zarza;38.818904;-6.216157;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/593461821;;Centro de Salud;Don Álvaro;38.84625;-6.273992;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/595909897;;Mercado de Abastos;Solana de los Barros;38.723478;-6.537797;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/595912406;;Pabellón de Deportes;Solana de los Barros;38.721975;-6.538981;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/596625629;;Centro de Salud;Arroyo de San Serván;38.857157;-6.454555;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/598033190;;Centro de Salud;Alconchel;38.517265;-7.068605;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/600257998;;Centro de Salud;Burguillos del Cerro;38.379266;-6.588662;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/603108791;;Centro de Salud;Castilblanco;39.283641;-5.088358;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/603983782;;Centro de Salud;Cordobilla de Lácara;39.145328;-6.436796;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/604952692;;Centro de Salud;Esparragalejo;38.941405;-6.434606;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/607777317;;Centro de Salud;Fuente del Maestre;38.523453;-6.445484;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/609925763;;Centro de Salud;Herrera del Duque;39.16857;-5.056137;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/609937953;;Juzgados;Herrera del Duque;39.169678;-5.050502;nombre generico o dudoso en OpenStreetMap: Juzgados
+descartado;way/616589591;;Centro de Salud;Navalvillar de Pela;39.092356;-5.470145;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/617871098;;Centro de Salud;Puebla de Alcocer;38.987329;-5.255087;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/618247891;;;Puebla de la Reina;38.665696;-6.104945;sin nombre en OpenStreetMap
+descartado;way/622823007;;Centro de Salud;Los Santos de Maimona;38.448087;-6.382594;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/623814203;;Centro de Salud;Siruela;38.978745;-5.045031;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/624206338;;Centro de Salud;Talarrubias;39.032661;-5.235999;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/625322611;;Juzgados de Fregenal de la Sierra;Fregenal de la Sierra;38.170117;-6.655276;duplicado en el lote de way/625322610 (11 m)
+descartado;way/631035404;;Centro de Salud;Aldeanueva del Camino;40.259265;-5.931266;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/63173040;;Centro de Salud;Alcántara;39.717214;-6.880303;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/641633918;;;Guadiana;38.924545;-6.687832;sin nombre en OpenStreetMap
+descartado;way/641967191;;Pabellón Municipal de Deportes;Valencia del Ventoso;38.269892;-6.47333;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/642501436;;;Guadiana;38.930542;-6.693205;sin nombre en OpenStreetMap
+descartado;way/64588949;;Carrefour;Zafra;38.433764;-6.421776;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/650026223;;Centro de Salud;Olivenza;38.686623;-7.098045;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/65390236;;Carrefour;Plasencia;40.038571;-6.078479;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/660758725;;;Medellín;38.961076;-5.959621;sin nombre en OpenStreetMap
+descartado;way/715040350;;Ayuntamiento;Cedillo;39.651627;-7.500305;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/791317247;;Supeco;Cáceres;39.4717;-6.391574;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/804581537;;Centro de Salud;Casar de Cáceres;39.563296;-6.41684;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/827705288;;Ayuntamiento;Coria;39.982043;-6.454443;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/849115050;;Dia;Mérida;38.921424;-6.333466;duplicado en el lote de node/7921444576 (147 m)
+descartado;way/913987821;;Carrefour;Badajoz;38.866961;-6.989106;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/925926890;;Centro de Salud;Oliva de la Frontera;38.277543;-6.916576;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/955987153;;Centro de salud;Villanueva del Fresno;38.377896;-7.163435;nombre generico o dudoso en OpenStreetMap: Centro de salud
+descartado;way/963185625;;Centro de Salud;Montehermoso;40.088685;-6.355258;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/979707966;;;Villanueva de la Vera;40.13056;-5.420375;sin nombre en OpenStreetMap

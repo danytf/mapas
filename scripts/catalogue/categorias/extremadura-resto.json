@@ -1,0 +1,277 @@
+{
+  "codigo": "extremadura-resto",
+  "prefijo": "catalogo",
+  "criterio": "Siete categorias de una vez: Hospital (amenity o healthcare = hospital), Centro de salud (clinica o consulta cuyo nombre es «centro de salud» o «centro de atencion primaria»; los consultorios no entran), Supermercado (shop=supermarket sin Carrefour ni Hipercor, que tienen su categoria), Centro comercial (shop=mall), Gimnasios (leisure=fitness_centre), Bricolaje (shop=doityourself sin Leroy Merlin) y Entidad oficial (ayuntamientos, juzgados y oficinas de la AEAT, la Seguridad Social, la DGT y similares). Se excluyen los elementos en desuso o abandonados. El nombre se compone con el de OpenStreetMap y, si no contiene el municipio, se le anade; nunca se inventa. Un punto de la misma categoria y el mismo nombre a menos de 150 m se considera el mismo. Un nombre generico («Supermercado», «Gimnasio»…) no entra y va a excepciones.",
+  "reglas": [
+    {
+      "categoria": "Centro de salud",
+      "subtipo": null,
+      "etiquetas": {
+        "amenity": [
+          "hospital"
+        ]
+      },
+      "exigir_texto": "centro de salud|centro de atenci[oó]n primaria",
+      "excluir_texto": "mental|veterinari|dental|fisioterap|rehabilitaci",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    },
+    {
+      "categoria": "Centro de salud",
+      "subtipo": null,
+      "etiquetas": {
+        "healthcare": [
+          "hospital"
+        ]
+      },
+      "exigir_texto": "centro de salud|centro de atenci[oó]n primaria",
+      "excluir_texto": "mental|veterinari|dental|fisioterap|rehabilitaci",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    },
+    {
+      "categoria": "Hospital",
+      "subtipo": null,
+      "etiquetas": {
+        "amenity": [
+          "hospital"
+        ]
+      },
+      "excluir_texto": "veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    },
+    {
+      "categoria": "Hospital",
+      "subtipo": null,
+      "etiquetas": {
+        "healthcare": [
+          "hospital"
+        ]
+      },
+      "excluir_texto": "veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    },
+    {
+      "categoria": "Centro de salud",
+      "subtipo": null,
+      "etiquetas": {
+        "amenity": [
+          "clinic",
+          "doctors"
+        ]
+      },
+      "exigir_texto": "centro de salud|centro de atenci[oó]n primaria",
+      "excluir_texto": "mental|veterinari|dental|fisioterap|rehabilitaci",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    },
+    {
+      "categoria": "Centro de salud",
+      "subtipo": null,
+      "etiquetas": {
+        "healthcare": [
+          "clinic",
+          "centre",
+          "doctor"
+        ]
+      },
+      "exigir_texto": "centro de salud|centro de atenci[oó]n primaria",
+      "excluir_texto": "mental|veterinari|dental|fisioterap|rehabilitaci",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    },
+    {
+      "categoria": "Supermercado",
+      "subtipo": null,
+      "etiquetas": {
+        "shop": [
+          "supermarket"
+        ]
+      },
+      "excluir_texto": "carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    },
+    {
+      "categoria": "Centro comercial",
+      "subtipo": null,
+      "etiquetas": {
+        "shop": [
+          "mall"
+        ]
+      },
+      "excluir_texto": "aparcamiento|parking|duty free",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    },
+    {
+      "categoria": "Gimnasios",
+      "subtipo": null,
+      "etiquetas": {
+        "leisure": [
+          "fitness_centre"
+        ]
+      },
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      },
+      "excluir_texto": "pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal"
+    },
+    {
+      "categoria": "Bricolaje",
+      "subtipo": null,
+      "etiquetas": {
+        "shop": [
+          "doityourself"
+        ]
+      },
+      "excluir_texto": "leroy merlin|click|recogida",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    },
+    {
+      "categoria": "Entidad oficial",
+      "subtipo": null,
+      "etiquetas": {
+        "amenity": [
+          "townhall"
+        ]
+      },
+      "exigir_texto": "ayuntamiento|entidad local aut[oó]noma|diputaci[oó]n",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    },
+    {
+      "categoria": "Entidad oficial",
+      "subtipo": null,
+      "etiquetas": {
+        "amenity": [
+          "courthouse"
+        ]
+      },
+      "exigir_texto": "juzgado|audiencia|tribunal|palacio de justicia|registro civil",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    },
+    {
+      "categoria": "Entidad oficial",
+      "subtipo": null,
+      "etiquetas": {
+        "office": [
+          "government"
+        ]
+      },
+      "exigir_texto": "aeat|agencia tributaria|seguridad social|inss|tgss|dgt|jefatura provincial de tr[aá]fico|sepe|subdelegaci[oó]n|delegaci[oó]n del gobierno|oficina de empleo",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    }
+  ],
+  "excluir_claves": [
+    "disused:shop",
+    "abandoned:shop",
+    "disused:amenity",
+    "abandoned:amenity"
+  ],
+  "nombre_por_categoria": {
+    "Hospital": "{nombre_municipio}",
+    "Centro de salud": "{nombre_municipio}",
+    "Supermercado": "{nombre_municipio}",
+    "Centro comercial": "{nombre_municipio}",
+    "Gimnasios": "{nombre_municipio}",
+    "Bricolaje": "{nombre_municipio}",
+    "Entidad oficial": "{nombre_municipio}"
+  },
+  "nombre_obligatorio": true,
+  "nombre_sospechoso_regex": "^(supermercado|super|tienda|alimentaci[oó]n|autoservicio|ultramarinos|minimarket|mini ?market|frutas?|panader[ií]a|gimnasio|gym|fitness|polideportivo|hospital|centro de salud|ayuntamiento|juzgado|centro comercial)s?$",
+  "excluir_revisar": true,
+  "calle_no_valida_regex": "^(carril|veh[ií]culos|salida|acceso)\\b|\\bcarril (bici|taxi|de servicio)\\b|rotonda|servicio|^[A-Z]{1,2}-?\\d",
+  "solo_provincias": [
+    "06",
+    "10"
+  ],
+  "duplicado_ignora_nombre": false,
+  "distancia_duplicado_m": 150,
+  "distancia_existente_m": 150,
+  "distancia_revisar_m": 0,
+  "nota_informe": "OpenStreetMap puede tener puntos cerrados, trasladados o duplicados, y no indica el horario vigente. El codigo postal y, en parte, la calle son los del punto con direccion mas cercano: orientativos, no una direccion postal verificada.",
+  "region": "extremadura"
+}
