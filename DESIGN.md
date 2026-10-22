@@ -305,4 +305,11 @@ Según el texto que aportó el titular (no verificado por mí contra su web): el
 
 - `/` lleva el foco a la búsqueda (no actúa al escribir en un campo, con un diálogo abierto ni en la pantalla de acceso). Con el foco en la búsqueda, `↓` salta a la primera fila.
 - En la lista: `↑` `↓` `Inicio` `Fin` recorren las filas; `↑` desde la primera vuelve a la búsqueda; `Intro` abre la ficha (como antes). La búsqueda declara `aria-keyshortcuts="/"` y tiene una pista en `title`.
-- Acciones masivas sobre los seguimientos: no se han hecho; hace falta decidir primero qué acción exacta (cambia datos de varios puntos a la vez).
+- Acciones masivas: ver la sección siguiente.
+
+## Acciones masivas de la lista (22/10/2026)
+
+- Botón «Seleccionar» junto al estado: las filas muestran una casilla (el clic marca en lugar de abrir la ficha; Intro o Espacio también) y aparece una barra inferior con el recuento, «Todas las filas cargadas», «Ninguna» y tres acciones: **Reprogramar seguimiento** (con fecha), **Marcar seguimiento como hecho** y **Añadir a favoritos**. Escape sale del modo.
+- Seguimiento: solo actúa sobre puntos con una solicitud pendiente con fecha de seguimiento (o el seguimiento antiguo); los demás se omiten y se cuentan. Pide confirmación con el número de puntos, guarda punto a punto con `savePermits` (mismo control de versión que la ficha), recarga el punto si otra persona lo cambió y restaura el estado anterior si hay un error. Una vez terminado se ofrece «Deshacer» (una vez).
+- Favoritos: un solo guardado de la lista personal; si falla, no se añade ninguno.
+- La selección se poda a las filas visibles al filtrar. Prueba estática: `scripts/test-acciones-masivas.mjs`.
