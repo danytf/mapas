@@ -319,3 +319,10 @@ Según el texto que aportó el titular (no verificado por mí contra su web): el
 - Ficha: sigue siendo la tercera columna (decisión previa: no tapa el mapa) pero como tarjeta flotante: margen de 12 px, borde, radio de superficie y elevación propios. En móvil y hasta 900 px sigue a pantalla completa.
 - Densidad: capa opcional «Densidad de puntos» en el selector de capas (arriba a la derecha). Mapa de calor dibujado en un lienzo por tesela, sin librerías, con los puntos visibles según la lista y los filtros (los desactivados no cuentan); radio según el zoom y rampa del gris azulado al rojo de acento; se atenúa a zoom 12 o más. Con cientos de miles de puntos habrá que añadir un índice espacial (hoy se recorren todos los puntos por tesela).
 - Ayuda: diálogo «Ayuda y atajos» (menú y tecla `?`) con búsqueda, teclado, acciones masivas, lectura del mapa y seguimientos. Es solo informativo.
+
+## Menú desplegable reordenado (22/10/2026)
+
+- Orden por tarea: cabecera con la cuenta y su rol (para saber con qué usuario se está) → **Informes** (Panel resumen, Calendario semanal) → **Progreso** (Mi progreso, Logros) → **Puntos** (Añadir punto, Restaurar puntos quitados) → **Datos** (Exportar CSV, Exportar estado operativo (JSON), Copiar coordenadas (JSON)) → **Administración** (solo administradores: Usuarios y provincias) → **Ayuda** (Ayuda y atajos, con la tecla `?` indicada) → **Cerrar sesión**, separado y en color de error, siempre el último.
+- Cambios de nombre: «Agregar punto» pasa a «Añadir punto» (también el título del diálogo); «Exportar estado (JSON)» a «Exportar estado operativo (JSON)»; «Copiar JSON con coordenadas» a «Copiar coordenadas (JSON)». El grupo «Avanzado» desaparece: su única opción es un dato más. «Mi progreso» y «Logros» salen de Informes.
+- Separadores entre grupos, y el menú se desplaza por dentro (altura máxima del visor menos 84 px) para que «Cerrar sesión» sea siempre alcanzable en ventanas bajas.
+
