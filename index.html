@@ -259,7 +259,8 @@
 
   /* Ficha del punto: panel lateral derecho (hoja a pantalla completa en pantallas estrechas). */
   main.fi-open { grid-template-columns: 408px 1fr 440px; }
-  #ficha { background: var(--panel); border-left: 1px solid var(--line); min-width: 0; min-height: 0; flex-direction: column; box-shadow: -4px 0 24px rgba(15,23,34,.06); z-index: 2; }
+  /* Ficha como tarjeta flotante: sigue siendo la tercera columna (no tapa el mapa) pero con margen, borde, radio y elevación propios. */
+  #ficha { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-surface); margin: 12px 12px 12px 0; overflow: hidden; min-width: 0; min-height: 0; flex-direction: column; box-shadow: var(--shadow); z-index: 2; }
   #ficha:not([hidden]) { display: flex; }
   @media (prefers-reduced-motion: no-preference) { #ficha:not([hidden]) { animation: fiIn 200ms ease-out; } }
   @keyframes fiIn { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: none; } }
@@ -373,7 +374,7 @@
   .fi-menu button.danger { color: var(--err); }
   @media (max-width: 900px) {
     main.fi-open { grid-template-columns: 408px 1fr; }
-    #ficha { position: fixed; inset: 54px 0 0 0; z-index: 1500; border-left: 0; box-shadow: none; }
+    #ficha { position: fixed; inset: 54px 0 0 0; z-index: 1500; border: 0; border-radius: 0; margin: 0; box-shadow: none; }
   }
   @media (max-width: 760px) { main.fi-open { grid-template-columns: 1fr; } }
   /* Objetivos táctiles de 44 px en pantallas estrechas o táctiles. */
@@ -433,6 +434,21 @@
   #dlgPanel { width: min(920px, 96vw); max-height: 90vh; overflow: auto; background: var(--bg); }
   .pn-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
   #pnClose, #admClose, #calClose { font-size: 24px; line-height: 1; height: 34px; width: 34px; padding: 0; background: transparent; border: 0; color: var(--muted); cursor: pointer; border-radius: var(--r-control); }
+  #ayClose { font-size: 24px; line-height: 1; height: 34px; width: 34px; padding: 0; background: transparent; border: 0; color: var(--muted); cursor: pointer; border-radius: var(--r-control); }
+  #ayClose:hover { background: var(--ok-bg); color: var(--fg); }
+  #dlgAyuda { width: min(640px, 96vw); max-height: 90vh; overflow: auto; background: var(--panel); padding: 0; }
+  #dlgAyuda .pn-head { position: sticky; top: 0; z-index: 2; margin: 0; padding: 12px 18px 12px 22px; background: var(--panel); border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; }
+  #dlgAyuda h2 { font-size: var(--fs-title); font-weight: 680; letter-spacing: -.02em; margin: 0; }
+  #ayBody { padding: 8px 22px 22px; font-size: var(--fs-body); line-height: 1.5; }
+  #ayBody h3 { font-size: var(--fs-label); font-weight: 650; color: var(--muted); margin: 18px 0 6px; }
+  #ayBody ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; list-style: disc; overflow: visible; }
+  #ayBody li { display: list-item; padding: 0; border: 0; cursor: default; position: static; }
+  #ayBody li::before { display: none; }
+  #ayBody li:hover { background: none; }
+  #ayBody dl { margin: 0; display: grid; gap: 6px; }
+  #ayBody dl > div { display: grid; grid-template-columns: 120px 1fr; gap: 10px; align-items: baseline; }
+  #ayBody dt { margin: 0; } #ayBody dd { margin: 0; color: var(--muted); }
+  #ayBody kbd { display: inline-block; min-width: 24px; padding: 1px 7px; border: 1px solid var(--line-2); border-bottom-width: 2px; border-radius: var(--r-xs); background: var(--ok-bg); font: 600 var(--fs-label) var(--font); text-align: center; }
   #pnClose:hover, #admClose:hover, #calClose:hover { background: var(--ok-bg); color: var(--fg); }
   #dlgAdm { width: min(980px, 96vw); max-height: 90vh; overflow: auto; background: var(--bg); }
   #dlgAdm .adm-note { font-size: var(--fs-label); color: var(--muted); margin: 0 0 8px; }
@@ -749,7 +765,7 @@
     .chipbtn { height: 44px; padding: 0 16px; }
     #menuBtn { width: 44px; height: 44px; }
     #menuPanel button { min-height: 44px; }
-    #pnClose, #admClose, #calClose { width: 44px; height: 44px; }
+    #pnClose, #admClose, #calClose, #ayClose { width: 44px; height: 44px; }
     .lg-h button { min-height: 44px; }
     dialog input, dialog select, dialog button { min-height: 44px; }
     .cal-nav button, .cal-chip { min-height: 44px; }
@@ -791,6 +807,8 @@
       <button id="bak" type="button" role="menuitem">Exportar estado (JSON)</button>
       <div class="mh" id="admMh" hidden>Administración</div>
       <button id="admBtn" type="button" role="menuitem" hidden>Usuarios y provincias</button>
+      <div class="mh">Ayuda</div>
+      <button id="ayBtn" type="button" role="menuitem">Ayuda y atajos de teclado</button>
       <div class="mh">Sesión</div>
       <button id="logout" type="button" role="menuitem">Cerrar sesión</button>
       <div class="mh">Avanzado</div>
@@ -862,6 +880,41 @@
 <dialog id="dlgGam" aria-labelledby="gamT">
   <div class="lg-h"><h2 id="gamT">Mi progreso</h2><span></span><button type="button" id="gamLogros">Insignias</button><button type="button" id="gamClose" aria-label="Cerrar">Cerrar</button></div>
   <div id="gamBody"></div>
+</dialog>
+<dialog id="dlgAyuda" aria-labelledby="ayT">
+  <div class="pn-head"><h2 id="ayT">Ayuda y atajos</h2><button type="button" id="ayClose" aria-label="Cerrar">&times;</button></div>
+  <div id="ayBody">
+    <h3>Buscar y filtrar</h3>
+    <ul>
+      <li>La búsqueda encuentra por nombre o por calle. Provincia, municipio y estado del permiso están siempre a la vista; el resto, en «Más filtros».</li>
+      <li>«Por revisar» muestra los puntos con la ubicación pendiente de comprobar. «Limpiar» quita todos los filtros activos.</li>
+    </ul>
+    <h3>Teclado</h3>
+    <dl>
+      <div><dt><kbd>/</kbd></dt><dd>Ir a la búsqueda</dd></div>
+      <div><dt><kbd>↓</kbd> <kbd>↑</kbd></dt><dd>Recorrer la lista (desde la búsqueda, <kbd>↓</kbd> salta a la primera fila)</dd></div>
+      <div><dt><kbd>Inicio</kbd> <kbd>Fin</kbd></dt><dd>Primera y última fila</dd></div>
+      <div><dt><kbd>Intro</kbd></dt><dd>Abrir la ficha del punto</dd></div>
+      <div><dt><kbd>Esc</kbd></dt><dd>Cerrar un diálogo o salir del modo «Seleccionar»</dd></div>
+      <div><dt><kbd>?</kbd></dt><dd>Abrir esta ayuda</dd></div>
+    </dl>
+    <h3>Cambiar varios puntos a la vez</h3>
+    <ul>
+      <li>«Seleccionar» pone una casilla en cada fila. En la barra inferior puedes reprogramar el seguimiento, marcarlo como hecho o añadir los puntos a favoritos.</li>
+      <li>Antes de guardar cambios de seguimiento se pide confirmación, y después puedes deshacerlos una vez. Los puntos sin seguimiento pendiente se omiten.</li>
+    </ul>
+    <h3>Leer el mapa</h3>
+    <ul>
+      <li>El color del marcador es la categoría; el borde, el estado del permiso. Un «!» amarillo indica una ubicación por revisar.</li>
+      <li>Los círculos oscuros con número agrupan puntos cercanos; al pulsarlos el mapa se acerca.</li>
+      <li>Al elegir una provincia se resalta su contorno. En el control de capas (arriba a la derecha) puedes cambiar el fondo y activar «Densidad de puntos».</li>
+      <li>El botón «Leyenda» explica los colores y los bordes.</li>
+    </ul>
+    <h3>Seguimientos</h3>
+    <ul>
+      <li>El indicador «Seguimientos» de la cabecera cuenta los puntos cuyo seguimiento es de hoy o está atrasado. Púlsalo para ver solo esos.</li>
+    </ul>
+  </div>
 </dialog>
 <dialog id="dlgPanel" aria-labelledby="pnT">
   <div class="pn-head"><h2 id="pnT">Panel resumen</h2><button type="button" id="pnClose" aria-label="Cerrar">&times;</button></div>
@@ -1008,7 +1061,40 @@ map.on("baselayerchange", (e) => syncBaseClass(e.layer === grisOscuro ? "dark" :
 const osm = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 19, attribution: "© OpenStreetMap contributors | Geocodificación: © Instituto Geográfico Nacional de España (CartoCiudad)"
 });
-L.control.layers(Object.assign(vectorialDisponible ? { "Wesser (vectorial, recomendado)": wesserVec } : {}, { "Wesser claro (Esri)": wesserClaro, "Gris claro": grisClaro, "Gris oscuro": grisOscuro, "Esri calles (color)": esri, "OpenStreetMap (solo si sirves la página por http)": osm }), null, { position: "topright" }).addTo(map);
+/* Vista de densidad (capa opcional «Densidad de puntos» en el selector de capas): mapa de calor dibujado en un lienzo por tesela, sin librerías.
+   Pinta los puntos visibles con la lista y los filtros actuales (los desactivados no cuentan); la rampa va del transparente al rojo Wesser. */
+let densityPts = [];
+const DensidadCapa = L.GridLayer.extend({
+  createTile(coords) {
+    const tam = this.getTileSize(), cv = document.createElement("canvas"); cv.width = tam.x; cv.height = tam.y;
+    const ctx = cv.getContext("2d"), z = coords.z, r = Math.max(16, Math.min(46, 56 - (z - 5) * 4));
+    const origen = coords.scaleBy(tam), lim = L.bounds(origen.subtract([r, r]), origen.add(tam).add([r, r]));
+    const acu = document.createElement("canvas"); acu.width = tam.x; acu.height = tam.y; const a = acu.getContext("2d");
+    let n = 0;
+    for (const [la, lo] of densityPts) {
+      const q = map.project([la, lo], z);
+      if (!lim.contains(q)) continue;
+      const x = q.x - origen.x, y = q.y - origen.y, g = a.createRadialGradient(x, y, 0, x, y, r);
+      g.addColorStop(0, "rgba(0,0,0,0.07)"); g.addColorStop(1, "rgba(0,0,0,0)");
+      a.fillStyle = g; a.fillRect(x - r, y - r, 2 * r, 2 * r); n++;
+    }
+    if (!n) return cv;
+    const img = a.getImageData(0, 0, tam.x, tam.y), d = img.data, acento = (resolveColor("var(--accent)") || "#c8102e").replace("#", "");
+    const R = parseInt(acento.slice(0, 2), 16), G = parseInt(acento.slice(2, 4), 16), B = parseInt(acento.slice(4, 6), 16);
+    for (let i = 3; i < d.length; i += 4) {
+      const al = d[i]; if (!al) continue;
+      const t = Math.min(1, al / 190);
+      d[i - 3] = Math.round(R * t + 90 * (1 - t)); d[i - 2] = Math.round(G * t + 100 * (1 - t)); d[i - 1] = Math.round(B * t + 120 * (1 - t)); d[i] = Math.round(30 + 190 * t);
+    }
+    ctx.putImageData(img, 0, 0);
+    return cv;
+  }
+});
+const densidad = new DensidadCapa({ pane: "overlayPane", tileSize: 256, maxZoom: 19, opacity: 0.9, className: "dens-capa" });
+let densTimer = 0;
+const refrescaDensidad = () => { clearTimeout(densTimer); densTimer = setTimeout(() => { if (map.hasLayer(densidad)) densidad.redraw(); }, 150); };
+map.on("zoomend", () => densidad.setOpacity(map.getZoom() >= 12 ? 0.35 : 0.9));
+L.control.layers(Object.assign(vectorialDisponible ? { "Wesser (vectorial, recomendado)": wesserVec } : {}, { "Wesser claro (Esri)": wesserClaro, "Gris claro": grisClaro, "Gris oscuro": grisOscuro, "Esri calles (color)": esri, "OpenStreetMap (solo si sirves la página por http)": osm }), { "Densidad de puntos": densidad }, { position: "topright" }).addTo(map);
 
 const markers = {};
 const cluster = L.markerClusterGroup({
@@ -2206,6 +2292,7 @@ function renderList() {
     if (visible) shown.push(c);
   });
   $("#vLista").textContent = "Lista (" + shown.length + ")";
+  densityPts = shown.filter((c) => !isInactive(c) && cache[c.id]).map((c) => [cache[c.id].lat, cache[c.id].lon]); refrescaDensidad();
   if (selMode) { const vis = new Set(shown.map((c) => String(c.id))); [...selIds].forEach((id) => { if (!vis.has(id)) selIds.delete(id); }); paintBulk(); }
   $("#filtBtn").textContent = nAct ? "Filtros (" + nAct + ")" : "Filtros";
   $("#filtBtn").classList.toggle("on", nAct > 0);
@@ -3182,6 +3269,20 @@ const csvCell = (value) => {
   });
   $("#panelBtn").addEventListener("click", () => { render(); dlg.showModal(); });
   $("#pnClose").addEventListener("click", () => dlg.close());
+})();
+
+/* Ayuda y atajos: diálogo informativo (no guarda nada). Se abre desde el menú o con «?». */
+(() => {
+  const dlg = $("#dlgAyuda");
+  const abrir = () => { if (!dlg.open) dlg.showModal(); };
+  $("#ayBtn").addEventListener("click", abrir);
+  $("#ayClose").addEventListener("click", () => dlg.close());
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "?" || e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
+    if (document.documentElement.classList.contains("lock") || document.querySelector("dialog[open]")) return;
+    if (e.target.closest && e.target.closest("input, textarea, select, [contenteditable]")) return;
+    e.preventDefault(); abrir();
+  });
 })();
 
 /* Calendario semanal: permisos de cada día de la semana en una provincia. Solo lee lo que ya hay en memoria (solicitudes y concesiones); no guarda nada. */

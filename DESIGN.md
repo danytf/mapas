@@ -313,3 +313,9 @@ Según el texto que aportó el titular (no verificado por mí contra su web): el
 - Seguimiento: solo actúa sobre puntos con una solicitud pendiente con fecha de seguimiento (o el seguimiento antiguo); los demás se omiten y se cuentan. Pide confirmación con el número de puntos, guarda punto a punto con `savePermits` (mismo control de versión que la ficha), recarga el punto si otra persona lo cambió y restaura el estado anterior si hay un error. Una vez terminado se ofrece «Deshacer» (una vez).
 - Favoritos: un solo guardado de la lista personal; si falla, no se añade ninguno.
 - La selección se poda a las filas visibles al filtrar. Prueba estática: `scripts/test-acciones-masivas.mjs`.
+
+## Ficha flotante, densidad y ayuda (22/10/2026)
+
+- Ficha: sigue siendo la tercera columna (decisión previa: no tapa el mapa) pero como tarjeta flotante: margen de 12 px, borde, radio de superficie y elevación propios. En móvil y hasta 900 px sigue a pantalla completa.
+- Densidad: capa opcional «Densidad de puntos» en el selector de capas (arriba a la derecha). Mapa de calor dibujado en un lienzo por tesela, sin librerías, con los puntos visibles según la lista y los filtros (los desactivados no cuentan); radio según el zoom y rampa del gris azulado al rojo de acento; se atenúa a zoom 12 o más. Con cientos de miles de puntos habrá que añadir un índice espacial (hoy se recorren todos los puntos por tesela).
+- Ayuda: diálogo «Ayuda y atajos» (menú y tecla `?`) con búsqueda, teclado, acciones masivas, lectura del mapa y seguimientos. Es solo informativo.
