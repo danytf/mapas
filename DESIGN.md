@@ -359,3 +359,7 @@ Según el texto que aportó el titular (no verificado por mí contra su web): el
 - Los 12 avisos «borde de acento sobre elemento redondeado» del detector son subrayados de 2 px de las pestañas y el filo de 3 px de la tarjeta de acceso; se mantienen.
 - Los avisos de «sombra ancha con borde fino» corresponden a la elevación de paneles y diálogos con un borde de 1 px; se mantiene un solo sistema de elevación (borde más sombra de `--shadow`).
 
+
+## Ayuda ampliada (22/10/2026)
+
+- «Ayuda y atajos» pasa de 5 bloques a 16 secciones plegables (acordeón con teclado nativo; «Primeros pasos» abierta por defecto): primeros pasos, buscar y filtrar, el mapa y sus capas, estados de un permiso, la ficha, corregir la ubicación, seguimientos, cambios masivos, informes, progreso y logros, añadir y recuperar puntos, exportar datos, administración, móvil, teclado y qué hacer si algo falla. Cada afirmación se ha contrastado con el comportamiento real de la aplicación; si cambia una función, hay que actualizar la sección correspondiente.
