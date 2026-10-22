@@ -1,6 +1,6 @@
 # Carga N2 de Extremadura (preparada, sin cargar)
 
-Estado: **preparada el 22/10/2026, sin aplicar en producción**. Primera comunidad fuera de Andalucía, con el proceso ya rodado (ver `docs/DISENO_CARGA_NACIONAL.md` y `docs/CARGA_N2_ANDALUCIA_RESTO.md`).
+Estado: **cargada en producción el 22/10/2026** por el titular con `cargar.sh` (388 municipios y 1.230 puntos), verificada en solo lectura, con los códigos postales y las calles completados después (ver «Cierre»). Badajoz y Cáceres se activaron el mismo día; faltan por asignar a los usuarios. Primera comunidad fuera de Andalucía, con el proceso ya rodado (ver `docs/DISENO_CARGA_NACIONAL.md` y `docs/CARGA_N2_ANDALUCIA_RESTO.md`).
 
 ## Origen
 - Fichero: `extremadura-261020.osm.pbf` (Geofabrik, edición del 20/10/2026, 40.146.603 bytes, MD5 `2e5549bd715da4677468a8dcf3a115fd`), guardado fuera del repositorio. OpenStreetMap, licencia ODbL.
@@ -37,3 +37,11 @@ bash scripts/catalogue/cargar.sh supabase/seeds/extremadura/grandes-superficies 
 bash scripts/catalogue/cargar.sh supabase/seeds/extremadura/resto resto catalogo-extremadura:extremadura-resto:
 ```
 Los `source_ref` llevan el prefijo `catalogo-extremadura:` (el de Andalucía es `catalogo-andalucia:`; `validar.py` lo toma del campo `region` de la definición). Verificar después en solo lectura el reparto por provincia y categoría: debe salir 677 en Badajoz y 553 en Cáceres, 1.230 en total.
+
+## Cierre (22/10/2026)
+- **Carga verificada:** 388 municipios (Badajoz 165, Cáceres 223, todos con INE distinto) y 1.230 puntos (Badajoz 677, Cáceres 553), 1.230 `source_ref` `catalogo-extremadura:` distintos, sin puntos sin coordenadas ni municipio. Total de la base 5.897 → 7.127.
+- **Códigos postales:** de 526 puntos sin código se escribieron 307 con `admin_set_postal_codes` (307 actualizados, 0 omitidos, 307 entradas en `audit_log`), tras un control contra los códigos ya conocidos de cada municipio. Rechazados 11 (contradecían el único código del municipio, p. ej. Gata y Mérida) y 5 dudosos de Badajoz y Cáceres. Quedan **219 sin código** (200 sin respuesta de Nominatim).
+- **Calles:** de 30 puntos sin calle se escribieron 12 (vía más cercana de Nominatim, orientativa); se descartaron las carreteras con código (EX-, N-, CC-) y las descripciones tipo «De X a Y por Z». Quedan **18 sin calle**.
+- **Archivados por no ser hospitales** (error de etiquetado en OpenStreetMap, con nota, recuperables desde Administración): 7 en Extremadura (casa chalet Badajoz, DESA Gata, Tanatorio Barcarrota, áreas de ambulancias, emergencias e información de Santa Marta, Urgencias del Hospital N.ª S.ª de la Montaña) y 11 en Andalucía (zonas o accesos de hospital, 6 sedes de Cruz Roja y un centro de atención a minusválidos). Total archivados en la base: 44.
+- **Filtro de Hospital afinado** en `andalucia-resto.json` y `extremadura-resto.json` (excluye nombres que empiezan por «urgencias», «entrada a», «emergencias», «área de», «información», «cruz roja», o que contienen «tanatorio», «minusválidos» o «centro de día»): sobre el fichero de Extremadura excluye 8 elementos, entre ellos 4 que se habían cargado. No detecta «casa chalet» (error aislado).
+- **Pendiente:** asignar Badajoz y Cáceres a los usuarios (hoy solo la cuenta del administrador que las activó), completar los 219 códigos y 18 calles, y revisar 8 hospitales dudosos de Andalucía (ambulatorios de Marbella y La Luisiana, posibles duplicados de Sevilla, CARE «Los Alcores», Génesis Care, Barbarela y el CAR Nicolás Salmerón).

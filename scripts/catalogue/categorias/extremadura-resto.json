@@ -49,7 +49,7 @@
           "hospital"
         ]
       },
-      "excluir_texto": "veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento",
+      "excluir_texto": "veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a",
       "excluir_si": {
         "disused": [
           "yes"
@@ -67,7 +67,7 @@
           "hospital"
         ]
       },
-      "excluir_texto": "veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento",
+      "excluir_texto": "veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a",
       "excluir_si": {
         "disused": [
           "yes"

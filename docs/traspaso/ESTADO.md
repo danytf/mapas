@@ -88,3 +88,7 @@ La gamificación se retiró en el PR #164 por error de interpretación y se rest
 - Rediseño premium (PR #164), gamificación restaurada (PR #165) y Wesser Spatial Canvas, el rediseño del mapa (PR #167), fusionados y desplegados.
 - Códigos postales: 918 escritos en producción (142 puntos siguen sin código). Detalle en `docs/traspaso/ROADMAP.md`.
 - Pendiente del titular: probar en móvil físico y con lector de pantalla; comprobar la licencia de Esri para uso comercial de las teselas; valorar los ~139 favoritos de Andalucía; copia mensual con `scripts/backup-supabase.sh`.
+
+## Extremadura (22/10/2026)
+
+Cargada en producción (388 municipios, 1.230 puntos: Badajoz 677, Cáceres 553) y provincias activadas. Códigos postales: 307 escritos, 219 sin código; calles: 12 escritas, 18 sin calle. 18 puntos que no eran hospitales archivados (7 + 11 en Andalucía). Total de la base: 7.127 puntos, 7.083 visibles. Falta asignar las provincias a los usuarios. Detalle en `docs/CARGA_N2_EXTREMADURA.md`.
