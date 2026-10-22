@@ -265,7 +265,9 @@ createServer(async (req, res) => {
       }
       if (req.method === "PATCH") {
         const eid = eqParam("establishment_id"), ver = Number(eqParam("version"));
-        const fila = S.shared[eid];
+        let fila = S.shared[eid];
+        // Las filas de estados sintéticos (estados=1) existen solo de lectura hasta que se editan: se materializan en la primera escritura.
+        if (!fila && S.conEstados) { const v = estadosDe(S.establishments).find((r) => r.establishment_id === eid); if (v) fila = S.shared[eid] = { ...v, updated_by: v.updated_by || u.id, version: 1 }; }
         if (!fila || fila.version !== ver) return send(res, 200, []);
         fila.state = body.state; fila.updated_by = body.updated_by || u.id; fila.version += 1;
         return send(res, 200, [{ establishment_id: eid, version: fila.version }]);
