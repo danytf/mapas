@@ -1,0 +1,4 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;way/212424648;;Carrefour;Mérida;38.90589;-6.360893;duplicado en el lote de node/431557517 (25 m)
+descartado;way/29390738;;Carrefour;Cáceres;39.466935;-6.395722;duplicado en el lote de node/10552592128 (12 m)
+descartado;way/64588949;;Carrefour;Zafra;38.433764;-6.421776;duplicado en el lote de node/10293822137 (17 m)

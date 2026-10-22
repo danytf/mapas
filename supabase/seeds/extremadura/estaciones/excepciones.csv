@@ -1,0 +1,25 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+por revisar;node/14144255688;Autobús;Estación de Autobuses de Zafra – Avenida de los Príncipes;Zafra;38.427533;-6.411041;posible duplicado de way/489842758 (Estración de Autobuses de Zafra) a 28 m
+por revisar;node/1890818693;Autobús;Parada de Autobuses (Cañamero) – Avenida de Cervantes;Cañamero;39.383126;-5.389173;nombre dudoso en OpenStreetMap: Parada de Autobuses
+descartado;node/2742296842;Autobús;Estación de Autobuses de Zafra;Zafra;38.427487;-6.411075;duplicado en el lote de node/14144255688 (5 m)
+por revisar;node/3887503141;Autobús;Estación de Autobuses (Arroyo de la Luz) – Calle Regajal;Arroyo de la Luz;39.481974;-6.582488;posible duplicado de way/655440158 (Estación de Autobuses Arroyo de la Luz) a 0 m
+descartado;node/416714187;Autobús;;Bohonal de Ibor;39.78445;-5.48278;sin nombre en OpenStreetMap
+descartado;node/4820833954;Autobús;;Villagarcía de la Torre;38.291324;-6.081379;sin nombre en OpenStreetMap
+descartado;way/1216775399;Autobús;;Alconchel;38.515986;-7.067949;sin nombre en OpenStreetMap
+descartado;way/1278935205;Autobús;;San Vicente de Alcántara;39.362365;-7.138084;sin nombre en OpenStreetMap
+descartado;way/1289723237;Autobús;;Malpartida de Plasencia;39.883154;-6.275547;sin nombre en OpenStreetMap
+descartado;way/1352878771;Autobús;;Monesterio;38.090064;-6.273287;sin nombre en OpenStreetMap
+descartado;way/1492035071;Autobús;;Zahínos;38.327846;-6.954829;sin nombre en OpenStreetMap
+descartado;way/1524921258;Autobús;;Logrosán;39.337251;-5.489626;sin nombre en OpenStreetMap
+descartado;way/152617559;Autobús;Estación de Autobuses de Almendralejo;Almendralejo;38.675764;-6.396705;duplicado en el lote de node/14144255687 (16 m)
+por revisar;way/297304561;Autobús;Parada de Autobús (Villanueva de la Sierra) – Plaza del Egido;Villanueva de la Sierra;40.202399;-6.407185;nombre dudoso en OpenStreetMap: Parada de Autobús
+por revisar;way/489842758;Autobús;Estración de Autobuses de Zafra – Avenida de los Príncipes;Zafra;38.427492;-6.411362;posible duplicado de node/14144255688 (Estación de Autobuses de Zafra) a 28 m
+por revisar;way/546304851;Autobús;Parada de bus. (La Parra) – Carretera de Salvatierra;La Parra;38.521611;-6.617868;nombre dudoso en OpenStreetMap: Parada de bus.
+por revisar;way/547028242;Autobús;Parada de Autobuses (Casas de Don Pedro) – Carretera de Pela;Casas de Don Pedro;39.103076;-5.331438;nombre dudoso en OpenStreetMap: Parada de Autobuses
+por revisar;way/551732523;Autobús;Parada de Autobús (Monterrubio de la Serena) – Calle Cruces;Monterrubio de la Serena;38.591131;-5.443701;nombre dudoso en OpenStreetMap: Parada de Autobús
+descartado;way/554103590;Autobús;Estación de Autobuses;Fregenal de la Sierra;38.169758;-6.649291;etiqueta public_transport=platform
+por revisar;way/554727219;Autobús;Parada de Autobuses (Higuera la Real) – Avenida de Portugal;Higuera la Real;38.143861;-6.690304;nombre dudoso en OpenStreetMap: Parada de Autobuses
+por revisar;way/607017087;Autobús;Parada de Autobuses (Fuente del Maestre) – Paseo de Extremadura;Fuente del Maestre;38.526946;-6.444528;nombre dudoso en OpenStreetMap: Parada de Autobuses
+por revisar;way/655440158;Autobús;Estación de Autobuses Arroyo de la Luz – Calle Regajal;Arroyo de la Luz;39.481976;-6.582498;posible duplicado de node/3887503141 (Estación de Autobuses) a 0 m
+por revisar;way/926312587;Autobús;Parada de Autobuses (Zahínos) – Calle Arroyo Judío;Zahínos;38.334168;-6.955057;nombre dudoso en OpenStreetMap: Parada de Autobuses
+por revisar;way/998727339;Autobús;Parada de Autobuses (Castilblanco) – Calle Capellanía;Castilblanco;39.285591;-5.089203;nombre dudoso en OpenStreetMap: Parada de Autobuses
