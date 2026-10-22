@@ -8,7 +8,7 @@
  "province": "Andalucía",
  "establishments": [
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-1073008477",
+   "source_ref": "catalogo-extremadura:estaciones:node-1073008477",
    "name": "Estación de tren de Casatejada",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -24,7 +24,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-12571012002",
+   "source_ref": "catalogo-extremadura:estaciones:node-12571012002",
    "name": "Estación de tren de Villanueva de la Serena – Calle José Gallardo",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -40,7 +40,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-12589890277",
+   "source_ref": "catalogo-extremadura:estaciones:node-12589890277",
    "name": "Estación de tren de Castuera – Plaza del Retraso",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -56,7 +56,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-12590020268",
+   "source_ref": "catalogo-extremadura:estaciones:node-12590020268",
    "name": "Estación de tren de Valdetorres – Calle Luis Chamizo",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -72,7 +72,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-12819863889",
+   "source_ref": "catalogo-extremadura:estaciones:node-12819863889",
    "name": "Estación de tren de Campanario",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -88,7 +88,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-13714976346",
+   "source_ref": "catalogo-extremadura:estaciones:node-13714976346",
    "name": "Estación de tren de Cáceres – Avenida de Alemania",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -104,7 +104,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-13715660837",
+   "source_ref": "catalogo-extremadura:estaciones:node-13715660837",
    "name": "Estación de tren de Navalmoral de la Mata – Paseo de la Estación",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -120,7 +120,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-14144255687",
+   "source_ref": "catalogo-extremadura:estaciones:node-14144255687",
    "name": "Estación de Autobuses de Almendralejo – Calle Santa María de Cora",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -136,7 +136,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-14144255688",
+   "source_ref": "catalogo-extremadura:estaciones:node-14144255688",
    "name": "Estación de Autobuses de Zafra – Avenida de los Príncipes",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -153,7 +153,7 @@
    "review_reason": "posible duplicado de way/489842758 (Estración de Autobuses de Zafra) a 28 m"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-1495837646",
+   "source_ref": "catalogo-extremadura:estaciones:node-1495837646",
    "name": "Estación de tren de Don Benito – Avenida de la Constitución",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -169,7 +169,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-1585506300",
+   "source_ref": "catalogo-extremadura:estaciones:node-1585506300",
    "name": "Estación de tren de Arroyo de Malpartida (Cáceres) – Plaza Patio de Viajeros",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -185,7 +185,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-1741275667",
+   "source_ref": "catalogo-extremadura:estaciones:node-1741275667",
    "name": "Estación de tren de Zafra",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -201,7 +201,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-1787131924",
+   "source_ref": "catalogo-extremadura:estaciones:node-1787131924",
    "name": "Estación de autobuses de Guareña – Calle Vicente Alexander",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -217,7 +217,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-1890818693",
+   "source_ref": "catalogo-extremadura:estaciones:node-1890818693",
    "name": "Parada de Autobuses (Cañamero) – Avenida de Cervantes",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -234,7 +234,7 @@
    "review_reason": "nombre dudoso en OpenStreetMap: Parada de Autobuses"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-1900394161",
+   "source_ref": "catalogo-extremadura:estaciones:node-1900394161",
    "name": "Estación de tren de Guareña",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -250,7 +250,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-1972336081",
+   "source_ref": "catalogo-extremadura:estaciones:node-1972336081",
    "name": "Estación de Autobuses de Llerena – Paseo Cieza de León",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -266,7 +266,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-1972336082",
+   "source_ref": "catalogo-extremadura:estaciones:node-1972336082",
    "name": "Estación de tren de Llerena – Barriada de la estación",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -282,7 +282,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-2039781019",
+   "source_ref": "catalogo-extremadura:estaciones:node-2039781019",
    "name": "Estación de tren de Mérida – Calle Carderos",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -298,7 +298,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-2328131196",
+   "source_ref": "catalogo-extremadura:estaciones:node-2328131196",
    "name": "Estación de tren de Casas de Millán",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -314,7 +314,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-2328131197",
+   "source_ref": "catalogo-extremadura:estaciones:node-2328131197",
    "name": "Estación de tren de Cañaveral – Calle Barrio de la Estación",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -330,7 +330,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-2328131200",
+   "source_ref": "catalogo-extremadura:estaciones:node-2328131200",
    "name": "Estación de tren de Monfragüe (Malpartida de Plasencia) – Carretera de Malpartida de Plasencia a Estación Ferrocarril de Monfragüe",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -346,7 +346,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-2333726540",
+   "source_ref": "catalogo-extremadura:estaciones:node-2333726540",
    "name": "Estación de tren de San Vicente de Alcántara",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -362,7 +362,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-2962633346",
+   "source_ref": "catalogo-extremadura:estaciones:node-2962633346",
    "name": "Estación de tren de Badajoz – Cáceres a Badajoz",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -378,7 +378,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-2962633353",
+   "source_ref": "catalogo-extremadura:estaciones:node-2962633353",
    "name": "Estación de tren de Montijo – Ctra. Estación",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -394,7 +394,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-2962633354",
+   "source_ref": "catalogo-extremadura:estaciones:node-2962633354",
    "name": "Estación de tren de Guadiana – Carretera de Guadiana a EX-209",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -410,7 +410,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-325231127",
+   "source_ref": "catalogo-extremadura:estaciones:node-325231127",
    "name": "Estación de tren de Plasencia – Avenida del Ambroz",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -426,7 +426,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-349044413",
+   "source_ref": "catalogo-extremadura:estaciones:node-349044413",
    "name": "Estación de tren de Mirabel – Calle Adolfo de Miguel",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -442,7 +442,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-3887503141",
+   "source_ref": "catalogo-extremadura:estaciones:node-3887503141",
    "name": "Estación de Autobuses (Arroyo de la Luz) – Calle Regajal",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -459,7 +459,7 @@
    "review_reason": "posible duplicado de way/655440158 (Estación de Autobuses Arroyo de la Luz) a 0 m"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-444122528",
+   "source_ref": "catalogo-extremadura:estaciones:node-444122528",
    "name": "Estación de tren de Garrovilla - Las Vegas (La Garrovilla) – Carretera de la Estación",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -475,7 +475,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-539005521",
+   "source_ref": "catalogo-extremadura:estaciones:node-539005521",
    "name": "Estación de tren de Cabeza Del Buey – Barriada de la Estación",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -491,7 +491,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-5461930431",
+   "source_ref": "catalogo-extremadura:estaciones:node-5461930431",
    "name": "Estación de Autobuses (Villafranca de los Barros) – Avenida de Fernando Aranguren",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -507,7 +507,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-6427733921",
+   "source_ref": "catalogo-extremadura:estaciones:node-6427733921",
    "name": "Estación de autobuses de Hospital Universitario (Cáceres)",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -523,7 +523,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-683597660",
+   "source_ref": "catalogo-extremadura:estaciones:node-683597660",
    "name": "Estación de tren de Valencia de Alcántara",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -539,7 +539,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-7042360728",
+   "source_ref": "catalogo-extremadura:estaciones:node-7042360728",
    "name": "Estación de tren de Aljucén (Mérida)",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -555,7 +555,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-774864973",
+   "source_ref": "catalogo-extremadura:estaciones:node-774864973",
    "name": "Estación de Autobús de Alburquerque – Avenida de los Emigrantes",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -571,7 +571,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-7785762854",
+   "source_ref": "catalogo-extremadura:estaciones:node-7785762854",
    "name": "Estación de tren de Fuente del Arco",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -587,7 +587,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-7785762865",
+   "source_ref": "catalogo-extremadura:estaciones:node-7785762865",
    "name": "Estación de tren de Zafra Feria – Carretera de N-630 a Fregenal de la Sierra por Zafra",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -603,7 +603,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-7785762866",
+   "source_ref": "catalogo-extremadura:estaciones:node-7785762866",
    "name": "Estación de tren de Los Santos de Maimona",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -619,7 +619,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-7785762867",
+   "source_ref": "catalogo-extremadura:estaciones:node-7785762867",
    "name": "Estación de tren de Villafranca de los Barros – Paseo de la Estación",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -635,7 +635,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-7785762869",
+   "source_ref": "catalogo-extremadura:estaciones:node-7785762869",
    "name": "Estación de tren de Almendralejo – Plaza Matías Pérez Fernández",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -651,7 +651,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-7785762875",
+   "source_ref": "catalogo-extremadura:estaciones:node-7785762875",
    "name": "Estación de tren de Calamonte – Avenida de José de Espronceda",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -667,7 +667,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-7788690540",
+   "source_ref": "catalogo-extremadura:estaciones:node-7788690540",
    "name": "Estación de tren de Fregenal de la Sierra – Carretera de la Estación",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -683,7 +683,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-7804977670",
+   "source_ref": "catalogo-extremadura:estaciones:node-7804977670",
    "name": "Estación de tren de Almorchón (Cabeza del Buey)",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -699,7 +699,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-936179799",
+   "source_ref": "catalogo-extremadura:estaciones:node-936179799",
    "name": "Estación de autobuses de Casar de Cáceres – Avenida Ejido de Abajo",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -715,7 +715,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:node-9665651329",
+   "source_ref": "catalogo-extremadura:estaciones:node-9665651329",
    "name": "Estación de tren de Montijo - El Molino – Calle Cerro de la Cruz",
    "category": "Estaciones",
    "subtype": "Tren",
@@ -731,7 +731,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-100368728",
+   "source_ref": "catalogo-extremadura:estaciones:way-100368728",
    "name": "Estación Autobuses Don Benito – Avenida de Alonso Martín",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -747,7 +747,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-1123007856",
+   "source_ref": "catalogo-extremadura:estaciones:way-1123007856",
    "name": "Estación de Autobuses de Cabeza del Buey – Camino de Campanario",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -763,7 +763,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-1151604399",
+   "source_ref": "catalogo-extremadura:estaciones:way-1151604399",
    "name": "Estación de Autobuses (Montehermoso) – Calle Estación",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -779,7 +779,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-1234892172",
+   "source_ref": "catalogo-extremadura:estaciones:way-1234892172",
    "name": "Estación de Autobuses de Granja de Torrehermosa – Carretera del Parque",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -795,7 +795,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-1237080052",
+   "source_ref": "catalogo-extremadura:estaciones:way-1237080052",
    "name": "Estación de Autobuses de Berlanga – Calle Tenería",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -811,7 +811,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-127395057",
+   "source_ref": "catalogo-extremadura:estaciones:way-127395057",
    "name": "Estación de Autobuses de Plasencia – Calle Tornavacas",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -827,7 +827,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-1359391563",
+   "source_ref": "catalogo-extremadura:estaciones:way-1359391563",
    "name": "Estación De Autobuses Jaraiz De La Vera – Avenida de la Constitución",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -843,7 +843,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-153045358",
+   "source_ref": "catalogo-extremadura:estaciones:way-153045358",
    "name": "Estación de Autobuses de Cáceres – Calle Túnez",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -859,7 +859,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-171244112",
+   "source_ref": "catalogo-extremadura:estaciones:way-171244112",
    "name": "Estación de Autobuses de Mérida – Avenida de la Libertad",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -875,7 +875,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-220873169",
+   "source_ref": "catalogo-extremadura:estaciones:way-220873169",
    "name": "Estación de Autobuses de Fuente de Cantos – Real",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -891,7 +891,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-273296424",
+   "source_ref": "catalogo-extremadura:estaciones:way-273296424",
    "name": "Estación de Autobuses (Villanueva de la Serena) – Calle Isabel Gallardo",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -907,7 +907,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-297304561",
+   "source_ref": "catalogo-extremadura:estaciones:way-297304561",
    "name": "Parada de Autobús (Villanueva de la Sierra) – Plaza del Egido",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -924,7 +924,7 @@
    "review_reason": "nombre dudoso en OpenStreetMap: Parada de Autobús"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-336389605",
+   "source_ref": "catalogo-extremadura:estaciones:way-336389605",
    "name": "Estación de Autobuses (Azuaga) – Calle Estalajes",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -940,7 +940,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-385454286",
+   "source_ref": "catalogo-extremadura:estaciones:way-385454286",
    "name": "Estación de Autobuses (Los Santos de Maimona) – Calle Francisco Pizarro",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -956,7 +956,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-410683709",
+   "source_ref": "catalogo-extremadura:estaciones:way-410683709",
    "name": "Estación de Autobuses (Miajadas) – Calle los Naranjos",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -972,7 +972,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-470124927",
+   "source_ref": "catalogo-extremadura:estaciones:way-470124927",
    "name": "Estaciòn de Autobuses de Montemayor (Baños de Montemayor) – Plaza del Arenal",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -988,7 +988,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-489842758",
+   "source_ref": "catalogo-extremadura:estaciones:way-489842758",
    "name": "Estración de Autobuses de Zafra – Avenida de los Príncipes",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -1005,7 +1005,7 @@
    "review_reason": "posible duplicado de node/14144255688 (Estación de Autobuses de Zafra) a 28 m"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-522942050",
+   "source_ref": "catalogo-extremadura:estaciones:way-522942050",
    "name": "Estación de autobuses de Trujillo – Calle Ferial",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -1021,7 +1021,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-546304851",
+   "source_ref": "catalogo-extremadura:estaciones:way-546304851",
    "name": "Parada de bus. (La Parra) – Carretera de Salvatierra",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -1038,7 +1038,7 @@
    "review_reason": "nombre dudoso en OpenStreetMap: Parada de bus."
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-547016283",
+   "source_ref": "catalogo-extremadura:estaciones:way-547016283",
    "name": "Estación de Autobuses (Jerez de los Caballeros) – Calle Rodeo",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -1054,7 +1054,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-547028242",
+   "source_ref": "catalogo-extremadura:estaciones:way-547028242",
    "name": "Parada de Autobuses (Casas de Don Pedro) – Carretera de Pela",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -1071,7 +1071,7 @@
    "review_reason": "nombre dudoso en OpenStreetMap: Parada de Autobuses"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-548883920",
+   "source_ref": "catalogo-extremadura:estaciones:way-548883920",
    "name": "Estación de Autobuses (Castuera) – Calle Zújar",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -1087,7 +1087,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-551732523",
+   "source_ref": "catalogo-extremadura:estaciones:way-551732523",
    "name": "Parada de Autobús (Monterrubio de la Serena) – Calle Cruces",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -1104,7 +1104,7 @@
    "review_reason": "nombre dudoso en OpenStreetMap: Parada de Autobús"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-554727219",
+   "source_ref": "catalogo-extremadura:estaciones:way-554727219",
    "name": "Parada de Autobuses (Higuera la Real) – Avenida de Portugal",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -1121,7 +1121,7 @@
    "review_reason": "nombre dudoso en OpenStreetMap: Parada de Autobuses"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-563323915",
+   "source_ref": "catalogo-extremadura:estaciones:way-563323915",
    "name": "Estación de autobuses de Badajoz – Calle de José Rebollo López",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -1137,7 +1137,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-563710791",
+   "source_ref": "catalogo-extremadura:estaciones:way-563710791",
    "name": "Estación de Autobuses (Valencia de Alcántara) – Calle Congregación Hijas de la Virgen",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -1153,7 +1153,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-596491677",
+   "source_ref": "catalogo-extremadura:estaciones:way-596491677",
    "name": "Estación de Autobuses (Arroyo de San Serván) – Avenida de la Constitución",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -1169,7 +1169,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-607017087",
+   "source_ref": "catalogo-extremadura:estaciones:way-607017087",
    "name": "Parada de Autobuses (Fuente del Maestre) – Paseo de Extremadura",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -1186,7 +1186,7 @@
    "review_reason": "nombre dudoso en OpenStreetMap: Parada de Autobuses"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-624256227",
+   "source_ref": "catalogo-extremadura:estaciones:way-624256227",
    "name": "Estación de Autobuses (Talarrubias) – Calle Fuentecita",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -1202,7 +1202,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-633120827",
+   "source_ref": "catalogo-extremadura:estaciones:way-633120827",
    "name": "Estación de autobuses de Montijo – Calle Virgen de Barbaño",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -1218,7 +1218,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-640582138",
+   "source_ref": "catalogo-extremadura:estaciones:way-640582138",
    "name": "Estación de Autobuses de Moraleja – Calle Trinidad Ruiz Téllez",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -1234,7 +1234,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-642650907",
+   "source_ref": "catalogo-extremadura:estaciones:way-642650907",
    "name": "Estación de Autobuses de Coria – Calle El Salvador",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -1250,7 +1250,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-655440158",
+   "source_ref": "catalogo-extremadura:estaciones:way-655440158",
    "name": "Estación de Autobuses Arroyo de la Luz – Calle Regajal",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -1267,7 +1267,7 @@
    "review_reason": "posible duplicado de node/3887503141 (Estación de Autobuses) a 0 m"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-658417279",
+   "source_ref": "catalogo-extremadura:estaciones:way-658417279",
    "name": "Estación de Autobuses (Olivenza) – Calle Avelino Palma Brioa",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -1283,7 +1283,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-802997330",
+   "source_ref": "catalogo-extremadura:estaciones:way-802997330",
    "name": "Estación de Autobuses (Hervás) – Avenida de España",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -1299,7 +1299,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-880427343",
+   "source_ref": "catalogo-extremadura:estaciones:way-880427343",
    "name": "Estación de Autobuses (Oliva de la Frontera) – Calle Paco Ramiro",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -1315,7 +1315,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-92426326",
+   "source_ref": "catalogo-extremadura:estaciones:way-92426326",
    "name": "Estación de autobuses de Navalmoral de la Mata – Carretera Jarandilla",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -1331,7 +1331,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-926312587",
+   "source_ref": "catalogo-extremadura:estaciones:way-926312587",
    "name": "Parada de Autobuses (Zahínos) – Calle Arroyo Judío",
    "category": "Estaciones",
    "subtype": "Autobús",
@@ -1348,7 +1348,7 @@
    "review_reason": "nombre dudoso en OpenStreetMap: Parada de Autobuses"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-estaciones:way-998727339",
+   "source_ref": "catalogo-extremadura:estaciones:way-998727339",
    "name": "Parada de Autobuses (Castilblanco) – Calle Capellanía",
    "category": "Estaciones",
    "subtype": "Autobús",

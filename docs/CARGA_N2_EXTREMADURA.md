@@ -28,8 +28,12 @@ Un SQL por provincia y lote en `supabase/seeds/extremadura/<lote>/` (transaccion
 - No probado en el PostgreSQL local (no se dispone de su contraseña en esta sesión); el esquema es el mismo que el de las cargas de Andalucía y el generador solo cambia los nombres de provincia.
 
 ## Cómo cargar (con aprobación)
+Desde la raíz del repositorio, en este orden (cada comando pide la cadena de conexión de Supabase sin mostrarla y enseña el recuento antes y después):
 ```
-bash scripts/catalogue/cargar.sh supabase/seeds/extremadura/municipios extremadura-municipios   # primero: los municipios
-bash scripts/catalogue/cargar.sh supabase/seeds/extremadura/correos extremadura-correos catalogo-extremadura:correos:
+bash scripts/catalogue/cargar.sh supabase/seeds/extremadura/municipios municipios
+bash scripts/catalogue/cargar.sh supabase/seeds/extremadura/correos postal_service
+bash scripts/catalogue/cargar.sh supabase/seeds/extremadura/estaciones estaciones
+bash scripts/catalogue/cargar.sh supabase/seeds/extremadura/grandes-superficies grandes-superficies catalogo-extremadura:extremadura-grandes-superficies:
+bash scripts/catalogue/cargar.sh supabase/seeds/extremadura/resto resto catalogo-extremadura:extremadura-resto:
 ```
-(y lo mismo para `estaciones`, `grandes-superficies` y `resto`). Verificar después en solo lectura el reparto por provincia y categoría.
+Los `source_ref` llevan el prefijo `catalogo-extremadura:` (el de Andalucía es `catalogo-andalucia:`; `validar.py` lo toma del campo `region` de la definición). Verificar después en solo lectura el reparto por provincia y categoría: debe salir 677 en Badajoz y 553 en Cáceres, 1.230 en total.

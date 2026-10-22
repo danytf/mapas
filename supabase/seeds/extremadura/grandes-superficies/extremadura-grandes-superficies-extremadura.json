@@ -8,7 +8,7 @@
  "province": "Andalucía",
  "establishments": [
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:node-10293822137",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:node-10293822137",
    "name": "Carrefour Zafra",
    "category": "Carrefour",
    "subtype": null,
@@ -24,7 +24,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:node-10552592128",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:node-10552592128",
    "name": "Carrefour Cáceres – Avenida de las Arenas",
    "category": "Carrefour",
    "subtype": null,
@@ -40,7 +40,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:node-10779469832",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:node-10779469832",
    "name": "Carrefour Mérida – Avenida Juan Carlos I",
    "category": "Carrefour",
    "subtype": null,
@@ -56,7 +56,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:node-11176813261",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:node-11176813261",
    "name": "MediaMarkt Badajoz – Calle Santiago Soutillo",
    "category": "MediaMarkt",
    "subtype": null,
@@ -72,7 +72,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:node-11959908853",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:node-11959908853",
    "name": "Carrefour Badajoz – Avenida Pardaleras",
    "category": "Carrefour",
    "subtype": null,
@@ -88,7 +88,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:node-13833802085",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:node-13833802085",
    "name": "Carrefour Moraleja – Avenida de Lusitania",
    "category": "Carrefour",
    "subtype": null,
@@ -104,7 +104,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:node-14297389601",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:node-14297389601",
    "name": "Carrefour Mérida – Avenida Lusitania",
    "category": "Carrefour",
    "subtype": null,
@@ -120,7 +120,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:node-2411991245",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:node-2411991245",
    "name": "Leroy Merlin Mérida – Calle Clara Campoamor Rodríguez",
    "category": "Leroy Merlin",
    "subtype": null,
@@ -136,7 +136,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:node-3643289485",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:node-3643289485",
    "name": "Carrefour Jarandilla de la Vera – Calle de Antonio Serrano Rodríguez",
    "category": "Carrefour",
    "subtype": null,
@@ -152,7 +152,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:node-3929623013",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:node-3929623013",
    "name": "Carrefour Jaraíz de la Vera – Calle de los Derechos Humanos",
    "category": "Carrefour",
    "subtype": null,
@@ -168,7 +168,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:node-431557517",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:node-431557517",
    "name": "Carrefour Mérida – Avenida de Portugal",
    "category": "Carrefour",
    "subtype": null,
@@ -184,7 +184,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:node-4393859789",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:node-4393859789",
    "name": "Carrefour Mérida – Calle San Salvador",
    "category": "Carrefour",
    "subtype": null,
@@ -200,7 +200,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:node-5551529611",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:node-5551529611",
    "name": "Carrefour Badajoz – Ronda del Pilar",
    "category": "Carrefour",
    "subtype": null,
@@ -216,7 +216,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:node-5551529618",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:node-5551529618",
    "name": "Carrefour Badajoz – Avenida Villanueva",
    "category": "Carrefour",
    "subtype": null,
@@ -232,7 +232,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:node-5649852803",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:node-5649852803",
    "name": "Carrefour Badajoz – Avenida Ricardo Carapeto Zambrano",
    "category": "Carrefour",
    "subtype": null,
@@ -248,7 +248,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:node-5709437866",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:node-5709437866",
    "name": "Carrefour Burguillos del Cerro – Calle Luis Noval",
    "category": "Carrefour",
    "subtype": null,
@@ -264,7 +264,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:node-5777176835",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:node-5777176835",
    "name": "Carrefour Herrera del Duque – Calle Feria",
    "category": "Carrefour",
    "subtype": null,
@@ -280,7 +280,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:node-6137488473",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:node-6137488473",
    "name": "Carrefour Plasencia – Calle Puerta de Talavera",
    "category": "Carrefour",
    "subtype": null,
@@ -296,7 +296,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:node-6156504929",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:node-6156504929",
    "name": "Carrefour Montijo – Calle Arriba",
    "category": "Carrefour",
    "subtype": null,
@@ -312,7 +312,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:node-6226000143",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:node-6226000143",
    "name": "Carrefour Badajoz – Calle Jacobo Rodríguez Pereira",
    "category": "Carrefour",
    "subtype": null,
@@ -328,7 +328,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:node-7049581997",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:node-7049581997",
    "name": "El Corte Inglés Badajoz – Avenida de Elvas",
    "category": "El Corte Inglés",
    "subtype": null,
@@ -344,7 +344,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:node-7088471585",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:node-7088471585",
    "name": "Carrefour Aldeanueva del Camino – Autovía Ruta de la Plata",
    "category": "Carrefour",
    "subtype": null,
@@ -360,7 +360,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:node-9589430750",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:node-9589430750",
    "name": "Carrefour Cáceres – Pintores",
    "category": "Carrefour",
    "subtype": null,
@@ -376,7 +376,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:node-9981297606",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:node-9981297606",
    "name": "Carrefour Badajoz – Calle Francisco Vaca Morales",
    "category": "Carrefour",
    "subtype": null,
@@ -392,7 +392,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:relation-16671170",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:relation-16671170",
    "name": "Carrefour Badajoz – Avenida Juan Carlos I",
    "category": "Carrefour",
    "subtype": null,
@@ -408,7 +408,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:way-1214094049",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:way-1214094049",
    "name": "Carrefour Talavera la Real – Calle Salvador Dalí",
    "category": "Carrefour",
    "subtype": null,
@@ -424,7 +424,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:way-122541982",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:way-122541982",
    "name": "Carrefour Badajoz",
    "category": "Carrefour",
    "subtype": null,
@@ -440,7 +440,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:way-122545841",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:way-122545841",
    "name": "El Corte Inglés Badajoz – Avenida Enrique Segura Otaño",
    "category": "El Corte Inglés",
    "subtype": null,
@@ -456,7 +456,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:way-1270214837",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:way-1270214837",
    "name": "Decathlon Cáceres – Avenida de las Arenas",
    "category": "Decathlon",
    "subtype": null,
@@ -472,7 +472,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:way-237543086",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:way-237543086",
    "name": "Carrefour Villanueva de la Serena",
    "category": "Carrefour",
    "subtype": null,
@@ -488,7 +488,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:way-237543096",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:way-237543096",
    "name": "Leroy Merlin Villanueva de la Serena – Calle Camino del Cerro de la Horca",
    "category": "Leroy Merlin",
    "subtype": null,
@@ -504,7 +504,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:way-298398346",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:way-298398346",
    "name": "Carrefour Almendralejo – Calle José Barrio Bardón",
    "category": "Carrefour",
    "subtype": null,
@@ -520,7 +520,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:way-30254014",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:way-30254014",
    "name": "El Corte Inglés Cáceres – Avenida Héroes de Baler",
    "category": "El Corte Inglés",
    "subtype": null,
@@ -536,7 +536,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:way-370164724",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:way-370164724",
    "name": "Decathlon Mérida – Calle Almería",
    "category": "Decathlon",
    "subtype": null,
@@ -552,7 +552,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:way-383029268",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:way-383029268",
    "name": "Leroy Merlin Cáceres – Calle de Antonio Floriano Cumbreño",
    "category": "Leroy Merlin",
    "subtype": null,
@@ -568,7 +568,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:way-413840560",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:way-413840560",
    "name": "Decathlon Badajoz – Calle María de Molina",
    "category": "Decathlon",
    "subtype": null,
@@ -584,7 +584,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:way-413850113",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:way-413850113",
    "name": "Leroy Merlin Badajoz – Calle Nevero Dos",
    "category": "Leroy Merlin",
    "subtype": null,
@@ -600,7 +600,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:way-574182112",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:way-574182112",
    "name": "Decathlon Villanueva de la Serena – Carretera de Don Benito",
    "category": "Decathlon",
    "subtype": null,
@@ -616,7 +616,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:way-65390236",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:way-65390236",
    "name": "Carrefour Plasencia – Calle Julián Besteiro",
    "category": "Carrefour",
    "subtype": null,
@@ -632,7 +632,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:way-704304129",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:way-704304129",
    "name": "Carrefour Mérida – CARRETERA N-VA KM.",
    "category": "Carrefour",
    "subtype": null,
@@ -648,7 +648,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:way-791317247",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:way-791317247",
    "name": "Carrefour Cáceres – Calle Gredos",
    "category": "Carrefour",
    "subtype": null,
@@ -664,7 +664,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-grandes-superficies:way-913987821",
+   "source_ref": "catalogo-extremadura:extremadura-grandes-superficies:way-913987821",
    "name": "Carrefour Badajoz – Calle Juan Simeón Vidarte",
    "category": "Carrefour",
    "subtype": null,

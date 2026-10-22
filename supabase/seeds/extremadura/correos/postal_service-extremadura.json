@@ -8,7 +8,7 @@
  "province": "Andalucía",
  "establishments": [
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-10106967921",
+   "source_ref": "catalogo-extremadura:postal_service:node-10106967921",
    "name": "Correos Aldeanueva de la Vera – Calle del Maestro Aparicio",
    "category": "Correos",
    "subtype": null,
@@ -24,7 +24,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-10605392748",
+   "source_ref": "catalogo-extremadura:postal_service:node-10605392748",
    "name": "Correos Madrigalejo – Calle Valeriano Muños",
    "category": "Correos",
    "subtype": null,
@@ -40,7 +40,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-10726545817",
+   "source_ref": "catalogo-extremadura:postal_service:node-10726545817",
    "name": "Correos Pozuelo de Zarzón – Calle Iglesia",
    "category": "Correos",
    "subtype": null,
@@ -56,7 +56,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-10740810349",
+   "source_ref": "catalogo-extremadura:postal_service:node-10740810349",
    "name": "Correos Villanueva de la Sierra – Plaza de España",
    "category": "Correos",
    "subtype": null,
@@ -72,7 +72,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-10885939591",
+   "source_ref": "catalogo-extremadura:postal_service:node-10885939591",
    "name": "Correos Santa Marta de Magasca – Avenida de Extremadura",
    "category": "Correos",
    "subtype": null,
@@ -88,7 +88,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-11144592020",
+   "source_ref": "catalogo-extremadura:postal_service:node-11144592020",
    "name": "Correos Caminomorisco – Calle Portillita",
    "category": "Correos",
    "subtype": null,
@@ -104,7 +104,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-11244554598",
+   "source_ref": "catalogo-extremadura:postal_service:node-11244554598",
    "name": "Correos Valdelacalzada – Plaza de España",
    "category": "Correos",
    "subtype": null,
@@ -120,7 +120,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-11449432166",
+   "source_ref": "catalogo-extremadura:postal_service:node-11449432166",
    "name": "Correos Cabeza del Buey – Calle Nueva",
    "category": "Correos",
    "subtype": null,
@@ -136,7 +136,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-1145674682",
+   "source_ref": "catalogo-extremadura:postal_service:node-1145674682",
    "name": "Correos Mirabel – Calle Cuesta",
    "category": "Correos",
    "subtype": null,
@@ -152,7 +152,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-11488962875",
+   "source_ref": "catalogo-extremadura:postal_service:node-11488962875",
    "name": "Correos Berlanga – Calle Ulpiano Vázquez",
    "category": "Correos",
    "subtype": null,
@@ -168,7 +168,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-12010185185",
+   "source_ref": "catalogo-extremadura:postal_service:node-12010185185",
    "name": "Correos Jarandilla de la Vera – Avenida de Soledad Vega Ortiz",
    "category": "Correos",
    "subtype": null,
@@ -184,7 +184,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-14178311371",
+   "source_ref": "catalogo-extremadura:postal_service:node-14178311371",
    "name": "Correos Mérida – Calle de Madrid",
    "category": "Correos",
    "subtype": null,
@@ -200,7 +200,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-1594869295",
+   "source_ref": "catalogo-extremadura:postal_service:node-1594869295",
    "name": "Correos Alcuéscar – Calle Madrid",
    "category": "Correos",
    "subtype": null,
@@ -216,7 +216,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-1660902570",
+   "source_ref": "catalogo-extremadura:postal_service:node-1660902570",
    "name": "Correos Almendralejo – Avenida de San Antonio, 24",
    "category": "Correos",
    "subtype": null,
@@ -232,7 +232,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-1888634894",
+   "source_ref": "catalogo-extremadura:postal_service:node-1888634894",
    "name": "Correos La Parra – Calle Santiago",
    "category": "Correos",
    "subtype": null,
@@ -248,7 +248,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-1902387511",
+   "source_ref": "catalogo-extremadura:postal_service:node-1902387511",
    "name": "Correos Guareña – Calle Malfeitos",
    "category": "Correos",
    "subtype": null,
@@ -264,7 +264,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-2003604787",
+   "source_ref": "catalogo-extremadura:postal_service:node-2003604787",
    "name": "Correos Badajoz – 4ª Avenida",
    "category": "Correos",
    "subtype": null,
@@ -280,7 +280,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-2149678219",
+   "source_ref": "catalogo-extremadura:postal_service:node-2149678219",
    "name": "Correos Guadalupe – Calle del Poeta Ángel Marina",
    "category": "Correos",
    "subtype": null,
@@ -296,7 +296,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-2309799574",
+   "source_ref": "catalogo-extremadura:postal_service:node-2309799574",
    "name": "Correos Badajoz – Avenida Cristóbal Colón",
    "category": "Correos",
    "subtype": null,
@@ -312,7 +312,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-2423922970",
+   "source_ref": "catalogo-extremadura:postal_service:node-2423922970",
    "name": "Correos Zafra – Plaza de España",
    "category": "Correos",
    "subtype": null,
@@ -328,7 +328,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-2445987631",
+   "source_ref": "catalogo-extremadura:postal_service:node-2445987631",
    "name": "Correos Hervás – Calle Gabriel y Galán",
    "category": "Correos",
    "subtype": null,
@@ -344,7 +344,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-2620064261",
+   "source_ref": "catalogo-extremadura:postal_service:node-2620064261",
    "name": "Correos Arroyo de la Luz – Calle Parra",
    "category": "Correos",
    "subtype": null,
@@ -360,7 +360,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-2694639524",
+   "source_ref": "catalogo-extremadura:postal_service:node-2694639524",
    "name": "Correos Cáceres – Calle Oaxaca",
    "category": "Correos",
    "subtype": null,
@@ -376,7 +376,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-3017740127",
+   "source_ref": "catalogo-extremadura:postal_service:node-3017740127",
    "name": "Correos Alburquerque – Avenida Aurelio Cabrera",
    "category": "Correos",
    "subtype": null,
@@ -392,7 +392,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-3032307859",
+   "source_ref": "catalogo-extremadura:postal_service:node-3032307859",
    "name": "Correos Llerena – Calle de la Corredera",
    "category": "Correos",
    "subtype": null,
@@ -408,7 +408,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-3373297748",
+   "source_ref": "catalogo-extremadura:postal_service:node-3373297748",
    "name": "Correos Azuaga – Plaza de La Merced",
    "category": "Correos",
    "subtype": null,
@@ -424,7 +424,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-3455967906",
+   "source_ref": "catalogo-extremadura:postal_service:node-3455967906",
    "name": "Correos Trujillo – Calle de la Encarnación",
    "category": "Correos",
    "subtype": null,
@@ -440,7 +440,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-3643289486",
+   "source_ref": "catalogo-extremadura:postal_service:node-3643289486",
    "name": "Correos Jarandilla de la Vera – Calle de Gabriel Acedo de la Berrueza",
    "category": "Correos",
    "subtype": null,
@@ -456,7 +456,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-3669253294",
+   "source_ref": "catalogo-extremadura:postal_service:node-3669253294",
    "name": "Correos Gata – Plaza de la Constitución",
    "category": "Correos",
    "subtype": null,
@@ -472,7 +472,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-4004041552",
+   "source_ref": "catalogo-extremadura:postal_service:node-4004041552",
    "name": "Correos Montehermoso – Iglesia",
    "category": "Correos",
    "subtype": null,
@@ -488,7 +488,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-4195366298",
+   "source_ref": "catalogo-extremadura:postal_service:node-4195366298",
    "name": "Correos Berzocana – Plaza de España",
    "category": "Correos",
    "subtype": null,
@@ -504,7 +504,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-4324469195",
+   "source_ref": "catalogo-extremadura:postal_service:node-4324469195",
    "name": "Correos Jaraíz de la Vera – Avenida de la Constitución",
    "category": "Correos",
    "subtype": null,
@@ -520,7 +520,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-452580404",
+   "source_ref": "catalogo-extremadura:postal_service:node-452580404",
    "name": "Correos Cáceres – Avenida de España 2-bis",
    "category": "Correos",
    "subtype": null,
@@ -536,7 +536,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-4587821766",
+   "source_ref": "catalogo-extremadura:postal_service:node-4587821766",
    "name": "Correos Aldeanueva del Camino – Avenida Gabriel y Galán",
    "category": "Correos",
    "subtype": null,
@@ -552,7 +552,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-4643687721",
+   "source_ref": "catalogo-extremadura:postal_service:node-4643687721",
    "name": "Correos Baños de Montemayor – Calle Vía de la Plata",
    "category": "Correos",
    "subtype": null,
@@ -568,7 +568,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5301112121",
+   "source_ref": "catalogo-extremadura:postal_service:node-5301112121",
    "name": "Correos Losar de la Vera – Calle Real",
    "category": "Correos",
    "subtype": null,
@@ -584,7 +584,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5302292770",
+   "source_ref": "catalogo-extremadura:postal_service:node-5302292770",
    "name": "Correos Castuera – Plaza de España",
    "category": "Correos",
    "subtype": null,
@@ -600,7 +600,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5306430423",
+   "source_ref": "catalogo-extremadura:postal_service:node-5306430423",
    "name": "Correos Esparragosa de la Serena – Calle Emigrante",
    "category": "Correos",
    "subtype": null,
@@ -616,7 +616,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5325528562",
+   "source_ref": "catalogo-extremadura:postal_service:node-5325528562",
    "name": "Correos Esparragosa de Lares – Calle Marcial Gonzalez",
    "category": "Correos",
    "subtype": null,
@@ -632,7 +632,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5337727140",
+   "source_ref": "catalogo-extremadura:postal_service:node-5337727140",
    "name": "Correos Segura de León – Calle Ramón y Cajal",
    "category": "Correos",
    "subtype": null,
@@ -648,7 +648,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5351628487",
+   "source_ref": "catalogo-extremadura:postal_service:node-5351628487",
    "name": "Correos Fregenal de la Sierra – Calle Marqués de Riocabado",
    "category": "Correos",
    "subtype": null,
@@ -664,7 +664,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5357494215",
+   "source_ref": "catalogo-extremadura:postal_service:node-5357494215",
    "name": "Correos Higuera la Real – Plaza de la Constitución",
    "category": "Correos",
    "subtype": null,
@@ -680,7 +680,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5368678347",
+   "source_ref": "catalogo-extremadura:postal_service:node-5368678347",
    "name": "Correos Oliva de la Frontera – Avenida de Extremadura",
    "category": "Correos",
    "subtype": null,
@@ -696,7 +696,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5378729796",
+   "source_ref": "catalogo-extremadura:postal_service:node-5378729796",
    "name": "Correos Zalamea de la Serena – Calle Altillo",
    "category": "Correos",
    "subtype": null,
@@ -712,7 +712,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5401215966",
+   "source_ref": "catalogo-extremadura:postal_service:node-5401215966",
    "name": "Correos Quintana de la Serena – Calle Severo Ochoa",
    "category": "Correos",
    "subtype": null,
@@ -728,7 +728,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5412998182",
+   "source_ref": "catalogo-extremadura:postal_service:node-5412998182",
    "name": "Correos Campanario – Avenida de la Constitución",
    "category": "Correos",
    "subtype": null,
@@ -744,7 +744,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5448243717",
+   "source_ref": "catalogo-extremadura:postal_service:node-5448243717",
    "name": "Correos Puebla de Sancho Pérez – Calle Rincón",
    "category": "Correos",
    "subtype": null,
@@ -760,7 +760,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5452096897",
+   "source_ref": "catalogo-extremadura:postal_service:node-5452096897",
    "name": "Correos Ribera del Fresno – Calle Fábrica",
    "category": "Correos",
    "subtype": null,
@@ -776,7 +776,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5464994574",
+   "source_ref": "catalogo-extremadura:postal_service:node-5464994574",
    "name": "Correos Villafranca de los Barros – Calle Carrera Chica",
    "category": "Correos",
    "subtype": null,
@@ -792,7 +792,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5554758530",
+   "source_ref": "catalogo-extremadura:postal_service:node-5554758530",
    "name": "Correos Santa Amalia – Calle Constitución",
    "category": "Correos",
    "subtype": null,
@@ -808,7 +808,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5643914889",
+   "source_ref": "catalogo-extremadura:postal_service:node-5643914889",
    "name": "Correos Cuacos de Yuste – Calle de Teodoro Perianes",
    "category": "Correos",
    "subtype": null,
@@ -824,7 +824,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5653664183",
+   "source_ref": "catalogo-extremadura:postal_service:node-5653664183",
    "name": "Correos Badajoz – Avenida Ricardo Carapeto Zambrano",
    "category": "Correos",
    "subtype": null,
@@ -840,7 +840,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5659265948",
+   "source_ref": "catalogo-extremadura:postal_service:node-5659265948",
    "name": "Correos La Zarza – Calle Fuente",
    "category": "Correos",
    "subtype": null,
@@ -856,7 +856,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5678269978",
+   "source_ref": "catalogo-extremadura:postal_service:node-5678269978",
    "name": "Correos Solana de los Barros – Calle Ladera",
    "category": "Correos",
    "subtype": null,
@@ -872,7 +872,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5682985634",
+   "source_ref": "catalogo-extremadura:postal_service:node-5682985634",
    "name": "Correos Arroyo de San Serván – Calle Badajoz",
    "category": "Correos",
    "subtype": null,
@@ -888,7 +888,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5685990332",
+   "source_ref": "catalogo-extremadura:postal_service:node-5685990332",
    "name": "Correos Ahillones – Calle Real",
    "category": "Correos",
    "subtype": null,
@@ -904,7 +904,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5693639819",
+   "source_ref": "catalogo-extremadura:postal_service:node-5693639819",
    "name": "Correos Alconera – Calle San Pedro",
    "category": "Correos",
    "subtype": null,
@@ -920,7 +920,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5709437863",
+   "source_ref": "catalogo-extremadura:postal_service:node-5709437863",
    "name": "Correos Burguillos del Cerro – Calle Batalla de La Albuera",
    "category": "Correos",
    "subtype": null,
@@ -936,7 +936,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5712014398",
+   "source_ref": "catalogo-extremadura:postal_service:node-5712014398",
    "name": "Correos Calamonte – Calle Nueva",
    "category": "Correos",
    "subtype": null,
@@ -952,7 +952,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5726367921",
+   "source_ref": "catalogo-extremadura:postal_service:node-5726367921",
    "name": "Correos Castilblanco – Calle Francisco Naveso",
    "category": "Correos",
    "subtype": null,
@@ -968,7 +968,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5731000822",
+   "source_ref": "catalogo-extremadura:postal_service:node-5731000822",
    "name": "Correos La Codosera – Travesía Luz",
    "category": "Correos",
    "subtype": null,
@@ -984,7 +984,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5760394797",
+   "source_ref": "catalogo-extremadura:postal_service:node-5760394797",
    "name": "Correos Fuente del Maestre – Calle Corredera",
    "category": "Correos",
    "subtype": null,
@@ -1000,7 +1000,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5766405567",
+   "source_ref": "catalogo-extremadura:postal_service:node-5766405567",
    "name": "Correos La Garrovilla – Calle Rafael Alberti",
    "category": "Correos",
    "subtype": null,
@@ -1016,7 +1016,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5776843931",
+   "source_ref": "catalogo-extremadura:postal_service:node-5776843931",
    "name": "Correos Herrera del Duque – Plaza de España",
    "category": "Correos",
    "subtype": null,
@@ -1032,7 +1032,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5784819228",
+   "source_ref": "catalogo-extremadura:postal_service:node-5784819228",
    "name": "Correos Higuera de Vargas – Calle Fuentecita",
    "category": "Correos",
    "subtype": null,
@@ -1048,7 +1048,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5801087181",
+   "source_ref": "catalogo-extremadura:postal_service:node-5801087181",
    "name": "Correos Lobón – Plaza de España",
    "category": "Correos",
    "subtype": null,
@@ -1064,7 +1064,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5807612380",
+   "source_ref": "catalogo-extremadura:postal_service:node-5807612380",
    "name": "Correos Magacela – Calle Pedro de Valdivia",
    "category": "Correos",
    "subtype": null,
@@ -1080,7 +1080,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5822428020",
+   "source_ref": "catalogo-extremadura:postal_service:node-5822428020",
    "name": "Correos La Morera – Plaza de España",
    "category": "Correos",
    "subtype": null,
@@ -1096,7 +1096,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5825523039",
+   "source_ref": "catalogo-extremadura:postal_service:node-5825523039",
    "name": "Correos La Nava de Santiago – Travesía Lirios",
    "category": "Correos",
    "subtype": null,
@@ -1112,7 +1112,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5830357784",
+   "source_ref": "catalogo-extremadura:postal_service:node-5830357784",
    "name": "Correos Navalvillar de Pela – Calle Felipe II",
    "category": "Correos",
    "subtype": null,
@@ -1128,7 +1128,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5834154791",
+   "source_ref": "catalogo-extremadura:postal_service:node-5834154791",
    "name": "Correos Nogales – Calle San Juan",
    "category": "Correos",
    "subtype": null,
@@ -1144,7 +1144,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5841565315",
+   "source_ref": "catalogo-extremadura:postal_service:node-5841565315",
    "name": "Correos Puebla de Alcocer – Calle Fray Juan de la Puebla",
    "category": "Correos",
    "subtype": null,
@@ -1160,7 +1160,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5871820312",
+   "source_ref": "catalogo-extremadura:postal_service:node-5871820312",
    "name": "Correos Santa Marta – Calle Molino",
    "category": "Correos",
    "subtype": null,
@@ -1176,7 +1176,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5884514391",
+   "source_ref": "catalogo-extremadura:postal_service:node-5884514391",
    "name": "Correos Los Santos de Maimona – Calle Teniente Valle",
    "category": "Correos",
    "subtype": null,
@@ -1192,7 +1192,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5891426009",
+   "source_ref": "catalogo-extremadura:postal_service:node-5891426009",
    "name": "Correos Siruela – Calle Hospital",
    "category": "Correos",
    "subtype": null,
@@ -1208,7 +1208,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-5894862184",
+   "source_ref": "catalogo-extremadura:postal_service:node-5894862184",
    "name": "Correos Talarrubias – Calle Ángel Utrero Calderón",
    "category": "Correos",
    "subtype": null,
@@ -1224,7 +1224,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-6030340792",
+   "source_ref": "catalogo-extremadura:postal_service:node-6030340792",
    "name": "Correos Valdecaballeros – Calle Peña",
    "category": "Correos",
    "subtype": null,
@@ -1240,7 +1240,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-6044708044",
+   "source_ref": "catalogo-extremadura:postal_service:node-6044708044",
    "name": "Correos Valencia del Ventoso – Calle Isabel la Católica",
    "category": "Correos",
    "subtype": null,
@@ -1256,7 +1256,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-6066807305",
+   "source_ref": "catalogo-extremadura:postal_service:node-6066807305",
    "name": "Correos Valverde de Leganés – Calle Plaza",
    "category": "Correos",
    "subtype": null,
@@ -1272,7 +1272,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-6077818668",
+   "source_ref": "catalogo-extremadura:postal_service:node-6077818668",
    "name": "Correos Valencia de Alcántara – Calle Rocamador",
    "category": "Correos",
    "subtype": null,
@@ -1288,7 +1288,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-6096486621",
+   "source_ref": "catalogo-extremadura:postal_service:node-6096486621",
    "name": "Correos Villanueva del Fresno – Plaza de España",
    "category": "Correos",
    "subtype": null,
@@ -1304,7 +1304,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-613092873",
+   "source_ref": "catalogo-extremadura:postal_service:node-613092873",
    "name": "Correos Logrosán – Calle Mario Roso de Luna",
    "category": "Correos",
    "subtype": null,
@@ -1320,7 +1320,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-6146168856",
+   "source_ref": "catalogo-extremadura:postal_service:node-6146168856",
    "name": "Correos Madroñera – Calle Valencia",
    "category": "Correos",
    "subtype": null,
@@ -1336,7 +1336,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-6156407800",
+   "source_ref": "catalogo-extremadura:postal_service:node-6156407800",
    "name": "Correos Montijo – Calle Concepción Arenal",
    "category": "Correos",
    "subtype": null,
@@ -1352,7 +1352,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-6156423501",
+   "source_ref": "catalogo-extremadura:postal_service:node-6156423501",
    "name": "Correos Montijo – Calle de San Antonio",
    "category": "Correos",
    "subtype": null,
@@ -1368,7 +1368,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-6163765656",
+   "source_ref": "catalogo-extremadura:postal_service:node-6163765656",
    "name": "Correos Aldeacentenera – Calle Antonio Machado",
    "category": "Correos",
    "subtype": null,
@@ -1384,7 +1384,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-6178340885",
+   "source_ref": "catalogo-extremadura:postal_service:node-6178340885",
    "name": "Correos Valverde del Fresno – 1º de Mayo",
    "category": "Correos",
    "subtype": null,
@@ -1400,7 +1400,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-6216439177",
+   "source_ref": "catalogo-extremadura:postal_service:node-6216439177",
    "name": "Correos Hoyos – Avenida Extremadura",
    "category": "Correos",
    "subtype": null,
@@ -1416,7 +1416,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-6812331592",
+   "source_ref": "catalogo-extremadura:postal_service:node-6812331592",
    "name": "Correos Carmonita – Avenida de Extremadura",
    "category": "Correos",
    "subtype": null,
@@ -1432,7 +1432,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-6865900037",
+   "source_ref": "catalogo-extremadura:postal_service:node-6865900037",
    "name": "Correos Olivenza – Calle Santa Engracia 1E",
    "category": "Correos",
    "subtype": null,
@@ -1448,7 +1448,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-710745557",
+   "source_ref": "catalogo-extremadura:postal_service:node-710745557",
    "name": "Correos Casar de Cáceres – Calle Larga Alta",
    "category": "Correos",
    "subtype": null,
@@ -1464,7 +1464,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-7725331816",
+   "source_ref": "catalogo-extremadura:postal_service:node-7725331816",
    "name": "Correos Miajadas – Calle de Colón",
    "category": "Correos",
    "subtype": null,
@@ -1480,7 +1480,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-8260177518",
+   "source_ref": "catalogo-extremadura:postal_service:node-8260177518",
    "name": "Correos Salorino – Calle del Cura",
    "category": "Correos",
    "subtype": null,
@@ -1496,7 +1496,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-8822447872",
+   "source_ref": "catalogo-extremadura:postal_service:node-8822447872",
    "name": "Correos Coria – Avenida Sierra de Gata",
    "category": "Correos",
    "subtype": null,
@@ -1512,7 +1512,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:node-911479107",
+   "source_ref": "catalogo-extremadura:postal_service:node-911479107",
    "name": "Correos Fuente de Cantos – Calle Llerena",
    "category": "Correos",
    "subtype": null,
@@ -1528,7 +1528,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:relation-9380430",
+   "source_ref": "catalogo-extremadura:postal_service:relation-9380430",
    "name": "Correos Badajoz – Paseo San Francisco",
    "category": "Correos",
    "subtype": null,
@@ -1544,7 +1544,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:way-1083828414",
+   "source_ref": "catalogo-extremadura:postal_service:way-1083828414",
    "name": "Correos Baños de Montemayor – Avenida de Extremadura",
    "category": "Correos",
    "subtype": null,
@@ -1560,7 +1560,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:way-1234892182",
+   "source_ref": "catalogo-extremadura:postal_service:way-1234892182",
    "name": "Correos Granja de Torrehermosa – Calle San Sebastían",
    "category": "Correos",
    "subtype": null,
@@ -1576,7 +1576,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:way-1316543966",
+   "source_ref": "catalogo-extremadura:postal_service:way-1316543966",
    "name": "Correos San Vicente de Alcántara – Avenida de Badajoz",
    "category": "Correos",
    "subtype": null,
@@ -1592,7 +1592,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:way-549941280",
+   "source_ref": "catalogo-extremadura:postal_service:way-549941280",
    "name": "Correos Monesterio – Carretera de Gijón a Sevilla",
    "category": "Correos",
    "subtype": null,
@@ -1608,7 +1608,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:way-641300864",
+   "source_ref": "catalogo-extremadura:postal_service:way-641300864",
    "name": "Correos Guadiana – Calle Nuestra Señora de la Soledad",
    "category": "Correos",
    "subtype": null,
@@ -1624,7 +1624,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:way-650716207",
+   "source_ref": "catalogo-extremadura:postal_service:way-650716207",
    "name": "Correos Plasencia – Avda. de Alfonso VIII",
    "category": "Correos",
    "subtype": null,
@@ -1640,7 +1640,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:way-926320759",
+   "source_ref": "catalogo-extremadura:postal_service:way-926320759",
    "name": "Correos Zahínos – Calle Calvario",
    "category": "Correos",
    "subtype": null,
@@ -1656,7 +1656,7 @@
    "status": "active"
   },
   {
-   "source_ref": "catalogo-andalucia:extremadura-correos:way-986467860",
+   "source_ref": "catalogo-extremadura:postal_service:way-986467860",
    "name": "Correos Don Benito – Calle Montón",
    "category": "Correos",
    "subtype": null,

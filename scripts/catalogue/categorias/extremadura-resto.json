@@ -272,5 +272,6 @@
   "distancia_duplicado_m": 150,
   "distancia_existente_m": 150,
   "distancia_revisar_m": 0,
-  "nota_informe": "OpenStreetMap puede tener puntos cerrados, trasladados o duplicados, y no indica el horario vigente. El codigo postal y, en parte, la calle son los del punto con direccion mas cercano: orientativos, no una direccion postal verificada."
+  "nota_informe": "OpenStreetMap puede tener puntos cerrados, trasladados o duplicados, y no indica el horario vigente. El codigo postal y, en parte, la calle son los del punto con direccion mas cercano: orientativos, no una direccion postal verificada.",
+  "region": "extremadura"
 }

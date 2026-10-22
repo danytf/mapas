@@ -142,7 +142,7 @@ for r in guardados:
         r["revisar"] = (r["revisar"] + "; " if r["revisar"] else "") + "nombre dudoso en OpenStreetMap: " + r["nombre_osm"]
     r["nombre"] = n + (" – " + re.sub(r" \d+[a-z]?$", "", r["calle"]) if r["calle"] else "")
     r["precision"] = "approximate" if r["revisar"] else "address"
-    r["source_ref"] = "catalogo-andalucia:%s:%s" % (defn["codigo"], r["osm"].replace("/", "-"))
+    r["source_ref"] = "catalogo-%s:%s:%s" % (defn.get("region", "andalucia"), defn["codigo"], r["osm"].replace("/", "-"))
 guardados = [r for r in guardados if r["final"] == "incluir"]
 refs = [r["source_ref"] for r in guardados]
 assert len(set(refs)) == len(refs), "source_ref duplicados"
