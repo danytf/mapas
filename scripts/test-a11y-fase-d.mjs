@@ -47,6 +47,8 @@ for (const [mode, v] of [["claro", light], ["oscuro", dark]]) {
   add(n("--warn sobre --panel (avisos, +XP)"), v.warn, v.panel);
   add(n("--ok sobre --ok-soft (KPI destacado)"), v.ok, v["ok-soft"]);
   add(n("--panel sobre --warn (chip de revisión pulsado)"), v.panel, v.warn);
+  add(n("--field-line sobre --panel (borde de campos, criterio 1.4.11)"), v["field-line"], v.panel, 3);
+  add(n("--field-line sobre --bg (borde de campos sobre el fondo)"), v["field-line"], v.bg, 3);
 }
 // Colores fijos de la cabecera, la ficha del punto y los estados.
 add("cabecera: #9fb0c6 sobre --ink-2", "#9fb0c6", light["ink-2"]);
@@ -87,11 +89,11 @@ for (const [mode, v] of [["claro", light], ["oscuro", dark]]) {
   }
 }
 if (/(\.cal-card|\.cal-chip|#ficha \.ef)\.s-[a-z]+ \{[^}]*--st: #[0-9a-f]{3,6}/i.test(html)) fail("los colores de estado de la ficha y el calendario deben usar los tokens --st-*, no literales");
-// Modo oscuro: sobreescrituras de la gamificación.
-const darkOv = (sel) => html.match(new RegExp(sel.replace(/[.#]/g, "\\$&") + " \\{ color: (#[0-9a-f]{6}); \\}"))?.[1];
-const up = darkOv("#dlgGam em.up"), dn = darkOv("#dlgGam em.dn");
-if (!up || !dn) fail("faltan las sobreescrituras de #dlgGam em.up / em.dn en modo oscuro");
-else { add("oscuro: em.up sobre --panel", up, dark.panel); add("oscuro: em.dn sobre --panel", dn, dark.panel); }
+// Modo oscuro: los colores de subida y bajada de la gamificación son tokens (--gam-up, --gam-dn) con valor propio en oscuro.
+if (!/#dlgGam em\.up \{ color: var\(--gam-up\)/.test(html) || !/#dlgGam em\.dn \{ color: var\(--gam-dn\)/.test(html)) fail("#dlgGam em.up / em.dn deben usar los tokens --gam-up / --gam-dn");
+const up = dark["gam-up"], dn = dark["gam-dn"], upL = light["gam-up"], dnL = light["gam-dn"];
+if (!up || !dn || !upL || !dnL) fail("faltan los tokens --gam-up / --gam-dn en claro u oscuro");
+else { add("claro: em.up sobre --panel", upL, light.panel); add("claro: em.dn sobre --panel", dnL, light.panel); add("oscuro: em.up sobre --panel", up, dark.panel); add("oscuro: em.dn sobre --panel", dn, dark.panel); }
 const mxVar = /#dlgGam \.ms \.mx \{[^}]*color: var\(--warn\)/.test(html) && /#dlgGam \.lgl li b \{[^}]*color: var\(--warn\)/.test(html);
 if (!/.kpi.al span {[^}]*opacity: .95/.test(html) || !/.kpi.hl span {[^}]*opacity: .95/.test(html)) fail("los rótulos de .kpi.al/.kpi.hl deben tener opacity .95 o más (con .85 dan 3,98:1)");
 if (!mxVar) fail("+XP y registro de XP deben usar var(--warn) (en modo oscuro #8a5a00 sobre el panel oscuro da 2,9:1)");

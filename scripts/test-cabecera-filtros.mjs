@@ -6,7 +6,7 @@ import { readFileSync } from "node:fs";
 const html = readFileSync(process.argv[2] || "index.html", "utf8");
 
 // Filtros: provincia, municipio y estado siempre a la vista; el resto, plegado y accesible.
-const tools = html.slice(html.indexOf('<div class="tools">'), html.indexOf('<div class="bar"'));
+const tools = html.slice(html.indexOf('<div class="tools">'), html.indexOf('<div class="srow">'));
 const plegado = tools.slice(tools.indexOf('<div id="moreF" hidden>'));
 assert.ok(plegado.length > 0, "Falta el bloque plegable #moreF (oculto por defecto)");
 const antes = tools.slice(0, tools.indexOf('<div id="moreF"'));

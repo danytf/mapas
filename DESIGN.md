@@ -5,14 +5,14 @@ colors:
   wesser-red: "#c8102e"
   wesser-red-deep: "#9f0c24"
   wesser-red-tint: "#fdecef"
-  ink: "#0f1722"
-  ink-raised: "#1b2636"
-  cool-paper: "#eef0f3"
+  ink: "#171b23"
+  ink-raised: "#222a36"
+  cool-paper: "#f5f6f8"
   panel-white: "#ffffff"
   panel-quiet: "#f3f5f8"
   text: "#141b26"
-  text-muted: "#5c6779"
-  line: "#e2e6ec"
+  text-muted: "#596478"
+  line: "#e4e7ec"
   line-strong: "#cfd5de"
   granted-deep: "#14532d"
   granted-tint: "#dcfce7"
@@ -23,6 +23,16 @@ colors:
   state-denied: "#111827"
   state-expired: "#94a3b8"
   state-cancelled: "#dc2626"
+  field-line: "#7f8b9d"
+  header-sub: "#aab9ce"
+  header-hot: "#ff7385"
+  gamification-gold: "#e0a800"
+  gamification-up: "#177a40"
+  gamification-down: "#b42318"
+  dark-ink: "#070b12"
+  dark-paper: "#0b111a"
+  dark-panel: "#121a26"
+  dark-red: "#ff4d63"
 typography:
   headline:
     fontFamily: "Figtree, Segoe UI Variable Text, Segoe UI, system-ui, sans-serif"
@@ -325,4 +335,13 @@ Según el texto que aportó el titular (no verificado por mí contra su web): el
 - Orden por tarea: cabecera con la cuenta y su rol (para saber con qué usuario se está) → **Informes** (Panel resumen, Calendario semanal) → **Progreso** (Mi progreso, Logros) → **Puntos** (Añadir punto, Restaurar puntos quitados) → **Datos** (Exportar CSV, Exportar estado operativo (JSON), Copiar coordenadas (JSON)) → **Administración** (solo administradores: Usuarios y provincias) → **Ayuda** (Ayuda y atajos, con la tecla `?` indicada) → **Cerrar sesión**, separado y en color de error, siempre el último.
 - Cambios de nombre: «Agregar punto» pasa a «Añadir punto» (también el título del diálogo); «Exportar estado (JSON)» a «Exportar estado operativo (JSON)»; «Copiar JSON con coordenadas» a «Copiar coordenadas (JSON)». El grupo «Avanzado» desaparece: su única opción es un dato más. «Mi progreso» y «Logros» salen de Informes.
 - Separadores entre grupos, y el menú se desplaza por dentro (altura máxima del visor menos 84 px) para que «Cerrar sesión» sea siempre alcanzable en ventanas bajas.
+
+## Avisos menores y tokens (22/10/2026)
+
+- Bordes de los campos de formulario: token `--field-line` (#7f8b9d en claro, #66758c en oscuro), de 3:1 como mínimo sobre `--panel` y `--bg` (criterio 1.4.11); la búsqueda también lleva borde.
+- Una sola `h1` por pantalla: el título del acceso pasa a `h2`. Se elimina la barra de progreso de las herramientas, que nunca recibía valor.
+- Calendario semanal entre 761 y 1180 px: los siete días pasan a dos filas de cuatro columnas en lugar de un desplazamiento horizontal.
+- Colores sueltos de la gamificación, las medallas, el calendario y la cabecera pasan a tokens (`--gam-up`, `--gam-dn`, `--gam-ink`, `--md1-*`, `--md2-*`, `--cal-*`, `--hd-sub`, `--shadow-pop`); la paleta documentada arriba se actualiza a los valores vigentes.
+- Densidad: índice espacial por celdas de 0,25° (solo se recorren las celdas que cubren cada tesela).
+- Resalte de provincia: trazo más ancho, suave y difuminado, y relleno al 8 %, para que la diferencia con la frontera del mapa base no se note; los contornos siguen siendo de Natural Earth 1:10 m.
 
