@@ -300,3 +300,9 @@ Según el texto que aportó el titular (no verificado por mí contra su web): el
 
 - Oscuro: la paleta recolorea ahora todas las capas de carretera, puente, túnel, camino, ferrocarril, pista y cauce (antes quedaban las vías secundarias en blanco brillante).
 - Controles: la leyenda sube 26 px sobre la atribución y la atribución se limita al 72 % del ancho (78 % y 9 px en móvil) para que no se tapen en anchos pequeños; el conmutador Mapa/Lista no parte «Lista (n)» en dos líneas.
+
+## Atajos de teclado (22/10/2026)
+
+- `/` lleva el foco a la búsqueda (no actúa al escribir en un campo, con un diálogo abierto ni en la pantalla de acceso). Con el foco en la búsqueda, `↓` salta a la primera fila.
+- En la lista: `↑` `↓` `Inicio` `Fin` recorren las filas; `↑` desde la primera vuelve a la búsqueda; `Intro` abre la ficha (como antes). La búsqueda declara `aria-keyshortcuts="/"` y tiene una pista en `title`.
+- Acciones masivas sobre los seguimientos: no se han hecho; hace falta decidir primero qué acción exacta (cambia datos de varios puntos a la vez).

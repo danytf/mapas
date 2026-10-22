@@ -787,7 +787,7 @@
   <aside>
     <div class="tools">
       <div class="row qrow">
-        <input id="q" type="search" placeholder="Buscar por nombre o calle" aria-label="Buscar centro">
+        <input id="q" type="search" placeholder="Buscar por nombre o calle" aria-label="Buscar centro" aria-keyshortcuts="/" title="Atajo: pulsa / para buscar">
         <button id="favBtn" type="button" aria-pressed="false" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-8-4.7-8-10.5C4 7 6 5 8.5 5c1.5 0 2.8.8 3.5 2 .7-1.2 2-2 3.5-2C18 5 20 7 20 10c0 5.800-8 10.500-8 10.500z"/></svg><span>Favoritos (0)</span></button>
       </div>
       <button id="filtBtn" type="button" aria-expanded="false" aria-controls="filtros">Filtros</button>
@@ -2931,6 +2931,27 @@ refreshSelects();
 $("#permiso").addEventListener("change", refilter);
 $("#valor").addEventListener("change", refilter);
 $("#orden").addEventListener("change", renderList);
+/* Atajos de teclado: «/» lleva a la búsqueda; con el foco en la búsqueda, ↓ salta a la primera fila; en la lista, ↑ ↓ Inicio y Fin
+   recorren las filas (↑ desde la primera vuelve a la búsqueda) y Intro abre la ficha, como antes. No actúan mientras se escribe en
+   un campo, hay un diálogo abierto o se está en la pantalla de acceso. */
+const filasLista = () => [...$("#list").querySelectorAll("li[data-id]")];
+document.addEventListener("keydown", (e) => {
+  if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey || e.key !== "/") return;
+  if (document.documentElement.classList.contains("lock") || document.querySelector("dialog[open]")) return;
+  if (e.target.closest && e.target.closest("input, textarea, select, [contenteditable]")) return;
+  e.preventDefault(); $("#q").focus(); $("#q").select();
+});
+$("#q").addEventListener("keydown", (e) => {
+  if (e.key !== "ArrowDown") return;
+  const f = filasLista()[0]; if (f) { e.preventDefault(); f.focus(); }
+});
+$("#list").addEventListener("keydown", (e) => {
+  const li = e.target.closest && e.target.closest("li[data-id]"); if (!li || !["ArrowDown", "ArrowUp", "Home", "End"].includes(e.key)) return;
+  const filas = filasLista(), i = filas.indexOf(li); let destino;
+  if (e.key === "ArrowDown") destino = filas[i + 1]; else if (e.key === "Home") destino = filas[0]; else if (e.key === "End") destino = filas[filas.length - 1];
+  else if (i > 0) destino = filas[i - 1]; else { e.preventDefault(); $("#q").focus(); return; }
+  if (destino) { e.preventDefault(); destino.focus(); }
+});
 (() => {
   const btn = $("#menuBtn"), panel = $("#menuPanel");
   const items = () => [...panel.querySelectorAll('[role="menuitem"]')].filter((i) => !i.disabled && !i.hidden);
