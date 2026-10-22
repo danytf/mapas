@@ -283,3 +283,11 @@ Siete columnas de lunes a domingo; sobre cada una, una silueta de barras (altura
 
 - Al elegir una provincia en el selector, el mapa dibuja su contorno con un velo suave de acento (relleno 7 %, trazo 2 px al 55 %), que se atenúa con zoom 12 o más. Contornos: Natural Earth (dominio público, 1:10 m), redondeados a 3 decimales, de las ocho provincias andaluzas (~24 KB en el propio `index.html`, `PROV_GEO`). Una provincia sin contorno en `PROV_GEO` no se resalta.
 - Limitación: los contornos son generalizados y no coinciden al detalle con las fronteras del mapa base; por eso el resalte es un velo y no una máscara. Para la carga nacional hay que añadir las demás provincias al mismo objeto (regenerar desde Natural Earth).
+## Cartografía vectorial Wesser (22/10/2026)
+
+- Capa por defecto «Wesser (vectorial, recomendado)»: teselas vectoriales de OpenFreeMap (datos de OpenStreetMap, sin clave) dibujadas con MapLibre GL a través de `@maplibre/maplibre-gl-leaflet`; la app sigue siendo Leaflet (marcadores, agrupaciones, ficha y eventos sin cambios).
+- Estilo: el estilo «positron» de OpenFreeMap se descarga en tiempo de ejecución y se recolorea por identificador de capa con una paleta propia (claro y oscuro): agua azul grisácea, zonas verdes suaves, edificios neutros, carreteras blancas con borde fino y fronteras provinciales y de comunidad en discontinua (visibles desde el zoom 5).
+- Fallback automático a Esri («Wesser claro (Esri)» o gris oscuro) si no hay WebGL, falla la descarga del estilo o no cargan las librerías; Esri y OpenStreetMap siguen en el selector de capas.
+- Atribución visible: «OpenFreeMap © OpenMapTiles Data from OpenStreetMap» más los créditos de geocodificación.
+- CSP: `tiles.openfreemap.org` en `connect-src` e `img-src` y `worker-src blob:`. Librerías con versión exacta e integridad SRI (maplibre-gl 4.7.1, maplibre-gl-leaflet 0.0.22).
+- Limitaciones: el puente no hace zoom suave entre niveles enteros; las teselas solo traen líneas de frontera, así que resaltar la provincia activa requeriría un fichero de polígonos provinciales aparte; OpenFreeMap es un servicio sostenido con donaciones y sin SLA, y su uso comercial debe confirmarse con su mantenedor.
