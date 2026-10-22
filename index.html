@@ -456,6 +456,16 @@
   #dlgAyuda h2 { font-size: var(--fs-title); font-weight: 680; letter-spacing: -.02em; margin: 0; }
   #ayBody { padding: 8px 22px 22px; font-size: var(--fs-body); line-height: 1.5; }
   #ayBody h3 { font-size: var(--fs-label); font-weight: 650; color: var(--muted); margin: 18px 0 6px; }
+  #ayBody p { margin: 4px 0 8px; }
+  #ayBody .ay-sec { border-bottom: 1px solid var(--line); padding: 2px 0; }
+  #ayBody .ay-sec > summary { cursor: pointer; padding: 10px 0; font-weight: 650; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  #ayBody .ay-sec > summary::-webkit-details-marker { display: none; }
+  #ayBody .ay-sec > summary::after { content: "\25BE"; color: var(--muted); transition: transform var(--t); }
+  #ayBody .ay-sec[open] > summary::after { transform: rotate(180deg); }
+  #ayBody .ay-sec > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--r-xs); }
+  #ayBody .ay-sec[open] { padding-bottom: 10px; }
+  #ayBody .ay-es > div { grid-template-columns: 110px 1fr; }
+  #ayBody .ay-es dt { font-weight: 600; }
   #ayBody ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; list-style: disc; overflow: visible; }
   #ayBody li { display: list-item; padding: 0; border: 0; cursor: default; position: static; }
   #ayBody li::before { display: none; }
@@ -900,36 +910,124 @@
 <dialog id="dlgAyuda" aria-labelledby="ayT">
   <div class="pn-head"><h2 id="ayT">Ayuda y atajos</h2><button type="button" id="ayClose" aria-label="Cerrar">&times;</button></div>
   <div id="ayBody">
-    <h3>Buscar y filtrar</h3>
-    <ul>
-      <li>La búsqueda encuentra por nombre o por calle. Provincia, municipio y estado del permiso están siempre a la vista; el resto, en «Más filtros».</li>
-      <li>«Por revisar» muestra los puntos con la ubicación pendiente de comprobar. «Limpiar» quita todos los filtros activos.</li>
-    </ul>
-    <h3>Teclado</h3>
-    <dl>
-      <div><dt><kbd>/</kbd></dt><dd>Ir a la búsqueda</dd></div>
-      <div><dt><kbd>↓</kbd> <kbd>↑</kbd></dt><dd>Recorrer la lista (desde la búsqueda, <kbd>↓</kbd> salta a la primera fila)</dd></div>
-      <div><dt><kbd>Inicio</kbd> <kbd>Fin</kbd></dt><dd>Primera y última fila</dd></div>
-      <div><dt><kbd>Intro</kbd></dt><dd>Abrir la ficha del punto</dd></div>
-      <div><dt><kbd>Esc</kbd></dt><dd>Cerrar un diálogo o salir del modo «Seleccionar»</dd></div>
-      <div><dt><kbd>?</kbd></dt><dd>Abrir esta ayuda</dd></div>
-    </dl>
-    <h3>Cambiar varios puntos a la vez</h3>
-    <ul>
-      <li>«Seleccionar» pone una casilla en cada fila. En la barra inferior puedes reprogramar el seguimiento, marcarlo como hecho o añadir los puntos a favoritos.</li>
-      <li>Antes de guardar cambios de seguimiento se pide confirmación, y después puedes deshacerlos una vez. Los puntos sin seguimiento pendiente se omiten.</li>
-    </ul>
-    <h3>Leer el mapa</h3>
-    <ul>
-      <li>El color del marcador es la categoría; el borde, el estado del permiso. Un «!» amarillo indica una ubicación por revisar.</li>
-      <li>Los círculos oscuros con número agrupan puntos cercanos; al pulsarlos el mapa se acerca.</li>
-      <li>Al elegir una provincia se resalta su contorno. En el control de capas (arriba a la derecha) puedes cambiar el fondo y activar «Densidad de puntos».</li>
-      <li>El botón «Leyenda» explica los colores y los bordes.</li>
-    </ul>
-    <h3>Seguimientos</h3>
-    <ul>
-      <li>El indicador «Seguimientos» de la cabecera cuenta los puntos cuyo seguimiento es de hoy o está atrasado. Púlsalo para ver solo esos.</li>
-    </ul>
+    <details class="ay-sec" open><summary>Primeros pasos</summary>
+      <p>Esta aplicación es un mapa de lugares donde solicitar permisos para equipos de captación. A la izquierda tienes la lista con la búsqueda y los filtros, en el centro el mapa y, al elegir un punto, a la derecha su ficha.</p>
+      <ul>
+        <li>Solo ves las provincias que tienes asignadas. Si falta alguna, pídesela a un administrador.</li>
+        <li>Por seguridad la sesión no se guarda en el navegador: al recargar la página hay que volver a entrar.</li>
+        <li>Todo lo que guardas va a Supabase. Si falla la conexión la aplicación lo dice y no muestra datos antiguos.</li>
+      </ul>
+    </details>
+    <details class="ay-sec"><summary>Buscar y filtrar</summary>
+      <ul>
+        <li>La búsqueda encuentra por nombre o por calle. Provincia, municipio y estado del permiso están siempre a la vista; en «Más filtros» tienes la categoría, la valoración, el orden y, según la categoría, la cadena o el tipo de entidad.</li>
+        <li>«Por revisar» muestra los puntos con la ubicación pendiente de comprobar. «Favoritos» muestra solo los tuyos (son personales: nadie más los ve).</li>
+        <li>«Limpiar» quita todos los filtros activos de una vez. «Filtros (n)» en móvil indica cuántos hay puestos.</li>
+      </ul>
+    </details>
+    <details class="ay-sec"><summary>El mapa y sus capas</summary>
+      <ul>
+        <li>El color del marcador es la categoría; el borde, el estado del permiso. Un «!» amarillo indica una ubicación por revisar. El botón «Leyenda» explica los colores.</li>
+        <li>Los círculos oscuros con número agrupan puntos cercanos; al pulsarlos el mapa se acerca.</li>
+        <li>Al elegir una provincia se resalta su contorno.</li>
+        <li>El control de capas (arriba a la derecha) cambia el fondo: «Wesser (vectorial)», «Wesser claro», «Gris claro», «Gris oscuro», «Esri calles» y OpenStreetMap. Si el fondo vectorial no carga, la aplicación pasa sola a Esri y lo avisa.</li>
+        <li>Ahí mismo puedes activar «Densidad de puntos», un mapa de calor de los puntos visibles según la lista y los filtros.</li>
+      </ul>
+    </details>
+    <details class="ay-sec"><summary>Estados de un permiso</summary>
+      <p>El estado de cada punto se calcula solo a partir de sus solicitudes y concesiones; no hay que ponerlo a mano.</p>
+      <dl class="ay-es">
+        <div><dt>Sin solicitar</dt><dd>No hay ninguna solicitud ni concesión.</dd></div>
+        <div><dt>Solicitado</dt><dd>Hay una solicitud pendiente cuyas fechas siguen vigentes.</dd></div>
+        <div><dt>Concedido</dt><dd>Hay una concesión en vigor o con fecha futura.</dd></div>
+        <div><dt>Caducado</dt><dd>Una solicitud sin respuesta cuyas fechas ya pasaron.</dd></div>
+        <div><dt>Denegado</dt><dd>La solicitud se marcó como denegada.</dd></div>
+        <div><dt>Cancelado</dt><dd>La última concesión se canceló.</dd></div>
+      </dl>
+    </details>
+    <details class="ay-sec"><summary>La ficha de un punto</summary>
+      <ul>
+        <li>Arriba: el nombre, la dirección, «Cómo llegar» y el corazón de favoritos. Debajo, el estado actual, el próximo seguimiento y los contadores.</li>
+        <li>Puedes valorar el punto para captación de 1 a 5 estrellas y anotar el contacto y las notas.</li>
+        <li>Las pestañas «Solicitudes» y «Concesiones» recogen las fechas, los captadores y la ONG de cada una; las solicitudes admiten una fecha de seguimiento y se pueden conceder, denegar o editar.</li>
+        <li>«Guardar cambios» guarda en Supabase. Si ves «Cambios sin guardar», aún no se ha guardado. Si otra persona cambió el punto mientras lo editabas, la aplicación no pisa su cambio: te lo explica y te deja cargar la versión actual.</li>
+        <li>«Más acciones»: «Desactivar en el mapa» (solo para ti, el punto sigue en la lista), «Quitar del mapa» (solo para ti, se recupera desde el menú) y, solo para administradores, «Archivar para todos».</li>
+      </ul>
+    </details>
+    <details class="ay-sec"><summary>Corregir la ubicación</summary>
+      <ul>
+        <li>En la pestaña «Ubicación» puedes mover el pin, pegar coordenadas o la dirección de Google Maps y copiar las coordenadas actuales.</li>
+        <li>Importante: cambiar solo la dirección postal no mueve el marcador. Después de mover el pin, pulsa «Guardar dirección y ubicación».</li>
+        <li>Los administradores pueden además cambiar el municipio y el código postal del punto.</li>
+        <li>Si la ubicación es dudosa, «Marcar revisión visual» la da por comprobada y sale de «Por revisar».</li>
+      </ul>
+    </details>
+    <details class="ay-sec"><summary>Seguimientos</summary>
+      <ul>
+        <li>El indicador «Seguimientos» de la cabecera cuenta los puntos cuyo seguimiento es de hoy o está atrasado. Púlsalo para ver solo esos.</li>
+        <li>Los seguimientos se programan en las solicitudes de cada ficha. En la lista aparecen primero los de hoy o atrasados y luego los permisos que caducan en 30 días.</li>
+      </ul>
+    </details>
+    <details class="ay-sec"><summary>Cambiar varios puntos a la vez</summary>
+      <ul>
+        <li>«Seleccionar» pone una casilla en cada fila. En la barra inferior puedes reprogramar el seguimiento, marcarlo como hecho o añadir los puntos a favoritos.</li>
+        <li>Antes de guardar cambios de seguimiento se pide confirmación, y después puedes deshacerlos una vez. Los puntos sin seguimiento pendiente se omiten. «Esc» sale del modo.</li>
+      </ul>
+    </details>
+    <details class="ay-sec"><summary>Informes</summary>
+      <ul>
+        <li><b>Panel resumen:</b> puntos en el mapa, concedidos, denegados, concesiones vigentes hoy, captadores que se pueden enviar hoy, solicitudes caducadas, permisos que caducan en 30 días y el desglose por categoría y por municipio.</li>
+        <li><b>Calendario semanal:</b> los permisos de cada día de la semana en una provincia, con filtros por ONG y por estado, y el total de captadores de cada día.</li>
+      </ul>
+    </details>
+    <details class="ay-sec"><summary>Mi progreso y logros</summary>
+      <ul>
+        <li>Al trabajar con la aplicación ganas experiencia (XP) y subes de nivel. «Mi progreso» muestra el nivel, las misiones del día, el reto de la semana, el territorio y el álbum.</li>
+        <li>«Logros» recoge las insignias conseguidas. Los sonidos se pueden desactivar en «Mi progreso».</li>
+      </ul>
+    </details>
+    <details class="ay-sec"><summary>Añadir y recuperar puntos</summary>
+      <ul>
+        <li>«Añadir punto» crea un punto propio: nombre, categoría, dirección, provincia y municipio. Puedes ubicarlo por dirección o colocarlo con un clic en el mapa.</li>
+        <li>«Restaurar puntos quitados» devuelve a la lista los que quitaste del mapa. El número entre paréntesis indica cuántos hay.</li>
+      </ul>
+    </details>
+    <details class="ay-sec"><summary>Exportar datos</summary>
+      <ul>
+        <li>«Exportar CSV» y «Exportar estado operativo (JSON)» piden confirmación antes de crear el archivo. El JSON no es una copia completa de Supabase.</li>
+        <li>«Copiar coordenadas (JSON)» copia nombres, direcciones y coordenadas al portapapeles, también con confirmación.</li>
+      </ul>
+    </details>
+    <details class="ay-sec"><summary>Administración (solo administradores)</summary>
+      <ul>
+        <li>«Usuarios y provincias»: ver los usuarios, cambiar su nombre y rol, activarlos o desactivarlos y asignarles provincias. También activar o desactivar provincias.</li>
+        <li>Las acciones sensibles piden confirmación. Nadie puede cambiar su propio rol ni desactivarse, y siempre queda al menos un administrador activo.</li>
+        <li>Desde ahí también se restauran los puntos archivados.</li>
+      </ul>
+    </details>
+    <details class="ay-sec"><summary>En el móvil</summary>
+      <ul>
+        <li>El mapa ocupa toda la pantalla. El conmutador de abajo cambia entre «Mapa» y «Lista», y «Filtros» despliega los filtros.</li>
+        <li>La ficha se abre a pantalla completa; ciérrala con la «×» para volver.</li>
+      </ul>
+    </details>
+    <details class="ay-sec"><summary>Teclado</summary>
+      <dl>
+        <div><dt><kbd>/</kbd></dt><dd>Ir a la búsqueda</dd></div>
+        <div><dt><kbd>↓</kbd> <kbd>↑</kbd></dt><dd>Recorrer la lista (desde la búsqueda, <kbd>↓</kbd> salta a la primera fila)</dd></div>
+        <div><dt><kbd>Inicio</kbd> <kbd>Fin</kbd></dt><dd>Primera y última fila</dd></div>
+        <div><dt><kbd>Intro</kbd></dt><dd>Abrir la ficha del punto</dd></div>
+        <div><dt><kbd>Esc</kbd></dt><dd>Cerrar un diálogo o salir del modo «Seleccionar»</dd></div>
+        <div><dt><kbd>?</kbd></dt><dd>Abrir esta ayuda</dd></div>
+      </dl>
+    </details>
+    <details class="ay-sec"><summary>Si algo no funciona</summary>
+      <ul>
+        <li>«No hay conexión» o «No se pudo cargar el mapa»: revisa la conexión y vuelve a entrar. La aplicación nunca muestra datos antiguos.</li>
+        <li>No ves una provincia: pide a un administrador que te la asigne.</li>
+        <li>Un cambio no se guardó: vuelve a abrir el punto, comprueba su estado actual y repítelo. Si el problema sigue, avisa a un administrador.</li>
+      </ul>
+    </details>
   </div>
 </dialog>
 <dialog id="dlgPanel" aria-labelledby="pnT">
