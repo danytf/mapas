@@ -278,3 +278,12 @@ Siete columnas de lunes a domingo; sobre cada una, una silueta de barras (altura
 ## Filtros compactos (22/10/2026)
 
 - «Por revisar» pasa a la misma fila que el estado y «Más filtros», y el panel reduce el relleno: una fila menos sin esconder provincia, municipio ni estado (decisión previa del titular: siempre a la vista).
+
+## Cartografía vectorial Wesser (22/10/2026)
+
+- Capa por defecto «Wesser (vectorial, recomendado)»: teselas vectoriales de OpenFreeMap (datos de OpenStreetMap, sin clave) dibujadas con MapLibre GL a través de `@maplibre/maplibre-gl-leaflet`; la app sigue siendo Leaflet (marcadores, agrupaciones, ficha y eventos sin cambios).
+- Estilo: el estilo «positron» de OpenFreeMap se descarga en tiempo de ejecución y se recolorea por identificador de capa con una paleta propia (claro y oscuro): agua azul grisácea, zonas verdes suaves, edificios neutros, carreteras blancas con borde fino y fronteras provinciales y de comunidad en discontinua (visibles desde el zoom 5).
+- Fallback automático a Esri («Wesser claro (Esri)» o gris oscuro) si no hay WebGL, falla la descarga del estilo o no cargan las librerías; Esri y OpenStreetMap siguen en el selector de capas.
+- Atribución visible: «OpenFreeMap © OpenMapTiles Data from OpenStreetMap» más los créditos de geocodificación.
+- CSP: `tiles.openfreemap.org` en `connect-src` e `img-src` y `worker-src blob:`. Librerías con versión exacta e integridad SRI (maplibre-gl 4.7.1, maplibre-gl-leaflet 0.0.22).
+- Limitaciones: el puente no hace zoom suave entre niveles enteros; las teselas solo traen líneas de frontera, así que resaltar la provincia activa requeriría un fichero de polígonos provinciales aparte; OpenFreeMap es un servicio sostenido con donaciones y sin SLA, y su uso comercial debe confirmarse con su mantenedor.
