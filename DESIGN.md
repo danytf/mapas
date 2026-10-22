@@ -279,6 +279,10 @@ Siete columnas de lunes a domingo; sobre cada una, una silueta de barras (altura
 
 - «Por revisar» pasa a la misma fila que el estado y «Más filtros», y el panel reduce el relleno: una fila menos sin esconder provincia, municipio ni estado (decisión previa del titular: siempre a la vista).
 
+## Provincia activa resaltada (22/10/2026)
+
+- Al elegir una provincia en el selector, el mapa dibuja su contorno con un velo suave de acento (relleno 7 %, trazo 2 px al 55 %), que se atenúa con zoom 12 o más. Contornos: Natural Earth (dominio público, 1:10 m), redondeados a 3 decimales, de las ocho provincias andaluzas (~24 KB en el propio `index.html`, `PROV_GEO`). Una provincia sin contorno en `PROV_GEO` no se resalta.
+- Limitación: los contornos son generalizados y no coinciden al detalle con las fronteras del mapa base; por eso el resalte es un velo y no una máscara. Para la carga nacional hay que añadir las demás provincias al mismo objeto (regenerar desde Natural Earth).
 ## Cartografía vectorial Wesser (22/10/2026)
 
 - Capa por defecto «Wesser (vectorial, recomendado)»: teselas vectoriales de OpenFreeMap (datos de OpenStreetMap, sin clave) dibujadas con MapLibre GL a través de `@maplibre/maplibre-gl-leaflet`; la app sigue siendo Leaflet (marcadores, agrupaciones, ficha y eventos sin cambios).
