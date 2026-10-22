@@ -82,6 +82,7 @@ node scripts/test-favoritos.mjs
 node scripts/test-tactil.mjs
 node scripts/test-paneles.mjs
 node scripts/test-escala.mjs
+node scripts/test-provincias.mjs
 node scripts/test-a11y-fase-d.mjs index.html
 ```
 
