@@ -222,7 +222,7 @@ createServer(async (req, res) => {
       if (fn === "cancel_permit_grant") {
         if (!g) return fallo("P0002", "Concesión no encontrada", 404);
         if (g.status === "cancelled") return send(res, 200, null);
-        if (body.p_expected_updated_at && body.p_expected_updated_at !== g.updated_at) return fallo("40001", "La concesión ha cambiado desde que se leyó", 409);
+        if (body.p_expected_updated_at && body.p_expected_updated_at !== g.updated_at) return fallo("PT409", "La concesión ha cambiado desde que se leyó", 409);
         Object.assign(g, { status: "cancelled", cancelled_at: ahora(), cancelled_reason: body.p_reason || null, updated_at: ahora(), updated_by: u.id });
         return send(res, 200, null);
       }
@@ -230,7 +230,7 @@ createServer(async (req, res) => {
       if (fn === "approve_permit_application") {
         const ya = grants.find((x) => x.application_id === a.id);
         if (a.status === "approved" && ya) return send(res, 200, ya.id);
-        if (body.p_expected_updated_at && body.p_expected_updated_at !== a.updated_at) return fallo("40001", "La solicitud ha cambiado desde que se leyó", 409);
+        if (body.p_expected_updated_at && body.p_expected_updated_at !== a.updated_at) return fallo("PT409", "La solicitud ha cambiado desde que se leyó", 409);
         if (a.status !== "pending") return fallo("23514", "La solicitud ya está resuelta");
         const vf = body.p_valid_from ?? a.requested_from, vu = body.p_valid_until ?? a.requested_until;
         if (vf && vu && vu < vf) return fallo("23514", "fechas incoherentes");
@@ -243,7 +243,7 @@ createServer(async (req, res) => {
       }
       if (!["denied", "withdrawn"].includes(body.p_status)) return fallo("22023", "Estado de resolución no válido");
       if (a.status === body.p_status) return send(res, 200, null);
-      if (body.p_expected_updated_at && body.p_expected_updated_at !== a.updated_at) return fallo("40001", "La solicitud ha cambiado desde que se leyó", 409);
+      if (body.p_expected_updated_at && body.p_expected_updated_at !== a.updated_at) return fallo("PT409", "La solicitud ha cambiado desde que se leyó", 409);
       if (a.status !== "pending") return fallo("23514", "La solicitud ya está resuelta");
       Object.assign(a, { status: body.p_status, resolution_reason: body.p_reason || null, resolved_at: ahora(), resolved_by: u.id, updated_at: ahora(), updated_by: u.id });
       return send(res, 200, null);
