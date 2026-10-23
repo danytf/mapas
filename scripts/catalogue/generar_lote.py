@@ -8,7 +8,7 @@ import json
 import os
 from collections import defaultdict
 
-PROV = {"04": "Almería", "06": "Badajoz", "10": "Cáceres", "11": "Cádiz", "14": "Córdoba", "18": "Granada", "21": "Huelva", "23": "Jaén", "29": "Málaga", "41": "Sevilla"}
+PROV = {"04": "Almería", "06": "Badajoz", "10": "Cáceres", "11": "Cádiz", "14": "Córdoba", "18": "Granada", "21": "Huelva", "23": "Jaén", "26": "La Rioja", "29": "Málaga", "41": "Sevilla"}
 
 ap = argparse.ArgumentParser()
 ap.add_argument("validados")
@@ -120,5 +120,5 @@ COMMIT;
   END IF;""")
         sql = sql.replace(f"JOIN public.categories cat ON cat.code = '{cod}'", "JOIN public.categories cat ON cat.name = c.categoria")
         assert "cat.code" not in sql and "categoria text" in sql, "plantilla de varias categorias no aplicada"
-    open(os.path.join(a.dir_salida, f"import_{cod}_{ine}_{nombre.lower().replace('í', 'i').replace('á', 'a').replace('é', 'e').replace('ó', 'o').replace('ú', 'u')}.sql"), "w", encoding="utf-8", newline="\n").write(sql)
+    open(os.path.join(a.dir_salida, f"import_{cod}_{ine}_{nombre.lower().replace('í', 'i').replace('á', 'a').replace('é', 'e').replace('ó', 'o').replace('ú', 'u').replace(' ', '_')}.sql"), "w", encoding="utf-8", newline="\n").write(sql)
     print(ine, nombre, n)

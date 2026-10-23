@@ -1,0 +1,7 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+por revisar;node/13676298387;Autobús;Nueva Estación de Logroño – Calle Miguel Delibes;Logroño;42.457529;-2.442703;posible duplicado de way/279110607 (Nueva Estación de Autobuses) a 7 m
+por revisar;node/13676298388;Autobús;Estación de autobuses de Santo Domingo de la Calzada – Plaza San Jerónimo Hermosilla;Santo Domingo de la Calzada;42.439112;-2.953145;posible duplicado de way/119256892 (Estacion de Autobuses Santo Domingo) a 0 m
+descartado;node/2207981818;Autobús;;Ventosa;42.405089;-2.62459;sin nombre en OpenStreetMap
+descartado;relation/18306244;Autobús;;Logroño;42.459952;-2.444741;sin nombre en OpenStreetMap
+por revisar;way/119256892;Autobús;Estacion de Autobuses Santo Domingo (Santo Domingo de la Calzada) – Plaza San Jerónimo Hermosilla;Santo Domingo de la Calzada;42.439107;-2.953143;posible duplicado de node/13676298388 (Santo Domingo de la Calzada) a 0 m
+por revisar;way/279110607;Autobús;Nueva Estación de Autobuses (Logroño) – Calle Miguel Delibes;Logroño;42.457593;-2.442669;posible duplicado de node/13676298387 (Nueva Estación de Logroño) a 7 m

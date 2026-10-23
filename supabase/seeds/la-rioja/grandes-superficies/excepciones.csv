@@ -1,0 +1,3 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/5322405845;;El Corte Inglés Outlet;Logroño;42.452399;-2.468653;texto excluido (supercor|opencor|viajes|seguros|bricolaje|gourmet|outlet|aparcamiento|parking)
+descartado;way/740834126;;Carrefour;Logroño;42.463632;-2.419917;duplicado en el lote de node/5043427794 (3 m)

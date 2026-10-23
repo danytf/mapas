@@ -1,0 +1,39 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/10233130630;;Ayuntamiento de Montenegro de Cameros;Montenegro de Cameros;42.089084;-2.755609;fuera de las provincias del lote (42)
+descartado;node/10918236781;;Tienda;Bañares;42.442717;-2.915697;nombre generico o dudoso en OpenStreetMap: Tienda
+descartado;node/12205866605;;;Alberite;42.404867;-2.44069;sin nombre en OpenStreetMap
+descartado;node/13239952326;;Ayuntamiento;Bezares;42.370129;-2.670813;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/13316222443;;Carrefour;Navarrete;42.428922;-2.562428;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/1340275487;;Carrefour;Logroño;42.463888;-2.447098;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/2554343574;;Juzgados;Alfaro;42.178578;-1.749987;nombre generico o dudoso en OpenStreetMap: Juzgados
+descartado;node/2641666932;;Ayuntamiento;Aldeanueva de Ebro;42.229276;-1.887375;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/3848663126;;Carrefour;Arnedo;42.224108;-2.106527;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/5043427794;;Carrefour;Logroño;42.463655;-2.419886;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/633435151;;Centro de Salud;Calahorra;42.302795;-1.97299;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;node/6341623424;;Ayuntamiento;Villarta-Quintana;42.429768;-3.049197;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/7799181344;;Ayuntamiento;Ojacastro;42.346492;-3.005158;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/1013410691;;Ayuntamiento;Zarratón;42.514335;-2.882599;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/1270930831;;Centro Comercial Berceo;Logroño;42.462628;-2.420591;duplicado en el lote de way/30689516 (23 m)
+descartado;way/1280004690;;;Logroño;42.451307;-2.469872;sin nombre en OpenStreetMap
+descartado;way/1280004691;;;Logroño;42.452172;-2.469459;sin nombre en OpenStreetMap
+descartado;way/1280024848;;Ayuntamiento de Villamediana de Iregua;Villamediana de Iregua;42.426287;-2.419168;duplicado en el lote de node/6861781770 (3 m)
+descartado;way/1284981805;;;Logroño;42.451605;-2.469802;sin nombre en OpenStreetMap
+descartado;way/1284981806;;;Logroño;42.4511;-2.470326;sin nombre en OpenStreetMap
+descartado;way/1284981807;;;Logroño;42.451185;-2.470246;sin nombre en OpenStreetMap
+descartado;way/1324546907;;Ayuntamiento;Valgañón;42.317586;-3.067349;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/296693094;;Consultorio Médico;Lardero;42.429394;-2.459266;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa|^cruz roja|minusv[aá]lidos|centro de d[ií]a)
+descartado;way/316841569;;;Logroño;42.458994;-2.43728;sin nombre en OpenStreetMap
+descartado;way/490212532;;Ayuntamiento;Sorzano;42.342453;-2.527691;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/517960290;;Leroy Merlin;Logroño;42.451725;-2.472787;texto excluido (leroy merlin|click|recogida)
+descartado;way/526437004;;Ayuntamiento;Igea;42.068445;-2.008776;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/645702851;;Centro de Salud;Autol;42.214341;-2.004685;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/645707457;;Ayuntamiento;Quel;42.228629;-2.048513;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/672993948;;Ayuntamiento;Nalda;42.334063;-2.487814;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/673497886;;Ayuntamiento;Albelda de Iregua;42.358326;-2.473387;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/674421121;;Centro de Salud;Sajazarra;42.587659;-2.96223;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/677269958;;Ayuntamiento;Villarta-Quintana;42.429772;-3.049192;duplicado en el lote de node/6341623424 (0 m)
+descartado;way/740834126;;Carrefour;Logroño;42.463632;-2.419917;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/755539254;;Ayuntamiento;Ezcaray;42.327173;-3.01329;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/94831690;;Ayuntamiento;Ajamil;42.167483;-2.487811;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/98654988;;Ayuntamiento;Leiva;42.502909;-3.046597;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/99716435;;Ayuntamiento;Santa Coloma;42.36682;-2.655723;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
