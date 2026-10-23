@@ -2,10 +2,12 @@
 // Imita lo mínimo de GoTrue y PostgREST que usa la app, con datos sintéticos de varias provincias, y un
 // Nominatim simulado que registra las peticiones. Puerto 8766, estado en memoria. Uso: node scripts/dev/mock-supabase.mjs
 // Usuarios (contraseña «x»): multi@test.es (Granada y Almería), alm@test.es (Almería), vacio@test.es (Jaén, sin puntos), admin@test.es.
-// Utilidades: GET /__log (peticiones registradas), GET /__state (estado), GET /__reset (opcional ?n=<puntos>&estados=1&realista=1).
+// Utilidades: GET /__log (peticiones registradas), GET /__state (estado), GET /__reset (opcional ?n=<puntos>&estados=1&realista=1),
+// GET /__fail?n=<veces>&modo=500|perdida (las próximas escrituras del estado compartido fallan con un 500, o se aplican y se corta la respuesta).
 import { createServer } from "node:http";
 
 const PORT = 8766;
+let FALLO = { n: 0, modo: "500" };
 const id = (n) => "00000000-0000-4000-8000-" + String(n).padStart(12, "0");
 const b64 = (o) => Buffer.from(JSON.stringify(o)).toString("base64url");
 
@@ -150,6 +152,7 @@ createServer(async (req, res) => {
   if (req.method === "OPTIONS") return send(res, 204);
 
   // Utilidades de prueba.
+  if (path === "/__fail") { FALLO = { n: Number(url.searchParams.get("n") || 0), modo: url.searchParams.get("modo") || "500" }; return send(res, 200, FALLO); }
   if (path === "/__log") return send(res, 200, S.log);
   if (path === "/__state") return send(res, 200, { userState: S.userState, establishments: S.establishments });
   if (path === "/__reset") { const n = url.searchParams.get("n"); const e = url.searchParams.get("estados"); S = freshState(n === null ? undefined : Number(n), e === null ? undefined : e === "1", url.searchParams.get("realista") === "1"); ADM = admInicial(); for (const p of provinces) p.is_active = true; return send(res, 200, { ok: true, puntos: S.establishments.length, estados: S.conEstados }); }
@@ -256,6 +259,8 @@ createServer(async (req, res) => {
     if (table === "establishment_app_state") {
       const visibles = new Set((u.role === "admin" ? S.establishments : S.establishments.filter((e) => u.provinces.some((c) => P(c).id === e.province_id))).map((e) => e.id));
       // Escrituras con el mismo protocolo que la app (H-11): INSERT si no hay fila (23505 si ya existe) y UPDATE condicionado a la versión leída, que suma 1.
+      const fallaAhora = (req.method === "POST" || req.method === "PATCH") && FALLO.n > 0 ? (FALLO.n--, FALLO.modo) : "";
+      if (fallaAhora === "500") return send(res, 500, { code: "XX000", message: "fallo simulado" });
       if (req.method === "POST") {
         const fila = Array.isArray(body) ? body[0] : body;
         if (!fila || !visibles.has(fila.establishment_id)) return send(res, 403, { code: "42501", message: "new row violates row-level security policy" });
@@ -270,6 +275,7 @@ createServer(async (req, res) => {
         if (!fila && S.conEstados) { const v = estadosDe(S.establishments).find((r) => r.establishment_id === eid); if (v) fila = S.shared[eid] = { ...v, updated_by: v.updated_by || u.id, version: 1 }; }
         if (!fila || fila.version !== ver) return send(res, 200, []);
         fila.state = body.state; fila.updated_by = body.updated_by || u.id; fila.version += 1;
+        if (fallaAhora === "perdida") { req.socket.destroy(); return; }
         return send(res, 200, [{ establishment_id: eid, version: fila.version }]);
       }
       const base = (S.conEstados ? estadosDe(S.establishments).filter((r) => !S.shared[r.establishment_id]) : []).concat(Object.values(S.shared));

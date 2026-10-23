@@ -343,6 +343,9 @@
   #ficha .row3 input { min-width: 0; }
   .fi-btns { display: flex; gap: 8px; flex-wrap: wrap; }
   .fi-msg { font-size: var(--fs-label); color: var(--err); min-height: 16px; }
+  #ficha .fi-res { flex: 1 1 100%; display: grid; gap: 6px; padding: 8px 0 2px; border-top: 1px dashed var(--line-2); font-size: var(--fs-label); }
+  #ficha .fi-res label, #ficha .fi-res p { margin: 0; font-weight: 600; }
+  #ficha .fi-res .fi-btns { display: flex; gap: 8px; flex-wrap: wrap; }
   #ficha .loc { display: grid; gap: 10px; }
   #ficha .loc .lrow { display: flex; gap: 8px; flex-wrap: wrap; }
   #ficha .loc .lb { display: inline-flex; align-items: center; min-height: 34px; font: inherit; font-size: var(--fs-label); font-weight: 600; padding: 0 12px; border: 1px solid var(--line-2); border-radius: var(--r-control); background: var(--panel); color: var(--fg); cursor: pointer; text-decoration: none; }
@@ -581,6 +584,20 @@
   .cal-list > li.cal-empty { font-size: var(--fs-label); color: var(--muted); text-align: center; padding: 14px 6px; border: 1px dashed var(--line-2); border-radius: var(--r-card); }
   .cal-none { padding: 34px 16px; text-align: center; color: var(--muted); font-size: var(--fs-body); border: 1px dashed var(--line-2); border-radius: var(--r-card); background: var(--panel); }
   .cal-note { font-size: var(--fs-label); color: var(--muted); margin: 12px 0 0; }
+  .cal-past { padding: 10px 12px; border: 1px solid var(--line-2); border-radius: var(--r-card); background: var(--panel); margin: 0 0 12px; }
+  .cal-sum .t b { color: var(--fg); }
+  .cal-seg { margin: 0; padding: 0 12px 8px; font-size: var(--fs-label); font-weight: 600; color: var(--fg); }
+  .cal-seg.late { color: var(--warn); }
+  .cal-warn { font-size: var(--fs-label); font-weight: 650; color: var(--warn); }
+  .cal-card.s-seguimiento { --st: var(--fg); --st-fg: var(--fg); border-left-style: double; }
+  .cal-chip.s-seguimiento { --st: var(--fg); }
+  .cal-modo { display: inline-flex; gap: 6px; margin-left: auto; }
+  .cal-modo button { height: 32px; padding: 0 13px; font-size: var(--fs-label); border-radius: var(--r-pill); }
+  .cal-modo button[aria-pressed="true"] { border-color: var(--fg); font-weight: 600; }
+  .cal-ongt { width: 100%; border-collapse: collapse; font-size: var(--fs-label); font-variant-numeric: tabular-nums; }
+  .cal-ongt th, .cal-ongt td { padding: 7px 12px; text-align: left; border-bottom: 1px solid var(--line); }
+  .cal-ongt thead th { color: var(--muted); font-weight: 560; border-bottom-color: var(--line-2); }
+  .cal-pp { color: var(--warn); }
   @media (max-width: 900px) {
     #dlgCal { padding: 16px 14px 20px; }
     .cal-bar > .cal-f { flex: 1 1 140px; }
@@ -774,10 +791,18 @@
   .kpi { border-left: 5px solid var(--kpi, var(--line-2)); padding-left: 16px; }
   .kpi.hl { --kpi: var(--st-concedido); border-left-color: var(--kpi); }
   .kpi.al { --kpi: var(--st-solicitado); border-left-color: var(--kpi); }
-  .kpis .kpi:nth-child(2) { --kpi: var(--st-solicitado); }
-  .kpis .kpi:nth-child(3) { --kpi: var(--st-concedido); }
-  .kpis .kpi:nth-child(4) { --kpi: var(--st-denegado); }
-  .kpis .kpi:nth-child(8) { --kpi: var(--st-caducado); }
+  button.kpi { display: block; width: 100%; height: auto; text-align: left; font: inherit; font-weight: 400; color: var(--fg); cursor: pointer; }
+  button.kpi:hover { border-color: var(--muted); border-left-color: var(--kpi, var(--muted)); }
+  button.kpi:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .kpi small { display: block; margin-top: 2px; font-size: var(--fs-label); color: var(--muted); }
+  .kpi.hl small, .kpi.al small { color: inherit; opacity: .95; }
+  .pn-bar { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: end; }
+  #dlgPanel .cal-f select { width: auto; min-width: 170px; }
+  .pn-hoy { margin: 0 0 0 auto; font-size: var(--fs-label); color: var(--muted); }
+  .pn-back { margin-bottom: 8px; }
+  .pn-empty { padding: 28px 16px; text-align: center; color: var(--muted); border: 1px dashed var(--line-2); border-radius: var(--r-card); background: var(--panel); }
+  #pnBody table.pn-list td:nth-child(n+2), #pnBody table.pn-list th:nth-child(n+2) { text-align: left; white-space: normal; }
+  #pnBody table.pn-list td:nth-child(5), #pnBody table.pn-list th:nth-child(5) { text-align: right; }
   .pn-scroll { max-height: none; overflow-x: auto; overflow-y: visible; }
   #pnBody thead th { position: static; }
   #pnBody tbody tr:last-child td, #admBody tbody tr:last-child td, #admBody tbody tr:last-child th { border-bottom: 0; }
@@ -949,7 +974,7 @@
       <ul>
         <li>Arriba: el nombre, la dirección, «Cómo llegar» y el corazón de favoritos. Debajo, el estado actual, el próximo seguimiento y los contadores.</li>
         <li>Puedes valorar el punto para captación de 1 a 5 estrellas y anotar el contacto y las notas.</li>
-        <li>Las pestañas «Solicitudes» y «Concesiones» recogen las fechas, los captadores y la ONG de cada una; las solicitudes admiten una fecha de seguimiento y se pueden conceder, denegar o editar.</li>
+        <li>Las pestañas «Solicitudes» y «Concesiones» recogen las fechas, los captadores, la ONG, el contacto y las notas de cada una. Las solicitudes se pueden conceder, denegar, retirar o editar: al resolverlas se conservan en la lista con su fecha y su motivo, y al conceder se crea la concesión enlazada. Las concesiones se pueden cancelar con motivo.</li>
         <li>«Guardar cambios» guarda en Supabase. Si ves «Cambios sin guardar», aún no se ha guardado. Si otra persona cambió el punto mientras lo editabas, la aplicación no pisa su cambio: te lo explica y te deja cargar la versión actual.</li>
         <li>«Más acciones»: «Desactivar en el mapa» (solo para ti, el punto sigue en la lista), «Quitar del mapa» (solo para ti, se recupera desde el menú) y, solo para administradores, «Archivar para todos».</li>
       </ul>
@@ -976,7 +1001,7 @@
     </details>
     <details class="ay-sec"><summary>Informes</summary>
       <ul>
-        <li><b>Panel resumen:</b> puntos en el mapa, concedidos, denegados, concesiones vigentes hoy, captadores que se pueden enviar hoy, solicitudes caducadas, permisos que caducan en 30 días y el desglose por categoría y por municipio.</li>
+        <li><b>Panel resumen:</b> centro de mando con tareas de hoy, solicitudes, concesiones (vigentes, próximas y por vencer en 7, 15 y 30 días) y avisos de datos incompletos. Cada cifra dice qué cuenta y abre la lista exacta de registros; se puede filtrar por provincia y ONG.</li>
         <li><b>Calendario semanal:</b> los permisos de cada día de la semana en una provincia, con filtros por ONG y por estado, y el total de captadores de cada día.</li>
       </ul>
     </details>
@@ -1506,8 +1531,29 @@ const sanitizePermitEntry = (value, kind) => {
   if (captadores) entry.captadores = captadores;
   const ong = cleanStateText(value.ong, 200).trim();
   if (ong) entry.ong = ong;
-  if (kind === "solicitud" && (value.res === true || value.res === "denegada")) entry.res = "denegada";
-  if (kind === "concesion" && value.cancelada === true) entry.cancelada = true;
+  /* Identidad y trazabilidad del expediente: id propio, enlace solicitud-concesión, motivo y fecha de la decisión. */
+  const id = typeof value.id === "string" && /^[A-Za-z0-9-]{8,64}$/.test(value.id) ? value.id : "";
+  if (id) entry.id = id;
+  if (kind === "solicitud") {
+    if (value.res === true || value.res === "denegada") entry.res = "denegada";
+    else if (value.res === "aprobada" || value.res === "retirada") entry.res = value.res;
+    const conc = typeof value.conc === "string" && /^[A-Za-z0-9-]{8,64}$/.test(value.conc) ? value.conc : "";
+    if (conc && entry.res === "aprobada") entry.conc = conc;
+  } else {
+    if (value.cancelada === true) entry.cancelada = true;
+    const sol = typeof value.sol === "string" && /^[A-Za-z0-9-]{8,64}$/.test(value.sol) ? value.sol : "";
+    if (sol) entry.sol = sol;
+    const alta = validIsoDate(value.alta);
+    if (alta) entry.alta = alta;
+  }
+  const resFecha = validIsoDate(value.resFecha);
+  if (resFecha && (kind !== "solicitud" || entry.res) ) entry.resFecha = resFecha;
+  const motivo = cleanStateText(value.motivo, 500).trim();
+  if (motivo) entry.motivo = motivo;
+  const contacto = cleanStateText(value.contacto, 500).trim();
+  if (contacto) entry.contacto = contacto;
+  const notas = cleanStateText(value.notas, 2000).trim();
+  if (notas) entry.notas = notas;
   return entry;
 };
 const sanitizeSharedPermitState = (value) => {
@@ -1539,19 +1585,34 @@ const sanitizeSharedPermitState = (value) => {
   }
   return result;
 };
-const today = () => new Date().toISOString().slice(0, 10);
-const isVig = (h) => !h.cancelada && (!h.desde || h.desde <= today()) && (!h.hasta || h.hasta >= today());
+/* === Reglas de expedientes (compartidas por la ficha, el panel resumen y el calendario) ===
+   Un expediente es una solicitud o una concesión; no se mezclan sus recuentos ni sus ciclos de vida.
+   Solicitud: pendiente → aprobada | denegada | retirada, o caducada si sus fechas pasan sin respuesta.
+   Concesión: vigente | futura | terminada | cancelada. Las fechas son inclusivas por los dos extremos.
+   Los captadores no se suman entre expedientes de la misma ONG en un punto (se toma el mayor, para no contar dos veces
+   una ampliación o un duplicado) y sí se suman entre ONG distintas. */
+const TZ_NEGOCIO = "Europe/Madrid";
+const fechaMadrid = new Intl.DateTimeFormat("en-CA", { timeZone: TZ_NEGOCIO, year: "numeric", month: "2-digit", day: "2-digit" });
+const today = () => fechaMadrid.format(new Date());
+const addDays = (d, n) => { const t = new Date(d + "T00:00:00Z"); t.setUTCDate(t.getUTCDate() + n); return t.toISOString().slice(0, 10); };
+const mondayOf = (d) => addDays(d, -((new Date(d + "T00:00:00Z").getUTCDay() + 6) % 7));
+const daysBetween = (a, b) => Math.round((Date.parse(b + "T00:00:00Z") - Date.parse(a + "T00:00:00Z")) / 864e5);
+const UMBRAL_ESTANCADA = 15; /* días sin respuesta a partir de los cuales una solicitud pendiente se considera estancada */
+const newId = () => (self.crypto && typeof self.crypto.randomUUID === "function") ? self.crypto.randomUUID() : "x" + Date.now().toString(36) + Math.random().toString(36).slice(2, 12);
+const solsOf = (p) => (p && Array.isArray(p.solicitudes)) ? p.solicitudes : (p && p.solicitud && (p.solicitud.desde || p.solicitud.hasta || p.solicitud.ong || p.solicitud.captadores) ? [p.solicitud] : []);
+const hasSol = (p) => solsOf(p).length > 0;
+const solEstado = (q, t) => (q.res === "denegada" || q.res === "aprobada" || q.res === "retirada") ? q.res : (q.hasta && q.hasta < (t || today()) ? "caducada" : "pendiente");
+const solValid = (q) => solEstado(q) === "pendiente";
+const concEstado = (h, t) => { t = t || today(); return h.cancelada ? "cancelada" : (h.desde && h.desde > t) ? "futura" : (h.hasta && h.hasta < t) ? "terminada" : "vigente"; };
+const isVig = (h) => concEstado(h) === "vigente";
 const histOf = (c) => ((permits[permitKey(c)] && permits[permitKey(c)].historial) || []).slice().sort((a, b) => (b.desde || "").localeCompare(a.desde || ""));
 const vigs = (c) => histOf(c).filter(isVig);
 const vigente = (c) => histOf(c).find(isVig);
 const histTxt = (h) => fmtD(h.desde) + " – " + fmtD(h.hasta) + (h.ong ? " · " + h.ong : "") + (safeCount(h.captadores) ? " · " + safeCount(h.captadores) + " captador" + (safeCount(h.captadores) === 1 ? "" : "es") : "");
-const solsOf = (p) => (p && Array.isArray(p.solicitudes)) ? p.solicitudes : (p && p.solicitud && (p.solicitud.desde || p.solicitud.hasta || p.solicitud.ong || p.solicitud.captadores) ? [p.solicitud] : []);
-const hasSol = (p) => solsOf(p).length > 0;
-const solValid = (q) => !q.res && (!q.hasta || q.hasta >= today());
 const solRange = (q) => [(q.desde || q.hasta) ? fmtD(q.desde) + " – " + fmtD(q.hasta) : "", q.ong, safeCount(q.captadores) ? safeCount(q.captadores) + " capt." : ""].filter(Boolean).join(" · ");
 const solTxt = (c) => solsOf(permOf(c)).filter(solValid).map(solRange).filter(Boolean).join(" | ");
 const futura = (c) => histOf(c).filter((h) => !h.cancelada && h.desde && h.desde > today()).pop();
-/* Estado: se calcula solo a partir de las solicitudes y concesiones (nada se elige a mano). */
+/* Estado resumido del punto (solo para el color del pin y los filtros; no sustituye a los expedientes). */
 const estadoCalc = (p) => {
   p = p || {};
   const sols = solsOf(p), hs = (p.historial || []).slice().sort((a, b) => (b.desde || "").localeCompare(a.desde || "")), pend = sols.filter((x) => !x.res), t = today();
@@ -1561,12 +1622,101 @@ const estadoCalc = (p) => {
   if (pend.some(solValid)) return "solicitado";
   if (pend.length) return "caducado"; /* solicitudes sin respuesta cuyas fechas ya pasaron */
   if (hs.length) return hs[0].cancelada ? "cancelado" : "sin"; /* última concesión cancelada / terminada */
-  return "denegado";
+  return sols.some((x) => x.res === "denegada") ? "denegado" : "sin";
 };
 const estadoOf = (c) => estadoCalc(permOf(c));
 const segCalc = (p) => solsOf(p).filter((x) => !x.res && x.seg).map((x) => x.seg).sort()[0] || "";
 const fechaCalc = (p) => solsOf(p).map((x) => x.fecha).filter(Boolean).sort().pop() || "";
 const seguimientoDue = (c) => { const d = segCalc(permOf(c)) || permOf(c).seguimiento; return d && d <= today() ? d : ""; };
+/* Expedientes de un punto en forma uniforme (k: «sol» o «con»; est: estado de su ciclo de vida). */
+const expedientesDe = (c, p) => {
+  const t = today(), out = [];
+  solsOf(p).forEach((q, i) => out.push({ k: "sol", c, i, id: q.id || "", est: solEstado(q, t), desde: q.desde || "", hasta: q.hasta || "", ong: (q.ong || "").trim(), n: safeCount(q.captadores), seg: q.res ? "" : (q.seg || ""), fecha: q.fecha || "", resFecha: q.resFecha || "", motivo: q.motivo || "" }));
+  ((p && p.historial) || []).forEach((h, i) => out.push({ k: "con", c, i, id: h.id || "", est: concEstado(h, t), desde: h.desde || "", hasta: h.hasta || "", ong: (h.ong || "").trim(), n: safeCount(h.captadores), seg: "", fecha: h.alta || "", resFecha: h.resFecha || "", motivo: h.motivo || "", sol: h.sol || "" }));
+  return out;
+};
+/* Seguimientos programados: la fecha «seg» de cada solicitud pendiente (o el seguimiento de un punto sin solicitudes). */
+const seguimientosDe = (c, p) => {
+  const out = [];
+  solsOf(p).forEach((q, i) => { if (!q.res && q.seg) out.push({ c, fecha: q.seg, ong: (q.ong || "").trim(), i }); });
+  if (!solsOf(p).length && p && p.seguimiento) out.push({ c, fecha: p.seguimiento, ong: "", i: -1 });
+  return out;
+};
+const diaEnRango = (r, d) => (!r.desde || r.desde <= d) && (!r.hasta || r.hasta >= d);
+const claveOng = (r) => r.c.id + "|" + r.ong.toLowerCase();
+/* Captadores de un conjunto de expedientes de un mismo día: mayor por punto y ONG, sumando entre ONG distintas. */
+const capacidad = (recs) => { const m = new Map(); recs.forEach((r) => m.set(claveOng(r), Math.max(m.get(claveOng(r)) || 0, r.n))); return [...m.values()].reduce((a, b) => a + b, 0); };
+const capacidadPorOng = (recs) => { const m = new Map(); recs.forEach((r) => { const k = claveOng(r), v = m.get(k); if (!v || r.n > v.n) m.set(k, { ong: v ? v.ong : (r.ong || "Sin ONG"), lc: r.ong.toLowerCase(), n: r.n }); }); const nombre = new Map(), out = new Map(); m.forEach((v) => { if (!nombre.has(v.lc)) nombre.set(v.lc, v.ong); const nm = nombre.get(v.lc); out.set(nm, (out.get(nm) || 0) + v.n); }); return out; };
+/* Posibles incoherencias o datos incompletos que requieren revisión (no se corrigen solas). */
+const incidencias = (recs, t) => {
+  const out = [], activas = recs.filter((r) => r.k === "con" && (r.est === "vigente" || r.est === "futura"));
+  recs.forEach((r) => {
+    if (r.k === "sol" && r.est === "pendiente") {
+      if (!r.ong) out.push({ r, tipo: "Solicitud sin ONG" });
+      if (!r.n) out.push({ r, tipo: "Solicitud sin número de captadores" });
+      if (r.fecha && daysBetween(r.fecha, t) > UMBRAL_ESTANCADA) out.push({ r, tipo: "Solicitud estancada: más de " + UMBRAL_ESTANCADA + " días sin respuesta" });
+    }
+    if (r.k === "sol" && r.est === "caducada") out.push({ r, tipo: "Solicitud sin respuesta cuyas fechas ya pasaron" });
+    if (r.k === "con" && (r.est === "vigente" || r.est === "futura")) {
+      if (!r.ong) out.push({ r, tipo: "Concesión sin ONG" });
+      if (!r.n) out.push({ r, tipo: "Concesión sin número de captadores" });
+      if (!r.hasta) out.push({ r, tipo: "Concesión sin fecha de fin" });
+    }
+  });
+  for (let a = 0; a < activas.length; a++) for (let b = a + 1; b < activas.length; b++) {
+    const x = activas[a], y = activas[b];
+    if (x.c.id === y.c.id && x.ong.toLowerCase() === y.ong.toLowerCase() && (!x.desde || !y.hasta || x.desde <= y.hasta) && (!y.desde || !x.hasta || y.desde <= x.hasta)) out.push({ r: x, tipo: "Concesiones solapadas de la misma ONG en este punto" });
+  }
+  return out;
+};
+/* Indicadores del panel: cada lista contiene los expedientes exactos que componen la cifra. */
+const indicadores = (recs, segs, t) => {
+  const sol = recs.filter((r) => r.k === "sol"), con = recs.filter((r) => r.k === "con");
+  const vig = con.filter((r) => r.est === "vigente"), fut = con.filter((r) => r.est === "futura");
+  const pend = sol.filter((r) => r.est === "pendiente");
+  const venc = (a, b) => vig.filter((r) => r.hasta && daysBetween(t, r.hasta) >= a && daysBetween(t, r.hasta) <= b);
+  const res = sol.filter((r) => r.est === "aprobada" || r.est === "denegada" || r.est === "retirada");
+  const conTiempo = res.filter((r) => r.fecha && r.resFecha && r.resFecha >= r.fecha);
+  return {
+    pendientes: pend,
+    sinSeguimiento: pend.filter((r) => !r.seg),
+    estancadas: pend.filter((r) => r.fecha && daysBetween(r.fecha, t) > UMBRAL_ESTANCADA),
+    sinRespuesta: sol.filter((r) => r.est === "caducada"),
+    aprobadas: sol.filter((r) => r.est === "aprobada"), denegadas: sol.filter((r) => r.est === "denegada"), retiradas: sol.filter((r) => r.est === "retirada"),
+    segVencidos: segs.filter((s) => s.fecha < t), segHoy: segs.filter((s) => s.fecha === t), segProximos: segs.filter((s) => s.fecha > t && s.fecha <= addDays(t, 7)),
+    vigentes: vig, futuras30: fut.filter((r) => r.desde <= addDays(t, 30)),
+    vencen7: venc(0, 7), vencen15: venc(8, 15), vencen30: venc(16, 30), sinFin: vig.filter((r) => !r.hasta),
+    capacidadHoy: capacidad(vig),
+    tasaResolucion: sol.length ? Math.round(100 * res.length / sol.length) : null,
+    diasMedios: conTiempo.length ? Math.round(10 * conTiempo.reduce((a, r) => a + daysBetween(r.fecha, r.resFecha), 0) / conTiempo.length) / 10 : null,
+    muestraTiempo: conTiempo.length, resueltas: res.length, solicitudes: sol.length,
+    incidencias: incidencias(recs, t)
+  };
+};
+/* Estado de un expediente en un día concreto, solo con lo que consta en los registros (no se inventa el pasado).
+   Concesión: «autorizada» o «cancelada»; si está cancelada y no consta cuándo, «desconocida».
+   Solicitud: «pendiente», el estado en que terminó (aprobada, denegada, retirada) desde su fecha de decisión, o «desconocida»
+   cuando para saberlo hace falta una fecha (de solicitud o de decisión) que no se guardó. Devuelve null si ese día aún no existía. */
+const estadoEnDia = (r, d, t) => {
+  if (r.k === "con") {
+    if (r.est !== "cancelada") return "autorizada";
+    if (!r.resFecha) return "desconocida";
+    return d < r.resFecha ? "autorizada" : "cancelada";
+  }
+  const pasado = d < t;
+  if (r.est === "pendiente" || r.est === "caducada") return !pasado ? "pendiente" : (r.fecha ? (r.fecha <= d ? "pendiente" : null) : "desconocida");
+  if (!r.resFecha) return "desconocida";
+  if (d >= r.resFecha) return r.est;
+  return r.fecha ? (r.fecha <= d ? "pendiente" : null) : "desconocida";
+};
+/* Una columna por día de la semana que empieza en wk: captadores autorizados (concesiones) y por aprobar (solicitudes) por separado, y los seguimientos aparte. */
+const calendarioSemana = (recs, segs, wk, t) => Array.from({ length: 7 }, (_, k) => {
+  const d = addDays(wk, k), items = [];
+  recs.forEach((r) => { if ((!r.desde && !r.hasta) || !diaEnRango(r, d)) return; const e = estadoEnDia(r, d, t); if (e) items.push({ r, e }); });
+  const aut = items.filter((i) => i.e === "autorizada").map((i) => i.r), pen = items.filter((i) => i.e === "pendiente").map((i) => i.r), sg = segs.filter((x) => x.fecha === d);
+  return { d, items, aut: capacidad(aut), pen: capacidad(pen), nAut: aut.length, nPen: pen.length, seg: sg, segAtras: d < t ? sg.length : 0 };
+});
+/* === fin de las reglas de expedientes === */
 /* Revisiones y correcciones se guardan en el estado del usuario en Supabase. */
 let reviewed = new Set();
 const saveReviewed = () => typeof window.mapaPersistUserState === "function" ? window.mapaPersistUserState("reviewed", [...reviewed]) : Promise.resolve(false);
@@ -1613,6 +1763,7 @@ function popupFor(c) {
 
 // Ficha del punto (panel lateral): cabecera con dirección y avisos; estado, valoración, contacto y notas siempre visibles;
 // solicitudes, concesiones y ubicación en pestañas; Guardar fijo abajo y las acciones destructivas en «Más acciones».
+let fichaTabPedida = ""; /* pestaña con la que se abre la próxima ficha (desde el panel o el calendario) */
 function fichaFor(c, pos) {
   const p = permOf(c);
   const el = document.createElement("div");
@@ -1647,14 +1798,14 @@ function fichaFor(c, pos) {
         '<section class="fi-tabs">' +
           '<div class="ptabs" role="tablist" aria-label="Detalle del permiso"></div>' +
           '<div data-tab="s" role="tabpanel" aria-label="Solicitudes">' +
-            '<p class="fi-hint">Un mismo punto puede tener varias solicitudes, cada una con sus fechas. El estado, la fecha de solicitud y el seguimiento se calculan solos a partir de ellas y de las concesiones.</p>' +
+            '<p class="fi-hint">Un mismo punto puede tener varias solicitudes, cada una con sus fechas. Al aprobar, denegar o retirar una solicitud se conserva en la lista con su fecha y su motivo. El estado del punto es un resumen que se calcula solo.</p>' +
             '<ul class="s-list fi-list"></ul>' +
-            '<details class="aform s-form"><summary>Añadir solicitud</summary><div class="row3"><label>Desde<input class="s-desde" type="date"></label><label>Hasta<input class="s-hasta" type="date"></label><label>Captadores<input class="s-n" type="number" min="1" step="1" placeholder="nº"></label></div><label>ONG<input class="s-ong" type="text" list="ongList" placeholder="AECC, Cruz Roja…" autocomplete="off"></label><label>Próximo seguimiento<input class="s-seg" type="date"></label><div class="fi-btns"><button type="button" class="s-add">Añadir solicitud</button><button type="button" class="s-cancel" hidden>Cancelar edición</button></div></details>' +
+            '<details class="aform s-form"><summary>Añadir solicitud</summary><div class="row3"><label>Desde<input class="s-desde" type="date"></label><label>Hasta<input class="s-hasta" type="date"></label><label>Captadores<input class="s-n" type="number" min="1" step="1" placeholder="nº"></label></div><label>ONG<input class="s-ong" type="text" list="ongList" placeholder="AECC, Cruz Roja…" autocomplete="off"></label><label>Próximo seguimiento<input class="s-seg" type="date"></label><label>Contacto de esta solicitud<input class="s-contacto" type="text" maxlength="500" autocomplete="off"></label><label>Notas de esta solicitud<textarea class="s-notas" maxlength="2000" rows="2"></textarea></label><div class="fi-btns"><button type="button" class="s-add">Añadir solicitud</button><button type="button" class="s-cancel" hidden>Cancelar edición</button></div></details>' +
             '<div class="s-msg fi-msg" role="status"></div>' +
           "</div>" +
           '<div data-tab="h" role="tabpanel" aria-label="Concesiones">' +
             '<ul class="h-list fi-list"></ul>' +
-            '<details class="aform h-form"><summary>Añadir concesión</summary><div class="row3"><label>Desde<input class="h-desde" type="date"></label><label>Hasta<input class="h-hasta" type="date"></label><label>Captadores<input class="h-n" type="number" min="1" step="1" placeholder="nº"></label></div><label>ONG<input class="h-ong" type="text" list="ongList" placeholder="AECC, Cruz Roja…" autocomplete="off"></label><div class="fi-btns"><button type="button" class="h-add">Añadir concesión al historial</button><button type="button" class="h-cancel" hidden>Cancelar edición</button></div></details>' +
+            '<details class="aform h-form"><summary>Añadir concesión</summary><div class="row3"><label>Desde<input class="h-desde" type="date"></label><label>Hasta<input class="h-hasta" type="date"></label><label>Captadores<input class="h-n" type="number" min="1" step="1" placeholder="nº"></label></div><label>ONG<input class="h-ong" type="text" list="ongList" placeholder="AECC, Cruz Roja…" autocomplete="off"></label><label>Contacto de esta concesión<input class="h-contacto" type="text" maxlength="500" autocomplete="off"></label><label>Notas de esta concesión<textarea class="h-notas" maxlength="2000" rows="2"></textarea></label><div class="fi-btns"><button type="button" class="h-add">Añadir concesión al historial</button><button type="button" class="h-cancel" hidden>Cancelar edición</button></div></details>' +
             '<div class="h-msg fi-msg" role="status"></div>' +
           "</div>" +
           '<div data-tab="l" role="tabpanel" aria-label="Ubicación">' +
@@ -1702,7 +1853,7 @@ function fichaFor(c, pos) {
     const next = e.key === "ArrowRight" ? ks[(i + 1) % ks.length] : e.key === "ArrowLeft" ? ks[(i - 1 + ks.length) % ks.length] : e.key === "Home" ? ks[0] : e.key === "End" ? ks[ks.length - 1] : null;
     if (next) { e.preventDefault(); showTab(next, true); }
   });
-  showTab("s");
+  showTab(tabs.some((t) => t[0] === fichaTabPedida) ? fichaTabPedida : "s"); fichaTabPedida = "";
   el.querySelector(".fi-close").addEventListener("click", () => map.closePopup());
   const favBtn = el.querySelector(".fi-fav");
   const paintFav = () => { const on = isFav(c); favBtn.setAttribute("aria-pressed", String(on)); favBtn.setAttribute("aria-label", on ? "Quitar de favoritos" : "Marcar como favorito"); favBtn.title = on ? "Quitar de favoritos" : "Marcar como favorito"; };
@@ -1727,13 +1878,16 @@ function fichaFor(c, pos) {
   const fuera = (e) => { if (!el.isConnected) { document.removeEventListener("click", fuera); return; } if (more.open && !more.contains(e.target)) more.open = false; };
   document.addEventListener("click", fuera);
   let val = p.valoracion || 0;
-  let hist = (p.historial || []).slice().map((h) => Object.assign({}, h));
+  const clone = (arr) => (arr || []).map((h) => Object.assign({}, h));
+  let hist = clone(p.historial);
   let editH = -1, editS = -1;
-  let sols = solsOf(p).map((x) => Object.assign({}, x));
+  let sols = clone(solsOf(p));
+  /* Última versión confirmada por Supabase: a ella se vuelve si un guardado falla. */
+  let base = { hist: clone(hist), sols: clone(sols), val };
   const q = (k) => el.querySelector("." + k);
   const ongList = document.getElementById("ongList") || document.body.appendChild(Object.assign(document.createElement("datalist"), { id: "ongList" }));
   ongList.innerHTML = [...new Set(["AECC", "Cruz Roja", "WWF", "FJC", "FPM", "FEC", "Aldeas Infantiles"].concat(Object.values(permits).reduce((a, x) => a.concat(solsOf(x).map((z) => z.ong), ((x && x.historial) || []).map((h) => h.ong)), []).filter(Boolean)))].map((o) => '<option value="' + esc(o) + '"></option>').join("");
-  const resetH = () => { editH = -1; ["h-desde", "h-hasta", "h-n", "h-ong"].forEach((k) => { q(k).value = ""; }); q("h-add").textContent = "Añadir concesión al historial"; q("h-cancel").hidden = true; };
+  const resetH = () => { editH = -1; ["h-desde", "h-hasta", "h-n", "h-ong", "h-contacto", "h-notas"].forEach((k) => { q(k).value = ""; }); q("h-add").textContent = "Añadir concesión al historial"; q("h-cancel").hidden = true; };
   const paintEf = () => {
     const cur = { historial: hist, solicitudes: sols, estado: p.estado }, ef = estadoCalc(cur), i = estadoInfo(ef), t = today();
     const vg = hist.filter(isVig).sort((a, b) => (b.desde || "").localeCompare(a.desde || ""))[0], fu = hist.filter((h) => !h.cancelada && h.desde && h.desde > t).sort((a, b) => (a.desde || "").localeCompare(b.desde || ""))[0];
@@ -1745,46 +1899,91 @@ function fichaFor(c, pos) {
     else if (ef === "caducado") { titulo = "Solicitudes sin respuesta"; meta = ["Las fechas pedidas ya pasaron"]; }
     else if (ef === "solicitado") { titulo = pend + (pend === 1 ? " solicitud pendiente" : " solicitudes pendientes"); }
     else if (ef !== "sin") { titulo = i[1]; }
+    /* El estado del punto es un resumen: si además hay solicitudes pendientes se dice aunque haya una concesión. */
+    if ((vg || fu) && pend) meta.push(pend + (pend === 1 ? " solicitud pendiente" : " solicitudes pendientes"));
     const card = el.querySelector(".ef"); card.className = "ef s-" + ef;
     card.innerHTML = '<span class="st">' + esc(i[1]) + "</span><strong>" + esc(titulo) + "</strong>" + (meta.length ? '<span class="meta">' + meta.join(" · ") + "</span>" : "");
     const fs = fechaCalc(cur), sg = segCalc(cur);
     el.querySelector(".pinfo").innerHTML = '<div class="' + (sg && sg <= t ? "due" : "") + '"><span>Próximo seguimiento</span><b>' + (sg ? esc(fmtD(sg)) + (sg <= t ? " (toca ya)" : "") : "—") + '</b></div><div><span>Solicitado el</span><b>' + (fs ? esc(fmtD(fs)) : "—") + '</b></div><div><span>Pendientes</span><b>' + pend + '</b></div><div><span>Concesiones</span><b>' + hist.filter((h) => !h.cancelada).length + "</b></div>";
   };
+  /* Pregunta inline (con motivo) para las acciones que cierran un expediente. Se rehace fuera del clic para que Leaflet no cierre la ficha. */
+  const askReason = (li, label, okText, onOk, sinCampo) => {
+    if (li.querySelector(".fi-res")) return;
+    const box = document.createElement("div");
+    box.className = "fi-res";
+    box.innerHTML = (sinCampo ? "<p>" + esc(label) + "</p>" : "<label>" + esc(label) + '<input type="text" maxlength="500" autocomplete="off"></label>') + '<div class="fi-btns"><button type="button" class="r-ok">' + esc(okText) + '</button><button type="button" class="r-no">No, volver</button></div>';
+    li.appendChild(box);
+    const inp = box.querySelector("input") || box.querySelector(".r-ok");
+    inp.focus();
+    const cerrar = () => { box.remove(); };
+    box.querySelector(".r-no").addEventListener("click", () => setTimeout(cerrar, 0));
+    box.querySelector(".r-ok").addEventListener("click", () => setTimeout(() => { const v = sinCampo ? "" : inp.value.trim(); cerrar(); onOk(v); }, 0));
+    inp.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !sinCampo) { e.preventDefault(); box.querySelector(".r-ok").click(); }
+      else if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); setTimeout(cerrar, 0); }
+    });
+  };
   const paintHist = () => {
     const ul = el.querySelector(".h-list");
     const sorted = hist.map((h, i) => [h, i]).sort((a, b) => (b[0].desde || "").localeCompare(a[0].desde || ""));
     ul.innerHTML = sorted.length ? "" : '<li class="fi-none">Sin concesiones registradas</li>';
+    const SOLTXT = { cancelada: "cancelada", futura: "futura", terminada: "terminada", vigente: "vigente" };
     sorted.forEach(([h, i]) => {
-      const li = document.createElement("li"); if (isVig(h)) li.className = "vig";
-      li.innerHTML = "<span>" + esc(histTxt(h)) + (h.cancelada ? " · <b>cancelada</b>" : (isVig(h) ? " · vigente" : "")) + "</span>"; if (h.cancelada) li.style.opacity = ".7";
-      const eb = document.createElement("button"); eb.type = "button"; eb.textContent = "Editar"; eb.title = "Cambiar fechas, ONG o captadores de esta concesión"; eb.style.cssText = "color:var(--ok);border-color:var(--ok);margin-left:auto";
-      eb.addEventListener("click", () => { editH = i; el.querySelector(".h-desde").value = h.desde || ""; el.querySelector(".h-hasta").value = h.hasta || ""; el.querySelector(".h-n").value = h.captadores || ""; el.querySelector(".h-ong").value = h.ong || ""; el.querySelector(".h-add").textContent = "Guardar cambios de la concesión"; el.querySelector(".h-cancel").hidden = false; el.querySelector(".h-form").open = true; });
-      const b = document.createElement("button"); b.type = "button"; b.textContent = "Quitar"; b.title = "Quitar esta concesión del historial";
-      b.addEventListener("click", () => setTimeout(() => { hist.splice(i, 1); if (editH === i) resetH(); paintHist(); commit(); }, 0));
-      const cb = document.createElement("button"); cb.type = "button"; cb.textContent = h.cancelada ? "Reactivar" : "Cancelar"; cb.title = h.cancelada ? "Volver a dar por válida esta concesión" : "Marcar esta concesión como cancelada"; cb.style.cssText = "color:var(--warn);border-color:var(--warn)";
-      cb.addEventListener("click", () => setTimeout(() => { if (h.cancelada) delete h.cancelada; else h.cancelada = true; paintHist(); commit(); }, 0));
-      li.appendChild(eb); li.appendChild(cb); li.appendChild(b); ul.appendChild(li);
+      const est = concEstado(h);
+      const li = document.createElement("li"); if (est === "vigente") li.className = "vig";
+      const origen = h.sol ? sols.find((x) => x.id === h.sol) : null;
+      li.innerHTML = "<span>" + esc(histTxt(h)) + " · <b>" + SOLTXT[est] + "</b>" +
+        (h.alta ? " · alta " + esc(fmtD(h.alta)) : "") + (origen ? " · de la solicitud del " + esc(fmtD(origen.fecha || "")) : "") +
+        (h.cancelada && h.resFecha ? " · cancelada el " + esc(fmtD(h.resFecha)) : "") + (h.motivo ? " · motivo: " + esc(h.motivo) : "") +
+        (h.contacto ? " · contacto: " + esc(h.contacto) : "") + (h.notas ? " · " + esc(h.notas) : "") + "</span>";
+      if (h.cancelada || est === "terminada") li.style.opacity = ".7";
+      const mk = (t, title, css, fn) => { const b = document.createElement("button"); b.type = "button"; b.textContent = t; b.title = title; if (css) b.style.cssText = css; b.addEventListener("click", () => setTimeout(() => { if (!commitBusy) fn(b); }, 0)); li.appendChild(b); return b; };
+      mk("Editar", "Cambiar fechas, ONG o captadores de esta concesión", "color:var(--ok);border-color:var(--ok);margin-left:auto", () => { editH = i; q("h-desde").value = h.desde || ""; q("h-hasta").value = h.hasta || ""; q("h-n").value = h.captadores || ""; q("h-ong").value = h.ong || ""; q("h-contacto").value = h.contacto || ""; q("h-notas").value = h.notas || ""; q("h-add").textContent = "Guardar cambios de la concesión"; q("h-cancel").hidden = false; q("h-form").open = true; });
+      if (h.cancelada) mk("Reactivar", "Volver a dar por válida esta concesión", "color:var(--warn);border-color:var(--warn)", async () => { delete h.cancelada; delete h.resFecha; paintHist(); const ok = await commit(); q("h-msg").style.color = ok ? "var(--ok)" : "var(--err)"; q("h-msg").textContent = ok ? "Concesión reactivada y guardada." : "No se ha reactivado: no se pudo guardar."; });
+      else mk("Cancelar", "Marcar esta concesión como cancelada (queda en el historial)", "color:var(--warn);border-color:var(--warn)", () => askReason(li, "Motivo de la cancelación (opcional)", "Cancelar la concesión", async (motivo) => { h.cancelada = true; h.resFecha = today(); if (motivo) h.motivo = motivo; paintHist(); const ok = await commit(); q("h-msg").style.color = ok ? "var(--ok)" : "var(--err)"; q("h-msg").textContent = ok ? "Concesión cancelada y guardada." : "No se ha cancelado: no se pudo guardar."; }));
+      mk("Quitar", "Borrar esta concesión del historial (no se puede deshacer)", "", () => askReason(li, "Se borra la concesión del historial y no se puede deshacer. Para conservarla, usa Cancelar.", "Borrar la concesión", async () => { hist.splice(i, 1); if (editH === i) resetH(); paintHist(); const ok = await commit(); q("h-msg").style.color = ok ? "var(--ok)" : "var(--err)"; q("h-msg").textContent = ok ? "Concesión borrada del historial." : "No se ha borrado: no se pudo guardar."; }, true));
+      ul.appendChild(li);
     });
   };
-  const resetS = () => { editS = -1; ["s-desde", "s-hasta", "s-n", "s-ong", "s-seg"].forEach((k) => { q(k).value = ""; }); q("s-add").textContent = "Añadir solicitud"; q("s-cancel").hidden = true; };
+  const resetS = () => { editS = -1; ["s-desde", "s-hasta", "s-n", "s-ong", "s-seg", "s-contacto", "s-notas"].forEach((k) => { q(k).value = ""; }); q("s-add").textContent = "Añadir solicitud"; q("s-cancel").hidden = true; };
   const paintSols = () => {
     const ul = el.querySelector(".s-list");
     const sorted = sols.map((x, i) => [x, i]).sort((a, b) => (b[0].desde || "").localeCompare(a[0].desde || ""));
     ul.innerHTML = sorted.length ? "" : '<li class="fi-none">Sin solicitudes registradas</li>';
     sorted.forEach(([x, i]) => {
-      const st = x.res === "denegada" ? "denegada" : (solValid(x) ? "pendiente" : "caducada");
+      const st = solEstado(x);
       const li = document.createElement("li"); if (st !== "pendiente") li.style.opacity = ".7";
-      li.innerHTML = "<span>" + esc(solRange(x) || "Sin datos") + " · <b>" + st + "</b>" + (x.fecha ? " · pedida el " + esc(fmtD(x.fecha)) : "") + (x.seg && !x.res ? " · seguimiento " + esc(fmtD(x.seg)) : "") + "</span>";
-      const mk = (t, title, css, fn) => { const b = document.createElement("button"); b.type = "button"; b.textContent = t; b.title = title; if (css) b.style.cssText = css; b.addEventListener("click", () => setTimeout(fn, 0)); li.appendChild(b); return b; }; /* se rehace la lista fuera del clic para que Leaflet no cierre la ficha */
-      if (!x.res) mk("Conceder", "Pasar esta solicitud a concesión con las mismas fechas", "color:var(--ok);border-color:var(--ok);margin-left:auto", () => {
-        hist.push({ desde: x.desde || "", hasta: x.hasta || "", captadores: x.captadores || 0, ong: x.ong || "" });
-        sols.splice(i, 1); if (editS === i) resetS();
-        paintSols(); paintHist(); commit();
-        el.querySelector(".s-msg").style.color = "var(--ok)"; el.querySelector(".s-msg").textContent = "Concedida. Si te dieron otras fechas o captadores, usa Editar en Concesiones.";
+      li.innerHTML = "<span>" + esc(solRange(x) || "Sin datos") + " · <b>" + st + "</b>" + (x.fecha ? " · pedida el " + esc(fmtD(x.fecha)) : "") + (x.resFecha && x.res ? " · resuelta el " + esc(fmtD(x.resFecha)) : "") +
+        (x.seg && !x.res ? " · seguimiento " + esc(fmtD(x.seg)) : "") + (x.motivo ? " · motivo: " + esc(x.motivo) : "") + (x.contacto ? " · contacto: " + esc(x.contacto) : "") + (x.notas ? " · " + esc(x.notas) : "") + "</span>";
+      const mk = (t, title, css, fn) => { const b = document.createElement("button"); b.type = "button"; b.textContent = t; b.title = title; if (css) b.style.cssText = css; b.addEventListener("click", () => setTimeout(() => { if (!commitBusy) fn(b); }, 0)); li.appendChild(b); return b; }; /* se rehace la lista fuera del clic para que Leaflet no cierre la ficha */
+      const fin = (txtOk, txtKo) => async () => { paintSols(); paintHist(); const ok = await commit(); q("s-msg").style.color = ok ? "var(--ok)" : "var(--err)"; q("s-msg").textContent = ok ? txtOk : txtKo; };
+      if (!x.res) mk("Conceder", "Aprobar esta solicitud: se conserva y se crea la concesión con las mismas fechas", "color:var(--ok);border-color:var(--ok);margin-left:auto", () => {
+        if (x.res) return; /* doble clic: ya está resuelta */
+        if (!x.id) x.id = newId();
+        const cid = newId(), t = today();
+        x.res = "aprobada"; x.resFecha = t; x.conc = cid;
+        const g = { id: cid, sol: x.id, desde: x.desde || "", hasta: x.hasta || "", captadores: x.captadores || 0, ong: x.ong || "", alta: t };
+        if (x.contacto) g.contacto = x.contacto;
+        if (x.notas) g.notas = x.notas;
+        hist.push(g);
+        if (editS === i) resetS();
+        fin("Aprobada y guardada: la solicitud se conserva y se ha creado la concesión. Si te dieron otras fechas o captadores, usa Editar en Concesiones.", "No se ha aprobado: no se pudo guardar. La solicitud sigue como estaba.")();
       });
-      if (!x.res) mk("Denegar", "Marcar esta solicitud como denegada", "color:var(--warn);border-color:var(--warn)", () => { x.res = "denegada"; paintSols(); commit(); });
-      mk("Editar", "Cambiar fechas, ONG o captadores de esta solicitud", "color:var(--ok);border-color:var(--ok)", () => { editS = i; q("s-desde").value = x.desde || ""; q("s-hasta").value = x.hasta || ""; q("s-n").value = x.captadores || ""; q("s-ong").value = x.ong || ""; q("s-seg").value = x.seg || ""; q("s-add").textContent = "Guardar cambios de la solicitud"; q("s-cancel").hidden = false; q("s-add").closest("details").open = true; });
-      mk("Quitar", "Quitar esta solicitud", "", () => { sols.splice(i, 1); if (editS === i) resetS(); paintSols(); commit(); });
+      if (!x.res) mk("Denegar", "Marcar esta solicitud como denegada (queda en el historial)", "color:var(--warn);border-color:var(--warn)", () => askReason(li, "Motivo de la denegación (opcional)", "Denegar la solicitud", (motivo) => {
+        if (x.res) return;
+        x.res = "denegada"; x.resFecha = today(); if (motivo) x.motivo = motivo;
+        fin("Denegación guardada.", "No se ha denegado: no se pudo guardar.")();
+      }));
+      if (!x.res) mk("Retirar", "La ONG retira esta solicitud (queda en el historial)", "", () => askReason(li, "Motivo de la retirada (opcional)", "Retirar la solicitud", (motivo) => {
+        if (x.res) return;
+        x.res = "retirada"; x.resFecha = today(); if (motivo) x.motivo = motivo;
+        fin("Retirada guardada.", "No se ha retirado: no se pudo guardar.")();
+      }));
+      mk("Editar", "Cambiar fechas, ONG o captadores de esta solicitud", "color:var(--ok);border-color:var(--ok)", () => { editS = i; q("s-desde").value = x.desde || ""; q("s-hasta").value = x.hasta || ""; q("s-n").value = x.captadores || ""; q("s-ong").value = x.ong || ""; q("s-seg").value = x.seg || ""; q("s-contacto").value = x.contacto || ""; q("s-notas").value = x.notas || ""; q("s-add").textContent = "Guardar cambios de la solicitud"; q("s-cancel").hidden = false; q("s-add").closest("details").open = true; });
+      mk("Quitar", "Borrar esta solicitud (no se puede deshacer)", "", () => askReason(li, (x.res === "aprobada" ? "Se borra la solicitud; la concesión creada se queda. " : "") + "Se borra del historial y no se puede deshacer.", "Borrar la solicitud", () => {
+        sols.splice(i, 1); if (editS === i) resetS();
+        fin("Solicitud borrada.", "No se ha borrado: no se pudo guardar.")();
+      }, true));
       ul.appendChild(li);
     });
   };
@@ -1793,25 +1992,23 @@ function fichaFor(c, pos) {
     el.querySelector(".sv").textContent = val ? val + " de 5" : "sin valorar";
   };
   let commitBusy = false;
+  /* Guarda el punto en Supabase y devuelve true solo si Supabase lo ha confirmado. Si falla, la ficha vuelve a lo último confirmado
+     (o a lo que Supabase tenga guardado, si se puede comprobar); los textos escritos en contacto y notas se conservan. */
   const commit = async () => {
-    if (commitBusy) return;
+    if (commitBusy) return false;
     commitBusy = true;
     const setCommitControlsDisabled = (disabled) => {
       el.querySelectorAll(".pform button, .pform input, .pform textarea, .pform select").forEach(control => { control.disabled = disabled; });
     };
     setCommitControlsDisabled(true);
     const sm = el.querySelector(".saved");
-    const previous = {
-      permit: permits[permitKey(c)] === undefined ? undefined : JSON.parse(JSON.stringify(permits[permitKey(c)])),
-      val,
-      hist: hist.map(item => ({ ...item })),
-      sols: sols.map(item => ({ ...item })),
-      contacto: el.querySelector(".f-contacto").value,
-      notas: el.querySelector(".f-notas").value
-    };
+    const previous = { permit: permits[permitKey(c)] === undefined ? undefined : JSON.parse(JSON.stringify(permits[permitKey(c)])) };
     const saveBtn = el.querySelector(".f-save"), saveLabel = saveBtn.textContent;
     sm.style.color = "var(--muted)"; sm.textContent = "Guardando en Supabase…"; saveBtn.textContent = "Guardando…";
+    let ok = false;
     try {
+      hist.forEach((h) => { if (!h.id) h.id = newId(); });
+      sols.forEach((x) => { if (!x.id) x.id = newId(); });
       const v = { contacto: el.querySelector(".f-contacto").value.trim(), notas: el.querySelector(".f-notas").value.trim(), valoracion: val, historial: hist };
       if (sols.length) v.solicitudes = sols;
       if (sols.length || hist.length) { v.estado = estadoCalc(v); v.fecha = fechaCalc(v); const sg = segCalc(v); if (sg) v.seguimiento = sg; }
@@ -1845,30 +2042,32 @@ function fichaFor(c, pos) {
           if (markers[c.id]) cluster.zoomToShowLayer(markers[c.id], () => markers[c.id].openPopup());
         }, 0));
         sm.appendChild(reload);
-        return;
+        return false;
       }
       if (saved !== "ok") {
-        // La operación puede haber fallado antes o después de que la petición llegara al servidor.
-        // Restaurar el estado anterior en memoria y volver a persistirlo evita dejar una edición ambigua.
+        // La petición pudo fallar antes o después de llegar al servidor: se vuelve a leer lo guardado antes de decir nada.
         if (previous.permit === undefined) delete permits[permitKey(c)];
         else permits[permitKey(c)] = previous.permit;
-        val = previous.val;
-        hist = previous.hist;
-        sols = previous.sols;
-        el.querySelector(".f-contacto").value = previous.contacto;
-        el.querySelector(".f-notas").value = previous.notas;
+        const leido = await reloadSharedPermit(c);
+        if (leido) {
+          const np = permits[permitKey(c)] || {};
+          hist = clone(np.historial); sols = clone(solsOf(np)); val = np.valoracion || 0;
+        } else {
+          hist = clone(base.hist); sols = clone(base.sols); val = base.val;
+        }
+        base = { hist: clone(hist), sols: clone(sols), val };
         paint(); paintHist(); paintSols(); paintEf();
-        setCommitControlsDisabled(true);
-        const rollbackSaved = await savePermits(c);
         if (markers[c.id]) markers[c.id].setIcon(makeIcon(c));
-        refreshSelects(); renderList(); paintEf();
+        refreshSelects(); renderList();
         sm.style.color = "var(--err)";
-        sm.textContent = rollbackSaved === "ok"
-          ? "No se pudo guardar; se restauró el estado anterior."
-          : "No se pudo guardar ni confirmar la restauración. Recupera la conexión antes de seguir editando.";
-        return;
+        sm.textContent = leido
+          ? "No se pudo guardar. La ficha muestra lo que hay guardado en Supabase; revisa si el cambio llegó antes de repetirlo. Lo escrito en contacto y notas sigue en el formulario."
+          : "No se pudo guardar ni comprobar lo guardado. Se ha vuelto a lo último confirmado; recupera la conexión antes de seguir editando.";
+        dirty(true);
+        return false;
       }
 
+      base = { hist: clone(hist), sols: clone(sols), val };
       if (markers[c.id]) markers[c.id].setIcon(makeIcon(c));
       refreshSelects();
       renderList();
@@ -1877,36 +2076,52 @@ function fichaFor(c, pos) {
       sm.textContent = "Guardado en Supabase";
       dirty(false);
       gamPermit(c, previous.permit);
+      ok = true;
     } finally {
       commitBusy = false;
       setCommitControlsDisabled(false);
       saveBtn.textContent = saveLabel;
     }
+    return ok;
   };
-  el.querySelectorAll(".stars button").forEach((b) => b.addEventListener("click", () => { val = val === +b.dataset.n ? 0 : +b.dataset.n; paint(); commit(); }));
+  el.querySelectorAll(".stars button").forEach((b) => b.addEventListener("click", () => { if (commitBusy) return; val = val === +b.dataset.n ? 0 : +b.dataset.n; paint(); commit(); }));
   paint(); paintHist(); paintSols(); paintEf();
-  q("s-add").addEventListener("click", () => {
-    const d = q("s-desde").value, h = q("s-hasta").value, n = parseInt(q("s-n").value, 10) || 0, og = q("s-ong").value.trim(), msg = q("s-msg");
+  const cuenta = (raw) => { const t = String(raw).trim(); if (!t) return { n: 0 }; const n = Number(t); return Number.isInteger(n) && n >= 1 && n <= 100000 ? { n } : { err: "El número de captadores debe ser un entero entre 1 y 100000." }; };
+  q("s-add").addEventListener("click", async () => {
+    const d = q("s-desde").value, h = q("s-hasta").value, cn = cuenta(q("s-n").value), og = q("s-ong").value.trim(), msg = q("s-msg"), t = today();
     msg.style.color = "var(--err)"; msg.textContent = "";
     if (!d && !h) { msg.textContent = "Indica al menos la fecha de inicio o la de fin."; return; }
     if (d && h && d > h) { msg.textContent = "La fecha de inicio es posterior a la de fin."; return; }
-    const x = { fecha: today(), desde: d, hasta: h, captadores: n, ong: og, seg: q("s-seg").value };
+    if (cn.err) { msg.textContent = cn.err; return; }
+    if (editS < 0 && h && h < t) { msg.textContent = "La fecha de fin ya pasó: una solicitud nueva no puede acabar antes de hoy."; return; }
+    const x = { fecha: t, desde: d, hasta: h, captadores: cn.n, ong: og, seg: q("s-seg").value, contacto: q("s-contacto").value.trim(), notas: q("s-notas").value.trim() };
     if (!x.seg) delete x.seg;
-    if (editS >= 0 && sols[editS]) { x.fecha = sols[editS].fecha || x.fecha; if (sols[editS].res) x.res = sols[editS].res; sols[editS] = x; } else sols.push(x);
-    resetS(); paintSols(); commit();
-    const falta = [!og && "ONG", !n && "captadores"].filter(Boolean);
-    msg.style.color = "var(--ok)"; msg.textContent = falta.length ? "Solicitud guardada. Falta indicar: " + falta.join(" y ") + "." : "Solicitud guardada.";
+    if (!x.contacto) delete x.contacto;
+    if (!x.notas) delete x.notas;
+    if (editS >= 0 && sols[editS]) { const o = sols[editS]; x.fecha = o.fecha || x.fecha; ["id", "res", "resFecha", "motivo", "conc"].forEach((k) => { if (o[k]) x[k] = o[k]; }); sols[editS] = x; } else sols.push(x);
+    paintSols();
+    const falta = [!og && "ONG", !cn.n && "captadores"].filter(Boolean);
+    const ok = await commit();
+    if (ok) { resetS(); msg.style.color = "var(--ok)"; msg.textContent = falta.length ? "Solicitud guardada. Falta indicar: " + falta.join(" y ") + "." : "Solicitud guardada."; }
+    else msg.textContent = "No se ha guardado la solicitud. Lo escrito sigue en el formulario: revisa el aviso de abajo y vuelve a pulsar el botón.";
   });
   q("s-cancel").addEventListener("click", resetS);
-  el.querySelector(".h-add").addEventListener("click", () => {
-    const d = el.querySelector(".h-desde").value, h = el.querySelector(".h-hasta").value, n = parseInt(el.querySelector(".h-n").value, 10) || 0, og = el.querySelector(".h-ong").value.trim(), msg = el.querySelector(".h-msg");
-    msg.textContent = "";
+  q("h-add").addEventListener("click", async () => {
+    const d = q("h-desde").value, h = q("h-hasta").value, cn = cuenta(q("h-n").value), og = q("h-ong").value.trim(), msg = q("h-msg");
+    msg.style.color = "var(--err)"; msg.textContent = "";
     if (!d && !h) { msg.textContent = "Indica al menos la fecha de inicio o la de fin."; return; }
     if (d && h && d > h) { msg.textContent = "La fecha de inicio es posterior a la de fin."; return; }
-    if (editH >= 0 && hist[editH]) hist[editH] = { desde: d, hasta: h, captadores: n, ong: og }; else hist.push({ desde: d, hasta: h, captadores: n, ong: og });
-    resetH(); paintHist(); commit();
+    if (cn.err) { msg.textContent = cn.err; return; }
+    const g = { desde: d, hasta: h, captadores: cn.n, ong: og, contacto: q("h-contacto").value.trim(), notas: q("h-notas").value.trim() };
+    if (!g.contacto) delete g.contacto;
+    if (!g.notas) delete g.notas;
+    if (editH >= 0 && hist[editH]) { const o = hist[editH]; ["id", "sol", "alta", "cancelada", "resFecha", "motivo"].forEach((k) => { if (o[k]) g[k] = o[k]; }); hist[editH] = g; } else { g.id = newId(); g.alta = today(); hist.push(g); }
+    paintHist();
+    const ok = await commit();
+    if (ok) { resetH(); msg.style.color = "var(--ok)"; msg.textContent = "Concesión guardada."; }
+    else msg.textContent = "No se ha guardado la concesión. Lo escrito sigue en el formulario: revisa el aviso de abajo y vuelve a pulsar el botón.";
   });
-  el.querySelector(".h-cancel").addEventListener("click", resetH);
+  q("h-cancel").addEventListener("click", resetH);
   el.querySelector(".f-save").addEventListener("click", commit);
   let armed = false;
   {
@@ -2429,7 +2644,7 @@ function renderList() {
   // Grupos «Seguimientos de hoy o atrasados» y «Caducan en 30 días», calculados sobre todos los puntos visibles.
   let sections = [[null, false, shown]];
   if ($("#orden").value !== "val") {
-    const lim = new Date(Date.now() + 30 * 864e5).toISOString().slice(0, 10), t0 = today();
+    const t0 = today(), lim = addDays(t0, 30);
     const due = [], soon = [], rest = [];
     shown.forEach((c) => {
       const v = vigente(c);
@@ -2751,7 +2966,7 @@ function logrosToast(msg) {
 function checkLogros() {
   const vis = CENTERS.filter((c) => !isOut(c));
   const due = vis.filter(seguimientoDue).length, used = Object.values(permits).filter((p) => p && p.estado && p.estado !== "sin").length;
-  const r = logros.racha, t = today(), ayer = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+  const r = logros.racha, t = today(), ayer = addDays(t, -1);
   if (due === 0 && used > 0) { if (r.dia !== t) { r.n = r.dia === ayer ? r.n + 1 : 1; r.dia = t; } } else if (due > 0 && r.n) { r.n = 0; r.dia = ""; }
   r.mejor = Math.max(r.mejor, r.n);
   const nuevos = [];
@@ -2784,7 +2999,6 @@ const xpTotal = () => Object.values(gam.aw).reduce((a, v) => a + v, 0);
 const lvOfXp = (x) => { let l = 0; RANGOS.forEach((r, i) => { if (x >= r[1]) l = i; }); return l; };
 const gamMult = () => { const n = logros.racha.n; return n >= 30 ? 2 : n >= 7 ? 1.5 : n >= 3 ? 1.25 : 1; };
 const dayAct = (d) => gam.day[d] || (gam.day[d] = { sol: 0, con: 0, seg: 0, prog: 0, rev: 0, add: 0, ctc: 0, val: 0, xp: 0, towns: [] });
-const mondayOf = (d) => { const t = new Date(d + "T12:00:00"); t.setDate(t.getDate() - ((t.getDay() + 6) % 7)); return t.toISOString().slice(0, 10); };
 const hashS = (s) => { let h = 7; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; };
 
 function award(key, base, kind, opt) {
@@ -3054,8 +3268,8 @@ function tabAlb() {
   }).join("");
 }
 function weekData(off) {
-  const mon = new Date(mondayOf(today()) + "T12:00:00"); mon.setDate(mon.getDate() - 7 * off);
-  const days = Array.from({ length: 7 }, (_, i) => { const d = new Date(mon); d.setDate(mon.getDate() + i); return d.toISOString().slice(0, 10); });
+  const mon = addDays(mondayOf(today()), -7 * off);
+  const days = Array.from({ length: 7 }, (_, i) => addDays(mon, i));
   const sum = (k) => days.reduce((a, d) => a + ((gam.day[d] || {})[k] || 0), 0);
   return { days, sol: sum("sol"), con: sum("con"), seg: sum("seg") + sum("prog"), rev: sum("rev") + sum("add"), xp: sum("xp"), act: days.filter((d) => ((gam.day[d] || {}).xp || 0) > 0).length, towns: new Set(days.reduce((a, d) => a.concat((gam.day[d] || {}).towns || []), [])).size };
 }
@@ -3398,59 +3612,152 @@ const csvCell = (value) => {
   return '"' + text.replace(/"/g, '""') + '"';
 };
 /* Panel resumen */
+/* Panel resumen: centro de mando. Cada cifra declara qué cuenta (solicitudes, concesiones, seguimientos, avisos o puntos) y abre la lista exacta
+   de registros que la componen. Los totales salen de cada expediente (reglas compartidas más arriba), no del estado resumido del punto. */
 (() => {
   const dlg = $("#dlgPanel"), body = $("#pnBody");
-  const focusPoint = (c) => { dlg.close(); if (markers[c.id]) cluster.zoomToShowLayer(markers[c.id], () => markers[c.id].openPopup()); };
-  const stat = (items) => {
-    const r = { n: items.length, sol: 0, con: 0, den: 0, vig: 0, capt: 0 };
-    items.forEach((c) => {
-      const e = estadoOf(c); if (e === "solicitado") r.sol++; else if (e === "concedido") r.con++; else if (e === "denegado") r.den++;
-      const v = vigs(c); if (v.length) { r.vig++; r.capt += Math.max(...v.map((h) => h.captadores || 0)); }
+  let fProv = "", fOng = ""; /* filtros: solo en memoria mientras dura la sesión */
+  const SIN_ONG = "__sin__";
+  const ongKey = (o) => (o || "").trim() ? o.trim().toLowerCase() : SIN_ONG;
+  const focusPoint = (c, tab) => { fichaTabPedida = tab || ""; dlg.close(); if (markers[c.id]) cluster.zoomToShowLayer(markers[c.id], () => markers[c.id].openPopup()); };
+  const plural = (n, uno, varios) => n + " " + (n === 1 ? uno : varios);
+  const GRUPOS = [
+    ["Tareas de hoy", [
+      ["segVencidos", "Seguimientos vencidos", "seguimiento", "seguimientos", "al"],
+      ["segHoy", "Seguimientos de hoy", "seguimiento", "seguimientos", ""],
+      ["segProximos", "Seguimientos en los próximos 7 días", "seguimiento", "seguimientos", ""],
+      ["sinSeguimiento", "Pendientes sin seguimiento programado", "solicitud", "solicitudes", "al"]
+    ]],
+    ["Solicitudes", [
+      ["pendientes", "Pendientes de decisión", "solicitud", "solicitudes", ""],
+      ["estancadas", "Estancadas: más de " + UMBRAL_ESTANCADA + " días sin respuesta", "solicitud", "solicitudes", "al"],
+      ["sinRespuesta", "Caducadas sin respuesta", "solicitud", "solicitudes", ""],
+      ["aprobadas", "Aprobadas", "solicitud", "solicitudes", ""],
+      ["denegadas", "Denegadas", "solicitud", "solicitudes", ""],
+      ["retiradas", "Retiradas", "solicitud", "solicitudes", ""]
+    ]],
+    ["Concesiones", [
+      ["vigentes", "Vigentes hoy", "concesión", "concesiones", "hl"],
+      ["futuras30", "Empiezan en los próximos 30 días", "concesión", "concesiones", ""],
+      ["vencen7", "Vencen en 0–7 días", "concesión", "concesiones", "al"],
+      ["vencen15", "Vencen en 8–15 días", "concesión", "concesiones", "al"],
+      ["vencen30", "Vencen en 16–30 días", "concesión", "concesiones", ""],
+      ["sinFin", "Vigentes sin fecha de fin", "concesión", "concesiones", ""]
+    ]],
+    ["Calidad de los datos", [
+      ["incidencias", "Posibles incoherencias o datos incompletos", "aviso", "avisos", "al"]
+    ]]
+  ];
+  const TITULO = {}; GRUPOS.forEach(([, ts]) => ts.forEach((t) => { TITULO[t[0]] = t; }));
+  TITULO.capacidadHoy = ["vigentes", "Captadores autorizados hoy", "concesión", "concesiones", "hl"];
+
+  const datos = () => {
+    const t = today(), todas = [], segsT = [], pts = [], ongs = new Map();
+    CENTERS.forEach((c) => {
+      if (isOut(c) || (fProv && c.provinceId !== fProv)) return;
+      pts.push(c);
+      const p = permits[permitKey(c)]; if (!p) return;
+      expedientesDe(c, p).forEach((r) => { todas.push(r); ongs.set(ongKey(r.ong), r.ong || "Sin ONG"); });
+      seguimientosDe(c, p).forEach((s) => { segsT.push(s); ongs.set(ongKey(s.ong), s.ong || "Sin ONG"); });
     });
-    return r;
+    const recs = fOng ? todas.filter((r) => ongKey(r.ong) === fOng) : todas, segs = fOng ? segsT.filter((s) => ongKey(s.ong) === fOng) : segsT;
+    return { t, recs, segs, pts, ongs, ind: indicadores(recs, segs, t) };
   };
-  const rowsHtml = (map, kind) => map.map(([k, r]) => '<tr data-kind="' + kind + '" data-k="' + esc(k) + '"><td><button type="button" class="pn-rowbtn">' + esc(k) + "</button></td><td>" + r.n + "</td><td>" + r.sol + "</td><td>" + r.con + "</td><td>" + r.den + "</td><td>" + r.vig + "</td><td>" + r.capt + "</td></tr>").join("");
-  const thead = (first) => "<thead><tr><th>" + first + "</th><th>Puntos</th><th>Solicitados</th><th>Concedidos</th><th>Denegados</th><th>Con vigencia hoy</th><th>Captadores hoy</th></tr></thead>";
+  const provOpts = () => {
+    const m = new Map();
+    CENTERS.forEach((c) => { if (!isOut(c) && c.provinceId) m.set(c.provinceId, c.province || "Sin provincia"); });
+    return [...m].sort((x, y) => x[1].localeCompare(y[1], "es"));
+  };
+  const barra = (d) => {
+    const po = provOpts(), og = [...d.ongs].sort((x, y) => (x[0] === SIN_ONG) - (y[0] === SIN_ONG) || x[1].localeCompare(y[1], "es"));
+    return '<div class="pn-bar"><label class="cal-f">Provincia<select id="pnProv">' + (po.length > 1 ? '<option value="">Todas las provincias</option>' : "") +
+      po.map(([id, n]) => '<option value="' + esc(id) + '"' + (id === fProv ? " selected" : "") + ">" + esc(n) + "</option>").join("") + "</select></label>" +
+      '<label class="cal-f">ONG<select id="pnOng"><option value="">Todas las ONG</option>' + og.map(([k, n]) => '<option value="' + esc(k) + '"' + (k === fOng ? " selected" : "") + ">" + esc(n) + "</option>").join("") + "</select></label>" +
+      '<p class="pn-hoy">Datos de hoy, ' + esc(fmtD(d.t)) + " (hora de Madrid)</p></div>";
+  };
+  const nPuntos = (arr) => new Set(arr.map((x) => (x.c || x.r.c).id)).size;
+  const tile = (key, d) => {
+    const t = TITULO[key], lista = key === "capacidadHoy" ? d.ind.vigentes : d.ind[key];
+    const valor = key === "capacidadHoy" ? d.ind.capacidadHoy : lista.length;
+    const unidad = key === "capacidadHoy" ? plural(d.ind.vigentes.length, "concesión vigente", "concesiones vigentes") : plural(lista.length, t[2], t[3]);
+    return '<button type="button" class="kpi' + (t[4] && (t[4] !== "al" || lista.length) ? " " + t[4] : "") + '" data-ind="' + key + '"><b>' + valor + "</b><span>" + esc(t[1]) + "</span><small>" + esc(unidad) + (lista.length ? " · " + plural(nPuntos(lista), "punto", "puntos") : "") + "</small></button>";
+  };
+  const capacidadOng = (d) => {
+    const aut = capacidadPorOng(d.ind.vigentes), sol = capacidadPorOng(d.ind.pendientes), nombres = [...new Set([...aut.keys(), ...sol.keys()])].sort((x, y) => (x === "Sin ONG") - (y === "Sin ONG") || x.localeCompare(y, "es"));
+    const nCon = (o) => d.ind.vigentes.filter((r) => (r.ong || "Sin ONG") === o).length;
+    if (!nombres.length) return "";
+    return '<h3>Capacidad por ONG</h3><div class="pn-scroll"><table><thead><tr><th>ONG</th><th>Concesiones vigentes hoy</th><th>Captadores autorizados hoy</th><th>Captadores en solicitudes pendientes</th></tr></thead><tbody>' +
+      nombres.map((o) => "<tr><td>" + esc(o) + "</td><td>" + nCon(o) + "</td><td>" + (aut.get(o) || 0) + "</td><td>" + (sol.get(o) || 0) + "</td></tr>").join("") + "</tbody></table></div>";
+  };
+  const rowsHtml = (map, kind) => map.map(([k, r]) => '<tr data-kind="' + kind + '" data-k="' + esc(k) + '"><td><button type="button" class="pn-rowbtn">' + esc(k) + "</button></td><td>" + r.n + "</td><td>" + r.pend + "</td><td>" + r.con + "</td><td>" + r.vig + "</td><td>" + r.capt + "</td></tr>").join("");
+  const thead = (first) => "<thead><tr><th>" + first + "</th><th>Puntos</th><th>Solicitudes pendientes</th><th>Concesiones vigentes hoy</th><th>Puntos con vigencia hoy</th><th>Captadores autorizados hoy</th></tr></thead>";
   const render = () => {
-    const all = CENTERS.filter((c) => !isOut(c));
-    const t = stat(all);
-    const limit = new Date(); limit.setDate(limit.getDate() + 30); const lim = limit.toISOString().slice(0, 10);
-    const soon = [], expired = [];
-    all.forEach((c) => {
-      const hs = histOf(c), v = vigs(c);
-      if (v.length) { const end = v.map((h) => h.hasta).filter(Boolean).sort().pop(); if (end && end <= lim && !v.some((h) => !h.hasta || h.hasta > lim)) soon.push([c, end, Math.max(...v.map((h) => h.captadores || 0))]); }
-      else if (estadoOf(c) === "caducado") expired.push(c);
-    });
-    soon.sort((a, b) => a[1].localeCompare(b[1]));
-    const byTipo = TIPOS.map(([, n]) => [n, stat(all.filter((c) => c.tipo === n))]).filter(([, r]) => r.n);
-    const towns = {}; all.forEach((c) => { const k = townOf(c); (towns[k] = towns[k] || []).push(c); });
-    const byTown = Object.entries(towns).map(([k, v]) => [k, stat(v)]).sort((a, b) => b[1].capt - a[1].capt || b[1].vig - a[1].vig || b[1].con - a[1].con || b[1].n - a[1].n || a[0].localeCompare(b[0]));
-    body.innerHTML =
-      '<div class="kpis">' +
-      '<div class="kpi"><b>' + t.n + "</b><span>Puntos en el mapa</span></div>" +
-      '<div class="kpi"><b>' + t.sol + "</b><span>Solicitados (pendientes)</span></div>" +
-      '<div class="kpi"><b>' + t.con + "</b><span>Concedidos</span></div>" +
-      '<div class="kpi"><b>' + t.den + "</b><span>Denegados</span></div>" +
-      '<div class="kpi hl"><b>' + t.vig + "</b><span>Con concesión vigente hoy</span></div>" +
-      '<div class="kpi hl"><b>' + t.capt + "</b><span>Captadores que se pueden enviar hoy</span></div>" +
-      '<div class="kpi al"><b>' + soon.length + "</b><span>Caducan en 30 días</span></div>" +
-      '<div class="kpi"><b>' + expired.length + "</b><span>Solicitud caducada</span></div></div>" +
-      (soon.length ? "<h3>Caducan en los próximos 30 días</h3><div class=\"pn-scroll\"><table><thead><tr><th>Punto</th><th>Hasta</th><th>Captadores</th></tr></thead><tbody>" +
-        soon.map(([c, end, n]) => '<tr data-kind="pt" data-k="' + c.id + '"><td><button type="button" class="pn-rowbtn">' + esc(c.name) + " · " + esc(townOf(c)) + "</button></td><td>" + fmtD(end) + "</td><td>" + n + "</td></tr>").join("") + "</tbody></table></div>" : "") +
-      "<h3>Por categoría</h3><div class=\"pn-scroll\"><table>" + thead("Categoría") + "<tbody>" + rowsHtml(byTipo, "tipo") + '<tr class="tot"><td>Total</td><td>' + t.n + "</td><td>" + t.sol + "</td><td>" + t.con + "</td><td>" + t.den + "</td><td>" + t.vig + "</td><td>" + t.capt + "</td></tr></tbody></table></div>" +
+    const d = datos(), ind = d.ind;
+    const porPunto = new Map(); d.recs.forEach((r) => { const a = porPunto.get(r.c.id) || []; a.push(r); porPunto.set(r.c.id, a); });
+    const stat = (items) => {
+      const rr = items.flatMap((c) => porPunto.get(c.id) || []), vig = rr.filter((r) => r.k === "con" && r.est === "vigente");
+      return { n: items.length, pend: rr.filter((r) => r.k === "sol" && r.est === "pendiente").length, con: vig.length, vig: new Set(vig.map((r) => r.c.id)).size, capt: capacidad(vig) };
+    };
+    const t = stat(d.pts);
+    const byTipo = TIPOS.map(([, n]) => [n, stat(d.pts.filter((c) => c.tipo === n))]).filter(([, r]) => r.n);
+    const towns = {}; d.pts.forEach((c) => { const k = townOf(c); (towns[k] = towns[k] || []).push(c); });
+    const byTown = Object.entries(towns).map(([k, v]) => [k, stat(v)]).sort((a, b) => b[1].capt - a[1].capt || b[1].vig - a[1].vig || b[1].pend - a[1].pend || b[1].n - a[1].n || a[0].localeCompare(b[0]));
+    const analitica = '<p class="pn-note">' + (ind.tasaResolucion === null ? "Todavía no hay solicitudes registradas." :
+      "Resueltas (aprobadas, denegadas o retiradas): <b>" + ind.resueltas + " de " + ind.solicitudes + "</b> solicitudes (" + ind.tasaResolucion + " %). Las caducadas sin respuesta no cuentan como resueltas. " +
+      (ind.diasMedios === null ? "Tiempo medio hasta la decisión: no calculable todavía (ninguna solicitud resuelta tiene fecha de decisión)." : "Tiempo medio hasta la decisión: <b>" + String(ind.diasMedios).replace(".", ",") + " días</b>, sobre " + plural(ind.muestraTiempo, "solicitud resuelta con fecha", "solicitudes resueltas con fecha") + " (las anteriores no guardaban la fecha de decisión).")) + "</p>";
+    body.innerHTML = barra(d) +
+      GRUPOS.map(([g, ts]) => "<h3>" + esc(g) + '</h3><div class="kpis">' + (g === "Concesiones" ? tile("capacidadHoy", d) : "") + ts.map(([k]) => tile(k, d)).join("") + "</div>").join("") +
+      analitica + capacidadOng(d) +
+      "<h3>Por categoría</h3><div class=\"pn-scroll\"><table>" + thead("Categoría") + "<tbody>" + rowsHtml(byTipo, "tipo") + '<tr class="tot"><td>Total</td><td>' + t.n + "</td><td>" + t.pend + "</td><td>" + t.con + "</td><td>" + t.vig + "</td><td>" + t.capt + "</td></tr></tbody></table></div>" +
       "<h3>Por municipio</h3><div class=\"pn-scroll\"><table>" + thead("Municipio") + "<tbody>" + rowsHtml(byTown, "town") + "</tbody></table></div>" +
-      '<div class="pn-note">Pulsa una fila para filtrar el mapa por esa categoría o municipio. El estado, la vigencia y los captadores se calculan con las solicitudes y concesiones de cada punto. El calendario semanal está en el menú, en «Calendario semanal».</div>';
+      '<div class="pn-note">Cada cifra cuenta lo que dice su rótulo: solicitudes, concesiones y seguimientos son registros individuales, y un punto con una concesión vigente y otra solicitud pendiente aparece en las dos. Pulsa una cifra para ver los registros exactos. Pulsa una fila de las tablas para filtrar el mapa por esa categoría o municipio. Los captadores no se suman entre registros de la misma ONG en un mismo punto (se toma el mayor) y sí entre ONG distintas.</div>';
   };
+  const detalle = (r) => {
+    if (r.k === "sol") return [r.fecha ? "pedida el " + fmtD(r.fecha) : "", r.seg ? "seguimiento " + fmtD(r.seg) : "", r.resFecha ? "resuelta el " + fmtD(r.resFecha) : "", r.motivo ? "motivo: " + r.motivo : ""].filter(Boolean).join(" · ");
+    return [r.fecha ? "alta " + fmtD(r.fecha) : "", r.motivo ? "motivo: " + r.motivo : ""].filter(Boolean).join(" · ");
+  };
+  const filas = (key, d) => {
+    const lista = key === "capacidadHoy" ? d.ind.vigentes : d.ind[key], t = d.t;
+    if (key.startsWith("seg")) return lista.slice().sort((a, b) => a.fecha.localeCompare(b.fecha)).map((s) => ({ c: s.c, tipo: "Seguimiento", ong: s.ong, periodo: "", n: "", det: fmtD(s.fecha) + (s.fecha < t ? " · atrasado " + plural(daysBetween(s.fecha, t), "día", "días") : s.fecha === t ? " · hoy" : ""), tab: "s" }));
+    if (key === "incidencias") return lista.map((x) => ({ c: x.r.c, tipo: x.tipo, ong: x.r.ong, periodo: fmtD(x.r.desde) + " – " + fmtD(x.r.hasta), n: x.r.n || "", det: detalle(x.r), tab: x.r.k === "sol" ? "s" : "h" }));
+    const orden = key.startsWith("vencen") ? (a, b) => a.hasta.localeCompare(b.hasta) : (a, b) => (a.desde || "").localeCompare(b.desde || "");
+    return lista.slice().sort(orden).map((r) => ({ c: r.c, tipo: (r.k === "sol" ? "Solicitud " : "Concesión ") + r.est, ong: r.ong, periodo: fmtD(r.desde) + " – " + fmtD(r.hasta), n: r.n || "", det: detalle(r) + (key.startsWith("vencen") ? ((detalle(r) ? " · " : "") + "faltan " + plural(daysBetween(t, r.hasta), "día", "días")) : ""), tab: r.k === "sol" ? "s" : "h" }));
+  };
+  const renderLista = (key) => {
+    const d = datos(), t = TITULO[key], fs = filas(key, d);
+    const filtros = [fProv ? (provOpts().find(([id]) => id === fProv) || ["", ""])[1] : "", fOng ? ([...d.ongs].find(([k]) => k === fOng) || ["", ""])[1] : ""].filter(Boolean);
+    body.innerHTML = '<div class="pn-back"><button type="button" id="pnBack" data-ind="' + key + '">&#8249; Volver al resumen</button></div>' +
+      '<h3 id="pnListT" tabindex="-1">' + esc(t[1]) + " · " + esc(plural(fs.length, key.startsWith("seg") ? "seguimiento" : (key === "incidencias" ? "aviso" : t[2]), key.startsWith("seg") ? "seguimientos" : (key === "incidencias" ? "avisos" : t[3]))) + "</h3>" +
+      (filtros.length ? '<p class="pn-note">Filtros activos: ' + esc(filtros.join(" · ")) + "</p>" : "") +
+      (fs.length ? '<div class="pn-scroll"><table class="pn-list"><thead><tr><th>Punto</th><th>Tipo</th><th>ONG</th><th>Periodo</th><th>Captadores</th><th>Detalle</th></tr></thead><tbody>' +
+        fs.map((f) => '<tr data-kind="pt" data-k="' + esc(String(f.c.id)) + '" data-tab="' + f.tab + '"><td><button type="button" class="pn-rowbtn">' + esc(f.c.name) + " · " + esc(townOf(f.c)) + "</button></td><td>" + esc(f.tipo) + "</td><td>" + esc(f.ong || "Sin ONG") + "</td><td>" + esc(f.periodo) + "</td><td>" + esc(String(f.n)) + "</td><td>" + esc(f.det) + "</td></tr>").join("") + "</tbody></table></div>" +
+        '<p class="pn-note">Pulsa una fila para abrir la ficha del punto en la pestaña del registro.</p>'
+        : '<p class="pn-empty">No hay registros con los filtros elegidos.</p>');
+    body.querySelector("#pnListT").focus();
+  };
+  const abre = (key) => renderLista(key);
+  const volver = (key) => { render(); const b = body.querySelector('[data-ind="' + key + '"]'); if (b) b.focus(); };
   body.addEventListener("click", (e) => {
+    if (e.target.closest("#pnBack")) { volver(e.target.closest("#pnBack").dataset.ind); return; }
+    const kpi = e.target.closest("button[data-ind]");
+    if (kpi) { abre(kpi.dataset.ind); return; }
     const bar = e.target.closest("[data-pt]");
     if (bar) { const c = CENTERS.find((x) => String(x.id) === bar.dataset.pt); if (c) focusPoint(c); return; }
     const tr = e.target.closest("tr[data-k]"); if (!tr) return;
     const k = tr.dataset.k;
-    if (tr.dataset.kind === "pt") { const c = CENTERS.find((x) => String(x.id) === k); if (c) focusPoint(c); return; }
+    if (tr.dataset.kind === "pt") { const c = CENTERS.find((x) => String(x.id) === k); if (c) focusPoint(c, tr.dataset.tab); return; }
     $("#tipo").value = tr.dataset.kind === "tipo" ? k : ""; $("#q").value = tr.dataset.kind === "town" ? k : ""; $("#permiso").value = ""; $("#valor").value = ""; $("#cadena").value = "";
     dlg.close(); refilter();
   });
-  $("#panelBtn").addEventListener("click", () => { render(); dlg.showModal(); });
+  body.addEventListener("change", (e) => {
+    if (e.target.id === "pnProv") fProv = e.target.value;
+    else if (e.target.id === "pnOng") fOng = e.target.value;
+    else return;
+    if (e.target.id === "pnProv") fOng = ""; /* las ONG disponibles dependen de la provincia */
+    render();
+    const s = body.querySelector("#" + e.target.id); if (s) s.focus();
+  });
+  $("#panelBtn").addEventListener("click", () => { const po = provOpts(); if (fProv && !po.some(([id]) => id === fProv)) fProv = ""; render(); dlg.showModal(); });
   $("#pnClose").addEventListener("click", () => dlg.close());
 })();
 
@@ -3468,98 +3775,140 @@ const csvCell = (value) => {
   });
 })();
 
-/* Calendario semanal: permisos de cada día de la semana en una provincia. Solo lee lo que ya hay en memoria (solicitudes y concesiones); no guarda nada. */
+/* Calendario semanal: permisos de cada día de la semana en una provincia. Solo lee lo que ya hay en memoria (solicitudes, concesiones y seguimientos); no guarda nada.
+   Tres conceptos que no se mezclan: concesiones (captadores autorizados), solicitudes pendientes (captadores por aprobar) y seguimientos (tareas con fecha). */
 (() => {
   const dlg = $("#dlgCal"), body = $("#calBody");
-  const ORDEN = ["concedido", "solicitado", "caducado", "denegado", "cancelado"];
   const DIAS = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
   const MES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
   const PERSONA = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c.8-4 3.5-6 7-6s6.2 2 7 6"/></svg>';
-  const addD = (d, n) => { const t = new Date(d + "T12:00:00"); t.setDate(t.getDate() + n); return t.toISOString().slice(0, 10); };
+  /* Cómo se pinta cada estado en un día: etiqueta, clase de color y si pertenece al histórico (oculto por defecto). */
+  const EST = {
+    autorizada: ["Autorizada", "concedido", false], pendiente: ["Por aprobar", "solicitado", false], seguimiento: ["Seguimiento", "seguimiento", false],
+    aprobada: ["Aprobada", "concedido", true], denegada: ["Denegada", "denegado", true], retirada: ["Retirada", "caducado", true],
+    cancelada: ["Cancelada", "cancelado", true], desconocida: ["Estado ese día no registrado", "caducado", true]
+  };
   const mesDe = (d) => MES[+d.slice(5, 7) - 1];
   const hue = (s) => { let h = 7; for (const ch of s) h = (h * 31 + ch.codePointAt(0)) % 360; return h; };
-  let wk = mondayOf(today()), prov = "", ong = "";
-  const fEst = new Set(ORDEN);
+  const plural = (n, uno, varios) => n + " " + (n === 1 ? uno : varios);
+  let wk = mondayOf(today()), prov = "", ong = "", modo = "dias";
+  const ver = { autorizada: true, pendiente: true, seguimiento: true, historico: false }; /* qué se muestra; el histórico va apagado */
 
-  const items = (a, b, provId) => {
-    const out = [];
-    CENTERS.filter((c) => !isOut(c) && (!provId || c.provinceId === provId)).forEach((c) => {
-      const p = permOf(c), ov = (d, h) => (d || h) && (!d || d <= b) && (!h || h >= a);
-      (p.historial || []).forEach((h) => { if (ov(h.desde, h.hasta)) out.push({ c, e: h.cancelada ? "cancelado" : "concedido", desde: h.desde, hasta: h.hasta, ong: h.ong, n: safeCount(h.captadores) }); });
-      solsOf(p).forEach((x) => { if (ov(x.desde, x.hasta)) out.push({ c, e: x.res ? "denegado" : (solValid(x) ? "solicitado" : "caducado"), desde: x.desde, hasta: x.hasta, ong: x.ong, n: safeCount(x.captadores) }); });
-    });
-    return out;
-  };
   const provOpts = () => {
     const m = new Map();
     CENTERS.forEach((c) => { if (!isOut(c) && c.provinceId) m.set(c.provinceId, c.province || "Sin provincia"); });
     return [...m].sort((x, y) => x[1].localeCompare(y[1], "es"));
   };
+  const registros = (provId) => {
+    const recs = [], segs = [];
+    CENTERS.forEach((c) => {
+      if (isOut(c) || (provId && c.provinceId !== provId)) return;
+      const p = permits[permitKey(c)]; if (!p) return;
+      expedientesDe(c, p).forEach((r) => recs.push(r));
+      seguimientosDe(c, p).forEach((s) => segs.push(s));
+    });
+    return { recs, segs };
+  };
   // Al abrir se elige la provincia con más captadores esa semana; si no hay actividad, la primera por orden alfabético.
   const provAuto = (opts) => {
-    const tot = new Map();
-    items(wk, addD(wk, 6), "").forEach((i) => { if (i.e === "concedido" || i.e === "solicitado") tot.set(i.c.provinceId, (tot.get(i.c.provinceId) || 0) + i.n); });
+    const { recs, segs } = registros(""), t = today(), tot = new Map();
+    calendarioSemana(recs, segs, wk, t).forEach((dia) => dia.items.forEach((i) => { if (i.e === "autorizada" || i.e === "pendiente") tot.set(i.r.c.provinceId, (tot.get(i.r.c.provinceId) || 0) + i.r.n); }));
     const best = [...tot].sort((x, y) => y[1] - x[1])[0];
     return best && opts.some(([id]) => id === best[0]) ? best[0] : (opts[0] ? opts[0][0] : "");
   };
-  // Captadores por punto: el mayor número declarado en las solicitudes o concesiones de ese estado.
-  const porPunto = (arr, e) => { const m = new Map(); arr.filter((i) => i.e === e).forEach((i) => m.set(i.c.id, Math.max(m.get(i.c.id) || 0, i.n))); return m; };
-  const suma = (m) => [...m.values()].reduce((x, y) => x + y, 0);
-  const plural = (n, uno, varios) => n + " " + (n === 1 ? uno : varios);
+  const ongDe = (x) => x.ong || "Sin ONG";
+  const visible = (e) => (e === "autorizada" || e === "pendiente") ? ver[e] : ver.historico;
 
-  const tarjeta = (i) => {
-    const info = estadoInfo(i.e), og = i.ong || "Sin ONG";
-    const span = i.desde !== i.hasta ? fmtD(i.desde).slice(0, 5) + " → " + fmtD(i.hasta).slice(0, 5) : "";
-    return '<li><button type="button" class="cal-card s-' + i.e + '" data-pt="' + esc(String(i.c.id)) + '">' +
-      '<span class="st">' + esc(info[1]) + "</span><strong>" + esc(i.c.name) + "</strong>" +
-      '<span class="wh">' + esc(townOf(i.c)) + (i.c.tipo ? " · " + esc(i.c.tipo) : "") + "</span>" +
+  const tarjeta = (i, d, t) => {
+    const r = i.r, info = EST[i.e], c = r.c, og = ongDe(r);
+    const span = r.desde !== r.hasta ? fmtD(r.desde).slice(0, 5) + " → " + fmtD(r.hasta).slice(0, 5) : "";
+    const avisos = [];
+    if (r.k === "con" && i.e === "autorizada" && r.hasta && r.hasta >= t && daysBetween(t, r.hasta) <= 7 && r.hasta === d) avisos.push("Vence " + (r.hasta === t ? "hoy" : "el " + fmtD(r.hasta).slice(0, 5)));
+    if (r.k === "con" && r.desde === d && d > t) avisos.push("Empieza");
+    return '<li><button type="button" class="cal-card s-' + info[1] + '" data-pt="' + esc(String(c.id)) + '" data-tab="' + (r.k === "sol" ? "s" : "h") + '">' +
+      '<span class="st">' + esc((r.k === "sol" ? "Solicitud · " : "Concesión · ") + info[0]) + "</span><strong>" + esc(c.name) + "</strong>" +
+      '<span class="wh">' + esc(townOf(c)) + (c.tipo ? " · " + esc(c.tipo) : "") + "</span>" +
       (span ? '<span class="sp">' + esc(span) + "</span>" : "") +
+      (avisos.length ? '<span class="cal-warn">' + esc(avisos.join(" · ")) + "</span>" : "") +
       '<span class="cal-meta"><span class="cal-ong" style="--h:' + hue(og) + '">' + esc(og) + "</span>" +
-      (i.n ? '<span class="cal-n">' + PERSONA + "<span>" + i.n + '</span><span class="adm-sr"> captadores</span></span>' : "") + "</span></button></li>";
+      (r.n ? '<span class="cal-n">' + PERSONA + "<span>" + r.n + '</span><span class="adm-sr"> captadores</span></span>' : "") + "</span></button></li>";
+  };
+  const tarjetaSeg = (s, t) => {
+    const c = s.c, atras = s.fecha < t;
+    return '<li><button type="button" class="cal-card s-seguimiento" data-pt="' + esc(String(c.id)) + '" data-tab="s">' +
+      '<span class="st">Seguimiento' + (atras ? " · atrasado" : s.fecha === t ? " · hoy" : "") + "</span><strong>" + esc(c.name) + "</strong>" +
+      '<span class="wh">' + esc(townOf(c)) + (c.tipo ? " · " + esc(c.tipo) : "") + "</span>" +
+      '<span class="cal-meta"><span class="cal-ong" style="--h:' + hue(ongDe(s)) + '">' + esc(ongDe(s)) + "</span></span></button></li>";
   };
 
   const draw = () => {
-    const a = wk, b = addD(wk, 6), t = today();
-    const todos = items(a, b, prov);
-    const ongs = [...new Set(todos.map((i) => i.ong || "Sin ONG"))].sort((x, y) => (x === "Sin ONG") - (y === "Sin ONG") || x.localeCompare(y, "es"));
+    const a = wk, b = addDays(wk, 6), t = today();
+    const { recs: todasRecs, segs: todasSegs } = registros(prov);
+    const semana = calendarioSemana(todasRecs, todasSegs, a, t);
+    const ongs = [...new Set(semana.flatMap((x) => x.items.map((i) => ongDe(i.r)).concat(x.seg.map(ongDe))))].sort((x, y) => (x === "Sin ONG") - (y === "Sin ONG") || x.localeCompare(y, "es"));
     if (ong && !ongs.includes(ong)) ong = "";
-    const its = todos.filter((i) => fEst.has(i.e) && (!ong || (i.ong || "Sin ONG") === ong));
     body.querySelector("#calOng").innerHTML = '<option value="">Todas las ONG</option>' + ongs.map((o) => '<option value="' + esc(o) + '"' + (o === ong ? " selected" : "") + ">" + esc(o) + "</option>").join("");
     body.querySelector("#calRange").textContent = (+a.slice(8)) + (mesDe(a) === mesDe(b) ? "" : " " + mesDe(a)) + " – " + (+b.slice(8)) + " " + mesDe(b) + " " + b.slice(0, 4);
     body.querySelector("#calDate").value = a;
-    const con = porPunto(its, "concedido"), sol = porPunto(its, "solicitado");
-    const otros = [["caducado", "sin respuesta", "sin respuesta"], ["denegado", "denegado", "denegados"], ["cancelado", "cancelado", "cancelados"]]
-      .map(([e, uno, varios]) => [new Set(its.filter((i) => i.e === e).map((i) => i.c.id)).size, uno, varios]).filter(([n]) => n).map(([n, uno, varios]) => n + " " + (n === 1 ? uno : varios));
+    const okOng = (x) => !ong || ongDe(x) === ong;
+    /* Las cifras se recalculan con el filtro de ONG; los totales del día no mezclan captadores autorizados, por aprobar y seguimientos. */
+    const sem = calendarioSemana(todasRecs.filter(okOng), todasSegs.filter(okOng), a, t);
+    const pico = (k) => sem.reduce((m, x) => x[k] > m.n ? { n: x[k], d: x.d } : m, { n: 0, d: "" });
+    const pa = pico("aut"), pp = pico("pen");
+    const nSeg = sem.reduce((n, x) => n + x.seg.length, 0), nAtr = sem.reduce((n, x) => n + x.segAtras, 0);
+    const regsAut = new Set(), regsPen = new Set();
+    sem.forEach((x) => x.items.forEach((i) => { if (i.e === "autorizada") regsAut.add(i.r); else if (i.e === "pendiente") regsPen.add(i.r); }));
+    const vencen = [...regsAut].filter((r) => r.k === "con" && r.hasta && r.hasta >= t && r.hasta <= b && r.hasta >= a).length;
     body.querySelector("#calSum").innerHTML =
-      '<div class="c"><b>' + suma(con) + "</b><span>captadores concedidos en " + plural(con.size, "punto", "puntos") + "</span></div>" +
-      '<div class="s"><b>' + suma(sol) + "</b><span>captadores por aprobar en " + plural(sol.size, "punto", "puntos") + "</span></div>" +
-      (otros.length ? '<div class="q">' + esc(otros.join(" · ")) + "</div>" : "");
+      '<div class="c"><b>' + pa.n + "</b><span>captadores autorizados como máximo en un día" + (pa.n ? " (" + DIAS[daysBetween(a, pa.d)].toLowerCase() + ") · " + plural(regsAut.size, "concesión", "concesiones") : "") + "</span></div>" +
+      '<div class="s"><b>' + pp.n + "</b><span>captadores por aprobar como máximo en un día" + (pp.n ? " (" + DIAS[daysBetween(a, pp.d)].toLowerCase() + ") · " + plural(regsPen.size, "solicitud", "solicitudes") : "") + "</span></div>" +
+      '<div class="t"><b>' + nSeg + "</b><span>" + (nSeg === 1 ? "seguimiento" : "seguimientos") + " esta semana" + (nAtr ? " · " + nAtr + " atrasado" + (nAtr === 1 ? "" : "s") : "") + "</span></div>" +
+      (vencen ? '<div class="q">' + esc(plural(vencen, "concesión vence", "concesiones vencen") + " esta semana") + "</div>" : "");
+    const nota = body.querySelector("#calPast");
+    nota.hidden = !(b < t || a > t);
+    nota.textContent = b < t
+      ? "Semana pasada: las concesiones se muestran con sus fechas. Las solicitudes se reconstruyen con su fecha de alta y de decisión cuando constan; si no constan, aparecen en el histórico como «estado ese día no registrado». Los seguimientos ya hechos no se conservan: solo se ven los que siguen programados."
+      : "Semana futura: las solicitudes se muestran tal como están hoy (por aprobar) y los seguimientos programados.";
     const grid = body.querySelector("#calGrid");
-    if (!its.length) {
-      grid.innerHTML = '<div class="cal-none">No hay permisos con fechas en esta semana' + (todos.length ? " con los filtros elegidos" : "") + ". Cambia de semana, de provincia o activa más estados.</div>";
+    if (modo === "ong") { grid.innerHTML = tablaOng(sem, t); return; }
+    const hayAlgo = sem.some((x) => x.items.some((i) => visible(i.e) && okOng(i.r)) || (ver.seguimiento && x.seg.length));
+    if (!hayAlgo) {
+      const oculto = semana.some((x) => x.items.length || x.seg.length);
+      grid.innerHTML = '<div class="cal-none">No hay nada que mostrar en esta semana' + (oculto ? " con los filtros elegidos" : "") + ". Cambia de semana, de provincia o activa más conceptos" + (!ver.historico ? " (el histórico de denegadas, retiradas y canceladas está oculto)" : "") + ".</div>";
       return;
     }
-    const cols = DIAS.map((_, k) => {
-      const d = addD(a, k), arr = its.filter((i) => (!i.desde || i.desde <= d) && (!i.hasta || i.hasta >= d))
-        .sort((x, y) => ORDEN.indexOf(x.e) - ORDEN.indexOf(y.e) || (x.ong || "~").localeCompare(y.ong || "~", "es") || x.c.name.localeCompare(y.c.name, "es"));
-      const c = porPunto(arr, "concedido"), s = porPunto(arr, "solicitado");
-      return { d, arr, c: suma(c), s: suma(s) };
-    });
-    const max = Math.max(1, ...cols.map((x) => x.c + x.s));
-    grid.innerHTML = '<div class="cal-scroll"><div class="cal-wk" role="group" aria-label="Permisos de la semana por día">' + cols.map((x, k) => {
-      const pct = x.c + x.s ? Math.max(7, Math.round(100 * (x.c + x.s) / max)) : 0;
+    const max = Math.max(1, ...sem.map((x) => x.aut + x.pen));
+    grid.innerHTML = '<div class="cal-scroll"><div class="cal-wk" role="group" aria-label="Permisos de la semana por día">' + sem.map((x, k) => {
+      const arr = x.items.filter((i) => visible(i.e) && okOng(i.r)).sort((p, q) => (p.e === "autorizada" ? 0 : p.e === "pendiente" ? 1 : 2) - (q.e === "autorizada" ? 0 : q.e === "pendiente" ? 1 : 2) || ongDe(p.r).localeCompare(ongDe(q.r), "es") || p.r.c.name.localeCompare(q.r.c.name, "es"));
+      const sg = ver.seguimiento ? x.seg.slice().sort((p, q) => p.c.name.localeCompare(q.c.name, "es")) : [];
+      const pa2 = ver.autorizada ? x.aut : 0, pp2 = ver.pendiente ? x.pen : 0, pct = pa2 + pp2 ? Math.max(7, Math.round(100 * (pa2 + pp2) / max)) : 0;
       return '<section class="cal-day' + (k >= 5 ? " we" : "") + (x.d === t ? " today" : "") + '" aria-labelledby="calH' + k + '">' +
-        '<div class="cal-sky" aria-hidden="true">' + (pct ? '<div class="cal-stack" style="height:' + pct + '%">' + (x.s ? '<i class="s" style="flex:' + x.s + ' 1 0"></i>' : "") + (x.c ? '<i class="c" style="flex:' + x.c + ' 1 0"></i>' : "") + "</div>" : "") + "</div>" +
+        '<div class="cal-sky" aria-hidden="true">' + (pct ? '<div class="cal-stack" style="height:' + pct + '%">' + (pp2 ? '<i class="s" style="flex:' + pp2 + ' 1 0"></i>' : "") + (pa2 ? '<i class="c" style="flex:' + pa2 + ' 1 0"></i>' : "") + "</div>" : "") + "</div>" +
         '<h3 class="cal-hd" id="calH' + k + '"><span class="dn">' + DIAS[k] + '</span><span class="n">' + (+x.d.slice(8)) + '</span><span class="m">' + mesDe(x.d) + "</span>" + (x.d === t ? '<span class="hoy">Hoy</span>' : "") + "</h3>" +
-        '<p class="cal-tot">' + (x.c || x.s ? "<b>" + x.c + "</b> captadores" + (x.s ? " · <b>" + x.s + "</b> por aprobar" : "") : "Sin captadores") + "</p>" +
-        '<ul class="cal-list">' + (x.arr.length ? x.arr.map(tarjeta).join("") : '<li class="cal-empty">Sin permisos</li>') + "</ul></section>";
+        '<p class="cal-tot">' + (pa2 ? "<b>" + pa2 + "</b> autorizados" : "") + (pa2 && pp2 ? " · " : "") + (pp2 ? "<b>" + pp2 + "</b> por aprobar" : "") + (!pa2 && !pp2 ? "Sin captadores" : "") + "</p>" +
+        (sg.length ? '<p class="cal-seg' + (x.d < t ? " late" : "") + '">' + esc(plural(sg.length, "seguimiento", "seguimientos")) + (x.d < t ? " atrasado" + (sg.length === 1 ? "" : "s") : "") + "</p>" : "") +
+        '<ul class="cal-list">' + (arr.length || sg.length ? sg.map((s) => tarjetaSeg(s, t)).join("") + arr.map((i) => tarjeta(i, x.d, t)).join("") : '<li class="cal-empty">Sin permisos</li>') + "</ul></section>";
     }).join("") + "</div></div>";
+  };
+  /* Vista por ONG: captadores autorizados y por aprobar de cada ONG en cada día, en una tabla. */
+  const tablaOng = (sem, t) => {
+    const filas = new Map();
+    sem.forEach((x, k) => {
+      const porOng = (recs) => capacidadPorOng(recs);
+      const aut = porOng(x.items.filter((i) => i.e === "autorizada").map((i) => i.r)), pen = porOng(x.items.filter((i) => i.e === "pendiente").map((i) => i.r));
+      new Set([...aut.keys(), ...pen.keys()]).forEach((o) => { const f = filas.get(o) || [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]; f[k] = [aut.get(o) || 0, pen.get(o) || 0]; filas.set(o, f); });
+    });
+    if (!filas.size) return '<div class="cal-none">Ninguna ONG tiene captadores autorizados ni por aprobar esta semana.</div>';
+    const nombres = [...filas.keys()].sort((x, y) => (x === "Sin ONG") - (y === "Sin ONG") || x.localeCompare(y, "es"));
+    return '<div class="pn-scroll"><table class="cal-ongt"><caption class="adm-sr">Captadores autorizados y por aprobar de cada ONG por día</caption><thead><tr><th scope="col">ONG</th>' +
+      sem.map((x, k) => '<th scope="col"' + (x.d === t ? ' aria-current="date"' : "") + ">" + DIAS[k].slice(0, 3) + " " + (+x.d.slice(8)) + "</th>").join("") + "</tr></thead><tbody>" +
+      nombres.map((o) => "<tr><th scope=\"row\">" + esc(o) + "</th>" + filas.get(o).map(([a2, p2]) => "<td>" + (a2 || p2 ? (a2 ? "<b>" + a2 + "</b>" : "") + (p2 ? '<span class="cal-pp"> +' + p2 + " por aprobar</span>" : "") : "—") + "</td>").join("") + "</tr>").join("") + "</tbody></table></div>";
   };
 
   const abrir = () => {
-    wk = mondayOf(today()); ong = ""; ORDEN.forEach((k) => fEst.add(k));
+    wk = mondayOf(today());
     const opts = provOpts();
-    prov = provAuto(opts);
+    if (!prov || !opts.some(([id]) => id === prov)) prov = provAuto(opts);
     body.innerHTML =
       '<div class="cal-bar">' +
       '<label class="cal-f">Provincia<select id="calProv">' + (opts.length > 1 ? '<option value="">Todas las provincias</option>' : "") +
@@ -3569,21 +3918,28 @@ const csvCell = (value) => {
       '<button type="button" data-w="1" aria-label="Semana siguiente">&#8250;</button><button type="button" data-w="0">Hoy</button>' +
       '<label class="cal-f"><span class="adm-sr">Ir a la semana de esta fecha</span><input type="date" id="calDate"></label></div></div>' +
       '<div class="cal-sum" id="calSum"></div>' +
-      '<div class="cal-filters" role="group" aria-label="Estados que se muestran">' +
-      ORDEN.map((k) => '<button type="button" class="cal-chip s-' + k + '" data-st="' + k + '" aria-pressed="true"><i></i>' + esc(estadoInfo(k)[1]) + "</button>").join("") + "</div>" +
+      '<div class="cal-filters" role="group" aria-label="Qué se muestra">' +
+      '<button type="button" class="cal-chip s-concedido" data-ver="autorizada" aria-pressed="' + ver.autorizada + '"><i></i>Concesiones</button>' +
+      '<button type="button" class="cal-chip s-solicitado" data-ver="pendiente" aria-pressed="' + ver.pendiente + '"><i></i>Solicitudes por aprobar</button>' +
+      '<button type="button" class="cal-chip s-seguimiento" data-ver="seguimiento" aria-pressed="' + ver.seguimiento + '"><i></i>Seguimientos</button>' +
+      '<button type="button" class="cal-chip s-cancelado" data-ver="historico" aria-pressed="' + ver.historico + '"><i></i>Histórico (denegadas, retiradas, canceladas)</button>' +
+      '<span class="cal-modo" role="group" aria-label="Vista"><button type="button" data-modo="dias" aria-pressed="' + (modo === "dias") + '">Por día</button><button type="button" data-modo="ong" aria-pressed="' + (modo === "ong") + '">Por ONG</button></span></div>' +
+      '<p class="cal-note cal-past" id="calPast" role="note" hidden></p>' +
       '<div id="calGrid"></div>' +
-      '<p class="cal-note">Un permiso aparece cada día entre su fecha de inicio y la de fin. Los captadores de un día suman los de cada punto; «por aprobar» son solicitudes que aún no tienen respuesta. Pulsa una tarjeta para ver el punto en el mapa.</p>';
+      '<p class="cal-note">Un permiso aparece cada día entre su fecha de inicio y la de fin, las dos incluidas. Los captadores de un día no se suman entre registros de la misma ONG en un mismo punto (se toma el mayor) y sí entre ONG distintas. Autorizados, por aprobar y seguimientos se cuentan por separado. Pulsa una tarjeta para abrir el punto en la pestaña de ese registro.</p>';
     draw();
     dlg.showModal();
     body.querySelector("#calProv").focus();
   };
   body.addEventListener("click", (e) => {
     const w = e.target.closest("[data-w]");
-    if (w) { wk = w.dataset.w === "0" ? mondayOf(today()) : addD(wk, 7 * +w.dataset.w); draw(); return; }
-    const st = e.target.closest("[data-st]");
-    if (st) { const k = st.dataset.st; if (fEst.has(k)) fEst.delete(k); else fEst.add(k); st.setAttribute("aria-pressed", String(fEst.has(k))); draw(); return; }
+    if (w) { wk = w.dataset.w === "0" ? mondayOf(today()) : addDays(wk, 7 * +w.dataset.w); draw(); return; }
+    const vv = e.target.closest("[data-ver]");
+    if (vv) { const k = vv.dataset.ver; ver[k] = !ver[k]; vv.setAttribute("aria-pressed", String(ver[k])); draw(); return; }
+    const md = e.target.closest("[data-modo]");
+    if (md) { modo = md.dataset.modo; body.querySelectorAll("[data-modo]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.modo === modo))); draw(); return; }
     const pt = e.target.closest("[data-pt]");
-    if (pt) { const c = CENTERS.find((x) => String(x.id) === pt.dataset.pt); if (c) { dlg.close(); if (markers[c.id]) cluster.zoomToShowLayer(markers[c.id], () => markers[c.id].openPopup()); } }
+    if (pt) { const c = CENTERS.find((x) => String(x.id) === pt.dataset.pt); if (c) { fichaTabPedida = pt.dataset.tab || ""; dlg.close(); if (markers[c.id]) cluster.zoomToShowLayer(markers[c.id], () => markers[c.id].openPopup()); } }
   });
   body.addEventListener("change", (e) => {
     if (e.target.id === "calProv") { prov = e.target.value; ong = ""; draw(); }

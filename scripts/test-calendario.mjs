@@ -14,7 +14,7 @@ assert.match(html, /<dialog id="dlgCal" aria-labelledby="calT">/, "dlgCal sin ar
 assert.match(html, /<h2 id="calT">Calendario semanal<\/h2>/, "Falta el título del diálogo");
 assert.match(html, /id="calBtn" type="button" role="menuitem">Calendario semanal<\/button>/, "Falta la opción «Calendario semanal» en el menú");
 assert.ok(bloque.includes('aria-label="Semana anterior"') && bloque.includes('aria-label="Semana siguiente"'), "Los botones de semana necesitan nombre accesible");
-assert.ok(bloque.includes('aria-pressed="true"') && bloque.includes("setAttribute(\"aria-pressed\""), "Los filtros de estado deben exponer aria-pressed");
+assert.ok(bloque.includes("aria-pressed=\"' + ver.autorizada") && bloque.includes("setAttribute(\"aria-pressed\""), "Los filtros deben exponer aria-pressed");
 assert.ok(bloque.includes('role="status"') && bloque.includes('aria-labelledby="calH'), "Rango en role=status y cada día con su encabezado");
 assert.ok(bloque.includes('<span class="st">'), "Cada tarjeta debe llevar el estado también en texto (no solo color)");
 assert.ok(bloque.includes('aria-hidden="true"'), "La silueta de barras es decorativa y va oculta a lectores de pantalla");
@@ -23,15 +23,20 @@ assert.ok(bloque.includes('aria-hidden="true"'), "La silueta de barras es decora
 assert.ok(!/localStorage|sessionStorage|indexedDB|document\.cookie|caches\.|fetch\(|\.from\(|\.rpc\(|supabase/.test(bloque), "El calendario no puede guardar en el navegador ni llamar a la red");
 
 // Los textos que vienen de los datos pasan por esc().
-for (const t of ["esc(i.c.name)", "esc(townOf(i.c))", "esc(og)", "esc(info[1])", "esc(n)", "esc(o)"]) {
+for (const t of ["esc(c.name)", "esc(townOf(c))", "esc(og)", "+ info[0])", "esc(o)", "esc(ongDe(s))"]) {
   assert.ok(bloque.includes(t), "Falta escapar con esc(): " + t);
 }
 
 // Selección por provincia y reglas de cálculo.
-assert.ok(bloque.includes("c.provinceId === provId"), "Debe filtrar por provincia");
-assert.ok(bloque.includes("!isOut(c)"), "Los puntos quitados o archivados no deben aparecer");
-assert.ok(bloque.includes('(!i.desde || i.desde <= d) && (!i.hasta || i.hasta >= d)'), "Un permiso aparece cada día entre su inicio y su fin");
-assert.ok(bloque.includes('h.cancelada ? "cancelado" : "concedido"') && bloque.includes('x.res ? "denegado" : (solValid(x) ? "solicitado" : "caducado")'), "Mismos estados que el cálculo de la ficha");
+assert.ok(bloque.includes("c.provinceId !== provId"), "Debe filtrar por provincia");
+assert.ok(bloque.includes("isOut(c) ||"), "Los puntos quitados o archivados no deben aparecer");
+assert.ok(html.includes('const diaEnRango = (r, d) => (!r.desde || r.desde <= d) && (!r.hasta || r.hasta >= d);'), "Un permiso aparece cada día entre su inicio y su fin (extremos incluidos)");
+assert.ok(bloque.includes("calendarioSemana(") && bloque.includes("expedientesDe(c, p)") && bloque.includes("seguimientosDe(c, p)"), "Usa las reglas compartidas de expedientes");
+// Concesiones, solicitudes y seguimientos no se mezclan en un único total.
+assert.ok(bloque.includes("captadores autorizados") && bloque.includes("captadores por aprobar") && bloque.includes("seguimiento"), "El resumen distingue autorizados, por aprobar y seguimientos");
+assert.ok(bloque.includes("ver = { autorizada: true, pendiente: true, seguimiento: true, historico: false }"), "El histórico (denegadas, retiradas, canceladas) va oculto por defecto");
+assert.ok(bloque.includes('data-modo="ong"') && bloque.includes("tablaOng"), "Hay vista por ONG");
+assert.ok(bloque.includes("Semana pasada:") && bloque.includes("no registrado"), "La semana pasada avisa de lo que no se puede reconstruir");
 
 // Movimiento: solo con preferencia de movimiento normal.
 assert.ok(/@media \(prefers-reduced-motion: no-preference\) \{ \.cal-stack \{ animation: calGrow/.test(html), "La animación debe respetar prefers-reduced-motion");
