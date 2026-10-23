@@ -363,3 +363,8 @@ Según el texto que aportó el titular (no verificado por mí contra su web): el
 ## Ayuda ampliada (22/10/2026)
 
 - «Ayuda y atajos» pasa de 5 bloques a 16 secciones plegables (acordeón con teclado nativo; «Primeros pasos» abierta por defecto): primeros pasos, buscar y filtrar, el mapa y sus capas, estados de un permiso, la ficha, corregir la ubicación, seguimientos, cambios masivos, informes, progreso y logros, añadir y recuperar puntos, exportar datos, administración, móvil, teclado y qué hacer si algo falla. Cada afirmación se ha contrastado con el comportamiento real de la aplicación; si cambia una función, hay que actualizar la sección correspondiente.
+
+## Contadores de filtros (23/10/2026)
+
+- Cada selector (provincia, municipio, categoría, estado, cadena y tipo de entidad) muestra cuántos puntos habría al elegir cada opción **con todos los demás filtros aplicados** (búsqueda, conmutadores incluidos); el propio selector no se aplica a sí mismo para poder ver las alternativas. Antes mostraban siempre el total de la base: con «Murcia» elegida, «Hospital» seguía diciendo 200. Se recalculan en cada cambio de filtro (`refreshCounts`).
+
