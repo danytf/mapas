@@ -1517,7 +1517,7 @@ const ejecutaOpsRel = async (client, userId, c, ops) => {
     } catch (e) { console.error("[Mapa] Error al guardar expedientes:", e); return "error"; }
     if (r && r.error) {
       console.error("[Mapa] Supabase rechazó una operación de expedientes:", op.t, r.error);
-      return r.error.code === "40001" ? "conflict" : "error";
+      return (r.error.code === "PT409" || r.status === 409) ? "conflict" : "error";
     }
   }
   return "ok";

@@ -92,8 +92,8 @@ create temp table pw_v (v timestamptz);
 grant all on pw_v to public;
 -- dentro de una transacción now() no avanza: la lectura «obsoleta» es una fecha anterior a la actual
 insert into pw_v select updated_at - interval '1 second' from public.permit_applications where id = pg_temp.u('b3');
-select pg_temp.check('aprobar con una fecha de lectura obsoleta: conflicto 40001',
-  pg_temp.as_user('e2', format($q$select public.approve_permit_application(%L, %L)$q$, pg_temp.u('b3'), (select v from pw_v))) = '40001');
+select pg_temp.check('aprobar con una fecha de lectura obsoleta: conflicto PT409',
+  pg_temp.as_user('e2', format($q$select public.approve_permit_application(%L, %L)$q$, pg_temp.u('b3'), (select v from pw_v))) = 'PT409');
 select pg_temp.check('el conflicto no deja concesión ni cambia el estado',
   (select status = 'pending' from public.permit_applications where id = pg_temp.u('b3')) and not exists (select 1 from public.permit_grants where application_id = pg_temp.u('b3')));
 select pg_temp.check('con la fecha actual la aprobación sí se aplica',
