@@ -39,9 +39,11 @@ psql -v ON_ERROR_STOP=1 -f supabase/tests/schema_smoke.sql
 psql -v ON_ERROR_STOP=1 -f supabase/tests/state_history.sql
 psql -v ON_ERROR_STOP=1 -f supabase/tests/state_version.sql
 psql -v ON_ERROR_STOP=1 -f supabase/tests/admin_postal_codes.sql
+psql -v ON_ERROR_STOP=1 -f supabase/tests/permit_workflow.sql
+psql -v ON_ERROR_STOP=1 -f supabase/tests/permit_backfill.sql
 psql -v ON_ERROR_STOP=1 -f supabase/tests/rls_matrix.sql
 ```
-Resultado esperado: `state_history: 29 comprobaciones correctas`, `state_version: 20 comprobaciones correctas` y `Matriz RLS: 973 celdas, 0 discrepancias, 0 inconclusas, 781 denegaciones esperadas verificadas`. Todas terminan en `ROLLBACK`, salvo el humo, que deja datos de prueba en la base local.
+Resultado esperado: `permit_workflow: 42 comprobaciones correctas` y `permit_backfill: 23 comprobaciones correctas`; `state_history: 29 comprobaciones correctas`, `state_version: 20 comprobaciones correctas` y `Matriz RLS: 973 celdas, 0 discrepancias, 0 inconclusas, 781 denegaciones esperadas verificadas`. Todas terminan en `ROLLBACK`, salvo el humo, que deja datos de prueba en la base local.
 
 ## Comparar con producción
 `supabase/tools/schema_fingerprint.sql` devuelve conteo y huella MD5 de políticas, permisos, funciones, triggers y RLS. Ejecutarlo en local y, con el MCP de Supabase, en producción (excluyendo `rls_auto_enable` de las funciones públicas). Valores de referencia en la cabecera del fichero y en `ESTADO.md`.
