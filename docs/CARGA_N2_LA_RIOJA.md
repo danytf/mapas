@@ -1,6 +1,6 @@
-# Carga N2 de La Rioja (preparada, sin cargar)
+# Carga N2 de La Rioja (cargada)
 
-Estado: **preparada el 23/10/2026, sin aplicar en producción**. Tercera región tras Andalucía y Extremadura, con el mismo procedimiento (`docs/CARGA_N2_EXTREMADURA.md`).
+Estado: **cargada en producción el 23/10/2026** por el titular con `cargar.sh` y verificada en solo lectura; con los códigos postales y las calles completados después y La Rioja activada (ver «Cierre»). Tercera región tras Andalucía y Extremadura, con el mismo procedimiento (`docs/CARGA_N2_EXTREMADURA.md`).
 
 ## Origen
 - Fichero: `la-rioja-261020.osm.pbf` (Geofabrik, edición del 20/10/2026, 13.589.836 bytes, MD5 `e14e4d47e31124a03135ff3a588dbeaa` verificado), fuera del repositorio. OpenStreetMap, licencia ODbL. (La primera descarga salió truncada, 11.120.149 bytes y MD5 distinto, y se descartó; la buena se descargó de nuevo y se comprobó.)
@@ -35,3 +35,10 @@ bash scripts/catalogue/cargar.sh supabase/seeds/la-rioja/grandes-superficies gra
 bash scripts/catalogue/cargar.sh supabase/seeds/la-rioja/resto resto catalogo-la-rioja:la-rioja-resto:
 ```
 Después, en solo lectura: 174 municipios nuevos y 246 puntos en total. Para verlos hay que activar La Rioja y asignarla a los usuarios desde «Usuarios y provincias».
+
+## Cierre (23/10/2026)
+- **Carga verificada:** 174 municipios (todos con INE distinto) y 246 puntos (Supermercado 86, Entidad oficial 78, Estaciones 21, Centro de salud 15, Correos 12, Carrefour 10, Hospital 6, Gimnasios 5, Bricolaje 5, Centro comercial 4 y 1 de Leroy Merlin, MediaMarkt, El Corte Inglés y Decathlon). 246 `source_ref` `catalogo-la-rioja:` distintos; ninguno sin coordenadas o municipio. Total de la base 7.127 → 7.373. La carga se hizo con la primera descarga del fichero descartada por truncada (MD5 distinto) y repetida.
+- **La Rioja activada** por el titular desde «Usuarios y provincias».
+- **Códigos postales:** de 83 puntos sin código se escribieron 68 con `admin_set_postal_codes` (68 actualizados, 0 omitidos), tras el control contra los códigos ya conocidos de cada municipio; fuera 1 rechazado (Villamediana de Iregua) y 1 dudoso (Logroño 26008). Quedan **15 sin código**.
+- **Calles:** de 12 puntos sin calle se escribieron 5 (vía más cercana de Nominatim, orientativa). Quedan **7 sin calle**.
+- **Pendiente:** asignar la provincia a los usuarios.

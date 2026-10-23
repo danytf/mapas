@@ -92,3 +92,7 @@ La gamificación se retiró en el PR #164 por error de interpretación y se rest
 ## Extremadura (22/10/2026)
 
 Cargada en producción (388 municipios, 1.230 puntos: Badajoz 677, Cáceres 553) y provincias activadas. Códigos postales: 307 escritos, 219 sin código; calles: 12 escritas, 18 sin calle. 18 puntos que no eran hospitales archivados (7 + 11 en Andalucía). Total de la base: 7.127 puntos, 7.083 visibles. Falta asignar las provincias a los usuarios. Detalle en `docs/CARGA_N2_EXTREMADURA.md`.
+
+## La Rioja (23/10/2026)
+
+Cargada en producción (174 municipios, 246 puntos) y provincia activada. Códigos postales: 68 escritos, 15 sin código; calles: 5 escritas, 7 sin calle. Total de la base: 7.373 puntos, 7.329 visibles. Falta asignar la provincia a los usuarios. Detalle en `docs/CARGA_N2_LA_RIOJA.md`.
