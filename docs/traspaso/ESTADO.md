@@ -104,3 +104,13 @@ Cargada en producción (45 municipios, 782 puntos; 6 archivados por no correspon
 ## Canarias (23/10/2026)
 
 Cargada en producción (88 municipios, 1.627 puntos: Las Palmas 779, Santa Cruz de Tenerife 848). Total de la base: 9.782 puntos. Pendientes: 437 códigos postales y 41 calles. Sin asignar a usuarios por decisión del titular hasta terminar toda España. Detalle en `docs/CARGA_N2_CANARIAS.md`.
+
+## Expedientes en tablas (23/10/2026)
+
+- **Fuente de verdad:** solicitudes, concesiones y seguimientos de los puntos del catálogo viven en `permit_applications`, `permit_grants` y `followups`. `establishment_app_state` solo guarda contacto, notas y valoración del punto; sus listas antiguas (`solicitudes`, `historial`) se conservan sin tocar como copia de reversión. Los puntos personales siguen en `user_app_state.customPermits`.
+- **Migración `20261023160115_permit_workflow`** (aditiva, aplicada en producción): datos de la decisión, `legacy_ref`, una concesión por solicitud, trigger de ciclo de vida, comprobación del responsable de un seguimiento y funciones atómicas e idempotentes `approve_permit_application`, `resolve_permit_application` y `cancel_permit_grant`. Detalle y reversión: `docs/MIGRACION_PERMISOS_RELACIONAL.md`.
+- **Volcado del JSON a las tablas:** hecho el 23/10/2026 por el titular en el editor SQL (2 solicitudes, 6 concesiones, 1 seguimiento; reconciliación con 0 diferencias). Las herramientas `supabase/tools/backfill_permits_from_state.sql` y `reconcile_permits.sql` son idempotentes.
+- **Aplicación:** PR #191 (ficha con guardado verificable, aprobar conservando la solicitud, panel por expedientes, calendario con autorizados/por aprobar/seguimientos por separado, fechas en `Europe/Madrid`) y PR #193 (lectura y escritura en las tablas con control de versión). Reglas de negocio en `index.html` (bloque «Reglas de expedientes») y probadas en `scripts/test-expedientes.mjs`. Diagnóstico: `docs/AUDITORIA_EXPEDIENTES_2026-10-23.md`.
+- **Pruebas:** SQL local `permit_workflow` (42) y `permit_backfill` (23); estáticas de CLAUDE.md; navegador solo con el Supabase simulado (`scripts/dev/mock-supabase.mjs` simula las tres tablas, las funciones y fallos con `/__fail`). **Sin probar:** sesión real en producción, móvil físico, lector de pantalla, dos usuarios con permisos reales.
+- **Huellas del esquema:** cambiaron con la migración (funciones, triggers e índices nuevos); recalcular con `supabase/tools/schema_fingerprint.sql` y actualizar las cifras de este fichero.
+- **Límites:** sin copia previa a la migración (necesita la cadena de conexión del titular); los permisos temporales de `.claude/settings.local.json` deben quedar vacíos; un seguimiento antiguo de un punto sin solicitudes no se muestra en la ficha.
