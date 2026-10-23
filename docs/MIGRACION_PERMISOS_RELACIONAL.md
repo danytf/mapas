@@ -25,6 +25,6 @@ El volcado no toca el JSON: volver a la versión anterior de la aplicación. Las
 - Puntos personales (sin fila en el catálogo) siguen en `user_app_state.customPermits`.
 - Aviso de seguridad: si hay puntos con listas antiguas en el JSON sin fila en las tablas (volcado sin hacer), la aplicación lo anota en la consola (`window.mapaExpedientesSinVolcar`).
 - **No fusionar antes del volcado:** al desplegar, los expedientes que solo estén en el JSON dejarían de verse. Orden: fusionar #191 → ventana sin ediciones → volcado y reconciliación a 0 → fusionar esta rama → verificar la URL pública.
-- Limitación: un seguimiento antiguo de un punto sin solicitudes (campo `seguimiento` sin solicitudes) se vuelca a `followups` sin solicitud pero la ficha todavía no lo muestra; en producción no hay ninguno.
-- Pendiente: responsable y siguiente acción de los seguimientos en la interfaz (las columnas existen).
+- Seguimiento de un punto sin solicitud: se muestra en la ficha («Seguimiento del punto») y se cierra con «Hecho»; no se crea desde la ficha.
+- Responsable y siguiente acción de los seguimientos: en la ficha; las personas asignables salen de `list_establishment_assignees` (migración `20261023164238`, solo id y etiqueta).
 - Probado con el Supabase simulado (`scripts/dev/mock-supabase.mjs` ahora simula las tres tablas y las tres funciones): alta, seguimiento, aprobar con doble clic (una sola concesión enlazada), denegar con motivo, conflicto por cambio de otra persona, recarga. La integridad y RLS reales se prueban en `supabase/tests/permit_workflow.sql`.

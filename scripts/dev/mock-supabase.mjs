@@ -203,6 +203,12 @@ createServer(async (req, res) => {
 
     const eqParam = (name) => { const v = url.searchParams.get(name); return v && v.startsWith("eq.") ? v.slice(3) : null; };
 
+    if (table === "rpc/list_establishment_assignees") {
+      const est = S.establishments.find((e) => e.id === body.p_establishment_id);
+      if (!est || !(u.role === "admin" || u.provinces.some((c) => P(c).id === est.province_id))) return send(res, 403, { code: "42501", message: "No autorizado" });
+      const prov = provinces.find((p) => p.id === est.province_id);
+      return send(res, 200, Object.entries(users).filter(([, x]) => x.role === "admin" || (prov && x.provinces.includes(prov.code))).map(([mail, x]) => ({ id: x.id, label: mail.split("@")[0] })));
+    }
     // Expedientes relacionales (solicitudes, concesiones y seguimientos) con las mismas reglas que la migración permit_workflow.
     const REL = ["permit_applications", "permit_grants", "followups"];
     const relVisible = (row) => u.role === "admin" || S.establishments.some((e) => e.id === row.establishment_id && u.provinces.some((c) => P(c).id === e.province_id));

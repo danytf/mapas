@@ -306,6 +306,8 @@
   #ficha .pinfo { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
   #ficha .pinfo > div { min-width: 0; overflow-wrap: anywhere; background: var(--ok-bg); border-radius: var(--r-card); padding: 8px 10px; display: grid; gap: 1px; font-size: var(--fs-label); color: var(--muted); }
   #ficha .pinfo > div:first-child { grid-column: 1 / -1; }
+  #ficha .pinfo > div.segp { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  #ficha .pinfo > div.segp button { flex: none; height: 30px; padding: 0 12px; }
   #ficha .pinfo > div.due { background: var(--warn-bg); color: var(--warn); }
   #ficha .pinfo b { font-size: var(--fs-body); font-weight: 650; color: var(--fg); font-variant-numeric: tabular-nums; }
   #ficha .pinfo > div.due b { color: var(--warn); }
@@ -1425,17 +1427,34 @@ const saveCustomPermits = async () => typeof window.mapaPersistUserState === "fu
 // relBase guarda lo último confirmado por punto; blobGuardado lo último confirmado del estado propio del punto (contacto, notas y valoración);
 // legacyRaw conserva sin tocar las listas antiguas del JSON (copia de reversión del volcado).
 let relBase = new Map(), blobGuardado = new Map(), legacyRaw = new Map();
+// Personas a las que se puede asignar un seguimiento (por establecimiento) y nombre conocido de cada una; solo en memoria.
+const asignables = new Map(), nombresPersona = new Map();
+const nombreResp = (id) => !id ? "" : (id === window.mapaSession?.user?.id ? "tú" : (nombresPersona.get(id) || "otra persona"));
+const cargaAsignables = async (c) => {
+  const client = window.mapaSession?.supabase;
+  if (!client || !c?.databaseId) return [];
+  if (asignables.has(c.databaseId)) return asignables.get(c.databaseId);
+  try {
+    const { data, error } = await client.rpc("list_establishment_assignees", { p_establishment_id: c.databaseId }).abortSignal(conTiempoLimite(10000));
+    if (error || !Array.isArray(data)) return [];
+    const lista = data.filter((r) => r && typeof r.id === "string" && typeof r.label === "string").map((r) => ({ id: r.id, label: r.label.slice(0, 80) }));
+    lista.forEach((r) => nombresPersona.set(r.id, r.label));
+    asignables.set(c.databaseId, lista);
+    return lista;
+  } catch (e) { return []; }
+};
 const LEGACY_KEYS = ["solicitudes", "solicitud", "historial", "estado", "fecha", "seguimiento"];
 const clonaLista = (arr) => (arr || []).map((h) => Object.assign({}, h));
 const nombreRel = (c) => permitKey(c);
 // Pone en memoria las listas confirmadas de un punto (sin tocar su contacto, notas ni valoración).
 const aplicaListasRel = (c, listas) => {
   const key = nombreRel(c), l = listas || { solicitudes: [], historial: [] };
-  relBase.set(key, { sols: clonaLista(l.solicitudes), hist: clonaLista(l.historial) });
+  relBase.set(key, { sols: clonaLista(l.solicitudes), hist: clonaLista(l.historial), punto: l.punto ? Object.assign({}, l.punto) : undefined });
   const p = permits[key] || {};
+  if (l.punto) p.segPunto = Object.assign({}, l.punto); else delete p.segPunto;
   p.solicitudes = clonaLista(l.solicitudes); p.historial = clonaLista(l.historial);
   p.estado = estadoCalc(p);
-  if (p.estado === "sin" && !p.contacto && !p.notas && !p.valoracion && !p.solicitudes.length && !p.historial.length) delete permits[key];
+  if (p.estado === "sin" && !p.contacto && !p.notas && !p.valoracion && !p.solicitudes.length && !p.historial.length && !p.segPunto) delete permits[key];
   else permits[key] = p;
 };
 const leeFilasRel = async (client, filtroEst) => {
@@ -1490,7 +1509,7 @@ const ejecutaOpsRel = async (client, userId, c, ops) => {
       } else if (op.t === "fuSet") {
         r = op.fu
           ? await client.from("followups").update({ due_on: op.due, completed_at: null, assigned_to: op.resp || null, next_action: op.accion || null }).eq("id", op.fu).abortSignal(conTiempoLimite())
-          : await client.from("followups").insert({ establishment_id: est, application_id: op.app, due_on: op.due, assigned_to: op.resp || null, next_action: op.accion || null, created_by: userId }).abortSignal(conTiempoLimite());
+          : await client.from("followups").insert({ establishment_id: est, application_id: op.app || null, due_on: op.due, assigned_to: op.resp || null, next_action: op.accion || null, created_by: userId }).abortSignal(conTiempoLimite());
       } else if (op.t === "fuDone") {
         if (!op.fu) continue;
         r = await client.from("followups").update({ completed_at: new Date().toISOString() }).eq("id", op.fu).is("completed_at", null).abortSignal(conTiempoLimite());
@@ -1528,7 +1547,7 @@ const savePermits = async (c) => {
   }
   if (!c.provinceId) return "error";
   const key = nombreRel(c), cur = permits[key] || {};
-  const ops = diffRel(relBase.get(key) || { sols: [], hist: [] }, { sols: solsOf(cur), hist: cur.historial || [] });
+  const ops = diffRel(relBase.get(key) || { sols: [], hist: [] }, { sols: solsOf(cur), hist: cur.historial || [], punto: cur.segPunto });
   if (ops.length) {
     let result = await ejecutaOpsRel(client, userId, c, ops);
     const releido = await recargaRelPunto(c);
@@ -1741,7 +1760,7 @@ const estadoCalc = (p) => {
 const estadoOf = (c) => estadoCalc(permOf(c));
 const segCalc = (p) => solsOf(p).filter((x) => !x.res && x.seg).map((x) => x.seg).sort()[0] || "";
 const fechaCalc = (p) => solsOf(p).map((x) => x.fecha).filter(Boolean).sort().pop() || "";
-const seguimientoDue = (c) => { const d = segCalc(permOf(c)) || permOf(c).seguimiento; return d && d <= today() ? d : ""; };
+const seguimientoDue = (c) => { const p = permOf(c), d = [segCalc(p), p.seguimiento, p.segPunto && p.segPunto.fecha].filter(Boolean).sort()[0]; return d && d <= today() ? d : ""; };
 /* Expedientes de un punto en forma uniforme (k: «sol» o «con»; est: estado de su ciclo de vida). */
 const expedientesDe = (c, p) => {
   const t = today(), out = [];
@@ -1753,7 +1772,8 @@ const expedientesDe = (c, p) => {
 const seguimientosDe = (c, p) => {
   const out = [];
   solsOf(p).forEach((q, i) => { if (!q.res && q.seg) out.push({ c, fecha: q.seg, ong: (q.ong || "").trim(), i, resp: q.resp || "", accion: q.accion || "" }); });
-  if (!solsOf(p).length && p && p.seguimiento) out.push({ c, fecha: p.seguimiento, ong: "", i: -1 });
+  if (!solsOf(p).length && p && p.seguimiento && !p.segPunto) out.push({ c, fecha: p.seguimiento, ong: "", i: -1 });
+  if (p && p.segPunto) out.push({ c, fecha: p.segPunto.fecha, ong: "", i: -1, resp: p.segPunto.resp || "", accion: p.segPunto.accion || "", punto: true });
   return out;
 };
 const diaEnRango = (r, d) => (!r.desde || r.desde <= d) && (!r.hasta || r.hasta >= d);
@@ -1840,7 +1860,7 @@ const calendarioSemana = (recs, segs, wk, t) => Array.from({ length: 7 }, (_, k)
 const REL_COLS = {
   permit_applications: "id,establishment_id,status,requested_from,requested_until,organization,capturer_count,requested_at,contact_details,notes,resolved_at,resolution_reason,updated_at",
   permit_grants: "id,establishment_id,application_id,status,valid_from,valid_until,organization,capturer_count,contact_details,notes,cancelled_at,cancelled_reason,created_at,updated_at",
-  followups: "id,establishment_id,application_id,due_on,completed_at,assigned_to,next_action"
+  followups: "id,establishment_id,application_id,grant_id,due_on,completed_at,assigned_to,next_action"
 };
 const APP_RES = { approved: "aprobada", denied: "denegada", withdrawn: "retirada" };
 const RES_APP = { aprobada: "approved", denegada: "denied", retirada: "withdrawn" };
@@ -1863,6 +1883,11 @@ const relListas = (apps, grants, fups) => {
     if (!res && abierto) x.seg = abierto.due_on;
     if (ultimo) { x.fu = ultimo.id; if (ultimo.assigned_to) x.resp = ultimo.assigned_to; if (ultimo.next_action) x.accion = ultimo.next_action; }
     get(a.establishment_id).solicitudes.push(x);
+  });
+  (fups || []).forEach((f) => {
+    if (f.application_id || f.grant_id || f.completed_at || !f.due_on) return;
+    const o = get(f.establishment_id);
+    if (!o.punto || f.due_on < o.punto.fecha) o.punto = { fecha: f.due_on, fu: f.id, accion: f.next_action || "", resp: f.assigned_to || "" };
   });
   (grants || []).forEach((g) => {
     const h = { id: g.id, ver: g.updated_at, desde: g.valid_from || "", hasta: g.valid_until || "", ong: g.organization || "", captadores: g.capturer_count || 0, alta: diaMadrid(g.created_at) };
@@ -1906,6 +1931,9 @@ const diffRel = (base, cur) => {
     else if (cambiaRel(h, b)) ops.push({ t: "updGrant", id: h.id, ver: b.ver, h });
   });
   base.hist.forEach((b) => { if (!ch.has(b.id)) ops.push({ t: "delGrant", id: b.id }); });
+  const bp = base.punto, cp = cur.punto;
+  if (bp && !cp) ops.push({ t: "fuDone", fu: bp.fu });
+  else if (cp && (!bp || cp.fecha !== bp.fecha || (cp.accion || "") !== (bp.accion || "") || (cp.resp || "") !== (bp.resp || ""))) ops.push({ t: "fuSet", app: "", fu: bp ? bp.fu : "", due: cp.fecha, resp: cp.resp || "", accion: cp.accion || "" });
   return ops;
 };
 /* === fin de la capa relacional === */
@@ -1992,7 +2020,7 @@ function fichaFor(c, pos) {
           '<div data-tab="s" role="tabpanel" aria-label="Solicitudes">' +
             '<p class="fi-hint">Un mismo punto puede tener varias solicitudes, cada una con sus fechas. Al aprobar, denegar o retirar una solicitud se conserva en la lista con su fecha y su motivo. El estado del punto es un resumen que se calcula solo.</p>' +
             '<ul class="s-list fi-list"></ul>' +
-            '<details class="aform s-form"><summary>Añadir solicitud</summary><div class="row3"><label>Desde<input class="s-desde" type="date"></label><label>Hasta<input class="s-hasta" type="date"></label><label>Captadores<input class="s-n" type="number" min="1" step="1" placeholder="nº"></label></div><label>ONG<input class="s-ong" type="text" list="ongList" placeholder="AECC, Cruz Roja…" autocomplete="off"></label><label>Próximo seguimiento<input class="s-seg" type="date"></label><label class="s-rel">Siguiente acción<input class="s-accion" type="text" maxlength="200" autocomplete="off" placeholder="Llamar, enviar documentación…"></label><label class="s-rel">Responsable del seguimiento<select class="s-resp"><option value="">Sin asignar</option><option value="yo">Yo</option></select></label><label>Contacto de esta solicitud<input class="s-contacto" type="text" maxlength="500" autocomplete="off"></label><label>Notas de esta solicitud<textarea class="s-notas" maxlength="2000" rows="2"></textarea></label><div class="fi-btns"><button type="button" class="s-add">Añadir solicitud</button><button type="button" class="s-cancel" hidden>Cancelar edición</button></div></details>' +
+            '<details class="aform s-form"><summary>Añadir solicitud</summary><div class="row3"><label>Desde<input class="s-desde" type="date"></label><label>Hasta<input class="s-hasta" type="date"></label><label>Captadores<input class="s-n" type="number" min="1" step="1" placeholder="nº"></label></div><label>ONG<input class="s-ong" type="text" list="ongList" placeholder="AECC, Cruz Roja…" autocomplete="off"></label><label>Próximo seguimiento<input class="s-seg" type="date"></label><label class="s-rel">Siguiente acción<input class="s-accion" type="text" maxlength="200" autocomplete="off" placeholder="Llamar, enviar documentación…"></label><label class="s-rel">Responsable del seguimiento<select class="s-resp"><option value="">Sin asignar</option></select></label><label>Contacto de esta solicitud<input class="s-contacto" type="text" maxlength="500" autocomplete="off"></label><label>Notas de esta solicitud<textarea class="s-notas" maxlength="2000" rows="2"></textarea></label><div class="fi-btns"><button type="button" class="s-add">Añadir solicitud</button><button type="button" class="s-cancel" hidden>Cancelar edición</button></div></details>' +
             '<div class="s-msg fi-msg" role="status"></div>' +
           "</div>" +
           '<div data-tab="h" role="tabpanel" aria-label="Concesiones">' +
@@ -2075,7 +2103,8 @@ function fichaFor(c, pos) {
   let editH = -1, editS = -1;
   let sols = clone(solsOf(p));
   /* Última versión confirmada por Supabase: a ella se vuelve si un guardado falla. */
-  let base = { hist: clone(hist), sols: clone(sols), val };
+  let segPunto = p.segPunto ? Object.assign({}, p.segPunto) : null; /* seguimiento del punto (sin solicitud), solo puntos del catálogo */
+  let base = { hist: clone(hist), sols: clone(sols), val, segPunto: segPunto ? Object.assign({}, segPunto) : null };
   const q = (k) => el.querySelector("." + k);
   const ongList = document.getElementById("ongList") || document.body.appendChild(Object.assign(document.createElement("datalist"), { id: "ongList" }));
   ongList.innerHTML = [...new Set(["AECC", "Cruz Roja", "WWF", "FJC", "FPM", "FEC", "Aldeas Infantiles"].concat(Object.values(permits).reduce((a, x) => a.concat(solsOf(x).map((z) => z.ong), ((x && x.historial) || []).map((h) => h.ong)), []).filter(Boolean)))].map((o) => '<option value="' + esc(o) + '"></option>').join("");
@@ -2095,8 +2124,8 @@ function fichaFor(c, pos) {
     if ((vg || fu) && pend) meta.push(pend + (pend === 1 ? " solicitud pendiente" : " solicitudes pendientes"));
     const card = el.querySelector(".ef"); card.className = "ef s-" + ef;
     card.innerHTML = '<span class="st">' + esc(i[1]) + "</span><strong>" + esc(titulo) + "</strong>" + (meta.length ? '<span class="meta">' + meta.join(" · ") + "</span>" : "");
-    const fs = fechaCalc(cur), sg = segCalc(cur);
-    el.querySelector(".pinfo").innerHTML = '<div class="' + (sg && sg <= t ? "due" : "") + '"><span>Próximo seguimiento</span><b>' + (sg ? esc(fmtD(sg)) + (sg <= t ? " (toca ya)" : "") : "—") + '</b></div><div><span>Solicitado el</span><b>' + (fs ? esc(fmtD(fs)) : "—") + '</b></div><div><span>Pendientes</span><b>' + pend + '</b></div><div><span>Concesiones</span><b>' + hist.filter((h) => !h.cancelada).length + "</b></div>";
+    const fs = fechaCalc(cur), sg = [segCalc(cur), segPunto && segPunto.fecha].filter(Boolean).sort()[0] || "";
+    el.querySelector(".pinfo").innerHTML = '<div class="' + (sg && sg <= t ? "due" : "") + '"><span>Próximo seguimiento</span><b>' + (sg ? esc(fmtD(sg)) + (sg <= t ? " (toca ya)" : "") : "—") + '</b></div><div><span>Solicitado el</span><b>' + (fs ? esc(fmtD(fs)) : "—") + '</b></div><div><span>Pendientes</span><b>' + pend + '</b></div><div><span>Concesiones</span><b>' + hist.filter((h) => !h.cancelada).length + "</b></div>" + (segPunto ? '<div class="segp"><span>Seguimiento del punto: ' + esc(fmtD(segPunto.fecha)) + (segPunto.accion ? " (" + esc(segPunto.accion) + ")" : "") + (segPunto.resp ? " · responsable: " + esc(nombreResp(segPunto.resp)) : "") + '</span><button type="button" class="f-segpunto">Hecho</button></div>' : "");
   };
   /* Pregunta inline (con motivo) para las acciones que cierran un expediente. Se rehace fuera del clic para que Leaflet no cierre la ficha. */
   const askReason = (li, label, okText, onOk, sinCampo) => {
@@ -2139,8 +2168,18 @@ function fichaFor(c, pos) {
   };
   const miId = () => window.mapaSession?.user?.id || "";
   if (!c.databaseId) el.querySelectorAll(".s-rel").forEach((n) => { n.hidden = true; }); /* los puntos personales no tienen seguimientos en tablas */
-  const setResp = (resp) => { const sel = q("s-resp"); sel.querySelectorAll("option[value=keep]").forEach((o) => o.remove()); if (resp && resp !== miId()) { const o = document.createElement("option"); o.value = "keep"; o.textContent = "Otra persona (sin cambios)"; sel.appendChild(o); sel.value = "keep"; } else sel.value = resp ? "yo" : ""; };
-  const resetS = () => { editS = -1; ["s-desde", "s-hasta", "s-n", "s-ong", "s-seg", "s-contacto", "s-notas", "s-accion", "s-resp"].forEach((k) => { q(k).value = ""; }); q("s-resp").querySelectorAll("option[value=keep]").forEach((o) => o.remove()); q("s-add").textContent = "Añadir solicitud"; q("s-cancel").hidden = true; };
+  const setResp = (resp) => {
+    const sel = q("s-resp");
+    if (resp && ![...sel.options].some((o) => o.value === resp)) { const o = document.createElement("option"); o.value = resp; o.textContent = nombreResp(resp) === "tú" ? "Yo" : (nombresPersona.get(resp) || "Otra persona"); sel.appendChild(o); }
+    sel.value = resp || "";
+  };
+  const pintaAsignables = (lista) => {
+    const sel = q("s-resp"), actual = sel.value;
+    sel.innerHTML = '<option value="">Sin asignar</option>' + lista.map((r) => '<option value="' + esc(r.id) + '">' + esc(r.id === miId() ? r.label + " (yo)" : r.label) + "</option>").join("");
+    setResp(actual);
+  };
+  if (c.databaseId) cargaAsignables(c).then((lista) => { if (lista.length) pintaAsignables(lista); });
+  const resetS = () => { editS = -1; ["s-desde", "s-hasta", "s-n", "s-ong", "s-seg", "s-contacto", "s-notas", "s-accion", "s-resp"].forEach((k) => { q(k).value = ""; });  q("s-add").textContent = "Añadir solicitud"; q("s-cancel").hidden = true; };
   const paintSols = () => {
     const ul = el.querySelector(".s-list");
     const sorted = sols.map((x, i) => [x, i]).sort((a, b) => (b[0].desde || "").localeCompare(a[0].desde || ""));
@@ -2149,7 +2188,7 @@ function fichaFor(c, pos) {
       const st = solEstado(x);
       const li = document.createElement("li"); if (st !== "pendiente") li.style.opacity = ".7";
       li.innerHTML = "<span>" + esc(solRange(x) || "Sin datos") + " · <b>" + st + "</b>" + (x.fecha ? " · pedida el " + esc(fmtD(x.fecha)) : "") + (x.resFecha && x.res ? " · resuelta el " + esc(fmtD(x.resFecha)) : "") +
-        (x.seg && !x.res ? " · seguimiento " + esc(fmtD(x.seg)) + (x.accion ? " (" + esc(x.accion) + ")" : "") + (x.resp ? (x.resp === miId() ? " · responsable: tú" : " · responsable: otra persona") : "") : "") + (x.motivo ? " · motivo: " + esc(x.motivo) : "") + (x.contacto ? " · contacto: " + esc(x.contacto) : "") + (x.notas ? " · " + esc(x.notas) : "") + "</span>";
+        (x.seg && !x.res ? " · seguimiento " + esc(fmtD(x.seg)) + (x.accion ? " (" + esc(x.accion) + ")" : "") + (x.resp ? " · responsable: " + esc(nombreResp(x.resp)) : "") : "") + (x.motivo ? " · motivo: " + esc(x.motivo) : "") + (x.contacto ? " · contacto: " + esc(x.contacto) : "") + (x.notas ? " · " + esc(x.notas) : "") + "</span>";
       const mk = (t, title, css, fn) => { const b = document.createElement("button"); b.type = "button"; b.textContent = t; b.title = title; if (css) b.style.cssText = css; b.addEventListener("click", () => setTimeout(() => { if (!commitBusy) fn(b); }, 0)); li.appendChild(b); return b; }; /* se rehace la lista fuera del clic para que Leaflet no cierre la ficha */
       const fin = (txtOk, txtKo) => async () => { paintSols(); paintHist(); const ok = await commit(); q("s-msg").style.color = ok ? "var(--ok)" : "var(--err)"; q("s-msg").textContent = ok ? txtOk : txtKo; };
       if (!x.res) mk("Conceder", "Aprobar esta solicitud: se conserva y se crea la concesión con las mismas fechas", "color:var(--ok);border-color:var(--ok);margin-left:auto", () => {
@@ -2206,9 +2245,10 @@ function fichaFor(c, pos) {
       sols.forEach((x) => { if (!x.id) x.id = newId(); });
       const v = { contacto: el.querySelector(".f-contacto").value.trim(), notas: el.querySelector(".f-notas").value.trim(), valoracion: val, historial: hist };
       if (sols.length) v.solicitudes = sols;
+      if (segPunto) v.segPunto = Object.assign({}, segPunto);
       if (sols.length || hist.length) { v.estado = estadoCalc(v); v.fecha = fechaCalc(v); const sg = segCalc(v); if (sg) v.seguimiento = sg; }
       else { v.estado = p.estado || "sin"; v.fecha = p.fecha || ""; if (p.seguimiento) v.seguimiento = p.seguimiento; }
-      if (v.estado === "sin" && !v.fecha && !v.contacto && !v.notas && !v.valoracion && !hist.length && !v.seguimiento && !sols.length) delete permits[permitKey(c)];
+      if (v.estado === "sin" && !v.fecha && !v.contacto && !v.notas && !v.valoracion && !hist.length && !v.seguimiento && !sols.length && !segPunto) delete permits[permitKey(c)];
       else permits[permitKey(c)] = v;
 
       const saved = await savePermits(c);
@@ -2244,11 +2284,11 @@ function fichaFor(c, pos) {
         const leido = await reloadSharedPermit(c);
         if (leido) {
           const np = permits[permitKey(c)] || {};
-          hist = clone(np.historial); sols = clone(solsOf(np)); val = np.valoracion || 0;
+          hist = clone(np.historial); sols = clone(solsOf(np)); val = np.valoracion || 0; segPunto = np.segPunto ? Object.assign({}, np.segPunto) : null;
         } else {
-          hist = clone(base.hist); sols = clone(base.sols); val = base.val;
+          hist = clone(base.hist); sols = clone(base.sols); val = base.val; segPunto = base.segPunto ? Object.assign({}, base.segPunto) : null;
         }
-        base = { hist: clone(hist), sols: clone(sols), val };
+        base = { hist: clone(hist), sols: clone(sols), val, segPunto: segPunto ? Object.assign({}, segPunto) : null };
         paint(); paintHist(); paintSols(); paintEf();
         if (markers[c.id]) markers[c.id].setIcon(makeIcon(c));
         refreshSelects(); renderList();
@@ -2260,8 +2300,8 @@ function fichaFor(c, pos) {
         return false;
       }
 
-      { const np = permits[permitKey(c)] || {}; hist = clone(np.historial); sols = clone(solsOf(np)); paintHist(); paintSols(); } /* se adoptan los registros tal como los confirmó Supabase (ids y versiones) */
-      base = { hist: clone(hist), sols: clone(sols), val };
+      { const np = permits[permitKey(c)] || {}; hist = clone(np.historial); sols = clone(solsOf(np)); segPunto = np.segPunto ? Object.assign({}, np.segPunto) : null; paintHist(); paintSols(); } /* se adoptan los registros tal como los confirmó Supabase (ids y versiones) */
+      base = { hist: clone(hist), sols: clone(sols), val, segPunto: segPunto ? Object.assign({}, segPunto) : null };
       if (markers[c.id]) markers[c.id].setIcon(makeIcon(c));
       refreshSelects();
       renderList();
@@ -2290,7 +2330,7 @@ function fichaFor(c, pos) {
     if (editS < 0 && h && h < t) { msg.textContent = "La fecha de fin ya pasó: una solicitud nueva no puede acabar antes de hoy."; return; }
     const x = { fecha: t, desde: d, hasta: h, captadores: cn.n, ong: og, seg: q("s-seg").value, contacto: q("s-contacto").value.trim(), notas: q("s-notas").value.trim() };
     const rs = q("s-resp").value, ac = q("s-accion").value.trim();
-    if (c.databaseId && x.seg) { if (ac) x.accion = ac; if (rs === "yo") x.resp = miId(); else if (rs === "keep" && editS >= 0 && sols[editS] && sols[editS].resp) x.resp = sols[editS].resp; }
+    if (c.databaseId && x.seg) { if (ac) x.accion = ac; if (rs) x.resp = rs; }
     if (!x.seg) delete x.seg;
     if (!x.contacto) delete x.contacto;
     if (!x.notas) delete x.notas;
@@ -2319,6 +2359,7 @@ function fichaFor(c, pos) {
   });
   q("h-cancel").addEventListener("click", resetH);
   el.querySelector(".f-save").addEventListener("click", commit);
+  el.addEventListener("click", (e) => { if (e.target.closest(".f-segpunto")) setTimeout(() => { if (commitBusy) return; segPunto = null; paintEf(); commit(); }, 0); });
   let armed = false;
   {
     const msg = el.querySelector(".lmsg"), inp = el.querySelector(".l-in"), saveLocBtn = el.querySelector(".l-save-location");
@@ -3700,6 +3741,7 @@ function conSeguimiento(c, modo, fecha) {
   const p = permits[permitKey(c)]; if (!p) return null;
   const copia = JSON.parse(JSON.stringify(p)); let cambio = false;
   solsOf(copia).forEach((x) => { if (!x.res && x.seg) { x.seg = modo === "hecho" ? "" : fecha; cambio = true; } });
+  if (copia.segPunto) { if (modo === "hecho") delete copia.segPunto; else copia.segPunto.fecha = fecha; cambio = true; }
   if (!solsOf(copia).length && copia.seguimiento) { if (modo === "hecho") delete copia.seguimiento; else copia.seguimiento = fecha; cambio = true; }
   if (!cambio) return null;
   if (solsOf(copia).length) { const sg = segCalc(copia); if (sg) copia.seguimiento = sg; else delete copia.seguimiento; }
@@ -3914,7 +3956,7 @@ const csvCell = (value) => {
   };
   const filas = (key, d) => {
     const lista = key === "capacidadHoy" ? d.ind.vigentes : d.ind[key], t = d.t;
-    if (key.startsWith("seg")) return lista.slice().sort((a, b) => a.fecha.localeCompare(b.fecha)).map((s) => ({ c: s.c, tipo: "Seguimiento", ong: s.ong, periodo: "", n: "", det: fmtD(s.fecha) + (s.fecha < t ? " · atrasado " + plural(daysBetween(s.fecha, t), "día", "días") : s.fecha === t ? " · hoy" : "") + (s.accion ? " · " + s.accion : "") + (s.resp ? (s.resp === window.mapaSession?.user?.id ? " · responsable: tú" : " · responsable: otra persona") : ""), tab: "s" }));
+    if (key.startsWith("seg")) return lista.slice().sort((a, b) => a.fecha.localeCompare(b.fecha)).map((s) => ({ c: s.c, tipo: "Seguimiento", ong: s.ong, periodo: "", n: "", det: fmtD(s.fecha) + (s.fecha < t ? " · atrasado " + plural(daysBetween(s.fecha, t), "día", "días") : s.fecha === t ? " · hoy" : "") + (s.accion ? " · " + s.accion : "") + (s.resp ? " · responsable: " + nombreResp(s.resp) : ""), tab: "s" }));
     if (key === "incidencias") return lista.map((x) => ({ c: x.r.c, tipo: x.tipo, ong: x.r.ong, periodo: fmtD(x.r.desde) + " – " + fmtD(x.r.hasta), n: x.r.n || "", det: detalle(x.r), tab: x.r.k === "sol" ? "s" : "h" }));
     const orden = key.startsWith("vencen") ? (a, b) => a.hasta.localeCompare(b.hasta) : (a, b) => (a.desde || "").localeCompare(b.desde || "");
     return lista.slice().sort(orden).map((r) => ({ c: r.c, tipo: (r.k === "sol" ? "Solicitud " : "Concesión ") + r.est, ong: r.ong, periodo: fmtD(r.desde) + " – " + fmtD(r.hasta), n: r.n || "", det: detalle(r) + (key.startsWith("vencen") ? ((detalle(r) ? " · " : "") + "faltan " + plural(daysBetween(t, r.hasta), "día", "días")) : ""), tab: r.k === "sol" ? "s" : "h" }));
