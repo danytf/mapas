@@ -1,6 +1,6 @@
-# Carga N2 de Canarias (preparada, sin cargar)
+# Carga N2 de Canarias (cargada)
 
-Estado: **preparada el 23/10/2026; no cargada**. Quinta región con el mismo procedimiento (Andalucía, Extremadura, La Rioja, Murcia). Las dos provincias, Las Palmas (35) y Santa Cruz de Tenerife (38), se cargan de una vez por decisión del titular.
+Estado: **cargada en producción el 23/10/2026** por el titular con `cargar.sh` y verificada en solo lectura (ver «Cierre»). Quinta región con el mismo procedimiento (Andalucía, Extremadura, La Rioja, Murcia). Las dos provincias, Las Palmas (35) y Santa Cruz de Tenerife (38), se cargan de una vez por decisión del titular.
 
 ## Origen
 - Fichero: `canary-islands-latest.osm.pbf` (Geofabrik, edición del 21/10/2026, 60.034.717 bytes, MD5 `fa59112afab00d09999e404f8a7c6dac` verificado), fuera del repositorio. OpenStreetMap, licencia ODbL. No existe un fichero solo de Tenerife: el de Canarias incluye todas las islas.
@@ -28,7 +28,7 @@ Un SQL por lote y provincia en `supabase/seeds/canarias/<lote>/` (transaccionale
 - Se detectó que el patrón `^desa\b` del filtro de Hospital de las definiciones anteriores quedó guardado con un carácter de retroceso (`\x08`) y nunca excluyó nada; la de Canarias ya lo lleva bien. No se ha tocado el resto.
 - No probado en el PostgreSQL local (sin la contraseña en esta sesión).
 
-## Cómo cargar (con aprobación)
+## Cómo se cargó (con aprobación)
 Desde la raíz del repositorio, en este orden:
 ```
 bash scripts/catalogue/cargar.sh supabase/seeds/canarias/municipios municipios
@@ -38,3 +38,10 @@ bash scripts/catalogue/cargar.sh supabase/seeds/canarias/grandes-superficies gra
 bash scripts/catalogue/cargar.sh supabase/seeds/canarias/resto resto catalogo-canarias:canarias-resto:
 ```
 Después, en solo lectura: 88 municipios nuevos y 1.627 puntos (la base pasaría de 8.155 a 9.782). Para verlos hay que activar las dos provincias desde «Usuarios y provincias». Sin asignar a usuarios hasta terminar toda España.
+
+## Cierre (23/10/2026)
+- **Carga verificada:** 88 municipios (34 y 54, todos con INE distinto) y 1.627 puntos (Las Palmas 779, Santa Cruz de Tenerife 848), 1.627 `source_ref` `catalogo-canarias:` distintos; ninguno sin coordenadas o municipio y todos activos. Por categoría: Supermercado 903, Entidad oficial 133, Centro comercial 123, Gimnasios 112, Correos 101, Centro de salud 88, Hospital 42, Estaciones 56, Bricolaje 32, Carrefour 8, IKEA 7, MediaMarkt 7, Decathlon 6, Leroy Merlin 5, El Corte Inglés 4. Total de la base 8.155 -> 9.782.
+- **Provincias:** en la verificación ya constaban como activas (`is_active = true`).
+- **Códigos postales y calles:** 437 puntos sin código (Las Palmas 246, Santa Cruz de Tenerife 191) y 41 sin calle (20 y 21). Pendientes de completar con Nominatim.
+- **Usuarios:** sin asignar a nadie hasta terminar el mapa de toda España (decisión del titular).
+- **Pendiente de revisar:** los hospitales y estaciones dudosos de «Calidad y límites».
