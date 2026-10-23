@@ -1,4 +1,4 @@
--- Pruebas del ciclo de vida de solicitudes y concesiones (migración 20261023150000_permit_workflow). Una transacción que termina en ROLLBACK.
+-- Pruebas del ciclo de vida de solicitudes y concesiones (migración 20261023160115_permit_workflow). Una transacción que termina en ROLLBACK.
 -- Ejecución: psql -v ON_ERROR_STOP=1 -f supabase/tests/permit_workflow.sql
 begin;
 
