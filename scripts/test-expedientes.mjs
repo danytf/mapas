@@ -291,6 +291,16 @@ const T = "2026-10-23";
   eq(R.diffRel(base2, cur).map((o) => o.resp), [""], "quitar el responsable actualiza el seguimiento");
   cur = JSON.parse(JSON.stringify(base2)); cur.sols = [...cur.sols, { id: "n-2", desde: "2026-12-01", fecha: "2026-10-23", seg: "2026-11-01", resp: "user-1", accion: "Visitar" }];
   eq(R.diffRel(base2, cur).filter((o) => o.t === "fuSet").map((o) => [o.resp, o.accion]), [["user-1", "Visitar"]]);
+  // seguimiento del punto (sin solicitud ni concesión)
+  const lp = R.relListas([], [], [
+    { id: "fp-1", establishment_id: E, application_id: null, grant_id: null, due_on: "2026-11-05", completed_at: null, assigned_to: "user-9", next_action: "Revisar" },
+    { id: "fp-2", establishment_id: E, application_id: null, grant_id: null, due_on: "2026-10-28", completed_at: null },
+    { id: "fp-3", establishment_id: E, application_id: null, grant_id: null, due_on: "2026-10-01", completed_at: "2026-10-02T10:00:00+00:00" }
+  ]).get(E);
+  eq(lp.punto, { fecha: "2026-10-28", fu: "fp-2", accion: "", resp: "" }, "el seguimiento del punto es el abierto más próximo; los cerrados no cuentan");
+  eq(R.diffRel({ sols: [], hist: [], punto: lp.punto }, { sols: [], hist: [], punto: undefined }), [{ t: "fuDone", fu: "fp-2" }], "marcar hecho cierra el seguimiento del punto");
+  eq(R.diffRel({ sols: [], hist: [], punto: lp.punto }, { sols: [], hist: [], punto: { ...lp.punto } }), [], "sin cambios, sin operaciones");
+  eq(R.diffRel({ sols: [], hist: [], punto: lp.punto }, { sols: [], hist: [], punto: { ...lp.punto, fecha: "2026-11-02" } }).map((o) => [o.t, o.due, o.app]), [["fuSet", "2026-11-02", ""]]);
   // reabrir un seguimiento cerrado (deshacer)
   const cerrado = copia(); cerrado.sols[0].seg = ""; cerrado.sols[0].fu = "fu-1";
   cur = copia(); cur.sols[0].seg = "2026-10-30"; cur.sols[0].fu = "fu-1";
