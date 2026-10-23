@@ -21,6 +21,7 @@ on:
       - "scripts/test-admin-panel.mjs"
       - "scripts/test-app-mejoras.mjs"
       - "scripts/test-calendario.mjs"
+      - "scripts/test-expedientes.mjs"
       - "scripts/test-cabecera-filtros.mjs"
       - "scripts/test-texto-minimo.mjs"
       - "scripts/test-ficha.mjs"
@@ -88,6 +89,8 @@ jobs:
         run: node scripts/test-provincias.mjs
       - name: Test bulk actions guarantees
         run: node scripts/test-acciones-masivas.mjs
+      - name: Test permit-file business rules
+        run: node scripts/test-expedientes.mjs
       - name: Test filter counters
         run: node scripts/test-contadores-filtros.mjs
       - name: Run XSS regression audit
