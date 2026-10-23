@@ -99,6 +99,7 @@ const freshState = (n = Number(process.env.MOCK_POINTS || 0), conEstados = proce
   })),
   userState: {},
   shared: {},
+  rel: { permit_applications: [], permit_grants: [], followups: [] },
   log: []
 });
 let S = freshState();
@@ -127,6 +128,7 @@ function applyFilters(rows, params) {
     if (op === "eq") out = out.filter((r) => String(r[key]) === val);
     else if (op === "gt") out = out.filter((r) => String(r[key]) > val);
     else if (op === "in") { const set = val.slice(1, -1).split(","); out = out.filter((r) => set.includes(String(r[key]))); }
+    else if (op === "is" && val === "null") out = out.filter((r) => r[key] === null || r[key] === undefined);
     else if (raw === "not.is.null") out = out.filter((r) => r[key] !== null && r[key] !== undefined);
   }
   return out;
@@ -153,6 +155,7 @@ createServer(async (req, res) => {
 
   // Utilidades de prueba.
   if (path === "/__fail") { FALLO = { n: Number(url.searchParams.get("n") || 0), modo: url.searchParams.get("modo") || "500" }; return send(res, 200, FALLO); }
+  if (path === "/__rel") return send(res, 200, S.rel);
   if (path === "/__log") return send(res, 200, S.log);
   if (path === "/__state") return send(res, 200, { userState: S.userState, establishments: S.establishments });
   if (path === "/__reset") { const n = url.searchParams.get("n"); const e = url.searchParams.get("estados"); S = freshState(n === null ? undefined : Number(n), e === null ? undefined : e === "1", url.searchParams.get("realista") === "1"); ADM = admInicial(); for (const p of provinces) p.is_active = true; return send(res, 200, { ok: true, puntos: S.establishments.length, estados: S.conEstados }); }
@@ -199,6 +202,69 @@ createServer(async (req, res) => {
     S.log.push({ tipo: "rest", metodo: req.method, tabla: table, consulta: url.search.slice(0, 300) });
 
     const eqParam = (name) => { const v = url.searchParams.get(name); return v && v.startsWith("eq.") ? v.slice(3) : null; };
+
+    // Expedientes relacionales (solicitudes, concesiones y seguimientos) con las mismas reglas que la migración permit_workflow.
+    const REL = ["permit_applications", "permit_grants", "followups"];
+    const relVisible = (row) => u.role === "admin" || S.establishments.some((e) => e.id === row.establishment_id && u.provinces.some((c) => P(c).id === e.province_id));
+    const ahora = () => { S.relClock = (S.relClock || 0) + 1; return new Date(Date.UTC(2026, 9, 23, 12, 0, 0) + S.relClock * 1000).toISOString().replace("Z", "000+00:00"); };
+    const fallo = (code, message, status = 400) => send(res, status, { code, message });
+    const apps = S.rel.permit_applications, grants = S.rel.permit_grants, fups = S.rel.followups;
+    const closeFups = (appId) => fups.forEach((f) => { if (f.application_id === appId && !f.completed_at) f.completed_at = ahora(); });
+    if (table.startsWith("rpc/") && ["approve_permit_application", "resolve_permit_application", "cancel_permit_grant"].includes(table.slice(4))) {
+      const fn = table.slice(4);
+      const a = apps.find((x) => x.id === body.p_application_id && relVisible(x)), g = grants.find((x) => x.id === body.p_grant_id && relVisible(x));
+      if (fn === "cancel_permit_grant") {
+        if (!g) return fallo("P0002", "Concesión no encontrada", 404);
+        if (g.status === "cancelled") return send(res, 200, null);
+        if (body.p_expected_updated_at && body.p_expected_updated_at !== g.updated_at) return fallo("40001", "La concesión ha cambiado desde que se leyó", 409);
+        Object.assign(g, { status: "cancelled", cancelled_at: ahora(), cancelled_reason: body.p_reason || null, updated_at: ahora(), updated_by: u.id });
+        return send(res, 200, null);
+      }
+      if (!a) return fallo("P0002", "Solicitud no encontrada", 404);
+      if (fn === "approve_permit_application") {
+        const ya = grants.find((x) => x.application_id === a.id);
+        if (a.status === "approved" && ya) return send(res, 200, ya.id);
+        if (body.p_expected_updated_at && body.p_expected_updated_at !== a.updated_at) return fallo("40001", "La solicitud ha cambiado desde que se leyó", 409);
+        if (a.status !== "pending") return fallo("23514", "La solicitud ya está resuelta");
+        const vf = body.p_valid_from ?? a.requested_from, vu = body.p_valid_until ?? a.requested_until;
+        if (vf && vu && vu < vf) return fallo("23514", "fechas incoherentes");
+        Object.assign(a, { status: "approved", resolved_at: ahora(), resolved_by: u.id, updated_at: ahora(), updated_by: u.id });
+        const nueva = { id: "00000000-0000-4000-9000-" + String(grants.length + 1).padStart(12, "0"), establishment_id: a.establishment_id, application_id: a.id, status: "active", valid_from: vf, valid_until: vu,
+          organization: body.p_organization ?? a.organization, capturer_count: body.p_capturer_count ?? a.capturer_count, contact_details: a.contact_details, notes: a.notes, cancelled_at: null, cancelled_reason: null, created_at: ahora(), updated_at: ahora(), created_by: u.id };
+        grants.push(nueva);
+        S.log.push({ tipo: "rel", accion: "aprobar", app: a.id, grant: nueva.id });
+        return send(res, 200, nueva.id);
+      }
+      if (!["denied", "withdrawn"].includes(body.p_status)) return fallo("22023", "Estado de resolución no válido");
+      if (a.status === body.p_status) return send(res, 200, null);
+      if (body.p_expected_updated_at && body.p_expected_updated_at !== a.updated_at) return fallo("40001", "La solicitud ha cambiado desde que se leyó", 409);
+      if (a.status !== "pending") return fallo("23514", "La solicitud ya está resuelta");
+      Object.assign(a, { status: body.p_status, resolution_reason: body.p_reason || null, resolved_at: ahora(), resolved_by: u.id, updated_at: ahora(), updated_by: u.id });
+      return send(res, 200, null);
+    }
+    if (REL.includes(table)) {
+      const rows = S.rel[table];
+      if (req.method === "GET") return reply(applyFilters(rows.filter(relVisible), url.searchParams));
+      if (req.method === "POST") {
+        const fila = Array.isArray(body) ? body[0] : body;
+        if (!fila || !fila.establishment_id || !relVisible(fila)) return fallo("42501", "new row violates row-level security policy", 403);
+        if (fila.id && rows.some((x) => x.id === fila.id)) return fallo("23505", "duplicate key value", 409);
+        const nueva = { id: fila.id || "00000000-0000-4000-a000-" + String(rows.length + 1).padStart(12, "0"), status: table === "permit_grants" ? "active" : "pending", completed_at: null, ...fila, created_at: ahora(), updated_at: ahora() };
+        rows.push(nueva);
+        return send(res, 201);
+      }
+      if (req.method === "PATCH") {
+        const sel = applyFilters(rows.filter(relVisible), url.searchParams);
+        for (const r of sel) Object.assign(r, body, { updated_at: ahora() });
+        return send(res, 200, sel.map((r) => ({ id: r.id })));
+      }
+      if (req.method === "DELETE") {
+        if (u.role !== "admin") return send(res, 200, []);
+        const sel = applyFilters(rows, url.searchParams);
+        sel.forEach((r) => rows.splice(rows.indexOf(r), 1));
+        return send(res, 200, sel.map((r) => ({ id: r.id })));
+      }
+    }
     if (table === "municipalities") {
       const prov = provinces.find((p) => p.id === eqParam("province_id"));
       if (!prov) return reply([]);

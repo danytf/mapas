@@ -168,7 +168,7 @@ const savePermitsStart = html.indexOf("const savePermits = async (c) =>");
 const savePermitsBody = savePermitsStart >= 0 ? html.slice(savePermitsStart, html.indexOf("const reloadSharedPermit", savePermitsStart)) : "";
 if (!savePermitsBody ||
     !/if \(!c\.databaseId\) \{\s*const result = c\.custom \? await saveCustomPermits\(\) : "error";/.test(savePermitsBody) ||
-    /return "ok";/.test(savePermitsBody) ||
+    !/await ejecutaOpsRel\(client, userId, c, ops\)/.test(savePermitsBody) || !/await saveSharedPermitRow\(client, userId, row\)/.test(savePermitsBody) ||
     !/window\.mapaPersistUserState\("customPermits", customPermitsSnapshot\(\)\)/.test(html) ||
     !/state\.customPermits/.test(html)) {
   failures.push("Los permisos de los puntos personales deben guardarse y cargarse desde user_app_state (customPermits) sin dar por bueno un guardado no realizado (H-13).");
