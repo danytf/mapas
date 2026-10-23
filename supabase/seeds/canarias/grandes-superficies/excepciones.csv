@@ -1,0 +1,4 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/3237667080;;El Corte Inglés;Las Palmas de Gran Canaria;28.134474;-15.431465;duplicado en el lote de node/3237667079 (74 m)
+descartado;node/6248064285;;El Corte Ingles Outlet;La Orotava;28.394793;-16.549312;texto excluido (supercor|opencor|viajes|seguros|bricolaje|gourmet|outlet|aparcamiento|parking)
+descartado;way/978431248;;IKEA;San Cristóbal de La Laguna;28.459746;-16.306845;duplicado en el lote de node/10081723522 (1 m)

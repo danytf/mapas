@@ -1,0 +1,19 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/2642765565;Autobús;Vallehermoso;Vallehermoso;28.181408;-17.264208;etiqueta public_transport=stop_position
+descartado;node/3870632455;Autobús;;Santa Cruz de Tenerife;28.451375;-16.288536;sin nombre en OpenStreetMap
+descartado;node/3870632758;Autobús;;Santa Cruz de Tenerife;28.449801;-16.288791;sin nombre en OpenStreetMap
+por revisar;node/4035648729;Autobús;Estación de guaguas (Moya) – CALLE LUJAN PEREZ;Moya;28.108409;-15.583536;posible duplicado de way/1523557883 (Estación de Moya) a 19 m
+descartado;node/4384556193;Autobús;;El Tanque;28.343485;-16.792353;sin nombre en OpenStreetMap
+descartado;node/7252363985;Autobús;;Mogán;27.820804;-15.762726;sin nombre en OpenStreetMap
+descartado;way/1244001799;Autobús;PB Bus;Granadilla de Abona;28.049035;-16.575835;duplicado en el lote de way/1243740638 (93 m)
+descartado;way/1244070654;Autobús;PB Bus;Granadilla de Abona;28.048704;-16.576854;duplicado en el lote de way/1243740638 (199 m)
+descartado;way/1244651809;Autobús;;Granadilla de Abona;28.047668;-16.579538;sin nombre en OpenStreetMap
+descartado;way/1244656796;Autobús;;Granadilla de Abona;28.047312;-16.58054;sin nombre en OpenStreetMap
+descartado;way/1245023617;Autobús;;Granadilla de Abona;28.046792;-16.581958;sin nombre en OpenStreetMap
+por revisar;way/1523557883;Autobús;Estación de Moya – CALLE LUJAN PEREZ;Moya;28.108248;-15.583615;posible duplicado de node/4035648729 (Estación de guaguas (Moya)) a 19 m
+descartado;way/168983972;Autobús;;Las Palmas de Gran Canaria;28.10063;-15.419166;sin nombre en OpenStreetMap
+descartado;way/344086043;Autobús;;Agüimes;27.904193;-15.447924;sin nombre en OpenStreetMap
+descartado;way/539232094;Autobús;"Parada Preferente de Guaguas ""Pedro Hernandez Morales""";La Oliva;28.680896;-14.008428;etiqueta public_transport=platform
+por revisar;way/548838026;Autobús;Estación de autobuses de Parada Preferente de Guaguas Muelle de San Sebastián (San Sebastián de la Gomera) – Paseo de Fred Olsen;San Sebastián de la Gomera;28.088181;-17.106864;nombre dudoso en OpenStreetMap: Parada Preferente de Guaguas Muelle de San Sebastián
+descartado;way/597078492;Autobús;Autobuses hoteles;Puerto del Rosario;28.455395;-13.869852;texto excluido (autobuses hoteles)
+descartado;way/916931452;Autobús;;Vallehermoso;28.181456;-17.264218;sin nombre en OpenStreetMap

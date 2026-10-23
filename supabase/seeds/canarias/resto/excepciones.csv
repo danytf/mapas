@@ -1,0 +1,218 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/10112786448;;;Los Silos;28.374685;-16.794812;sin nombre en OpenStreetMap
+descartado;node/10281243610;;;Adeje;28.121513;-16.731008;sin nombre en OpenStreetMap
+descartado;node/10729676105;;Mini Market;Las Palmas de Gran Canaria;28.126781;-15.425146;nombre generico o dudoso en OpenStreetMap: Mini Market
+descartado;node/10741829225;;;Guía de Isora;28.180435;-16.81592;sin nombre en OpenStreetMap
+descartado;node/10754816616;;;Santa Cruz de Tenerife;28.529378;-16.156585;sin nombre en OpenStreetMap
+descartado;node/10804515177;;;La Oliva;28.727912;-13.859139;sin nombre en OpenStreetMap
+descartado;node/11090376607;;;Santa Cruz de Tenerife;28.468552;-16.253505;sin nombre en OpenStreetMap
+descartado;node/11309288469;;;Arrecife;28.963168;-13.538439;sin nombre en OpenStreetMap
+descartado;node/11381368469;;;La Victoria de Acentejo;28.4379;-16.463574;sin nombre en OpenStreetMap
+descartado;node/11394974679;;Carrefour Express;Icod de los Vinos;28.378823;-16.700703;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/11435852848;;;Arona;28.07913;-16.681812;sin nombre en OpenStreetMap
+descartado;node/11476480212;;;Haría;29.131523;-13.464861;sin nombre en OpenStreetMap
+descartado;node/11519290581;;Cruz Roja;Adeje;28.121431;-16.736018;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol)
+descartado;node/11575119757;;;Arona;28.049399;-16.713933;sin nombre en OpenStreetMap
+descartado;node/11575119758;;;Arona;28.049382;-16.71338;sin nombre en OpenStreetMap
+descartado;node/11693661257;;;Tías;28.923232;-13.671324;sin nombre en OpenStreetMap
+descartado;node/11770805980;;Clínica Bandama - Centro de Salud Mental;Las Palmas de Gran Canaria;28.055018;-15.462108;texto excluido (mental|veterinari|dental|fisioterap|rehabilitaci)
+descartado;node/1182279849;;Supermercado;Mogán;27.816591;-15.75156;nombre generico o dudoso en OpenStreetMap: Supermercado
+descartado;node/1268312554;;Consultorio de Carrizal;Ingenio;27.91247;-15.400493;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol)
+descartado;node/12911426214;;;Tías;28.932172;-13.628784;sin nombre en OpenStreetMap
+descartado;node/12959200902;;Quirón prevención;Arrecife;28.964709;-13.558341;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol)
+descartado;node/13168940981;;;Tías;28.92397;-13.656155;sin nombre en OpenStreetMap
+descartado;node/13169464662;;;Yaiza;28.862642;-13.82489;sin nombre en OpenStreetMap
+descartado;node/13643605901;;SPAR;Los Llanos de Aridane;28.647074;-17.912997;duplicado en el lote de node/13639210342 (17 m)
+descartado;node/13794092401;;;Yaiza;28.880559;-13.833535;sin nombre en OpenStreetMap
+descartado;node/1482185081;;;Yaiza;28.863502;-13.85199;sin nombre en OpenStreetMap
+descartado;node/1541240876;;;Adeje;28.086438;-16.730047;sin nombre en OpenStreetMap
+descartado;node/1572872289;;Consultorio Local de Mala;Haría;29.093014;-13.47046;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol)
+descartado;node/1617727984;;;Tías;28.930118;-13.658974;sin nombre en OpenStreetMap
+descartado;node/1629854439;;Cruz Roja Española;Puerto del Rosario;28.499031;-13.862937;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol)
+descartado;node/1663985842;;Cem;Pájara;28.048897;-14.344901;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol)
+descartado;node/1755068938;;;Las Palmas de Gran Canaria;28.16555;-15.43372;sin nombre en OpenStreetMap
+descartado;node/1780457607;;BASE DEL SUC (112);La Orotava;28.295271;-16.565151;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol)
+descartado;node/1891207414;;Ayuntamiento;Telde;28.003236;-15.414667;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/1895089259;;;Las Palmas de Gran Canaria;28.126227;-15.437905;sin nombre en OpenStreetMap
+descartado;node/1901627578;;;Las Palmas de Gran Canaria;28.113979;-15.428758;sin nombre en OpenStreetMap
+descartado;node/1903040816;;Carrefour;Las Palmas de Gran Canaria;28.100631;-15.442868;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/1941594810;;;Teguise;28.993882;-13.488027;sin nombre en OpenStreetMap
+descartado;node/1978466823;;;San Bartolomé de Tirajana;27.764982;-15.560162;sin nombre en OpenStreetMap
+descartado;node/2260915917;;Mercadona;Telde;28.028623;-15.395125;duplicado en el lote de node/11504519497 (17 m)
+descartado;node/2441469213;;;La Guancha;28.380239;-16.653133;sin nombre en OpenStreetMap
+descartado;node/2484969369;;;Teguise;28.996955;-13.490095;sin nombre en OpenStreetMap
+descartado;node/2589501918;;;Arona;28.065206;-16.731731;sin nombre en OpenStreetMap
+descartado;node/2604829056;;;Arucas;28.14558;-15.557693;sin nombre en OpenStreetMap
+descartado;node/2620751495;;;San Bartolomé de Tirajana;27.764058;-15.578205;sin nombre en OpenStreetMap
+descartado;node/2632229462;;Centro médico Isla Baja;Buenavista del Norte;28.373977;-16.85096;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol)
+descartado;node/2678521622;;Centro Ambulatorio de Especialidades del Instituto Social de la Marina Casa del Mar;Las Palmas de Gran Canaria;28.138075;-15.430083;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol)
+descartado;node/2678544466;;Consultorio Local de Marzagán;Las Palmas de Gran Canaria;28.041622;-15.428195;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol)
+descartado;node/2678550005;;Consultorio Local de San Lorenzo;Las Palmas de Gran Canaria;28.07583;-15.474903;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol)
+descartado;node/2788010196;;;La Oliva;28.635107;-13.901236;sin nombre en OpenStreetMap
+descartado;node/2808446401;;Cruz Roja;La Oliva;28.737;-13.869569;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol)
+descartado;node/301234636;;Carrefour;Santa Cruz de Tenerife;28.457316;-16.258774;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/3024790256;;Centro de salud;Agüimes;27.878125;-15.426075;nombre generico o dudoso en OpenStreetMap: Centro de salud
+descartado;node/3076545846;;;Arona;28.052666;-16.710603;sin nombre en OpenStreetMap
+descartado;node/3076623939;;;Arona;28.048352;-16.71152;sin nombre en OpenStreetMap
+descartado;node/313411021;;;Arona;28.053463;-16.726806;sin nombre en OpenStreetMap
+descartado;node/315506004;;Consultorio Arguayo;Santiago del Teide;28.269544;-16.807097;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol)
+descartado;node/318877455;;;Valle Gran Rey;28.08327;-17.333835;sin nombre en OpenStreetMap
+descartado;node/319254092;;Centro de Salud;Valle Gran Rey;28.100424;-17.330211;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;node/3206625883;;SPAR;San Bartolomé de Tirajana;27.768174;-15.548919;duplicado en el lote de node/2012748518 (50 m)
+descartado;node/3263112000;;;Mogán;27.786239;-15.702925;sin nombre en OpenStreetMap
+descartado;node/3292520761;;;Tacoronte;28.510905;-16.408626;sin nombre en OpenStreetMap
+descartado;node/3383044760;;Supermercado;Ingenio;27.921281;-15.434136;nombre generico o dudoso en OpenStreetMap: Supermercado
+descartado;node/3471016457;;Supermercado;Tinajo;29.119735;-13.650591;nombre generico o dudoso en OpenStreetMap: Supermercado
+descartado;node/3507616757;;;Agüimes;27.904195;-15.446872;sin nombre en OpenStreetMap
+descartado;node/352651357;;Hipercor;Las Palmas de Gran Canaria;28.095722;-15.457344;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/3910186827;;;San Bartolomé de Tirajana;27.760782;-15.568962;sin nombre en OpenStreetMap
+descartado;node/3910186830;;;San Bartolomé de Tirajana;27.760753;-15.569782;sin nombre en OpenStreetMap
+descartado;node/3910207884;;;San Bartolomé de Tirajana;27.762251;-15.565943;sin nombre en OpenStreetMap
+descartado;node/4068075577;;;Mogán;27.783639;-15.711706;sin nombre en OpenStreetMap
+descartado;node/436686785;;;Las Palmas de Gran Canaria;28.130365;-15.444167;sin nombre en OpenStreetMap
+descartado;node/4377598823;;Spar;Las Palmas de Gran Canaria;28.115993;-15.421418;duplicado en el lote de node/4377550199 (46 m)
+descartado;node/4452168095;;;Arona;28.06087;-16.716026;sin nombre en OpenStreetMap
+descartado;node/4547048691;;;Santa Cruz de Tenerife;28.469257;-16.262351;sin nombre en OpenStreetMap
+descartado;node/455250184;;;Yaiza;28.862782;-13.827299;sin nombre en OpenStreetMap
+descartado;node/455921786;;;Yaiza;28.861692;-13.833131;sin nombre en OpenStreetMap
+descartado;node/4570789889;;;Adeje;28.094187;-16.724391;sin nombre en OpenStreetMap
+descartado;node/4583270477;;Supermercado;Arico;28.165685;-16.501749;nombre generico o dudoso en OpenStreetMap: Supermercado
+descartado;node/4680717291;;;Puerto del Rosario;28.506814;-13.866434;sin nombre en OpenStreetMap
+descartado;node/4792234302;;Minimarket;Adeje;28.121349;-16.728863;nombre generico o dudoso en OpenStreetMap: Minimarket
+descartado;node/4809559823;;;Antigua;28.411949;-13.854626;sin nombre en OpenStreetMap
+descartado;node/480959278;;;Valle Gran Rey;28.087863;-17.339109;sin nombre en OpenStreetMap
+descartado;node/4809603524;;;Antigua;28.413929;-13.855565;sin nombre en OpenStreetMap
+descartado;node/4809609323;;;Antigua;28.411273;-13.856311;sin nombre en OpenStreetMap
+descartado;node/4978166525;;;Adeje;28.079639;-16.725484;sin nombre en OpenStreetMap
+descartado;node/5169283521;;HiperDino;Arrecife;28.961073;-13.549235;duplicado en el lote de node/5048977322 (31 m)
+descartado;node/5275771098;;;Los Realejos;28.379546;-16.618685;sin nombre en OpenStreetMap
+descartado;node/5310908587;;Supermercado;Arico;28.143168;-16.439815;nombre generico o dudoso en OpenStreetMap: Supermercado
+descartado;node/5372061234;;;Valverde;27.805353;-17.91151;sin nombre en OpenStreetMap
+descartado;node/5375587334;;;Mogán;27.790397;-15.708201;sin nombre en OpenStreetMap
+descartado;node/5401269321;;;Santa María de Guía de Gran Canaria;28.141942;-15.635738;sin nombre en OpenStreetMap
+descartado;node/5401269322;;;Santa María de Guía de Gran Canaria;28.140777;-15.63295;sin nombre en OpenStreetMap
+descartado;node/5457851489;;;La Oliva;28.681014;-13.933974;sin nombre en OpenStreetMap
+descartado;node/573736148;;Spar;Las Palmas de Gran Canaria;28.117272;-15.425356;duplicado en el lote de node/4228113289 (131 m)
+descartado;node/5764565453;;;San Bartolomé de Tirajana;27.751398;-15.576109;sin nombre en OpenStreetMap
+descartado;node/5792885626;;Minimarket;Puerto de la Cruz;28.415682;-16.535787;nombre generico o dudoso en OpenStreetMap: Minimarket
+descartado;node/5792885896;;Mini Market;Adeje;28.072323;-16.726262;nombre generico o dudoso en OpenStreetMap: Mini Market
+descartado;node/5792895375;;;Arona;28.058152;-16.729107;sin nombre en OpenStreetMap
+descartado;node/5792895653;;Mini Market;Arona;28.056035;-16.715957;nombre generico o dudoso en OpenStreetMap: Mini Market
+descartado;node/5792895767;;Minimarket;Arona;28.054129;-16.723634;nombre generico o dudoso en OpenStreetMap: Minimarket
+descartado;node/5792901756;;;San Cristóbal de La Laguna;28.489388;-16.329346;sin nombre en OpenStreetMap
+descartado;node/585485496;;;Arafo;28.338984;-16.419475;sin nombre en OpenStreetMap
+descartado;node/599980711;;;Pájara;28.164947;-14.222729;sin nombre en OpenStreetMap
+descartado;node/602097905;;Carrefour;Santa Lucía de Tirajana;27.843518;-15.441072;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/6028335692;;;Santa Cruz de Tenerife;28.442822;-16.313901;sin nombre en OpenStreetMap
+descartado;node/6060874385;;;Icod de los Vinos;28.377978;-16.723068;sin nombre en OpenStreetMap
+descartado;node/613452110;;;Pájara;28.050284;-14.352779;sin nombre en OpenStreetMap
+descartado;node/6206291809;;;Yaiza;28.87508;-13.836666;sin nombre en OpenStreetMap
+descartado;node/631801669;;Ayuntamiento;Haría;29.145967;-13.499975;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/6335841402;;;Antigua;28.394124;-13.860598;sin nombre en OpenStreetMap
+descartado;node/6339297985;;Lidl;Santa Cruz de Tenerife;28.458183;-16.258435;duplicado en el lote de node/11055154257 (27 m)
+descartado;node/6372218991;;Mini Market;San Sebastián de la Gomera;28.031275;-17.190488;nombre generico o dudoso en OpenStreetMap: Mini Market
+descartado;node/6383869012;;;Santiago del Teide;28.266879;-16.807868;sin nombre en OpenStreetMap
+descartado;node/6565254059;;;Teguise;28.992159;-13.500471;sin nombre en OpenStreetMap
+descartado;node/667348602;;Centro de Salud;San Bartolomé de Tirajana;27.924367;-15.573672;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;node/668649606;;;Buenavista del Norte;28.369705;-16.846365;sin nombre en OpenStreetMap
+descartado;node/6697980175;;;Santa Lucía de Tirajana;27.848504;-15.446988;sin nombre en OpenStreetMap
+descartado;node/672549831;;;San Cristóbal de La Laguna;28.510738;-16.300872;sin nombre en OpenStreetMap
+descartado;node/6760725766;;;San Bartolomé de Tirajana;27.759601;-15.579689;sin nombre en OpenStreetMap
+descartado;node/6762722194;;Carrefour;Las Palmas de Gran Canaria;28.127681;-15.448752;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/696587129;;Armonía;Santa Cruz de La Palma;28.68443;-17.763957;duplicado en el lote de node/13603235629 (33 m)
+descartado;node/6996913234;;;Telde;27.946434;-15.394042;sin nombre en OpenStreetMap
+descartado;node/706736654;;;Los Llanos de Aridane;28.65807;-17.919373;sin nombre en OpenStreetMap
+descartado;node/7726439384;;Mutua Universal Las Palmas;Las Palmas de Gran Canaria;28.149245;-15.425849;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol)
+descartado;node/775936394;;;Candelaria;28.366871;-16.36609;sin nombre en OpenStreetMap
+descartado;node/7768191786;;;Puerto del Rosario;28.489926;-13.87055;sin nombre en OpenStreetMap
+descartado;node/7856846348;;;Santa Lucía de Tirajana;27.845434;-15.444887;sin nombre en OpenStreetMap
+descartado;node/8105090617;;Mercado Municipal;Puerto del Rosario;28.498019;-13.859098;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/813776478;;;Puntagorda;28.76416;-17.97725;sin nombre en OpenStreetMap
+descartado;node/8207134080;;;Las Palmas de Gran Canaria;28.151899;-15.422836;sin nombre en OpenStreetMap
+descartado;node/8629155201;;Minimarket;San Bartolomé de Tirajana;27.764803;-15.579717;nombre generico o dudoso en OpenStreetMap: Minimarket
+descartado;node/8711842858;;;San Bartolomé de Tirajana;27.737725;-15.597995;sin nombre en OpenStreetMap
+descartado;node/8772210349;;Mercadona;Santa Cruz de Tenerife;28.463332;-16.264073;duplicado en el lote de node/1732751061 (90 m)
+descartado;node/8772274193;;Instituto oftalmologico Amigó;Santa Cruz de Tenerife;28.462209;-16.25011;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol)
+descartado;node/8786446417;;;Puerto del Rosario;28.490475;-13.864623;sin nombre en OpenStreetMap
+descartado;node/886051501;;;Santa Cruz de Tenerife;28.459396;-16.254028;sin nombre en OpenStreetMap
+descartado;node/9010737637;;C.A.E. Telde;Telde;27.994085;-15.397619;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol)
+descartado;node/903036796;;Asepeyo;Arona;28.065764;-16.728665;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol)
+descartado;node/9271944417;;;Arrecife;28.972513;-13.533975;sin nombre en OpenStreetMap
+descartado;node/9806826581;;;Pájara;28.152224;-14.231167;sin nombre en OpenStreetMap
+descartado;relation/10323585;;Juzgados;San Cristóbal de La Laguna;28.487321;-16.312803;nombre generico o dudoso en OpenStreetMap: Juzgados
+descartado;relation/18331514;;Ayuntamiento;Puerto de la Cruz;28.417994;-16.548478;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;relation/4719103;;Ayuntamiento;Santiago del Teide;28.29742;-16.815482;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;relation/9141791;;Centro Comercial La Minilla;Las Palmas de Gran Canaria;28.125616;-15.437983;duplicado en el lote de node/6278434079 (32 m)
+descartado;way/1005928318;;Leroy Merlin;Adeje;28.121424;-16.746211;texto excluido (leroy merlin|click|recogida)
+descartado;way/1039339444;;Cruz Roja La Montañeta;Garachico;28.341262;-16.756092;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol)
+descartado;way/1040497516;;;Antigua;28.400272;-13.857542;sin nombre en OpenStreetMap
+descartado;way/114477393;;Centro Comercial;Haría;29.082896;-13.452735;nombre generico o dudoso en OpenStreetMap: Centro Comercial
+descartado;way/1160053394;;;Teguise;28.993775;-13.505907;sin nombre en OpenStreetMap
+descartado;way/1239069700;;;Arafo;28.330097;-16.372741;sin nombre en OpenStreetMap
+descartado;way/1262482371;;HiperDino;Santa Cruz de Tenerife;28.460017;-16.271484;duplicado en el lote de relation/20415927 (0 m)
+descartado;way/1264219071;;;Garafía;28.779864;-17.962761;sin nombre en OpenStreetMap
+descartado;way/127927730;;Leroy Merlin;Telde;28.01266;-15.385858;texto excluido (leroy merlin|click|recogida)
+descartado;way/1302949177;;;Las Palmas de Gran Canaria;28.109547;-15.445722;sin nombre en OpenStreetMap
+descartado;way/1302949178;;;Las Palmas de Gran Canaria;28.109316;-15.445779;sin nombre en OpenStreetMap
+descartado;way/133393795;;Juzgados;Valverde;27.813051;-17.915316;nombre generico o dudoso en OpenStreetMap: Juzgados
+descartado;way/1368192066;;;La Oliva;28.714681;-13.870634;sin nombre en OpenStreetMap
+descartado;way/148803513;;;Santa Lucía de Tirajana;27.8421;-15.440903;sin nombre en OpenStreetMap
+descartado;way/149716677;;;San Bartolomé de Tirajana;27.75793;-15.566772;sin nombre en OpenStreetMap
+descartado;way/167297895;;;Yaiza;28.860521;-13.805419;sin nombre en OpenStreetMap
+descartado;way/180380118;;Centro de salud Playa de Arinaga;Agüimes;27.859246;-15.393719;duplicado en el lote de node/3022477068 (10 m)
+descartado;way/195740738;;;Teguise;29.003924;-13.486763;sin nombre en OpenStreetMap
+descartado;way/195740739;;;Teguise;29.004637;-13.487205;sin nombre en OpenStreetMap
+descartado;way/203867648;;;Teguise;28.994919;-13.490703;sin nombre en OpenStreetMap
+descartado;way/205254731;;;Yaiza;28.863279;-13.830394;sin nombre en OpenStreetMap
+descartado;way/205254747;;;Yaiza;28.863054;-13.828013;sin nombre en OpenStreetMap
+descartado;way/205258617;;;Yaiza;28.864213;-13.830065;sin nombre en OpenStreetMap
+descartado;way/236267551;;Gerência de servicios sanitarios de Lanzarote;Yaiza;28.866162;-13.83172;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol)
+descartado;way/236694275;;Centro de Salud;Arona;28.012763;-16.670267;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/245336366;;Mini Market;Los Llanos de Aridane;28.633543;-17.908352;nombre generico o dudoso en OpenStreetMap: Mini Market
+descartado;way/251218006;;;Haría;29.093038;-13.470381;sin nombre en OpenStreetMap
+descartado;way/251260994;;Ayuntamiento;Puntagorda;28.766037;-17.979864;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/261148042;;;San Bartolomé de Tirajana;27.77223;-15.540639;sin nombre en OpenStreetMap
+descartado;way/264653908;;Juzgados;Güímar;28.314888;-16.412664;nombre generico o dudoso en OpenStreetMap: Juzgados
+descartado;way/283327751;;;Arona;28.054591;-16.73291;sin nombre en OpenStreetMap
+descartado;way/298340284;;Centro de salud;Agüimes;27.903143;-15.445952;nombre generico o dudoso en OpenStreetMap: Centro de salud
+descartado;way/311484340;;Centro de Salud;Frontera;27.751597;-18.010879;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/37766257;;Leroy Merlin;La Orotava;28.393927;-16.547738;texto excluido (leroy merlin|click|recogida)
+descartado;way/40358173;;Carrefour;Las Palmas de Gran Canaria;28.071852;-15.41854;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/406112302;;;Tías;28.948519;-13.686153;sin nombre en OpenStreetMap
+descartado;way/428940716;;Centro de Salud;La Aldea de San Nicolás;27.98657;-15.781654;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/440241392;;;Santa Lucía de Tirajana;27.845151;-15.445409;sin nombre en OpenStreetMap
+descartado;way/454003061;;Centro Médico;Buenavista del Norte;28.37451;-16.851469;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol)
+descartado;way/454005492;;;Buenavista del Norte;28.373261;-16.852793;sin nombre en OpenStreetMap
+descartado;way/455399662;;Centro Médico;Los Silos;28.365814;-16.816622;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol)
+descartado;way/457391473;;;El Tanque;28.356779;-16.777237;sin nombre en OpenStreetMap
+descartado;way/457393379;;Consultorio El Tanque;El Tanque;28.358116;-16.774293;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol)
+descartado;way/459569949;;Consultorio Garachico;Garachico;28.372624;-16.764732;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol)
+descartado;way/476750099;;;Santa Cruz de Tenerife;28.444314;-16.278825;sin nombre en OpenStreetMap
+descartado;way/484487478;;;Teguise;28.994855;-13.49026;sin nombre en OpenStreetMap
+descartado;way/486035738;;;Teguise;29.003757;-13.487255;sin nombre en OpenStreetMap
+descartado;way/486035739;;;Teguise;29.003877;-13.48698;sin nombre en OpenStreetMap
+descartado;way/520379376;;Centro Ambulatorio de Especialidades Prudencio Guzmán;Las Palmas de Gran Canaria;28.096242;-15.412588;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol)
+descartado;way/521599258;;Mercado Municipal de Arucas;Arucas;28.118593;-15.527634;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/542515971;;Leroy Merlin;Las Palmas de Gran Canaria;28.095273;-15.471128;texto excluido (leroy merlin|click|recogida)
+descartado;way/544088661;;Supermercado;Tías;28.967772;-13.671648;nombre generico o dudoso en OpenStreetMap: Supermercado
+descartado;way/546606481;;;San Cristóbal de La Laguna;28.470085;-16.313324;sin nombre en OpenStreetMap
+descartado;way/547880665;;Consultorio Local de Tahíche;Teguise;29.014668;-13.541741;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol)
+descartado;way/548373723;;Ayuntamiento;Yaiza;28.952478;-13.76449;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/555187199;;;Teguise;29.011275;-13.540344;sin nombre en OpenStreetMap
+descartado;way/555187201;;;Teguise;29.010346;-13.54047;sin nombre en OpenStreetMap
+descartado;way/555187202;;;Teguise;29.014976;-13.542484;sin nombre en OpenStreetMap
+descartado;way/559500501;;C.A.E. Galdar;Gáldar;28.14372;-15.65409;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol)
+descartado;way/559505401;;;Santa María de Guía de Gran Canaria;28.137546;-15.634182;sin nombre en OpenStreetMap
+descartado;way/583952974;;Mercado Municipal;Arucas;28.118876;-15.525054;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/614451616;;;Mogán;27.786759;-15.706597;sin nombre en OpenStreetMap
+descartado;way/631831349;;;Tinajo;29.06061;-13.679851;sin nombre en OpenStreetMap
+descartado;way/662926752;;CAE Arucas;Arucas;28.117809;-15.526766;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol)
+descartado;way/665101168;;;Las Palmas de Gran Canaria;28.124727;-15.443948;sin nombre en OpenStreetMap
+descartado;way/677565203;;Ayuntamiento de Arucas;Arucas;28.118679;-15.525379;duplicado en el lote de node/6760727385 (90 m)
+descartado;way/697820240;;Juzgados;Las Palmas de Gran Canaria;28.093996;-15.414505;nombre generico o dudoso en OpenStreetMap: Juzgados
+descartado;way/712152869;;;Pájara;28.152009;-14.232323;sin nombre en OpenStreetMap
+descartado;way/72679095;;Mercadona;Santa Cruz de Tenerife;28.429031;-16.304556;duplicado en el lote de way/575146923 (0 m)
+descartado;way/736372972;;;Las Palmas de Gran Canaria;28.097012;-15.450926;sin nombre en OpenStreetMap
+descartado;way/747872089;;;Telde;27.946657;-15.39323;sin nombre en OpenStreetMap
+descartado;way/809337039;;Lidl;Arrecife;28.972101;-13.564005;duplicado en el lote de node/12375851701 (18 m)
+descartado;way/842175679;;;Santa Lucía de Tirajana;27.84546;-15.445187;sin nombre en OpenStreetMap
