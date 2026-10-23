@@ -1,0 +1,3 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;way/140538977;;Oficina de Correos;Puerto de la Cruz;28.414482;-16.554149;duplicado en el lote de node/7200314465 (16 m)
+descartado;way/1517539191;;;Tuineje;28.211824;-14.021621;duplicado en el lote de node/599623300 (3 m)
