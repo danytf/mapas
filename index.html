@@ -1489,8 +1489,8 @@ const ejecutaOpsRel = async (client, userId, c, ops) => {
         if (!r.error && !(r.data && r.data.length)) return "error";
       } else if (op.t === "fuSet") {
         r = op.fu
-          ? await client.from("followups").update({ due_on: op.due, completed_at: null }).eq("id", op.fu).abortSignal(conTiempoLimite())
-          : await client.from("followups").insert({ establishment_id: est, application_id: op.app, due_on: op.due, created_by: userId }).abortSignal(conTiempoLimite());
+          ? await client.from("followups").update({ due_on: op.due, completed_at: null, assigned_to: op.resp || null, next_action: op.accion || null }).eq("id", op.fu).abortSignal(conTiempoLimite())
+          : await client.from("followups").insert({ establishment_id: est, application_id: op.app, due_on: op.due, assigned_to: op.resp || null, next_action: op.accion || null, created_by: userId }).abortSignal(conTiempoLimite());
       } else if (op.t === "fuDone") {
         if (!op.fu) continue;
         r = await client.from("followups").update({ completed_at: new Date().toISOString() }).eq("id", op.fu).is("completed_at", null).abortSignal(conTiempoLimite());
@@ -1752,7 +1752,7 @@ const expedientesDe = (c, p) => {
 /* Seguimientos programados: la fecha «seg» de cada solicitud pendiente (o el seguimiento de un punto sin solicitudes). */
 const seguimientosDe = (c, p) => {
   const out = [];
-  solsOf(p).forEach((q, i) => { if (!q.res && q.seg) out.push({ c, fecha: q.seg, ong: (q.ong || "").trim(), i }); });
+  solsOf(p).forEach((q, i) => { if (!q.res && q.seg) out.push({ c, fecha: q.seg, ong: (q.ong || "").trim(), i, resp: q.resp || "", accion: q.accion || "" }); });
   if (!solsOf(p).length && p && p.seguimiento) out.push({ c, fecha: p.seguimiento, ong: "", i: -1 });
   return out;
 };
@@ -1840,7 +1840,7 @@ const calendarioSemana = (recs, segs, wk, t) => Array.from({ length: 7 }, (_, k)
 const REL_COLS = {
   permit_applications: "id,establishment_id,status,requested_from,requested_until,organization,capturer_count,requested_at,contact_details,notes,resolved_at,resolution_reason,updated_at",
   permit_grants: "id,establishment_id,application_id,status,valid_from,valid_until,organization,capturer_count,contact_details,notes,cancelled_at,cancelled_reason,created_at,updated_at",
-  followups: "id,establishment_id,application_id,due_on,completed_at"
+  followups: "id,establishment_id,application_id,due_on,completed_at,assigned_to,next_action"
 };
 const APP_RES = { approved: "aprobada", denied: "denegada", withdrawn: "retirada" };
 const RES_APP = { aprobada: "approved", denegada: "denied", retirada: "withdrawn" };
@@ -1861,7 +1861,7 @@ const relListas = (apps, grants, fups) => {
     if (a.notes) x.notas = a.notes;
     if (grantDeApp.has(a.id)) x.conc = grantDeApp.get(a.id);
     if (!res && abierto) x.seg = abierto.due_on;
-    if (ultimo) x.fu = ultimo.id;
+    if (ultimo) { x.fu = ultimo.id; if (ultimo.assigned_to) x.resp = ultimo.assigned_to; if (ultimo.next_action) x.accion = ultimo.next_action; }
     get(a.establishment_id).solicitudes.push(x);
   });
   (grants || []).forEach((g) => {
@@ -1884,7 +1884,7 @@ const diffRel = (base, cur) => {
   const cs = new Set(cur.sols.map((x) => x.id)), ch = new Set(cur.hist.map((x) => x.id)), aprobadas = new Set();
   cur.sols.forEach((x) => {
     const b = bs.get(x.id);
-    if (!b) { ops.push({ t: "insApp", x }); if (x.seg) ops.push({ t: "fuSet", app: x.id, fu: "", due: x.seg }); return; }
+    if (!b) { ops.push({ t: "insApp", x }); if (x.seg) ops.push({ t: "fuSet", app: x.id, fu: "", due: x.seg, resp: x.resp || "", accion: x.accion || "" }); return; }
     if ((x.res || "") !== (b.res || "")) {
       if (x.res === "aprobada") {
         const g = cur.hist.find((h) => h.sol === x.id && !bh.has(h.id)) || {};
@@ -1894,7 +1894,8 @@ const diffRel = (base, cur) => {
       if (b.seg && b.fu) ops.push({ t: "fuDone", fu: b.fu });
     } else {
       if (cambiaRel(x, b)) ops.push({ t: "updApp", id: x.id, ver: b.ver, x });
-      if (!x.res && (x.seg || "") !== (b.seg || "")) ops.push(x.seg ? { t: "fuSet", app: x.id, fu: b.fu || "", due: x.seg } : { t: "fuDone", fu: b.fu || "" });
+      const cambiaSeg = (x.seg || "") !== (b.seg || ""), cambiaResp = (x.resp || "") !== (b.resp || "") || (x.accion || "") !== (b.accion || "");
+      if (!x.res && (cambiaSeg || (cambiaResp && x.seg))) ops.push(x.seg ? { t: "fuSet", app: x.id, fu: b.fu || "", due: x.seg, resp: x.resp || "", accion: x.accion || "" } : { t: "fuDone", fu: b.fu || "" });
     }
   });
   base.sols.forEach((b) => { if (!cs.has(b.id)) ops.push({ t: "delApp", id: b.id }); });
@@ -1991,7 +1992,7 @@ function fichaFor(c, pos) {
           '<div data-tab="s" role="tabpanel" aria-label="Solicitudes">' +
             '<p class="fi-hint">Un mismo punto puede tener varias solicitudes, cada una con sus fechas. Al aprobar, denegar o retirar una solicitud se conserva en la lista con su fecha y su motivo. El estado del punto es un resumen que se calcula solo.</p>' +
             '<ul class="s-list fi-list"></ul>' +
-            '<details class="aform s-form"><summary>Añadir solicitud</summary><div class="row3"><label>Desde<input class="s-desde" type="date"></label><label>Hasta<input class="s-hasta" type="date"></label><label>Captadores<input class="s-n" type="number" min="1" step="1" placeholder="nº"></label></div><label>ONG<input class="s-ong" type="text" list="ongList" placeholder="AECC, Cruz Roja…" autocomplete="off"></label><label>Próximo seguimiento<input class="s-seg" type="date"></label><label>Contacto de esta solicitud<input class="s-contacto" type="text" maxlength="500" autocomplete="off"></label><label>Notas de esta solicitud<textarea class="s-notas" maxlength="2000" rows="2"></textarea></label><div class="fi-btns"><button type="button" class="s-add">Añadir solicitud</button><button type="button" class="s-cancel" hidden>Cancelar edición</button></div></details>' +
+            '<details class="aform s-form"><summary>Añadir solicitud</summary><div class="row3"><label>Desde<input class="s-desde" type="date"></label><label>Hasta<input class="s-hasta" type="date"></label><label>Captadores<input class="s-n" type="number" min="1" step="1" placeholder="nº"></label></div><label>ONG<input class="s-ong" type="text" list="ongList" placeholder="AECC, Cruz Roja…" autocomplete="off"></label><label>Próximo seguimiento<input class="s-seg" type="date"></label><label class="s-rel">Siguiente acción<input class="s-accion" type="text" maxlength="200" autocomplete="off" placeholder="Llamar, enviar documentación…"></label><label class="s-rel">Responsable del seguimiento<select class="s-resp"><option value="">Sin asignar</option><option value="yo">Yo</option></select></label><label>Contacto de esta solicitud<input class="s-contacto" type="text" maxlength="500" autocomplete="off"></label><label>Notas de esta solicitud<textarea class="s-notas" maxlength="2000" rows="2"></textarea></label><div class="fi-btns"><button type="button" class="s-add">Añadir solicitud</button><button type="button" class="s-cancel" hidden>Cancelar edición</button></div></details>' +
             '<div class="s-msg fi-msg" role="status"></div>' +
           "</div>" +
           '<div data-tab="h" role="tabpanel" aria-label="Concesiones">' +
@@ -2136,7 +2137,10 @@ function fichaFor(c, pos) {
       ul.appendChild(li);
     });
   };
-  const resetS = () => { editS = -1; ["s-desde", "s-hasta", "s-n", "s-ong", "s-seg", "s-contacto", "s-notas"].forEach((k) => { q(k).value = ""; }); q("s-add").textContent = "Añadir solicitud"; q("s-cancel").hidden = true; };
+  const miId = () => window.mapaSession?.user?.id || "";
+  if (!c.databaseId) el.querySelectorAll(".s-rel").forEach((n) => { n.hidden = true; }); /* los puntos personales no tienen seguimientos en tablas */
+  const setResp = (resp) => { const sel = q("s-resp"); sel.querySelectorAll("option[value=keep]").forEach((o) => o.remove()); if (resp && resp !== miId()) { const o = document.createElement("option"); o.value = "keep"; o.textContent = "Otra persona (sin cambios)"; sel.appendChild(o); sel.value = "keep"; } else sel.value = resp ? "yo" : ""; };
+  const resetS = () => { editS = -1; ["s-desde", "s-hasta", "s-n", "s-ong", "s-seg", "s-contacto", "s-notas", "s-accion", "s-resp"].forEach((k) => { q(k).value = ""; }); q("s-resp").querySelectorAll("option[value=keep]").forEach((o) => o.remove()); q("s-add").textContent = "Añadir solicitud"; q("s-cancel").hidden = true; };
   const paintSols = () => {
     const ul = el.querySelector(".s-list");
     const sorted = sols.map((x, i) => [x, i]).sort((a, b) => (b[0].desde || "").localeCompare(a[0].desde || ""));
@@ -2145,7 +2149,7 @@ function fichaFor(c, pos) {
       const st = solEstado(x);
       const li = document.createElement("li"); if (st !== "pendiente") li.style.opacity = ".7";
       li.innerHTML = "<span>" + esc(solRange(x) || "Sin datos") + " · <b>" + st + "</b>" + (x.fecha ? " · pedida el " + esc(fmtD(x.fecha)) : "") + (x.resFecha && x.res ? " · resuelta el " + esc(fmtD(x.resFecha)) : "") +
-        (x.seg && !x.res ? " · seguimiento " + esc(fmtD(x.seg)) : "") + (x.motivo ? " · motivo: " + esc(x.motivo) : "") + (x.contacto ? " · contacto: " + esc(x.contacto) : "") + (x.notas ? " · " + esc(x.notas) : "") + "</span>";
+        (x.seg && !x.res ? " · seguimiento " + esc(fmtD(x.seg)) + (x.accion ? " (" + esc(x.accion) + ")" : "") + (x.resp ? (x.resp === miId() ? " · responsable: tú" : " · responsable: otra persona") : "") : "") + (x.motivo ? " · motivo: " + esc(x.motivo) : "") + (x.contacto ? " · contacto: " + esc(x.contacto) : "") + (x.notas ? " · " + esc(x.notas) : "") + "</span>";
       const mk = (t, title, css, fn) => { const b = document.createElement("button"); b.type = "button"; b.textContent = t; b.title = title; if (css) b.style.cssText = css; b.addEventListener("click", () => setTimeout(() => { if (!commitBusy) fn(b); }, 0)); li.appendChild(b); return b; }; /* se rehace la lista fuera del clic para que Leaflet no cierre la ficha */
       const fin = (txtOk, txtKo) => async () => { paintSols(); paintHist(); const ok = await commit(); q("s-msg").style.color = ok ? "var(--ok)" : "var(--err)"; q("s-msg").textContent = ok ? txtOk : txtKo; };
       if (!x.res) mk("Conceder", "Aprobar esta solicitud: se conserva y se crea la concesión con las mismas fechas", "color:var(--ok);border-color:var(--ok);margin-left:auto", () => {
@@ -2170,7 +2174,7 @@ function fichaFor(c, pos) {
         x.res = "retirada"; x.resFecha = today(); if (motivo) x.motivo = motivo;
         fin("Retirada guardada.", "No se ha retirado: no se pudo guardar.")();
       }));
-      mk("Editar", "Cambiar fechas, ONG o captadores de esta solicitud", "color:var(--ok);border-color:var(--ok)", () => { editS = i; q("s-desde").value = x.desde || ""; q("s-hasta").value = x.hasta || ""; q("s-n").value = x.captadores || ""; q("s-ong").value = x.ong || ""; q("s-seg").value = x.seg || ""; q("s-contacto").value = x.contacto || ""; q("s-notas").value = x.notas || ""; q("s-add").textContent = "Guardar cambios de la solicitud"; q("s-cancel").hidden = false; q("s-add").closest("details").open = true; });
+      mk("Editar", "Cambiar fechas, ONG o captadores de esta solicitud", "color:var(--ok);border-color:var(--ok)", () => { editS = i; q("s-desde").value = x.desde || ""; q("s-hasta").value = x.hasta || ""; q("s-n").value = x.captadores || ""; q("s-ong").value = x.ong || ""; q("s-seg").value = x.seg || ""; q("s-accion").value = x.accion || ""; setResp(x.resp || ""); q("s-contacto").value = x.contacto || ""; q("s-notas").value = x.notas || ""; q("s-add").textContent = "Guardar cambios de la solicitud"; q("s-cancel").hidden = false; q("s-add").closest("details").open = true; });
       if (admin || c.custom) mk("Quitar", "Borrar esta solicitud (no se puede deshacer)", "", () => askReason(li, (x.res === "aprobada" ? "Se borra la solicitud; la concesión creada se queda. " : "") + "Se borra del historial y no se puede deshacer.", "Borrar la solicitud", () => {
         sols.splice(i, 1); if (editS === i) resetS();
         fin("Solicitud borrada.", "No se ha borrado: no se pudo guardar.")();
@@ -2285,6 +2289,8 @@ function fichaFor(c, pos) {
     if (cn.err) { msg.textContent = cn.err; return; }
     if (editS < 0 && h && h < t) { msg.textContent = "La fecha de fin ya pasó: una solicitud nueva no puede acabar antes de hoy."; return; }
     const x = { fecha: t, desde: d, hasta: h, captadores: cn.n, ong: og, seg: q("s-seg").value, contacto: q("s-contacto").value.trim(), notas: q("s-notas").value.trim() };
+    const rs = q("s-resp").value, ac = q("s-accion").value.trim();
+    if (c.databaseId && x.seg) { if (ac) x.accion = ac; if (rs === "yo") x.resp = miId(); else if (rs === "keep" && editS >= 0 && sols[editS] && sols[editS].resp) x.resp = sols[editS].resp; }
     if (!x.seg) delete x.seg;
     if (!x.contacto) delete x.contacto;
     if (!x.notas) delete x.notas;
@@ -3908,7 +3914,7 @@ const csvCell = (value) => {
   };
   const filas = (key, d) => {
     const lista = key === "capacidadHoy" ? d.ind.vigentes : d.ind[key], t = d.t;
-    if (key.startsWith("seg")) return lista.slice().sort((a, b) => a.fecha.localeCompare(b.fecha)).map((s) => ({ c: s.c, tipo: "Seguimiento", ong: s.ong, periodo: "", n: "", det: fmtD(s.fecha) + (s.fecha < t ? " · atrasado " + plural(daysBetween(s.fecha, t), "día", "días") : s.fecha === t ? " · hoy" : ""), tab: "s" }));
+    if (key.startsWith("seg")) return lista.slice().sort((a, b) => a.fecha.localeCompare(b.fecha)).map((s) => ({ c: s.c, tipo: "Seguimiento", ong: s.ong, periodo: "", n: "", det: fmtD(s.fecha) + (s.fecha < t ? " · atrasado " + plural(daysBetween(s.fecha, t), "día", "días") : s.fecha === t ? " · hoy" : "") + (s.accion ? " · " + s.accion : "") + (s.resp ? (s.resp === window.mapaSession?.user?.id ? " · responsable: tú" : " · responsable: otra persona") : ""), tab: "s" }));
     if (key === "incidencias") return lista.map((x) => ({ c: x.r.c, tipo: x.tipo, ong: x.r.ong, periodo: fmtD(x.r.desde) + " – " + fmtD(x.r.hasta), n: x.r.n || "", det: detalle(x.r), tab: x.r.k === "sol" ? "s" : "h" }));
     const orden = key.startsWith("vencen") ? (a, b) => a.hasta.localeCompare(b.hasta) : (a, b) => (a.desde || "").localeCompare(b.desde || "");
     return lista.slice().sort(orden).map((r) => ({ c: r.c, tipo: (r.k === "sol" ? "Solicitud " : "Concesión ") + r.est, ong: r.ong, periodo: fmtD(r.desde) + " – " + fmtD(r.hasta), n: r.n || "", det: detalle(r) + (key.startsWith("vencen") ? ((detalle(r) ? " · " : "") + "faltan " + plural(daysBetween(t, r.hasta), "día", "días")) : ""), tab: r.k === "sol" ? "s" : "h" }));
