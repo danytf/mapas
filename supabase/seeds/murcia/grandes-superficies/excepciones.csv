@@ -1,0 +1,3 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;way/224989626;;Centro Comercial Carrefour;Cartagena;37.607938;-0.975301;duplicado en el lote de node/617137186 (24 m)
+descartado;way/53169051;;Decathlon;Murcia;37.956426;-1.217822;duplicado en el lote de node/672832149 (27 m)

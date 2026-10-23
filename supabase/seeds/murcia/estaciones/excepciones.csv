@@ -1,0 +1,7 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/13906320551;Tren;Alcantarilla;Alcantarilla;37.967047;-1.207256;duplicado en el lote de node/1151623443 (99 m)
+descartado;node/3291020086;Autobús;;San Pedro del Pinatar;37.823597;-0.760999;sin nombre en OpenStreetMap
+descartado;node/472297810;Tren;Riquelme - Sucina;Murcia;37.895775;-0.973398;etiqueta disused=yes
+descartado;node/617136990;Tren;Cartagena;Cartagena;37.60359;-0.977275;duplicado en el lote de node/617134268 (258 m)
+descartado;way/161301047;Tren;Librilla;Librilla;37.886542;-1.347132;etiqueta disused=yes
+descartado;way/322455958;Autobús;Estación de Autobuses de San Pedro del Pinatar;San Pedro del Pinatar;37.837339;-0.787068;etiqueta public_transport=platform

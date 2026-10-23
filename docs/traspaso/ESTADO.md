@@ -96,3 +96,7 @@ Cargada en producción (388 municipios, 1.230 puntos: Badajoz 677, Cáceres 553)
 ## La Rioja (23/10/2026)
 
 Cargada en producción (174 municipios, 246 puntos) y provincia activada. Códigos postales: 68 escritos, 15 sin código; calles: 5 escritas, 7 sin calle. Total de la base: 7.373 puntos, 7.329 visibles. Falta asignar la provincia a los usuarios. Detalle en `docs/CARGA_N2_LA_RIOJA.md`.
+
+## Murcia (23/10/2026)
+
+Cargada en producción (45 municipios, 782 puntos; 6 archivados por no corresponder a su categoría). Total de la base: 8.155 puntos. Sin asignar a usuarios por decisión del titular hasta terminar toda España. Pendientes: 334 códigos postales y 49 calles. Detalle en `docs/CARGA_N2_MURCIA.md`.
