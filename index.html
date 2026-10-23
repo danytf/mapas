@@ -2418,6 +2418,7 @@ function renderList() {
     if (visible) shown.push(c);
   });
   $("#vLista").textContent = "Lista (" + shown.length + ")";
+  refreshCounts();
   densityPts = shown.filter((c) => !isInactive(c) && cache[c.id]).map((c) => [cache[c.id].lat, cache[c.id].lon]); refrescaDensidad();
   if (selMode) { const vis = new Set(shown.map((c) => String(c.id))); [...selIds].forEach((id) => { if (!vis.has(id)) selIds.delete(id); }); paintBulk(); }
   $("#filtBtn").textContent = nAct ? "Filtros (" + nAct + ")" : "Filtros";
@@ -3091,6 +3092,57 @@ gamReady = true;
 (() => { const w = mondayOf(today()); if (gam.wsum !== w) { const prevW = weekData(1).xp; if (gam.wsum && prevW > 0) logrosToast("Resumen de la semana pasada: " + prevW + " XP. Míralo en Mi progreso, pestaña Semana."); gam.wsum = w; saveGam(); } })();
 
 // Municipios que tienen puntos visibles (de la provincia elegida, si hay una).
+/* Contadores de los filtros: cada selector muestra cuántos puntos habría si se eligiera esa opción, teniendo en cuenta TODOS los demás filtros
+   activos (búsqueda, provincia, municipio, categoría, estado, valoración, cadena, tipo de entidad y los conmutadores). Así, con «Murcia» elegida,
+   la categoría «Hospital» cuenta solo los hospitales de Murcia. El propio selector no se aplica a sí mismo, para poder ver las alternativas. */
+const provDe = (c) => (typeof c.province === "string" ? c.province : (typeof c.prov === "string" ? c.prov : ""));
+function filtrosActuales() {
+  return { q: $("#q").value.trim().toLowerCase(), provincia: $("#provincia").value, muni: $("#muni").value, tipo: $("#tipo").value, permiso: $("#permiso").value,
+    valor: $("#valor").value, cadena: $("#cadena").value, subtipo: $("#subtipo").value };
+}
+function coincide(c, f, omitir) {
+  if (isOut(c)) return false;
+  if (omitir !== "muni" && f.muni && townOf(c) !== f.muni) return false;
+  if (omitir !== "provincia" && f.provincia && provDe(c) !== f.provincia) return false;
+  if (omitir !== "tipo" && !matchTipo(c, f.tipo)) return false;
+  if (omitir !== "cadena" && f.cadena && chainOf(c) !== f.cadena) return false;
+  if (omitir !== "subtipo" && f.subtipo && c.sub !== f.subtipo) return false;
+  if (omitir !== "permiso" && f.permiso && estadoOf(c) !== f.permiso) return false;
+  if (onlyRev && !isRev(c)) return false;
+  if (onlySeg && !seguimientoDue(c)) return false;
+  if (onlyFav && !isFav(c)) return false;
+  if (omitir !== "valor" && f.valor) { const r = permOf(c).valoracion || 0; if (f.valor === "sin" ? r : r < +f.valor) return false; }
+  if (f.q && !(c.name + " " + c.street + " " + townOf(c)).toLowerCase().includes(f.q)) return false;
+  return true;
+}
+function refreshCounts() {
+  const f = filtrosActuales();
+  const fijar = (sel, cuenta, total) => {
+    [...sel.options].forEach((o) => {
+      const n = o.value === "" ? total : (cuenta[o.value] || 0);
+      if (o.value === "" && !/ \(\d+\)$/.test(o.textContent)) return;
+      o.textContent = /\s\(\d+\)$/.test(o.textContent) ? o.textContent.replace(/\s\(\d+\)$/, " (" + n + ")") : o.textContent + " (" + n + ")";
+    });
+  };
+  const facetas = [
+    ["provincia", $("#provincia"), (c) => provDe(c).trim() || provDe(c)],
+    ["muni", $("#muni"), (c) => townOf(c)],
+    ["tipo", $("#tipo"), (c) => c.tipo],
+    ["permiso", $("#permiso"), (c) => estadoOf(c)],
+    ["cadena", $("#cadena"), (c) => (c.tipo === "Supermercado" ? chainOf(c) : "")],
+    ["subtipo", $("#subtipo"), (c) => (c.tipo === "Entidad oficial" ? c.sub : "")]
+  ];
+  facetas.forEach(([clave, sel, valorDe]) => {
+    const cuenta = {}; let total = 0;
+    for (const c of CENTERS) {
+      if (!coincide(c, f, clave)) continue;
+      total++;
+      const v = valorDe(c); if (v) cuenta[v] = (cuenta[v] || 0) + 1;
+    }
+    if (clave === "tipo" || clave === "permiso") { [...sel.options].forEach((o) => { if (o.value === "") return; o.textContent = o.textContent.replace(/\s\(\d+\)$/, "") + " (" + (cuenta[o.value] || 0) + ")"; }); return; }
+    fijar(sel, cuenta, total);
+  });
+}
 function refreshMuniSelect() {
   const sel = $("#muni"), prev = sel.value, prov = $("#provincia").value, cnt = {};
   CENTERS.forEach((c) => {

@@ -88,6 +88,8 @@ jobs:
         run: node scripts/test-provincias.mjs
       - name: Test bulk actions guarantees
         run: node scripts/test-acciones-masivas.mjs
+      - name: Test filter counters
+        run: node scripts/test-contadores-filtros.mjs
       - name: Run XSS regression audit
         run: node scripts/audit-xss.mjs index.html
       - name: Check keyboard access to statistics panel rows
