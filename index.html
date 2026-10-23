@@ -1421,8 +1421,100 @@ const customPermitsSnapshot = () => Object.fromEntries(CENTERS
   .map(c => [c.name, sanitizeSharedPermitState(permits[permitKey(c)]) || {}]));
 const saveCustomPermits = async () => typeof window.mapaPersistUserState === "function" &&
   await window.mapaPersistUserState("customPermits", customPermitsSnapshot()) ? "ok" : "error";
+// Expedientes de los puntos del catálogo (solicitudes, concesiones y seguimientos): viven en tablas propias de Supabase.
+// relBase guarda lo último confirmado por punto; blobGuardado lo último confirmado del estado propio del punto (contacto, notas y valoración);
+// legacyRaw conserva sin tocar las listas antiguas del JSON (copia de reversión del volcado).
+let relBase = new Map(), blobGuardado = new Map(), legacyRaw = new Map();
+const LEGACY_KEYS = ["solicitudes", "solicitud", "historial", "estado", "fecha", "seguimiento"];
+const clonaLista = (arr) => (arr || []).map((h) => Object.assign({}, h));
+const nombreRel = (c) => permitKey(c);
+// Pone en memoria las listas confirmadas de un punto (sin tocar su contacto, notas ni valoración).
+const aplicaListasRel = (c, listas) => {
+  const key = nombreRel(c), l = listas || { solicitudes: [], historial: [] };
+  relBase.set(key, { sols: clonaLista(l.solicitudes), hist: clonaLista(l.historial) });
+  const p = permits[key] || {};
+  p.solicitudes = clonaLista(l.solicitudes); p.historial = clonaLista(l.historial);
+  p.estado = estadoCalc(p);
+  if (p.estado === "sin" && !p.contacto && !p.notas && !p.valoracion && !p.solicitudes.length && !p.historial.length) delete permits[key];
+  else permits[key] = p;
+};
+const leeFilasRel = async (client, filtroEst) => {
+  const q = (tabla) => (opts) => { let b = client.from(tabla).select(REL_COLS[tabla], opts); if (filtroEst) b = b.eq("establishment_id", filtroEst); return b; };
+  const [apps, grants, fups] = await Promise.all([
+    fetchAllRows(q("permit_applications"), "id"), fetchAllRows(q("permit_grants"), "id"), fetchAllRows(q("followups"), "id")]);
+  return relListas(apps, grants, fups);
+};
+// Lee de Supabase los expedientes de un punto y los deja en memoria. Devuelve true si se ha podido.
+const recargaRelPunto = async (c) => {
+  const client = window.mapaSession?.supabase;
+  if (!client || !c?.databaseId) return false;
+  try { aplicaListasRel(c, (await leeFilasRel(client, c.databaseId)).get(c.databaseId)); return true; }
+  catch (e) { console.error("[Mapa] No se pudieron leer los expedientes del punto:", e); return false; }
+};
+const conTiempoLimite = (ms = 15000) => { const ac = new AbortController(); setTimeout(() => ac.abort(), ms); return ac.signal; };
+// Ejecuta las operaciones de diffRel una a una. Devuelve «ok», «conflict» (otra persona cambió el registro) o «error».
+const ejecutaOpsRel = async (client, userId, c, ops) => {
+  const est = c.databaseId, hoy = today();
+  const filaApp = (x) => ({ organization: x.ong || null, capturer_count: x.captadores || null, requested_from: x.desde || null, requested_until: x.hasta || null, contact_details: x.contacto || null, notes: x.notas || null });
+  const filaGrant = (h) => ({ organization: h.ong || null, capturer_count: h.captadores || null, valid_from: h.desde || null, valid_until: h.hasta || null, contact_details: h.contacto || null, notes: h.notas || null });
+  for (const op of ops) {
+    let r;
+    try {
+      if (op.t === "insApp") {
+        r = await client.from("permit_applications").insert(Object.assign({ id: op.x.id, establishment_id: est, status: "pending", requested_at: op.x.fecha || hoy, created_by: userId, updated_by: userId }, filaApp(op.x))).abortSignal(conTiempoLimite());
+        if (r.error && r.error.code === "23505") r = { error: null }; /* reintento de un alta que sí llegó */
+      } else if (op.t === "updApp") {
+        r = await client.from("permit_applications").update(Object.assign({ updated_by: userId }, filaApp(op.x))).eq("id", op.id).eq("updated_at", op.ver).select("id").abortSignal(conTiempoLimite());
+        if (!r.error && !(r.data && r.data.length)) return "conflict";
+      } else if (op.t === "delApp") {
+        r = await client.from("permit_applications").delete().eq("id", op.id).select("id").abortSignal(conTiempoLimite());
+        if (!r.error && !(r.data && r.data.length)) return "error"; /* solo los administradores pueden borrar */
+      } else if (op.t === "approve") {
+        r = await client.rpc("approve_permit_application", { p_application_id: op.id, p_expected_updated_at: op.ver || null, p_valid_from: op.g.desde || null, p_valid_until: op.g.hasta || null, p_organization: op.g.ong || null, p_capturer_count: op.g.captadores || null }).abortSignal(conTiempoLimite());
+      } else if (op.t === "resolve") {
+        r = await client.rpc("resolve_permit_application", { p_application_id: op.id, p_status: op.st, p_reason: op.motivo || null, p_expected_updated_at: op.ver || null }).abortSignal(conTiempoLimite());
+      } else if (op.t === "insGrant") {
+        r = await client.from("permit_grants").insert(Object.assign({ id: op.h.id, establishment_id: est, application_id: op.h.sol || null, status: "active", created_by: userId, updated_by: userId }, filaGrant(op.h))).abortSignal(conTiempoLimite());
+        if (r.error && r.error.code === "23505") r = { error: null };
+      } else if (op.t === "updGrant") {
+        r = await client.from("permit_grants").update(Object.assign({ updated_by: userId }, filaGrant(op.h))).eq("id", op.id).eq("updated_at", op.ver).select("id").abortSignal(conTiempoLimite());
+        if (!r.error && !(r.data && r.data.length)) return "conflict";
+      } else if (op.t === "cancel") {
+        r = await client.rpc("cancel_permit_grant", { p_grant_id: op.id, p_reason: op.motivo || null, p_expected_updated_at: op.ver || null }).abortSignal(conTiempoLimite());
+      } else if (op.t === "reactivate") {
+        r = await client.from("permit_grants").update({ status: "active", updated_by: userId }).eq("id", op.id).eq("updated_at", op.ver).select("id").abortSignal(conTiempoLimite());
+        if (!r.error && !(r.data && r.data.length)) return "conflict";
+      } else if (op.t === "delGrant") {
+        r = await client.from("permit_grants").delete().eq("id", op.id).select("id").abortSignal(conTiempoLimite());
+        if (!r.error && !(r.data && r.data.length)) return "error";
+      } else if (op.t === "fuSet") {
+        r = op.fu
+          ? await client.from("followups").update({ due_on: op.due, completed_at: null }).eq("id", op.fu).abortSignal(conTiempoLimite())
+          : await client.from("followups").insert({ establishment_id: est, application_id: op.app, due_on: op.due, created_by: userId }).abortSignal(conTiempoLimite());
+      } else if (op.t === "fuDone") {
+        if (!op.fu) continue;
+        r = await client.from("followups").update({ completed_at: new Date().toISOString() }).eq("id", op.fu).is("completed_at", null).abortSignal(conTiempoLimite());
+      } else continue;
+    } catch (e) { console.error("[Mapa] Error al guardar expedientes:", e); return "error"; }
+    if (r && r.error) {
+      console.error("[Mapa] Supabase rechazó una operación de expedientes:", op.t, r.error);
+      return r.error.code === "40001" ? "conflict" : "error";
+    }
+  }
+  return "ok";
+};
+// Estado propio del punto en establishment_app_state: contacto, notas y valoración, más las listas antiguas intactas.
+const estadoBlobPunto = (c) => {
+  const cur = permits[nombreRel(c)] || {}, s = Object.assign({}, legacyRaw.get(c.databaseId) || {});
+  ["contacto", "notas"].forEach((k) => { if (cur[k]) s[k] = cur[k]; else delete s[k]; });
+  if (cur.valoracion) s.valoracion = cur.valoracion; else delete s.valoracion;
+  return sanitizeSharedPermitState(s) || {};
+};
+const blobDe = (state) => { const o = {}; if (state.contacto) o.contacto = state.contacto; if (state.notas) o.notas = state.notas; if (state.valoracion) o.valoracion = state.valoracion; return o; };
+const legacyDe = (state) => { const raw = {}; LEGACY_KEYS.forEach((k) => { if (state[k] !== undefined) raw[k] = state[k]; }); return raw; };
 // Guarda el estado de permisos de un punto. Devuelve "ok", "conflict" o "error"; nunca da por bueno
-// un guardado que no ha llegado a Supabase.
+// un guardado que no ha llegado a Supabase. Los puntos del catálogo guardan sus solicitudes, concesiones y seguimientos en sus tablas
+// (con funciones atómicas para aprobar, denegar, retirar y cancelar) y solo contacto, notas y valoración en el estado compartido.
 const savePermits = async (c) => {
   const session = window.mapaSession;
   const client = session?.supabase;
@@ -1435,16 +1527,35 @@ const savePermits = async (c) => {
     return result;
   }
   if (!c.provinceId) return "error";
-  const row = { establishment_id: c.databaseId, province_id: c.provinceId, state: sanitizeSharedPermitState(permits[permitKey(c)]) || {}, updated_by: userId };
-  const result = await saveSharedPermitRow(client, userId, row);
-  if (result !== "ok" && status) {
-    status.textContent = result === "conflict"
-      ? "Aviso: otra persona ha cambiado este punto mientras lo editabas; no se ha sobrescrito su cambio."
-      : "Aviso: no se pudo confirmar el guardado de los permisos compartidos en Supabase.";
+  const key = nombreRel(c), cur = permits[key] || {};
+  const ops = diffRel(relBase.get(key) || { sols: [], hist: [] }, { sols: solsOf(cur), hist: cur.historial || [] });
+  if (ops.length) {
+    let result = await ejecutaOpsRel(client, userId, c, ops);
+    const releido = await recargaRelPunto(c);
+    if (result === "ok" && !releido) result = "error";
+    if (result !== "ok") {
+      if (status) status.textContent = result === "conflict"
+        ? "Aviso: otra persona ha cambiado este punto mientras lo editabas; no se ha sobrescrito su cambio."
+        : "Aviso: no se pudo confirmar el guardado de las solicitudes o concesiones en Supabase.";
+      return result;
+    }
   }
-  return result;
+  const actual = permits[key] || {}, ahora = { contacto: actual.contacto || "", notas: actual.notas || "", valoracion: actual.valoracion || 0 };
+  const guardado = blobGuardado.get(key) || { contacto: "", notas: "", valoracion: 0 };
+  if (ahora.contacto !== guardado.contacto || ahora.notas !== guardado.notas || ahora.valoracion !== guardado.valoracion) {
+    const row = { establishment_id: c.databaseId, province_id: c.provinceId, state: estadoBlobPunto(c), updated_by: userId };
+    const result = await saveSharedPermitRow(client, userId, row);
+    if (result !== "ok") {
+      if (status) status.textContent = result === "conflict"
+        ? "Aviso: otra persona ha cambiado este punto mientras lo editabas; no se ha sobrescrito su cambio."
+        : "Aviso: no se pudo confirmar el guardado de los datos del punto en Supabase.";
+      return result;
+    }
+    blobGuardado.set(key, ahora);
+  }
+  return "ok";
 };
-// Relee de Supabase el estado compartido de un punto (tras un conflicto) y actualiza la memoria.
+// Relee de Supabase el estado compartido y los expedientes de un punto (tras un conflicto o un fallo) y actualiza la memoria.
 const reloadSharedPermit = async (c) => {
   const client = window.mapaSession?.supabase;
   if (!client || !c?.databaseId) return false;
@@ -1453,17 +1564,20 @@ const reloadSharedPermit = async (c) => {
     .eq("establishment_id", c.databaseId)
     .maybeSingle();
   if (error) return false;
+  const key = permitKey(c);
   if (!data) {
     sharedPermitVersions.delete(c.databaseId);
-    delete permits[permitKey(c)];
-    return true;
+    legacyRaw.delete(c.databaseId); blobGuardado.delete(key);
+    delete permits[key];
+  } else {
+    if (data.province_id !== c.provinceId || !data.state || typeof data.state !== "object" || Array.isArray(data.state)) return false;
+    sharedPermitVersions.set(c.databaseId, Number(data.version));
+    const safe = sanitizeSharedPermitState(data.state) || {}, b = blobDe(safe);
+    legacyRaw.set(c.databaseId, legacyDe(data.state));
+    blobGuardado.set(key, { contacto: b.contacto || "", notas: b.notas || "", valoracion: b.valoracion || 0 });
+    if (Object.keys(b).length) permits[key] = b; else delete permits[key];
   }
-  if (data.province_id !== c.provinceId || !data.state || typeof data.state !== "object" || Array.isArray(data.state)) return false;
-  sharedPermitVersions.set(c.databaseId, Number(data.version));
-  const safePermitState = sanitizeSharedPermitState(data.state);
-  if (safePermitState && Object.keys(safePermitState).length) permits[permitKey(c)] = safePermitState;
-  else delete permits[permitKey(c)];
-  return true;
+  return await recargaRelPunto(c);
 };
 let removed = new Set();
 let inactive = new Set();
@@ -1717,6 +1831,83 @@ const calendarioSemana = (recs, segs, wk, t) => Array.from({ length: 7 }, (_, k)
   return { d, items, aut: capacidad(aut), pen: capacidad(pen), nAut: aut.length, nPen: pen.length, seg: sg, segAtras: d < t ? sg.length : 0 };
 });
 /* === fin de las reglas de expedientes === */
+
+/* === Capa relacional de expedientes ===
+   Las solicitudes, concesiones y seguimientos de los puntos del catálogo viven en permit_applications, permit_grants y followups
+   (la fuente de verdad). En memoria se siguen representando como las listas «solicitudes» e «historial» de cada punto, para que la
+   ficha, el panel y el calendario usen las mismas reglas. Estas funciones convierten filas en listas y calculan, comparando lo último
+   confirmado con lo editado, qué operaciones hay que enviar a Supabase. No hacen llamadas de red. */
+const REL_COLS = {
+  permit_applications: "id,establishment_id,status,requested_from,requested_until,organization,capturer_count,requested_at,contact_details,notes,resolved_at,resolution_reason,updated_at",
+  permit_grants: "id,establishment_id,application_id,status,valid_from,valid_until,organization,capturer_count,contact_details,notes,cancelled_at,cancelled_reason,created_at,updated_at",
+  followups: "id,establishment_id,application_id,due_on,completed_at"
+};
+const APP_RES = { approved: "aprobada", denied: "denegada", withdrawn: "retirada" };
+const RES_APP = { aprobada: "approved", denegada: "denied", retirada: "withdrawn" };
+const diaMadrid = (ts) => (ts ? fechaMadrid.format(new Date(ts)) : "");
+const relListas = (apps, grants, fups) => {
+  const out = new Map(), get = (e) => { let o = out.get(e); if (!o) out.set(e, o = { solicitudes: [], historial: [] }); return o; };
+  const fuPorApp = new Map();
+  (fups || []).forEach((f) => { if (f.application_id) { const a = fuPorApp.get(f.application_id) || []; a.push(f); fuPorApp.set(f.application_id, a); } });
+  const grantDeApp = new Map();
+  (grants || []).forEach((g) => { if (g.application_id) grantDeApp.set(g.application_id, g.id); });
+  (apps || []).forEach((a) => {
+    const res = APP_RES[a.status] || "", fs = (fuPorApp.get(a.id) || []).slice().sort((x, y) => String(x.due_on).localeCompare(String(y.due_on)));
+    const abierto = fs.find((f) => !f.completed_at), ultimo = abierto || fs[fs.length - 1];
+    const x = { id: a.id, ver: a.updated_at, desde: a.requested_from || "", hasta: a.requested_until || "", ong: a.organization || "", captadores: a.capturer_count || 0, fecha: a.requested_at || "" };
+    if (res) { x.res = res; x.resFecha = diaMadrid(a.resolved_at); }
+    if (a.resolution_reason) x.motivo = a.resolution_reason;
+    if (a.contact_details) x.contacto = a.contact_details;
+    if (a.notes) x.notas = a.notes;
+    if (grantDeApp.has(a.id)) x.conc = grantDeApp.get(a.id);
+    if (!res && abierto) x.seg = abierto.due_on;
+    if (ultimo) x.fu = ultimo.id;
+    get(a.establishment_id).solicitudes.push(x);
+  });
+  (grants || []).forEach((g) => {
+    const h = { id: g.id, ver: g.updated_at, desde: g.valid_from || "", hasta: g.valid_until || "", ong: g.organization || "", captadores: g.capturer_count || 0, alta: diaMadrid(g.created_at) };
+    if (g.application_id) h.sol = g.application_id;
+    if (g.status === "cancelled") { h.cancelada = true; h.resFecha = diaMadrid(g.cancelled_at); }
+    if (g.cancelled_reason) h.motivo = g.cancelled_reason;
+    if (g.contact_details) h.contacto = g.contact_details;
+    if (g.notes) h.notas = g.notes;
+    get(g.establishment_id).historial.push(h);
+  });
+  return out;
+};
+const CAMPOS_REL = ["desde", "hasta", "ong", "contacto", "notas"];
+const cambiaRel = (x, b) => CAMPOS_REL.some((k) => (x[k] || "") !== (b[k] || "")) || (Number(x.captadores) || 0) !== (Number(b.captadores) || 0);
+/* Operaciones necesarias para pasar de lo último confirmado (base) a lo editado (cur). Aprobar, denegar, retirar y cancelar van por las funciones
+   atómicas de la base de datos; el resto son altas, cambios con control de versión y bajas. */
+const diffRel = (base, cur) => {
+  const ops = [], bs = new Map(base.sols.map((x) => [x.id, x])), bh = new Map(base.hist.map((x) => [x.id, x]));
+  const cs = new Set(cur.sols.map((x) => x.id)), ch = new Set(cur.hist.map((x) => x.id)), aprobadas = new Set();
+  cur.sols.forEach((x) => {
+    const b = bs.get(x.id);
+    if (!b) { ops.push({ t: "insApp", x }); if (x.seg) ops.push({ t: "fuSet", app: x.id, fu: "", due: x.seg }); return; }
+    if ((x.res || "") !== (b.res || "")) {
+      if (x.res === "aprobada") {
+        const g = cur.hist.find((h) => h.sol === x.id && !bh.has(h.id)) || {};
+        if (g.id) aprobadas.add(g.id);
+        ops.push({ t: "approve", id: x.id, ver: b.ver, g });
+      } else if (RES_APP[x.res]) ops.push({ t: "resolve", id: x.id, st: RES_APP[x.res], motivo: x.motivo || "", ver: b.ver });
+      if (b.seg && b.fu) ops.push({ t: "fuDone", fu: b.fu });
+    } else {
+      if (cambiaRel(x, b)) ops.push({ t: "updApp", id: x.id, ver: b.ver, x });
+      if (!x.res && (x.seg || "") !== (b.seg || "")) ops.push(x.seg ? { t: "fuSet", app: x.id, fu: b.fu || "", due: x.seg } : { t: "fuDone", fu: b.fu || "" });
+    }
+  });
+  base.sols.forEach((b) => { if (!cs.has(b.id)) ops.push({ t: "delApp", id: b.id }); });
+  cur.hist.forEach((h) => {
+    const b = bh.get(h.id);
+    if (!b) { if (!aprobadas.has(h.id)) ops.push({ t: "insGrant", h }); return; }
+    if (!!h.cancelada !== !!b.cancelada) ops.push(h.cancelada ? { t: "cancel", id: h.id, motivo: h.motivo || "", ver: b.ver } : { t: "reactivate", id: h.id, ver: b.ver });
+    else if (cambiaRel(h, b)) ops.push({ t: "updGrant", id: h.id, ver: b.ver, h });
+  });
+  base.hist.forEach((b) => { if (!ch.has(b.id)) ops.push({ t: "delGrant", id: b.id }); });
+  return ops;
+};
+/* === fin de la capa relacional === */
 /* Revisiones y correcciones se guardan en el estado del usuario en Supabase. */
 let reviewed = new Set();
 const saveReviewed = () => typeof window.mapaPersistUserState === "function" ? window.mapaPersistUserState("reviewed", [...reviewed]) : Promise.resolve(false);
@@ -1941,7 +2132,7 @@ function fichaFor(c, pos) {
       mk("Editar", "Cambiar fechas, ONG o captadores de esta concesión", "color:var(--ok);border-color:var(--ok);margin-left:auto", () => { editH = i; q("h-desde").value = h.desde || ""; q("h-hasta").value = h.hasta || ""; q("h-n").value = h.captadores || ""; q("h-ong").value = h.ong || ""; q("h-contacto").value = h.contacto || ""; q("h-notas").value = h.notas || ""; q("h-add").textContent = "Guardar cambios de la concesión"; q("h-cancel").hidden = false; q("h-form").open = true; });
       if (h.cancelada) mk("Reactivar", "Volver a dar por válida esta concesión", "color:var(--warn);border-color:var(--warn)", async () => { delete h.cancelada; delete h.resFecha; paintHist(); const ok = await commit(); q("h-msg").style.color = ok ? "var(--ok)" : "var(--err)"; q("h-msg").textContent = ok ? "Concesión reactivada y guardada." : "No se ha reactivado: no se pudo guardar."; });
       else mk("Cancelar", "Marcar esta concesión como cancelada (queda en el historial)", "color:var(--warn);border-color:var(--warn)", () => askReason(li, "Motivo de la cancelación (opcional)", "Cancelar la concesión", async (motivo) => { h.cancelada = true; h.resFecha = today(); if (motivo) h.motivo = motivo; paintHist(); const ok = await commit(); q("h-msg").style.color = ok ? "var(--ok)" : "var(--err)"; q("h-msg").textContent = ok ? "Concesión cancelada y guardada." : "No se ha cancelado: no se pudo guardar."; }));
-      mk("Quitar", "Borrar esta concesión del historial (no se puede deshacer)", "", () => askReason(li, "Se borra la concesión del historial y no se puede deshacer. Para conservarla, usa Cancelar.", "Borrar la concesión", async () => { hist.splice(i, 1); if (editH === i) resetH(); paintHist(); const ok = await commit(); q("h-msg").style.color = ok ? "var(--ok)" : "var(--err)"; q("h-msg").textContent = ok ? "Concesión borrada del historial." : "No se ha borrado: no se pudo guardar."; }, true));
+      if (admin || c.custom) mk("Quitar", "Borrar esta concesión del historial (no se puede deshacer)", "", () => askReason(li, "Se borra la concesión del historial y no se puede deshacer. Para conservarla, usa Cancelar.", "Borrar la concesión", async () => { hist.splice(i, 1); if (editH === i) resetH(); paintHist(); const ok = await commit(); q("h-msg").style.color = ok ? "var(--ok)" : "var(--err)"; q("h-msg").textContent = ok ? "Concesión borrada del historial." : "No se ha borrado: no se pudo guardar."; }, true));
       ul.appendChild(li);
     });
   };
@@ -1980,7 +2171,7 @@ function fichaFor(c, pos) {
         fin("Retirada guardada.", "No se ha retirado: no se pudo guardar.")();
       }));
       mk("Editar", "Cambiar fechas, ONG o captadores de esta solicitud", "color:var(--ok);border-color:var(--ok)", () => { editS = i; q("s-desde").value = x.desde || ""; q("s-hasta").value = x.hasta || ""; q("s-n").value = x.captadores || ""; q("s-ong").value = x.ong || ""; q("s-seg").value = x.seg || ""; q("s-contacto").value = x.contacto || ""; q("s-notas").value = x.notas || ""; q("s-add").textContent = "Guardar cambios de la solicitud"; q("s-cancel").hidden = false; q("s-add").closest("details").open = true; });
-      mk("Quitar", "Borrar esta solicitud (no se puede deshacer)", "", () => askReason(li, (x.res === "aprobada" ? "Se borra la solicitud; la concesión creada se queda. " : "") + "Se borra del historial y no se puede deshacer.", "Borrar la solicitud", () => {
+      if (admin || c.custom) mk("Quitar", "Borrar esta solicitud (no se puede deshacer)", "", () => askReason(li, (x.res === "aprobada" ? "Se borra la solicitud; la concesión creada se queda. " : "") + "Se borra del historial y no se puede deshacer.", "Borrar la solicitud", () => {
         sols.splice(i, 1); if (editS === i) resetS();
         fin("Solicitud borrada.", "No se ha borrado: no se pudo guardar.")();
       }, true));
@@ -2021,8 +2212,7 @@ function fichaFor(c, pos) {
         // Otra persona guardó este punto después de que se leyera: no se sobrescribe ni se intenta
         // restaurar (eso también pisaría su cambio). Lo escrito sigue visible en la ficha hasta que
         // se cargue la versión actual.
-        if (previous.permit === undefined) delete permits[permitKey(c)];
-        else permits[permitKey(c)] = previous.permit;
+        if (!c.databaseId) { if (previous.permit === undefined) delete permits[permitKey(c)]; else permits[permitKey(c)] = previous.permit; }
         sm.style.color = "var(--err)";
         sm.textContent = "No se ha guardado: otra persona ha cambiado este punto mientras lo editabas. Anota lo que querías cambiar, carga la versión actual y vuelve a aplicarlo. ";
         const reload = document.createElement("button");
@@ -2046,8 +2236,7 @@ function fichaFor(c, pos) {
       }
       if (saved !== "ok") {
         // La petición pudo fallar antes o después de llegar al servidor: se vuelve a leer lo guardado antes de decir nada.
-        if (previous.permit === undefined) delete permits[permitKey(c)];
-        else permits[permitKey(c)] = previous.permit;
+        if (!c.databaseId) { if (previous.permit === undefined) delete permits[permitKey(c)]; else permits[permitKey(c)] = previous.permit; }
         const leido = await reloadSharedPermit(c);
         if (leido) {
           const np = permits[permitKey(c)] || {};
@@ -2067,6 +2256,7 @@ function fichaFor(c, pos) {
         return false;
       }
 
+      { const np = permits[permitKey(c)] || {}; hist = clone(np.historial); sols = clone(solsOf(np)); paintHist(); paintSols(); } /* se adoptan los registros tal como los confirmó Supabase (ids y versiones) */
       base = { hist: clone(hist), sols: clone(sols), val };
       if (markers[c.id]) markers[c.id].setIcon(makeIcon(c));
       refreshSelects();
@@ -4371,15 +4561,25 @@ renderList();
     const sharedRows = await fetchAllRows(
       (opts) => client.from("establishment_app_state").select("establishment_id,province_id,state,version", opts),
       "establishment_id");
+    // Solicitudes, concesiones y seguimientos salen de sus tablas; si la lectura falla, la carga falla (sin copia local ni respaldo en el JSON).
+    const relMap = await leeFilasRel(client);
+    relBase = new Map(); blobGuardado = new Map(); legacyRaw = new Map();
     const byId = new Map(CENTERS.filter(c => c.databaseId).map(c => [c.databaseId, c]));
+    let sinVolcar = 0;
     sharedRows.forEach(row => {
       const c = byId.get(row.establishment_id);
       if (!c || row.province_id !== c.provinceId) return;
       if (Number.isFinite(Number(row.version))) sharedPermitVersions.set(row.establishment_id, Number(row.version));
       if (!row.state || typeof row.state !== "object" || Array.isArray(row.state)) return;
-      const safePermitState = sanitizeSharedPermitState(row.state);
-      if (safePermitState && Object.keys(safePermitState).length) permits[permitKey(c)] = safePermitState;
+      const safe = sanitizeSharedPermitState(row.state) || {}, b = blobDe(safe), raw = legacyDe(row.state);
+      if (Object.keys(raw).length) legacyRaw.set(c.databaseId, raw);
+      if (Object.keys(b).length) permits[permitKey(c)] = b;
+      blobGuardado.set(permitKey(c), { contacto: b.contacto || "", notas: b.notas || "", valoracion: b.valoracion || 0 });
+      if (((safe.solicitudes || []).length + (safe.historial || []).length) && !relMap.has(row.establishment_id)) sinVolcar++;
     });
+    byId.forEach((c, estId) => { const l = relMap.get(estId); if (l) aplicaListasRel(c, l); });
+    window.mapaExpedientesSinVolcar = sinVolcar;
+    if (sinVolcar) console.warn("[Mapa] " + sinVolcar + " puntos tienen solicitudes o concesiones antiguas sin volcar a las tablas.");
     const customNames = new Set(CENTERS.map(c => c.name));
     customs = Array.isArray(state.customs) ? state.customs.filter(p => {
       if (!p || typeof p.name !== "string" || !p.name.trim()) return false;

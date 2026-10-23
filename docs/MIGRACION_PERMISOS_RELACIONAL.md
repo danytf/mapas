@@ -17,3 +17,14 @@ Estado (23/10/2026): **migración APLICADA en producción el 23/10/2026 (versió
 
 ## Reversión (sin restaurar la base)
 El volcado no toca el JSON: volver a la versión anterior de la aplicación. Las filas volcadas se identifican por `legacy_ref` y pueden retirarse con `DELETE ... WHERE legacy_ref IS NOT NULL`. La migración de esquema es aditiva y no hace falta deshacerla.
+
+## Versión de la aplicación que usa las tablas (rama `feat/expedientes-tablas`, apilada sobre el PR #191)
+- Carga: solicitudes, concesiones y seguimientos se leen de sus tablas (paginado, sin copia local); si la lectura falla, la carga falla. El JSON de `establishment_app_state` solo aporta contacto, notas y valoración del punto; sus listas antiguas se conservan sin tocar (copia de reversión).
+- Guardado: `savePermits` compara lo último confirmado con lo editado (`diffRel`) y envía altas, cambios con control de versión (`updated_at`), bajas (solo administradores) y las funciones atómicas `approve_permit_application`, `resolve_permit_application` y `cancel_permit_grant`. Tras cada guardado, o fallo, se relee el punto: la memoria es siempre lo que hay en Supabase.
+- Seguimientos: una fila de `followups` por solicitud pendiente; cerrar un seguimiento marca `completed_at`; resolver la solicitud lo cierra.
+- Puntos personales (sin fila en el catálogo) siguen en `user_app_state.customPermits`.
+- Aviso de seguridad: si hay puntos con listas antiguas en el JSON sin fila en las tablas (volcado sin hacer), la aplicación lo anota en la consola (`window.mapaExpedientesSinVolcar`).
+- **No fusionar antes del volcado:** al desplegar, los expedientes que solo estén en el JSON dejarían de verse. Orden: fusionar #191 → ventana sin ediciones → volcado y reconciliación a 0 → fusionar esta rama → verificar la URL pública.
+- Limitación: un seguimiento antiguo de un punto sin solicitudes (campo `seguimiento` sin solicitudes) se vuelca a `followups` sin solicitud pero la ficha todavía no lo muestra; en producción no hay ninguno.
+- Pendiente: responsable y siguiente acción de los seguimientos en la interfaz (las columnas existen).
+- Probado con el Supabase simulado (`scripts/dev/mock-supabase.mjs` ahora simula las tres tablas y las tres funciones): alta, seguimiento, aprobar con doble clic (una sola concesión enlazada), denegar con motivo, conflicto por cambio de otra persona, recarga. La integridad y RLS reales se prueban en `supabase/tests/permit_workflow.sql`.

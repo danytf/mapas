@@ -7,7 +7,7 @@ import { runInNewContext } from "node:vm";
 const html = readFileSync(process.argv[2] || "index.html", "utf8");
 const a = html.indexOf("const fmtD = ");
 const b = html.indexOf("/* === Reglas de expedientes");
-const c = html.indexOf("/* === fin de las reglas de expedientes === */");
+const c = html.indexOf("/* === fin de la capa relacional === */");
 assert.ok(a >= 0 && b > a && c > b, "No se encuentra el bloque de reglas de expedientes en index.html");
 const codigo = html.slice(a, b) + "\n" + html.slice(b, c);
 
@@ -21,7 +21,7 @@ const reglas = (ahoraIso) => {
   const sandbox = { Date: Falsa, self: {} };
   return runInNewContext(
     "const permits = {}; const permitKey = (c) => c.id; const permOf = (c) => permits[permitKey(c)] || {};\n" + codigo +
-    "\n({ today, addDays, mondayOf, daysBetween, solEstado, concEstado, estadoCalc, expedientesDe, seguimientosDe, capacidad, capacidadPorOng, incidencias, indicadores, estadoEnDia, calendarioSemana, sanitizeSharedPermitState, UMBRAL_ESTANCADA })",
+    "\n({ today, addDays, mondayOf, daysBetween, solEstado, concEstado, estadoCalc, expedientesDe, seguimientosDe, capacidad, capacidadPorOng, incidencias, indicadores, estadoEnDia, calendarioSemana, sanitizeSharedPermitState, UMBRAL_ESTANCADA, relListas, diffRel })",
     sandbox
   );
 };
@@ -222,6 +222,67 @@ const T = "2026-10-23";
   const ind = R.indicadores(R.expedientesDe(P1, p), R.seguimientosDe(P1, p), T);
   eq(ind.segVencidos.map((s) => s.ong), ["A"]); eq(ind.segHoy.map((s) => s.ong), ["B"]); eq(ind.segProximos.map((s) => s.ong), ["C"], "hoy+7 = 30/10 incluido; el 31 queda fuera");
   eq(R.seguimientosDe(P1, { seguimiento: "2026-10-23" }).length, 1, "seguimiento antiguo de un punto sin solicitudes");
+}
+
+// Capa relacional: filas de las tablas -> listas de la ficha, y diferencias -> operaciones.
+{
+  const E = "est-1";
+  const apps = [
+    { id: "app-1", establishment_id: E, status: "pending", requested_from: "2026-11-02", requested_until: "2026-11-30", organization: "AECC", capturer_count: 3, requested_at: "2026-10-20", contact_details: "Ana", notes: null, resolved_at: null, resolution_reason: null, updated_at: "2026-10-20T10:00:00.000000+00:00" },
+    { id: "app-2", establishment_id: E, status: "approved", requested_from: "2026-10-01", requested_until: "2026-10-31", organization: "WWF", capturer_count: 2, requested_at: "2026-10-01", resolved_at: "2026-10-05T10:30:00+00:00", resolution_reason: null, updated_at: "2026-10-05T10:30:00.000000+00:00" },
+    { id: "app-3", establishment_id: E, status: "denied", requested_from: "2026-10-01", requested_until: null, organization: "FJC", capturer_count: null, requested_at: "2026-10-02", resolved_at: "2026-10-06T22:30:00+00:00", resolution_reason: "Sin cupo", updated_at: "2026-10-06T22:30:00.000000+00:00" }
+  ];
+  const grants = [
+    { id: "gr-1", establishment_id: E, application_id: "app-2", status: "active", valid_from: "2026-10-01", valid_until: "2026-10-31", organization: "WWF", capturer_count: 2, created_at: "2026-10-05T10:30:00+00:00", updated_at: "2026-10-05T10:30:00.000000+00:00" },
+    { id: "gr-2", establishment_id: E, application_id: null, status: "cancelled", valid_from: "2026-09-01", valid_until: "2026-09-30", organization: "AECC", capturer_count: 1, cancelled_at: "2026-09-10T08:00:00+00:00", cancelled_reason: "Renuncia", created_at: "2026-09-01T00:00:00+00:00", updated_at: "2026-09-10T08:00:00.000000+00:00" }
+  ];
+  const fups = [{ id: "fu-1", establishment_id: E, application_id: "app-1", due_on: "2026-10-30", completed_at: null }, { id: "fu-2", establishment_id: E, application_id: "app-3", due_on: "2026-10-10", completed_at: null }];
+  const l = R.relListas(apps, grants, fups).get(E);
+  eq(l.solicitudes.length, 3); eq(l.historial.length, 2);
+  const s1 = l.solicitudes.find((x) => x.id === "app-1");
+  eq([s1.desde, s1.hasta, s1.ong, s1.captadores, s1.fecha, s1.seg, s1.fu, s1.contacto, s1.res, s1.ver], ["2026-11-02", "2026-11-30", "AECC", 3, "2026-10-20", "2026-10-30", "fu-1", "Ana", undefined, "2026-10-20T10:00:00.000000+00:00"]);
+  const s2 = l.solicitudes.find((x) => x.id === "app-2");
+  eq([s2.res, s2.resFecha, s2.conc], ["aprobada", "2026-10-05", "gr-1"]);
+  const s3 = l.solicitudes.find((x) => x.id === "app-3");
+  eq([s3.res, s3.motivo, s3.seg, s3.resFecha], ["denegada", "Sin cupo", undefined, "2026-10-07"], "una solicitud resuelta no muestra seguimiento abierto; la fecha de decisión es la de Madrid (22:30 UTC = 00:30 del día siguiente)");
+  const g2 = l.historial.find((x) => x.id === "gr-2");
+  eq([g2.cancelada, g2.resFecha, g2.motivo, g2.sol], [true, "2026-09-10", "Renuncia", undefined]);
+  eq(l.historial.find((x) => x.id === "gr-1").sol, "app-2");
+  const base = { sols: l.solicitudes, hist: l.historial };
+  const copia = () => JSON.parse(JSON.stringify(base));
+  eq(R.diffRel(base, copia()), [], "sin cambios no hay operaciones (idempotente)");
+  // alta con seguimiento
+  let cur = copia(); cur.sols.push({ id: "new-1", desde: "2026-12-01", hasta: "2026-12-10", ong: "WWF", captadores: 2, fecha: "2026-10-23", seg: "2026-10-30" });
+  eq(R.diffRel(base, cur).map((o) => o.t), ["insApp", "fuSet"]);
+  // edición de campos y de seguimiento
+  cur = copia(); cur.sols[0].captadores = 5; cur.sols[0].seg = "2026-11-02";
+  eq(R.diffRel(base, cur).map((o) => o.t + ":" + (o.fu || o.id)), ["updApp:app-1", "fuSet:fu-1"]);
+  cur = copia(); cur.sols[0].seg = "";
+  eq(R.diffRel(base, cur), [{ t: "fuDone", fu: "fu-1" }]);
+  // aprobar: una sola operación atómica y la concesión nueva no se inserta aparte
+  cur = copia(); cur.sols[0].res = "aprobada"; cur.sols[0].conc = "c-new"; cur.hist.push({ id: "c-new", sol: "app-1", desde: "2026-11-02", hasta: "2026-11-30", ong: "AECC", captadores: 3 });
+  eq(R.diffRel(base, cur).map((o) => o.t), ["approve", "fuDone"]);
+  eq(R.diffRel(base, cur)[0].ver, "2026-10-20T10:00:00.000000+00:00", "aprueba con la versión leída");
+  // denegar y retirar
+  cur = copia(); cur.sols[0].res = "denegada"; cur.sols[0].motivo = "x";
+  eq(R.diffRel(base, cur).map((o) => o.t + (o.st || "")), ["resolvedenied", "fuDone"]);
+  cur = copia(); cur.sols[0].res = "retirada";
+  eq(R.diffRel(base, cur)[0].st, "withdrawn");
+  // cancelar, reactivar, editar y borrar concesiones
+  cur = copia(); cur.hist.find((h) => h.id === "gr-1").cancelada = true; cur.hist.find((h) => h.id === "gr-1").motivo = "m";
+  eq(R.diffRel(base, cur).map((o) => o.t), ["cancel"]);
+  cur = copia(); delete cur.hist.find((h) => h.id === "gr-2").cancelada;
+  eq(R.diffRel(base, cur).map((o) => o.t), ["reactivate"]);
+  cur = copia(); cur.hist.find((h) => h.id === "gr-1").hasta = "2026-11-15";
+  eq(R.diffRel(base, cur).map((o) => o.t), ["updGrant"]);
+  cur = copia(); cur.hist.push({ id: "m-1", desde: "2026-12-01", hasta: "2026-12-31", ong: "A", captadores: 1 });
+  eq(R.diffRel(base, cur).map((o) => o.t), ["insGrant"]);
+  cur = copia(); cur.hist = cur.hist.filter((h) => h.id !== "gr-2"); cur.sols = cur.sols.filter((x) => x.id !== "app-3");
+  eq(R.diffRel(base, cur).map((o) => o.t).sort(), ["delApp", "delGrant"]);
+  // reabrir un seguimiento cerrado (deshacer)
+  const cerrado = copia(); cerrado.sols[0].seg = ""; cerrado.sols[0].fu = "fu-1";
+  cur = copia(); cur.sols[0].seg = "2026-10-30"; cur.sols[0].fu = "fu-1";
+  eq(R.diffRel({ sols: cerrado.sols, hist: cerrado.hist }, cur), [{ t: "fuSet", app: "app-1", fu: "fu-1", due: "2026-10-30" }]);
 }
 
 console.log("Reglas de expedientes: " + n + " comprobaciones correctas.");
