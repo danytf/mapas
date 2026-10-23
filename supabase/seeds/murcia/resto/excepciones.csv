@@ -1,0 +1,120 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/10658553131;;Tienda;San Javier;37.817487;-0.818839;nombre generico o dudoso en OpenStreetMap: Tienda
+descartado;node/10660894069;;Leroy Merlin;San Pedro del Pinatar;37.822477;-0.808852;texto excluido (leroy merlin|click|recogida)
+descartado;node/1109085931;;Carrefour;Águilas;37.411544;-1.564087;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/11371406089;;Leroy Merlin;Lorca;37.637684;-1.698689;texto excluido (leroy merlin|click|recogida)
+descartado;node/1151681384;;Consum;Alcantarilla;37.968275;-1.216239;duplicado en el lote de node/4633391795 (11 m)
+descartado;node/11717176362;;Centro de Salud;Abanilla;38.204618;-1.039621;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;node/11763152219;;Centro De Salud Mental De Jumilla;Jumilla;38.473554;-1.333025;texto excluido (mental|veterinari|dental|fisioterap|rehabilitaci)
+descartado;node/11989737230;;;Bullas;38.03664;-1.670191;sin nombre en OpenStreetMap
+descartado;node/12351076302;;;San Pedro del Pinatar;37.831116;-0.788907;sin nombre en OpenStreetMap
+descartado;node/12415922484;;;San Pedro del Pinatar;37.83319;-0.794369;sin nombre en OpenStreetMap
+descartado;node/13165920169;;;Cartagena;37.670421;-0.823535;sin nombre en OpenStreetMap
+descartado;node/13372401114;;Mercado Municipal Central;Yecla;38.612221;-1.117143;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/13395134880;;;San Pedro del Pinatar;37.829094;-0.802137;sin nombre en OpenStreetMap
+descartado;node/13395140458;;;San Pedro del Pinatar;37.836995;-0.790666;sin nombre en OpenStreetMap
+descartado;node/13395162442;;;San Pedro del Pinatar;37.832844;-0.794806;sin nombre en OpenStreetMap
+descartado;node/13428410501;;;Molina de Segura;38.052989;-1.214485;sin nombre en OpenStreetMap
+descartado;node/13464926246;;Supeemercado;Cartagena;37.648663;-0.868143;duplicado en el lote de node/13464882143 (69 m)
+descartado;node/13503857347;;;Mazarrón;37.572142;-1.267189;sin nombre en OpenStreetMap
+descartado;node/1389767573;;Carrefour;San Javier;37.81987;-0.812765;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/14240404005;;;Murcia;37.867061;-1.10675;sin nombre en OpenStreetMap
+descartado;node/1604657173;;;Águilas;37.403171;-1.579763;sin nombre en OpenStreetMap
+descartado;node/1825094651;;;Águilas;37.434077;-1.504153;sin nombre en OpenStreetMap
+descartado;node/1939128393;;;Murcia;37.940171;-1.141568;sin nombre en OpenStreetMap
+descartado;node/1939128408;;;Murcia;37.941461;-1.140783;sin nombre en OpenStreetMap
+descartado;node/2087452763;;;San Javier;37.797789;-0.806841;sin nombre en OpenStreetMap
+descartado;node/2318289656;;Mercadona;Murcia;37.993123;-1.128882;duplicado en el lote de node/2318289539 (78 m)
+descartado;node/2329292750;;Carrefour;Cartagena;37.625389;-0.947797;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/2432185322;;Juzgados;Jumilla;38.472425;-1.323517;nombre generico o dudoso en OpenStreetMap: Juzgados
+descartado;node/2550747184;;;Cartagena;37.615569;-1.020623;sin nombre en OpenStreetMap
+descartado;node/2618477312;;Mercadona;Cartagena;37.609644;-0.988971;duplicado en el lote de node/2618477150 (80 m)
+descartado;node/281675234;;;San Javier;37.797194;-0.806925;sin nombre en OpenStreetMap
+descartado;node/281675378;;;San Javier;37.797655;-0.80738;sin nombre en OpenStreetMap
+descartado;node/3048960151;;Supermercado;Cartagena;37.647561;-0.714869;nombre generico o dudoso en OpenStreetMap: Supermercado
+descartado;node/313491751;;Carrefour;Murcia;37.980634;-1.11231;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/3561970979;;;Murcia;37.945222;-1.111006;sin nombre en OpenStreetMap
+descartado;node/3600350519;;Mercadona;Cartagena;37.606304;-0.993027;duplicado en el lote de node/2735416112 (72 m)
+descartado;node/3983787919;;Juzgado de Paz;Torre Pacheco;37.741867;-0.955366;duplicado en el lote de node/3905141184 (112 m)
+descartado;node/4778704582;;Consum;Murcia;37.988145;-1.139152;duplicado en el lote de node/4633441790 (56 m)
+descartado;node/4916568960;;Centro de Salud Mental Murcia-Este;Murcia;37.983995;-1.119959;texto excluido (mental|veterinari|dental|fisioterap|rehabilitaci)
+descartado;node/4944768621;;Supermercado;Murcia;37.971614;-1.12594;nombre generico o dudoso en OpenStreetMap: Supermercado
+descartado;node/5036852883;;Juzgado;Abarán;38.202878;-1.400426;nombre generico o dudoso en OpenStreetMap: Juzgado
+descartado;node/5136074065;;Mercado de Abastos;Pliego;37.991026;-1.507488;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/5343011304;;Mercadona;Murcia;37.975641;-1.125974;duplicado en el lote de node/5343006451 (61 m)
+descartado;node/5677898128;;;Murcia;37.976889;-1.178247;sin nombre en OpenStreetMap
+descartado;node/617137186;;Carrefour;Cartagena;37.607723;-0.975276;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/6355782716;;Mercadona;Murcia;37.984434;-1.132007;duplicado en el lote de node/5360485834 (24 m)
+descartado;node/7172943535;;Carrefour;Murcia;37.99145;-1.112638;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/780172124;;Leroy Merlin;Murcia;38.038169;-1.151742;texto excluido (leroy merlin|click|recogida)
+descartado;node/7882196214;;Carrefour;Lorca;37.634305;-1.700158;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/811067372;;Carrefour;Murcia;38.00158;-1.142173;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/8533617043;;;Murcia;38.005351;-1.107816;sin nombre en OpenStreetMap
+descartado;node/9160856244;;Mercadona;Murcia;37.992845;-1.129595;duplicado en el lote de node/2318289539 (20 m)
+descartado;node/9430862979;;Centro de Salud Mental;Alcantarilla;37.970125;-1.206387;texto excluido (mental|veterinari|dental|fisioterap|rehabilitaci)
+descartado;node/9670176728;;Dialprix;Los Alcázares;37.738756;-0.851006;duplicado en el lote de node/2433918174 (22 m)
+descartado;relation/1887767;;;Murcia;38.029651;-1.145385;sin nombre en OpenStreetMap
+descartado;relation/9383038;;Leroy Merlin;Murcia;37.938247;-1.150251;texto excluido (leroy merlin|click|recogida)
+descartado;way/1000920378;;;Alhama de Murcia;37.847437;-1.430486;sin nombre en OpenStreetMap
+descartado;way/1002257834;;;Alhama de Murcia;37.855015;-1.429817;sin nombre en OpenStreetMap
+descartado;way/1057691684;;Mercadona;Murcia;38.007809;-1.15169;duplicado en el lote de node/1597495435 (6 m)
+descartado;way/1070613102;;;Murcia;37.964982;-1.183794;sin nombre en OpenStreetMap
+descartado;way/125492862;;Punta Galera;Los Alcázares;37.756684;-0.833242;duplicado en el lote de way/125492861 (62 m)
+descartado;way/1258297531;;Dia;La Unión;37.620827;-0.876132;duplicado en el lote de node/3060601864 (14 m)
+descartado;way/1265254307;;Juzgados;Jumilla;38.472453;-1.323503;duplicado en el lote de node/2432185322 (3 m)
+descartado;way/1303129949;;;Caravaca de la Cruz;38.095205;-1.866585;sin nombre en OpenStreetMap
+descartado;way/136786563;;Carrefour Express;Murcia;37.949438;-1.156695;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/1534208836;;;Santomera;38.063898;-1.05215;sin nombre en OpenStreetMap
+descartado;way/154035824;;Centro de Salud;Archena;38.11982;-1.302128;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/155183257;;Centro de Salud;Archena;38.107048;-1.290272;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/1564542999;;Cruz Roja;Águilas;37.402057;-1.591675;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa|^cruz roja|minusv[aá]lidos|centro de d[ií]a)
+descartado;way/165355952;;Centro de Salud Mental;Lorca;37.663502;-1.696089;texto excluido (mental|veterinari|dental|fisioterap|rehabilitaci)
+descartado;way/165356883;;Juzgados;Lorca;37.676739;-1.700089;nombre generico o dudoso en OpenStreetMap: Juzgados
+descartado;way/183313877;;Centro de Salud;Alhama de Murcia;37.851576;-1.430565;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/198268864;;;San Javier;37.808379;-0.831792;sin nombre en OpenStreetMap
+descartado;way/198268867;;;San Javier;37.808078;-0.832332;sin nombre en OpenStreetMap
+descartado;way/221607817;;;Cartagena;37.618549;-0.981897;sin nombre en OpenStreetMap
+descartado;way/221607821;;;Cartagena;37.616781;-0.982046;sin nombre en OpenStreetMap
+descartado;way/235306706;;Centro de Salud;Blanca;38.178618;-1.37018;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/263505862;;Lidl;Los Alcázares;37.758253;-0.846675;duplicado en el lote de node/1249889595 (9 m)
+descartado;way/265760951;;Centro de Salud Mental Vicente Campillo;Molina de Segura;38.059799;-1.210794;texto excluido (mental|veterinari|dental|fisioterap|rehabilitaci)
+descartado;way/274749102;;Centro de Salud Mental San Andrés;Murcia;37.985662;-1.140736;texto excluido (mental|veterinari|dental|fisioterap|rehabilitaci)
+descartado;way/401622331;;Spar;Torre Pacheco;37.748573;-0.950624;duplicado en el lote de node/4045610066 (99 m)
+descartado;way/403126329;;Centro de Salud;Ceutí;38.077919;-1.271565;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/463689716;;;Aledo;37.800649;-1.574403;sin nombre en OpenStreetMap
+descartado;way/464181213;;Centro de salud;Aledo;37.795403;-1.57278;nombre generico o dudoso en OpenStreetMap: Centro de salud
+descartado;way/477043755;;;Lorca;37.560883;-1.681291;sin nombre en OpenStreetMap
+descartado;way/48960438;;La Rambla Shopping;Cartagena;37.613969;-1.005759;etiqueta abandoned=yes
+descartado;way/508777362;;Centro de Salud;Puerto Lumbreras;37.561521;-1.808577;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/508796164;;Pabellón Municipal de Deportes y Piscina Cubierta;Puerto Lumbreras;37.54675;-1.813935;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/508798556;;Pabellón Polideportivo Escolar;Puerto Lumbreras;37.567763;-1.797423;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/511548573;;Pabellón de Deportes;Alhama de Murcia;37.855951;-1.416867;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/512953892;;Centro de Salud;Fuente Álamo de Murcia;37.722013;-1.177122;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/513074213;;Pabellón Municipal Javier Gómez Noya;Fuente Álamo de Murcia;37.727639;-1.167894;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/513074214;;Piscina Municipal Cubierta;Fuente Álamo de Murcia;37.727803;-1.16739;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/515843207;;Pabellón de Deportes;Abarán;38.200466;-1.399688;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/515849278;;Centro de Salud;Abarán;38.204523;-1.403674;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/516450405;;Centro de Salud;Albudeite;38.027325;-1.384833;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/518033058;;;Blanca;38.178592;-1.367046;sin nombre en OpenStreetMap
+descartado;way/521309279;;Pabellón de Deportes;Ceutí;38.079416;-1.265431;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/521901361;;Centro de Salud;Fortuna;38.182539;-1.122901;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/522446783;;Pabellón de Deportes;Fortuna;38.183448;-1.127986;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/522446788;;Pabellón de Deportes;Fortuna;38.176969;-1.122792;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/522459265;;Pabellón de Deportes;Fortuna;38.183447;-1.132605;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/526851505;;Centro de Salud;Mula;38.037318;-1.49263;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/526851507;;Juzgados;Mula;38.035784;-1.489483;nombre generico o dudoso en OpenStreetMap: Juzgados
+descartado;way/529173566;;Centro de Salud;Pliego;37.993413;-1.507685;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/529246875;;Centro de Salud;Ricote;38.152545;-1.36296;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/531324626;;Centro de Salud;Las Torres de Cotillas;38.025438;-1.244481;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/531513717;;Pabellón de Deportes;Las Torres de Cotillas;38.025845;-1.238953;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/531746426;;Pabellón de Deportes;Las Torres de Cotillas;38.01914;-1.238044;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal)
+descartado;way/546214072;;Dialprix;Moratalla;38.187043;-1.890266;duplicado en el lote de node/4777193726 (8 m)
+descartado;way/572760586;;;Moratalla;38.199547;-1.857029;sin nombre en OpenStreetMap
+descartado;way/57816982;;;Cartagena;37.623775;-0.95204;sin nombre en OpenStreetMap
+descartado;way/57816985;;Leroy Merlin;Cartagena;37.624196;-0.947848;texto excluido (leroy merlin|click|recogida)
+descartado;way/58275990;;Centro de Salud;Moratalla;38.189827;-1.892401;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/749626387;;;Murcia;38.000745;-1.140601;sin nombre en OpenStreetMap
+descartado;way/881708893;;;Caravaca de la Cruz;38.099426;-1.868425;sin nombre en OpenStreetMap
+descartado;way/918801220;;Centro de Salud;Murcia;38.024904;-1.094459;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/99704266;;;Cartagena;37.616621;-1.023997;sin nombre en OpenStreetMap
+descartado;way/997234790;;;Alhama de Murcia;37.842216;-1.433835;sin nombre en OpenStreetMap
