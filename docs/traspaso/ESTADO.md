@@ -99,4 +99,4 @@ Cargada en producción (174 municipios, 246 puntos) y provincia activada. Códig
 
 ## Murcia (23/10/2026)
 
-Cargada en producción (45 municipios, 782 puntos; 6 archivados por no corresponder a su categoría). Total de la base: 8.155 puntos. Sin asignar a usuarios por decisión del titular hasta terminar toda España. Pendientes: 334 códigos postales y 49 calles. Detalle en `docs/CARGA_N2_MURCIA.md`.
+Cargada en producción (45 municipios, 782 puntos; 6 archivados por no corresponder a su categoría). Total de la base: 8.155 puntos. Sin asignar a usuarios por decisión del titular hasta terminar toda España. Códigos postales y calles completados (223 y 17); pendientes 111 códigos y 31 calles. Detalle en `docs/CARGA_N2_MURCIA.md`.
