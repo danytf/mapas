@@ -279,10 +279,22 @@ const T = "2026-10-23";
   eq(R.diffRel(base, cur).map((o) => o.t), ["insGrant"]);
   cur = copia(); cur.hist = cur.hist.filter((h) => h.id !== "gr-2"); cur.sols = cur.sols.filter((x) => x.id !== "app-3");
   eq(R.diffRel(base, cur).map((o) => o.t).sort(), ["delApp", "delGrant"]);
+  // responsable y siguiente acción del seguimiento
+  const conResp = R.relListas(apps, grants, [{ id: "fu-1", establishment_id: E, application_id: "app-1", due_on: "2026-10-30", completed_at: null, assigned_to: "user-1", next_action: "Llamar" }]).get(E);
+  const sr = conResp.solicitudes.find((x) => x.id === "app-1");
+  eq([sr.resp, sr.accion], ["user-1", "Llamar"]);
+  cur = JSON.parse(JSON.stringify({ sols: conResp.solicitudes, hist: conResp.historial }));
+  const base2 = JSON.parse(JSON.stringify(cur));
+  cur.sols.find((x) => x.id === "app-1").accion = "Enviar documentación";
+  eq(R.diffRel(base2, cur), [{ t: "fuSet", app: "app-1", fu: "fu-1", due: "2026-10-30", resp: "user-1", accion: "Enviar documentación" }]);
+  cur = JSON.parse(JSON.stringify(base2)); cur.sols.find((x) => x.id === "app-1").resp = "";
+  eq(R.diffRel(base2, cur).map((o) => o.resp), [""], "quitar el responsable actualiza el seguimiento");
+  cur = JSON.parse(JSON.stringify(base2)); cur.sols = [...cur.sols, { id: "n-2", desde: "2026-12-01", fecha: "2026-10-23", seg: "2026-11-01", resp: "user-1", accion: "Visitar" }];
+  eq(R.diffRel(base2, cur).filter((o) => o.t === "fuSet").map((o) => [o.resp, o.accion]), [["user-1", "Visitar"]]);
   // reabrir un seguimiento cerrado (deshacer)
   const cerrado = copia(); cerrado.sols[0].seg = ""; cerrado.sols[0].fu = "fu-1";
   cur = copia(); cur.sols[0].seg = "2026-10-30"; cur.sols[0].fu = "fu-1";
-  eq(R.diffRel({ sols: cerrado.sols, hist: cerrado.hist }, cur), [{ t: "fuSet", app: "app-1", fu: "fu-1", due: "2026-10-30" }]);
+  eq(R.diffRel({ sols: cerrado.sols, hist: cerrado.hist }, cur), [{ t: "fuSet", app: "app-1", fu: "fu-1", due: "2026-10-30", resp: "", accion: "" }]);
 }
 
 console.log("Reglas de expedientes: " + n + " comprobaciones correctas.");
