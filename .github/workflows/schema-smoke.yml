@@ -155,6 +155,8 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261018232107_admin_list_users_private_wrapper.sql
       - name: Add bulk postal code function for administrators
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261019191833_admin_set_postal_codes.sql
+      - name: Add permit lifecycle (decision data, atomic approval, assignee check)
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261023160115_permit_workflow.sql
       - name: Verify every migration file is applied by this workflow
         shell: bash
         run: |
@@ -182,5 +184,9 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/admin_panel.sql
       - name: Run bulk postal code tests
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/admin_postal_codes.sql
+      - name: Run permit lifecycle tests
+        run: psql -v ON_ERROR_STOP=1 -f supabase/tests/permit_workflow.sql
+      - name: Run permit backfill and reconciliation tests
+        run: psql -v ON_ERROR_STOP=1 -f supabase/tests/permit_backfill.sql
       - name: Run exhaustive authorization matrix
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/rls_matrix.sql
