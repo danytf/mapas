@@ -40,7 +40,8 @@ end $$;
 
 select pg_temp.as_user('e2', format('insert into as_seen select * from public.list_establishment_assignees(%L)', pg_temp.u('a1')));
 select pg_temp.check('un usuario de Granada ve a los administradores y a los usuarios activos de Granada',
-  (select count(*) = 3 from as_seen where id in (pg_temp.u('e1'), pg_temp.u('e2'), pg_temp.u('e3'))) and (select count(*) = 3 from as_seen), (select count(*)::text from as_seen));
+  (select count(*) = 3 from as_seen where id in (pg_temp.u('e1'), pg_temp.u('e2'), pg_temp.u('e3')))
+  and not exists (select 1 from as_seen a join public.profiles p on p.id = a.id where p.role <> 'admin' and a.id not in (pg_temp.u('e2'), pg_temp.u('e3'))), (select count(*)::text from as_seen));
 select pg_temp.check('no aparecen usuarios de otra provincia ni inactivos', not exists (select 1 from as_seen where id in (pg_temp.u('e4'), pg_temp.u('e5'))));
 select pg_temp.check('la etiqueta es el nombre, o la parte local del correo',
   (select label from as_seen where id = pg_temp.u('e2')) = 'Ana Dos' and (select label from as_seen where id = pg_temp.u('e3')) = 'tres.as', (select string_agg(label, ',') from as_seen));
