@@ -1,4 +1,4 @@
--- Pruebas de la baja de un usuario que resolvió solicitudes (migración 20261025205500_allow_resolver_set_null_on_profile_delete). Una transacción que termina en ROLLBACK.
+-- Pruebas de la baja de un usuario que resolvió solicitudes (migración 20261025212400_allow_resolver_set_null_on_profile_delete). Una transacción que termina en ROLLBACK.
 -- Ejecución: psql -v ON_ERROR_STOP=1 -f supabase/tests/profile_delete_resolver.sql
 begin;
 
