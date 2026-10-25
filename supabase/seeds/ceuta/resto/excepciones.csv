@@ -1,0 +1,4 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/5062994852;;Carrefour;Ceuta;35.893705;-5.329069;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/249895535;;Supeco;Ceuta;35.890945;-5.319462;duplicado en el lote de node/12697009418 (13 m)
+descartado;way/849589467;;Juzgados;Ceuta;35.886927;-5.310198;nombre generico o dudoso en OpenStreetMap: Juzgados

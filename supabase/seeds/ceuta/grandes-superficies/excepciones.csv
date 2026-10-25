@@ -1,0 +1,3 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;way/249895527;;Decathlon;Ceuta;35.893436;-5.323068;duplicado en el lote de node/12697009416 (59 m)
+descartado;way/249895528;;El Corte Inglés Outlet;Ceuta;35.89082;-5.318065;texto excluido (supercor|opencor|viajes|seguros|bricolaje|gourmet|outlet|aparcamiento|parking)
