@@ -298,7 +298,7 @@ const T = "2026-10-23";
     { id: "fp-3", establishment_id: E, application_id: null, grant_id: null, due_on: "2026-10-01", completed_at: "2026-10-02T10:00:00+00:00" }
   ]).get(E);
   eq(lp.punto, { fecha: "2026-10-28", fu: "fp-2", accion: "", resp: "" }, "el seguimiento del punto es el abierto más próximo; los cerrados no cuentan");
-  eq(R.diffRel({ sols: [], hist: [], punto: lp.punto }, { sols: [], hist: [], punto: undefined }), [{ t: "fuDone", fu: "fp-2" }], "marcar hecho cierra el seguimiento del punto");
+  eq(R.diffRel({ sols: [], hist: [], punto: lp.punto }, { sols: [], hist: [], punto: undefined }), [{ t: "fuDone", fu: "fp-2", punto: true }], "marcar hecho cierra el seguimiento del punto");
   eq(R.diffRel({ sols: [], hist: [], punto: lp.punto }, { sols: [], hist: [], punto: { ...lp.punto } }), [], "sin cambios, sin operaciones");
   eq(R.diffRel({ sols: [], hist: [], punto: lp.punto }, { sols: [], hist: [], punto: { ...lp.punto, fecha: "2026-11-02" } }).map((o) => [o.t, o.due, o.app]), [["fuSet", "2026-11-02", ""]]);
   // reabrir un seguimiento cerrado (deshacer)
@@ -485,6 +485,56 @@ const T = "2026-10-23";
   eq(v([{ t: "fuSet", fu: "", app: "g1", due: "2026-10-30", resp: "u1", accion: "X" }], base([], [con({ seg: "2026-10-30", resp: "u1", accion: "X" })])), [], "un seguimiento nuevo de una concesión que aparece sí");
   eq(v([{ t: "fuSet", fu: "", app: "", due: "2026-10-30", resp: "", accion: "" }], base()), ["fuSet"], "un seguimiento del punto que no aparece no vale");
   eq(v([{ t: "fuSet", fu: "", app: "", due: "2026-10-30", resp: "", accion: "" }], base([], [], { fu: "fp", fecha: "2026-10-30" })), [], "un seguimiento del punto que aparece sí");
+}
+
+// Cierre de auditoría (25/10/2026): seguimientos ligados directamente a una concesión (grant_id, sin application_id). No deben confundirse con el seguimiento
+// del punto ni con el de una solicitud, ni al generar las operaciones ni al verificarlas contra lo releído.
+{
+  const R = reglas("2026-10-25T10:00:00Z"), v = R.verificaOps, d = R.diffRel;
+  const con = (o) => Object.assign({ id: "g1", ver: "vg", desde: "2026-11-01", hasta: "2026-11-30", ong: "A", captadores: 2, alta: "2026-10-25", fu: "fg", fuver: "vfg", seg: "2026-11-02", resp: "u1", accion: "Llamar" }, o);
+  const punto = (o) => Object.assign({ fecha: "2026-11-05", fu: "fp", fuver: "vfp", accion: "Revisar", resp: "u2" }, o);
+  const copia = (x) => JSON.parse(JSON.stringify(x));
+  for (const [nombre, p] of [["sin seguimiento del punto", undefined], ["con seguimiento del punto", punto()]]) {
+    const base = { sols: [], hist: [con()], punto: p }, cur = () => ({ sols: [], hist: copia(base.hist), punto: p && copia(p) });
+    let c = cur(); c.hist[0].seg = "2026-11-09";
+    eq(d(base, c), [{ t: "fuSet", app: "", fu: "fg", ver: "vfg", due: "2026-11-09", resp: "u1", accion: "Llamar" }], "reprogramar el seguimiento de la concesión, " + nombre + ": una sola operación, la de la concesión");
+    c = cur(); c.hist[0].resp = "u3";
+    eq(d(base, c).map((o) => [o.t, o.fu, o.resp]), [["fuSet", "fg", "u3"]], "cambiar solo el responsable de la concesión, " + nombre);
+    c = cur(); c.hist[0].seg = "";
+    eq(d(base, c), [{ t: "fuDone", fu: "fg", ver: "vfg" }], "cerrar el seguimiento de la concesión, " + nombre + ": no toca el del punto");
+    c = cur(); c.hist[0].seg = "2026-11-02";
+    eq(d(base, c), [], "sin cambios en la concesión, " + nombre + ": ninguna operación");
+    // Verificación contra lo releído
+    const op = { t: "fuSet", app: "", fu: "fg", ver: "vfg", due: "2026-11-09", resp: "u1", accion: "Llamar" };
+    eq(v([op], { sols: [], hist: [con({ seg: "2026-11-09" })], punto: p }), [], "verificar reprogramación correcta de la concesión, " + nombre);
+    eq(v([op], { sols: [], hist: [con({ seg: "2026-11-02" })], punto: p }), ["fuSet"], "…la fecha no cambió en la concesión, " + nombre);
+    eq(v([op], { sols: [], hist: [con({ seg: "2026-11-09", resp: "u9" })], punto: p }), ["fuSet"], "…otro responsable, " + nombre);
+    eq(v([op], { sols: [], hist: [con({ seg: "2026-11-09", accion: "Otra" })], punto: p }), ["fuSet"], "…otra acción, " + nombre);
+    eq(v([op], { sols: [], hist: [con({ seg: "" })], punto: p }), ["fuSet"], "…la concesión sigue sin seguimiento abierto, " + nombre);
+    eq(v([op], { sols: [], hist: [con({ seg: "2026-11-09", fu: "otro" })], punto: p }), ["fuSet"], "…el seguimiento releído es otro: no se puede confirmar, " + nombre);
+    eq(v([op], { sols: [], hist: [], punto: p }), ["fuSet"], "…la concesión ya no figura, " + nombre);
+    const cierra = { t: "fuDone", fu: "fg", ver: "vfg" };
+    eq(v([cierra], { sols: [], hist: [con({ seg: "" })], punto: p }), [], "verificar cierre correcto, " + nombre);
+    eq(v([cierra], { sols: [], hist: [con()], punto: p }), ["fuDone"], "…sigue abierto, " + nombre);
+  }
+  // La fecha del seguimiento del punto no puede dar por bueno un seguimiento de concesión que no coincide.
+  eq(v([{ t: "fuSet", app: "", fu: "fg", due: "2026-11-09", resp: "u1", accion: "Llamar" }], { sols: [], hist: [con({ seg: "2026-11-02" })], punto: punto({ fecha: "2026-11-09" }) }), ["fuSet"], "un seguimiento del punto con la misma fecha no enmascara un fallo de la concesión");
+  // Concesión sin seguimiento previo: no hay alta de seguimiento de concesión; poner fecha no genera operaciones (ni una falsa del punto).
+  const base2 = { sols: [], hist: [con({ fu: "", fuver: "", seg: "", resp: "", accion: "" })], punto: punto() }, cur2 = copia(base2); cur2.hist[0].seg = "2026-11-12";
+  eq(d(base2, cur2), [], "una concesión sin seguimiento previo no genera una operación del punto al ponerle fecha");
+  // El seguimiento del punto sigue su camino sin tocar el de la concesión.
+  const base3 = { sols: [], hist: [con()], punto: punto() }, cur3 = copia(base3); cur3.punto.fecha = "2026-11-20";
+  eq(d(base3, cur3).map((o) => [o.t, o.fu, o.due]), [["fuSet", "fp", "2026-11-20"]], "cambiar el seguimiento del punto no toca el de la concesión");
+  // Varios seguimientos del punto abiertos en la base: la aplicación solo carga el más próximo. Si el editado deja de ser ese, solo se acepta que otro anterior o igual lo oculte.
+  const opPunto = { t: "fuSet", app: "", fu: "fp", due: "2026-11-05", resp: "u2", accion: "Revisar", punto: true };
+  eq(v([opPunto], { sols: [], hist: [], punto: punto({ fu: "otro", fecha: "2026-10-25" }) }), [], "el seguimiento del punto editado queda oculto por otro anterior: se acepta");
+  eq(v([opPunto], { sols: [], hist: [], punto: punto({ fu: "otro", fecha: "2026-12-01" }) }), ["fuSet"], "…pero no si el que se ve es posterior (el editado debería verse)");
+  eq(v([opPunto], { sols: [], hist: [], punto: undefined }), ["fuSet"], "…ni si ya no hay ningún seguimiento del punto");
+  eq(v([{ t: "fuSet", app: "", fu: "fg", due: "2026-11-05", resp: "u1", accion: "Llamar" }], { sols: [], hist: [], punto: punto({ fu: "otro", fecha: "2026-10-25" }) }), ["fuSet"], "la tolerancia es solo del punto: un seguimiento de concesión que no aparece sigue siendo un fallo");
+  // Seguimientos de solicitud y concesión del mismo punto a la vez: cada operación apunta a su propio seguimiento.
+  const s1 = { id: "s1", ver: "vs", desde: "2026-11-01", hasta: "2026-11-05", ong: "A", captadores: 2, fecha: "2026-10-25", fu: "fs", fuver: "vfs", seg: "2026-10-30", resp: "u1", accion: "X" };
+  const base4 = { sols: [s1], hist: [con()], punto: punto() }, cur4 = copia(base4); cur4.sols[0].seg = "2026-11-03"; cur4.hist[0].seg = "2026-11-04"; cur4.punto.fecha = "2026-11-06";
+  eq(d(base4, cur4).map((o) => o.fu).sort(), ["fg", "fp", "fs"], "tres seguimientos distintos: cada operación lleva el identificador del suyo");
 }
 
 console.log("Reglas de expedientes: " + n + " comprobaciones correctas.");

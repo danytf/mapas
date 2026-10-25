@@ -1800,7 +1800,7 @@ const savePermits = async (c) => {
     if (result === "ok" && !releido) result = "error";
     if (result === "ok") {
       const mal = verificaOps(ops, relBase.get(key) || { sols: [], hist: [] });
-      if (mal.length) { console.error("[Mapa] La relectura no coincide con lo guardado:", mal); estadoOps.noVerificadas = mal; result = "error"; }
+      if (mal.length) { console.error("[Mapa] La relectura no coincide con lo guardado: " + mal.join(", ")); estadoOps.noVerificadas = mal; result = "error"; }
     }
     ultimoGuardado = estadoOps;
     if (result !== "ok") {
@@ -2257,8 +2257,8 @@ const diffRel = (base, cur) => {
   });
   base.hist.forEach((b) => { if (!ch.has(b.id)) ops.push({ t: "delGrant", id: b.id }); });
   const bp = base.punto, cp = cur.punto;
-  if (bp && !cp) ops.push({ t: "fuDone", fu: bp.fu, ver: bp.fuver });
-  else if (cp && (!bp || cp.fecha !== bp.fecha || (cp.accion || "") !== (bp.accion || "") || (cp.resp || "") !== (bp.resp || ""))) ops.push({ t: "fuSet", app: "", fu: bp ? bp.fu : "", ver: bp ? bp.fuver : undefined, due: cp.fecha, resp: cp.resp || "", accion: cp.accion || "" });
+  if (bp && !cp) ops.push({ t: "fuDone", fu: bp.fu, ver: bp.fuver, punto: true });
+  else if (cp && (!bp || cp.fecha !== bp.fecha || (cp.accion || "") !== (bp.accion || "") || (cp.resp || "") !== (bp.resp || ""))) ops.push({ t: "fuSet", app: "", fu: bp ? bp.fu : "", ver: bp ? bp.fuver : undefined, due: cp.fecha, resp: cp.resp || "", accion: cp.accion || "", punto: true });
   return ops;
 };
 /* Tras escribir, la base se relee y cada operación se comprueba contra lo leído: que el alta exista, que lo aprobado tenga su concesión enlazada,
@@ -2284,7 +2284,12 @@ const verificaOps = (ops, base) => {
     else if (op.t === "delGrant" && hist.has(g)) mal.push(op.t);
     else if (op.t === "fuDone") { const f = op.fu ? porFu(op.fu) : null; if (f && fechaFu(f)) mal.push(op.t); } /* cerrado: ya no figura abierto */
     else if (op.t === "fuSet") {
-      if (op.fu) { const f = porFu(op.fu); if (f && (fechaFu(f) !== op.due || (f.resp || "") !== (op.resp || "") || (f.accion || "") !== (op.accion || ""))) mal.push(op.t); } /* reprogramado: fecha, responsable y acción */
+      if (op.fu && ops.some((o) => o.t === "fuDone" && o.fu === op.fu)) { /* lo decide el cierre del mismo seguimiento */ }
+      else if (op.fu) {
+        const f = porFu(op.fu);
+        /* Un punto puede tener varios seguimientos abiertos en la base, pero la aplicación solo carga el más próximo: si el editado ya no es ese, no se puede releer; vale solo si el que se ve es anterior o igual. */
+        if (!f && op.punto && base.punto && base.punto.fecha <= op.due) return;
+        if (!f || (fechaFu(f) !== op.due || (f.resp || "") !== (op.resp || "") || (f.accion || "") !== (op.accion || ""))) mal.push(op.t); } /* reprogramado: fecha, responsable y acción */
       else if (op.app) { const x = sols.get(op.app) || hist.get(op.app); if (!x || fechaFu(x) !== op.due || (x.resp || "") !== (op.resp || "") || (x.accion || "") !== (op.accion || "")) mal.push(op.t); } /* alta de seguimiento de una solicitud o concesión */
       else if (!base.punto || base.punto.fecha > op.due) mal.push(op.t); /* alta de seguimiento del punto */
     }
