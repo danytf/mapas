@@ -8,7 +8,7 @@ import json
 import os
 from collections import defaultdict
 
-PROV = {"04": "Almería", "06": "Badajoz", "08": "Barcelona", "10": "Cáceres", "11": "Cádiz", "14": "Córdoba", "17": "Girona", "18": "Granada", "21": "Huelva", "23": "Jaén", "25": "Lleida", "26": "La Rioja", "29": "Málaga", "30": "Murcia", "33": "Asturias", "35": "Las Palmas", "38": "Santa Cruz de Tenerife", "39": "Cantabria", "41": "Sevilla", "43": "Tarragona", "51": "Ceuta"}
+PROV = {"04": "Almería", "06": "Badajoz", "08": "Barcelona", "10": "Cáceres", "11": "Cádiz", "14": "Córdoba", "17": "Girona", "18": "Granada", "21": "Huelva", "23": "Jaén", "25": "Lleida", "26": "La Rioja", "29": "Málaga", "30": "Murcia", "33": "Asturias", "35": "Las Palmas", "38": "Santa Cruz de Tenerife", "39": "Cantabria", "41": "Sevilla", "43": "Tarragona", "51": "Ceuta", "52": "Melilla"}
 
 ap = argparse.ArgumentParser()
 ap.add_argument("validados")
