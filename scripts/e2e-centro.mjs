@@ -85,6 +85,7 @@ const main = async () => {
     const out = { vistas: {}, cabeceras: [] };
     const CAP = { res: 'Resumen', sol: 'Solicitudes', con: 'Concesiones', seg: 'Seguimientos', inc: 'Avisos de datos' };
     out.nav = [...b().querySelectorAll('#ceNav button')].map(x => x.innerText.replace(/\\n/g,' '));
+    out.ayudaNav = [...b().querySelectorAll('#ceNav button')].filter(x => x.querySelector('.n')).map(x => [x.getAttribute('aria-label'), x.title, x.querySelector('.n').textContent, x.querySelector('.n').hidden]);
     out.kpis = b().querySelectorAll('.ce-kpis .kpi').length; out.svgs = b().querySelectorAll('svg.ce-svg').length; out.cards = b().querySelectorAll('.ce-card').length;
     for (const v of ['res','sol','con','seg','inc']) {
       nav(v); await w(250); const info = { caption: b().querySelector('#ceList table caption')?.textContent || null, estados: 0, descuadres: [], detalle: false };
@@ -105,7 +106,7 @@ const main = async () => {
       out.vistas[v] = info;
     }
     return out;`);
-  eq(r1.nav.length, 5, "cinco secciones de navegación"); ok(r1.kpis === 6 && r1.svgs >= 3 && r1.cards >= 8, "el Resumen tiene sus indicadores, gráficos y tarjetas");
+  eq(r1.nav.length, 5, "cinco secciones de navegación"); ok(r1.ayudaNav.length === 4 && r1.ayudaNav.every(([al, ti, n, oculto]) => (oculto ? /^0 / : new RegExp("^" + n + " ")).test(ti) && /^(Solicitudes|Concesiones|Seguimientos|Avisos de datos): /.test(al) && al.endsWith(ti)), "cada número de la navegación dice qué cuenta (ayuda y etiqueta accesible)"); ok(r1.ayudaNav.some(([al]) => /^Concesiones: \d+ vigentes? hoy$/.test(al)), "Concesiones cuenta las vigentes hoy"); ok(r1.kpis === 6 && r1.svgs >= 3 && r1.cards >= 8, "el Resumen tiene sus indicadores, gráficos y tarjetas");
   for (const v of ["sol", "con", "seg", "inc"]) { ok(r1.vistas[v].estados >= 4, v + ": se recorrieron sus estados"); ok(r1.vistas[v].detalle, v + ": el detalle se abre"); eq(r1.vistas[v].descuadres, [], v + ": el número de cada estado coincide con las filas"); }
   eq(r1.cabeceras, [], "cada vista dibuja su propia tabla (no la de la vista anterior)");
 
