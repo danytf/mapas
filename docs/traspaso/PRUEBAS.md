@@ -25,6 +25,7 @@ node scripts/test-favoritos.mjs
 node scripts/test-tactil.mjs
 node scripts/test-paneles.mjs
 node scripts/test-escala.mjs
+node scripts/test-mapa-limites.mjs
 node scripts/test-expedientes.mjs
 node scripts/test-a11y-fase-d.mjs index.html          # contraste WCAG AA claro/oscuro, nombres, aria-live y foco (Fase D)
 ```

@@ -1385,7 +1385,9 @@ const $ = (s) => document.querySelector(s);
 let cache = {};
 const saveCache = () => {};
 
-const map = L.map("map", { zoomControl: true, maxZoom: 19 }).setView(SPAIN_CENTER, 6);
+// Recuadro que contiene España entera (península, Baleares, Canarias, Ceuta y Melilla). Al ser un solo rectángulo, deja ver parte de Marruecos, Portugal y Francia; solo evita perderse por el resto del mundo.
+const SPAIN_BOUNDS = L.latLngBounds([27.2, -18.9], [44.4, 5.0]);
+const map = L.map("map", { zoomControl: true, maxZoom: 19, minZoom: 5, maxBounds: SPAIN_BOUNDS, maxBoundsViscosity: 1.0 }).setView(SPAIN_CENTER, 6);
 const ATTR = "Tiles © Esri — Source: Esri, HERE, Garmin, OpenStreetMap contributors | Geocodificación: © Instituto Geográfico Nacional de España (CartoCiudad) | Ubicaciones: © colaboradores de OpenStreetMap (ODbL)";
 const esriTiles = (svc, o) => L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/" + svc + "/MapServer/tile/{z}/{y}/{x}", Object.assign({ maxZoom: 19, attribution: ATTR }, o || {}));
 /* Cartografía "Wesser": los mismos teselas de Esri (proveedor y atribución sin cambios), con el color de calles, zonas urbanas, verdes y agua
