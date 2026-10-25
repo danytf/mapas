@@ -590,6 +590,8 @@
   .cal-m .sg.late { color: var(--accent); font-weight: 600; }
   .cal-links { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 14px; font-size: var(--fs-label); color: var(--muted); }
   .cal-links button { height: 32px; padding: 0 13px; font-size: var(--fs-label); border-radius: var(--r-pill); }
+  .cal-new { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 12px 8px; }
+  .cal-new button { height: 28px; padding: 0 10px; font-size: var(--fs-label); border-radius: var(--r-pill); }
   .cal-modo { display: inline-flex; gap: 6px; margin-left: auto; }
   .cal-modo button { height: 32px; padding: 0 13px; font-size: var(--fs-label); border-radius: var(--r-pill); }
   .cal-modo button[aria-pressed="true"] { border-color: var(--fg); font-weight: 600; }
@@ -973,7 +975,8 @@
   .ce-chip { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0; font-size: var(--fs-label); color: var(--muted); }
   .ce-chip:empty { display: none; }
   .ce-aviso { margin: 0 0 8px; min-height: 1.2em; font-size: var(--fs-label); color: var(--fg); }
-  .ce-count { margin: 0 0 8px; color: var(--muted); font-size: var(--fs-label); }
+  .ce-count { margin: 0; color: var(--muted); font-size: var(--fs-label); }
+  .ce-listbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin: 0 0 8px; }
   .ce-more { margin: 12px 0 0; }
   @media (max-width: 1100px) { .ce-g3 { grid-template-columns: 1fr 1fr; } .ce-work.con-lado { grid-template-columns: minmax(0, 1fr) 330px; } }
   @media (max-width: 900px) {
@@ -1041,7 +1044,7 @@
     #ficha details.fi-loc > summary { min-height: 44px; }
     .lg-h button { min-height: 44px; }
     dialog input, dialog select, dialog button { min-height: 44px; }
-    .cal-nav button, .cal-chip, .cal-links button { min-height: 44px; }
+    .cal-nav button, .cal-chip, .cal-links button, .cal-new button { min-height: 44px; }
     .cal-m { min-height: 56px; padding: 4px 4px; }
     .cal-m .m, .cal-m .sg { font-size: var(--fs-label); }
     .cal-nav button { min-width: 44px; }
@@ -4320,6 +4323,7 @@ const csvCell = (value) => {
       return '<section class="cal-day' + (k >= 5 ? " we" : "") + (x.d === t ? " today" : "") + '" aria-labelledby="calH' + k + '">' +
         '<div class="cal-sky" aria-hidden="true">' + (pct ? '<div class="cal-stack" style="height:' + pct + '%">' + (pp2 ? '<i class="s" style="flex:' + pp2 + ' 1 0"></i>' : "") + (pa2 ? '<i class="c" style="flex:' + pa2 + ' 1 0"></i>' : "") + "</div>" : "") + "</div>" +
         '<h3 class="cal-hd" id="calH' + k + '"><span class="dn">' + DIAS[k] + '</span><span class="n">' + (+x.d.slice(8)) + '</span><span class="m">' + mesDe(x.d) + "</span>" + (x.d === t ? '<span class="hoy">Hoy</span>' : "") + "</h3>" +
+        '<p class="cal-new" role="group" aria-label="Crear el ' + esc(fmtD(x.d)) + '">' + (x.d >= t ? '<button type="button" data-nuevo="sol" data-nuevo-dia="' + x.d + '" aria-label="Nueva solicitud desde el ' + esc(fmtD(x.d)) + '">+ Solicitud</button>' : "") + '<button type="button" data-nuevo="con" data-nuevo-dia="' + x.d + '" aria-label="Nueva concesión desde el ' + esc(fmtD(x.d)) + '">+ Concesión</button></p>' +
         '<p class="cal-tot">' + (pa2 ? "<b>" + pa2 + "</b> autorizados" : "") + (pa2 && pp2 ? " · " : "") + (pp2 ? "<b>" + pp2 + "</b> por aprobar" : "") + (!pa2 && !pp2 ? "Sin captadores" : "") + "</p>" +
         (sg.length ? '<p class="cal-seg' + (x.d < t ? " late" : "") + '">' + esc(plural(sg.length, "seguimiento", "seguimientos")) + (x.d < t ? " atrasado" + (sg.length === 1 ? "" : "s") : "") + "</p>" : "") +
         '<ul class="cal-list">' + (arr.length || sg.length ? sg.map((s) => tarjetaSeg(s, t)).join("") + arr.map((i) => tarjeta(i, x.d, t)).join("") : '<li class="cal-empty">Sin permisos</li>') + "</ul></section>";
@@ -4396,6 +4400,8 @@ const csvCell = (value) => {
   body.addEventListener("click", (e) => {
     const cc = e.target.closest("[data-centro]");
     if (cc) { const [vista, est] = cc.dataset.centro.split(":"); dlg.close(); document.dispatchEvent(new CustomEvent("centro:abrir", { detail: { vista, est, prov, ong } })); return; }
+    const nv = e.target.closest("[data-nuevo]");
+    if (nv) { dlg.close(); document.dispatchEvent(new CustomEvent("centro:abrir", { detail: { vista: nv.dataset.nuevo === "sol" ? "sol" : "con", est: "todas", prov, ong, nuevo: nv.dataset.nuevo, desde: nv.dataset.nuevoDia } })); return; }
     const dd = e.target.closest("[data-dia]");
     if (dd) { wk = mondayOf(dd.dataset.dia); modo = "dias"; body.querySelectorAll("[data-modo]").forEach((b2) => b2.setAttribute("aria-pressed", String(b2.dataset.modo === modo))); draw(); return; }
     const w = e.target.closest("[data-w]");
@@ -4663,6 +4669,7 @@ const csvCell = (value) => {
     return arr.slice().sort((a, b) => sinFechaAlFinal(claveO(a) || "", claveO(b) || "", (x, y) => abierto ? antes(x, y) : antes(y, x)) || porPunto(a, b));
   };
   let filasVis = []; /* filas de la tabla en pantalla (para «Mostrar más» y la selección) */
+  let filasTodas = []; /* todas las filas que cumplen los filtros (para exportar) */
 
   /* === Gráficos (SVG y HTML, sin dependencias): marcas finas, extremos redondeados de 4 px, sin cuadrículas pesadas, colores validados en claro y oscuro === */
   const barraSvg = (x, y, w, h, r) => {
@@ -4876,6 +4883,29 @@ const csvCell = (value) => {
     draw();
   };
 
+  /* === Exportar a CSV lo que se ve (con los filtros), no solo las filas dibujadas === */
+  const exportaCsv = () => {
+    if (!filasTodas.length) return;
+    if (!window.confirm("El CSV incluye datos operativos (puntos, ONG, fechas y responsables) de las " + filasTodas.length + " filas de la lista. Guárdalo solo en una ubicación autorizada. ¿Quieres exportarlo?")) return;
+    const t = today(), yo = window.mapaSession?.user?.id || "", quien = (id) => !id ? "" : nombresPersona.get(id) || (id === yo ? "Yo" : "Persona sin nombre");
+    const base = (x) => [x.c.province || "", townOf(x.c), x.c.name, x.c.street || ""];
+    const iso = (d) => d || "";
+    const defs = {
+      sol: [["provincia", "municipio", "punto", "direccion", "ong", "desde", "hasta", "captadores", "estado", "solicitada", "resuelta", "motivo", "seguimiento", "responsable_seguimiento", "accion_seguimiento"],
+        (r) => { const o = rawDe(r) || {}; return base(r).concat([ongDe(r), iso(r.desde), iso(r.hasta), r.n || "", TEXTO[r.est], iso(r.fecha), iso(r.resFecha), r.motivo || "", iso(r.seg), quien(o.resp), o.accion || ""]); }],
+      con: [["provincia", "municipio", "punto", "direccion", "ong", "desde", "hasta", "captadores", "estado", "alta", "cancelada_el", "motivo", "solicitud_enlazada"],
+        (r) => base(r).concat([ongDe(r), iso(r.desde), iso(r.hasta), r.n || "", TEXTO[r.est], iso(r.fecha), r.est === "cancelada" ? iso(r.resFecha) : "", r.motivo || "", r.sol ? "sí" : "no"])],
+      seg: [["provincia", "municipio", "punto", "direccion", "ong", "fecha", "situacion", "dias_de_retraso", "accion", "responsable", "origen"],
+        (s) => { const dias = daysBetween(s.fecha, t); return base(s).concat([ongDe(s), iso(s.fecha), dias > 0 ? "atrasado" : dias === 0 ? "hoy" : "proximo", dias > 0 ? dias : 0, s.accion || "", quien(s.resp), s.con ? "concesión" : s.i >= 0 && !s.punto ? "solicitud pendiente" : "seguimiento del punto"]); }],
+      inc: [["gravedad", "aviso", "provincia", "municipio", "punto", "ong", "expediente", "periodo"],
+        (x) => [SEV[x.sev] || x.sev, x.tipo, x.r.c.province || "", townOf(x.r.c), x.r.c.name, ongDe(x.r), x.r.k === "sol" ? "solicitud" : "concesión", periodo(x.r)]]
+    };
+    const [cab, fila] = defs[vista];
+    const cuerpo = filasTodas.map((x) => fila(x).map(csvCell).join(";")).join("\r\n");
+    download("centro-" + slugName(NOMBRE[vista][1]) + "-" + exportScopeName() + "-" + t + ".csv", "\ufeff" + cab.join(";") + "\r\n" + cuerpo, "text/csv;charset=utf-8");
+    aviso = "CSV creado con " + plural(filasTodas.length, NOMBRE[vista][0], NOMBRE[vista][1]) + "."; body.querySelector("#ceAviso").textContent = aviso;
+  };
+
   /* === Pantalla principal === */
   const draw = () => {
     try { dibuja(); }
@@ -4945,7 +4975,8 @@ const csvCell = (value) => {
       seg: '<th class="ce-chk"><label class="ce-chkl"><input type="checkbox" id="ceChkTodos" aria-label="Seleccionar todos los seguimientos que se ven"' + (vista === "seg" && vis.length && vis.every((s) => multi.has(clave(s))) ? " checked" : "") + '></label></th><th>Punto</th><th>ONG</th><th>Fecha</th><th>Acción prevista</th><th>Responsable</th><th>Origen</th><th><span class="adm-sr">Acciones</span></th>',
       inc: "<th>Punto</th><th>Gravedad</th><th>Qué revisar</th><th>ONG</th><th>Expediente</th>"
     };
-    lista.innerHTML = '<p class="ce-count" role="status">' + esc(plural(filas.length, nombre[0], nombre[1]) + (filas.length > vis.length ? " · se muestran " + vis.length : "")) + "</p>" +
+    filasTodas = filas;
+    lista.innerHTML = '<div class="ce-listbar"><p class="ce-count" role="status">' + esc(plural(filas.length, nombre[0], nombre[1]) + (filas.length > vis.length ? " · se muestran " + vis.length : "")) + '</p><button type="button" class="ce-act" data-csv="1">Exportar CSV</button></div>' +
       '<div class="pn-scroll ce-tabla"><table><caption class="adm-sr">' + esc(TITULO[vista]) + "</caption><thead><tr>" + cabs[vista] + "</tr></thead><tbody>" +
       vis.map((x) => (vista === "sol" ? filaSol(x, t) : vista === "con" ? filaCon(x, t) : vista === "seg" ? filaSeg(x, t) : filaInc(x)) + (accion && vista !== "inc" && accion.key === clave(x) && sel !== clave(x) ? filaConf(COLS[vista]) : "")).join("") + "</tbody></table></div>" +
       (filas.length > vis.length ? '<p class="ce-more"><button type="button" data-mas="1">Mostrar ' + Math.min(TRAMO, filas.length - vis.length) + " más</button></p>" : "");
@@ -4968,6 +4999,7 @@ const csvCell = (value) => {
     const box = body.querySelector("#ceForm");
     if (!form) { box.hidden = true; box.innerHTML = ""; return; }
     const { tipo, c, r } = form, editar = !!r, o = r && (tipo === "sol" ? solsOf(permits[permitKey(c)])[ubica(solsOf(permits[permitKey(c)]), r)] : tipo === "con" ? ((permits[permitKey(c)] || {}).historial || [])[ubica((permits[permitKey(c)] || {}).historial || [], r)] : null) || {};
+    const pre = (!editar && form.pre) || {};
     const titulo = tipo === "seg" ? "Cambiar el seguimiento" : (editar ? "Editar " : "Nueva ") + (tipo === "sol" ? "solicitud" : "concesión");
     const sg = tipo === "seg" ? r : null;
     box.hidden = false;
@@ -4976,8 +5008,8 @@ const csvCell = (value) => {
         : '<div class="cf-pick"><label class="cf-f">Punto<input id="cfPunto" type="search" autocomplete="off" placeholder="Busca por nombre o municipio"></label><p id="cfElegido" class="cf-pt">' + (c ? "Punto: <strong>" + esc(c.name) + "</strong> · " + esc(townOf(c)) : "Ningún punto elegido") + '</p><p id="cfCuenta" class="cf-pt" role="status"></p><ul id="cfRes" class="cf-res"></ul></div>') +
       (tipo === "seg"
         ? '<div class="cf-row">' + campo("cfSeg", "Fecha del seguimiento", "date", sg.fecha) + campo("cfAccion", "Siguiente acción", "text", sg.accion || "", ' maxlength="200" autocomplete="off"') + '<label class="cf-f">Responsable<select id="cfResp"><option value="">Sin asignar</option></select></label></div>'
-        : '<div class="cf-row">' + campo("cfDesde", "Desde", "date", o.desde) + campo("cfHasta", "Hasta", "date", o.hasta) + campo("cfN", "Captadores", "number", o.captadores || "", ' min="1" step="1"') +
-          campo("cfOng", "ONG", "text", o.ong || "", ' list="ceOngList" autocomplete="off"') + "</div>" +
+        : '<div class="cf-row">' + campo("cfDesde", "Desde", "date", o.desde || pre.desde) + campo("cfHasta", "Hasta", "date", o.hasta || pre.hasta) + campo("cfN", "Captadores", "number", o.captadores || "", ' min="1" step="1"') +
+          campo("cfOng", "ONG", "text", o.ong || pre.ong || "", ' list="ceOngList" autocomplete="off"') + "</div>" +
           (tipo === "sol" && editar && o.res ? '<p class="cf-pt" id="cfSinSeg">Esta solicitud ya está resuelta (' + esc(o.res) + "): no tiene seguimiento pendiente. Los seguimientos de una concesión se gestionan desde Seguimientos.</p>" : "") +
           (tipo === "sol" && !(editar && o.res) ? '<div class="cf-row">' + campo("cfSeg", "Próximo seguimiento", "date", o.seg || "") + campo("cfAccion", "Siguiente acción", "text", o.accion || "", ' maxlength="200" autocomplete="off"') + '<label class="cf-f">Responsable del seguimiento<select id="cfResp"><option value="">Sin asignar</option></select></label></div>' : "") +
           '<div class="cf-row">' + campo("cfContacto", "Contacto de " + (tipo === "sol" ? "esta solicitud" : "esta concesión"), "text", o.contacto || "", ' maxlength="500" autocomplete="off"') +
@@ -5108,7 +5140,9 @@ const csvCell = (value) => {
       '<p class="cal-note">Aquí se tramitan las solicitudes, concesiones y seguimientos de todos los puntos. Las cifras son las del Panel resumen y el Calendario. Cada cambio se guarda en Supabase y solo se da por hecho cuando lo confirma. Una solicitud sin respuesta se marca como estancada a partir de ' + UMBRAL_ESTANCADA + " días; eso no cambia su estado.</p>";
     draw();
     if (!dlg.open) dlg.showModal();
-    body.querySelector("#ceNav [aria-current=page]").focus();
+    /* Desde un día del Calendario: formulario nuevo con la fecha de ese día ya puesta (y la ONG que se estaba filtrando). */
+    if (o && (o.nuevo === "sol" || o.nuevo === "con") && validIsoDate(o.desde)) { form = { tipo: o.nuevo, c: null, r: null, pre: { desde: o.desde, hasta: o.desde, ong: o.ong || "" } }; dibujaForm(); }
+    else body.querySelector("#ceNav [aria-current=page]").focus();
     precargaNombres();
   };
   const actuar = (b) => {
@@ -5156,6 +5190,7 @@ const csvCell = (value) => {
     if (e.target.closest("#cfCancelar")) { form = null; dibujaForm(); return; }
     const cf = e.target.closest("[data-conf]");
     if (cf) { if (cf.dataset.conf === "ok") confirma(); else { accion = null; draw(); } return; }
+    if (e.target.closest("[data-csv]")) { exportaCsv(); return; }
     const lt = e.target.closest("[data-lote]");
     if (lt) {
       const a = lt.dataset.lote;
