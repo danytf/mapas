@@ -32,6 +32,10 @@ on:
       - "scripts/test-paneles.mjs"
       - "scripts/test-escala.mjs"
       - "scripts/test-a11y-fase-d.mjs"
+      - "scripts/e2e-centro.mjs"
+      - "scripts/dev/seed-permits-demo.mjs"
+      - "scripts/dev/mock-supabase.mjs"
+      - "scripts/dev/build-mock-site.mjs"
       - ".github/workflows/audit-static-catalog.yml"
   pull_request:
   workflow_dispatch:
@@ -145,3 +149,21 @@ jobs:
           name: static-catalog-audit
           path: catalog-audit-output/
           if-no-files-found: error
+
+  # Prueba de extremo a extremo en un Chrome real contra el Supabase simulado: recorre el Centro como administrador, como usuario de una provincia y en un móvil,
+  # y falla ante cualquier excepción de la página. Es un trabajo aparte (no obligatorio en la protección de la rama) hasta comprobar que es estable en este entorno.
+  e2e-centro:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: E2E del Centro de permisos
+        run: node scripts/e2e-centro.mjs
+        env:
+          CI: "true"
+          CHROME_PATH: /usr/bin/google-chrome
