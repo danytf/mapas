@@ -1,4 +1,4 @@
--- Pruebas del borrado de solicitudes y concesiones con seguimientos (migración 20261025200000_followups_cascade_on_parent_delete). Una transacción que termina en ROLLBACK.
+-- Pruebas del borrado de solicitudes y concesiones con seguimientos (migración 20261025174656_followups_cascade_on_parent_delete). Una transacción que termina en ROLLBACK.
 -- Ejecución: psql -v ON_ERROR_STOP=1 -f supabase/tests/followups_cascade.sql
 begin;
 

@@ -164,7 +164,7 @@ jobs:
       - name: Make permit actions atomic (close follow-ups with the decision, create application with follow-up)
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261025170441_permit_atomic_followups.sql
       - name: Delete follow-ups with their application or grant (cascade)
-        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261025200000_followups_cascade_on_parent_delete.sql
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261025174656_followups_cascade_on_parent_delete.sql
       - name: Verify every migration file is applied by this workflow
         shell: bash
         run: |

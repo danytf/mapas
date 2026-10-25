@@ -241,7 +241,7 @@ select 'establishment_location_reviews', o.op, s.scope, s.scope,
 from (values ('select'),('update'),('delete'),('insert')) o(op)
 cross join (values ('G','e1','e3','d1'),('O','e2','e4','d2')) s(scope,row_sfx,del_sfx,est_sfx);
 
--- Borrar una solicitud o concesión con seguimientos: hasta la migración 20261025200000 se rechazaba incluso para administración (followups.application_id/grant_id son inmutables y la clave era SET NULL). Ahora la clave es CASCADE: la administración puede quitarla (los seguimientos se van con ella) y el resto sigue sin poder.
+-- Borrar una solicitud o concesión con seguimientos: hasta la migración 20261025174656 se rechazaba incluso para administración (followups.application_id/grant_id son inmutables y la clave era SET NULL). Ahora la clave es CASCADE: la administración puede quitarla (los seguimientos se van con ella) y el resto sigue sin poder.
 insert into matrix_cells (tbl, op, target, tprov, stmt) values
   ('permit_applications','delete_referenced','G','G','delete from public.permit_applications where id={e5}'),
   ('permit_grants','delete_referenced','G','G','delete from public.permit_grants where id={e5}');
