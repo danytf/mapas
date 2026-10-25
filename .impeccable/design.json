@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2026-10-19T14:30:00Z",
-  "title": "Design System: Mapa del Responsable de Gestión de Recursos de Wesser",
+  "title": "Design System: Centro de Gestión de Recursos de Wesser",
   "extensions": {
     "colorMeta": {
       "wesser-red": { "role": "primary", "displayName": "Rojo Wesser", "canonical": "#c8102e" },

@@ -1,4 +1,4 @@
-# Mapa del Responsable de Gestión de Recursos de Wesser
+# Centro de Gestión de Recursos de Wesser
 
 Lee este fichero entero al empezar y después `docs/traspaso/ESTADO.md` y `docs/traspaso/ROADMAP.md`. Con eso puedes continuar sin pedir contexto al titular (Dani). Idioma de trabajo y de la aplicación: español.
 
