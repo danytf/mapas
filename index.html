@@ -4536,6 +4536,7 @@ const csvCell = (value) => {
   };
   const ubica = (arr, r) => r.id ? arr.findIndex((x) => x.id === r.id) : r.i;
   const NOEXISTE = "No se encuentra ese registro: ya no está como lo viste. Revisa la lista y repite.";
+  const YA_ASIGNADO = "Ya tenía ese responsable: sin cambios.";
   const mutadores = {
     conceder: (r) => (copia) => {
       const x = copia.solicitudes[ubica(copia.solicitudes, r)]; if (!x) return NOEXISTE; if (x.res) return "Esa solicitud ya está resuelta.";
@@ -4563,6 +4564,14 @@ const csvCell = (value) => {
       else if (s.con) { const h = copia.historial[s.i]; if (!h || h.cancelada || !h.seg) return NOEXISTE; h.seg = ""; }
       else if (s.i >= 0) { const x = copia.solicitudes[s.i]; if (!x || x.res || !x.seg) return NOEXISTE; x.seg = ""; }
       else delete copia.seguimiento;
+    },
+    /* Asigna (o quita, con rs vacío) el responsable de un seguimiento abierto sin tocar su fecha ni su acción. */
+    asignarResp: (s, rs) => (copia) => {
+      if (!s.punto && !s.con && s.i < 0) return "Este seguimiento antiguo no admite responsable.";
+      const o = s.punto ? copia.segPunto : s.con ? copia.historial[s.i] : copia.solicitudes[s.i];
+      if (!o || (s.con && o.cancelada) || (!s.punto && !s.con && o.res) || (!s.punto && !o.seg)) return NOEXISTE;
+      if ((o.resp || "") === rs) return YA_ASIGNADO;
+      if (rs) o.resp = rs; else delete o.resp;
     },
     /* Cambia la fecha de un seguimiento; la acción y el responsable solo se cambian si se pasan (en una reprogramación en lote se conservan). */
     cambiarSeg: (s, fecha, ac, rs) => (copia) => {
@@ -4814,11 +4823,26 @@ const csvCell = (value) => {
     }
     const sels = [...multi].map((k) => indice.get(k)).filter(Boolean);
     if (lote && lote.fase === "confirmar") {
-      const que = lote.tipo === "hecho" ? "cerrar " + plural(sels.length, "seguimiento", "seguimientos") : "pasar " + plural(sels.length, "seguimiento", "seguimientos") + " al " + fmtD(lote.fecha);
+      const que = lote.tipo === "hecho" ? "cerrar " + plural(sels.length, "seguimiento", "seguimientos")
+        : lote.tipo === "resp" ? (lote.resp ? "asignar a " + (lote.resp === window.mapaSession?.user?.id ? "ti" : nombreResp(lote.resp)) : "dejar sin responsable") + " " + plural(sels.length, "seguimiento", "seguimientos")
+        : "pasar " + plural(sels.length, "seguimiento", "seguimientos") + " al " + fmtD(lote.fecha);
       box.innerHTML = '<div class="ce-lote"><strong>Vas a ' + esc(que) + '.</strong><p class="ce-def">Cada seguimiento se guarda y se comprueba por separado; si alguno ha cambiado o falla, se te dirá cuál y el resto sigue su curso. ' + esc("Puntos: " + [...new Set(sels.map((s) => s.c.name))].slice(0, 6).join(", ") + (new Set(sels.map((s) => s.c.id)).size > 6 ? "…" : "") + ".") + '</p><div class="ce-btns"><button type="button" class="ce-act ok" data-lote="ejecutar"' + (ocupado ? " disabled" : "") + '>Confirmar</button><button type="button" class="ce-act" data-lote="cancelar"' + (ocupado ? " disabled" : "") + ">Volver</button></div></div>";
       return;
     }
-    box.innerHTML = '<div class="ce-lote"><strong>' + esc(plural(n, "seguimiento seleccionado", "seguimientos seleccionados")) + '</strong><div class="ce-btns"><button type="button" class="ce-act ok" data-lote="hecho">Marcar como hechos</button><label class="ce-lotef">Reprogramar al <input type="date" id="ceLoteFecha" min="' + today() + '"></label><button type="button" class="ce-act" data-lote="rep">Reprogramar</button><button type="button" class="ce-act" data-lote="limpiar">Quitar selección</button></div></div>';
+    box.innerHTML = '<div class="ce-lote"><strong>' + esc(plural(n, "seguimiento seleccionado", "seguimientos seleccionados")) + '</strong><div class="ce-btns"><button type="button" class="ce-act ok" data-lote="hecho">Marcar como hechos</button><label class="ce-lotef">Reprogramar al <input type="date" id="ceLoteFecha" min="' + today() + '"></label><button type="button" class="ce-act" data-lote="rep">Reprogramar</button><label class="ce-lotef">Responsable <select id="ceLoteResp"><option value="__">Cargando…</option></select></label><button type="button" class="ce-act" data-lote="resp">Asignar responsable</button><button type="button" class="ce-act" data-lote="limpiar">Quitar selección</button></div></div>';
+    pintaRespLote(sels);
+  };
+  /* Responsables que valen para TODOS los puntos seleccionados (la base de datos solo admite a quien tiene acceso a la provincia del punto). */
+  let respLoteSel = "__", respLoteTok = 0;
+  const pintaRespLote = async (sels) => {
+    const tok = ++respLoteTok, sel2 = body.querySelector("#ceLoteResp"); if (!sel2) return;
+    const pts = [...new Map(sels.filter((s) => s.c.databaseId).map((s) => [s.c.databaseId, s.c])).values()];
+    const listas = await Promise.all(pts.map((c) => asignables.get(c.databaseId) || cargaAsignables(c)));
+    const el = body.querySelector("#ceLoteResp"); if (tok !== respLoteTok || !el) return;
+    const miId = window.mapaSession?.user?.id || "", comunes = listas.length ? listas[0].filter((r) => listas.every((l) => l.some((x) => x.id === r.id))) : [];
+    el.innerHTML = '<option value="__">Elige responsable…</option><option value="">Sin responsable</option>' + comunes.map((r) => '<option value="' + esc(r.id) + '">' + esc(r.id === miId ? r.label + " (yo)" : r.label) + "</option>").join("");
+    el.value = [...el.options].some((o) => o.value === respLoteSel) ? respLoteSel : "__";
+    if (listas.length > 1 && !comunes.length) el.options[0].textContent = "Ningún responsable vale para todos los puntos";
   };
   const ejecutaLote = async () => {
     if (ocupado || !lote || lote.fase !== "confirmar") return;
@@ -4829,10 +4853,11 @@ const csvCell = (value) => {
         const s = sels[i]; ultimoGuardado = {};
         aviso = "Guardando " + (i + 1) + " de " + sels.length + "…"; body.querySelector("#ceAviso").textContent = aviso;
         let r;
-        try { r = await aplica(s.c, lote.tipo === "hecho" ? mutadores.cerrarSeg(s) : mutadores.cambiarSeg(s, lote.fecha)); }
+        try { r = await aplica(s.c, lote.tipo === "hecho" ? mutadores.cerrarSeg(s) : lote.tipo === "resp" ? mutadores.asignarResp(s, lote.resp) : mutadores.cambiarSeg(s, lote.fecha)); }
         catch (e) { console.error(e); r = "error"; }
         tocados.add(s.c);
-        res.push({ nombre: s.c.name, ok: r === "ok", texto: textoResultado(s.c, r, lote.tipo === "hecho" ? "Cerrado" : "Reprogramado al " + fmtD(lote.fecha)) });
+        const sinCambios = r === YA_ASIGNADO;
+        res.push({ nombre: s.c.name, ok: r === "ok" || sinCambios, texto: sinCambios ? YA_ASIGNADO : textoResultado(s.c, r, lote.tipo === "hecho" ? "Cerrado" : lote.tipo === "resp" ? (lote.resp ? "Asignado a " + (lote.resp === window.mapaSession?.user?.id ? "ti" : nombreResp(lote.resp)) : "Responsable quitado") : "Reprogramado al " + fmtD(lote.fecha)) });
       }
     } finally { ocupado = false; }
     tocados.forEach((c) => { try { refrescaPunto(c); } catch (e) { console.error(e); } document.dispatchEvent(new CustomEvent("permisos:cambio", { detail: { id: c.id } })); });
@@ -4840,7 +4865,7 @@ const csvCell = (value) => {
     historial.clear();
     const ok = res.filter((x) => x.ok).length;
     multi = new Set(res.map((x, i) => x.ok ? null : clave(sels[i])).filter(Boolean)); /* quedan seleccionados los que no se pudieron guardar, para reintentar */
-    lote = { fase: "resultado", titulo: lote.tipo === "hecho" ? "Seguimientos cerrados" : "Seguimientos reprogramados", res };
+    lote = { fase: "resultado", titulo: lote.tipo === "hecho" ? "Seguimientos cerrados" : lote.tipo === "resp" ? "Responsable asignado" : "Seguimientos reprogramados", res };
     aviso = ok === res.length ? "Lote completado: " + ok + " guardados." : "Lote terminado con incidencias: " + ok + " guardados y " + (res.length - ok) + " sin guardar. Revisa el detalle.";
     draw();
   };
@@ -5119,6 +5144,7 @@ const csvCell = (value) => {
       const a = lt.dataset.lote;
       if (a === "hecho") { lote = { fase: "confirmar", tipo: "hecho" }; draw(); }
       else if (a === "rep") { const f = val("ceLoteFecha"); if (!validIsoDate(f)) { aviso = "Elige una fecha válida para reprogramar."; draw(); return; } lote = { fase: "confirmar", tipo: "rep", fecha: f }; aviso = ""; draw(); }
+      else if (a === "resp") { const rs = val("ceLoteResp"); if (rs === "__") { aviso = "Elige un responsable (o «Sin responsable») antes de asignar."; draw(); return; } respLoteSel = rs; lote = { fase: "confirmar", tipo: "resp", resp: rs }; aviso = ""; draw(); }
       else if (a === "ejecutar") ejecutaLote();
       else if (a === "cancelar") { lote = null; draw(); }
       else if (a === "cerrar") { lote = null; aviso = ""; draw(); }
