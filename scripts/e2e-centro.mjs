@@ -207,6 +207,46 @@ const main = async () => {
     return { nombre, esperadas, ficha: f.querySelector('.fi-title')?.textContent, pendientes: caja ? +caja.querySelector('b').textContent : -1, soloLectura: !f.querySelector('.s-add, .h-add, .ptabs') && !!f.querySelector('.f-centro') };`);
   eq(r3b.ficha, r3b.nombre, "la ficha abre el punto elegido en el Centro"); eq(r3b.pendientes, r3b.esperadas, "solicitudes pendientes de un punto: ficha = Centro"); ok(r3b.soloLectura, "la ficha no tiene formularios de permisos y ofrece el botón del Centro");
 
+  /* ===== 3c. Seguimientos ligados directamente a una concesión (grant_id), con y sin seguimiento del punto: modificar y cerrar, comprobado en las filas recargadas ===== */
+  const r3c = await ev(ayudas + `
+    const out = { variantes: [] }; const rel = () => fetch('http://127.0.0.1:8766/__rel').then(r => r.json()); const cli = window.mapaSession.supabase, yo = window.mapaSession.user.id;
+    if (!document.getElementById('dlgCentro').open) { document.getElementById('menuBtn').click(); document.getElementById('centroBtn').click(); await w(1500); }
+    let r0 = await rel(); const concs = r0.permit_grants.filter(g => !g.application_id).slice(0, 2); const g1 = r0.followups.find(f => f.grant_id && !f.application_id && !f.completed_at);
+    const gA = r0.permit_grants.find(g => g.id === g1.grant_id), gB = r0.permit_grants.find(g => g.id !== gA.id && !r0.followups.some(f => f.grant_id === g.id) && g.establishment_id !== gA.establishment_id);
+    const punto = (est) => r0.followups.filter(f => f.establishment_id === est && !f.application_id && !f.grant_id && !f.completed_at);
+    /* variante A: sin seguimiento del punto en ese establecimiento; variante B: con seguimiento del punto, y un segundo seguimiento de concesión creado por la API */
+    for (const f of punto(gA.establishment_id)) await cli.from('followups').delete().eq('id', f.id);
+    await cli.from('followups').insert({ establishment_id: gB.establishment_id, grant_id: gB.id, due_on: d(21), next_action: 'Cupo B E2E', created_by: yo });
+    await cli.from('followups').insert({ establishment_id: gB.establishment_id, due_on: d(23), next_action: 'Punto B E2E', created_by: yo });
+    for (const g of [gA, gB]) { const c = CENTERS.find(x => x.databaseId === g.establishment_id); await reloadSharedPermit(c); document.dispatchEvent(new CustomEvent('permisos:cambio', { detail: { id: c.id } })); }
+    const variantes = [{ nom: 'sinPunto', g: gA, accion0: g1.next_action, nueva: 'Cupo A cambiado E2E', fecha: d(30), resp: yo }, { nom: 'conPunto', g: gB, accion0: 'Cupo B E2E', nueva: 'Cupo B cambiado E2E', fecha: d(31), resp: '' }];
+    for (const v of variantes) {
+      nav('sol'); await w(200); nav('seg'); await w(300); set('ceEst','todas'); await w(300);
+      const fila = (txt) => [...b().querySelectorAll('#ceList tr.ce-row')].find(tr => tr.textContent.includes(txt));
+      const rr = await rel(); const res = { nom: v.nom, puntoAntes: rr.followups.filter(f => f.establishment_id === v.g.establishment_id && !f.application_id && !f.grant_id && !f.completed_at).length, existe: !!fila(v.accion0) };
+      fila(v.accion0).querySelector('.ce-pt').click(); await w(300); b().querySelector('#ceSide [data-act=edseg]').click(); await w(900);
+      set('cfSeg', v.fecha); set('cfAccion', v.nueva); const sel = b().querySelector('#cfResp'); if (sel && v.resp) sel.value = v.resp; b().querySelector('#cfGuardar').click(); await w(3000);
+      res.avisoEdit = b().querySelector('#ceAviso').textContent; let r1 = await rel(); const f1 = r1.followups.find(f => f.grant_id === v.g.id);
+      res.edit = f1 ? [f1.due_on === v.fecha, f1.next_action === v.nueva, (f1.assigned_to || '') === v.resp, !f1.application_id, !f1.completed_at] : null;
+      res.puntoTrasEditar = r1.followups.filter(f => f.establishment_id === v.g.establishment_id && !f.application_id && !f.grant_id && !f.completed_at).map(f => f.due_on + '|' + f.next_action).sort();
+      res.puntoAntesLista = r0.followups.filter(f => f.establishment_id === v.g.establishment_id && !f.application_id && !f.grant_id && !f.completed_at && f.id !== undefined).length;
+      b().querySelector('[data-cierra-lado]')?.click(); await w(150); set('ceEst','todas'); await w(250);
+      fila(v.nueva).querySelector('.ce-pt').click(); await w(300); b().querySelector('#ceSide [data-act=hecho]').click(); await w(400); b().querySelector('[data-conf=ok]')?.click(); await w(3000);
+      res.avisoHecho = b().querySelector('#ceAviso').textContent; r1 = await rel(); const f2 = r1.followups.find(f => f.grant_id === v.g.id);
+      res.hecho = f2 ? [!!f2.completed_at, f2.due_on === v.fecha] : null; res.enLista = !!fila(v.nueva);
+      res.puntoTrasHecho = r1.followups.filter(f => f.establishment_id === v.g.establishment_id && !f.application_id && !f.grant_id && !f.completed_at).map(f => f.due_on + '|' + f.next_action).sort();
+      b().querySelector('[data-cierra-lado]')?.click(); await w(150); out.variantes.push(res);
+    }
+    return out;`);
+  r3c.variantes.forEach((x) => {
+    ok(x.existe, "[" + x.nom + "] el seguimiento de la concesión aparece en Seguimientos");
+    eq(x.edit, [true, true, true, true, true], "[" + x.nom + "] cambiar el seguimiento de la concesión: fecha, acción y responsable guardados en su fila (grant_id, sin application_id) [" + x.avisoEdit + "]");
+    ok(/guardado/i.test(x.avisoEdit) && !/No se pudo|Otra persona/.test(x.avisoEdit), "[" + x.nom + "] la edición se guardó y se verificó");
+    eq(x.hecho, [true, true], "[" + x.nom + "] «Hecho» cierra el seguimiento de la concesión en su fila [" + x.avisoHecho + "]"); ok(!x.enLista, "[" + x.nom + "] y desaparece de la lista");
+    eq(x.puntoTrasHecho, x.puntoTrasEditar, "[" + x.nom + "] el seguimiento del punto (si lo hay) no se toca al editar ni al cerrar el de la concesión");
+  });
+  eq(r3c.variantes.map((x) => x.puntoAntes > 0), [false, true], "la prueba cubre una concesión sin seguimiento del punto y otra con él");
+
   /* ===== 4. Calendario, enlaces cruzados y almacenamiento local ===== */
   const r4 = await ev(ayudas + `
     const out = {}; document.getElementById('ceClose').click(); await w(200);
