@@ -832,7 +832,17 @@
   .cf-f { display: grid; gap: 4px; font-size: var(--fs-label); font-weight: 560; color: var(--muted); }
   .cf-f input, .cf-f select, .cf-f textarea { min-width: 150px; }
   .cf-pt { margin: 0; font-size: var(--fs-label); color: var(--muted); }
-  .cf-res { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .cf-res { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; max-height: 280px; overflow-y: auto; }
+  .cf-res:empty { display: none; }
+  /* La regla global de «li» es la de la lista de puntos del mapa (rejilla de 34 px, borde y cursor): aquí no aplica. */
+  .cf-res li { display: block; grid-template-columns: none; padding: 0; border: 0; cursor: default; }
+  .cf-res li::before { display: none; }
+  .cf-res li:hover { background: none; }
+  .cf-opt { display: grid; gap: 2px; width: 100%; height: auto; text-align: left; font: inherit; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-card); padding: 8px 12px; cursor: pointer; }
+  .cf-opt strong { font-weight: 620; }
+  .cf-opt span { font-size: var(--fs-label); color: var(--muted); overflow-wrap: anywhere; }
+  .cf-opt:hover { border-color: var(--muted); background: var(--ok-bg); }
+  .cf-opt:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .cf-btns { display: flex; gap: 8px; }
   .ce-aviso { margin: 0 0 8px; min-height: 1.2em; font-size: var(--fs-label); color: var(--fg); }
   .ce-count { margin: 0 0 8px; color: var(--muted); font-size: var(--fs-label); }
@@ -870,7 +880,7 @@
     #menuBtn { width: 44px; height: 44px; }
     #menuPanel button { min-height: 44px; }
     #pnClose, #admClose, #calClose, #ceClose, #ayClose { width: 44px; height: 44px; }
-    .ce-tabs button, .ce-act { min-height: 44px; }
+    .ce-tabs button, .ce-act, .cf-opt { min-height: 44px; }
     .lg-h button { min-height: 44px; }
     dialog input, dialog select, dialog button { min-height: 44px; }
     .cal-nav button, .cal-chip { min-height: 44px; }
@@ -4481,7 +4491,7 @@ const csvCell = (value) => {
     box.hidden = false;
     box.innerHTML = '<h3 id="cfT">' + esc(titulo) + "</h3>" +
       (editar || tipo === "seg" ? '<p class="cf-pt">Punto: <strong>' + esc(c.name) + "</strong> · " + esc(townOf(c)) + "</p>"
-        : '<div class="cf-pick"><label class="cf-f">Punto<input id="cfPunto" type="search" autocomplete="off" placeholder="Busca por nombre o municipio"' + (c ? "" : "") + '></label><p id="cfElegido" class="cf-pt">' + (c ? "Punto: <strong>" + esc(c.name) + "</strong> · " + esc(townOf(c)) : "Ningún punto elegido") + '</p><ul id="cfRes" class="cf-res"></ul></div>') +
+        : '<div class="cf-pick"><label class="cf-f">Punto<input id="cfPunto" type="search" autocomplete="off" placeholder="Busca por nombre o municipio"' + (c ? "" : "") + '></label><p id="cfElegido" class="cf-pt">' + (c ? "Punto: <strong>" + esc(c.name) + "</strong> · " + esc(townOf(c)) : "Ningún punto elegido") + '</p><p id="cfCuenta" class="cf-pt" role="status"></p><ul id="cfRes" class="cf-res"></ul></div>') +
       (tipo === "seg"
         ? '<div class="cf-row">' + campo("cfSeg", "Fecha del seguimiento", "date", sg.fecha) + campo("cfAccion", "Siguiente acción", "text", sg.accion || "", ' maxlength="200" autocomplete="off"') + '<label class="cf-f">Responsable<select id="cfResp"><option value="">Sin asignar</option></select></label></div>'
         : '<div class="cf-row">' + campo("cfDesde", "Desde", "date", o.desde) + campo("cfHasta", "Hasta", "date", o.hasta) + campo("cfN", "Captadores", "number", o.captadores || "", ' min="1" step="1"') +
@@ -4551,11 +4561,35 @@ const csvCell = (value) => {
     if (res.ok) { form = null; dibujaForm(); }
     else { const m2 = body.querySelector("#cfMsg"); if (m2) { m2.style.color = "var(--err)"; m2.textContent = res.texto + " Lo escrito sigue en el formulario."; } }
   };
+  /* Búsqueda de punto: sin tildes ni mayúsculas, por palabras sueltas (todas deben aparecer en el nombre, municipio, provincia, calle o tipo) y los nombres que empiezan por lo escrito primero. */
+  const indiceBusqueda = new WeakMap();
+  const textosDe = (c) => { let x = indiceBusqueda.get(c); if (!x) { x = { nombre: sinAcentos(c.name), resto: sinAcentos([townOf(c), c.province, c.street, c.tipo].filter(Boolean).join(" ")) }; indiceBusqueda.set(c, x); } return x; };
+  const MAX_RESULTADOS = 12;
+  const encuentra = (txt, centros) => {
+    const palabras = sinAcentos(txt).split(/\s+/).filter(Boolean);
+    if (!palabras.length || palabras.join("").length < 2) return [];
+    const hallados = [];
+    centros.forEach((c) => {
+      const x = textosDe(c);
+      if (palabras.every((p) => x.nombre.includes(p) || x.resto.includes(p))) hallados.push({ c, rango: x.nombre.startsWith(palabras[0]) ? 0 : 1 });
+    });
+    return hallados.sort((a, b) => a.rango - b.rango || antes(a.c.name, b.c.name)).map((x) => x.c);
+  };
   const buscaPunto = (txt) => {
-    const t = txt.trim().toLowerCase(), ul = body.querySelector("#cfRes"); if (!ul) return;
-    if (t.length < 2) { ul.innerHTML = ""; form.cands = []; return; }
-    form.cands = CENTERS.filter((c) => !isOut(c) && (c.name + " " + townOf(c)).toLowerCase().includes(t)).slice(0, 8);
-    ul.innerHTML = form.cands.length ? form.cands.map((c, i) => '<li><button type="button" class="ce-act" data-pick="' + i + '">' + esc(c.name) + " · " + esc(townOf(c)) + "</button></li>").join("") : '<li class="cf-pt">Ningún punto coincide.</li>';
+    const ul = body.querySelector("#cfRes"), cnt = body.querySelector("#cfCuenta"); if (!ul) return;
+    const hallados = encuentra(txt, CENTERS.filter((c) => !isOut(c)));
+    if (!hallados.length) { ul.innerHTML = ""; form.cands = []; cnt.textContent = sinAcentos(txt).length < 2 ? "" : "Ningún punto coincide."; return; }
+    form.cands = hallados.slice(0, MAX_RESULTADOS);
+    ul.innerHTML = form.cands.map((c, i) => '<li><button type="button" class="cf-opt" data-pick="' + i + '"><strong>' + esc(c.name) + "</strong><span>" + esc([townOf(c), c.province && c.province !== townOf(c) ? c.province : "", c.street].filter(Boolean).join(" · ")) + "</span></button></li>").join("");
+    cnt.textContent = hallados.length > form.cands.length ? "Se muestran " + form.cands.length + " de " + hallados.length + ": escribe más para afinar." : plural(hallados.length, "punto", "puntos") + ".";
+  };
+  const eligePunto = (i) => {
+    form.c = form.cands[i]; if (!form.c) return;
+    body.querySelector("#cfElegido").innerHTML = "Punto: <strong>" + esc(form.c.name) + "</strong> · " + esc(townOf(form.c));
+    body.querySelector("#cfRes").innerHTML = ""; body.querySelector("#cfCuenta").textContent = "";
+    const sel = body.querySelector("#cfResp");
+    if (sel) { sel.closest("label").hidden = !form.c.databaseId; if (form.c.databaseId) pintaResp(form.c, ""); }
+    const sig = body.querySelector("#cfDesde"); if (sig) sig.focus();
   };
 
   const abrir = (opts) => {
@@ -4611,7 +4645,7 @@ const csvCell = (value) => {
     const nw = e.target.closest("[data-new]");
     if (nw) { abreForm(nw.dataset.new, null, null); return; }
     const pk = e.target.closest("[data-pick]");
-    if (pk && form) { form.c = form.cands[+pk.dataset.pick]; body.querySelector("#cfElegido").innerHTML = "Punto: <strong>" + esc(form.c.name) + "</strong> · " + esc(townOf(form.c)); body.querySelector("#cfRes").innerHTML = ""; const sel = body.querySelector("#cfResp"); if (form.c.databaseId && sel) { sel.closest("label").hidden = false; pintaResp(form.c, ""); } else if (sel) sel.closest("label").hidden = true; return; }
+    if (pk && form) { eligePunto(+pk.dataset.pick); return; }
     if (e.target.closest("#cfGuardar")) { guardaForm(); return; }
     if (e.target.closest("#cfCancelar")) { form = null; dibujaForm(); return; }
     const cf = e.target.closest("[data-conf]");
@@ -4630,9 +4664,9 @@ const csvCell = (value) => {
   });
   body.addEventListener("input", (e) => {
     if (e.target.id === "ceQ") { q = e.target.value; mostrar = TRAMO; accion = null; draw(); }
-    else if (e.target.id === "cfPunto" && form) buscaPunto(e.target.value);
+    else if (e.target.id === "cfPunto" && form) { form.c = null; body.querySelector("#cfElegido").textContent = "Ningún punto elegido"; buscaPunto(e.target.value); } /* cambiar la búsqueda anula el punto elegido: no se guarda en uno que ya no se ve */
   });
-  body.addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target.id === "ceMotivo") { e.preventDefault(); confirma(); } else if (e.key === "Escape" && accion) { e.stopPropagation(); accion = null; draw(); } });
+  body.addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target.id === "cfPunto") { e.preventDefault(); if (form && form.cands && form.cands.length) eligePunto(0); } else if (e.key === "Enter" && e.target.id === "ceMotivo") { e.preventDefault(); confirma(); } else if (e.key === "Escape" && accion) { e.stopPropagation(); accion = null; draw(); } });
   $("#centroBtn").addEventListener("click", () => abrir());
   $("#ceClose").addEventListener("click", () => dlg.close());
 })();
