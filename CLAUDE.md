@@ -32,7 +32,7 @@ Español directo, conciso y orientado a la acción; sin emojis decorativos. Pref
 ## Git y despliegue
 
 - Ramas con prefijo `fix/`, `feat/`, `docs/`, `audit/`, `security/`; PR hacia `main`; fusión con squash (merge commit solo para PR apilados).
-- `main` está protegida: PR obligatorio, checks `audit` y `postgres-smoke` obligatorios, ramas actualizadas con `main` antes de fusionar, sin saltarse reglas ni siquiera el administrador, sin force push ni borrado.
+- `main` está protegida: PR obligatorio, checks `audit`, `postgres-smoke` y `e2e-centro` obligatorios, ramas actualizadas con `main` antes de fusionar, sin saltarse reglas ni siquiera el administrador, sin force push ni borrado.
 - Tocar `index.html` en `main` despliega en producción (workflow Deploy GitHub Pages). Tras fusionar, verifica en el navegador la URL pública.
 - No ejecutes las auditorías dentro de la raíz con `git add -A` sin revisar: `scripts/audit-static-catalog.mjs` genera `catalog-audit-output/` (ya está en `.gitignore`).
 - Las migraciones de `supabase/migrations/` deben llevar la versión que Supabase registra al aplicarlas (`list_migrations`), y el workflow `schema-smoke.yml` debe aplicarlas todas (hay un paso que lo comprueba). Los scripts de `supabase/bootstrap/` no son migraciones pendientes de producción.
