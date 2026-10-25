@@ -1,4 +1,4 @@
--- Pruebas de las operaciones atómicas de expedientes (migración 20261025190000_permit_atomic_followups). Una transacción que termina en ROLLBACK.
+-- Pruebas de las operaciones atómicas de expedientes (migración 20261025170441_permit_atomic_followups). Una transacción que termina en ROLLBACK.
 -- Ejecución: psql -v ON_ERROR_STOP=1 -f supabase/tests/permit_atomic.sql
 begin;
 

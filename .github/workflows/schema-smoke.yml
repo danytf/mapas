@@ -162,7 +162,7 @@ jobs:
       - name: Signal edit conflicts with PT409 instead of a retried serialization failure
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261023170237_permit_conflict_code.sql
       - name: Make permit actions atomic (close follow-ups with the decision, create application with follow-up)
-        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261025190000_permit_atomic_followups.sql
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261025170441_permit_atomic_followups.sql
       - name: Verify every migration file is applied by this workflow
         shell: bash
         run: |
