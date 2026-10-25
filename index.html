@@ -2257,18 +2257,29 @@ const diffRel = (base, cur) => {
    que lo cancelado figure cancelado, que lo borrado ya no esté. Un duplicado (23505) de un reintento solo se da por bueno si la fila existe así. */
 const verificaOps = (ops, base) => {
   const sols = new Map(base.sols.map((x) => [x.id, x])), hist = new Map(base.hist.map((x) => [x.id, x])), mal = [];
+  /* Mismos datos que se pidieron: con un duplicado (23505) de un reintento, solo vale si la fila existente coincide con lo que se quería guardar. */
+  const mismoGrant = (a, b) => ["desde", "hasta", "ong"].every((k) => (a[k] || "") === (b[k] || "")) && (Number(a.captadores) || 0) === (Number(b.captadores) || 0);
+  /* Un seguimiento se localiza por su identificador en la solicitud, la concesión o el punto; abierto = tiene fecha. */
+  const porFu = (fu) => base.sols.find((x) => x.fu === fu) || base.hist.find((h) => h.fu === fu) || (base.punto && base.punto.fu === fu ? base.punto : null);
+  const fechaFu = (f) => f.seg || (f === base.punto ? f.fecha : "") || "";
   ops.forEach((op) => {
     const a = op.t === "insApp" ? op.x.id : op.id, g = op.t === "insGrant" ? op.h.id : op.id;
-    if (op.t === "insApp" && !sols.has(a)) mal.push(op.t);
+    if (op.t === "insApp" && (!sols.has(a) || cambiaRel(op.x, sols.get(a)))) mal.push(op.t);
     else if (op.t === "updApp" && (!sols.has(a) || cambiaRel(op.x, sols.get(a)))) mal.push(op.t);
     else if (op.t === "delApp" && sols.has(a)) mal.push(op.t);
-    else if (op.t === "approve" && !(sols.get(a) && sols.get(a).res === "aprobada" && base.hist.some((h) => h.sol === a))) mal.push(op.t);
+    else if (op.t === "approve" && !(sols.get(a) && sols.get(a).res === "aprobada" && base.hist.some((h) => h.sol === a && (!op.g || !op.g.id || h.id !== op.g.id || mismoGrant(op.g, h))))) mal.push(op.t);
     else if (op.t === "resolve" && !(sols.get(a) && sols.get(a).res === APP_RES[op.st])) mal.push(op.t);
-    else if (op.t === "insGrant" && !hist.has(g)) mal.push(op.t);
+    else if (op.t === "insGrant" && (!hist.has(g) || cambiaRel(op.h, hist.get(g)) || (op.h.sol || "") !== (hist.get(g).sol || ""))) mal.push(op.t);
     else if (op.t === "updGrant" && (!hist.has(g) || cambiaRel(op.h, hist.get(g)))) mal.push(op.t);
     else if (op.t === "cancel" && !(hist.get(g) && hist.get(g).cancelada)) mal.push(op.t);
     else if (op.t === "reactivate" && !(hist.get(g) && !hist.get(g).cancelada)) mal.push(op.t);
     else if (op.t === "delGrant" && hist.has(g)) mal.push(op.t);
+    else if (op.t === "fuDone") { const f = op.fu ? porFu(op.fu) : null; if (f && fechaFu(f)) mal.push(op.t); } /* cerrado: ya no figura abierto */
+    else if (op.t === "fuSet") {
+      if (op.fu) { const f = porFu(op.fu); if (f && (fechaFu(f) !== op.due || (f.resp || "") !== (op.resp || "") || (f.accion || "") !== (op.accion || ""))) mal.push(op.t); } /* reprogramado: fecha, responsable y acción */
+      else if (op.app) { const x = sols.get(op.app) || hist.get(op.app); if (!x || fechaFu(x) !== op.due || (x.resp || "") !== (op.resp || "") || (x.accion || "") !== (op.accion || "")) mal.push(op.t); } /* alta de seguimiento de una solicitud o concesión */
+      else if (!base.punto || base.punto.fecha > op.due) mal.push(op.t); /* alta de seguimiento del punto */
+    }
   });
   return mal;
 };

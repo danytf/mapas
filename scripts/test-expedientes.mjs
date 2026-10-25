@@ -457,5 +457,34 @@ const T = "2026-10-23";
   const vacio = R.resumenDatos([], [], t, []);
   ok(vacio.cola.length === 0 && vacio.resolucion.mediana === null && vacio.resolucion.media === null && vacio.vencimientos.length === 0 && vacio.porProvincia.length === 0 && vacio.capacidadDias.every((d) => d.aut === 0 && d.pen === 0), "sin expedientes: sin cola, sin tiempo de resolución y capacidad a cero (no se inventa nada)");
 }
+// Verificación del contenido (revisión externa 25/10/2026): un alta o un duplicado (23505) solo vale si la fila leída coincide con lo pedido; los seguimientos también se comprueban.
+{
+  const R = reglas("2026-10-25T10:00:00Z"), v = R.verificaOps;
+  const sol = (o) => Object.assign({ id: "s1", ver: "v", desde: "2026-11-01", hasta: "2026-11-05", ong: "A", captadores: 2, fecha: "2026-10-25" }, o);
+  const con = (o) => Object.assign({ id: "g1", ver: "v", desde: "2026-11-01", hasta: "2026-11-05", ong: "A", captadores: 2, alta: "2026-10-25" }, o);
+  const base = (sols, hist, punto) => ({ sols: sols || [], hist: hist || [], punto });
+  eq(v([{ t: "insApp", x: sol() }], base([sol({ captadores: 9 })])), ["insApp"], "un alta cuya fila existente tiene otro número de captadores (duplicado distinto) no se da por buena");
+  eq(v([{ t: "insApp", x: sol() }], base([sol({ ong: "Otra" })])), ["insApp"], "…ni con otra ONG");
+  eq(v([{ t: "insApp", x: sol({ contacto: "Ana" }) }], base([sol()])), ["insApp"], "…ni si falta el contacto");
+  eq(v([{ t: "insApp", x: sol() }], base([sol()])), [], "un alta que coincide con lo pedido sí");
+  eq(v([{ t: "insGrant", h: con() }], base([], [con({ hasta: "2026-12-01" })])), ["insGrant"], "una concesión con otras fechas no vale");
+  eq(v([{ t: "insGrant", h: con({ sol: "s1" }) }], base([], [con()])), ["insGrant"], "una concesión sin el enlace a su solicitud no vale");
+  eq(v([{ t: "insGrant", h: con({ sol: "s1" }) }], base([], [con({ sol: "s1" })])), [], "una concesión correcta sí");
+  eq(v([{ t: "approve", id: "s1", g: { id: "g1", desde: "2026-11-01", hasta: "2026-11-05", ong: "A", captadores: 2 } }], base([sol({ res: "aprobada" })], [con({ sol: "s1", hasta: "2026-11-09" })])), ["approve"], "aprobar: la concesión creada con otras fechas no vale");
+  eq(v([{ t: "approve", id: "s1", g: { id: "g1", desde: "2026-11-01", hasta: "2026-11-05", ong: "A", captadores: 2 } }], base([sol({ res: "aprobada" })], [con({ sol: "s1" })])), [], "aprobar con la concesión esperada sí");
+  const conFu = (o) => Object.assign({ fu: "f1", fuver: "v" }, o);
+  eq(v([{ t: "fuDone", fu: "f1" }], base([sol(conFu({ seg: "2026-10-30" }))])), ["fuDone"], "cerrar un seguimiento que sigue abierto no vale");
+  eq(v([{ t: "fuDone", fu: "f1" }], base([sol(conFu())])), [], "cerrar un seguimiento que ya no figura abierto sí");
+  eq(v([{ t: "fuDone", fu: "fp" }], base([], [], { fu: "fp", fecha: "2026-10-30" })), ["fuDone"], "…y el seguimiento del punto");
+  eq(v([{ t: "fuSet", fu: "f1", due: "2026-11-02", resp: "u1", accion: "Llamar" }], base([sol(conFu({ seg: "2026-11-02", resp: "u1", accion: "Llamar" }))])), [], "reprogramar con fecha, responsable y acción correctos sí");
+  eq(v([{ t: "fuSet", fu: "f1", due: "2026-11-02", resp: "u1", accion: "Llamar" }], base([sol(conFu({ seg: "2026-11-09", resp: "u1", accion: "Llamar" }))])), ["fuSet"], "reprogramar con otra fecha no vale");
+  eq(v([{ t: "fuSet", fu: "f1", due: "2026-11-02", resp: "u1", accion: "Llamar" }], base([sol(conFu({ seg: "2026-11-02", resp: "u2", accion: "Llamar" }))])), ["fuSet"], "…ni con otro responsable");
+  eq(v([{ t: "fuSet", fu: "f1", due: "2026-11-02", resp: "", accion: "Visitar" }], base([sol(conFu({ seg: "2026-11-02", accion: "Llamar" }))])), ["fuSet"], "…ni con otra acción");
+  eq(v([{ t: "fuSet", fu: "", app: "s1", due: "2026-10-30", resp: "", accion: "" }], base([sol()])), ["fuSet"], "un seguimiento nuevo que no aparece al releer no vale");
+  eq(v([{ t: "fuSet", fu: "", app: "s1", due: "2026-10-30", resp: "", accion: "" }], base([sol({ seg: "2026-10-30" })])), [], "un seguimiento nuevo que aparece sí");
+  eq(v([{ t: "fuSet", fu: "", app: "g1", due: "2026-10-30", resp: "u1", accion: "X" }], base([], [con({ seg: "2026-10-30", resp: "u1", accion: "X" })])), [], "un seguimiento nuevo de una concesión que aparece sí");
+  eq(v([{ t: "fuSet", fu: "", app: "", due: "2026-10-30", resp: "", accion: "" }], base()), ["fuSet"], "un seguimiento del punto que no aparece no vale");
+  eq(v([{ t: "fuSet", fu: "", app: "", due: "2026-10-30", resp: "", accion: "" }], base([], [], { fu: "fp", fecha: "2026-10-30" })), [], "un seguimiento del punto que aparece sí");
+}
 
 console.log("Reglas de expedientes: " + n + " comprobaciones correctas.");
