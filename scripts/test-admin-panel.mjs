@@ -40,6 +40,10 @@ assert.ok(html.includes('const nr = CENTERS.filter((c) => hasPersonalRef(removed
 assert.ok(bloque.includes('eq("status", "archived"), "id")') && bloque.includes('update({ status: "active", archived_at: null })'), "Administración lista (paginada) y restaura los archivados");
 assert.ok(bloque.includes('esc(p.name)') && bloque.includes('esc(p.notes || "")'), "Los datos de los archivados pasan por esc()");
 
+// La lista de archivados va plegada por defecto (es muy larga) y conserva su estado al redibujar.
+assert.ok(bloque.includes('<details class="adm-arch"\' + (abierto ? " open" : "")') && bloque.includes('<summary>Puntos archivados ("'), "Puntos archivados debe ser un desplegable con su recuento");
+assert.ok(bloque.includes('bodyA.querySelector("details.adm-arch[open]")') && bloque.includes("archHtml(archAbierto)"), "El desplegable de archivados debe conservar su estado al redibujar");
+
 // El simulado debe cubrir las operaciones usadas.
 const mock = readFileSync("scripts/dev/mock-supabase.mjs", "utf8");
 for (const t of ["rpc/admin_list_users", '"23514"', "alta_provincia", "baja_provincia"]) assert.ok(mock.includes(t), "El simulado no cubre " + t);
