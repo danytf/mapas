@@ -1,0 +1,3 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/1948966520;;Oficina de Correos;Barcelona;41.404183;2.163732;duplicado en el lote de node/11635077644 (27 m)
+descartado;way/379122844;;Oficina de Correos;Reus;41.159227;1.106079;duplicado en el lote de node/4648647013 (15 m)

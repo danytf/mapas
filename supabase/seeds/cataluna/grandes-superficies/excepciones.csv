@@ -1,0 +1,14 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/10139433705;;Leroy Merlin;Vilanova i la Geltrú;41.227227;1.740714;duplicado en el lote de node/10139433704 (4 m)
+descartado;node/10172005118;;Carrefour Market;Barcelona;41.386415;2.17595;duplicado en el lote de node/9759339663 (72 m)
+descartado;node/11433029547;;Carrefour;Manresa;41.730516;1.8229;duplicado en el lote de node/11433029546 (34 m)
+descartado;node/14257727603;;Carrefour Express;Badalona;41.452819;2.230412;duplicado en el lote de node/13708126602 (7 m)
+descartado;node/7011813143;;Leroy Merlin;Lliçà d'Amunt;41.602308;2.259115;duplicado en el lote de node/7023809585 (121 m)
+descartado;node/7035127186;;Carrefour;Manresa;41.731011;1.8235;duplicado en el lote de node/11433029546 (58 m)
+descartado;way/125006738;;El Corte Inglés;Sabadell;41.554614;2.098481;duplicado en el lote de node/7800879757 (42 m)
+descartado;way/187012626;;Leroy Merlin;Sabadell;41.512372;2.10518;duplicado en el lote de way/1186002287 (123 m)
+descartado;way/24728217;;Leroy Merlin;Sant Boi de Llobregat;41.329576;2.048558;duplicado en el lote de node/12855660301 (90 m)
+descartado;way/45119267;;Carrefour Planet;Cabrera de Mar;41.519345;2.421837;duplicado en el lote de node/1754693997 (48 m)
+descartado;way/531843975;;Leroy Merlin;Sant Boi de Llobregat;41.329277;2.047946;duplicado en el lote de node/12855660301 (43 m)
+descartado;way/78353795;;Carrefour;Tarragona;41.128239;1.206738;duplicado en el lote de node/10707783804 (43 m)
+descartado;way/866897664;;Carrefour Market Ur;;42.448653;1.946292;fuera de los municipios oficiales cargados
