@@ -23,7 +23,7 @@ Un SQL por lote en `supabase/seeds/melilla/<lote>/` (transaccionales e idempoten
 ## Calidad y límites
 - Umbrales de siempre. Calle y código postal calculados con el propio fichero. Quedan **0 puntos sin calle y 14 sin código postal**. Los códigos presentes son 52001, 52005 y 52006.
 - **Estaciones: 0** (no hay estaciones de tren ni de autobús en el fichero). **Entidad oficial: 0**: ningún elemento oficial de OpenStreetMap cumple las reglas de nombre (ayuntamiento, juzgado, AEAT, Seguridad Social…), p. ej. el gobierno de la ciudad autónoma no se llama «Ayuntamiento». No se inventa.
-- Dudoso en Hospital: **«Acceso Hospital Melilla – Calle del Ramal del Docker»** parece un acceso, no un hospital, y conviene archivarlo tras la carga. «Hospital Comarcal» (Calle Vista Hermosa) y «Hospital Universitario de Melilla» (Calle Monumental) son elementos distintos en OpenStreetMap (a unos 800 m), pero podrían ser el mismo hospital con su nombre antiguo y el actual: no está verificado, revisar si ambos siguen en servicio.
+- Dudoso en Hospital: **«Acceso Hospital Melilla – Calle del Ramal del Docker»** parece un acceso, no un hospital, y conviene archivarlo tras la carga. «Hospital Comarcal» (Calle Vista Hermosa) y «Hospital Universitario de Melilla» (Calle Monumental) son elementos distintos en OpenStreetMap (a unos 700 m), pero podrían ser el mismo hospital con su nombre antiguo y el actual: no está verificado, revisar si ambos siguen en servicio.
 - Excepciones: «Urgencias» (excluido por nombre), un área sin nombre y un duplicado de «Parque Murias» (se queda el nodo).
 - No probado en el PostgreSQL local (sin la contraseña en esta sesión).
 
