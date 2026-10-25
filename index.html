@@ -786,6 +786,33 @@
   #dlgPanel .pn-head, #dlgAdm .pn-head { position: sticky; top: 0; z-index: 2; margin: 0; padding: 12px 18px 12px 22px; background: var(--panel); border-bottom: 1px solid var(--line); }
   #dlgPanel h2, #dlgAdm h2 { font-size: var(--fs-title); font-weight: 680; letter-spacing: -.02em; line-height: 1.2; }
   #pnBody { padding: 16px 22px 22px; }
+  /* Centro de permisos: bandejas de solicitudes y concesiones (solo lectura). */
+  #dlgCentro { width: min(1180px, 98vw); max-height: 94vh; overflow: auto; background: var(--bg); padding: 0; }
+  #dlgCentro .pn-head { position: sticky; top: 0; z-index: 2; margin: 0; padding: 12px 18px 12px 22px; background: var(--panel); border-bottom: 1px solid var(--line); }
+  #dlgCentro h2 { font-size: var(--fs-title); font-weight: 680; letter-spacing: -.02em; line-height: 1.2; }
+  #ceBody { padding: 16px 22px 22px; }
+  #dlgCentro .cal-f select, #dlgCentro .cal-f input { width: auto; min-width: 170px; }
+  #dlgCentro .cal-f.ce-q input { min-width: 220px; }
+  .ce-tabs { display: inline-flex; gap: 6px; margin-bottom: 12px; }
+  .ce-tabs button { font: inherit; color: var(--fg); background: var(--panel); border: 1px solid var(--line-2); cursor: pointer; height: 32px; padding: 0 14px; border-radius: var(--r-pill); font-size: var(--fs-label); }
+  .ce-tabs button[aria-pressed="true"] { border-color: var(--fg); font-weight: 600; }
+  .ce-tabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  #ceBody table { width: 100%; border-collapse: collapse; font-size: var(--fs-label); font-variant-numeric: tabular-nums; }
+  #ceBody th, #ceBody td { padding: 8px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+  #ceBody thead th { background: var(--panel); font-weight: 600; color: var(--muted); border-bottom: 1px solid var(--line-2); }
+  #ceBody tbody tr:last-child td { border-bottom: 0; }
+  #ceBody tbody tr:hover { background: var(--ok-bg); }
+  #ceBody td.n, #ceBody th.n { text-align: right; }
+  #ceBody .ce-pt { all: unset; box-sizing: border-box; cursor: pointer; display: block; font: inherit; color: inherit; border-radius: var(--r-xs); }
+  #ceBody .ce-pt strong { display: block; font-weight: 620; }
+  #ceBody .ce-pt span, #ceBody .ce-sub { display: block; color: var(--muted); }
+  #ceBody .ce-pt:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .ce-badge { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+  .ce-badge i { width: 9px; height: 9px; border-radius: 50%; background: var(--st, var(--muted)); flex: none; }
+  .ce-badge.s-concedido { --st: var(--st-concedido); } .ce-badge.s-solicitado { --st: var(--st-solicitado); } .ce-badge.s-caducado { --st: var(--st-caducado); } .ce-badge.s-denegado { --st: var(--st-denegado); } .ce-badge.s-cancelado { --st: var(--st-cancelado); }
+  .ce-warn { display: block; color: var(--warn); font-weight: 600; }
+  .ce-count { margin: 0 0 8px; color: var(--muted); font-size: var(--fs-label); }
+  .ce-more { margin: 12px 0 0; }
   #dlgAdm .adm-note, #dlgAdm #admMsg, #dlgAdm #admBody { margin-left: 22px; margin-right: 22px; }
   #dlgAdm .adm-note { margin-top: 14px; }
   #dlgAdm #admBody { padding-bottom: 22px; }
@@ -818,7 +845,8 @@
     .chipbtn { height: 44px; padding: 0 16px; }
     #menuBtn { width: 44px; height: 44px; }
     #menuPanel button { min-height: 44px; }
-    #pnClose, #admClose, #calClose, #ayClose { width: 44px; height: 44px; }
+    #pnClose, #admClose, #calClose, #ceClose, #ayClose { width: 44px; height: 44px; }
+    .ce-tabs button { min-height: 44px; }
     .lg-h button { min-height: 44px; }
     dialog input, dialog select, dialog button { min-height: 44px; }
     .cal-nav button, .cal-chip { min-height: 44px; }
@@ -849,6 +877,7 @@
     <div id="menuPanel" role="menu" hidden>
       <div class="mu" id="menuUser" aria-live="polite"></div>
       <div class="mh">Informes</div>
+      <button id="centroBtn" type="button" role="menuitem">Centro de permisos</button>
       <button id="panelBtn" type="button" role="menuitem">Panel resumen</button>
       <button id="calBtn" type="button" role="menuitem">Calendario semanal</button>
       <div class="mh">Progreso</div>
@@ -1060,6 +1089,10 @@
 <dialog id="dlgPanel" aria-labelledby="pnT">
   <div class="pn-head"><h2 id="pnT">Panel resumen</h2><button type="button" id="pnClose" aria-label="Cerrar">&times;</button></div>
   <div id="pnBody"></div>
+</dialog>
+<dialog id="dlgCentro" aria-labelledby="ceT">
+  <div class="pn-head"><h2 id="ceT">Centro de permisos</h2><button type="button" id="ceClose" aria-label="Cerrar">&times;</button></div>
+  <div id="ceBody"></div>
 </dialog>
 <dialog id="dlgCal" aria-labelledby="calT">
   <div class="pn-head"><h2 id="calT">Calendario semanal</h2><button type="button" id="calClose" aria-label="Cerrar">&times;</button></div>
@@ -4186,6 +4219,142 @@ const csvCell = (value) => {
   });
   $("#calBtn").addEventListener("click", abrir);
   $("#calClose").addEventListener("click", () => dlg.close());
+})();
+
+/* Centro de permisos (v1, solo lectura): bandejas de solicitudes y concesiones de todos los puntos del ámbito del usuario. Solo lee lo que ya hay
+   en memoria y usa las reglas compartidas de expedientes (expedientesDe, indicadores): sus cifras son las del Panel resumen. No guarda nada. */
+(() => {
+  const dlg = $("#dlgCentro"), body = $("#ceBody");
+  const TRAMO = 100; /* filas que se dibujan de una vez */
+  const OPC = {
+    sol: [["pendiente", "Pendientes"], ["estancada", "Estancadas (más de " + UMBRAL_ESTANCADA + " días)"], ["caducada", "Sin respuesta y caducadas"], ["aprobada", "Aprobadas"], ["denegada", "Denegadas"], ["retirada", "Retiradas"], ["todas", "Todas"]],
+    con: [["vigente", "Vigentes"], ["vencen", "Vencen en 30 días"], ["futura", "Futuras"], ["terminada", "Terminadas"], ["cancelada", "Canceladas"], ["sinfin", "Vigentes sin fecha de fin"], ["todas", "Todas"]]
+  };
+  const COLOR = { pendiente: "solicitado", caducada: "caducado", aprobada: "concedido", denegada: "denegado", retirada: "caducado", vigente: "concedido", futura: "concedido", terminada: "caducado", cancelada: "cancelado" };
+  const TEXTO = { pendiente: "Pendiente", caducada: "Caducada sin respuesta", aprobada: "Aprobada", denegada: "Denegada", retirada: "Retirada", vigente: "Vigente", futura: "Futura", terminada: "Terminada", cancelada: "Cancelada" };
+  const pred = {
+    sol: (est, r, t) => est === "todas" ? true : est === "estancada" ? (r.est === "pendiente" && !!r.fecha && daysBetween(r.fecha, t) > UMBRAL_ESTANCADA) : r.est === est,
+    con: (est, r, t) => est === "todas" ? true : est === "vencen" ? (r.est === "vigente" && !!r.hasta && daysBetween(t, r.hasta) <= 30) : est === "sinfin" ? (r.est === "vigente" && !r.hasta) : r.est === est
+  };
+  const plural = (n, uno, varios) => n + " " + (n === 1 ? uno : varios);
+  const ongDe = (r) => r.ong || "Sin ONG";
+  let vista = "sol", prov = "", ong = "", q = "", mostrar = TRAMO;
+  const est = { sol: "pendiente", con: "vigente" };
+
+  const provOpts = () => {
+    const m = new Map();
+    CENTERS.forEach((c) => { if (!isOut(c) && c.provinceId) m.set(c.provinceId, c.province || "Sin provincia"); });
+    return [...m].sort((x, y) => x[1].localeCompare(y[1], "es"));
+  };
+  const registros = (provId) => {
+    const recs = [];
+    CENTERS.forEach((c) => {
+      if (isOut(c) || (provId && c.provinceId !== provId)) return;
+      const p = permits[permitKey(c)]; if (!p) return;
+      expedientesDe(c, p).forEach((r) => recs.push(r));
+    });
+    return recs;
+  };
+  const textoDe = (r) => (r.c.name + " " + townOf(r.c) + " " + (r.c.province || "") + " " + ongDe(r)).toLowerCase();
+  const antes = (a, b) => a.localeCompare(b, "es");
+  const periodo = (r) => (!r.desde && !r.hasta) ? "Sin fechas" : fmtD(r.desde) + " – " + fmtD(r.hasta);
+
+  const celdaPunto = (r) => '<button type="button" class="ce-pt" data-pt="' + esc(String(r.c.id)) + '" data-tab="' + (r.k === "sol" ? "s" : "h") + '"><strong>' + esc(r.c.name) + "</strong><span>" +
+    esc(townOf(r.c) + (r.c.province && r.c.province !== townOf(r.c) ? " · " + r.c.province : "")) + "</span></button>";
+  const badge = (e) => '<span class="ce-badge s-' + COLOR[e] + '"><i aria-hidden="true"></i>' + esc(TEXTO[e]) + "</span>";
+
+  const filaSol = (r, t) => {
+    const edad = r.fecha ? daysBetween(r.fecha, t) : null, estancada = r.est === "pendiente" && edad !== null && edad > UMBRAL_ESTANCADA;
+    return "<tr><td>" + celdaPunto(r) + "</td><td>" + esc(ongDe(r)) + "</td><td>" + esc(periodo(r)) + '</td><td class="n">' + (r.n || "—") + "</td><td>" +
+      (r.fecha ? esc(fmtD(r.fecha)) + (r.est === "pendiente" && edad >= 0 ? '<span class="ce-sub">hace ' + esc(plural(edad, "día", "días")) + "</span>" : "") : "No consta") + "</td><td>" + badge(r.est) +
+      (estancada ? '<span class="ce-warn">Estancada</span>' : "") + "</td><td>" + (r.seg ? esc(fmtD(r.seg)) + (r.seg < t ? '<span class="ce-warn">Atrasado</span>' : "") : (r.est === "pendiente" ? "Sin seguimiento" : "")) + "</td></tr>";
+  };
+  const detalleCon = (r, t) => {
+    if (r.est === "vigente") return !r.hasta ? "Sin fecha de fin" : r.hasta === t ? "Termina hoy" : "Termina en " + plural(daysBetween(t, r.hasta), "día", "días");
+    if (r.est === "futura") return "Empieza en " + plural(daysBetween(t, r.desde), "día", "días");
+    if (r.est === "terminada") return "Terminó el " + fmtD(r.hasta);
+    return "Cancelada" + (r.resFecha ? " el " + fmtD(r.resFecha) : "") + (r.motivo ? ": " + r.motivo : "");
+  };
+  const filaCon = (r, t) => "<tr><td>" + celdaPunto(r) + "</td><td>" + esc(ongDe(r)) + "</td><td>" + esc(periodo(r)) + '</td><td class="n">' + (r.n || "—") + "</td><td>" + badge(r.est) + "</td><td>" +
+    esc(detalleCon(r, t)) + (r.sol ? "" : '<span class="ce-sub">Sin solicitud enlazada</span>') + "</td></tr>";
+
+  /* Orden: lo pendiente de resolver, de más antiguo a más reciente; lo ya resuelto o terminado, de más reciente a más antiguo. */
+  const ordena = (arr, k, e) => {
+    const abierto = k === "sol" ? (e === "pendiente" || e === "estancada" || e === "caducada") : (e === "vigente" || e === "vencen" || e === "futura" || e === "sinfin");
+    const clave = k === "sol" ? (abierto ? (r) => r.fecha : (r) => r.resFecha || r.fecha) : (abierto ? (r) => r.hasta : (r) => r.hasta || r.resFecha);
+    return arr.slice().sort((a, b) => {
+      const x = clave(a) || "", y = clave(b) || "";
+      if (!x !== !y) return x ? -1 : 1; /* sin fecha, al final */
+      return (abierto ? antes(x, y) : antes(y, x)) || antes(a.c.name, b.c.name);
+    });
+  };
+
+  const draw = () => {
+    const t = today(), todas = registros(prov);
+    const ongs = [...new Set(todas.map(ongDe))].sort((x, y) => (x === "Sin ONG") - (y === "Sin ONG") || antes(x, y));
+    if (ong && !ongs.includes(ong)) ong = "";
+    body.querySelector("#ceOng").innerHTML = '<option value="">Todas las ONG</option>' + ongs.map((o) => '<option value="' + esc(o) + '"' + (o === ong ? " selected" : "") + ">" + esc(o) + "</option>").join("");
+    const ql = q.trim().toLowerCase(), base = todas.filter((r) => (!ong || ongDe(r) === ong) && (!ql || textoDe(r).includes(ql)));
+    const delTipo = base.filter((r) => r.k === vista);
+    body.querySelector("#ceEst").innerHTML = OPC[vista].map(([k, n]) => '<option value="' + k + '"' + (k === est[vista] ? " selected" : "") + ">" + esc(n + " (" + delTipo.filter((r) => pred[vista](k, r, t)).length + ")") + "</option>").join("");
+    /* Resumen: las mismas cifras del Panel resumen (indicadores), con los filtros de provincia y ONG. */
+    const ind = indicadores(todas.filter((r) => !ong || ongDe(r) === ong), [], t), venc = ind.vencen7.length + ind.vencen15.length + ind.vencen30.length;
+    const tile = (v, e, n, txt, cls) => '<button type="button" class="kpi' + (n && cls ? " " + cls : "") + '" data-go="' + v + ":" + e + '"><b>' + n + "</b><span>" + esc(txt) + "</span></button>";
+    body.querySelector("#ceSum").innerHTML = tile("sol", "pendiente", ind.pendientes.length, "Solicitudes pendientes", "al") + tile("sol", "estancada", ind.estancadas.length, "Solicitudes estancadas", "al") +
+      tile("con", "vigente", ind.vigentes.length, "Concesiones vigentes", "hl") + tile("con", "vencen", venc, "Vencen en 30 días", "al") + tile("con", "sinfin", ind.sinFin.length, "Vigentes sin fecha de fin", "al");
+    body.querySelectorAll("#ceTabs button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.vista === vista)));
+    const filas = ordena(delTipo.filter((r) => pred[vista](est[vista], r, t)), vista, est[vista]), lista = body.querySelector("#ceList");
+    const nombre = vista === "sol" ? ["solicitud", "solicitudes"] : ["concesión", "concesiones"];
+    if (!filas.length) {
+      lista.innerHTML = '<div class="pn-empty">' + (todas.length ? "No hay " + nombre[1] + " con estos filtros." : "Todavía no hay solicitudes ni concesiones en las provincias a las que tienes acceso.") + "</div>";
+      return;
+    }
+    const vis = filas.slice(0, mostrar);
+    const cab = vista === "sol" ? "<th>Punto</th><th>ONG</th><th>Periodo solicitado</th><th class=\"n\">Captadores</th><th>Solicitada</th><th>Estado</th><th>Seguimiento</th>" : "<th>Punto</th><th>ONG</th><th>Periodo</th><th class=\"n\">Captadores</th><th>Estado</th><th>Detalle</th>";
+    lista.innerHTML = '<p class="ce-count" role="status">' + esc(plural(filas.length, nombre[0], nombre[1]) + (filas.length > vis.length ? " · se muestran " + vis.length : "")) + "</p>" +
+      '<div class="pn-scroll"><table><caption class="adm-sr">' + esc(vista === "sol" ? "Solicitudes" : "Concesiones") + '</caption><thead><tr>' + cab + "</tr></thead><tbody>" +
+      vis.map((r) => vista === "sol" ? filaSol(r, t) : filaCon(r, t)).join("") + "</tbody></table></div>" +
+      (filas.length > vis.length ? '<p class="ce-more"><button type="button" data-mas="1">Mostrar ' + Math.min(TRAMO, filas.length - vis.length) + " más</button></p>" : "");
+  };
+  const abrir = () => {
+    const opts = provOpts();
+    if (prov && !opts.some(([id]) => id === prov)) prov = "";
+    if (opts.length === 1) prov = opts[0][0];
+    mostrar = TRAMO;
+    body.innerHTML =
+      '<div class="cal-bar">' +
+      '<label class="cal-f">Provincia<select id="ceProv">' + (opts.length > 1 ? '<option value="">Todas las provincias</option>' : "") +
+      opts.map(([id, n]) => '<option value="' + esc(id) + '"' + (id === prov ? " selected" : "") + ">" + esc(n) + "</option>").join("") + "</select></label>" +
+      '<label class="cal-f">ONG<select id="ceOng"></select></label>' +
+      '<label class="cal-f">Estado<select id="ceEst"></select></label>' +
+      '<label class="cal-f ce-q">Buscar<input type="search" id="ceQ" autocomplete="off" placeholder="Punto, municipio u ONG" value="' + esc(q) + '"></label></div>' +
+      '<div class="kpis" id="ceSum"></div>' +
+      '<div class="ce-tabs" id="ceTabs" role="group" aria-label="Qué se muestra"><button type="button" data-vista="sol" aria-pressed="true">Solicitudes</button><button type="button" data-vista="con" aria-pressed="false">Concesiones</button></div>' +
+      '<div id="ceList"></div>' +
+      '<p class="cal-note">Esta vista solo consulta: para aprobar, denegar, cancelar o editar, abre el punto desde la fila. Las cifras de arriba son las del Panel resumen. Una solicitud sin respuesta se marca como estancada a partir de ' + UMBRAL_ESTANCADA + " días; eso no cambia su estado.</p>";
+    draw();
+    dlg.showModal();
+    body.querySelector("#ceProv").focus();
+  };
+  body.addEventListener("click", (e) => {
+    const go = e.target.closest("[data-go]");
+    if (go) { const [v, k] = go.dataset.go.split(":"); vista = v; est[v] = k; mostrar = TRAMO; draw(); return; }
+    const tab = e.target.closest("[data-vista]");
+    if (tab) { vista = tab.dataset.vista; mostrar = TRAMO; draw(); return; }
+    if (e.target.closest("[data-mas]")) { mostrar += TRAMO; draw(); return; }
+    const pt = e.target.closest("[data-pt]");
+    if (pt) { const c = CENTERS.find((x) => String(x.id) === pt.dataset.pt); if (c) { fichaTabPedida = pt.dataset.tab || ""; dlg.close(); if (markers[c.id]) cluster.zoomToShowLayer(markers[c.id], () => markers[c.id].openPopup()); } }
+  });
+  body.addEventListener("change", (e) => {
+    if (e.target.id === "ceProv") { prov = e.target.value; ong = ""; }
+    else if (e.target.id === "ceOng") ong = e.target.value;
+    else if (e.target.id === "ceEst") est[vista] = e.target.value;
+    else return;
+    mostrar = TRAMO; draw();
+  });
+  body.addEventListener("input", (e) => { if (e.target.id === "ceQ") { q = e.target.value; mostrar = TRAMO; draw(); } });
+  $("#centroBtn").addEventListener("click", abrir);
+  $("#ceClose").addEventListener("click", () => dlg.close());
 })();
 
 // Administración (usuarios y provincias): solo para administradores. El alta de cuentas se hace en Supabase.
