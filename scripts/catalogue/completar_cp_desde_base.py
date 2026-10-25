@@ -1,5 +1,6 @@
 """Sugiere el codigo postal de los puntos activos que no lo tienen, con Nominatim inverso.
-Uso: python completar_cp_desde_base.py <salida.json>
+Uso: python completar_cp_desde_base.py <salida.json> [--prov 39] [--con-calle]
+- --prov limita a una provincia (codigo de 2 cifras). --con-calle incluye tambien los puntos sin direccion, aunque tengan codigo postal.
 - Pide la cadena de conexion sin eco (no se guarda) y lee con psql, en solo lectura, id, nombre, provincia, municipio y coordenadas de los puntos activos sin codigo postal.
 - 1 peticion cada 1,2 s con User-Agent identificado (politica de uso de Nominatim). Reanudable: guarda cada respuesta en <salida.json> y no repite las ya hechas.
 - Solo sugiere codigos de 5 cifras cuyas dos primeras cifras coinciden con la provincia del punto. No escribe nada en la base.
@@ -14,10 +15,13 @@ import urllib.request
 
 UA = "mapas-wesser-carga/1.0 (danytf@gmail.com)"
 salida = sys.argv[1]
+prov_f = sys.argv[sys.argv.index("--prov") + 1] if "--prov" in sys.argv else None
+con_calle = "--con-calle" in sys.argv
 conn = getpass.getpass("Cadena de conexion de Supabase (no se muestra ni se guarda): ")
 sql = ("select coalesce(json_agg(json_build_object('id', e.id, 'nombre', e.name, 'prov', p.code, 'municipio', m.name, 'lat', e.latitude, 'lon', e.longitude) order by p.code, m.name, e.name), '[]') "
        "from establishments e join provinces p on p.id = e.province_id join municipalities m on m.id = e.municipality_id "
-       "where e.status = 'active' and coalesce(e.postal_code, '') = ''")
+       "where e.status = 'active' and (coalesce(e.postal_code, '') = ''" + (" or coalesce(e.address, '') = ''" if con_calle else "") + ")"
+       + ((" and p.code = '%s'" % prov_f) if prov_f and prov_f.isdigit() else ""))
 r = subprocess.run(["psql", conn, "-Atq", "-c", sql], capture_output=True, text=True, encoding="utf-8")
 del conn
 if r.returncode != 0:
