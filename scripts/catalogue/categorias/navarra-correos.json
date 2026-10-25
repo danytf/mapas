@@ -1,0 +1,42 @@
+{
+  "codigo": "postal_service",
+  "categoria": "Correos",
+  "prefijo": "catalogo",
+  "criterio": "Oficinas de Correos (amenity=post_office cuyo nombre, operador o marca contiene «Correos» o «Correus»). Excluidos: buzones (post_box), taquillas de paqueteria (parcel_locker, incluidas las CityPaq), Correos Express, puntos de otras empresas (MRW, UPS, GLS, DHL, Tipsa, UniPost, Mail Boxes…), calles y paradas que solo llevan «Correos» en el nombre, y elementos en desuso. El nombre se compone «Correos <municipio>» como en Granada; no se exige nombre en OpenStreetMap. Dos oficinas a menos de 60 m se consideran la misma (nodo y edificio, cualquiera que sea el nombre). Granada queda fuera del lote porque su catalogo esta revisado a mano, salvo Orce y Puebla de Don Fadrique (altas reales sin oficina en la base, elegidas por el titular); a menos de 120 m de un punto ya existente se considera que ya esta en la base.",
+  "reglas": [
+    {
+      "subtipo": null,
+      "etiquetas": {
+        "amenity": [
+          "post_office"
+        ]
+      },
+      "exigir_texto": "correos|correus|correo\\b|postetxe",
+      "excluir_texto": "express|citypaq|mail boxes|mrw|tipsa|dhl|unipost|abacus|la poste|ups|gls",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    }
+  ],
+  "excluir_claves": [
+    "disused:amenity",
+    "abandoned:amenity"
+  ],
+  "nombre_fijo": "Correos {municipio}",
+  "nombre_obligatorio": false,
+  "distancia_duplicado_m": 60,
+  "distancia_existente_m": 120,
+  "distancia_revisar_m": 60,
+  "calle_no_valida_regex": "^(carril|veh[ií]culos|salida|acceso)\\b|\\bcarril (bici|taxi|de servicio)\\b|rotonda|servicio|^[A-Z]{1,2}-?\\d",
+  "nota_informe": "Las oficinas de OpenStreetMap pueden estar cerradas, trasladadas o duplicadas; OpenStreetMap no indica el horario vigente.",
+  "duplicado_ignora_nombre": true,
+  "solo_provincias": [
+    "31"
+  ],
+  "region": "navarra"
+}
