@@ -1,0 +1,157 @@
+{
+  "codigo": "baleares-grandes-superficies",
+  "prefijo": "catalogo",
+  "criterio": "Grandes superficies de cinco marcas, cada una en su categoria: Decathlon (tienda de deporte), Leroy Merlin (bricolaje), El Corte Ingles e Hipercor (grandes almacenes), IKEA (muebles) y MediaMarkt (electronica). Se excluyen los puntos de recogida y los elementos en desuso. El nombre se compone «<marca> <municipio>» y, si hay calle, « – <calle>», como en Granada; no se exige nombre en OpenStreetMap. Dos puntos de la misma marca a menos de 150 m se consideran el mismo (nodo y edificio). Granada queda fuera del lote porque su catalogo esta revisado a mano. Carrefour entra completo (hipermercados, Market, Express y City), por decision del titular: OpenStreetMap no distingue de forma fiable el tamano.",
+  "reglas": [
+    {
+      "categoria": "Decathlon",
+      "subtipo": null,
+      "etiquetas": {
+        "shop": [
+          "sports",
+          "outdoor"
+        ]
+      },
+      "exigir_texto": "decathlon",
+      "excluir_texto": "click|recogida|collect|pick",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    },
+    {
+      "categoria": "Leroy Merlin",
+      "subtipo": null,
+      "etiquetas": {
+        "shop": [
+          "doityourself",
+          "hardware",
+          "garden_centre",
+          "trade",
+          "houseware"
+        ]
+      },
+      "exigir_texto": "leroy merlin",
+      "excluir_texto": "click|recogida|collect|pick",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    },
+    {
+      "categoria": "El Corte Inglés",
+      "subtipo": null,
+      "etiquetas": {
+        "shop": [
+          "department_store",
+          "mall"
+        ]
+      },
+      "exigir_texto": "corte ingl[eé]s|hipercor",
+      "excluir_texto": "supercor|opencor|viajes|seguros|bricolaje|gourmet|outlet|aparcamiento|parking",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    },
+    {
+      "categoria": "IKEA",
+      "subtipo": null,
+      "etiquetas": {
+        "shop": [
+          "furniture",
+          "department_store",
+          "interior_decoration"
+        ]
+      },
+      "exigir_texto": "(^|[^a-z])ikea([^a-z]|$)",
+      "excluir_texto": "recogida|pick|click|planning|restaurante|bistro",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    },
+    {
+      "categoria": "MediaMarkt",
+      "subtipo": null,
+      "etiquetas": {
+        "shop": [
+          "electronics",
+          "computer",
+          "mobile_phone"
+        ]
+      },
+      "exigir_texto": "media ?markt",
+      "excluir_texto": "click|recogida|collect|pick",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    },
+    {
+      "categoria": "Carrefour",
+      "subtipo": null,
+      "etiquetas": {
+        "shop": [
+          "supermarket",
+          "hypermarket",
+          "convenience",
+          "department_store",
+          "mall"
+        ]
+      },
+      "exigir_texto": "carrefour",
+      "excluir_texto": "click|recogida|collect|pick|express shop|banco|bank|gasolinera|fuel|viajes",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    }
+  ],
+  "excluir_claves": [
+    "disused:shop",
+    "abandoned:shop"
+  ],
+  "nombre_por_categoria": {
+    "Decathlon": "Decathlon {municipio}",
+    "Leroy Merlin": "Leroy Merlin {municipio}",
+    "El Corte Inglés": "El Corte Inglés {municipio}",
+    "IKEA": "IKEA {municipio}",
+    "MediaMarkt": "MediaMarkt {municipio}",
+    "Carrefour": "Carrefour {municipio}"
+  },
+  "nombre_obligatorio": false,
+  "duplicado_ignora_nombre": true,
+  "distancia_duplicado_m": 150,
+  "distancia_existente_m": 150,
+  "distancia_revisar_m": 150,
+  "nota_informe": "OpenStreetMap puede tener tiendas cerradas, trasladadas o duplicadas, y no indica el horario vigente.",
+  "solo_provincias": [
+    "07"
+  ],
+  "region": "baleares"
+}
