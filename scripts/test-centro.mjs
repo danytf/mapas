@@ -22,8 +22,9 @@ ok(bloque.includes('role="status"') && bloque.includes('<caption class="adm-sr">
 ok(bloque.includes("badge(r.est)") && bloque.includes("esc(TEXTO[e])"), "El estado va también en texto, no solo en color");
 
 // No toca la red ni el navegador; lo único que guarda es «Hecho» en un seguimiento, por guardaPunto (guardado verificable con control de conflictos).
-ok(!/localStorage|sessionStorage|indexedDB|document\.cookie|caches\.|fetch\(|\.from\(|\.rpc\(|supabase|savePermits|ejecutaOpsRel/.test(bloque), "El Centro no puede llamar a la red ni guardar fuera de guardaPunto");
-ok((bloque.match(/guardaPunto\(/g) || []).length === 1 && bloque.includes("return guardaPunto(c, copia, previo)"), "Solo hay una escritura: cerrar un seguimiento con guardaPunto");
+ok(!/localStorage|sessionStorage|indexedDB|document\.cookie|caches\.|fetch\(|\.from\(|\.rpc\(|supabase|ejecutaOpsRel|guardaPunto/.test(bloque), "El Centro no puede llamar a la red ni escribir fuera de aplica()");
+ok((bloque.match(/savePermits\(/g) || []).length === 1 && /const aplica = async[\s\S]*?await savePermits\(c\)/.test(bloque), "Hay una sola escritura: aplica() guarda con savePermits");
+ok(/if \(r === "conflict"\) \{ await reloadSharedPermit\(c\); return "conflict"; \}/.test(bloque) && bloque.includes("gamPermit(c, previo)"), "aplica() recarga tras un conflicto y registra el progreso solo si se confirma");
 ok(bloque.includes("if (s.punto) delete copia.segPunto") && bloque.includes('x.seg = ""'), "«Hecho» cierra solo el seguimiento elegido, no todos los del punto");
 ok(bloque.includes("No se pudo confirmar el guardado") && bloque.includes("Otra persona ha cambiado"), "Los errores y conflictos no se presentan como guardados");
 
@@ -93,5 +94,32 @@ ok(cs("proximo") === ind2.segProximos.length && cs("proximo") === 1, "Próximos 
 ok(cs("sinresp") === 1 && cs("todas") === 4, "Sin responsable y total");
 // Avisos: la bandeja usa la misma lista de incidencias que el Panel.
 ok(bloque.includes("incidencias(todas.filter(okOng), t)") && ind2.incidencias.length === ctx.incidencias(recs2, t).length, "Los avisos salen de incidencias()");
+
+// Cambios de «aplica()»: cada mutador se prueba sobre una copia del estado del punto.
+const m0 = bloque.indexOf("  const ubica = "), m1 = bloque.indexOf("\n  };\n", bloque.indexOf("const mutadores = {")) + 6;
+ok(m0 >= 0 && m1 > m0, "No se encuentran los mutadores");
+const M = runInNewContext(
+  "const permits = {}; const permitKey = (c) => c.id; const permOf = (c) => permits[permitKey(c)] || {};\n" + html.slice(i0, i2) + "\n" + bloque.slice(m0, m1) + "\n({ mutadores, ubica, today })",
+  { Date: Falsa, self: { crypto: { randomUUID: (() => { let n = 0; return () => "id-" + (++n); })() } } }
+);
+const nuevo = () => ({ solicitudes: [{ id: "s1", desde: "2026-11-01", hasta: "2026-11-10", captadores: 2, ong: "A", fecha: "2026-10-20", seg: "2026-10-30", contacto: "Ana", notas: "n" }, { id: "s2", res: "denegada", resFecha: "2026-10-21", fecha: "2026-10-20" }], historial: [{ id: "g1", desde: "2026-10-01", hasta: "2026-12-01", ong: "A", captadores: 3 }] });
+let cp = nuevo();
+ok(M.mutadores.conceder({ id: "s1" })(cp) === undefined && cp.solicitudes[0].res === "aprobada" && cp.historial.length === 2, "Conceder aprueba la solicitud y crea la concesión");
+const g = cp.historial[1];
+ok(g.sol === "s1" && g.desde === "2026-11-01" && g.hasta === "2026-11-10" && g.captadores === 2 && g.ong === "A" && g.contacto === "Ana" && g.notas === "n" && cp.solicitudes[0].conc === g.id, "La concesión nace con los datos de la solicitud y queda enlazada");
+ok(typeof M.mutadores.conceder({ id: "s1" })(cp) === "string", "Conceder una solicitud ya resuelta se aborta sin cambios (doble clic)");
+ok(typeof M.mutadores.conceder({ id: "s2" })(nuevo()) === "string" && typeof M.mutadores.conceder({ id: "nada" })(nuevo()) === "string", "Conceder una denegada o inexistente se aborta");
+cp = nuevo(); M.mutadores.resolver({ id: "s1" }, "retirada", "La ONG desiste")(cp);
+ok(cp.solicitudes[0].res === "retirada" && cp.solicitudes[0].motivo === "La ONG desiste" && cp.solicitudes[0].resFecha === t && cp.historial.length === 1, "Retirar guarda motivo y fecha y no crea concesión");
+cp = nuevo(); M.mutadores.cancelar({ id: "g1" }, "Se acaba")(cp);
+ok(cp.historial[0].cancelada === true && cp.historial[0].resFecha === t && cp.historial[0].motivo === "Se acaba", "Cancelar marca la concesión con fecha y motivo");
+M.mutadores.reactivar({ id: "g1" })(cp);
+ok(!cp.historial[0].cancelada && !cp.historial[0].resFecha, "Reactivar quita la cancelación");
+cp = nuevo(); M.mutadores.quitarSol({ id: "s2" })(cp); M.mutadores.quitarCon({ id: "g1" })(cp);
+ok(cp.solicitudes.length === 1 && cp.historial.length === 0, "Quitar borra solo el registro elegido");
+cp = nuevo(); M.mutadores.cerrarSeg({ i: 0, punto: false })(cp);
+ok(cp.solicitudes[0].seg === "" && cp.solicitudes[1].seg === undefined, "«Hecho» cierra solo el seguimiento de esa solicitud");
+cp = { segPunto: { fecha: "2026-10-30", fu: "f1" }, solicitudes: [], historial: [] }; M.mutadores.cerrarSeg({ punto: true, i: -1 })(cp);
+ok(!cp.segPunto, "«Hecho» cierra el seguimiento del punto");
 
 console.log("Centro de permisos: " + n + " comprobaciones correctas.");
