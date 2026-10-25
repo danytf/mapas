@@ -215,6 +215,13 @@ createServer(async (req, res) => {
     const ahora = () => { S.relClock = (S.relClock || 0) + 1; return new Date(Date.UTC(2026, 9, 23, 12, 0, 0) + S.relClock * 1000).toISOString().replace("Z", "000+00:00"); };
     const fallo = (code, message, status = 400) => send(res, status, { code, message });
     const apps = S.rel.permit_applications, grants = S.rel.permit_grants, fups = S.rel.followups;
+    /* Auditoría simulada (como los triggers de audit_log): solo la lee un administrador. */
+    S.audit = S.audit || [];
+    const aud = (accion, tabla, rid, campos) => S.audit.push({ id: S.audit.length + 1, actor_id: u.id, action: accion, table_name: tabla, record_id: rid, details: { changed_fields: campos }, created_at: ahora().replace("000+00:00", "Z") });
+    if (table === "audit_log") {
+      if (u.role !== "admin") return reply([]);
+      return reply(applyFilters(S.audit.slice().reverse(), url.searchParams));
+    }
     const closeFups = (appId) => fups.forEach((f) => { if (f.application_id === appId && !f.completed_at) f.completed_at = ahora(); });
     if (table.startsWith("rpc/") && ["approve_permit_application", "resolve_permit_application", "cancel_permit_grant"].includes(table.slice(4))) {
       const fn = table.slice(4);
@@ -224,6 +231,7 @@ createServer(async (req, res) => {
         if (g.status === "cancelled") return send(res, 200, null);
         if (body.p_expected_updated_at && body.p_expected_updated_at !== g.updated_at) return fallo("PT409", "La concesión ha cambiado desde que se leyó", 409);
         Object.assign(g, { status: "cancelled", cancelled_at: ahora(), cancelled_reason: body.p_reason || null, updated_at: ahora(), updated_by: u.id });
+        aud("update", "permit_grants", g.id, ["status", "cancelled_at", "cancelled_reason"]);
         return send(res, 200, null);
       }
       if (!a) return fallo("P0002", "Solicitud no encontrada", 404);
@@ -238,6 +246,7 @@ createServer(async (req, res) => {
         const nueva = { id: "00000000-0000-4000-9000-" + String(grants.length + 1).padStart(12, "0"), establishment_id: a.establishment_id, application_id: a.id, status: "active", valid_from: vf, valid_until: vu,
           organization: body.p_organization ?? a.organization, capturer_count: body.p_capturer_count ?? a.capturer_count, contact_details: a.contact_details, notes: a.notes, cancelled_at: null, cancelled_reason: null, created_at: ahora(), updated_at: ahora(), created_by: u.id };
         grants.push(nueva);
+        aud("update", "permit_applications", a.id, ["status", "resolved_at"]); aud("insert", "permit_grants", nueva.id, ["organization", "valid_from", "valid_until", "capturer_count", "application_id", "status"]);
         S.log.push({ tipo: "rel", accion: "aprobar", app: a.id, grant: nueva.id });
         return send(res, 200, nueva.id);
       }
@@ -246,6 +255,7 @@ createServer(async (req, res) => {
       if (body.p_expected_updated_at && body.p_expected_updated_at !== a.updated_at) return fallo("PT409", "La solicitud ha cambiado desde que se leyó", 409);
       if (a.status !== "pending") return fallo("23514", "La solicitud ya está resuelta");
       Object.assign(a, { status: body.p_status, resolution_reason: body.p_reason || null, resolved_at: ahora(), resolved_by: u.id, updated_at: ahora(), updated_by: u.id });
+      aud("update", "permit_applications", a.id, ["status", "resolution_reason", "resolved_at"]);
       return send(res, 200, null);
     }
     if (REL.includes(table)) {
@@ -257,17 +267,18 @@ createServer(async (req, res) => {
         if (fila.id && rows.some((x) => x.id === fila.id)) return fallo("23505", "duplicate key value", 409);
         const nueva = { id: fila.id || "00000000-0000-4000-a000-" + String(rows.length + 1).padStart(12, "0"), status: table === "permit_grants" ? "active" : "pending", completed_at: null, ...fila, created_at: ahora(), updated_at: ahora() };
         rows.push(nueva);
+        aud("insert", table, nueva.id, Object.keys(fila));
         return send(res, 201);
       }
       if (req.method === "PATCH") {
         const sel = applyFilters(rows.filter(relVisible), url.searchParams);
-        for (const r of sel) Object.assign(r, body, { updated_at: ahora() });
+        for (const r of sel) { Object.assign(r, body, { updated_at: ahora() }); aud("update", table, r.id, Object.keys(body)); }
         return send(res, 200, sel.map((r) => ({ id: r.id })));
       }
       if (req.method === "DELETE") {
         if (u.role !== "admin") return send(res, 200, []);
         const sel = applyFilters(rows, url.searchParams);
-        sel.forEach((r) => rows.splice(rows.indexOf(r), 1));
+        sel.forEach((r) => { rows.splice(rows.indexOf(r), 1); aud("delete", table, r.id, []); });
         return send(res, 200, sel.map((r) => ({ id: r.id })));
       }
     }
