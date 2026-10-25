@@ -14,7 +14,7 @@ assert.match(html, /<dialog id="dlgAdm" aria-labelledby="admT">/, "dlgAdm sin ar
 assert.match(html, /<h2 id="admT">Administración<\/h2>/, "Falta el título del diálogo");
 assert.match(html, /<div id="admMsg" role="status"><\/div>/, "El mensaje de estado debe ser role=status");
 assert.match(html, /id="admBtn"[^>]*role="menuitem"[^>]*hidden/, "La opción del menú debe estar oculta por defecto");
-assert.match(html, /id="admMh" hidden/, "El encabezado del grupo de menú debe estar oculto por defecto");
+assert.match(html, /id="admMh"[^>]* hidden>/, "El encabezado del grupo de menú debe estar oculto por defecto");
 assert.ok(html.includes(".filter((i) => !i.disabled && !i.hidden)"), "El menú por teclado no debe incluir elementos ocultos");
 
 // Solo para administradores y acceso a datos por las vías previstas.

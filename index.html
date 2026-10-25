@@ -413,6 +413,11 @@
   #menuPanel .mu + .mh, #menuPanel .mh:first-child { border-top: 0; margin-top: 0; }
   #menuPanel .mu { border-bottom: 1px solid var(--line); margin-bottom: 4px; }
   #menuPanel .mh-fin { padding: 0; height: 0; margin-top: 5px; }
+  #menuPanel .mh-btn { width: 100%; font-size: var(--fs-label); font-weight: 650; color: var(--muted); }
+  #menuPanel .mh-btn::after { content: ""; flex: none; width: 7px; height: 7px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(-45deg); transition: transform .15s; }
+  #menuPanel .mh-btn[aria-expanded="true"]::after { transform: rotate(45deg); }
+  #menuPanel .mn-sec button { padding-left: 20px; }
+  @media (prefers-reduced-motion: reduce) { #menuPanel .mh-btn::after { transition: none; } }
   #menuPanel button { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
   #menuPanel [hidden] { display: none; }
   #menuPanel .mk { min-width: 22px; padding: 0 6px; border: 1px solid var(--line-2); border-bottom-width: 2px; border-radius: var(--r-xs); background: var(--ok-bg); color: var(--muted); font-size: var(--fs-label); text-align: center; }
@@ -1073,24 +1078,36 @@
     <button id="menuBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Menú" title="Menú"><span></span><span></span><span></span></button>
     <div id="menuPanel" role="menu" hidden>
       <div class="mu" id="menuUser" aria-live="polite"></div>
-      <div class="mh">Informes</div>
-      <button id="centroBtn" type="button" role="menuitem">Centro de permisos</button>
-      <button id="panelBtn" type="button" role="menuitem">Panel resumen</button>
-      <button id="calBtn" type="button" role="menuitem">Calendario semanal</button>
-      <div class="mh">Progreso</div>
-      <button id="gamBtn" type="button" role="menuitem">Mi progreso</button>
-      <button id="logrosBtn" type="button" role="menuitem">Logros</button>
-      <div class="mh">Puntos</div>
-      <button id="add" type="button" role="menuitem">Añadir punto</button>
-      <button id="restore" type="button" role="menuitem">Restaurar puntos quitados (0)</button>
-      <div class="mh">Datos</div>
-      <button id="csv" type="button" role="menuitem">Exportar CSV</button>
-      <button id="bak" type="button" role="menuitem">Exportar estado operativo (JSON)</button>
-      <button id="copy" type="button" role="menuitem">Copiar coordenadas (JSON)</button>
-      <div class="mh" id="admMh" hidden>Administración</div>
-      <button id="admBtn" type="button" role="menuitem" hidden>Usuarios y provincias</button>
-      <div class="mh">Ayuda</div>
-      <button id="ayBtn" type="button" role="menuitem">Ayuda y atajos<span class="mk" aria-hidden="true">?</span></button>
+      <button type="button" class="mh mh-btn" role="menuitem" aria-expanded="true" aria-controls="mnSec-informes">Informes</button>
+      <div class="mn-sec" id="mnSec-informes" role="group" aria-label="Informes">
+        <button id="centroBtn" type="button" role="menuitem">Centro de permisos</button>
+        <button id="panelBtn" type="button" role="menuitem">Panel resumen</button>
+        <button id="calBtn" type="button" role="menuitem">Calendario semanal</button>
+      </div>
+      <button type="button" class="mh mh-btn" role="menuitem" aria-expanded="false" aria-controls="mnSec-progreso">Progreso</button>
+      <div class="mn-sec" id="mnSec-progreso" role="group" aria-label="Progreso" hidden>
+        <button id="gamBtn" type="button" role="menuitem">Mi progreso</button>
+        <button id="logrosBtn" type="button" role="menuitem">Logros</button>
+      </div>
+      <button type="button" class="mh mh-btn" role="menuitem" aria-expanded="false" aria-controls="mnSec-puntos">Puntos</button>
+      <div class="mn-sec" id="mnSec-puntos" role="group" aria-label="Puntos" hidden>
+        <button id="add" type="button" role="menuitem">Añadir punto</button>
+        <button id="restore" type="button" role="menuitem">Restaurar puntos quitados (0)</button>
+      </div>
+      <button type="button" class="mh mh-btn" role="menuitem" aria-expanded="false" aria-controls="mnSec-datos">Datos</button>
+      <div class="mn-sec" id="mnSec-datos" role="group" aria-label="Datos" hidden>
+        <button id="csv" type="button" role="menuitem">Exportar CSV</button>
+        <button id="bak" type="button" role="menuitem">Exportar estado operativo (JSON)</button>
+        <button id="copy" type="button" role="menuitem">Copiar coordenadas (JSON)</button>
+      </div>
+      <button type="button" class="mh mh-btn" role="menuitem" id="admMh" aria-expanded="false" aria-controls="mnSec-admin" hidden>Administración</button>
+      <div class="mn-sec" id="mnSec-admin" role="group" aria-label="Administración" hidden>
+        <button id="admBtn" type="button" role="menuitem" hidden>Usuarios y provincias</button>
+      </div>
+      <button type="button" class="mh mh-btn" role="menuitem" aria-expanded="false" aria-controls="mnSec-ayuda">Ayuda</button>
+      <div class="mn-sec" id="mnSec-ayuda" role="group" aria-label="Ayuda" hidden>
+        <button id="ayBtn" type="button" role="menuitem">Ayuda y atajos<span class="mk" aria-hidden="true">?</span></button>
+      </div>
       <div class="mh mh-fin" role="presentation"></div>
       <button id="logout" type="button" role="menuitem" class="mn-salir">Cerrar sesión</button>
     </div>
@@ -3985,7 +4002,7 @@ $("#bulkFav").addEventListener("click", async () => {
 });
 (() => {
   const btn = $("#menuBtn"), panel = $("#menuPanel");
-  const items = () => [...panel.querySelectorAll('[role="menuitem"]')].filter((i) => !i.disabled && !i.hidden);
+  const items = () => [...panel.querySelectorAll('[role="menuitem"]')].filter((i) => !i.disabled && !i.closest("[hidden]"));
   // Abrir con el teclado lleva el foco al primer (o último) elemento del menú.
   const set = (open, focusItem) => {
     panel.hidden = !open; btn.setAttribute("aria-expanded", open);
@@ -4011,7 +4028,12 @@ $("#bulkFav").addEventListener("click", async () => {
     else if (e.key === "Escape") { e.preventDefault(); set(false); btn.focus(); }
   });
   // El menú se oculta al elegir una opción: el foco vuelve al botón del menú salvo que se abra un diálogo.
-  panel.addEventListener("click", () => { set(false); if (!document.querySelector("dialog[open]")) btn.focus(); });
+  panel.addEventListener("click", (e) => {
+    /* Los títulos del menú despliegan o pliegan su sección sin cerrar el menú (el estado vive solo en memoria mientras dura la sesión). */
+    const cab = e.target.closest(".mh-btn");
+    if (cab) { const abierto = cab.getAttribute("aria-expanded") === "true", sec = document.getElementById(cab.getAttribute("aria-controls")); cab.setAttribute("aria-expanded", String(!abierto)); if (sec) sec.hidden = abierto; return; }
+    set(false); if (!document.querySelector("dialog[open]")) btn.focus();
+  });
   document.addEventListener("click", (e) => { if (!panel.contains(e.target)) set(false); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") set(false); });
   // Al cerrar un diálogo abierto desde el menú, el elemento de origen está oculto: el foco vuelve al botón del menú.

@@ -50,6 +50,9 @@ const main = async () => {
   for (const [prefijo, ancho, alto] of [["pc", 1440, 900], ["movil", 390, 800]]) {
     await abre(ancho, alto);
     await foto(prefijo + "-00-mapa");
+    await ev("document.getElementById('menuBtn').click(); await new Promise(r=>setTimeout(r,300)); return 1;"); await foto(prefijo + "-00-menu");
+    await ev("[...document.querySelectorAll('#menuPanel .mh-btn')].find(x => x.textContent.trim() === 'Datos').click(); await new Promise(r=>setTimeout(r,300)); return 1;"); await foto(prefijo + "-00-menu-datos");
+    await ev("document.getElementById('menuBtn').click(); await new Promise(r=>setTimeout(r,300)); return 1;");
     await ev("document.getElementById('menuBtn').click(); document.getElementById('centroBtn').click(); await new Promise(r=>setTimeout(r,1200)); return 1;");
     for (const v of ["res", "sol", "con", "seg", "inc"]) { await ev(ayudas + "nav('" + v + "'); await w(500); return 1;"); await foto(prefijo + "-01-" + v); }
     await ev(ayudas + "nav('sol'); await w(300); b().querySelector('#ceList tr.ce-row .ce-pt').click(); await w(500); return 1;"); await foto(prefijo + "-02-detalle-solicitud");
