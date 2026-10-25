@@ -165,6 +165,8 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261025170441_permit_atomic_followups.sql
       - name: Delete follow-ups with their application or grant (cascade)
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261025174656_followups_cascade_on_parent_delete.sql
+      - name: Allow deleting a user who resolved permit applications
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261025212400_allow_resolver_set_null_on_profile_delete.sql
       - name: Verify every migration file is applied by this workflow
         shell: bash
         run: |
@@ -200,6 +202,8 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/permit_rpc_isolation.sql
       - name: Run follow-up cascade tests
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/followups_cascade.sql
+      - name: Run user deletion (decision author) tests
+        run: psql -v ON_ERROR_STOP=1 -f supabase/tests/profile_delete_resolver.sql
       - name: Run assignee listing tests
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/permit_assignees.sql
       - name: Run permit backfill and reconciliation tests
