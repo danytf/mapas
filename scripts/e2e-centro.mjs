@@ -172,6 +172,15 @@ const main = async () => {
   ok(/Se aplicaron 1 de 2 pasos/.test(r3.parcial), "un fallo parcial dice cuántos pasos se aplicaron"); eq(r3.reintento, [1, 1], "reintentar un alta tras un fallo parcial no duplica la solicitud");
   permitidos = [];
 
+  /* Coherencia Centro ↔ ficha del punto: las solicitudes pendientes de un punto son las mismas en las dos pantallas */
+  const r3b = await ev(ayudas + `
+    nav('sol'); await w(250); set('ceEst','pendiente'); await w(250);
+    const nombres = [...b().querySelectorAll('tr.ce-row .ce-pt strong')].map(x => x.textContent), nombre = nombres[0], esperadas = nombres.filter(x => x === nombre).length;
+    b().querySelector('tr.ce-row .ce-pt').click(); await w(300); b().querySelector('#ceSide [data-pt]').click(); await w(3000);
+    const f = document.getElementById('ficha'), caja = [...f.querySelectorAll('.pinfo > div')].find(x => /Pendientes/.test(x.innerText));
+    return { nombre, esperadas, ficha: f.querySelector('.fi-title')?.textContent, pendientes: caja ? +caja.querySelector('b').textContent : -1, soloLectura: !f.querySelector('.s-add, .h-add, .ptabs') && !!f.querySelector('.f-centro') };`);
+  eq(r3b.ficha, r3b.nombre, "la ficha abre el punto elegido en el Centro"); eq(r3b.pendientes, r3b.esperadas, "solicitudes pendientes de un punto: ficha = Centro"); ok(r3b.soloLectura, "la ficha no tiene formularios de permisos y ofrece el botón del Centro");
+
   /* ===== 4. Calendario, enlaces cruzados y almacenamiento local ===== */
   const r4 = await ev(ayudas + `
     const out = {}; document.getElementById('ceClose').click(); await w(200);
