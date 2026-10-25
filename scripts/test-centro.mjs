@@ -169,4 +169,8 @@ ok(html.includes('detail: { punto: c, vista: tr.dataset.v || "sol", est: "todas"
 ok(bloque.includes("(!punto || String(x.c.id) === String(punto.id))") && bloque.includes("data-quita-punto") && bloque.includes("abreForm(nw.dataset.new, punto, null)"), "El Centro filtra por punto, permite quitar el filtro y da de alta en ese punto");
 ok(bloque.includes('new CustomEvent("permisos:cambio", { detail: { id: c.id } })'), "El Centro avisa a la ficha abierta de que el punto ha cambiado");
 
+// Móvil: sin desbordamiento horizontal del diálogo (medido en un marco de 390 px).
+ok(/\.ce-tabs \{ display: flex; flex-wrap: wrap;/.test(html), "Las pestañas del Centro deben poder saltar de línea en pantallas estrechas");
+ok(/\.pn-scroll \{[^}]*overflow-x: auto;[^}]*position: relative;/.test(html), "El contenedor de las tablas es su propia referencia de posición: los textos ocultos (adm-sr) de la última columna no deben alargar el diálogo");
+
 console.log("Centro de permisos: " + n + " comprobaciones correctas.");
