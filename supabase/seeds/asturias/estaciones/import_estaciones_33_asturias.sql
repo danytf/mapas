@@ -1,0 +1,266 @@
+-- Carga de la categoría Estaciones de Asturias (provincia 33), trozo de la carga de Andalucía.
+-- Origen: estaciones-asturias.json (OpenStreetMap, ODbL, consulta del 2026-10-25, base 2026-10-24T20:20:51Z).
+-- 208 filas. No toca nada existente: si el source_ref ya existe, no hace nada.
+-- El municipio se asigna por código INE oficial (municipalities.official_code).
+-- Transaccional: si falta la categoría o algún municipio, aborta sin cambios.
+
+BEGIN;
+
+CREATE TEMP TABLE _carga (
+  source_ref text, name text, subtype text, muni_ine text, address text, postal_code text,
+  latitude double precision, longitude double precision, location_precision text, location_source text
+) ON COMMIT DROP;
+
+INSERT INTO _carga VALUES
+  ('catalogo-asturias:estaciones:node-108478880', 'Estación de tren de Cadavedo (Valdés)', 'Tren', '33034', NULL, NULL, 43.54289, -6.39182, 'address', 'openstreetmap:node/108478880'),
+  ('catalogo-asturias:estaciones:node-1094103535', 'Estación de Autobuses de Avilés – Estación de Avilés', 'Autobús', '33004', 'Estación de Avilés', NULL, 43.5616, -5.92302, 'address', 'openstreetmap:node/1094103535'),
+  ('catalogo-asturias:estaciones:node-1110776259', 'Estación de Autobuses (Lena) – Calle de Luis Menéndez Pidal', 'Autobús', '33033', 'Calle de Luis Menéndez Pidal', '33630', 43.15847, -5.82736, 'address', 'openstreetmap:node/1110776259'),
+  ('catalogo-asturias:estaciones:node-11509683218', 'Estación de tren de El Berrón (Siero) – Calle La Estación', 'Tren', '33066', 'Calle La Estación', NULL, 43.38248, -5.70247, 'approximate', 'openstreetmap:node/11509683218'),
+  ('catalogo-asturias:estaciones:node-11986323230', 'Estación de tren de Castropol', 'Tren', '33017', NULL, NULL, 43.50889, -7.01385, 'address', 'openstreetmap:node/11986323230'),
+  ('catalogo-asturias:estaciones:node-12048103158', 'Estación de tren de Piedras Blancas (Castrillón) – Calle La Estación', 'Tren', '33016', 'Calle La Estación 14', NULL, 43.55646, -5.97549, 'address', 'openstreetmap:node/12048103158'),
+  ('catalogo-asturias:estaciones:node-12463972413', 'Estación de tren de Cueves (Ribadesella)', 'Tren', '33056', NULL, NULL, 43.43123, -5.07331, 'address', 'openstreetmap:node/12463972413'),
+  ('catalogo-asturias:estaciones:node-12702395582', 'Estación de tren de L''Entregu / El Entrego (Samartín del Rei Aurelio) – Calle Juan de la Cierva', 'Tren', '33060', 'Calle Juan de la Cierva', NULL, 43.28714, -5.64519, 'address', 'openstreetmap:node/12702395582'),
+  ('catalogo-asturias:estaciones:node-12759701351', 'Estación de tren de La Cobertoria (Lena)', 'Tren', '33033', NULL, NULL, 43.13007, -5.81605, 'address', 'openstreetmap:node/12759701351'),
+  ('catalogo-asturias:estaciones:node-12759731381', 'Estación de tren de Peña Rubia (Langreo)', 'Tren', '33031', NULL, NULL, 43.32126, -5.721, 'address', 'openstreetmap:node/12759731381'),
+  ('catalogo-asturias:estaciones:node-12926284057', 'Estación de tren de Parque Principado (Oviedo) – Carretera Oviedo - Viella', 'Tren', '33044', 'Carretera Oviedo - Viella', NULL, 43.38621, -5.80874, 'address', 'openstreetmap:node/12926284057'),
+  ('catalogo-asturias:estaciones:node-12926284058', 'Estación de tren de Colloto / Cualloto (Siero) – Calle la Estación', 'Tren', '33066', 'Calle la Estación', NULL, 43.37949, -5.79207, 'address', 'openstreetmap:node/12926284058'),
+  ('catalogo-asturias:estaciones:node-12926284059', 'Estación de tren de Fonciello (Siero)', 'Tren', '33066', NULL, NULL, 43.38174, -5.72969, 'address', 'openstreetmap:node/12926284059'),
+  ('catalogo-asturias:estaciones:node-12926284060', 'Estación de tren de Lieres (Siero) – Carretera a Feleches', 'Tren', '33066', 'Carretera a Feleches', NULL, 43.38052, -5.58266, 'address', 'openstreetmap:node/12926284060'),
+  ('catalogo-asturias:estaciones:node-12926284061', 'Estación de tren de Nava – Camín de Castañera', 'Tren', '33040', 'Camín de Castañera', NULL, 43.36119, -5.50899, 'address', 'openstreetmap:node/12926284061'),
+  ('catalogo-asturias:estaciones:node-12926284062', 'Estación de tren de Ceceda (Nava)', 'Tren', '33040', NULL, NULL, 43.35617, -5.45111, 'address', 'openstreetmap:node/12926284062'),
+  ('catalogo-asturias:estaciones:node-12926284063', 'Estación de tren de Carancos (Nava)', 'Tren', '33040', NULL, NULL, 43.35537, -5.43457, 'address', 'openstreetmap:node/12926284063'),
+  ('catalogo-asturias:estaciones:node-12926284064', 'Estación de tren de L''Infiestu (Piloña) – Avenida de La Cueva', 'Tren', '33049', 'Avenida de La Cueva', '33530', 43.35191, -5.36916, 'address', 'openstreetmap:node/12926284064'),
+  ('catalogo-asturias:estaciones:node-12926284065', 'Estación de tren de Ribadesella – Carretera de la Estación', 'Tren', '33056', 'Carretera de la Estación', '33560', 43.45938, -5.05466, 'address', 'openstreetmap:node/12926284065'),
+  ('catalogo-asturias:estaciones:node-12926284066', 'Estación de tren de Nueva (Llanes)', 'Tren', '33036', NULL, NULL, 43.44051, -4.93543, 'address', 'openstreetmap:node/12926284066'),
+  ('catalogo-asturias:estaciones:node-12926284067', 'Estación de tren de Posada (Llanes) – Calle Ería Las Piedras', 'Tren', '33036', 'Calle Ería Las Piedras', NULL, 43.42512, -4.86521, 'address', 'openstreetmap:node/12926284067'),
+  ('catalogo-asturias:estaciones:node-12926284068', 'Estación de tren de Llanes – Calle Rodrigo Grossi', 'Tren', '33036', 'Calle Rodrigo Grossi 4', '33500', 43.42091, -4.75912, 'address', 'openstreetmap:node/12926284068'),
+  ('catalogo-asturias:estaciones:node-13033345317', 'Estación de tren de San Pedru Nora (Oviedo)', 'Tren', '33044', NULL, NULL, 43.36874, -5.95853, 'address', 'openstreetmap:node/13033345317'),
+  ('catalogo-asturias:estaciones:node-13033457363', 'Estación de tren de Santa María Grau (Grado)', 'Tren', '33026', NULL, NULL, 43.38396, -5.98255, 'address', 'openstreetmap:node/13033457363'),
+  ('catalogo-asturias:estaciones:node-13042483547', 'Estación de tren de Puente Buracos (Siero)', 'Tren', '33066', NULL, NULL, 43.44805, -5.7173, 'address', 'openstreetmap:node/13042483547'),
+  ('catalogo-asturias:estaciones:node-13068514059', 'Estación de tren de San Vicente (Samartín del Rei Aurelio) – Trabanquin', 'Tren', '33060', 'Trabanquin', '33940', 43.2891, -5.65292, 'address', 'openstreetmap:node/13068514059'),
+  ('catalogo-asturias:estaciones:node-13068622422', 'Estación de tren de El Entrego - La Oscura (Samartín del Rei Aurelio) – Calle Máximo Fernández Cocañín', 'Tren', '33060', 'Calle Máximo Fernández Cocañín 1', NULL, 43.28968, -5.64086, 'address', 'openstreetmap:node/13068622422'),
+  ('catalogo-asturias:estaciones:node-13076036214', 'Estación de tren de Riberas (Soto del Barco) – La Riestra', 'Tren', '33069', 'La Riestra', NULL, 43.50272, -6.07429, 'address', 'openstreetmap:node/13076036214'),
+  ('catalogo-asturias:estaciones:node-13081261440', 'Estación de tren de Blimea (Samartín del Rei Aurelio) – Estación de Blimea', 'Tren', '33060', 'Estación de Blimea', NULL, 43.27088, -5.59039, 'address', 'openstreetmap:node/13081261440'),
+  ('catalogo-asturias:estaciones:node-13081283761', 'Estación de tren de Sotrondio (Samartín del Rei Aurelio) – Avenida del Rey Aurelio', 'Tren', '33060', 'Avenida del Rey Aurelio 6', '33950', 43.27602, -5.60484, 'address', 'openstreetmap:node/13081283761'),
+  ('catalogo-asturias:estaciones:node-13082048616', 'Estación de tren de Santa Cruz (Mieres) – Carretera de Ujo a Cabañaquinta', 'Tren', '33037', 'Carretera de Ujo a Cabañaquinta', NULL, 43.19595, -5.77757, 'address', 'openstreetmap:node/13082048616'),
+  ('catalogo-asturias:estaciones:node-13098181683', 'Estación de tren de La Florida (Siero)', 'Tren', '33066', NULL, NULL, 43.43478, -5.71001, 'address', 'openstreetmap:node/13098181683'),
+  ('catalogo-asturias:estaciones:node-13116707283', 'Estación de tren de Viḷḷayana (Lena) – Avenida Camino de Santiago', 'Tren', '33033', 'Avenida Camino de Santiago', NULL, 43.18394, -5.81463, 'address', 'openstreetmap:node/13116707283'),
+  ('catalogo-asturias:estaciones:node-13127522314', 'Estación de tren de Salinas (Castrillón)', 'Tren', '33016', NULL, NULL, 43.5704, -5.95657, 'address', 'openstreetmap:node/13127522314'),
+  ('catalogo-asturias:estaciones:node-13132993626', 'Estación de tren de Santuyano (Mieres)', 'Tren', '33037', NULL, NULL, 43.22089, -5.78549, 'address', 'openstreetmap:node/13132993626'),
+  ('catalogo-asturias:estaciones:node-13140347478', 'Estación de tren de Villabona–Tabladiello (Llanera)', 'Tren', '33035', NULL, NULL, 43.4742, -5.80007, 'address', 'openstreetmap:node/13140347478'),
+  ('catalogo-asturias:estaciones:node-13157639313', 'Estación de tren de Trubia (Oviedo) – Camino del Molino', 'Tren', '33044', 'Camino del Molino', NULL, 43.34856, -5.96758, 'address', 'openstreetmap:node/13157639313'),
+  ('catalogo-asturias:estaciones:node-13160589692', 'Estación de tren de Piñeres (Aller) – Carretera de Ujo al Puerto de San Isidro', 'Tren', '33002', 'Carretera de Ujo al Puerto de San Isidro', NULL, 43.16588, -5.68434, 'address', 'openstreetmap:node/13160589692'),
+  ('catalogo-asturias:estaciones:node-13165236051', 'Estación de tren de La Perea (Mieres)', 'Tren', '33037', NULL, NULL, 43.27667, -5.81284, 'address', 'openstreetmap:node/13165236051'),
+  ('catalogo-asturias:estaciones:node-13174866312', 'Estación de tren de Cancienes (Corvera de Asturias) – Carretera de la Chusca', 'Tren', '33020', 'Carretera de la Chusca', NULL, 43.5072, -5.86938, 'address', 'openstreetmap:node/13174866312'),
+  ('catalogo-asturias:estaciones:node-13185390171', 'Estación de tren de Luarca (Valdés)', 'Tren', '33034', NULL, '33700', 43.53758, -6.53667, 'address', 'openstreetmap:node/13185390171'),
+  ('catalogo-asturias:estaciones:node-13195224669', 'Estación de tren de Caneiru (Valdés)', 'Tren', '33034', NULL, NULL, 43.54188, -6.44601, 'address', 'openstreetmap:node/13195224669'),
+  ('catalogo-asturias:estaciones:node-13227882015', 'Estación de tren de Fuentesanta / Ḥuentesanta (Nava) – Camin de la Estacion', 'Tren', '33040', 'Camin de la Estacion', NULL, 43.35562, -5.47853, 'address', 'openstreetmap:node/13227882015'),
+  ('catalogo-asturias:estaciones:node-13229931499', 'Estación de tren de Muros de Nalon – Calle Vilar', 'Tren', '33039', 'Calle Vilar', NULL, 43.54309, -6.11101, 'address', 'openstreetmap:node/13229931499'),
+  ('catalogo-asturias:estaciones:node-13233594546', 'Estación de tren de Candás (Carreño) – Calle La Estación', 'Tren', '33014', 'Calle La Estación', NULL, 43.58458, -5.77268, 'address', 'openstreetmap:node/13233594546'),
+  ('catalogo-asturias:estaciones:node-13252833306', 'Estación de tren de Ablaña (Mieres) – Calle Inés de la Fuente', 'Tren', '33037', 'Calle Inés de la Fuente', '33650', 43.26766, -5.80578, 'address', 'openstreetmap:node/13252833306'),
+  ('catalogo-asturias:estaciones:node-13281900673', 'Estación de tren de Santiagu''l Monte (Soto del Barco)', 'Tren', '33069', NULL, NULL, 43.54088, -6.02799, 'address', 'openstreetmap:node/13281900673'),
+  ('catalogo-asturias:estaciones:node-13346727582', 'Estación de tren de Tresona (Corvera de Asturias) – Camín de La Estación', 'Tren', '33020', 'Camín de La Estación', '33468', 43.55187, -5.87422, 'address', 'openstreetmap:node/13346727582'),
+  ('catalogo-asturias:estaciones:node-13346763799', 'Estación de tren de Llaranes (Avilés) – Calle Cabo de Gata', 'Tren', '33004', 'Calle Cabo de Gata', '33460', 43.5543, -5.89657, 'address', 'openstreetmap:node/13346763799'),
+  ('catalogo-asturias:estaciones:node-13353562172', 'Estación de tren de San Zabornín (Carreño) – Carretera Candás - San Zabornín', 'Tren', '33014', 'Carretera Candás - San Zabornín', NULL, 43.56894, -5.82532, 'address', 'openstreetmap:node/13353562172'),
+  ('catalogo-asturias:estaciones:node-13353569116', 'Estación de tren de Regueral (Carreño)', 'Tren', '33014', NULL, NULL, 43.58049, -5.79767, 'address', 'openstreetmap:node/13353569116'),
+  ('catalogo-asturias:estaciones:node-13353591838', 'Estación de tren de Gudín Laminación (Corvera de Asturias) – Calle Pedro II Rodríguez de León', 'Tren', '33020', 'Calle Pedro II Rodríguez de León', NULL, 43.55233, -5.86526, 'address', 'openstreetmap:node/13353591838'),
+  ('catalogo-asturias:estaciones:node-13471310609', 'Estación de tren de Lugones (Siero) – Calle Monte Sueve', 'Tren', '33066', 'Calle Monte Sueve', NULL, 43.40437, -5.81212, 'address', 'openstreetmap:node/13471310609'),
+  ('catalogo-asturias:estaciones:node-13519909358', 'Estación de tren de La Corredoria (Oviedo) – Calle Francisco Pintado Fe', 'Tren', '33044', 'Calle Francisco Pintado Fe', '33011', 43.38817, -5.82714, 'address', 'openstreetmap:node/13519909358'),
+  ('catalogo-asturias:estaciones:node-13533523655', 'Estación de tren de Veriña (Gijón) – Camin de La Estacion', 'Tren', '33024', 'Camin de La Estacion 747', '33691', 43.54176, -5.7226, 'address', 'openstreetmap:node/13533523655'),
+  ('catalogo-asturias:estaciones:node-13818487438', 'Estación de Autobuses de Oviedo – Calle Pepe Cosmen', 'Autobús', '33044', 'Calle Pepe Cosmen', '33001', 43.36921, -5.8509, 'address', 'openstreetmap:node/13818487438'),
+  ('catalogo-asturias:estaciones:node-13849400640', 'Estación de tren de Olloniego (Oviedo) – Avenida Príncipe de Asturias', 'Tren', '33044', 'Avenida Príncipe de Asturias', NULL, 43.2961, -5.81885, 'address', 'openstreetmap:node/13849400640'),
+  ('catalogo-asturias:estaciones:node-14029422666', 'Estación de tren de La Felguera - Nuevu Llangréu (Langreo) – Calle Francisco Ferrer', 'Tren', '33031', 'Calle Francisco Ferrer', '33930', 43.30565, -5.68883, 'address', 'openstreetmap:node/14029422666'),
+  ('catalogo-asturias:estaciones:node-14106243671', 'Estación de tren de Santianes (Pravia)', 'Tren', '33051', NULL, NULL, 43.50375, -6.0918, 'address', 'openstreetmap:node/14106243671'),
+  ('catalogo-asturias:estaciones:node-14164969437', 'Estación de tren de Valmori (Llanes)', 'Tren', '33036', NULL, NULL, 43.42144, -4.83594, 'address', 'openstreetmap:node/14164969437'),
+  ('catalogo-asturias:estaciones:node-14165013619', 'Estación de tren de Centro de Transportes (Gijón)', 'Tren', '33024', NULL, NULL, 43.5311, -5.70673, 'address', 'openstreetmap:node/14165013619'),
+  ('catalogo-asturias:estaciones:node-14165090730', 'Estación de tren de La Carrera (Siero)', 'Tren', '33066', NULL, NULL, 43.38699, -5.6754, 'address', 'openstreetmap:node/14165090730'),
+  ('catalogo-asturias:estaciones:node-14166251387', 'Estación de tren de Pintueles (Piloña)', 'Tren', '33049', NULL, NULL, 43.35988, -5.38416, 'address', 'openstreetmap:node/14166251387'),
+  ('catalogo-asturias:estaciones:node-14166307467', 'Estación de tren de El Remediu (Nava)', 'Tren', '33040', NULL, NULL, 43.37505, -5.54626, 'address', 'openstreetmap:node/14166307467'),
+  ('catalogo-asturias:estaciones:node-14166351462', 'Estación de tren de Los Barreros / Barredos (Laviana) – Calle la Estación', 'Tren', '33032', 'Calle la Estación', NULL, 43.25986, -5.575, 'address', 'openstreetmap:node/14166351462'),
+  ('catalogo-asturias:estaciones:node-14166406698', 'Estación de tren de Vegarrozadas (Castrillón)', 'Tren', '33016', NULL, NULL, 43.55114, -5.9955, 'address', 'openstreetmap:node/14166406698'),
+  ('catalogo-asturias:estaciones:node-14166419575', 'Estación de tren de Raíces (Castrillón) – Calle Antonio Machado', 'Tren', '33016', 'Calle Antonio Machado', '33405', 43.57636, -5.93993, 'address', 'openstreetmap:node/14166419575'),
+  ('catalogo-asturias:estaciones:node-14167101807', 'Estación de tren de Oficinas (Corvera de Asturias) – Cai Mar Xónicu', 'Tren', '33020', 'Cai Mar Xónicu', '33468', 43.55437, -5.88271, 'address', 'openstreetmap:node/14167101807'),
+  ('catalogo-asturias:estaciones:node-14167695579', 'Estación de tren de El Parador (Soto del Barco) – Carretera Soto del Barco - San Juan de la Arena', 'Tren', '33069', 'Carretera Soto del Barco - San Juan de la Arena', NULL, 43.53517, -6.07061, 'address', 'openstreetmap:node/14167695579'),
+  ('catalogo-asturias:estaciones:node-14168468677', 'Estación de tren de Los Cabos (Pravia)', 'Tren', '33051', NULL, NULL, 43.51236, -6.0974, 'address', 'openstreetmap:node/14168468677'),
+  ('catalogo-asturias:estaciones:node-14168531754', 'Estación de tren de San Ranón (Pravia)', 'Tren', '33051', NULL, NULL, 43.51647, -6.08203, 'address', 'openstreetmap:node/14168531754'),
+  ('catalogo-asturias:estaciones:node-14168840503', 'Estación de tren de El Pito - Piñera (Cudillero) – Camino El Centenal', 'Tren', '33021', 'Camino El Centenal', NULL, 43.54686, -6.14334, 'address', 'openstreetmap:node/14168840503'),
+  ('catalogo-asturias:estaciones:node-14169818448', 'Estación de tren de Les Segaes (Oviedo)', 'Tren', '33044', NULL, NULL, 43.31324, -5.86928, 'address', 'openstreetmap:node/14169818448'),
+  ('catalogo-asturias:estaciones:node-14172881279', 'Estación de tren de Santolaya (Oviedo)', 'Tren', '33044', NULL, NULL, 43.31726, -5.81262, 'address', 'openstreetmap:node/14172881279'),
+  ('catalogo-asturias:estaciones:node-14172902240', 'Estación de tren de Santana (Aller)', 'Tren', '33002', NULL, NULL, 43.16476, -5.6461, 'address', 'openstreetmap:node/14172902240'),
+  ('catalogo-asturias:estaciones:node-14172928702', 'Estación de tren de Corigos (Aller) – Carretera de Ujo al Puerto de San Isidro', 'Tren', '33002', 'Carretera de Ujo al Puerto de San Isidro', NULL, 43.16426, -5.67661, 'address', 'openstreetmap:node/14172928702'),
+  ('catalogo-asturias:estaciones:node-14172937192', 'Estación de tren de Caborana (Aller) – Polígono Industrial de Caborana', 'Tren', '33002', 'Polígono Industrial de Caborana', NULL, 43.1761, -5.75491, 'address', 'openstreetmap:node/14172937192'),
+  ('catalogo-asturias:estaciones:node-14174421496', 'Estación de tren de Uxo - Taruelo (Mieres) – Carretera de Ujo al Puerto de San Isidro', 'Tren', '33037', 'Carretera de Ujo al Puerto de San Isidro', NULL, 43.20068, -5.78805, 'address', 'openstreetmap:node/14174421496'),
+  ('catalogo-asturias:estaciones:node-14176048177', 'Estación de tren de San Antonio (Aller) – Carretera de Ujo al Puerto de San Isidro', 'Tren', '33002', 'Carretera de Ujo al Puerto de San Isidro', NULL, 43.16884, -5.69677, 'address', 'openstreetmap:node/14176048177'),
+  ('catalogo-asturias:estaciones:node-14177336359', 'Estación de tren de Sandiche (Candamo)', 'Tren', '33010', NULL, NULL, 43.4256, -6.0599, 'address', 'openstreetmap:node/14177336359'),
+  ('catalogo-asturias:estaciones:node-14177369363', 'Estación de tren de Beifar (Pravia)', 'Tren', '33051', NULL, NULL, 43.47012, -6.09893, 'address', 'openstreetmap:node/14177369363'),
+  ('catalogo-asturias:estaciones:node-14177372169', 'Estación de tren de Los Corros (Siero) – Carretera de La Secada a Gargantada', 'Tren', '33066', 'Carretera de La Secada a Gargantada', NULL, 43.37685, -5.60146, 'address', 'openstreetmap:node/14177372169'),
+  ('catalogo-asturias:estaciones:node-14177385744', 'Estación de tren de Sebares (Piloña) – Camino del Palacio', 'Tren', '33049', 'Camino del Palacio', NULL, 43.36246, -5.25719, 'address', 'openstreetmap:node/14177385744'),
+  ('catalogo-asturias:estaciones:node-14178284816', 'Estación de tren de Ozanes (Parres)', 'Tren', '33045', NULL, NULL, 43.36832, -5.18536, 'address', 'openstreetmap:node/14178284816'),
+  ('catalogo-asturias:estaciones:node-14185554854', 'Estación de tren de Baiña (Mieres)', 'Tren', '33037', NULL, NULL, 43.27449, -5.82827, 'address', 'openstreetmap:node/14185554854'),
+  ('catalogo-asturias:estaciones:node-14189218123', 'Estación de tren de Llames (Nava)', 'Tren', '33040', NULL, '33529', 43.36878, -5.52522, 'address', 'openstreetmap:node/14189218123'),
+  ('catalogo-asturias:estaciones:node-14190661349', 'Estación de tren de Villamayor (Piloña) – Calle La Estación', 'Tren', '33049', 'Calle La Estación', NULL, 43.36306, -5.3025, 'address', 'openstreetmap:node/14190661349'),
+  ('catalogo-asturias:estaciones:node-14196270443', 'Estación de tren de Torañu (Parres)', 'Tren', '33045', NULL, NULL, 43.41218, -5.118, 'address', 'openstreetmap:node/14196270443'),
+  ('catalogo-asturias:estaciones:node-14196412408', 'Estación de tren de Ḥuentes (Parres)', 'Tren', '33045', NULL, NULL, 43.4014, -5.14308, 'address', 'openstreetmap:node/14196412408'),
+  ('catalogo-asturias:estaciones:node-14197094767', 'Estación de tren de Colombres (Ribadedeva)', 'Tren', '33055', NULL, NULL, 43.38287, -4.55687, 'address', 'openstreetmap:node/14197094767'),
+  ('catalogo-asturias:estaciones:node-14197263844', 'Estación de tren de Policlínico de Arriondas (Parres) – Carretera de Castañera', 'Tren', '33045', 'Carretera de Castañera', NULL, 43.37876, -5.18613, 'address', 'openstreetmap:node/14197263844'),
+  ('catalogo-asturias:estaciones:node-14197322192', 'Estación de tren de Sotu (Parres)', 'Tren', '33045', NULL, NULL, 43.35813, -5.22683, 'address', 'openstreetmap:node/14197322192'),
+  ('catalogo-asturias:estaciones:node-14197439774', 'Estación de tren de Lloviu (Ribadesella)', 'Tren', '33056', NULL, NULL, 43.44056, -5.05591, 'address', 'openstreetmap:node/14197439774'),
+  ('catalogo-asturias:estaciones:node-14197996734', 'Estación de tren de Camangu (Ribadesella)', 'Tren', '33056', NULL, NULL, 43.44835, -5.01901, 'address', 'openstreetmap:node/14197996734'),
+  ('catalogo-asturias:estaciones:node-14200499162', 'Estación de tren de Po (Llanes) – Carretera de Ribadesella a Llanes', 'Tren', '33036', 'Carretera de Ribadesella a Llanes', '33509', 43.42413, -4.7824, 'approximate', 'openstreetmap:node/14200499162'),
+  ('catalogo-asturias:estaciones:node-14200581240', 'Estación de tren de Celoriu (Llanes) – Carretera de Ribadesella a Llanes', 'Tren', '33036', 'Carretera de Ribadesella a Llanes', NULL, 43.42478, -4.81134, 'address', 'openstreetmap:node/14200581240'),
+  ('catalogo-asturias:estaciones:node-14200612953', 'Estación de tren de Belmonte (Llanes) – Carretera de Ribadesella a Llanes', 'Tren', '33036', 'Carretera de Ribadesella a Llanes', NULL, 43.43986, -4.98232, 'address', 'openstreetmap:node/14200612953'),
+  ('catalogo-asturias:estaciones:node-14200625800', 'Estación de tren de Villaḥormes (Llanes)', 'Tren', '33036', NULL, NULL, 43.44195, -4.90375, 'address', 'openstreetmap:node/14200625800'),
+  ('catalogo-asturias:estaciones:node-14200665015', 'Estación de tren de San Roque l''Acebal (Llanes)', 'Tren', '33036', NULL, '33596', 43.39473, -4.72999, 'address', 'openstreetmap:node/14200665015'),
+  ('catalogo-asturias:estaciones:node-14200684637', 'Estación de tren de Vidiago (Llanes)', 'Tren', '33036', NULL, NULL, 43.39661, -4.67277, 'address', 'openstreetmap:node/14200684637'),
+  ('catalogo-asturias:estaciones:node-14200765745', 'Estación de tren de Pendueles (Llanes)', 'Tren', '33036', NULL, NULL, 43.39275, -4.63011, 'address', 'openstreetmap:node/14200765745'),
+  ('catalogo-asturias:estaciones:node-14200767828', 'Estación de tren de Villademar (Cudillero) – Carretera Las Dueñas - Cudillero', 'Tren', '33021', 'Carretera Las Dueñas - Cudillero', NULL, 43.55712, -6.1554, 'address', 'openstreetmap:node/14200767828'),
+  ('catalogo-asturias:estaciones:node-14201342680', 'Estación de tren de Santa Marina (Cudillero)', 'Tren', '33021', NULL, NULL, 43.55265, -6.30515, 'address', 'openstreetmap:node/14201342680'),
+  ('catalogo-asturias:estaciones:node-14201346784', 'Estación de tren de La Magdalena (Cudillero)', 'Tren', '33021', NULL, '33155', 43.5592, -6.18497, 'address', 'openstreetmap:node/14201346784'),
+  ('catalogo-asturias:estaciones:node-14201349751', 'Estación de tren de San Martín de Luiña (Cudillero)', 'Tren', '33021', NULL, NULL, 43.54451, -6.22865, 'address', 'openstreetmap:node/14201349751'),
+  ('catalogo-asturias:estaciones:node-14201350090', 'Estación de tren de Valdredo (Cudillero)', 'Tren', '33021', NULL, NULL, 43.56641, -6.26323, 'address', 'openstreetmap:node/14201350090'),
+  ('catalogo-asturias:estaciones:node-14201653341', 'Estación de tren de Tablizu (Valdés)', 'Tren', '33034', NULL, NULL, 43.54814, -6.35153, 'address', 'openstreetmap:node/14201653341'),
+  ('catalogo-asturias:estaciones:node-14206234990', 'Estación de tren de San Cristuébanu (Valdés)', 'Tren', '33034', NULL, NULL, 43.5472, -6.41526, 'address', 'openstreetmap:node/14206234990'),
+  ('catalogo-asturias:estaciones:node-14209680949', 'Estación de tren de Barcia (Valdés)', 'Tren', '33034', NULL, NULL, 43.54675, -6.50825, 'address', 'openstreetmap:node/14209680949'),
+  ('catalogo-asturias:estaciones:node-14210389860', 'Estación de tren de Piñera-Villaoril (Navia)', 'Tren', '33041', NULL, NULL, 43.53556, -6.68535, 'address', 'openstreetmap:node/14210389860'),
+  ('catalogo-asturias:estaciones:node-14210431552', 'Estación de tren de As Campas (Castropol)', 'Tren', '33017', NULL, NULL, 43.52039, -6.9771, 'address', 'openstreetmap:node/14210431552'),
+  ('catalogo-asturias:estaciones:node-14210431632', 'Estación de tren de Cartavio (Coaña)', 'Tren', '33018', NULL, NULL, 43.55075, -6.78961, 'address', 'openstreetmap:node/14210431632'),
+  ('catalogo-asturias:estaciones:node-14210433204', 'Estación de tren de Medal (Coaña)', 'Tren', '33018', NULL, NULL, 43.54568, -6.75299, 'address', 'openstreetmap:node/14210433204'),
+  ('catalogo-asturias:estaciones:node-14210456677', 'Estación de tren de Vilavedeye (Castropol)', 'Tren', '33017', NULL, NULL, 43.4913, -7.03586, 'address', 'openstreetmap:node/14210456677'),
+  ('catalogo-asturias:estaciones:node-14210460106', 'Estación de tren de Tol (Castropol)', 'Tren', '33017', NULL, NULL, 43.52718, -6.95203, 'approximate', 'openstreetmap:node/14210460106'),
+  ('catalogo-asturias:estaciones:node-14210485373', 'Estación de tren de Vegadeo-Pueblo (Castropol)', 'Tren', '33017', NULL, NULL, 43.47301, -7.05052, 'address', 'openstreetmap:node/14210485373'),
+  ('catalogo-asturias:estaciones:node-14212418945', 'Estación de tren de Loza (Coaña)', 'Tren', '33018', NULL, NULL, 43.55123, -6.77166, 'address', 'openstreetmap:node/14212418945'),
+  ('catalogo-asturias:estaciones:node-14219149011', 'Estación de tren de A Caridá (El Franco)', 'Tren', '33023', NULL, NULL, 43.54708, -6.82753, 'address', 'openstreetmap:node/14219149011'),
+  ('catalogo-asturias:estaciones:node-14243670392', 'Candás Apeaderu (Carreño) – Cai Promadonga', 'Tren', '33014', 'Cai Promadonga', '33430', 43.58647, -5.76801, 'address', 'openstreetmap:node/14243670392'),
+  ('catalogo-asturias:estaciones:node-14245167424', 'Estación de tren de Les Maces (Oviedo)', 'Tren', '33044', NULL, NULL, 43.35864, -5.89759, 'address', 'openstreetmap:node/14245167424'),
+  ('catalogo-asturias:estaciones:node-14246811967', 'Estación de tren de Carrocera (Samartín del Rei Aurelio) – Carretera Riañu - Puertu Tarna', 'Tren', '33060', 'Carretera Riañu - Puertu Tarna', NULL, 43.2877, -5.62637, 'address', 'openstreetmap:node/14246811967'),
+  ('catalogo-asturias:estaciones:node-14246858505', 'Estación de tren de La Rocica (Avilés) – Calle El Roble', 'Tren', '33004', 'Calle El Roble', NULL, 43.54713, -5.90467, 'address', 'openstreetmap:node/14246858505'),
+  ('catalogo-asturias:estaciones:node-14246874234', 'Estación de tren de Curuxona (Siero)', 'Tren', '33066', NULL, NULL, 43.33946, -5.63068, 'address', 'openstreetmap:node/14246874234'),
+  ('catalogo-asturias:estaciones:node-14246877012', 'Estación de tren de Ḷḷinares-Congostinas (Lena)', 'Tren', '33033', NULL, NULL, 43.1017, -5.77202, 'address', 'openstreetmap:node/14246877012'),
+  ('catalogo-asturias:estaciones:node-14247445640', 'Estación de tren de San Cosme (Cudillero)', 'Tren', '33021', NULL, NULL, 43.54402, -6.2482, 'address', 'openstreetmap:node/14247445640'),
+  ('catalogo-asturias:estaciones:node-14247759418', 'Estación de tren de Montiana (Gijón) – Carretera de Veriña a San Andrés', 'Tren', '33024', 'Carretera de Veriña a San Andrés', NULL, 43.52101, -5.74596, 'address', 'openstreetmap:node/14247759418'),
+  ('catalogo-asturias:estaciones:node-14248055842', 'Estación de tren de Veiga d’Anzu (Grado)', 'Tren', '33026', NULL, NULL, 43.38929, -6.00571, 'address', 'openstreetmap:node/14248055842'),
+  ('catalogo-asturias:estaciones:node-14290940361', 'Estación de tren de Laviana – Avenida del Real Titanico', 'Tren', '33032', 'Avenida del Real Titanico', NULL, 43.25075, -5.56476, 'address', 'openstreetmap:node/14290940361'),
+  ('catalogo-asturias:estaciones:node-1624701431', 'Estación de tren de Reanes (Siero)', 'Tren', '33066', NULL, NULL, 43.37915, -5.56265, 'address', 'openstreetmap:node/1624701431'),
+  ('catalogo-asturias:estaciones:node-1625248209', 'Estación de tren de Aboño/Musel (Gijón) – Camín de Aboño', 'Tren', '33024', 'Camín de Aboño', NULL, 43.55524, -5.71772, 'address', 'openstreetmap:node/1625248209'),
+  ('catalogo-asturias:estaciones:node-1625248255', 'Estación de tren de Cristalería (Avilés) – Barrio Jardín', 'Tren', '33004', 'Barrio Jardín', NULL, 43.57558, -5.92948, 'address', 'openstreetmap:node/1625248255'),
+  ('catalogo-asturias:estaciones:node-2180474587', 'L''Infiestu Apeaderu (Piloña) – Puente Pialla', 'Tren', '33049', 'Puente Pialla', NULL, 43.34401, -5.36066, 'address', 'openstreetmap:node/2180474587'),
+  ('catalogo-asturias:estaciones:node-2353364389', 'Estación de tren de Aces (Candamo)', 'Tren', '33010', NULL, NULL, 43.43991, -6.06579, 'address', 'openstreetmap:node/2353364389'),
+  ('catalogo-asturias:estaciones:node-2353404074', 'Estación de tren de Peñaflor (Grado)', 'Tren', '33026', NULL, NULL, 43.40293, -6.04518, 'address', 'openstreetmap:node/2353404074'),
+  ('catalogo-asturias:estaciones:node-2353485234', 'Estación de tren de Les Campes (Oviedo) – Carretera de Oviedo a El Escamplero', 'Tren', '33044', 'Carretera de Oviedo a El Escamplero', NULL, 43.36384, -5.88339, 'address', 'openstreetmap:node/2353485234'),
+  ('catalogo-asturias:estaciones:node-28976223', 'Estación de tren de Tremañes - Carreño (Gijón) – Carretera de la Iglesia', 'Tren', '33024', 'Carretera de la Iglesia', NULL, 43.52856, -5.69475, 'address', 'openstreetmap:node/28976223'),
+  ('catalogo-asturias:estaciones:node-30546837', 'Estación de tren de Avilés – Estación de Avilés', 'Tren', '33004', 'Estación de Avilés', '33401', 43.56148, -5.92296, 'address', 'openstreetmap:node/30546837'),
+  ('catalogo-asturias:estaciones:node-30547011', 'Estación de tren de Cudillero – Camin de la Estacion', 'Tren', '33021', 'Camin de la Estacion', '33150', 43.55091, -6.15216, 'address', 'openstreetmap:node/30547011'),
+  ('catalogo-asturias:estaciones:node-30547259', 'Estación de tren de El Caleyo (Oviedo) – Carretera de la Bolgachina', 'Tren', '33044', 'Carretera de la Bolgachina', NULL, 43.32913, -5.87287, 'address', 'openstreetmap:node/30547259'),
+  ('catalogo-asturias:estaciones:node-30550872', 'Estación de tren de Peñamiel (Morcín)', 'Tren', '33038', NULL, NULL, 43.28244, -5.85886, 'address', 'openstreetmap:node/30550872'),
+  ('catalogo-asturias:estaciones:node-30550910', 'Estación de tren de Soto Ribera (Ribera de Arriba) – Plaza de la Cultura', 'Tren', '33057', 'Plaza de la Cultura', '33172', 43.30855, -5.87524, 'address', 'openstreetmap:node/30550910'),
+  ('catalogo-asturias:estaciones:node-30550949', 'Estación de tren de Caces (Oviedo) – Santa Marina de Piedramuella-Soto Ribera, por Las Caldas', 'Tren', '33044', 'Santa Marina de Piedramuella-Soto Ribera, por Las Caldas', NULL, 43.33137, -5.93294, 'address', 'openstreetmap:node/30550949'),
+  ('catalogo-asturias:estaciones:node-30550975', 'Estación de tren de Parteayer (Morcín) – los fresnos', 'Tren', '33038', 'los fresnos', NULL, 43.28328, -5.87527, 'address', 'openstreetmap:node/30550975'),
+  ('catalogo-asturias:estaciones:node-449681643', 'Estación de Autobuses de Villaviciosa – Ramón Rivero Solares', 'Autobús', '33076', 'Ramón Rivero Solares', '33300', 43.48431, -5.43602, 'address', 'openstreetmap:node/449681643'),
+  ('catalogo-asturias:estaciones:node-4586092220', 'Estación de tren de Oviedo / Uviéu – Calle Uría / Cai Uría', 'Tren', '33044', 'Calle Uría / Cai Uría', '33003', 43.36636, -5.85487, 'address', 'openstreetmap:node/4586092220'),
+  ('catalogo-asturias:estaciones:node-4586092221', 'Estación de tren de Mieres del Camín – Carretera de Paxío y Cuna', 'Tren', '33037', 'Carretera de Paxío y Cuna', NULL, 43.25004, -5.78239, 'address', 'openstreetmap:node/4586092221'),
+  ('catalogo-asturias:estaciones:node-4586092222', 'Estación de tren de Pola de Lena – Calle Ramón y Cajal', 'Tren', '33033', 'Calle Ramón y Cajal', NULL, 43.15865, -5.83113, 'address', 'openstreetmap:node/4586092222'),
+  ('catalogo-asturias:estaciones:node-493416984', 'Estación de tren de Palombar (Ribera de Arriba) – Santa Marina de Piedramuelle-Soto de Ribera, por Las Caldas;Santa Marina de Piedramuella-Soto Ribera, por Las Caldas', 'Tren', '33057', 'Santa Marina de Piedramuelle-Soto de Ribera, por Las Caldas;Santa Marina de Piedramuella-Soto Ribera, por Las Caldas', NULL, 43.30991, -5.9124, 'address', 'openstreetmap:node/493416984'),
+  ('catalogo-asturias:estaciones:node-5857291786', 'Apeadero Carancos (Nava)', 'Autobús', '33040', NULL, NULL, 43.35587, -5.43436, 'address', 'openstreetmap:node/5857291786'),
+  ('catalogo-asturias:estaciones:node-5857297485', 'Apeadero Ceceda (Nava)', 'Autobús', '33040', NULL, NULL, 43.3582, -5.44992, 'address', 'openstreetmap:node/5857297485'),
+  ('catalogo-asturias:estaciones:node-6177041450', 'Estación de tren de Ḷḷevinco (Aller) – Avenida Antonio Vázquez Megido', 'Tren', '33002', 'Avenida Antonio Vázquez Megido', '33686', 43.15106, -5.60032, 'address', 'openstreetmap:node/6177041450'),
+  ('catalogo-asturias:estaciones:node-6196372546', 'Estación de tren de L''Oyanco (Aller) – Barrio de Santa Bárbara', 'Tren', '33002', 'Barrio de Santa Bárbara', NULL, 43.16654, -5.72217, 'address', 'openstreetmap:node/6196372546'),
+  ('catalogo-asturias:estaciones:node-619869107', 'Estación de tren de Fuso de la Reina (Oviedo)', 'Tren', '33044', NULL, NULL, 43.31861, -5.92561, 'address', 'openstreetmap:node/619869107'),
+  ('catalogo-asturias:estaciones:node-6913720698', 'Estación de tren de Grado – Calle Jove y Valdés', 'Tren', '33026', 'Calle Jove y Valdés', '33820', 43.39444, -6.06373, 'address', 'openstreetmap:node/6913720698'),
+  ('catalogo-asturias:estaciones:node-707998668', 'Estación de tren de Villalegre (Avilés) – Calle Rafael Suárez', 'Tren', '33004', 'Calle Rafael Suárez 9', '33402', 43.54003, -5.90224, 'address', 'openstreetmap:node/707998668'),
+  ('catalogo-asturias:estaciones:node-737223165', 'Estación de tren de San Claudio (Oviedo) – Carretera Estación', 'Tren', '33044', 'Carretera Estación 51', '33191', 43.35532, -5.91779, 'address', 'openstreetmap:node/737223165'),
+  ('catalogo-asturias:estaciones:node-7593333185', 'Estación de tren de Outur (Valdés)', 'Tren', '33034', NULL, NULL, 43.54063, -6.59351, 'address', 'openstreetmap:node/7593333185'),
+  ('catalogo-asturias:estaciones:node-7741995380', 'Estación de tren de Pravia – Calle Ramón Suárez Pazos', 'Tren', '33051', 'Calle Ramón Suárez Pazos', NULL, 43.49114, -6.11062, 'address', 'openstreetmap:node/7741995380'),
+  ('catalogo-asturias:estaciones:node-7844629003', 'Estación de tren de Soto Udrión/Sotu-Udrión (Oviedo)', 'Tren', '33044', NULL, NULL, 43.35647, -5.96504, 'address', 'openstreetmap:node/7844629003'),
+  ('catalogo-asturias:estaciones:node-8040017219', 'Estación de tren de Xixún (Siero) – Carretera de Gijón a Langreo', 'Tren', '33066', 'Carretera de Gijón a Langreo', NULL, 43.37128, -5.69367, 'address', 'openstreetmap:node/8040017219'),
+  ('catalogo-asturias:estaciones:node-8040074019', 'Estación de tren de Valdesoto (Siero) – Camín del Monte Faes', 'Tren', '33066', 'Camín del Monte Faes', NULL, 43.35845, -5.65858, 'address', 'openstreetmap:node/8040074019'),
+  ('catalogo-asturias:estaciones:node-8040080704', 'Estación de tren de Bendicion (Siero) – Camín La Estación', 'Tren', '33066', 'Camín La Estación', NULL, 43.36346, -5.6806, 'address', 'openstreetmap:node/8040080704'),
+  ('catalogo-asturias:estaciones:node-8040089876', 'Estación de tren de Villabona de Asturias (Llanera) – Calle San Antolín', 'Tren', '33035', 'Calle San Antolín', '33422', 43.46151, -5.82634, 'address', 'openstreetmap:node/8040089876'),
+  ('catalogo-asturias:estaciones:node-8040191013', 'Estación de tren de Ciañu (Langreo) – Calle Infanzones de Langreo', 'Tren', '33031', 'Calle Infanzones de Langreo', '33900', 43.28939, -5.66882, 'address', 'openstreetmap:node/8040191013'),
+  ('catalogo-asturias:estaciones:node-8040194951', 'Estación de tren de Soto Rei/Soto de Rey (Ribera de Arriba)', 'Tren', '33057', NULL, NULL, 43.3064, -5.85579, 'address', 'openstreetmap:node/8040194951'),
+  ('catalogo-asturias:estaciones:node-8042352227', 'Estación de tren de Serín (Gijón)', 'Tren', '33024', NULL, NULL, 43.50482, -5.78191, 'address', 'openstreetmap:node/8042352227'),
+  ('catalogo-asturias:estaciones:node-8589432333', 'Estación de autobuses de Gijón – Magnus Blikstad', 'Autobús', '33024', 'Magnus Blikstad 7', '33207', 43.5389, -5.66713, 'approximate', 'openstreetmap:node/8589432333'),
+  ('catalogo-asturias:estaciones:node-962270420', 'Estación Autobús Cangas de Narcea (Cangas del Narcea) – Pintor Luis Alvarez', 'Autobús', '33011', 'Pintor Luis Alvarez', '33800', 43.17766, -6.55264, 'address', 'openstreetmap:node/962270420'),
+  ('catalogo-asturias:estaciones:relation-11512969', 'Estación de autobuses de Cangas de Onís / Cangues d''Onís – Avenida de los Picos de Europa', 'Autobús', '33012', 'Avenida de los Picos de Europa', '33550', 43.35291, -5.12619, 'address', 'openstreetmap:relation/11512969'),
+  ('catalogo-asturias:estaciones:relation-3733647', 'Estación de Autobuses (Parres) – Calle de Ramón Menéndez Pidal', 'Autobús', '33045', 'Calle de Ramón Menéndez Pidal', NULL, 43.38745, -5.188, 'address', 'openstreetmap:relation/3733647'),
+  ('catalogo-asturias:estaciones:way-1030507477', 'Estación de El Berrón;El Berrón (Siero) – Calle La Estación', 'Tren', '33066', 'Calle La Estación', NULL, 43.38244, -5.70238, 'approximate', 'openstreetmap:way/1030507477'),
+  ('catalogo-asturias:estaciones:way-106115349', 'Avilés Apeadero – Calle El Muelle', 'Tren', '33004', 'Calle El Muelle', NULL, 43.55461, -5.91748, 'address', 'openstreetmap:way/106115349'),
+  ('catalogo-asturias:estaciones:way-112587230', 'Estación ALSA (Gijón) – Calle Ribadesella', 'Autobús', '33024', 'Calle Ribadesella 5', '33207', 43.53897, -5.66765, 'approximate', 'openstreetmap:way/112587230'),
+  ('catalogo-asturias:estaciones:way-1147549131', 'Estación de tren de Tapia de Casariego', 'Tren', '33070', NULL, '33747', 43.53505, -6.90938, 'address', 'openstreetmap:way/1147549131'),
+  ('catalogo-asturias:estaciones:way-129139445', 'Estación de autobuses de Colegio Público de Lugo de Llanera', 'Autobús', '33035', NULL, NULL, 43.44811, -5.82302, 'address', 'openstreetmap:way/129139445'),
+  ('catalogo-asturias:estaciones:way-1357803617', 'Estación de tren de Meres (Siero) – CALLE ESTACION FERROCARRIL, S/N', 'Tren', '33066', 'CALLE ESTACION FERROCARRIL, S/N', '33199', 43.38092, -5.74855, 'address', 'openstreetmap:way/1357803617'),
+  ('catalogo-asturias:estaciones:way-147493959', 'Estación de autobuses (Pravia) – Calle Ramón Suárez Pazos', 'Autobús', '33051', 'Calle Ramón Suárez Pazos', NULL, 43.4913, -6.11196, 'address', 'openstreetmap:way/147493959'),
+  ('catalogo-asturias:estaciones:way-1528803587', 'Estación de autobuses de Barres (Castropol) – Carretera Figueras - La Roda', 'Autobús', '33017', 'Carretera Figueras - La Roda', NULL, 43.53816, -6.99566, 'address', 'openstreetmap:way/1528803587'),
+  ('catalogo-asturias:estaciones:way-176265484', 'Estación de tren de Campomanes (Lena) – Calle de La Estación', 'Tren', '33033', 'Calle de La Estación', NULL, 43.11012, -5.8164, 'address', 'openstreetmap:way/176265484'),
+  ('catalogo-asturias:estaciones:way-176265527', 'Estación de tren de La Frecha (Lena)', 'Tren', '33033', NULL, NULL, 43.09614, -5.79855, 'address', 'openstreetmap:way/176265527'),
+  ('catalogo-asturias:estaciones:way-176265528', 'Estación de tren de Puente de los Fierros (Lena)', 'Tren', '33033', NULL, NULL, 43.07168, -5.76944, 'address', 'openstreetmap:way/176265528'),
+  ('catalogo-asturias:estaciones:way-177039125', 'Estación de Autobuses de La Felguera (Langreo) – Calle Inventor La Cierva', 'Autobús', '33031', 'Calle Inventor La Cierva', '33930', 43.30401, -5.69183, 'address', 'openstreetmap:way/177039125'),
+  ('catalogo-asturias:estaciones:way-177183725', 'Estación de tren de Sama (Langreo) – Calle Cipriano Pedrosa', 'Tren', '33031', 'Calle Cipriano Pedrosa', '33900', 43.29185, -5.67945, 'address', 'openstreetmap:way/177183725'),
+  ('catalogo-asturias:estaciones:way-188927831', 'Estación de tren de San Juan de Nieva (Castrillón) – Avenida de la Playa', 'Tren', '33016', 'Avenida de la Playa', NULL, 43.58788, -5.93132, 'address', 'openstreetmap:way/188927831'),
+  ('catalogo-asturias:estaciones:way-195861229', 'Estación de Autobuses Mieres – Cai Valeriano Miranda', 'Autobús', '33037', 'Cai Valeriano Miranda', '33600', 43.24488, -5.77723, 'address', 'openstreetmap:way/195861229'),
+  ('catalogo-asturias:estaciones:way-207759247', 'Estación de autobuses Tineo – Calle Aurelio Flauta', 'Autobús', '33073', 'Calle Aurelio Flauta', NULL, 43.33261, -6.41791, 'address', 'openstreetmap:way/207759247'),
+  ('catalogo-asturias:estaciones:way-222343743', 'Estación de tren de San Esteban de Pravia (Muros de Nalón) – Calle de Casto Plasencia', 'Tren', '33039', 'Calle de Casto Plasencia', '33130', 43.55209, -6.08721, 'address', 'openstreetmap:way/222343743'),
+  ('catalogo-asturias:estaciones:way-234663285', 'Estación de autobuses de Ribadesella / Ribeseya – Carretera de la Estación', 'Autobús', '33056', 'Carretera de la Estación', '33560', 43.45934, -5.06221, 'address', 'openstreetmap:way/234663285'),
+  ('catalogo-asturias:estaciones:way-237464874', 'Estación de tren de Navia – Avenida Manuel Suárez', 'Tren', '33041', 'Avenida Manuel Suárez', '33710', 43.53656, -6.71994, 'address', 'openstreetmap:way/237464874'),
+  ('catalogo-asturias:estaciones:way-252566239', 'Estación de Autobuses de Luanco (Gozón) – Plaza de La Villa', 'Autobús', '33025', 'Plaza de La Villa', '33440', 43.61304, -5.79405, 'address', 'openstreetmap:way/252566239'),
+  ('catalogo-asturias:estaciones:way-265386895', 'Estación d''Uxo (Mieres) – Barrio Viñuela', 'Tren', '33037', 'Barrio Viñuela', '33640', 43.20602, -5.79263, 'address', 'openstreetmap:way/265386895'),
+  ('catalogo-asturias:estaciones:way-270122813', 'Estación de tren de Cabañaquinta (Aller) – Avenida Francisco Cabrera', 'Tren', '33002', 'Avenida Francisco Cabrera 12', '33686', 43.16078, -5.62491, 'address', 'openstreetmap:way/270122813'),
+  ('catalogo-asturias:estaciones:way-272210254', 'Estación de tren de Calzada de Asturias (Gijón) – Avenida de las Industrias', 'Tren', '33024', 'Avenida de las Industrias 40', '33213', 43.53537, -5.69716, 'address', 'openstreetmap:way/272210254'),
+  ('catalogo-asturias:estaciones:way-296109867', 'Estacion de Grado – Avenida de los Deportes', 'Autobús', '33026', 'Avenida de los Deportes', '33820', 43.38291, -6.07434, 'address', 'openstreetmap:way/296109867'),
+  ('catalogo-asturias:estaciones:way-370739780', 'Estación de tren de Soto del Barco/Sotu''l Barcu – Carretera Sotul Barcu - Corniana', 'Tren', '33069', 'Carretera Sotul Barcu - Corniana', NULL, 43.52906, -6.07131, 'address', 'openstreetmap:way/370739780'),
+  ('catalogo-asturias:estaciones:way-40800645', 'Estación de Autobuses (Llanes) – La Bolera', 'Autobús', '33036', 'La Bolera', NULL, 43.41709, -4.75457, 'address', 'openstreetmap:way/40800645'),
+  ('catalogo-asturias:estaciones:way-413203317', 'Estación de tren de Sama - Los Llerones (Langreo) – Carretera Riañu - Puertu Tarna', 'Tren', '33031', 'Carretera Riañu - Puertu Tarna', NULL, 43.29679, -5.67992, 'address', 'openstreetmap:way/413203317'),
+  ('catalogo-asturias:estaciones:way-554273689', 'Estación de autobuses de La Pola (Siero) – Plaza de Olof Palme', 'Autobús', '33066', 'Plaza de Olof Palme', '33510', 43.39169, -5.66531, 'address', 'openstreetmap:way/554273689'),
+  ('catalogo-asturias:estaciones:way-602327383', 'Estación de tren de Carbayin Bajo (Siero) – Carretera de La Secada a Gargantada', 'Tren', '33066', 'Carretera de La Secada a Gargantada', NULL, 43.35077, -5.63438, 'address', 'openstreetmap:way/602327383'),
+  ('catalogo-asturias:estaciones:way-62017847', 'Estación de tren de La Felguera (Langreo) – Calle Inventor La Cierva', 'Tren', '33031', 'Calle Inventor La Cierva 1', '33930', 43.30481, -5.69277, 'address', 'openstreetmap:way/62017847'),
+  ('catalogo-asturias:estaciones:way-62149438', 'Estación de tren de Arriondas (Parres) – Calle de Evaristo Valle', 'Tren', '33045', 'Calle de Evaristo Valle', NULL, 43.38752, -5.18827, 'address', 'openstreetmap:way/62149438'),
+  ('catalogo-asturias:estaciones:way-747140046', 'Estación de tren de San Román (Candamo) – Carretera Grullos - Peñaullán', 'Tren', '33010', 'Carretera Grullos - Peñaullán', NULL, 43.44886, -6.07716, 'address', 'openstreetmap:way/747140046'),
+  ('catalogo-asturias:estaciones:way-833564650', 'Estación de autobuses de Lagos de Covadonga / Llagos de Cuadonga (Cangas de Onís) – Area de Buferrera', 'Autobús', '33012', 'Area de Buferrera', NULL, 43.27614, -4.98609, 'address', 'openstreetmap:way/833564650'),
+  ('catalogo-asturias:estaciones:way-84542134', 'Estación de tren de Llamaquique (Oviedo) – Avenida de los Hermanos Menéndez Pidal', 'Tren', '33044', 'Avenida de los Hermanos Menéndez Pidal 20', '33005', 43.3588, -5.85738, 'address', 'openstreetmap:way/84542134'),
+  ('catalogo-asturias:estaciones:way-84658593', 'Estación de Gijón/Xixón Sanz Crespo – Rotonda de Sanz Crespo', 'Tren', '33024', 'Rotonda de Sanz Crespo', '33207', 43.53773, -5.67563, 'address', 'openstreetmap:way/84658593'),
+  ('catalogo-asturias:estaciones:way-86369504', 'Estación de Autobuses de Alsa en Gijón – Magnus Blikstad', 'Autobús', '33024', 'Magnus Blikstad 7', '33206', 43.53889, -5.66708, 'approximate', 'openstreetmap:way/86369504'),
+  ('catalogo-asturias:estaciones:way-89361760', 'Estación de tren de Pola de Siero / La Pola Siero – Calle El Molín', 'Tren', '33066', 'Calle El Molín 30', '33510', 43.38812, -5.66477, 'address', 'openstreetmap:way/89361760'),
+  ('catalogo-asturias:estaciones:way-90757627', 'Estación de tren de Noreña – Avenida de Gijón', 'Tren', '33042', 'Avenida de Gijón', NULL, 43.39402, -5.7036, 'address', 'openstreetmap:way/90757627');
+
+DO $$
+DECLARE faltan text;
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM public.categories WHERE code = 'estaciones' AND name = 'Estaciones') THEN
+    RAISE EXCEPTION 'Falta la categoría Estaciones.';
+  END IF;
+  SELECT string_agg(DISTINCT c.muni_ine, ', ') INTO faltan
+  FROM _carga c
+  WHERE NOT EXISTS (SELECT 1 FROM public.municipalities m JOIN public.provinces p ON p.id = m.province_id
+                    WHERE m.official_code = c.muni_ine AND p.code = '33');
+  IF faltan IS NOT NULL THEN
+    RAISE EXCEPTION 'Faltan municipios de la provincia 33 con estos códigos INE: %', faltan;
+  END IF;
+END;
+$$;
+
+INSERT INTO public.establishments (
+  province_id, municipality_id, category_id,
+  name, normalized_name, subtype, address, postal_code,
+  latitude, longitude, location_precision, location_source,
+  source_ref, status
+)
+SELECT p.id, m.id, cat.id,
+       c.name, lower(trim(c.name)), c.subtype, c.address, c.postal_code,
+       c.latitude, c.longitude, c.location_precision, c.location_source,
+       c.source_ref, 'active'
+FROM _carga c
+JOIN public.municipalities m ON m.official_code = c.muni_ine
+JOIN public.provinces p ON p.id = m.province_id AND p.code = '33'
+JOIN public.categories cat ON cat.code = 'estaciones'
+ON CONFLICT DO NOTHING;
+
+DO $$
+DECLARE n integer;
+BEGIN
+  SELECT count(*) INTO n FROM public.establishments e WHERE e.source_ref IN (SELECT source_ref FROM _carga);
+  IF n <> 208 THEN
+    RAISE EXCEPTION 'Se esperaban 208 puntos de Estaciones en Asturias, hay %', n;
+  END IF;
+END;
+$$;
+
+COMMIT;
