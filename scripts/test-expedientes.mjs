@@ -261,11 +261,11 @@ const T = "2026-10-23";
   eq(R.diffRel(base, cur), [{ t: "fuDone", fu: "fu-1" }]);
   // aprobar: una sola operación atómica y la concesión nueva no se inserta aparte
   cur = copia(); cur.sols[0].res = "aprobada"; cur.sols[0].conc = "c-new"; cur.hist.push({ id: "c-new", sol: "app-1", desde: "2026-11-02", hasta: "2026-11-30", ong: "AECC", captadores: 3 });
-  eq(R.diffRel(base, cur).map((o) => o.t), ["approve", "fuDone"]);
+  eq(R.diffRel(base, cur).map((o) => o.t), ["approve"], "aprobar no emite cierre de seguimiento: lo cierra la base de datos en la misma transacción");
   eq(R.diffRel(base, cur)[0].ver, "2026-10-20T10:00:00.000000+00:00", "aprueba con la versión leída");
   // denegar y retirar
   cur = copia(); cur.sols[0].res = "denegada"; cur.sols[0].motivo = "x";
-  eq(R.diffRel(base, cur).map((o) => o.t + (o.st || "")), ["resolvedenied", "fuDone"]);
+  eq(R.diffRel(base, cur).map((o) => o.t + (o.st || "")), ["resolvedenied"], "denegar tampoco: lo cierra la base de datos");
   cur = copia(); cur.sols[0].res = "retirada";
   eq(R.diffRel(base, cur)[0].st, "withdrawn");
   // cancelar, reactivar, editar y borrar concesiones
@@ -345,7 +345,7 @@ const T = "2026-10-23";
   cur = mut(); cur.hist[0].seg = "2026-11-02"; cur.hist[0].accion = "Llamar";
   eq(R.diffRel(base, cur), [{ t: "fuSet", app: "", fu: "f-g1", ver: "2026-10-20T08:00:00Z", due: "2026-11-02", resp: "u-1", accion: "Llamar" }], "reprogramar el seguimiento de una concesión");
   cur = mut(); cur.hist[0].cancelada = true; cur.hist[0].resFecha = "2026-10-25";
-  eq(R.diffRel(base, cur).map((o) => o.t), ["cancel", "fuDone"], "cancelar la concesión cierra su seguimiento");
+  eq(R.diffRel(base, cur).map((o) => o.t), ["cancel"], "cancelar la concesión cierra su seguimiento en la base de datos, en la misma transacción");
   eq(R.diffRel(base, mut()), [], "sin cambios, sin operaciones");
 }
 

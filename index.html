@@ -1707,12 +1707,16 @@ const ejecutaOpsRel = async (client, userId, c, ops, estado) => {
   const filaGrant = (h) => ({ organization: h.ong || null, capturer_count: h.captadores || null, valid_from: h.desde || null, valid_until: h.hasta || null, contact_details: h.contacto || null, notes: h.notas || null });
   let hechas = 0;
   try {
-  for (const op of ops) {
+  for (let i = 0; i < ops.length; i++) {
+    const op = ops[i];
     let r;
     try {
       if (op.t === "insApp") {
-        r = await client.from("permit_applications").insert(Object.assign({ id: op.x.id, establishment_id: est, status: "pending", requested_at: op.x.fecha || hoy, created_by: userId, updated_by: userId }, filaApp(op.x))).abortSignal(conTiempoLimite());
-        if (r.error && r.error.code === "23505") r = { error: null }; /* reintento de un alta que sí llegó */
+        /* Solicitud y seguimiento de alta en una sola transacción (idempotente por identificador): o se crean las dos cosas o ninguna. */
+        const sig = ops[i + 1], fu = sig && sig.t === "fuSet" && sig.app === op.x.id && !sig.fu ? sig : null;
+        r = await client.rpc("create_permit_application", { p_id: op.x.id, p_establishment_id: est, p_organization: op.x.ong || null, p_capturer_count: op.x.captadores || null, p_requested_from: op.x.desde || null, p_requested_until: op.x.hasta || null,
+          p_requested_at: op.x.fecha || hoy, p_contact_details: op.x.contacto || null, p_notes: op.x.notas || null, p_followup_due: fu ? fu.due : null, p_followup_assignee: fu ? fu.resp || null : null, p_followup_action: fu ? fu.accion || null : null }).abortSignal(conTiempoLimite());
+        if (fu && !r.error) { i++; hechas++; } /* el seguimiento ya viajó con el alta */
       } else if (op.t === "updApp") {
         r = await client.from("permit_applications").update(Object.assign({ updated_by: userId }, filaApp(op.x))).eq("id", op.id).eq("updated_at", op.ver).select("id").abortSignal(conTiempoLimite());
         if (!r.error && !(r.data && r.data.length)) return "conflict";
@@ -1745,7 +1749,12 @@ const ejecutaOpsRel = async (client, userId, c, ops, estado) => {
       } else if (op.t === "fuDone") {
         if (!op.fu) continue;
         r = await conVersion(client.from("followups").update({ completed_at: new Date().toISOString() }).eq("id", op.fu).is("completed_at", null), op.ver).select("id").abortSignal(conTiempoLimite());
-        if (!r.error && !(r.data && r.data.length)) return "conflict"; /* ya cerrado o cambiado por otra persona */
+        if (!r.error && !(r.data && r.data.length)) {
+          /* Ya cerrado (p. ej. por la decisión de otra persona o de otra pestaña): vale si sigue cerrado; si lo cambiaron, es un conflicto. */
+          const q = await client.from("followups").select("id, completed_at").eq("id", op.fu).maybeSingle().abortSignal(conTiempoLimite());
+          if (q.error || !q.data || !q.data.completed_at) return q.error ? "error" : "conflict";
+          r = { error: null };
+        }
       } else continue;
     } catch (e) { console.error("[Mapa] Error al guardar expedientes:", e); return "error"; }
     if (r && r.error) {
@@ -2228,7 +2237,7 @@ const diffRel = (base, cur) => {
         if (g.id) aprobadas.add(g.id);
         ops.push({ t: "approve", id: x.id, ver: b.ver, g });
       } else if (RES_APP[x.res]) ops.push({ t: "resolve", id: x.id, st: RES_APP[x.res], motivo: x.motivo || "", ver: b.ver });
-      if (b.seg && b.fu) ops.push({ t: "fuDone", fu: b.fu, ver: b.fuver });
+      /* Los seguimientos abiertos de la solicitud los cierra la propia función de la base de datos, en la misma transacción. */
     } else {
       if (cambiaRel(x, b)) ops.push({ t: "updApp", id: x.id, ver: b.ver, x });
       const cambiaSeg = (x.seg || "") !== (b.seg || ""), cambiaResp = (x.resp || "") !== (b.resp || "") || (x.accion || "") !== (b.accion || "");
@@ -2241,10 +2250,9 @@ const diffRel = (base, cur) => {
     if (!b) { if (!aprobadas.has(h.id)) ops.push({ t: "insGrant", h }); return; }
     if (!!h.cancelada !== !!b.cancelada) ops.push(h.cancelada ? { t: "cancel", id: h.id, motivo: h.motivo || "", ver: b.ver } : { t: "reactivate", id: h.id, ver: b.ver });
     else if (cambiaRel(h, b)) ops.push({ t: "updGrant", id: h.id, ver: b.ver, h });
-    /* Seguimiento de la concesión: cerrarlo, reprogramarlo o cambiar su responsable o su acción. Al cancelar la concesión se cierra también. */
+    /* Seguimiento de la concesión: cerrarlo, reprogramarlo o cambiar su responsable o su acción. Al cancelar la concesión lo cierra la base de datos. */
     if (b.fu && b.seg) {
-      if (h.cancelada && !b.cancelada) ops.push({ t: "fuDone", fu: b.fu, ver: b.fuver });
-      else if (!h.cancelada && ((h.seg || "") !== (b.seg || "") || (h.resp || "") !== (b.resp || "") || (h.accion || "") !== (b.accion || ""))) ops.push(h.seg ? { t: "fuSet", app: "", fu: b.fu, ver: b.fuver, due: h.seg, resp: h.resp || "", accion: h.accion || "" } : { t: "fuDone", fu: b.fu, ver: b.fuver });
+      if (!h.cancelada && ((h.seg || "") !== (b.seg || "") || (h.resp || "") !== (b.resp || "") || (h.accion || "") !== (b.accion || ""))) ops.push(h.seg ? { t: "fuSet", app: "", fu: b.fu, ver: b.fuver, due: h.seg, resp: h.resp || "", accion: h.accion || "" } : { t: "fuDone", fu: b.fu, ver: b.fuver });
     }
   });
   base.hist.forEach((b) => { if (!ch.has(b.id)) ops.push({ t: "delGrant", id: b.id }); });

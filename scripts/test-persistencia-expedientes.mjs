@@ -25,7 +25,7 @@ const cliente = (plan) => {
       : () => p });
     return p;
   };
-  return { llamadas, from: (tabla) => ({ insert: () => cadena(tabla, "insert"), update: () => cadena(tabla, "update"), delete: () => cadena(tabla, "delete") }),
+  return { llamadas, from: (tabla) => ({ insert: () => cadena(tabla, "insert"), update: () => cadena(tabla, "update"), delete: () => cadena(tabla, "delete"), select: () => cadena(tabla, "select") }),
     rpc: (f) => cadena(f, "rpc") };
 };
 const sandbox = { Date, self: {}, AbortController, setTimeout: () => 0, console: { error: () => {}, log: () => {} } };
@@ -58,13 +58,30 @@ for (const op of [{ t: "approve", id: "s1", ver: "v", g: {} }, { t: "resolve", i
   const r = await run([op], () => ({ error: { code: "PT409", message: "cambiado" }, status: 409 })); eq([r.res, r.est.hechas], ["conflict", 0], op.t + " con PT409 es un conflicto");
 }
 
-// Duplicado 23505 en un alta: se acepta como reintento, pero queda constancia en el recuento y verificaOps decide si es válido al releer.
-{ const r = await run([{ t: "insApp", x: sol("s1") }, { t: "insGrant", h: { id: "g1", ong: "A", captadores: 1 } }], (i, t, tipo) => ({ error: { code: "23505" }, status: 409 })); eq([r.res, r.est.hechas], ["ok", 2], "un reintento duplicado (23505) se acepta y se cuenta"); }
+// Duplicado 23505 en una concesión insertada: se acepta como reintento; verificaOps decide si es válido al releer.
+{ const r = await run([{ t: "insGrant", h: { id: "g1", ong: "A", captadores: 1 } }], () => ({ error: { code: "23505" }, status: 409 })); eq([r.res, r.est.hechas], ["ok", 1], "un reintento duplicado (23505) de una concesión se acepta y se cuenta"); }
+// El alta de una solicitud va por create_permit_application: ya es idempotente, así que un 23505 allí es «mismo identificador con otros datos» = conflicto.
+{ const r = await run([{ t: "insApp", x: sol("s1") }], () => ({ error: { code: "23505" }, status: 409 })); eq([r.res, r.est.hechas], ["conflict", 0], "un 23505 de create_permit_application no se da por bueno"); }
+// Alta con su seguimiento: una sola llamada a la base de datos, que cuenta como las dos operaciones.
+{ const ops = [{ t: "insApp", x: sol("s1") }, { t: "fuSet", app: "s1", fu: "", due: "2026-10-30", resp: "u-2", accion: "Llamar" }, { t: "insGrant", h: { id: "g1", ong: "A", captadores: 1 } }];
+  let args; const cl = cliente(() => OK); const rpc0 = cl.rpc; cl.rpc = (f, a) => { args = [f, a]; return rpc0(f, a); };
+  const est = {}; const res = await ejecuta(cl, "u-1", pto, ops, est);
+  eq([res, est.hechas, est.total, cl.llamadas.map((l) => l[0] + ":" + l[1])], ["ok", 3, 3, ["rpc:create_permit_application", "insert:permit_grants"]], "solicitud y seguimiento van en una sola llamada");
+  eq([args[0], args[1].p_id, args[1].p_followup_due, args[1].p_followup_assignee, args[1].p_followup_action, args[1].p_establishment_id], ["create_permit_application", "s1", "2026-10-30", "u-2", "Llamar", "est-1"], "la llamada lleva el seguimiento"); }
+// Si el alta con seguimiento falla, no se aplica nada de las dos cosas y no se sigue.
+{ const ops = [{ t: "insApp", x: sol("s1") }, { t: "fuSet", app: "s1", fu: "", due: "2026-10-30", resp: "", accion: "" }, { t: "insGrant", h: { id: "g1", ong: "A", captadores: 1 } }];
+  const r = await run(ops, () => ({ error: { code: "23514", message: "responsable no válido" }, status: 400 })); eq([r.res, r.est.hechas, r.llamadas.length], ["error", 0, 1], "un fallo del alta no deja nada a medias ni sigue con lo demás"); }
+// Sin seguimiento adyacente, el alta no lleva fecha de seguimiento.
+{ let args; const cl = cliente(() => OK); const rpc0 = cl.rpc; cl.rpc = (f, a) => { args = a; return rpc0(f, a); }; await ejecuta(cl, "u-1", pto, [{ t: "insApp", x: sol("s1") }], {}); eq([args.p_followup_due, args.p_followup_assignee], [null, null], "sin seguimiento no se envía fecha"); }
 // …pero otros 409 que no son PT409 ni duplicados siguen siendo conflicto, y otros errores, error.
 { const r = await run([{ t: "insApp", x: sol("s1") }], () => ({ error: { code: "23514", message: "ya resuelta" }, status: 400 })); eq(r.res, "error", "una regla de la base (23514) es un error, no un éxito"); }
 
 // Reintento idempotente de borrado/cierre: ya cerrado o ya borrado no cuenta como éxito silencioso (0 filas).
-{ const r = await run([{ t: "fuDone", fu: "f1", ver: "v" }], () => ({ error: null, data: [], status: 200 })); eq(r.res, "conflict", "cerrar un seguimiento ya cerrado o cambiado es un conflicto (se relee)"); }
+{ const r = await run([{ t: "fuDone", fu: "f1", ver: "v" }], () => ({ error: null, data: [], status: 200 })); eq(r.res, "conflict", "cerrar un seguimiento que no se encuentra cerrado (0 filas) es un conflicto (se relee)"); }
+// Con la migración atómica, aprobar/denegar/cancelar ya cierran el seguimiento: un cierre explícito posterior que encuentra 0 filas pero lo ve cerrado es correcto.
+{ const r = await run([{ t: "fuDone", fu: "f1", ver: "v" }], (i, t, tipo) => tipo === "select" ? { error: null, data: { id: "f1", completed_at: "2026-10-25T10:00:00Z" }, status: 200 } : { error: null, data: [], status: 200 }); eq([r.res, r.est.hechas], ["ok", 1], "un seguimiento ya cerrado por la base de datos se acepta"); }
+{ const r = await run([{ t: "fuDone", fu: "f1", ver: "v" }], (i, t, tipo) => tipo === "select" ? { error: null, data: { id: "f1", completed_at: null }, status: 200 } : { error: null, data: [], status: 200 }); eq(r.res, "conflict", "si sigue abierto pero con otra versión, es un conflicto"); }
+{ const r = await run([{ t: "fuDone", fu: "f1", ver: "v" }], (i, t, tipo) => tipo === "select" ? { error: { code: "500" }, data: null, status: 500 } : { error: null, data: [], status: 200 }); eq(r.res, "error", "si no se puede comprobar, es un error"); }
 { const r = await run([{ t: "delApp", id: "s1" }], () => ({ error: null, data: [], status: 200 })); eq(r.res, "error", "borrar sin permiso (0 filas) es un error"); }
 
 // El recuento se informa siempre (finally), incluso sin operaciones que ejecutar.
