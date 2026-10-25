@@ -1,0 +1,43 @@
+{
+ "format_version": 1,
+ "source": "openstreetmap",
+ "source_license": "ODbL 1.0 (c) OpenStreetMap contributors, https://www.openstreetmap.org/copyright",
+ "queried_at": "2026-10-25",
+ "osm_base_timestamp": "2026-10-24T20:20:51Z",
+ "selection_criteria": "Oficinas de Correos (amenity=post_office cuyo nombre, operador o marca contiene «Correos»). Excluidos: buzones (post_box), taquillas de paqueteria (parcel_locker, incluidas las CityPaq), Correos Express, puntos de otras empresas (MRW, UPS, GLS, DHL, Tipsa, Mail Boxes…), calles y paradas que solo llevan «Correos» en el nombre, y elementos en desuso. El nombre se compone «Correos <municipio>» como en Granada; no se exige nombre en OpenStreetMap. Dos oficinas a menos de 60 m se consideran la misma (nodo y edificio, cualquiera que sea el nombre). Granada queda fuera del lote porque su catalogo esta revisado a mano, salvo Orce y Puebla de Don Fadrique (altas reales sin oficina en la base, elegidas por el titular); a menos de 120 m de un punto ya existente se considera que ya esta en la base.",
+ "province": "Andalucía",
+ "establishments": [
+  {
+   "source_ref": "catalogo-ceuta:postal_service:manual-el-coso-hadu",
+   "name": "Correos Ceuta – Calle Bermudo Soriano",
+   "category": "Correos",
+   "subtype": null,
+   "municipality": "Ceuta",
+   "municipality_ine": "51001",
+   "address": "Calle Bermudo Soriano",
+   "postal_code": "51003",
+   "latitude": 35.88693,
+   "longitude": -5.33232,
+   "location_precision": "verified",
+   "location_source": "manual_google_maps",
+   "province": "Ceuta",
+   "status": "active"
+  },
+  {
+   "source_ref": "catalogo-ceuta:postal_service:node-9156016046",
+   "name": "Correos Ceuta – Plaza de España",
+   "category": "Correos",
+   "subtype": null,
+   "municipality": "Ceuta",
+   "municipality_ine": "51001",
+   "address": "Plaza de España",
+   "postal_code": "51001",
+   "latitude": 35.88678,
+   "longitude": -5.30987,
+   "location_precision": "address",
+   "location_source": "openstreetmap:node/9156016046",
+   "province": "Ceuta",
+   "status": "active"
+  }
+ ]
+}

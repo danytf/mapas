@@ -42,3 +42,13 @@ Previsto en solo lectura: 1 municipio nuevo y 21 puntos (la base pasaría de 10.
 - **Carga verificada en solo lectura:** 1 municipio (Ceuta) y 21 puntos, 21 `source_ref` `catalogo-ceuta:` distintos, todos activos, ninguno sin coordenadas, ningún código postal con formato distinto de 51xxx. Por categoría: Supermercado 6, Entidad oficial 6, Carrefour 3, Centro de salud 2, Centro comercial 2, Decathlon 1, Hospital 1. Total de la base 10.505 -> 10.526 y municipios 1.594 -> 1.595.
 - **Provincia:** Ceuta (51) ya estaba activa (`is_active = true`).
 - **Códigos postales (25/10/2026):** los 11 puntos sin código se consultaron con Nominatim inverso y se escribieron con `admin_set_postal_codes` desde la sesión de administrador (11 actualizados, 0 omitidos, 11 entradas en `audit_log`): 51001 (2), 51002 (7) y 51003 (2), todos de los códigos ya presentes en la ciudad. Quedan **0 sin código postal y 0 sin calle**. Sin asignar a usuarios hasta terminar España.
+
+## Correos (añadido el 25/10/2026, pendiente de cargar)
+El lote automático dejó Correos en 0 porque la única oficina de OpenStreetMap no tiene nombre ni operador. El titular facilitó (captura de Google) las dos oficinas reales de Ceuta, y se carga como lote propio, `supabase/seeds/ceuta/correos/` (2 puntos):
+- **Correos Ceuta – Plaza de España** (Pl. de España s/n): la oficina sin nombre de OpenStreetMap (`node/9156016046`) está a 30 m del centro de la Plaza de España, así que se usan sus coordenadas (precisión `address`, origen `openstreetmap:node/9156016046`). Código postal 51001 (Nominatim inverso).
+- **Correos Ceuta – Calle Bermudo Soriano** (Suc. 1 Hadú, C.C. El Coso, C. Bermudo Soriano s/n): no existe en OpenStreetMap; coordenadas **35.88693, -5.33232 facilitadas por el titular desde Google Maps** (precisión `verified`, origen `manual_google_maps`, como los otros puntos de ese origen). Código postal 51003 (Nominatim inverso, el mismo que El Coso).
+- `generar_lote.py` acepta ahora el origen `manual_google_maps` en el campo `osm` (sin prefijo `openstreetmap:`). Cargar con:
+```
+bash scripts/catalogue/cargar.sh supabase/seeds/ceuta/correos postal_service
+```
+Después, en solo lectura: 2 puntos más de Ceuta (23) y la base pasaría de 10.526 a 10.528.
