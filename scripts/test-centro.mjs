@@ -173,4 +173,12 @@ ok(bloque.includes('new CustomEvent("permisos:cambio", { detail: { id: c.id } })
 ok(/\.ce-tabs \{ display: flex; flex-wrap: wrap;/.test(html), "Las pestañas del Centro deben poder saltar de línea en pantallas estrechas");
 ok(/\.pn-scroll \{[^}]*overflow-x: auto;[^}]*position: relative;/.test(html), "El contenedor de las tablas es su propia referencia de posición: los textos ocultos (adm-sr) de la última columna no deben alargar el diálogo");
 
+// Auditoría 25/10/2026: el estado de guardado se libera siempre y los fallos parciales se explican.
+ok(/try \{ res = await aplica\(c, muta\); \}\s*catch \(e\) \{[\s\S]*?\} finally \{ ocupado = false; \}/.test(bloque), "ejecuta() libera «ocupado» en un finally: una excepción no deja el Centro bloqueado");
+ok(bloque.includes("try { r = await savePermits(c); } catch (e)") && bloque.includes("try { gamPermit(c, previo); } catch (e)"), "aplica() no se rompe si savePermits o la gamificación lanzan");
+ok(bloque.includes("Se aplicaron \" + ultimoGuardado.hechas + \" de \" + ultimoGuardado.total") && bloque.includes("Lo guardado no coincide con lo esperado"), "Un guardado a medias o no verificado se explica");
+ok(html.includes("const mal = verificaOps(ops, relBase.get(key) || { sols: [], hist: [] });") && html.includes("estadoOps.noVerificadas = mal; result = \"error\";"), "savePermits verifica por relectura que se guardó lo esperado");
+
+ok((bloque.match(/form\.idNuevo \|\| \(form\.idNuevo = newId\(\)\)/g) || []).length === 2, "Las altas del formulario usan un identificador estable entre intentos (el reintento tras un fallo parcial no duplica)");
+
 console.log("Centro de permisos: " + n + " comprobaciones correctas.");

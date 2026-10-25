@@ -21,7 +21,7 @@ const reglas = (ahoraIso) => {
   const sandbox = { Date: Falsa, self: {} };
   return runInNewContext(
     "const permits = {}; const permitKey = (c) => c.id; const permOf = (c) => permits[permitKey(c)] || {};\n" + codigo +
-    "\n({ today, addDays, mondayOf, daysBetween, solEstado, concEstado, estadoCalc, expedientesDe, seguimientosDe, capacidad, capacidadPorOng, incidencias, indicadores, estadoEnDia, calendarioSemana, sanitizeSharedPermitState, UMBRAL_ESTANCADA, relListas, diffRel })",
+    "\n({ today, addDays, mondayOf, daysBetween, solEstado, concEstado, estadoCalc, expedientesDe, seguimientosDe, capacidad, capacidadPorOng, incidencias, indicadores, estadoEnDia, calendarioSemana, sanitizeSharedPermitState, UMBRAL_ESTANCADA, relListas, diffRel, verificaOps })",
     sandbox
   );
 };
@@ -315,6 +315,92 @@ const T = "2026-10-23";
   eq(R.diffRel(bv, cv).map((o) => [o.t, o.ver]), [["fuDone", "2026-10-24T09:00:00+00:00"]], "cerrar envía la versión leída");
   const pv = R.relListas([], [], [{ id: "fp-9", establishment_id: E, application_id: null, grant_id: null, due_on: "2026-10-28", completed_at: null, updated_at: "2026-10-24T10:00:00+00:00" }]).get(E);
   eq(R.diffRel({ sols: [], hist: [], punto: pv.punto }, { sols: [], hist: [], punto: undefined }).map((o) => [o.t, o.ver]), [["fuDone", "2026-10-24T10:00:00+00:00"]], "el seguimiento del punto también lleva su versión");
+}
+
+// Auditoría 25/10/2026, hallazgo 4: seguimientos vinculados directamente a una concesión (grant_id).
+{
+  const R = reglas("2026-10-25T10:00:00Z"), E = "est-1";
+  const grants = [{ id: "g-1", establishment_id: E, application_id: null, status: "active", valid_from: "2026-10-01", valid_until: "2026-11-30", organization: "ONG A", capturer_count: 2, created_at: "2026-10-01T09:00:00Z", updated_at: "2026-10-01T09:00:00Z" },
+                  { id: "g-2", establishment_id: E, application_id: null, status: "cancelled", cancelled_at: "2026-10-05T09:00:00Z", valid_from: "2026-10-01", valid_until: "2026-11-30", organization: "ONG B", capturer_count: 1, created_at: "2026-10-01T09:00:00Z", updated_at: "2026-10-05T09:00:00Z" }];
+  const fups = [
+    { id: "f-g1", establishment_id: E, application_id: null, grant_id: "g-1", due_on: "2026-10-27", completed_at: null, assigned_to: "u-1", next_action: "Revisar el cupo", updated_at: "2026-10-20T08:00:00Z" },
+    { id: "f-g1b", establishment_id: E, application_id: null, grant_id: "g-1", due_on: "2026-11-10", completed_at: null, updated_at: "2026-10-20T08:00:00Z" },
+    { id: "f-g1c", establishment_id: E, application_id: null, grant_id: "g-1", due_on: "2026-10-01", completed_at: "2026-10-02T10:00:00Z", updated_at: "2026-10-02T10:00:00Z" },
+    { id: "f-g2", establishment_id: E, application_id: null, grant_id: "g-2", due_on: "2026-10-28", completed_at: null, updated_at: "2026-10-20T08:00:00Z" }
+  ];
+  const l = R.relListas([], grants, fups).get(E), h1 = l.historial.find((h) => h.id === "g-1"), h2 = l.historial.find((h) => h.id === "g-2");
+  eq([h1.seg, h1.fu, h1.resp, h1.accion, h1.fuver], ["2026-10-27", "f-g1", "u-1", "Revisar el cupo", "2026-10-20T08:00:00Z"], "la concesión muestra su seguimiento abierto más próximo");
+  ok(h2.seg === undefined, "el seguimiento abierto de una concesión cancelada no se muestra");
+  const segs = R.seguimientosDe({ id: "c-1" }, { historial: l.historial });
+  eq(segs.map((s) => [s.fecha, s.con, s.i, s.resp, s.accion]), [["2026-10-27", true, 0, "u-1", "Revisar el cupo"]], "seguimientosDe incluye los de concesión (y no los de una cancelada)");
+  const ind = R.indicadores([], segs.map((s) => Object.assign({ c: { id: "c-1" } }, s)), "2026-10-25");
+  ok(ind.segProximos.length === 1, "el Panel cuenta el seguimiento de la concesión");
+  // si también cuelga de una solicitud, va con la solicitud y no se duplica
+  const doble = R.relListas([{ id: "a-1", establishment_id: E, status: "pending", organization: "ONG A", capturer_count: 1, requested_at: "2026-10-20", updated_at: "2026-10-20T08:00:00Z" }], grants, [{ id: "f-ab", establishment_id: E, application_id: "a-1", grant_id: "g-1", due_on: "2026-10-26", completed_at: null, updated_at: "2026-10-20T08:00:00Z" }]).get(E);
+  ok(doble.solicitudes[0].seg === "2026-10-26" && doble.historial.find((h) => h.id === "g-1").seg === undefined, "un seguimiento de solicitud y concesión se muestra una sola vez");
+  // cerrar, reprogramar y cancelar
+  const base = JSON.parse(JSON.stringify({ sols: l.solicitudes, hist: l.historial })), mut = () => JSON.parse(JSON.stringify(base));
+  let cur = mut(); cur.hist[0].seg = "";
+  eq(R.diffRel(base, cur), [{ t: "fuDone", fu: "f-g1", ver: "2026-10-20T08:00:00Z" }], "cerrar el seguimiento de una concesión");
+  cur = mut(); cur.hist[0].seg = "2026-11-02"; cur.hist[0].accion = "Llamar";
+  eq(R.diffRel(base, cur), [{ t: "fuSet", app: "", fu: "f-g1", ver: "2026-10-20T08:00:00Z", due: "2026-11-02", resp: "u-1", accion: "Llamar" }], "reprogramar el seguimiento de una concesión");
+  cur = mut(); cur.hist[0].cancelada = true; cur.hist[0].resFecha = "2026-10-25";
+  eq(R.diffRel(base, cur).map((o) => o.t), ["cancel", "fuDone"], "cancelar la concesión cierra su seguimiento");
+  eq(R.diffRel(base, mut()), [], "sin cambios, sin operaciones");
+}
+
+// Auditoría 25/10/2026, hallazgo 2: la relectura debe coincidir con lo guardado (también cuando un 23505 se dio por bueno).
+{
+  const R = reglas("2026-10-25T10:00:00Z"), E = "est-1", v = R.verificaOps;
+  const sol = (o) => Object.assign({ id: "s1", ver: "v", desde: "2026-11-01", hasta: "2026-11-05", ong: "A", captadores: 2, fecha: "2026-10-25" }, o);
+  const con = (o) => Object.assign({ id: "g1", ver: "v", desde: "2026-11-01", hasta: "2026-11-05", ong: "A", captadores: 2, alta: "2026-10-25" }, o);
+  const base = (sols, hist) => ({ sols: sols || [], hist: hist || [] });
+  eq(v([{ t: "insApp", x: sol() }], base([sol()])), [], "el alta existe");
+  eq(v([{ t: "insApp", x: sol() }], base([])), ["insApp"], "un alta que no aparece al releer (23505 sin fila) no se da por buena");
+  eq(v([{ t: "updApp", id: "s1", x: sol({ captadores: 5 }) }], base([sol({ captadores: 2 })])), ["updApp"], "un cambio que no coincide con lo leído");
+  eq(v([{ t: "updApp", id: "s1", x: sol({ captadores: 5 }) }], base([sol({ captadores: 5 })])), [], "un cambio que coincide");
+  eq(v([{ t: "approve", id: "s1" }], base([sol({ res: "aprobada" })], [con({ sol: "s1" })])), [], "aprobar: solicitud aprobada y concesión enlazada");
+  eq(v([{ t: "approve", id: "s1" }], base([sol({ res: "aprobada" })], [])), ["approve"], "aprobar sin concesión enlazada no se da por bueno");
+  eq(v([{ t: "approve", id: "s1" }], base([sol()], [])), ["approve"], "aprobar con la solicitud aún pendiente");
+  eq(v([{ t: "resolve", id: "s1", st: "denied" }], base([sol({ res: "denegada" })])), [], "denegar");
+  eq(v([{ t: "resolve", id: "s1", st: "withdrawn" }], base([sol({ res: "denegada" })])), ["resolve"], "retirar no coincide con denegada");
+  eq(v([{ t: "insGrant", h: con() }], base([], [])), ["insGrant"], "una concesión que no aparece");
+  eq(v([{ t: "cancel", id: "g1" }], base([], [con({ cancelada: true })])), [], "cancelar");
+  eq(v([{ t: "cancel", id: "g1" }], base([], [con()])), ["cancel"], "cancelar sin que figure cancelada");
+  eq(v([{ t: "reactivate", id: "g1" }], base([], [con({ cancelada: true })])), ["reactivate"], "reactivar sin que se haya reactivado");
+  eq(v([{ t: "delApp", id: "s1" }, { t: "delGrant", id: "g1" }], base([sol()], [con()])), ["delApp", "delGrant"], "borrar: siguen existiendo");
+  eq(v([{ t: "fuSet", fu: "f", due: "2026-11-01" }, { t: "fuDone", fu: "f" }], base()), [], "los seguimientos se comprueban por relectura del punto");
+}
+
+// Auditoría 25/10/2026, hallazgo 6: coherencia entre el Panel (indicadores) y el Calendario (calendarioSemana).
+{
+  const R = reglas("2026-10-25T10:00:00Z"), t = R.today(), wk = R.mondayOf(t);
+  const pt = (id) => ({ id });
+  const recs = [
+    ...R.expedientesDe(pt(1), { historial: [
+      { id: "g1", desde: "2026-10-20", hasta: "2026-10-31", ong: "A", captadores: 3 },
+      { id: "g2", desde: "2026-10-26", hasta: "2026-11-05", ong: "A", captadores: 5 },      /* futura: empieza mañana */
+      { id: "g3", desde: "2026-10-01", hasta: "2026-10-10", ong: "B", captadores: 2 },      /* terminada */
+      { id: "g4", desde: "2026-10-15", hasta: "2026-10-30", ong: "b", captadores: 4, cancelada: true, resFecha: "2026-10-18" } /* cancelada */
+    ], solicitudes: [{ id: "s1", desde: "2026-10-27", hasta: "2026-10-29", ong: "C", captadores: 2, fecha: "2026-10-20" }] }),
+    ...R.expedientesDe(pt(2), { historial: [{ id: "g5", desde: "2026-10-22", hasta: "2026-10-27", ong: "A", captadores: 1 }, { id: "g6", desde: "2026-10-22", hasta: "2026-10-27", ong: "a", captadores: 4 }] }) /* misma ONG con distinta caja: no se suma dos veces */
+  ];
+  const ind = R.indicadores(recs, [], t), sem = R.calendarioSemana(recs, [], wk, t);
+  const hoy = sem.find((d) => d.d === t);
+  ok(hoy.aut === ind.capacidadHoy, "captadores autorizados de hoy: Calendario " + hoy.aut + " = Panel " + ind.capacidadHoy);
+  ok(ind.capacidadHoy === 3 + 4, "punto 1: 3 de «A» y punto 2: mayor de «A»/«a» (4); la terminada, la futura y la cancelada no cuentan");
+  ok(hoy.nAut === ind.vigentes.length, "las concesiones vigentes de hoy: Calendario " + hoy.nAut + " = Panel " + ind.vigentes.length);
+  const manana = R.calendarioSemana(recs, [], R.mondayOf(R.addDays(t, 1)), t).find((d) => d.d === R.addDays(t, 1));
+  ok(manana.aut === 5 + 4 && manana.pen === 0, "mañana: la futura de la misma ONG en el mismo punto no se suma a la vigente (se toma la mayor: 5) y el otro punto aporta 4");
+  const d27 = R.calendarioSemana(recs, [], R.mondayOf(R.addDays(t, 1)), t).find((d) => d.d === R.addDays(t, 2));
+  ok(d27.pen === 2 && d27.aut === 5 + 4, "pasado mañana: los 2 captadores de la solicitud pendiente van aparte, no engrosan la capacidad autorizada (capacidad ≠ demanda)");
+  // ninguna cifra mezcla autorizada con pendiente
+  ok(sem.every((d) => d.aut >= 0 && d.pen >= 0) && !sem.some((d) => d.items.some((i) => i.e === "autorizada" && i.r.k === "sol")), "una solicitud nunca cuenta como capacidad autorizada");
+  // concesión sin ninguna fecha: el Panel la cuenta como vigente y el Calendario no puede dibujarla; debe quedar señalada como incidencia
+  const sinFechas = R.expedientesDe(pt(3), { historial: [{ id: "g7", ong: "D", captadores: 2 }] });
+  const i2 = R.indicadores(sinFechas, [], t);
+  ok(i2.vigentes.length === 1 && R.calendarioSemana(sinFechas, [], wk, t).every((d) => d.items.length === 0), "una concesión sin fechas es vigente para el Panel y no sale en el Calendario");
+  ok(i2.incidencias.some((x) => /sin fechas/i.test(x.tipo)), "…y por eso se señala como incidencia");
 }
 
 console.log("Reglas de expedientes: " + n + " comprobaciones correctas.");

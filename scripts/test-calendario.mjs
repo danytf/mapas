@@ -44,4 +44,7 @@ assert.ok(/@media \(prefers-reduced-motion: no-preference\) \{ \.cal-stack \{ an
 // La vista semanal ya no está en el panel resumen.
 for (const t of ['id="wkBox"', "Permisos por semana", "data-wkdate", "wkRender"]) assert.ok(!html.includes(t), "Debe haberse quitado del panel resumen: " + t);
 
+// Auditoría 25/10/2026: las ONG se agrupan sin distinguir mayúsculas ni espacios, igual que el Panel y el Centro.
+assert.ok(bloque.includes("const kOng = (x) => ongDe(x).trim().toLowerCase();") && bloque.includes("kOng(x) === ong.trim().toLowerCase()") && bloque.includes("porClave.has(kOng(y))"), "El filtro de ONG del Calendario debe usar la clave normalizada");
+
 console.log("Calendario semanal: comprobaciones estáticas correctas.");
