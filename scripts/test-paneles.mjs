@@ -13,7 +13,7 @@ assert.ok(/\.pn-head[^}]*position: sticky[^}]*border-bottom: 1px solid var\(--li
 assert.ok(/h2 \{ font-size: var\(--fs-title\)/.test(css), "Los títulos siguen la escala de la ficha (--fs-title, 17 px)");
 assert.ok(/\.kpi \{ border-left: 5px solid var\(--kpi/.test(css) && /\.kpi\.hl \{ --kpi: var\(--st-concedido\)/.test(css) && /\.kpi\.al \{ --kpi: var\(--st-solicitado\)/.test(css), "Las tarjetas del resumen codifican el estado con borde izquierdo y los tokens de estado");
 assert.ok(/button\.kpi \{[^}]*cursor: pointer/.test(css) && /button\.kpi:focus-visible/.test(css), "Cada cifra del resumen es un botón con foco visible");
-assert.ok(/\.pn-scroll \{ max-height: none; overflow-x: auto; overflow-y: visible; \}/.test(css), "La tabla del resumen no crea una segunda barra de desplazamiento vertical");
+assert.ok(/\.pn-scroll \{ max-height: none; overflow-x: auto; overflow-y: visible; position: relative; \}/.test(css), "La tabla del resumen no crea una segunda barra de desplazamiento vertical");
 assert.ok(/dialog input\[type="checkbox"\] \{ width: 18px; height: 18px; min-height: 0;/.test(css), "Las casillas de verificación no heredan el alto de los campos de texto");
 assert.ok(/@media \(max-width: 900px\), \(pointer: coarse\) \{ \.adm-chk \{ min-height: 44px; \} \}/.test(css), "Las filas con casilla de Administración miden 44 px en táctil");
 
