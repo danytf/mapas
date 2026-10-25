@@ -809,6 +809,7 @@
   .ce-nav .n[hidden] { display: none; }
   .ce-nav .n.al { background: var(--accent); color: var(--accent-fg); }
   #ceBody[data-vista="res"] .ce-solo-lista { display: none; }
+  #ceBody:not([data-vista="seg"]) .ce-solo-seg { display: none; }
   .ce-filtros { margin-bottom: 10px; }
   /* Tablas de trabajo */
   #ceBody table { width: 100%; border-collapse: collapse; font-size: var(--fs-label); font-variant-numeric: tabular-nums; }
@@ -4446,7 +4447,7 @@ const csvCell = (value) => {
   const MES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"], DIA = ["lun", "mar", "mié", "jue", "vie", "sáb", "dom"];
   const corto = (d) => (+d.slice(8)) + " " + MES[+d.slice(5, 7) - 1];
   const diaSem = (d) => DIA[(new Date(d + "T00:00:00Z").getUTCDay() + 6) % 7];
-  let vista = "res", prov = "", ong = "", q = "", mostrar = TRAMO, ocupado = false, aviso = "";
+  let vista = "res", prov = "", ong = "", resp = "", q = "", mostrar = TRAMO, ocupado = false, aviso = ""; /* resp: filtro de responsable en Seguimientos ("" todos, "__ninguno" sin responsable, o el id de una persona) */
   let punto = null;  /* si se llega desde la ficha, el Panel o el Calendario: solo los expedientes de ese punto */
   let accion = null; /* confirmación en línea de una fila: { a, key } */
   let form = null;   /* formulario abierto: { tipo: "sol" | "con" | "seg", c, r } (r = registro que se edita; sin r, alta) */
@@ -4893,7 +4894,16 @@ const csvCell = (value) => {
     const selProv = body.querySelector("#ceProv"); if (selProv.value !== prov) selProv.value = prov; /* el filtro puede cambiar desde el Resumen o un enlace: el selector debe decir lo mismo */
     body.querySelector("#ceOng").innerHTML = '<option value="">Todas las ONG</option>' + ongs.map((o) => '<option value="' + esc(o) + '"' + (o.trim().toLowerCase() === ong.trim().toLowerCase() ? " selected" : "") + ">" + esc(o) + "</option>").join("");
     const ql = q.trim().toLowerCase(), okOng = (x) => (!ong || claveOngDe(x) === ong.trim().toLowerCase()) && (!punto || String(x.c.id) === String(punto.id)), okF = (x) => okOng(x) && (!ql || textoDe(x).includes(ql));
-    const base = todas.filter(okF), baseSeg = todasSegs.filter(okF), recsAmb = todas.filter(okOng), segsAmb = todasSegs.filter(okOng);
+    /* Responsables de los seguimientos que cumplen los demás filtros, con cuántos tiene cada uno (el filtro «Responsable» solo se ve y se aplica en Seguimientos). */
+    const segsF = todasSegs.filter(okF), porResp = new Map(); let sinResp = 0;
+    segsF.forEach((x) => { if (x.resp) porResp.set(x.resp, (porResp.get(x.resp) || 0) + 1); else sinResp++; });
+    if (resp && resp !== "__ninguno" && !porResp.has(resp)) resp = "";
+    const okResp = (x) => !resp || (resp === "__ninguno" ? !x.resp : x.resp === resp);
+    const base = todas.filter(okF), baseSeg = segsF.filter(okResp), recsAmb = todas.filter(okOng), segsAmb = todasSegs.filter(okOng);
+    const miId = window.mapaSession?.user?.id || "", sinNombre = [...porResp.keys()].filter((id) => id !== miId && !nombresPersona.get(id));
+    const nombreDe = (id) => id === miId ? "Yo" : nombresPersona.get(id) || "Otra persona " + (sinNombre.indexOf(id) + 1);
+    body.querySelector("#ceResp").innerHTML = '<option value="">Todos (' + segsF.length + ")</option>" + '<option value="__ninguno"' + (resp === "__ninguno" ? " selected" : "") + ">Sin responsable (" + sinResp + ")</option>" +
+      [...porResp.entries()].sort((a, b) => (a[0] === miId ? -1 : b[0] === miId ? 1 : nombreDe(a[0]).localeCompare(nombreDe(b[0]), "es"))).map(([id, n]) => '<option value="' + esc(id) + '"' + (resp === id ? " selected" : "") + ">" + esc(nombreDe(id) + " (" + n + ")") + "</option>").join("");
     indice = new Map(); todas.concat(todasSegs).forEach((x) => indice.set(clave(x), x));
     const incsAmb = incidencias(recsAmb, t), ind = indicadores(recsAmb, segsAmb, t);
     /* Navegación con el número que pide atención en cada sección (con los filtros de provincia, ONG y punto) */
@@ -5077,7 +5087,7 @@ const csvCell = (value) => {
     mostrar = TRAMO; aviso = ""; accion = null; form = null; sel = ""; multi = new Set(); lote = null;
     /* Al llegar desde el Panel, el Calendario o una ficha, se parte de los filtros que traen y se limpia el texto de búsqueda. */
     punto = o && o.punto ? o.punto : null;
-    if (o) { prov = o.prov || ""; ong = o.ong || ""; q = ""; if (o.vista) { vista = o.vista; if (o.est) est[o.vista] = o.est; } }
+    if (o) { prov = o.prov || ""; ong = o.ong || ""; resp = ""; q = ""; if (o.vista) { vista = o.vista; if (o.est) est[o.vista] = o.est; } }
     if (prov && !ps.some(([id]) => id === prov)) prov = "";
     if (ps.length === 1) prov = ps[0][0];
     body.innerHTML =
@@ -5087,6 +5097,7 @@ const csvCell = (value) => {
       '<label class="cal-f">Provincia<select id="ceProv">' + (ps.length > 1 ? '<option value="">Todas las provincias</option>' : "") +
       ps.map(([id, n]) => '<option value="' + esc(id) + '"' + (id === prov ? " selected" : "") + ">" + esc(n) + "</option>").join("") + "</select></label>" +
       '<label class="cal-f">ONG<select id="ceOng"></select></label>' +
+      '<label class="cal-f ce-solo-seg">Responsable<select id="ceResp"></select></label>' +
       '<label class="cal-f ce-solo-lista">Estado<select id="ceEst"></select></label>' +
       '<label class="cal-f ce-solo-lista">Ordenar por<select id="ceOrd"></select></label>' +
       '<label class="cal-f ce-q ce-solo-lista">Buscar<input type="search" id="ceQ" autocomplete="off" placeholder="Punto, municipio u ONG" value="' + esc(q) + '"></label></div>' +
@@ -5170,6 +5181,7 @@ const csvCell = (value) => {
   body.addEventListener("change", (e) => {
     if (e.target.id === "ceProv") { prov = e.target.value; ong = ""; }
     else if (e.target.id === "ceOng") ong = e.target.value;
+    else if (e.target.id === "ceResp") resp = e.target.value;
     else if (e.target.id === "ceEst") est[vista] = e.target.value;
     else if (e.target.id === "ceOrd") orden[vista] = e.target.value;
     else if (e.target.dataset && e.target.dataset.chk !== undefined) { if (e.target.checked) multi.add(e.target.dataset.chk); else multi.delete(e.target.dataset.chk); lote = null; draw(); return; }
