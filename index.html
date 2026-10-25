@@ -468,6 +468,7 @@
   #admMsg { min-height: 18px; font-size: var(--fs-label); margin: 0 0 6px; color: var(--ok); }
   #admMsg.err { color: var(--accent); font-weight: 600; }
   #admBody h3 { font-size: var(--fs-body); font-weight: 650; margin: 14px 0 8px; }
+  #admBody .adm-arch > summary { cursor: pointer; font-weight: 650; margin: 14px 0 8px; min-height: 34px; display: flex; align-items: center; }
   .adm-scroll { overflow: auto; border: 1px solid var(--line); border-radius: var(--r-card); background: var(--panel); }
   #admBody table { width: 100%; border-collapse: collapse; font-size: var(--fs-label); }
   #admBody th, #admBody td { padding: 7px 10px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
@@ -5304,18 +5305,19 @@ const csvCell = (value) => {
     return '<tr data-pid="' + esc(p.id) + '"><th scope="row">' + esc(p.name) + "</th><td>" + esc(p.code) + '</td><td><label class="adm-chk"><input type="checkbox" data-f="pactive"' + (p.is_active ? " checked" : "") + "> Activa" +
       '<span class="adm-sr"> (' + esc(p.name) + ")</span></label></td><td>" + afectados + (afectados === 1 ? " usuario" : " usuarios") + "</td></tr>";
   };
-  const archHtml = () => "<h3>Puntos archivados</h3>" + (archived.length
-    ? '<div class="adm-scroll"><table><thead><tr><th scope="col">Punto</th><th scope="col">Municipio</th><th scope="col">Archivado</th><th scope="col">Motivo</th><th scope="col">Acción</th></tr></thead><tbody>' +
+  const archHtml = (abierto) => archived.length
+    ? '<details class="adm-arch"' + (abierto ? " open" : "") + "><summary>Puntos archivados (" + archived.length + ')</summary><div class="adm-scroll"><table><thead><tr><th scope="col">Punto</th><th scope="col">Municipio</th><th scope="col">Archivado</th><th scope="col">Motivo</th><th scope="col">Acción</th></tr></thead><tbody>' +
       archived.map((p) => '<tr data-eid="' + esc(p.id) + '"><th scope="row">' + esc(p.name) + "</th><td>" + esc(p.municipalities?.name || "") + "</td><td>" + esc(fmtLast(p.archived_at)) + "</td><td>" + esc(p.notes || "") +
-        '</td><td><button type="button" data-f="restore" aria-label="Restaurar ' + esc(p.name) + '">Restaurar</button></td></tr>').join("") + "</tbody></table></div>"
-    : '<p class="adm-note">No hay puntos archivados.</p>');
+        '</td><td><button type="button" data-f="restore" aria-label="Restaurar ' + esc(p.name) + '">Restaurar</button></td></tr>').join("") + "</tbody></table></div></details>"
+    : "<h3>Puntos archivados</h3>" + '<p class="adm-note">No hay puntos archivados.</p>';
   function render() {
+    const archAbierto = !!bodyA.querySelector("details.adm-arch[open]");
     const abiertos = new Set([...bodyA.querySelectorAll("tr[data-uid] details[open]")].map((d) => d.closest("tr").dataset.uid));
     const a = document.activeElement, foco = a && bodyA.contains(a) ? { uid: a.closest("tr")?.dataset.uid, pid: a.closest("tr")?.dataset.pid, f: a.dataset.f, p: a.dataset.pid } : null;
     bodyA.innerHTML = '<h3>Usuarios</h3><div class="adm-scroll"><table><thead><tr><th scope="col">Usuario</th><th scope="col">Nombre visible</th><th scope="col">Rol</th><th scope="col">Estado</th><th scope="col">Provincias</th><th scope="col">Último acceso</th></tr></thead><tbody>' +
       users.map(rowHtml).join("") + "</tbody></table></div>" +
       '<h3>Provincias</h3><div class="adm-scroll"><table><thead><tr><th scope="col">Provincia</th><th scope="col">Código</th><th scope="col">Estado</th><th scope="col">Usuarios afectados</th></tr></thead><tbody>' +
-      provs.map(provHtml).join("") + "</tbody></table></div>" + archHtml();
+      provs.map(provHtml).join("") + "</tbody></table></div>" + archHtml(archAbierto);
     abiertos.forEach((uid) => { const d = bodyA.querySelector('tr[data-uid="' + uid + '"] details'); if (d) d.open = true; });
     if (foco) {
       const sel = foco.uid ? 'tr[data-uid="' + foco.uid + '"] [data-f="' + foco.f + '"]' + (foco.p ? '[data-pid="' + foco.p + '"]' : "") : 'tr[data-pid="' + foco.pid + '"] [data-f="' + foco.f + '"]';
