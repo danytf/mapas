@@ -1,0 +1,24 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+por revisar;node/11509683218;Tren;Estación de tren de El Berrón (Siero) – Calle La Estación;Siero;43.382479;-5.702474;"posible duplicado de way/1030507477 (Estación de El Berrón;El Berrón) a 9 m"
+descartado;node/13252833307;Tren;Ablaña;Mieres;43.267248;-5.806375;duplicado en el lote de node/13252833306 (66 m)
+descartado;node/14185547242;Tren;La Perea;Mieres;43.277058;-5.812241;duplicado en el lote de node/13165236051 (64 m)
+por revisar;node/14200499162;Tren;Estación de tren de Po (Llanes) – Carretera de Ribadesella a Llanes;Llanes;43.424128;-4.782395;nombre dudoso en OpenStreetMap: Po
+por revisar;node/14210460106;Tren;Estación de tren de Tol (Castropol);Castropol;43.527184;-6.952031;nombre dudoso en OpenStreetMap: Tol
+descartado;node/14245178889;Tren;;Langreo;43.31777;-5.710965;sin nombre en OpenStreetMap
+descartado;node/290699590;Autobús;San Pelayu;Corvera de Asturias;43.551268;-5.878555;etiqueta public_transport=platform
+descartado;node/58157938;Tren;Bulnes;Cabrales;43.238224;-4.823328;etiqueta station=funicular
+descartado;node/58157942;Tren;Poncebos;Cabrales;43.257695;-4.830316;etiqueta station=funicular
+por revisar;node/8589432333;Autobús;Estación de autobuses de Gijón – Magnus Blikstad;Gijón;43.538899;-5.667134;"posible duplicado de way/112587230 (Estación ALSA) a 42 m; posible duplicado de way/86369504 (Estación de Autobuses de Alsa en Gijón) a 4 m"
+por revisar;way/1030507477;Tren;"Estación de El Berrón;El Berrón (Siero) – Calle La Estación";Siero;43.382436;-5.702376;posible duplicado de node/11509683218 (El Berrón) a 9 m
+descartado;way/10973183;Autobús;Estación de Autobuses de Oviedo;Oviedo;43.36912;-5.851082;duplicado en el lote de node/13818487438 (17 m)
+por revisar;way/112587230;Autobús;Estación ALSA (Gijón) – Calle Ribadesella;Gijón;43.538973;-5.667651;"posible duplicado de node/8589432333 (Gijón) a 42 m; posible duplicado de way/86369504 (Estación de Autobuses de Alsa en Gijón) a 46 m"
+descartado;way/1262196732;Autobús;;Oviedo;43.369336;-5.850602;sin nombre en OpenStreetMap
+descartado;way/1558957936;Tren;;Gijón;43.466788;-5.725964;sin nombre en OpenStreetMap
+descartado;way/176100103;Tren;Sama-Los Llerones;Langreo;43.298744;-5.683363;etiqueta disused:railway
+descartado;way/222920121;Tren;Soto Ribera;Ribera de Arriba;43.308583;-5.875317;duplicado en el lote de node/30550910 (6 m)
+descartado;way/391398900;Tren;Estación de Malvedo;Lena;43.106511;-5.795704;etiqueta disused:railway
+descartado;way/40800646;Autobús;Estación de Autobuses;Llanes;43.417021;-4.754586;duplicado en el lote de way/40800645 (8 m)
+descartado;way/425016687;Autobús;;Villaviciosa;43.484559;-5.436174;sin nombre en OpenStreetMap
+descartado;way/66838721;Tren;Lieres;Siero;43.380589;-5.58257;duplicado en el lote de node/12926284060 (10 m)
+descartado;way/74619542;Tren;La Corredoria;Oviedo;43.388366;-5.827024;duplicado en el lote de node/13519909358 (23 m)
+por revisar;way/86369504;Autobús;Estación de Autobuses de Alsa en Gijón – Magnus Blikstad;Gijón;43.538893;-5.66708;"posible duplicado de node/8589432333 (Gijón) a 4 m; posible duplicado de way/112587230 (Estación ALSA) a 46 m"
