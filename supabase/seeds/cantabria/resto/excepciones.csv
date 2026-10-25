@@ -1,0 +1,39 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/11001369005;;Mercado de Abastos;Santoña;43.441673;-3.457808;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/11135836793;;;Colindres;43.395828;-3.453501;sin nombre en OpenStreetMap
+descartado;node/11137062251;;Covirán;Colindres;43.398029;-3.450324;duplicado en el lote de node/11103271198 (115 m)
+descartado;node/11804863348;;;Ribamontán al Mar;43.463037;-3.723853;sin nombre en OpenStreetMap
+descartado;node/11959920316;;;Bareyo;43.482712;-3.613065;sin nombre en OpenStreetMap
+descartado;node/12036594323;;Lupa;Santander;43.463671;-3.811579;duplicado en el lote de node/1695906682 (49 m)
+descartado;node/12648153620;;;Laredo;43.411844;-3.410805;sin nombre en OpenStreetMap
+descartado;node/12956616104;;Carrefour Express;Piélagos;43.413636;-3.945608;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/12990273051;;;Piélagos;43.409738;-3.940763;sin nombre en OpenStreetMap
+descartado;node/13416742004;;Hipercor;Santander;43.437796;-3.840287;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/13461794006;;Ayuntamiento de Karrantza;Karrantza Harana / Valle de Carranza;43.225073;-3.360829;fuera de las provincias del lote (48)
+descartado;node/1603458489;;Centro de salud;Ribamontán al Mar;43.455405;-3.743596;nombre generico o dudoso en OpenStreetMap: Centro de salud
+descartado;node/1773085422;;Carrefour;Castro-Urdiales;43.380615;-3.219732;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/1800298569;;Carrefour;Santander;43.458116;-3.861958;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/1800298590;;Carrefour;Santander;43.445484;-3.854281;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/1800298626;;Carrefour;Camargo;43.427186;-3.838068;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/1800298708;;Leroy Merlin;Camargo;43.428446;-3.840157;texto excluido (leroy merlin|click|recogida)
+descartado;node/2775911223;;Covirán;Meruelo;43.455326;-3.572554;duplicado en el lote de node/2775911221 (90 m)
+descartado;node/4038446909;;Lupa;Torrelavega;43.349225;-4.052556;duplicado en el lote de node/2993637385 (133 m)
+descartado;node/4296918692;;;Alfoz de Lloredo;43.384634;-4.209823;sin nombre en OpenStreetMap
+descartado;node/4382744391;;;Karrantza Harana / Valle de Carranza;43.223019;-3.360426;fuera de las provincias del lote (48)
+descartado;node/5533454808;;;Camargo;43.424689;-3.829776;sin nombre en OpenStreetMap
+descartado;node/5552814323;;Alcampo;Torrelavega;43.348248;-4.051691;duplicado en el lote de node/5552807217 (57 m)
+descartado;node/6244473241;;Eroski;Karrantza Harana / Valle de Carranza;43.23448;-3.358322;fuera de las provincias del lote (48)
+descartado;node/6750821295;;Ayuntamiento de Alfoz de Bricia;;42.907601;-3.848127;fuera de los municipios oficiales cargados
+descartado;node/6777035388;;Covirán;Trucios-Turtzioz;43.272498;-3.256952;fuera de las provincias del lote (48)
+descartado;node/705088923;;Carrefour Market;Santander;43.461594;-3.813199;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;node/7497265092;;Lupa;Santander;43.46362;-3.807037;duplicado en el lote de node/6698654060 (99 m)
+descartado;node/7836098795;;Centro de Salud;Selaya;43.216724;-3.807405;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;node/9024517417;;Covirán;Karrantza Harana / Valle de Carranza;43.237128;-3.35852;fuera de las provincias del lote (48)
+descartado;node/9748940444;;Ayuntamiento de Trucios-Turtzioz;Trucios-Turtzioz;43.271382;-3.256195;fuera de las provincias del lote (48)
+descartado;way/193809577;;;Reinosa;43.006572;-4.132135;sin nombre en OpenStreetMap
+descartado;way/200280479;;Ayuntamiento de Arija;Arija;42.98628;-3.960111;fuera de las provincias del lote (09)
+descartado;way/213752342;;;Santa María de Cayón;43.321945;-3.852754;sin nombre en OpenStreetMap
+descartado;way/382341141;;Ayuntamiento de Lanestosa;Lanestosa;43.220115;-3.438697;fuera de las provincias del lote (48)
+descartado;way/636529885;;Carrefour;Torrelavega;43.341296;-4.032853;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos)
+descartado;way/657047326;;Leroy Merlin;Torrelavega;43.339942;-4.029653;texto excluido (leroy merlin|click|recogida)
+descartado;way/833129627;;;Santander;43.473018;-3.787126;sin nombre en OpenStreetMap
