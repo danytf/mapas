@@ -161,6 +161,8 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261023164238_list_establishment_assignees.sql
       - name: Signal edit conflicts with PT409 instead of a retried serialization failure
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261023170237_permit_conflict_code.sql
+      - name: Make permit actions atomic (close follow-ups with the decision, create application with follow-up)
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261025170441_permit_atomic_followups.sql
       - name: Verify every migration file is applied by this workflow
         shell: bash
         run: |
@@ -190,6 +192,8 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/admin_postal_codes.sql
       - name: Run permit lifecycle tests
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/permit_workflow.sql
+      - name: Run atomic permit action tests
+        run: psql -v ON_ERROR_STOP=1 -f supabase/tests/permit_atomic.sql
       - name: Run assignee listing tests
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/permit_assignees.sql
       - name: Run permit backfill and reconciliation tests
