@@ -1,0 +1,9 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;way/188113062;Tren;La Rhune;;43.30924;-1.635135;fuera de los municipios oficiales cargados
+descartado;way/297113467;Autobús;;Altsasu / Alsasua;42.904781;-2.165565;sin nombre en OpenStreetMap
+por revisar;way/317492210;Autobús;Estación de autobuses de Parada de la Baztanesa – Zubiondoa karrika;Baztan;43.140976;-1.566407;nombre dudoso en OpenStreetMap: Parada de la Baztanesa
+descartado;way/354541528;Autobús;;Araitz;43.041729;-1.98721;sin nombre en OpenStreetMap
+descartado;way/354541532;Autobús;;Araitz;43.042151;-1.987224;sin nombre en OpenStreetMap
+descartado;way/354541540;Autobús;;Araitz;43.036778;-1.984918;sin nombre en OpenStreetMap
+descartado;way/354541544;Autobús;;Araitz;43.036055;-1.984734;sin nombre en OpenStreetMap
+descartado;way/455763876;Autobús;;Baztan;43.145169;-1.517467;sin nombre en OpenStreetMap

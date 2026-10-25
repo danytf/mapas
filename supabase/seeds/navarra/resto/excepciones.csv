@@ -1,0 +1,66 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/10650206921;;Osasun zentroa;Irurtzun;42.918572;-1.828563;nombre generico o dudoso en OpenStreetMap: Osasun zentroa
+descartado;node/11187945630;;Coaliment;Andosilla;42.372671;-1.950061;duplicado en el lote de node/11187945277 (28 m)
+descartado;node/11194827152;;;Burlada / Burlata;42.83147;-1.616913;sin nombre en OpenStreetMap
+descartado;node/11199608694;;;Pamplona / Iruña;42.808218;-1.644921;sin nombre en OpenStreetMap
+descartado;node/11367264569;;Carrefour Market;Pamplona / Iruña;42.814003;-1.639549;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/12009219746;;Carrefour express;Aoiz / Agoitz;42.783333;-1.373932;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/13296350709;;;Barañáin / Barañain;42.80202;-1.68497;sin nombre en OpenStreetMap
+descartado;node/13347671655;;Torino Box;;42.475289;-2.404616;fuera de los municipios oficiales cargados
+descartado;node/1335007679;;;Sangüesa / Zangoza;42.574275;-1.282044;sin nombre en OpenStreetMap
+descartado;node/14099788587;;Carrefour;Atetz;42.937891;-1.692441;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/1869828011;;Hipercor;Huarte / Uharte;42.829494;-1.582126;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/2104169366;;;Santacara;42.375252;-1.549012;sin nombre en OpenStreetMap
+descartado;node/2110554685;;Centro de salud;Mendigorria;42.628449;-1.835409;nombre generico o dudoso en OpenStreetMap: Centro de salud
+descartado;node/2110571428;;;Santacara;42.373762;-1.553469;sin nombre en OpenStreetMap
+descartado;node/2500527137;;;Altsasu / Alsasua;42.893394;-2.174127;sin nombre en OpenStreetMap
+descartado;node/2995659752;;Centro de Salud;Fustiñana;42.021175;-1.484474;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;node/2995663323;;Ayuntamiento;Fustiñana;42.019937;-1.486297;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/4153536788;;Ayuntamiento;Murillo el Fruto;42.392469;-1.462269;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/4297555736;;Ayuntamiento;Berbinzana;42.526368;-1.833769;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/4712361078;;Ayuntamiento;Falces;42.388349;-1.795821;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/4721104114;;Ayuntamiento;Santacara;42.375414;-1.553046;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/4833174021;;;Torres del Río;42.551871;-2.272673;sin nombre en OpenStreetMap
+descartado;node/4913749927;;Ayuntamiento;Ribaforada;41.997937;-1.509067;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/5283626974;;;Andosilla;42.377144;-1.946187;sin nombre en OpenStreetMap
+descartado;node/5519781321;;Ayuntamiento;Urroz-Villa;42.777483;-1.458646;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/6391648241;;Centro de salud;Falces;42.389769;-1.79534;nombre generico o dudoso en OpenStreetMap: Centro de salud
+descartado;node/6900902126;;;Pamplona / Iruña;42.816572;-1.654059;sin nombre en OpenStreetMap
+descartado;node/7159713652;;La Venta Des Pottoks;;43.310335;-1.687985;fuera de los municipios oficiales cargados
+descartado;node/716505481;;Ayuntamiento;Oteiza;42.619177;-1.953451;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/7175319204;;Osasun zentroa;Igantzi;43.225959;-1.699513;nombre generico o dudoso en OpenStreetMap: Osasun zentroa
+descartado;node/7526775877;;Benta Peio;Luzaide / Valcarlos;43.118213;-1.270659;duplicado en el lote de node/4054671230 (134 m)
+descartado;node/8747139475;;Osasun etxea;Bera;43.281605;-1.683067;nombre generico o dudoso en OpenStreetMap: Osasun etxea
+descartado;node/9180660096;;Carrefour Market;Pamplona / Iruña;42.815318;-1.655671;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/1049641788;;;Añorbe;42.660693;-1.713918;sin nombre en OpenStreetMap
+descartado;way/1321994640;;Centro de Salud;Milagro;42.240765;-1.769254;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/1395708184;;;Tudela;42.040712;-1.625303;sin nombre en OpenStreetMap
+descartado;way/1460290132;;;Barañáin / Barañain;42.807211;-1.688451;sin nombre en OpenStreetMap
+descartado;way/1484365316;;;Pamplona / Iruña;42.819204;-1.620198;sin nombre en OpenStreetMap
+descartado;way/1488011412;;Hospital psiquiátrico San Francisco Javier;Pamplona / Iruña;42.833872;-1.623521;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada|salud mental|laboral|hospital de d[ií]a)
+descartado;way/1569057005;;;Pamplona / Iruña;42.825283;-1.655246;sin nombre en OpenStreetMap
+descartado;way/23695326;;Centro de Salud;Peralta / Azkoien;42.338669;-1.804925;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/250107543;;Ayuntamiento;Barásoain;42.603467;-1.646416;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/290065383;;Eroski;Tafalla;42.533914;-1.669759;duplicado en el lote de node/2114134008 (1 m)
+descartado;way/296945596;;Carrefour;Pamplona / Iruña;42.8064;-1.673319;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/306485570;;Centro de Salud;Puente la Reina / Gares;42.67067;-1.817595;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/315295142;;Ayuntamiento;Ayegui / Aiegi;42.656704;-2.038385;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/32696426;;Centro de Salud;Tafalla;42.533431;-1.674487;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/353700652;;Ayuntamiento;Améscoa Baja;42.765879;-2.130764;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/404862714;;Centro de Salud;Cintruénigo;42.082929;-1.805492;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/405176873;;Ayuntamiento;Ujué / Uxue;42.50524;-1.498588;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/413717040;;Ayuntamiento;Cortes;41.921347;-1.420275;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/431763824;;Ayuntamiento;Arróniz;42.589011;-2.091067;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/433111691;;Ayuntamiento;Valtierra;42.19505;-1.633945;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/4392423;;Ayuntamiento;Etxarri Aranatz;42.907433;-2.064592;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/4392425;;Osasun Etxea;Etxarri Aranatz;42.906183;-2.064821;nombre generico o dudoso en OpenStreetMap: Osasun Etxea
+descartado;way/457971722;;Osasun etxea;Baztan;43.18194;-1.456728;nombre generico o dudoso en OpenStreetMap: Osasun etxea
+descartado;way/476407897;;Dia;Ansoáin / Antsoain;42.832132;-1.645087;duplicado en el lote de node/12065185369 (34 m)
+descartado;way/517051930;;Udaletxea;Urdiain;42.886908;-2.136708;nombre generico o dudoso en OpenStreetMap: Udaletxea
+descartado;way/51865608;;;Ansoáin / Antsoain;42.831296;-1.649519;sin nombre en OpenStreetMap
+descartado;way/731048410;;Centro médico;Azagra;42.308815;-1.896698;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada|salud mental|laboral|hospital de d[ií]a)
+descartado;way/742652022;;Ayuntamiento;Fontellas;42.028189;-1.575294;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/745882412;;Ayuntamiento;Villafranca;42.279282;-1.750167;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/765736906;;;Valle de Egüés / Eguesibar;42.831394;-1.551913;sin nombre en OpenStreetMap
+descartado;way/780533764;;Udaletxea;Abaurregaina / Abaurrea Alta;42.903479;-1.207905;nombre generico o dudoso en OpenStreetMap: Udaletxea
+descartado;way/90866559;;Carrefour;Tudela;42.043119;-1.621005;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
