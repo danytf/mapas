@@ -16,6 +16,7 @@ node scripts/test-list-performance.mjs
 node scripts/test-admin-panel.mjs
 node scripts/test-app-mejoras.mjs
 node scripts/test-calendario.mjs
+node scripts/test-centro.mjs
 node scripts/test-cabecera-filtros.mjs
 node scripts/test-texto-minimo.mjs
 node scripts/test-ficha.mjs
