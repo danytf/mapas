@@ -1,0 +1,27 @@
+{
+ "format_version": 1,
+ "source": "openstreetmap",
+ "source_license": "ODbL 1.0 (c) OpenStreetMap contributors, https://www.openstreetmap.org/copyright",
+ "queried_at": "2026-10-25",
+ "osm_base_timestamp": "2026-10-24T20:20:51Z",
+ "selection_criteria": "Oficinas de Correos (amenity=post_office cuyo nombre, operador o marca contiene «Correos»). Excluidos: buzones (post_box), taquillas de paqueteria (parcel_locker, incluidas las CityPaq), Correos Express, puntos de otras empresas (MRW, UPS, GLS, DHL, Tipsa, Mail Boxes…), calles y paradas que solo llevan «Correos» en el nombre, y elementos en desuso. El nombre se compone «Correos <municipio>» como en Granada; no se exige nombre en OpenStreetMap. Dos oficinas a menos de 60 m se consideran la misma (nodo y edificio, cualquiera que sea el nombre). Granada queda fuera del lote porque su catalogo esta revisado a mano, salvo Orce y Puebla de Don Fadrique (altas reales sin oficina en la base, elegidas por el titular); a menos de 120 m de un punto ya existente se considera que ya esta en la base.",
+ "province": "Andalucía",
+ "establishments": [
+  {
+   "source_ref": "catalogo-melilla:postal_service:node-4830993869",
+   "name": "Correos Melilla – Calle Pedro Navarro",
+   "category": "Correos",
+   "subtype": null,
+   "municipality": "Melilla",
+   "municipality_ine": "52001",
+   "address": "Calle Pedro Navarro",
+   "postal_code": "52006",
+   "latitude": 35.28421,
+   "longitude": -2.93966,
+   "location_precision": "address",
+   "location_source": "openstreetmap:node/4830993869",
+   "province": "Melilla",
+   "status": "active"
+  }
+ ]
+}
