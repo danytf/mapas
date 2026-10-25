@@ -223,6 +223,29 @@ createServer(async (req, res) => {
       return reply(applyFilters(S.audit.slice().reverse(), url.searchParams));
     }
     const closeFups = (appId) => fups.forEach((f) => { if (f.application_id === appId && !f.completed_at) f.completed_at = ahora(); });
+    const closeGrantFups = (grantId) => fups.forEach((f) => { if (f.grant_id === grantId && !f.completed_at) f.completed_at = ahora(); });
+    /* create_permit_application (migración 20261025170441): solicitud y seguimiento en una transacción, idempotente por identificador. */
+    if (table === "rpc/create_permit_application") {
+      if (!body.p_id || !body.p_establishment_id) return fallo("22023", "Faltan el identificador o el establecimiento");
+      const est = S.establishments.find((e) => e.id === body.p_establishment_id);
+      if (!est || !relVisible({ establishment_id: est.id })) return fallo("42501", "new row violates row-level security policy", 403);
+      let a = apps.find((x) => x.id === body.p_id);
+      if (a) {
+        const n = (v) => v ?? null;
+        if (a.establishment_id !== body.p_establishment_id || n(a.organization) !== n(body.p_organization) || n(a.capturer_count) !== n(body.p_capturer_count) || n(a.requested_from) !== n(body.p_requested_from) || n(a.requested_until) !== n(body.p_requested_until)) return fallo("23505", "Ya existe otra solicitud con ese identificador", 409);
+      } else {
+        a = { id: body.p_id, establishment_id: body.p_establishment_id, status: "pending", requested_from: body.p_requested_from ?? null, requested_until: body.p_requested_until ?? null, organization: body.p_organization ?? null, capturer_count: body.p_capturer_count ?? null,
+          requested_at: body.p_requested_at ?? ahora().slice(0, 10), contact_details: body.p_contact_details ?? null, notes: body.p_notes ?? null, created_by: u.id, updated_by: u.id, created_at: ahora(), updated_at: ahora() };
+        if (body.p_followup_due && body.p_followup_assignee && !relVisible({ establishment_id: a.establishment_id })) return fallo("23514", "responsable no válido");
+        apps.push(a);
+        aud("insert", "permit_applications", a.id, ["organization", "requested_from", "requested_until", "capturer_count", "status"]);
+      }
+      if (body.p_followup_due && a.status === "pending" && !fups.some((f) => f.application_id === a.id && !f.completed_at)) {
+        const f = { id: "00000000-0000-4000-a000-" + String(fups.length + 1).padStart(12, "0"), establishment_id: a.establishment_id, application_id: a.id, due_on: body.p_followup_due, assigned_to: body.p_followup_assignee ?? null, next_action: body.p_followup_action ?? null, completed_at: null, created_by: u.id, created_at: ahora(), updated_at: ahora() };
+        fups.push(f); aud("insert", "followups", f.id, ["due_on", "assigned_to", "next_action"]);
+      }
+      return send(res, 200, a.id);
+    }
     if (table.startsWith("rpc/") && ["approve_permit_application", "resolve_permit_application", "cancel_permit_grant"].includes(table.slice(4))) {
       const fn = table.slice(4);
       const a = apps.find((x) => x.id === body.p_application_id && relVisible(x)), g = grants.find((x) => x.id === body.p_grant_id && relVisible(x));
@@ -231,6 +254,7 @@ createServer(async (req, res) => {
         if (g.status === "cancelled") return send(res, 200, null);
         if (body.p_expected_updated_at && body.p_expected_updated_at !== g.updated_at) return fallo("PT409", "La concesión ha cambiado desde que se leyó", 409);
         Object.assign(g, { status: "cancelled", cancelled_at: ahora(), cancelled_reason: body.p_reason || null, updated_at: ahora(), updated_by: u.id });
+        closeGrantFups(g.id);
         aud("update", "permit_grants", g.id, ["status", "cancelled_at", "cancelled_reason"]);
         return send(res, 200, null);
       }
@@ -246,6 +270,7 @@ createServer(async (req, res) => {
         const nueva = { id: "00000000-0000-4000-9000-" + String(grants.length + 1).padStart(12, "0"), establishment_id: a.establishment_id, application_id: a.id, status: "active", valid_from: vf, valid_until: vu,
           organization: body.p_organization ?? a.organization, capturer_count: body.p_capturer_count ?? a.capturer_count, contact_details: a.contact_details, notes: a.notes, cancelled_at: null, cancelled_reason: null, created_at: ahora(), updated_at: ahora(), created_by: u.id };
         grants.push(nueva);
+        closeFups(a.id);
         aud("update", "permit_applications", a.id, ["status", "resolved_at"]); aud("insert", "permit_grants", nueva.id, ["organization", "valid_from", "valid_until", "capturer_count", "application_id", "status"]);
         S.log.push({ tipo: "rel", accion: "aprobar", app: a.id, grant: nueva.id });
         return send(res, 200, nueva.id);
@@ -255,6 +280,7 @@ createServer(async (req, res) => {
       if (body.p_expected_updated_at && body.p_expected_updated_at !== a.updated_at) return fallo("PT409", "La solicitud ha cambiado desde que se leyó", 409);
       if (a.status !== "pending") return fallo("23514", "La solicitud ya está resuelta");
       Object.assign(a, { status: body.p_status, resolution_reason: body.p_reason || null, resolved_at: ahora(), resolved_by: u.id, updated_at: ahora(), updated_by: u.id });
+      closeFups(a.id);
       aud("update", "permit_applications", a.id, ["status", "resolution_reason", "resolved_at"]);
       return send(res, 200, null);
     }

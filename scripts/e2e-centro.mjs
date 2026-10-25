@@ -158,18 +158,19 @@ const main = async () => {
     const antes = (await rel()).permit_applications.filter(a => a.status === 'approved').length;
     b().querySelector('[data-act=conceder]').click(); await w(2500); cli.rpc = orig;
     out.caida = b().querySelector('#ceAviso').textContent; out.sinCambios = (await rel()).permit_applications.filter(a => a.status === 'approved').length === antes; out.libre = ![...b().querySelectorAll('[data-act]')].some(x => x.disabled);
-    /* fallo parcial en un alta y reintento: una sola solicitud */
+    /* alta que falla en la base de datos (create_permit_application es atómica): no queda nada a medias; el reintento crea una sola solicitud y un solo seguimiento */
     b().querySelector('[data-new=sol]').click(); await w(300); set('cfPunto','vera'); await w(250); b().querySelector('[data-pick="0"]').click(); await w(250);
     set('cfDesde', d(5)); set('cfHasta', d(9)); set('cfN','2'); set('cfOng','ONG Reintento'); set('cfSeg', d(3)); set('cfAccion','Reintento E2E');
-    const dfrom = cli.from.bind(cli); cli.from = (t) => { const o = dfrom(t); return t !== 'followups' ? o : new Proxy(o, { get: (tg, p) => p === 'insert' ? () => ({ abortSignal: async () => ({ error: { code: '500', message: 'caída' }, status: 500 }) }) : (typeof tg[p] === 'function' ? tg[p].bind(tg) : tg[p]) }); };
-    b().querySelector('#cfGuardar').click(); await w(3000); cli.from = dfrom; out.parcial = b().querySelector('#ceAviso').textContent;
+    cli.rpc = (f, a) => f === 'create_permit_application' ? { abortSignal: async () => ({ error: { code: '500', message: 'caída' }, status: 500 }) } : orig(f, a);
+    b().querySelector('#cfGuardar').click(); await w(3000); cli.rpc = orig; out.parcial = b().querySelector('#ceAviso').textContent;
+    { const q = await rel(); out.sinMedias = [q.permit_applications.filter(a => a.organization === 'ONG Reintento').length, q.followups.filter(f => f.next_action === 'Reintento E2E').length]; }
     b().querySelector('#cfGuardar').click(); await w(3000); const r = await rel(); out.reintento = [r.permit_applications.filter(a => a.organization === 'ONG Reintento').length, r.followups.filter(f => f.next_action === 'Reintento E2E').length];
     return out;`);
   eq(r3.seleccion, 3, "se seleccionan 3 seguimientos"); ok(/Vas a pasar 3 seguimientos/.test(r3.previo), "el lote enseña un resumen previo");
   ok(/3 guardados/.test(r3.lote1) && r3.reprogramados === 3, "reprogramar 3 seguimientos en lote");
   ok(/2 guardados y 1 sin guardar/.test(r3.lote2) && r3.lineas.filter((x) => x === "mal").length === 1 && r3.quedan === 1, "lote con un conflicto: 2 guardados, 1 sin guardar y queda seleccionado");
   ok(/No se pudo confirmar el guardado/.test(r3.caida) && r3.sinCambios && r3.libre, "caída del servidor: no se aplica nada y el Centro sigue operativo");
-  ok(/Se aplicaron 1 de 2 pasos/.test(r3.parcial), "un fallo parcial dice cuántos pasos se aplicaron"); eq(r3.reintento, [1, 1], "reintentar un alta tras un fallo parcial no duplica la solicitud");
+  ok(/No se ha aplicado/.test(r3.parcial), "un alta que falla avisa de que no se ha aplicado"); eq(r3.sinMedias, [0, 0], "un alta que falla no deja ni la solicitud ni el seguimiento a medias"); eq(r3.reintento, [1, 1], "reintentar el alta crea una sola solicitud y un solo seguimiento");
   permitidos = [];
 
   /* Coherencia Centro ↔ ficha del punto: las solicitudes pendientes de un punto son las mismas en las dos pantallas */
