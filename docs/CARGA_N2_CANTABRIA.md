@@ -1,6 +1,6 @@
-# Carga N2 de Cantabria (preparada)
+# Carga N2 de Cantabria (cargada)
 
-Estado: **preparada el 25/10/2026, pendiente de carga en producción por el titular con `cargar.sh`**. Sexta región con el mismo procedimiento (Andalucía, Extremadura, La Rioja, Murcia y Canarias; ver `docs/CARGA_N2_CANARIAS.md`).
+Estado: **cargada en producción el 25/10/2026** por el titular con `cargar.sh` y verificada en solo lectura (ver «Cierre»). Sexta región con el mismo procedimiento (Andalucía, Extremadura, La Rioja, Murcia y Canarias; ver `docs/CARGA_N2_CANARIAS.md`).
 
 ## Origen
 - Fichero: `cantabria-latest.osm.pbf` (Geofabrik, edición del 24/10/2026 20:20 UTC, 35.648.189 bytes, MD5 `11341d2b6fadcb2a3ae01c4b24627636` verificado contra el `.md5` de Geofabrik), fuera del repositorio. OpenStreetMap, licencia ODbL.
@@ -30,7 +30,7 @@ Un SQL por lote en `supabase/seeds/cantabria/<lote>/` (transaccionales e idempot
 - Centro comercial (7): «Johnson Control Camargo» no parece un centro comercial, y el Corte Inglés de Santander aparece dos veces (nodo y área).
 - Carrefour entra completo (18, con Market y Express) por decisión del titular.
 
-## Cómo cargar (con aprobación)
+## Cómo se cargó (con aprobación)
 Desde la raíz del repositorio, en este orden:
 ```
 bash scripts/catalogue/cargar.sh supabase/seeds/cantabria/municipios municipios
@@ -39,4 +39,9 @@ bash scripts/catalogue/cargar.sh supabase/seeds/cantabria/estaciones estaciones
 bash scripts/catalogue/cargar.sh supabase/seeds/cantabria/grandes-superficies grandes-superficies catalogo-cantabria:cantabria-grandes-superficies:
 bash scripts/catalogue/cargar.sh supabase/seeds/cantabria/resto resto catalogo-cantabria:cantabria-resto:
 ```
-Después, en solo lectura: 102 municipios nuevos y 723 puntos en total (la base pasaría de 9.782 a 10.505 y los municipios de 1.492 a 1.594). Para verlos hay que activar Cantabria desde «Usuarios y provincias». Sin asignar a usuarios hasta terminar toda España (decisión del titular, 23/10/2026).
+Previsto en solo lectura: 102 municipios nuevos y 723 puntos (la base pasaría de 9.782 a 10.505 y los municipios de 1.492 a 1.594). Para verlos hay que activar Cantabria desde «Usuarios y provincias». Sin asignar a usuarios hasta terminar toda España (decisión del titular, 23/10/2026).
+
+## Cierre (25/10/2026)
+- **Carga verificada en solo lectura:** 102 municipios (102 códigos INE distintos) y 723 puntos, 723 `source_ref` `catalogo-cantabria:` distintos, todos activos, ninguno sin coordenadas, todos en su provincia, ningún código postal con formato distinto de 39xxx y ninguna coordenada fuera de Cantabria. Por categoría: Supermercado 302, Entidad oficial 124, Estaciones 104, Gimnasios 61, Centro de salud 47, Correos 30, Carrefour 18, Hospital 14, Bricolaje 9, Centro comercial 7, Decathlon 2, Leroy Merlin 2, MediaMarkt 1, El Corte Inglés 1, IKEA 1. Total de la base 9.782 -> 10.505 y municipios 1.492 -> 1.594.
+- **Provincia:** Cantabria sigue desactivada (`is_active = false`); activarla desde «Usuarios y provincias» cuando el titular lo decida.
+- **Pendiente:** 114 códigos postales y 25 calles; revisar los dudosos de «Calidad y límites». Sin asignar a usuarios hasta terminar España.
