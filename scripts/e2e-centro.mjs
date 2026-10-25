@@ -330,6 +330,29 @@ const main = async () => {
   eq(r3g.guardada, [r3g.dia, r3g.dia, "pending"], "la solicitud creada desde el día se guarda con esa fecha [" + r3g.aviso + "]");
   eq(r3g.con.slice(0, 3), ["Nueva concesión", true, true], "«+ Concesión» abre el formulario con la fecha del día"); ok(r3g.con[3] !== false, "…y con la ONG que se estaba filtrando en el Calendario");
 
+  /* ===== 3h. Menú con secciones desplegables ===== */
+  const r3h = await ev(ayudas + `
+    const out = {}; ['ceClose', 'pnClose', 'calClose'].forEach(id => { const x = document.getElementById(id); if (x && x.closest('dialog')?.open) x.click(); }); await w(300);
+    const panel = document.getElementById('menuPanel'), btn = document.getElementById('menuBtn'); btn.click(); await w(200);
+    const cabs = () => [...panel.querySelectorAll('.mh-btn')].filter(x => !x.hidden); const estado = () => cabs().map(x => x.textContent.trim() + ':' + x.getAttribute('aria-expanded'));
+    const visibles = () => [...panel.querySelectorAll('.mn-sec button[role=menuitem]')].filter(x => !x.closest('[hidden]') && !x.hidden).map(x => x.id);
+    out.abierto = !panel.hidden; out.inicial = estado(); out.itemsInicial = visibles();
+    const datos = cabs().find(x => x.textContent.trim() === 'Datos'); datos.click(); await w(150);
+    out.tras = [!panel.hidden, datos.getAttribute('aria-expanded'), visibles().includes('csv')];
+    const inf = cabs().find(x => x.textContent.trim() === 'Informes'); inf.click(); await w(150); out.pliega = [!panel.hidden, inf.getAttribute('aria-expanded'), visibles().includes('centroBtn')];
+    /* teclado: las flechas saltan las opciones ocultas y la tecla Intro pliega el título enfocado */
+    inf.focus(); panel.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true })); out.flecha = document.activeElement.textContent.trim();
+    datos.click(); await w(150); out.pliegaDatos = [datos.getAttribute('aria-expanded'), visibles().includes('csv')];
+    const aria = [...panel.querySelectorAll('.mh-btn')].every(x => { const sec = document.getElementById(x.getAttribute('aria-controls')); return !!sec && (x.getAttribute('aria-expanded') === 'true') === !sec.hidden; }); out.aria = aria;
+    /* elegir una opción cierra el menú y la acción se ejecuta */
+    inf.click(); await w(100); document.getElementById('panelBtn').click(); await w(700); out.accion = [panel.hidden, document.getElementById('dlgPanel').open]; document.getElementById('pnClose').click(); await w(200);
+    return out;`);
+  eq(r3h.inicial, ["Informes:true", "Progreso:false", "Puntos:false", "Datos:false", "Administración:false", "Ayuda:false"], "el menú muestra seis secciones; solo Informes empieza desplegada");
+  eq(r3h.itemsInicial, ["centroBtn", "panelBtn", "calBtn", "admBtn"].filter((x) => r3h.itemsInicial.includes(x)), "con las demás plegadas solo se ven las opciones de Informes"); ok(r3h.itemsInicial.length >= 3 && !r3h.itemsInicial.includes("csv"), "…y no las de Datos");
+  eq(r3h.tras, [true, "true", true], "pulsar «Datos» despliega su sección sin cerrar el menú"); eq(r3h.pliega, [true, "false", false], "pulsar «Informes» pliega su sección sin cerrar el menú");
+  eq(r3h.flecha, "Progreso", "la flecha abajo salta las opciones plegadas y va al título siguiente"); eq(r3h.pliegaDatos, ["false", false], "pulsar otra vez pliega"); ok(r3h.aria, "cada título refleja con aria-expanded si su sección está visible");
+  eq(r3h.accion, [true, true], "elegir una opción cierra el menú y abre lo pedido");
+
   /* ===== 3d. Coherencia de cifras: las tablas fuente, recalculadas aquí de forma independiente, frente al Centro (menú y Resumen), el Panel y el Calendario ===== */
   const r3d = await ev(ayudas + `
     const out = {}; const rel = () => fetch('http://127.0.0.1:8766/__rel').then(r => r.json()); const t = today();
