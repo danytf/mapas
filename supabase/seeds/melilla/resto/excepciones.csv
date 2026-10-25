@@ -1,0 +1,4 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;way/1472671153;;Urgencias;Melilla;35.280797;-2.943104;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol)
+descartado;way/304965444;;;Melilla;35.281886;-2.942981;sin nombre en OpenStreetMap
+descartado;way/580225157;;Parque Murias Melilla;Melilla;35.270921;-2.93839;duplicado en el lote de node/5257525120 (16 m)
