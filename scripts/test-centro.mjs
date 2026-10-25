@@ -225,4 +225,8 @@ ok(bloque.includes("data-cal=") && bloque.includes('$("#calBtn").click()'), "Acc
 
 ok(bloque.includes('if (selProv.value !== prov) selProv.value = prov;'), "El selector de provincia refleja el filtro aunque cambie desde el Resumen");
 
+// Regresión (25/10/2026): «Avisos de datos» lanzaba una excepción al dibujar porque la cabecera de seguimientos evaluaba clave() sobre filas de avisos.
+ok(bloque.includes('(vista === "seg" && vis.length && vis.every((s) => multi.has(clave(s)))'), "La casilla de seleccionar todos solo se evalúa en la vista de seguimientos");
+ok(/const draw = \(\) => \{\s*try \{ dibuja\(\); \}\s*catch \(e\) \{[\s\S]*?No se pudo dibujar esta vista/.test(bloque), "Un fallo al dibujar se registra y se avisa, sin dejar la pantalla a medias");
+
 console.log("Centro de permisos: " + n + " comprobaciones correctas.");

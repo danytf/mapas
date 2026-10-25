@@ -4828,6 +4828,13 @@ const csvCell = (value) => {
 
   /* === Pantalla principal === */
   const draw = () => {
+    try { dibuja(); }
+    catch (e) {
+      console.error("[Mapa] Error al dibujar el Centro de permisos:", e);
+      const av = body.querySelector("#ceAviso"); if (av) av.textContent = "No se pudo dibujar esta vista. Vuelve a abrir el Centro; si se repite, avisa a un administrador.";
+    }
+  };
+  const dibuja = () => {
     const t = today(), { recs: todas, segs: todasSegs } = registros(prov);
     /* Las ONG se agrupan sin distinguir mayúsculas ni espacios (igual que el Panel): «aecc» y «AECC» son la misma. */
     const porClave = new Map(); todas.concat(todasSegs).forEach((x) => { const k = claveOngDe(x); if (!porClave.has(k)) porClave.set(k, ongDe(x)); });
@@ -4873,7 +4880,7 @@ const csvCell = (value) => {
     const cabs = {
       sol: '<th>Punto</th><th>ONG</th><th>Periodo solicitado</th><th class="n">Captadores</th><th>Solicitada</th><th>Estado</th><th>Seguimiento</th><th><span class="adm-sr">Acciones</span></th>',
       con: '<th>Punto</th><th>ONG</th><th>Periodo</th><th class="n">Captadores</th><th>Estado</th><th>Detalle</th><th><span class="adm-sr">Acciones</span></th>',
-      seg: '<th class="ce-chk"><label class="ce-chkl"><input type="checkbox" id="ceChkTodos" aria-label="Seleccionar todos los seguimientos que se ven"' + (vis.length && vis.every((s) => multi.has(clave(s))) ? " checked" : "") + '></label></th><th>Punto</th><th>ONG</th><th>Fecha</th><th>Acción prevista</th><th>Responsable</th><th>Origen</th><th><span class="adm-sr">Acciones</span></th>',
+      seg: '<th class="ce-chk"><label class="ce-chkl"><input type="checkbox" id="ceChkTodos" aria-label="Seleccionar todos los seguimientos que se ven"' + (vista === "seg" && vis.length && vis.every((s) => multi.has(clave(s))) ? " checked" : "") + '></label></th><th>Punto</th><th>ONG</th><th>Fecha</th><th>Acción prevista</th><th>Responsable</th><th>Origen</th><th><span class="adm-sr">Acciones</span></th>',
       inc: "<th>Punto</th><th>Gravedad</th><th>Qué revisar</th><th>ONG</th><th>Expediente</th>"
     };
     lista.innerHTML = '<p class="ce-count" role="status">' + esc(plural(filas.length, nombre[0], nombre[1]) + (filas.length > vis.length ? " · se muestran " + vis.length : "")) + "</p>" +
