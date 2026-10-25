@@ -35,3 +35,14 @@ En la pestaña Ubicación, debajo del municipio, un administrador ve «Código p
 ## Panel resumen y Administración con el mismo lenguaje
 
 Solo CSS (sin cambiar marcado ni lógica): cabecera fija con filete y título de 17 px, secciones con etiqueta de 12 px, tarjetas del resumen con borde izquierdo de estado (`--st-*`), tabla sin segunda barra de desplazamiento y casillas de verificación a 18 px (antes heredaban el alto de 38 px de los campos de texto y se veían como cuadros enormes en Administración). Prueba: `scripts/test-paneles.mjs`. Comprobado a ojo en navegador, en claro, sobre la web con la hoja inyectada; sin probar en oscuro ni en móvil.
+
+## Cambio del 25/10/2026: los permisos ya no se gestionan en la ficha
+
+Decisión del titular: las solicitudes, concesiones y seguimientos se tramitan **solo en el Centro de permisos**; la ficha queda con la información básica.
+
+- **Se quita** de la ficha: las pestañas Solicitudes y Concesiones (listas, formularios, conceder, denegar, retirar, cancelar, quitar) y el botón «Hecho» del seguimiento del punto. Ya no hay pestañas: la **Ubicación** pasa a un desplegable «Ubicación y dirección» (los municipios y el código postal de administradores se siguen cargando al abrirlo, no al abrir cada ficha).
+- **Se queda**: cabecera, estado (resumen de solo lectura: estado, próximo seguimiento, solicitado el, pendientes y concesiones), valoración, contacto y notas del punto, ubicación, favoritos y «Más acciones».
+- **Nuevo**: botón «Gestionar permisos en el Centro», que abre el Centro filtrado por ese punto (evento `centro:abrir`). Si el Centro cambia el punto con la ficha abierta, el resumen se repinta con lo confirmado (evento `permisos:cambio`).
+- **Guardado**: «Guardar cambios» de la ficha parte de lo que hay en memoria (lo confirmado por Supabase) y solo cambia contacto, notas y valoración; una ficha abierta ya no puede pisar lo hecho en el Centro.
+- **Panel resumen y Calendario**: sus filas y tarjetas abren el Centro filtrado por ese punto (antes, la ficha en la pestaña del registro).
+- Pruebas: `test-ficha.mjs`, `test-a11y-fase-d.mjs`, `audit-persistence.mjs` y `test-centro.mjs` adaptadas.

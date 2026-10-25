@@ -306,8 +306,12 @@
   #ficha .pinfo { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
   #ficha .pinfo > div { min-width: 0; overflow-wrap: anywhere; background: var(--ok-bg); border-radius: var(--r-card); padding: 8px 10px; display: grid; gap: 1px; font-size: var(--fs-label); color: var(--muted); }
   #ficha .pinfo > div:first-child { grid-column: 1 / -1; }
+  .fi-gestion { margin-top: 10px; display: grid; gap: 6px; }
+  #ficha .fi-gestion button { width: 100%; }
+  .fi-hint { margin: 0; font-size: var(--fs-label); color: var(--muted); }
+  #ficha details.fi-loc { display: grid; gap: 10px; border-top: 1px solid var(--line); padding-top: 6px; }
+  #ficha details.fi-loc > summary { cursor: pointer; font-weight: 600; color: var(--accent); min-height: 34px; display: flex; align-items: center; }
   #ficha .pinfo > div.segp { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-  #ficha .pinfo > div.segp button { flex: none; height: 30px; padding: 0 12px; }
   #ficha .pinfo > div.due { background: var(--warn-bg); color: var(--warn); }
   #ficha .pinfo b { font-size: var(--fs-body); font-weight: 650; color: var(--fg); font-variant-numeric: tabular-nums; }
   #ficha .pinfo > div.due b { color: var(--warn); }
@@ -323,31 +327,6 @@
   #ficha input, #ficha textarea { font: inherit; font-weight: 400; font-size: var(--fs-body); padding: 8px 10px; min-height: 38px; border: 1px solid var(--field-line); border-radius: var(--r-control); background: var(--panel); color: var(--fg); width: 100%; }
   #ficha input:focus, #ficha textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); outline: 0; }
   #ficha textarea { resize: vertical; min-height: 60px; }
-  .fi-tabs { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
-  #ficha .ptabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); }
-  #ficha .ptabs button { height: 38px; padding: 0 12px; background: none; color: var(--muted); border: 0; border-bottom: 2px solid transparent; border-radius: 0; font-weight: 600; font-size: var(--fs-body); }
-  #ficha .ptabs button:hover { background: none; color: var(--fg); }
-  #ficha .ptabs button[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); }
-  #ficha [data-tab] { display: grid; gap: 10px; align-content: start; }
-  #ficha [data-tab][hidden] { display: none; }
-  .fi-hint { margin: 0; font-size: var(--fs-label); color: var(--muted); }
-  #ficha ul.fi-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; overflow: visible; flex: none; }
-  #ficha ul.fi-list li { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 10px; border: 1px solid var(--line); border-left-width: 4px; border-radius: var(--r-card); background: var(--panel); font-size: var(--fs-label); cursor: default; }
-  #ficha ul.fi-list li::before { display: none; }
-  #ficha ul.fi-list li:hover { background: var(--panel); }
-  #ficha ul.fi-list li.vig { border-left-color: var(--st-concedido); background: var(--ok-soft); }
-  #ficha ul.fi-list li > span { flex: 1 1 100%; overflow-wrap: anywhere; }
-  #ficha ul.fi-list li button { height: 30px; padding: 0 10px; font-size: var(--fs-label); }
-  #ficha ul.fi-list li.fi-none { color: var(--muted); border-left-color: var(--line-2); }
-  #ficha details.aform { border: 1px dashed var(--line-2); border-radius: var(--r-card); padding: 4px 12px 10px; display: grid; gap: 8px; }
-  #ficha details.aform > summary { cursor: pointer; font-size: var(--fs-body); font-weight: 600; color: var(--accent); min-height: 34px; display: flex; align-items: center; }
-  #ficha .row3 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 84px; gap: 8px; }
-  #ficha .row3 input { min-width: 0; }
-  .fi-btns { display: flex; gap: 8px; flex-wrap: wrap; }
-  .fi-msg { font-size: var(--fs-label); color: var(--err); min-height: 16px; }
-  #ficha .fi-res { flex: 1 1 100%; display: grid; gap: 6px; padding: 8px 0 2px; border-top: 1px dashed var(--line-2); font-size: var(--fs-label); }
-  #ficha .fi-res label, #ficha .fi-res p { margin: 0; font-weight: 600; }
-  #ficha .fi-res .fi-btns { display: flex; gap: 8px; flex-wrap: wrap; }
   #ficha .loc { display: grid; gap: 10px; }
   #ficha .loc .lrow { display: flex; gap: 8px; flex-wrap: wrap; }
   #ficha .loc .lb { display: inline-flex; align-items: center; min-height: 34px; font: inherit; font-size: var(--fs-label); font-weight: 600; padding: 0 12px; border: 1px solid var(--line-2); border-radius: var(--r-control); background: var(--panel); color: var(--fg); cursor: pointer; text-decoration: none; }
@@ -392,9 +371,6 @@
     #favBtn { height: 44px; }
     #ficha a.how, #ficha .fi-flag button { min-height: 44px; }
     #ficha .stars button { min-width: 44px; height: 44px; }
-    #ficha .ptabs button { height: 44px; }
-    #ficha ul.fi-list li button { height: 40px; min-width: 44px; }
-    #ficha details.aform > summary { min-height: 44px; }
     #ficha .loc .lb { min-height: 44px; }
     #ficha .loc-muni select, #ficha .loc-cp input { min-height: 44px; }
     #ficha input, #ficha textarea { min-height: 44px; }
@@ -846,6 +822,8 @@
   .cf-opt:hover { border-color: var(--muted); background: var(--ok-bg); }
   .cf-opt:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .cf-btns { display: flex; gap: 8px; }
+  .ce-chip { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 8px; font-size: var(--fs-label); color: var(--muted); }
+  .ce-chip:empty { display: none; }
   .ce-aviso { margin: 0 0 8px; min-height: 1.2em; font-size: var(--fs-label); color: var(--fg); }
   .ce-count { margin: 0 0 8px; color: var(--muted); font-size: var(--fs-label); }
   .ce-more { margin: 12px 0 0; }
@@ -882,7 +860,8 @@
     #menuBtn { width: 44px; height: 44px; }
     #menuPanel button { min-height: 44px; }
     #pnClose, #admClose, #calClose, #ceClose, #ayClose { width: 44px; height: 44px; }
-    .ce-tabs button, .ce-act, .cf-opt { min-height: 44px; }
+    .ce-tabs button, .ce-act, .cf-opt, #ficha .fi-gestion button { min-height: 44px; }
+    #ficha details.fi-loc > summary { min-height: 44px; }
     .lg-h button { min-height: 44px; }
     dialog input, dialog select, dialog button { min-height: 44px; }
     .cal-nav button, .cal-chip, .cal-links button { min-height: 44px; }
@@ -1057,7 +1036,7 @@
     <details class="ay-sec"><summary>Seguimientos</summary>
       <ul>
         <li>El indicador «Seguimientos» de la cabecera cuenta los puntos cuyo seguimiento es de hoy o está atrasado. Púlsalo para ver solo esos.</li>
-        <li>Los seguimientos se programan en las solicitudes de cada ficha. En la lista aparecen primero los de hoy o atrasados y luego los permisos que caducan en 30 días.</li>
+        <li>Los seguimientos se programan al crear o editar una solicitud en el Centro de permisos. En la lista aparecen primero los de hoy o atrasados y luego los permisos que caducan en 30 días.</li>
       </ul>
     </details>
     <details class="ay-sec"><summary>Cambiar varios puntos a la vez</summary>
@@ -1068,6 +1047,7 @@
     </details>
     <details class="ay-sec"><summary>Informes</summary>
       <ul>
+        <li><b>Centro de permisos:</b> aquí se tramitan las solicitudes, concesiones y seguimientos de todos los puntos (crear, editar, conceder, denegar, retirar, cancelar y cerrar seguimientos). La ficha de cada punto solo muestra un resumen y un botón para abrirlo aquí.</li>
         <li><b>Panel resumen:</b> centro de mando con tareas de hoy, solicitudes, concesiones (vigentes, próximas y por vencer en 7, 15 y 30 días) y avisos de datos incompletos. Cada cifra dice qué cuenta y abre la lista exacta de registros; se puede filtrar por provincia y ONG.</li>
         <li><b>Calendario semanal:</b> los permisos de cada día de la semana en una provincia, con filtros por ONG y por estado, y el total de captadores de cada día.</li>
       </ul>
@@ -2056,7 +2036,6 @@ function popupFor(c) {
 
 // Ficha del punto (panel lateral): cabecera con dirección y avisos; estado, valoración, contacto y notas siempre visibles;
 // solicitudes, concesiones y ubicación en pestañas; Guardar fijo abajo y las acciones destructivas en «Más acciones».
-let fichaTabPedida = ""; /* pestaña con la que se abre la próxima ficha (desde el panel o el calendario) */
 function fichaFor(c, pos) {
   const p = permOf(c);
   const el = document.createElement("div");
@@ -2081,27 +2060,14 @@ function fichaFor(c, pos) {
     "</div>" +
     '<div class="pform">' +
       '<div class="fi-scroll">' +
-        '<section class="fi-state" aria-label="Estado del permiso"><div class="ef" aria-live="polite"></div><div class="pinfo"></div></section>' +
+        '<section class="fi-state" aria-label="Estado del permiso"><div class="ef" aria-live="polite"></div><div class="pinfo"></div><div class="fi-gestion"><button type="button" class="f-centro">Gestionar permisos en el Centro</button><p class="fi-hint">Las solicitudes, concesiones y seguimientos se tramitan en el Centro de permisos.</p></div></section>' +
         '<section class="fi-rate"><span class="fi-lab">Valoración para captación</span><div class="stars" role="group" aria-label="Valoración de 1 a 5 estrellas">' +
           [1, 2, 3, 4, 5].map((n) => '<button type="button" data-n="' + n + '" aria-pressed="false" aria-label="' + n + (n === 1 ? " estrella" : " estrellas") + '">★</button>').join("") + '</div><span class="sv"></span></section>' +
         '<section class="fi-contact">' +
           '<label>Contacto (nombre, teléfono, email)<input class="f-contacto" type="text" value="' + esc(p.contacto || "") + '"></label>' +
           '<label>Notas<textarea class="f-notas">' + esc(p.notas || "") + "</textarea></label>" +
         "</section>" +
-        '<section class="fi-tabs">' +
-          '<div class="ptabs" role="tablist" aria-label="Detalle del permiso"></div>' +
-          '<div data-tab="s" role="tabpanel" aria-label="Solicitudes">' +
-            '<p class="fi-hint">Un mismo punto puede tener varias solicitudes, cada una con sus fechas. Al aprobar, denegar o retirar una solicitud se conserva en la lista con su fecha y su motivo. El estado del punto es un resumen que se calcula solo.</p>' +
-            '<ul class="s-list fi-list"></ul>' +
-            '<details class="aform s-form"><summary>Añadir solicitud</summary><div class="row3"><label>Desde<input class="s-desde" type="date"></label><label>Hasta<input class="s-hasta" type="date"></label><label>Captadores<input class="s-n" type="number" min="1" step="1" placeholder="nº"></label></div><label>ONG<input class="s-ong" type="text" list="ongList" placeholder="AECC, Cruz Roja…" autocomplete="off"></label><label>Próximo seguimiento<input class="s-seg" type="date"></label><label class="s-rel">Siguiente acción<input class="s-accion" type="text" maxlength="200" autocomplete="off" placeholder="Llamar, enviar documentación…"></label><label class="s-rel">Responsable del seguimiento<select class="s-resp"><option value="">Sin asignar</option></select></label><label>Contacto de esta solicitud<input class="s-contacto" type="text" maxlength="500" autocomplete="off"></label><label>Notas de esta solicitud<textarea class="s-notas" maxlength="2000" rows="2"></textarea></label><div class="fi-btns"><button type="button" class="s-add">Añadir solicitud</button><button type="button" class="s-cancel" hidden>Cancelar edición</button></div></details>' +
-            '<div class="s-msg fi-msg" role="status"></div>' +
-          "</div>" +
-          '<div data-tab="h" role="tabpanel" aria-label="Concesiones">' +
-            '<ul class="h-list fi-list"></ul>' +
-            '<details class="aform h-form"><summary>Añadir concesión</summary><div class="row3"><label>Desde<input class="h-desde" type="date"></label><label>Hasta<input class="h-hasta" type="date"></label><label>Captadores<input class="h-n" type="number" min="1" step="1" placeholder="nº"></label></div><label>ONG<input class="h-ong" type="text" list="ongList" placeholder="AECC, Cruz Roja…" autocomplete="off"></label><label>Contacto de esta concesión<input class="h-contacto" type="text" maxlength="500" autocomplete="off"></label><label>Notas de esta concesión<textarea class="h-notas" maxlength="2000" rows="2"></textarea></label><div class="fi-btns"><button type="button" class="h-add">Añadir concesión al historial</button><button type="button" class="h-cancel" hidden>Cancelar edición</button></div></details>' +
-            '<div class="h-msg fi-msg" role="status"></div>' +
-          "</div>" +
-          '<div data-tab="l" role="tabpanel" aria-label="Ubicación">' +
+        '<details class="fi-loc"><summary>Ubicación y dirección</summary>' +
             '<div class="loc"><div class="lrow"><a class="lb l-gm" target="_blank" rel="noopener" href="' + ver + '">Ver ubicación exacta en Google Maps</a><button type="button" class="lb l-mv">Mover pin</button><button type="button" class="lb l-cp">Copiar coordenadas actuales</button></div>' +
             '<label class="l-address-label">Dirección postal del establecimiento<input class="l-address" type="text" value="' + esc(c.street || "") + '"></label>' +
             '<label class="l-coords-label">Coordenadas o URL de Google Maps<input class="l-in" type="text" value="' + (cache[c.id] ? cache[c.id].lat.toFixed(6) + ", " + cache[c.id].lon.toFixed(6) : "") + '" placeholder="Pega 37.167041, -4.152314 o la URL de Google Maps" aria-label="Coordenadas o URL de Google Maps"></label>' +
@@ -2110,8 +2076,7 @@ function fichaFor(c, pos) {
             (admin && c.provinceId ? '<div class="loc-muni"><label>Municipio (solo administradores)<select class="m-sel" disabled><option value="">Cargando…</option></select></label><button type="button" class="lb m-save" disabled>Cambiar municipio</button><div class="lmsg m-msg" role="status"></div></div>' : "") +
             (admin && c.databaseId ? '<div class="loc-cp"><label>Código postal (solo administradores)<input class="cp-in" type="text" inputmode="numeric" maxlength="5" autocomplete="off" placeholder="Cargando…" disabled></label><button type="button" class="lb cp-save" disabled>Guardar código postal</button><div class="lmsg cp-msg" role="status"></div></div>' : "") +
           "</div>" +
-          "</div>" +
-        "</section>" +
+        "</details>" +
       "</div>" +
       '<div class="fi-foot">' +
         '<div class="fi-status"><span class="saved" role="status"></span><span class="fi-dirty" hidden>Cambios sin guardar</span></div>' +
@@ -2123,30 +2088,10 @@ function fichaFor(c, pos) {
           "</div></details></div>" +
       "</div>" +
     "</div>";
-  const pf = el.querySelector(".pform");
-  const tb = el.querySelector(".ptabs");
-  const tabs = [["s", "Solicitudes"], ["h", "Concesiones"], ["l", "Ubicación"]];
-  tabs.forEach(([k, t]) => {
-    const b = document.createElement("button"); b.type = "button"; b.textContent = t; b.dataset.k = k; b.id = "fiTab" + k; b.setAttribute("role", "tab");
-    tb.appendChild(b);
-    pf.querySelector('[data-tab="' + k + '"]').setAttribute("aria-labelledby", b.id);
-    pf.querySelector('[data-tab="' + k + '"]').removeAttribute("aria-label");
-  });
   let cargaMuni = null;
   let cargaCp = null;
-  const showTab = (k, focus) => {
-    pf.querySelectorAll("[data-tab]").forEach((n) => { n.hidden = n.dataset.tab !== k; });
-    tb.querySelectorAll("button").forEach((b) => { const on = b.dataset.k === k; b.setAttribute("aria-selected", on); b.tabIndex = on ? 0 : -1; if (on && focus) b.focus(); });
-    if (k === "l" && cargaMuni) cargaMuni();
-    if (k === "l" && cargaCp) cargaCp();
-  };
-  tb.addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) showTab(b.dataset.k); });
-  tb.addEventListener("keydown", (e) => {
-    const ks = tabs.map((t) => t[0]), i = ks.indexOf(document.activeElement.dataset.k);
-    const next = e.key === "ArrowRight" ? ks[(i + 1) % ks.length] : e.key === "ArrowLeft" ? ks[(i - 1 + ks.length) % ks.length] : e.key === "Home" ? ks[0] : e.key === "End" ? ks[ks.length - 1] : null;
-    if (next) { e.preventDefault(); showTab(next, true); }
-  });
-  showTab(tabs.some((t) => t[0] === fichaTabPedida) ? fichaTabPedida : "s"); fichaTabPedida = "";
+  /* Municipio y código postal (administradores) se leen al abrir el desplegable de ubicación, no al abrir cada ficha. */
+  el.querySelector(".fi-loc").addEventListener("toggle", (e) => { if (e.target.open) { if (cargaMuni) cargaMuni(); if (cargaCp) cargaCp(); } });
   el.querySelector(".fi-close").addEventListener("click", () => map.closePopup());
   const favBtn = el.querySelector(".fi-fav");
   const paintFav = () => { const on = isFav(c); favBtn.setAttribute("aria-pressed", String(on)); favBtn.setAttribute("aria-label", on ? "Quitar de favoritos" : "Marcar como favorito"); favBtn.title = on ? "Quitar de favoritos" : "Marcar como favorito"; };
@@ -2171,19 +2116,11 @@ function fichaFor(c, pos) {
   const fuera = (e) => { if (!el.isConnected) { document.removeEventListener("click", fuera); return; } if (more.open && !more.contains(e.target)) more.open = false; };
   document.addEventListener("click", fuera);
   let val = p.valoracion || 0;
-  const clone = (arr) => (arr || []).map((h) => Object.assign({}, h));
-  let hist = clone(p.historial);
-  let editH = -1, editS = -1;
-  let sols = clone(solsOf(p));
   /* Última versión confirmada por Supabase: a ella se vuelve si un guardado falla. */
-  let segPunto = p.segPunto ? Object.assign({}, p.segPunto) : null; /* seguimiento del punto (sin solicitud), solo puntos del catálogo */
-  let base = { hist: clone(hist), sols: clone(sols), val, segPunto: segPunto ? Object.assign({}, segPunto) : null };
-  const q = (k) => el.querySelector("." + k);
-  const ongList = document.getElementById("ongList") || document.body.appendChild(Object.assign(document.createElement("datalist"), { id: "ongList" }));
-  ongList.innerHTML = [...new Set(["AECC", "Cruz Roja", "WWF", "FJC", "FPM", "FEC", "Aldeas Infantiles"].concat(Object.values(permits).reduce((a, x) => a.concat(solsOf(x).map((z) => z.ong), ((x && x.historial) || []).map((h) => h.ong)), []).filter(Boolean)))].map((o) => '<option value="' + esc(o) + '"></option>').join("");
-  const resetH = () => { editH = -1; ["h-desde", "h-hasta", "h-n", "h-ong", "h-contacto", "h-notas"].forEach((k) => { q(k).value = ""; }); q("h-add").textContent = "Añadir concesión al historial"; q("h-cancel").hidden = true; };
+  let base = { val };
+  /* Los expedientes (solicitudes, concesiones, seguimientos) se gestionan en el Centro de permisos; aquí solo se muestra un resumen de lo confirmado. */
   const paintEf = () => {
-    const cur = { historial: hist, solicitudes: sols, estado: p.estado }, ef = estadoCalc(cur), i = estadoInfo(ef), t = today();
+    const cur = permOf(c), hist = cur.historial || [], sols = solsOf(cur), segPunto = cur.segPunto || null, ef = estadoCalc(cur), i = estadoInfo(ef), t = today();
     const vg = hist.filter(isVig).sort((a, b) => (b.desde || "").localeCompare(a.desde || ""))[0], fu = hist.filter((h) => !h.cancelada && h.desde && h.desde > t).sort((a, b) => (a.desde || "").localeCompare(b.desde || ""))[0];
     const pend = sols.filter(solValid).length;
     const cap = (h) => (safeCount(h.captadores) ? [safeCount(h.captadores) + " captadores"] : []);
@@ -2198,109 +2135,15 @@ function fichaFor(c, pos) {
     const card = el.querySelector(".ef"); card.className = "ef s-" + ef;
     card.innerHTML = '<span class="st">' + esc(i[1]) + "</span><strong>" + esc(titulo) + "</strong>" + (meta.length ? '<span class="meta">' + meta.join(" · ") + "</span>" : "");
     const fs = fechaCalc(cur), sg = [segCalc(cur), segPunto && segPunto.fecha].filter(Boolean).sort()[0] || "";
-    el.querySelector(".pinfo").innerHTML = '<div class="' + (sg && sg <= t ? "due" : "") + '"><span>Próximo seguimiento</span><b>' + (sg ? esc(fmtD(sg)) + (sg <= t ? " (toca ya)" : "") : "—") + '</b></div><div><span>Solicitado el</span><b>' + (fs ? esc(fmtD(fs)) : "—") + '</b></div><div><span>Pendientes</span><b>' + pend + '</b></div><div><span>Concesiones</span><b>' + hist.filter((h) => !h.cancelada).length + "</b></div>" + (segPunto ? '<div class="segp"><span>Seguimiento del punto: ' + esc(fmtD(segPunto.fecha)) + (segPunto.accion ? " (" + esc(segPunto.accion) + ")" : "") + (segPunto.resp ? " · responsable: " + esc(nombreResp(segPunto.resp)) : "") + '</span><button type="button" class="f-segpunto">Hecho</button></div>' : "");
-  };
-  /* Pregunta inline (con motivo) para las acciones que cierran un expediente. Se rehace fuera del clic para que Leaflet no cierre la ficha. */
-  const askReason = (li, label, okText, onOk, sinCampo) => {
-    if (li.querySelector(".fi-res")) return;
-    const box = document.createElement("div");
-    box.className = "fi-res";
-    box.innerHTML = (sinCampo ? "<p>" + esc(label) + "</p>" : "<label>" + esc(label) + '<input type="text" maxlength="500" autocomplete="off"></label>') + '<div class="fi-btns"><button type="button" class="r-ok">' + esc(okText) + '</button><button type="button" class="r-no">No, volver</button></div>';
-    li.appendChild(box);
-    const inp = box.querySelector("input") || box.querySelector(".r-ok");
-    inp.focus();
-    const cerrar = () => { box.remove(); };
-    box.querySelector(".r-no").addEventListener("click", () => setTimeout(cerrar, 0));
-    box.querySelector(".r-ok").addEventListener("click", () => setTimeout(() => { const v = sinCampo ? "" : inp.value.trim(); cerrar(); onOk(v); }, 0));
-    inp.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" && !sinCampo) { e.preventDefault(); box.querySelector(".r-ok").click(); }
-      else if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); setTimeout(cerrar, 0); }
-    });
-  };
-  const paintHist = () => {
-    const ul = el.querySelector(".h-list");
-    const sorted = hist.map((h, i) => [h, i]).sort((a, b) => (b[0].desde || "").localeCompare(a[0].desde || ""));
-    ul.innerHTML = sorted.length ? "" : '<li class="fi-none">Sin concesiones registradas</li>';
-    const SOLTXT = { cancelada: "cancelada", futura: "futura", terminada: "terminada", vigente: "vigente" };
-    sorted.forEach(([h, i]) => {
-      const est = concEstado(h);
-      const li = document.createElement("li"); if (est === "vigente") li.className = "vig";
-      const origen = h.sol ? sols.find((x) => x.id === h.sol) : null;
-      li.innerHTML = "<span>" + esc(histTxt(h)) + " · <b>" + SOLTXT[est] + "</b>" +
-        (h.alta ? " · alta " + esc(fmtD(h.alta)) : "") + (origen ? " · de la solicitud del " + esc(fmtD(origen.fecha || "")) : "") +
-        (h.cancelada && h.resFecha ? " · cancelada el " + esc(fmtD(h.resFecha)) : "") + (h.motivo ? " · motivo: " + esc(h.motivo) : "") +
-        (h.contacto ? " · contacto: " + esc(h.contacto) : "") + (h.notas ? " · " + esc(h.notas) : "") + "</span>";
-      if (h.cancelada || est === "terminada") li.style.opacity = ".7";
-      const mk = (t, title, css, fn) => { const b = document.createElement("button"); b.type = "button"; b.textContent = t; b.title = title; if (css) b.style.cssText = css; b.addEventListener("click", () => setTimeout(() => { if (!commitBusy) fn(b); }, 0)); li.appendChild(b); return b; };
-      mk("Editar", "Cambiar fechas, ONG o captadores de esta concesión", "color:var(--ok);border-color:var(--ok);margin-left:auto", () => { editH = i; q("h-desde").value = h.desde || ""; q("h-hasta").value = h.hasta || ""; q("h-n").value = h.captadores || ""; q("h-ong").value = h.ong || ""; q("h-contacto").value = h.contacto || ""; q("h-notas").value = h.notas || ""; q("h-add").textContent = "Guardar cambios de la concesión"; q("h-cancel").hidden = false; q("h-form").open = true; });
-      if (h.cancelada) mk("Reactivar", "Volver a dar por válida esta concesión", "color:var(--warn);border-color:var(--warn)", async () => { delete h.cancelada; delete h.resFecha; paintHist(); const ok = await commit(); q("h-msg").style.color = ok ? "var(--ok)" : "var(--err)"; q("h-msg").textContent = ok ? "Concesión reactivada y guardada." : "No se ha reactivado: no se pudo guardar."; });
-      else mk("Cancelar", "Marcar esta concesión como cancelada (queda en el historial)", "color:var(--warn);border-color:var(--warn)", () => askReason(li, "Motivo de la cancelación (opcional)", "Cancelar la concesión", async (motivo) => { h.cancelada = true; h.resFecha = today(); if (motivo) h.motivo = motivo; paintHist(); const ok = await commit(); q("h-msg").style.color = ok ? "var(--ok)" : "var(--err)"; q("h-msg").textContent = ok ? "Concesión cancelada y guardada." : "No se ha cancelado: no se pudo guardar."; }));
-      if (admin || c.custom) mk("Quitar", "Borrar esta concesión del historial (no se puede deshacer)", "", () => askReason(li, "Se borra la concesión del historial y no se puede deshacer. Para conservarla, usa Cancelar.", "Borrar la concesión", async () => { hist.splice(i, 1); if (editH === i) resetH(); paintHist(); const ok = await commit(); q("h-msg").style.color = ok ? "var(--ok)" : "var(--err)"; q("h-msg").textContent = ok ? "Concesión borrada del historial." : "No se ha borrado: no se pudo guardar."; }, true));
-      ul.appendChild(li);
-    });
-  };
-  const miId = () => window.mapaSession?.user?.id || "";
-  if (!c.databaseId) el.querySelectorAll(".s-rel").forEach((n) => { n.hidden = true; }); /* los puntos personales no tienen seguimientos en tablas */
-  const setResp = (resp) => {
-    const sel = q("s-resp");
-    if (resp && ![...sel.options].some((o) => o.value === resp)) { const o = document.createElement("option"); o.value = resp; o.textContent = nombreResp(resp) === "tú" ? "Yo" : (nombresPersona.get(resp) || "Otra persona"); sel.appendChild(o); }
-    sel.value = resp || "";
-  };
-  const pintaAsignables = (lista) => {
-    const sel = q("s-resp"), actual = sel.value;
-    sel.innerHTML = '<option value="">Sin asignar</option>' + lista.map((r) => '<option value="' + esc(r.id) + '">' + esc(r.id === miId() ? r.label + " (yo)" : r.label) + "</option>").join("");
-    setResp(actual);
-  };
-  if (c.databaseId) cargaAsignables(c).then((lista) => { if (lista.length) pintaAsignables(lista); });
-  const resetS = () => { editS = -1; ["s-desde", "s-hasta", "s-n", "s-ong", "s-seg", "s-contacto", "s-notas", "s-accion", "s-resp"].forEach((k) => { q(k).value = ""; });  q("s-add").textContent = "Añadir solicitud"; q("s-cancel").hidden = true; };
-  const paintSols = () => {
-    const ul = el.querySelector(".s-list");
-    const sorted = sols.map((x, i) => [x, i]).sort((a, b) => (b[0].desde || "").localeCompare(a[0].desde || ""));
-    ul.innerHTML = sorted.length ? "" : '<li class="fi-none">Sin solicitudes registradas</li>';
-    sorted.forEach(([x, i]) => {
-      const st = solEstado(x);
-      const li = document.createElement("li"); if (st !== "pendiente") li.style.opacity = ".7";
-      li.innerHTML = "<span>" + esc(solRange(x) || "Sin datos") + " · <b>" + st + "</b>" + (x.fecha ? " · pedida el " + esc(fmtD(x.fecha)) : "") + (x.resFecha && x.res ? " · resuelta el " + esc(fmtD(x.resFecha)) : "") +
-        (x.seg && !x.res ? " · seguimiento " + esc(fmtD(x.seg)) + (x.accion ? " (" + esc(x.accion) + ")" : "") + (x.resp ? " · responsable: " + esc(nombreResp(x.resp)) : "") : "") + (x.motivo ? " · motivo: " + esc(x.motivo) : "") + (x.contacto ? " · contacto: " + esc(x.contacto) : "") + (x.notas ? " · " + esc(x.notas) : "") + "</span>";
-      const mk = (t, title, css, fn) => { const b = document.createElement("button"); b.type = "button"; b.textContent = t; b.title = title; if (css) b.style.cssText = css; b.addEventListener("click", () => setTimeout(() => { if (!commitBusy) fn(b); }, 0)); li.appendChild(b); return b; }; /* se rehace la lista fuera del clic para que Leaflet no cierre la ficha */
-      const fin = (txtOk, txtKo) => async () => { paintSols(); paintHist(); const ok = await commit(); q("s-msg").style.color = ok ? "var(--ok)" : "var(--err)"; q("s-msg").textContent = ok ? txtOk : txtKo; };
-      if (!x.res) mk("Conceder", "Aprobar esta solicitud: se conserva y se crea la concesión con las mismas fechas", "color:var(--ok);border-color:var(--ok);margin-left:auto", () => {
-        if (x.res) return; /* doble clic: ya está resuelta */
-        if (!x.id) x.id = newId();
-        const cid = newId(), t = today();
-        x.res = "aprobada"; x.resFecha = t; x.conc = cid;
-        const g = { id: cid, sol: x.id, desde: x.desde || "", hasta: x.hasta || "", captadores: x.captadores || 0, ong: x.ong || "", alta: t };
-        if (x.contacto) g.contacto = x.contacto;
-        if (x.notas) g.notas = x.notas;
-        hist.push(g);
-        if (editS === i) resetS();
-        fin("Aprobada y guardada: la solicitud se conserva y se ha creado la concesión. Si te dieron otras fechas o captadores, usa Editar en Concesiones.", "No se ha aprobado: no se pudo guardar. La solicitud sigue como estaba.")();
-      });
-      if (!x.res) mk("Denegar", "Marcar esta solicitud como denegada (queda en el historial)", "color:var(--warn);border-color:var(--warn)", () => askReason(li, "Motivo de la denegación (opcional)", "Denegar la solicitud", (motivo) => {
-        if (x.res) return;
-        x.res = "denegada"; x.resFecha = today(); if (motivo) x.motivo = motivo;
-        fin("Denegación guardada.", "No se ha denegado: no se pudo guardar.")();
-      }));
-      if (!x.res) mk("Retirar", "La ONG retira esta solicitud (queda en el historial)", "", () => askReason(li, "Motivo de la retirada (opcional)", "Retirar la solicitud", (motivo) => {
-        if (x.res) return;
-        x.res = "retirada"; x.resFecha = today(); if (motivo) x.motivo = motivo;
-        fin("Retirada guardada.", "No se ha retirado: no se pudo guardar.")();
-      }));
-      mk("Editar", "Cambiar fechas, ONG o captadores de esta solicitud", "color:var(--ok);border-color:var(--ok)", () => { editS = i; q("s-desde").value = x.desde || ""; q("s-hasta").value = x.hasta || ""; q("s-n").value = x.captadores || ""; q("s-ong").value = x.ong || ""; q("s-seg").value = x.seg || ""; q("s-accion").value = x.accion || ""; setResp(x.resp || ""); q("s-contacto").value = x.contacto || ""; q("s-notas").value = x.notas || ""; q("s-add").textContent = "Guardar cambios de la solicitud"; q("s-cancel").hidden = false; q("s-add").closest("details").open = true; });
-      if (admin || c.custom) mk("Quitar", "Borrar esta solicitud (no se puede deshacer)", "", () => askReason(li, (x.res === "aprobada" ? "Se borra la solicitud; la concesión creada se queda. " : "") + "Se borra del historial y no se puede deshacer.", "Borrar la solicitud", () => {
-        sols.splice(i, 1); if (editS === i) resetS();
-        fin("Solicitud borrada.", "No se ha borrado: no se pudo guardar.")();
-      }, true));
-      ul.appendChild(li);
-    });
+    el.querySelector(".pinfo").innerHTML = '<div class="' + (sg && sg <= t ? "due" : "") + '"><span>Próximo seguimiento</span><b>' + (sg ? esc(fmtD(sg)) + (sg <= t ? " (toca ya)" : "") : "—") + '</b></div><div><span>Solicitado el</span><b>' + (fs ? esc(fmtD(fs)) : "—") + '</b></div><div><span>Pendientes</span><b>' + pend + '</b></div><div><span>Concesiones</span><b>' + hist.filter((h) => !h.cancelada).length + "</b></div>" + (segPunto ? '<div class="segp"><span>Seguimiento del punto: ' + esc(fmtD(segPunto.fecha)) + (segPunto.accion ? " (" + esc(segPunto.accion) + ")" : "") + (segPunto.resp ? " · responsable: " + esc(nombreResp(segPunto.resp)) : "") + '</span></div>' : "");
   };
   const paint = () => {
     el.querySelectorAll(".stars button").forEach((b) => { b.classList.toggle("on", +b.dataset.n <= val); b.setAttribute("aria-pressed", +b.dataset.n === val); });
     el.querySelector(".sv").textContent = val ? val + " de 5" : "sin valorar";
   };
   let commitBusy = false;
-  /* Guarda el punto en Supabase y devuelve true solo si Supabase lo ha confirmado. Si falla, la ficha vuelve a lo último confirmado
-     (o a lo que Supabase tenga guardado, si se puede comprobar); los textos escritos en contacto y notas se conservan. */
+  /* Guarda contacto, notas y valoración del punto en Supabase y devuelve true solo si Supabase lo ha confirmado. Los expedientes no se tocan desde aquí:
+     se parte siempre de lo que hay en memoria (lo confirmado), así una ficha abierta no pisa lo que se haya hecho en el Centro de permisos. */
   const commit = async () => {
     if (commitBusy) return false;
     commitBusy = true;
@@ -2314,14 +2157,10 @@ function fichaFor(c, pos) {
     sm.style.color = "var(--muted)"; sm.textContent = "Guardando en Supabase…"; saveBtn.textContent = "Guardando…";
     let ok = false;
     try {
-      hist.forEach((h) => { if (!h.id) h.id = newId(); });
-      sols.forEach((x) => { if (!x.id) x.id = newId(); });
-      const v = { contacto: el.querySelector(".f-contacto").value.trim(), notas: el.querySelector(".f-notas").value.trim(), valoracion: val, historial: hist };
-      if (sols.length) v.solicitudes = sols;
-      if (segPunto) v.segPunto = Object.assign({}, segPunto);
-      if (sols.length || hist.length) { v.estado = estadoCalc(v); v.fecha = fechaCalc(v); const sg = segCalc(v); if (sg) v.seguimiento = sg; }
+      const v = Object.assign({}, permits[permitKey(c)] || {}, { contacto: el.querySelector(".f-contacto").value.trim(), notas: el.querySelector(".f-notas").value.trim(), valoracion: val });
+      if (solsOf(v).length || (v.historial || []).length) { v.estado = estadoCalc(v); v.fecha = fechaCalc(v); const sg = segCalc(v); if (sg) v.seguimiento = sg; }
       else { v.estado = p.estado || "sin"; v.fecha = p.fecha || ""; if (p.seguimiento) v.seguimiento = p.seguimiento; }
-      if (v.estado === "sin" && !v.fecha && !v.contacto && !v.notas && !v.valoracion && !hist.length && !v.seguimiento && !sols.length && !segPunto) delete permits[permitKey(c)];
+      if (v.estado === "sin" && !v.fecha && !v.contacto && !v.notas && !v.valoracion && !(v.historial || []).length && !v.seguimiento && !solsOf(v).length && !v.segPunto) delete permits[permitKey(c)];
       else permits[permitKey(c)] = v;
 
       const saved = await savePermits(c);
@@ -2355,14 +2194,9 @@ function fichaFor(c, pos) {
         // La petición pudo fallar antes o después de llegar al servidor: se vuelve a leer lo guardado antes de decir nada.
         if (!c.databaseId) { if (previous.permit === undefined) delete permits[permitKey(c)]; else permits[permitKey(c)] = previous.permit; }
         const leido = await reloadSharedPermit(c);
-        if (leido) {
-          const np = permits[permitKey(c)] || {};
-          hist = clone(np.historial); sols = clone(solsOf(np)); val = np.valoracion || 0; segPunto = np.segPunto ? Object.assign({}, np.segPunto) : null;
-        } else {
-          hist = clone(base.hist); sols = clone(base.sols); val = base.val; segPunto = base.segPunto ? Object.assign({}, base.segPunto) : null;
-        }
-        base = { hist: clone(hist), sols: clone(sols), val, segPunto: segPunto ? Object.assign({}, segPunto) : null };
-        paint(); paintHist(); paintSols(); paintEf();
+        if (leido) val = (permits[permitKey(c)] || {}).valoracion || 0; else val = base.val;
+        base = { val };
+        paint(); paintEf();
         if (markers[c.id]) markers[c.id].setIcon(makeIcon(c));
         refreshSelects(); renderList();
         sm.style.color = "var(--err)";
@@ -2373,8 +2207,7 @@ function fichaFor(c, pos) {
         return false;
       }
 
-      { const np = permits[permitKey(c)] || {}; hist = clone(np.historial); sols = clone(solsOf(np)); segPunto = np.segPunto ? Object.assign({}, np.segPunto) : null; paintHist(); paintSols(); } /* se adoptan los registros tal como los confirmó Supabase (ids y versiones) */
-      base = { hist: clone(hist), sols: clone(sols), val, segPunto: segPunto ? Object.assign({}, segPunto) : null };
+      base = { val };
       if (markers[c.id]) markers[c.id].setIcon(makeIcon(c));
       refreshSelects();
       renderList();
@@ -2392,47 +2225,12 @@ function fichaFor(c, pos) {
     return ok;
   };
   el.querySelectorAll(".stars button").forEach((b) => b.addEventListener("click", () => { if (commitBusy) return; val = val === +b.dataset.n ? 0 : +b.dataset.n; paint(); commit(); }));
-  paint(); paintHist(); paintSols(); paintEf();
-  const cuenta = (raw) => { const t = String(raw).trim(); if (!t) return { n: 0 }; const n = Number(t); return Number.isInteger(n) && n >= 1 && n <= 100000 ? { n } : { err: "El número de captadores debe ser un entero entre 1 y 100000." }; };
-  q("s-add").addEventListener("click", async () => {
-    const d = q("s-desde").value, h = q("s-hasta").value, cn = cuenta(q("s-n").value), og = q("s-ong").value.trim(), msg = q("s-msg"), t = today();
-    msg.style.color = "var(--err)"; msg.textContent = "";
-    if (!d && !h) { msg.textContent = "Indica al menos la fecha de inicio o la de fin."; return; }
-    if (d && h && d > h) { msg.textContent = "La fecha de inicio es posterior a la de fin."; return; }
-    if (cn.err) { msg.textContent = cn.err; return; }
-    if (editS < 0 && h && h < t) { msg.textContent = "La fecha de fin ya pasó: una solicitud nueva no puede acabar antes de hoy."; return; }
-    const x = { fecha: t, desde: d, hasta: h, captadores: cn.n, ong: og, seg: q("s-seg").value, contacto: q("s-contacto").value.trim(), notas: q("s-notas").value.trim() };
-    const rs = q("s-resp").value, ac = q("s-accion").value.trim();
-    if (c.databaseId && x.seg) { if (ac) x.accion = ac; if (rs) x.resp = rs; }
-    if (!x.seg) delete x.seg;
-    if (!x.contacto) delete x.contacto;
-    if (!x.notas) delete x.notas;
-    if (editS >= 0 && sols[editS]) { const o = sols[editS]; x.fecha = o.fecha || x.fecha; ["id", "res", "resFecha", "motivo", "conc"].forEach((k) => { if (o[k]) x[k] = o[k]; }); sols[editS] = x; } else sols.push(x);
-    paintSols();
-    const falta = [!og && "ONG", !cn.n && "captadores"].filter(Boolean);
-    const ok = await commit();
-    if (ok) { resetS(); msg.style.color = "var(--ok)"; msg.textContent = falta.length ? "Solicitud guardada. Falta indicar: " + falta.join(" y ") + "." : "Solicitud guardada."; }
-    else msg.textContent = "No se ha guardado la solicitud. Lo escrito sigue en el formulario: revisa el aviso de abajo y vuelve a pulsar el botón.";
-  });
-  q("s-cancel").addEventListener("click", resetS);
-  q("h-add").addEventListener("click", async () => {
-    const d = q("h-desde").value, h = q("h-hasta").value, cn = cuenta(q("h-n").value), og = q("h-ong").value.trim(), msg = q("h-msg");
-    msg.style.color = "var(--err)"; msg.textContent = "";
-    if (!d && !h) { msg.textContent = "Indica al menos la fecha de inicio o la de fin."; return; }
-    if (d && h && d > h) { msg.textContent = "La fecha de inicio es posterior a la de fin."; return; }
-    if (cn.err) { msg.textContent = cn.err; return; }
-    const g = { desde: d, hasta: h, captadores: cn.n, ong: og, contacto: q("h-contacto").value.trim(), notas: q("h-notas").value.trim() };
-    if (!g.contacto) delete g.contacto;
-    if (!g.notas) delete g.notas;
-    if (editH >= 0 && hist[editH]) { const o = hist[editH]; ["id", "sol", "alta", "cancelada", "resFecha", "motivo"].forEach((k) => { if (o[k]) g[k] = o[k]; }); hist[editH] = g; } else { g.id = newId(); g.alta = today(); hist.push(g); }
-    paintHist();
-    const ok = await commit();
-    if (ok) { resetH(); msg.style.color = "var(--ok)"; msg.textContent = "Concesión guardada."; }
-    else msg.textContent = "No se ha guardado la concesión. Lo escrito sigue en el formulario: revisa el aviso de abajo y vuelve a pulsar el botón.";
-  });
-  q("h-cancel").addEventListener("click", resetH);
+  paint(); paintEf();
   el.querySelector(".f-save").addEventListener("click", commit);
-  el.addEventListener("click", (e) => { if (e.target.closest(".f-segpunto")) setTimeout(() => { if (commitBusy) return; segPunto = null; paintEf(); commit(); }, 0); });
+  el.querySelector(".f-centro").addEventListener("click", () => document.dispatchEvent(new CustomEvent("centro:abrir", { detail: { punto: c, vista: "sol", est: "todas" } })));
+  /* Si el Centro de permisos cambia este punto mientras la ficha sigue abierta, el resumen se repinta con lo confirmado. */
+  const alCambiar = (ev) => { if (!el.isConnected) { document.removeEventListener("permisos:cambio", alCambiar); return; } if (ev.detail && String(ev.detail.id) === String(c.id)) paintEf(); };
+  document.addEventListener("permisos:cambio", alCambiar);
   let armed = false;
   {
     const msg = el.querySelector(".lmsg"), inp = el.querySelector(".l-in"), saveLocBtn = el.querySelector(".l-save-location");
@@ -3930,7 +3728,7 @@ const csvCell = (value) => {
   let fProv = "", fOng = ""; /* filtros: solo en memoria mientras dura la sesión */
   const SIN_ONG = "__sin__";
   const ongKey = (o) => (o || "").trim() ? o.trim().toLowerCase() : SIN_ONG;
-  const focusPoint = (c, tab) => { fichaTabPedida = tab || ""; dlg.close(); if (markers[c.id]) cluster.zoomToShowLayer(markers[c.id], () => markers[c.id].openPopup()); };
+  const focusPoint = (c) => { dlg.close(); if (markers[c.id]) cluster.zoomToShowLayer(markers[c.id], () => markers[c.id].openPopup()); };
   const plural = (n, uno, varios) => n + " " + (n === 1 ? uno : varios);
   const GRUPOS = [
     ["Tareas de hoy", [
@@ -4029,10 +3827,10 @@ const csvCell = (value) => {
   };
   const filas = (key, d) => {
     const lista = key === "capacidadHoy" ? d.ind.vigentes : d.ind[key], t = d.t;
-    if (key.startsWith("seg")) return lista.slice().sort((a, b) => a.fecha.localeCompare(b.fecha)).map((s) => ({ c: s.c, tipo: "Seguimiento", ong: s.ong, periodo: "", n: "", det: fmtD(s.fecha) + (s.fecha < t ? " · atrasado " + plural(daysBetween(s.fecha, t), "día", "días") : s.fecha === t ? " · hoy" : "") + (s.accion ? " · " + s.accion : "") + (s.resp ? " · responsable: " + nombreResp(s.resp) : ""), tab: "s" }));
-    if (key === "incidencias") return lista.map((x) => ({ c: x.r.c, tipo: x.tipo, ong: x.r.ong, periodo: fmtD(x.r.desde) + " – " + fmtD(x.r.hasta), n: x.r.n || "", det: detalle(x.r), tab: x.r.k === "sol" ? "s" : "h" }));
+    if (key.startsWith("seg")) return lista.slice().sort((a, b) => a.fecha.localeCompare(b.fecha)).map((s) => ({ c: s.c, tipo: "Seguimiento", ong: s.ong, periodo: "", n: "", det: fmtD(s.fecha) + (s.fecha < t ? " · atrasado " + plural(daysBetween(s.fecha, t), "día", "días") : s.fecha === t ? " · hoy" : "") + (s.accion ? " · " + s.accion : "") + (s.resp ? " · responsable: " + nombreResp(s.resp) : ""), v: "seg" }));
+    if (key === "incidencias") return lista.map((x) => ({ c: x.r.c, tipo: x.tipo, ong: x.r.ong, periodo: fmtD(x.r.desde) + " – " + fmtD(x.r.hasta), n: x.r.n || "", det: detalle(x.r), v: "inc" }));
     const orden = key.startsWith("vencen") ? (a, b) => a.hasta.localeCompare(b.hasta) : (a, b) => (a.desde || "").localeCompare(b.desde || "");
-    return lista.slice().sort(orden).map((r) => ({ c: r.c, tipo: (r.k === "sol" ? "Solicitud " : "Concesión ") + r.est, ong: r.ong, periodo: fmtD(r.desde) + " – " + fmtD(r.hasta), n: r.n || "", det: detalle(r) + (key.startsWith("vencen") ? ((detalle(r) ? " · " : "") + "faltan " + plural(daysBetween(t, r.hasta), "día", "días")) : ""), tab: r.k === "sol" ? "s" : "h" }));
+    return lista.slice().sort(orden).map((r) => ({ c: r.c, tipo: (r.k === "sol" ? "Solicitud " : "Concesión ") + r.est, ong: r.ong, periodo: fmtD(r.desde) + " – " + fmtD(r.hasta), n: r.n || "", det: detalle(r) + (key.startsWith("vencen") ? ((detalle(r) ? " · " : "") + "faltan " + plural(daysBetween(t, r.hasta), "día", "días")) : ""), v: r.k }));
   };
   const renderLista = (key) => {
     const d = datos(), t = TITULO[key], fs = filas(key, d);
@@ -4042,8 +3840,8 @@ const csvCell = (value) => {
       '<h3 id="pnListT" tabindex="-1">' + esc(t[1]) + " · " + esc(plural(fs.length, key.startsWith("seg") ? "seguimiento" : (key === "incidencias" ? "aviso" : t[2]), key.startsWith("seg") ? "seguimientos" : (key === "incidencias" ? "avisos" : t[3]))) + "</h3>" +
       (filtros.length ? '<p class="pn-note">Filtros activos: ' + esc(filtros.join(" · ")) + "</p>" : "") +
       (fs.length ? '<div class="pn-scroll"><table class="pn-list"><thead><tr><th>Punto</th><th>Tipo</th><th>ONG</th><th>Periodo</th><th>Captadores</th><th>Detalle</th></tr></thead><tbody>' +
-        fs.map((f) => '<tr data-kind="pt" data-k="' + esc(String(f.c.id)) + '" data-tab="' + f.tab + '"><td><button type="button" class="pn-rowbtn">' + esc(f.c.name) + " · " + esc(townOf(f.c)) + "</button></td><td>" + esc(f.tipo) + "</td><td>" + esc(f.ong || "Sin ONG") + "</td><td>" + esc(f.periodo) + "</td><td>" + esc(String(f.n)) + "</td><td>" + esc(f.det) + "</td></tr>").join("") + "</tbody></table></div>" +
-        '<p class="pn-note">Pulsa una fila para abrir la ficha del punto en la pestaña del registro.</p>'
+        fs.map((f) => '<tr data-kind="pt" data-k="' + esc(String(f.c.id)) + '" data-v="' + f.v + '"><td><button type="button" class="pn-rowbtn">' + esc(f.c.name) + " · " + esc(townOf(f.c)) + "</button></td><td>" + esc(f.tipo) + "</td><td>" + esc(f.ong || "Sin ONG") + "</td><td>" + esc(f.periodo) + "</td><td>" + esc(String(f.n)) + "</td><td>" + esc(f.det) + "</td></tr>").join("") + "</tbody></table></div>" +
+        '<p class="pn-note">Pulsa una fila para ver ese punto en el Centro de permisos.</p>'
         : '<p class="pn-empty">No hay registros con los filtros elegidos.</p>');
     body.querySelector("#pnListT").focus();
   };
@@ -4069,7 +3867,7 @@ const csvCell = (value) => {
     if (bar) { const c = CENTERS.find((x) => String(x.id) === bar.dataset.pt); if (c) focusPoint(c); return; }
     const tr = e.target.closest("tr[data-k]"); if (!tr) return;
     const k = tr.dataset.k;
-    if (tr.dataset.kind === "pt") { const c = CENTERS.find((x) => String(x.id) === k); if (c) focusPoint(c, tr.dataset.tab); return; }
+    if (tr.dataset.kind === "pt") { const c = CENTERS.find((x) => String(x.id) === k); if (c) { dlg.close(); document.dispatchEvent(new CustomEvent("centro:abrir", { detail: { punto: c, vista: tr.dataset.v || "sol", est: "todas" } })); } return; }
     $("#tipo").value = tr.dataset.kind === "tipo" ? k : ""; $("#q").value = tr.dataset.kind === "town" ? k : ""; $("#permiso").value = ""; $("#valor").value = ""; $("#cadena").value = "";
     dlg.close(); refilter();
   });
@@ -4149,7 +3947,7 @@ const csvCell = (value) => {
     const avisos = [];
     if (r.k === "con" && i.e === "autorizada" && r.hasta && r.hasta >= t && daysBetween(t, r.hasta) <= 7 && r.hasta === d) avisos.push("Vence " + (r.hasta === t ? "hoy" : "el " + fmtD(r.hasta).slice(0, 5)));
     if (r.k === "con" && r.desde === d && d > t) avisos.push("Empieza");
-    return '<li><button type="button" class="cal-card s-' + info[1] + '" data-pt="' + esc(String(c.id)) + '" data-tab="' + (r.k === "sol" ? "s" : "h") + '">' +
+    return '<li><button type="button" class="cal-card s-' + info[1] + '" data-pt="' + esc(String(c.id)) + '" data-v="' + r.k + '">' +
       '<span class="st">' + esc((r.k === "sol" ? "Solicitud · " : "Concesión · ") + info[0]) + "</span><strong>" + esc(c.name) + "</strong>" +
       '<span class="wh">' + esc(townOf(c)) + (c.tipo ? " · " + esc(c.tipo) : "") + "</span>" +
       (span ? '<span class="sp">' + esc(span) + "</span>" : "") +
@@ -4159,7 +3957,7 @@ const csvCell = (value) => {
   };
   const tarjetaSeg = (s, t) => {
     const c = s.c, atras = s.fecha < t;
-    return '<li><button type="button" class="cal-card s-seguimiento" data-pt="' + esc(String(c.id)) + '" data-tab="s">' +
+    return '<li><button type="button" class="cal-card s-seguimiento" data-pt="' + esc(String(c.id)) + '" data-v="seg">' +
       '<span class="st">Seguimiento' + (atras ? " · atrasado" : s.fecha === t ? " · hoy" : "") + "</span><strong>" + esc(c.name) + "</strong>" +
       '<span class="wh">' + esc(townOf(c)) + (c.tipo ? " · " + esc(c.tipo) : "") + "</span>" +
       '<span class="cal-meta"><span class="cal-ong" style="--h:' + hue(ongDe(s)) + '">' + esc(ongDe(s)) + "</span></span></button></li>";
@@ -4251,7 +4049,7 @@ const csvCell = (value) => {
       '<div class="cal-links" role="group" aria-label="Abrir en el Centro de permisos"><span>Gestionar en el Centro de permisos:</span><button type="button" data-centro="sol:pendiente">Solicitudes pendientes</button><button type="button" data-centro="con:vigente">Concesiones vigentes</button><button type="button" data-centro="seg:todas">Seguimientos</button></div>' +
       '<p class="cal-note cal-past" id="calPast" role="note" hidden></p>' +
       '<div id="calGrid"></div>' +
-      '<p class="cal-note">Un permiso aparece cada día entre su fecha de inicio y la de fin, las dos incluidas. Los captadores de un día no se suman entre registros de la misma ONG en un mismo punto (se toma el mayor) y sí entre ONG distintas. Autorizados, por aprobar y seguimientos se cuentan por separado. Pulsa una tarjeta para abrir el punto en la pestaña de ese registro.</p>';
+      '<p class="cal-note">Un permiso aparece cada día entre su fecha de inicio y la de fin, las dos incluidas. Los captadores de un día no se suman entre registros de la misma ONG en un mismo punto (se toma el mayor) y sí entre ONG distintas. Autorizados, por aprobar y seguimientos se cuentan por separado. Pulsa una tarjeta para ver ese punto en el Centro de permisos.</p>';
     draw();
     dlg.showModal();
     body.querySelector("#calProv").focus();
@@ -4266,7 +4064,7 @@ const csvCell = (value) => {
     const md = e.target.closest("[data-modo]");
     if (md) { modo = md.dataset.modo; body.querySelectorAll("[data-modo]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.modo === modo))); draw(); return; }
     const pt = e.target.closest("[data-pt]");
-    if (pt) { const c = CENTERS.find((x) => String(x.id) === pt.dataset.pt); if (c) { fichaTabPedida = pt.dataset.tab || ""; dlg.close(); if (markers[c.id]) cluster.zoomToShowLayer(markers[c.id], () => markers[c.id].openPopup()); } }
+    if (pt) { const c = CENTERS.find((x) => String(x.id) === pt.dataset.pt); if (c) { dlg.close(); document.dispatchEvent(new CustomEvent("centro:abrir", { detail: { punto: c, vista: pt.dataset.v || "sol", est: "todas" } })); } }
   });
   body.addEventListener("change", (e) => {
     if (e.target.id === "calProv") { prov = e.target.value; ong = ""; draw(); }
@@ -4303,6 +4101,7 @@ const csvCell = (value) => {
   const claveOngDe = (r) => ongDe(r).trim().toLowerCase();
   const esAdmin = () => window.mapaSession?.profile?.role === "admin";
   let vista = "sol", prov = "", ong = "", q = "", mostrar = TRAMO, ocupado = false, aviso = "";
+  let punto = null;  /* si se llega desde la ficha, el Panel o el Calendario: solo los expedientes de ese punto */
   let accion = null; /* confirmación en línea de una fila: { a, key } */
   let form = null;   /* formulario abierto: { tipo: "sol" | "con" | "seg", c, r } (r = registro que se edita; sin r, alta) */
   const est = { sol: "pendiente", con: "vigente", seg: "vencido", inc: "todas" };
@@ -4354,6 +4153,7 @@ const csvCell = (value) => {
     ocupado = true; aviso = "Guardando…"; draw();
     const res = await aplica(c, muta);
     ocupado = false; refrescaPunto(c); refreshSelects(); renderList();
+    document.dispatchEvent(new CustomEvent("permisos:cambio", { detail: { id: c.id } }));
     const texto = res === "ok" ? txtOk
       : res === "conflict" ? "Otra persona ha cambiado «" + c.name + "»: se ha recargado y no se ha tocado su cambio. Revísalo y repite."
       : res === "error" ? "No se pudo confirmar el guardado de «" + c.name + "». No se ha aplicado."
@@ -4393,14 +4193,14 @@ const csvCell = (value) => {
   };
 
   /* === Filas === */
-  const celdaPunto = (x, tab) => '<button type="button" class="ce-pt" data-pt="' + esc(String(x.c.id)) + '" data-tab="' + tab + '"><strong>' + esc(x.c.name) + "</strong><span>" +
+  const celdaPunto = (x) => '<button type="button" class="ce-pt" data-pt="' + esc(String(x.c.id)) + '"><strong>' + esc(x.c.name) + "</strong><span>" +
     esc(townOf(x.c) + (x.c.province && x.c.province !== townOf(x.c) ? " · " + x.c.province : "")) + "</span></button>";
   const badge = (e) => '<span class="ce-badge s-' + COLOR[e] + '"><i aria-hidden="true"></i>' + esc(TEXTO[e]) + "</span>";
   const btn = (a, k, txt, extra) => '<button type="button" class="ce-act' + (extra ? " " + extra : "") + '" data-act="' + a + '" data-k="' + k + '"' + (ocupado ? " disabled" : "") + ">" + esc(txt) + "</button>";
 
   const filaSol = (r, t, k) => {
     const edad = r.fecha ? daysBetween(r.fecha, t) : null, estancada = r.est === "pendiente" && edad !== null && edad > UMBRAL_ESTANCADA, abierta = !(r.est === "aprobada" || r.est === "denegada" || r.est === "retirada");
-    return "<tr><td>" + celdaPunto(r, "s") + "</td><td>" + esc(ongDe(r)) + "</td><td>" + esc(periodo(r)) + '</td><td class="n">' + (r.n || "—") + "</td><td>" +
+    return "<tr><td>" + celdaPunto(r) + "</td><td>" + esc(ongDe(r)) + "</td><td>" + esc(periodo(r)) + '</td><td class="n">' + (r.n || "—") + "</td><td>" +
       (r.fecha ? esc(fmtD(r.fecha)) + (r.est === "pendiente" && edad >= 0 ? '<span class="ce-sub">hace ' + esc(plural(edad, "día", "días")) + "</span>" : "") : "No consta") + "</td><td>" + badge(r.est) +
       (estancada ? '<span class="ce-warn">Estancada</span>' : "") + "</td><td>" + (r.seg ? esc(fmtD(r.seg)) + (r.seg < t ? '<span class="ce-warn">Atrasado</span>' : "") : (r.est === "pendiente" ? "Sin seguimiento" : "")) + '</td><td class="ce-acts">' +
       (abierta ? btn("conceder", k, "Conceder", "ok") + btn("den", k, "Denegar") + btn("ret", k, "Retirar") : "") + btn("ed", k, "Editar") + (esAdmin() || r.c.custom ? btn("quitS", k, "Quitar") : "") + "</td></tr>";
@@ -4411,16 +4211,16 @@ const csvCell = (value) => {
     if (r.est === "terminada") return "Terminó el " + fmtD(r.hasta);
     return "Cancelada" + (r.resFecha ? " el " + fmtD(r.resFecha) : "") + (r.motivo ? ": " + r.motivo : "");
   };
-  const filaCon = (r, t, k) => "<tr><td>" + celdaPunto(r, "h") + "</td><td>" + esc(ongDe(r)) + "</td><td>" + esc(periodo(r)) + '</td><td class="n">' + (r.n || "—") + "</td><td>" + badge(r.est) + "</td><td>" +
+  const filaCon = (r, t, k) => "<tr><td>" + celdaPunto(r) + "</td><td>" + esc(ongDe(r)) + "</td><td>" + esc(periodo(r)) + '</td><td class="n">' + (r.n || "—") + "</td><td>" + badge(r.est) + "</td><td>" +
     esc(detalleCon(r, t)) + (r.sol ? "" : '<span class="ce-sub">Sin solicitud enlazada</span>') + '</td><td class="ce-acts">' +
     btn("ed", k, "Editar") + (r.est === "cancelada" ? btn("rea", k, "Reactivar") : btn("can", k, "Cancelar")) + (esAdmin() || r.c.custom ? btn("quitC", k, "Quitar") : "") + "</td></tr>";
   const filaSeg = (s, t, k) => {
     const dias = daysBetween(s.fecha, t), origen = s.i >= 0 && !s.punto ? "Solicitud pendiente" : "Seguimiento del punto", editable = !!s.c.databaseId;
-    return "<tr><td>" + celdaPunto(s, "s") + "</td><td>" + esc(ongDe(s)) + "</td><td>" + esc(fmtD(s.fecha)) +
+    return "<tr><td>" + celdaPunto(s) + "</td><td>" + esc(ongDe(s)) + "</td><td>" + esc(fmtD(s.fecha)) +
       (dias > 0 ? '<span class="ce-warn">Atrasado ' + esc(plural(dias, "día", "días")) + "</span>" : dias === 0 ? '<span class="ce-sub">Hoy</span>' : "") + "</td><td>" + (s.accion ? esc(s.accion) : "—") + "</td><td>" +
       (s.resp ? esc(nombreResp(s.resp)) : "Sin responsable") + "</td><td>" + esc(origen) + '</td><td class="ce-acts">' + btn("hecho", k, "Hecho") + (editable ? btn("edseg", k, "Cambiar") : "") + "</td></tr>";
   };
-  const filaInc = (x) => "<tr><td>" + celdaPunto(x.r, x.r.k === "sol" ? "s" : "h") + "</td><td>" + esc(x.tipo) + "</td><td>" + esc(ongDe(x.r)) + "</td><td>" + esc(x.r.k === "sol" ? "Solicitud" : "Concesión") + " · " + esc(periodo(x.r)) + "</td></tr>";
+  const filaInc = (x) => "<tr><td>" + celdaPunto(x.r) + "</td><td>" + esc(x.tipo) + "</td><td>" + esc(ongDe(x.r)) + "</td><td>" + esc(x.r.k === "sol" ? "Solicitud" : "Concesión") + " · " + esc(periodo(x.r)) + "</td></tr>";
   /* Confirmación en línea bajo la fila: motivo opcional para denegar, retirar o cancelar; texto fijo para borrar. */
   const TEXTOS_CONF = {
     den: ["Motivo de la denegación (opcional)", "Denegar la solicitud", true], ret: ["Motivo de la retirada (opcional)", "Retirar la solicitud", true], can: ["Motivo de la cancelación (opcional)", "Cancelar la concesión", true],
@@ -4452,7 +4252,7 @@ const csvCell = (value) => {
     const ongs = [...porClave.values()].sort((x, y) => (x === "Sin ONG") - (y === "Sin ONG") || antes(x, y));
     if (ong && !porClave.has(ong.trim().toLowerCase())) ong = "";
     body.querySelector("#ceOng").innerHTML = '<option value="">Todas las ONG</option>' + ongs.map((o) => '<option value="' + esc(o) + '"' + (o.trim().toLowerCase() === ong.trim().toLowerCase() ? " selected" : "") + ">" + esc(o) + "</option>").join("");
-    const ql = q.trim().toLowerCase(), okOng = (x) => !ong || claveOngDe(x) === ong.trim().toLowerCase(), okF = (x) => okOng(x) && (!ql || textoDe(x).includes(ql));
+    const ql = q.trim().toLowerCase(), okOng = (x) => (!ong || claveOngDe(x) === ong.trim().toLowerCase()) && (!punto || String(x.c.id) === String(punto.id)), okF = (x) => okOng(x) && (!ql || textoDe(x).includes(ql));
     const base = todas.filter(okF), baseSeg = todasSegs.filter(okF);
     const incs = incidencias(todas.filter(okOng), t).filter((x) => !ql || textoDe(x.r).includes(ql));
     const tipos = [...new Set(incs.map((x) => x.tipo))].sort(antes);
@@ -4469,6 +4269,7 @@ const csvCell = (value) => {
       tile("seg", "vencido", ind.segVencidos.length, "Seguimientos atrasados", "al") + tile("inc", "todas", ind.incidencias.length, "Avisos de datos", "al");
     body.querySelectorAll("#ceTabs button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.vista === vista)));
     body.querySelector("#ceAviso").textContent = aviso;
+    body.querySelector("#cePunto").innerHTML = punto ? "<span>Solo «" + esc(punto.name) + "» · " + esc(townOf(punto)) + '</span><button type="button" class="ce-act" data-quita-punto="1">Ver todos los puntos</button>' : "";
     const lista = body.querySelector("#ceList"), nombre = NOMBRE[vista];
     const filas = vista === "inc" ? delTipo.filter((x) => est.inc === "todas" || x.tipo === est.inc).sort((a, b) => antes(a.tipo, b.tipo) || antes(a.r.c.name, b.r.c.name))
       : ordena(delTipo.filter((r) => pred[vista](est[vista], r, t)), vista, est[vista]);
@@ -4617,7 +4418,8 @@ const csvCell = (value) => {
     const o = opts || null, ps = provOpts();
     mostrar = TRAMO; aviso = ""; accion = null; form = null;
     /* Al llegar desde el Panel, el Calendario o una ficha, se parte de los filtros que traen y se limpia el texto de búsqueda. */
-    if (o) { prov = o.prov || ""; ong = o.ong || ""; q = o.punto ? o.punto.name : ""; if (o.vista) { vista = o.vista; if (o.est) est[o.vista] = o.est; } }
+    punto = o && o.punto ? o.punto : null;
+    if (o) { prov = o.prov || ""; ong = o.ong || ""; q = ""; if (o.vista) { vista = o.vista; if (o.est) est[o.vista] = o.est; } }
     if (prov && !ps.some(([id]) => id === prov)) prov = "";
     if (ps.length === 1) prov = ps[0][0];
     body.innerHTML =
@@ -4631,6 +4433,7 @@ const csvCell = (value) => {
       '<div class="ce-top"><div class="ce-tabs" id="ceTabs" role="group" aria-label="Qué se muestra"><button type="button" data-vista="sol" aria-pressed="true">Solicitudes</button><button type="button" data-vista="con" aria-pressed="false">Concesiones</button><button type="button" data-vista="seg" aria-pressed="false">Seguimientos</button><button type="button" data-vista="inc" aria-pressed="false">Avisos de datos</button></div>' +
       '<div class="ce-new"><button type="button" class="ce-act ok" data-new="sol">Nueva solicitud</button><button type="button" class="ce-act ok" data-new="con">Nueva concesión</button></div></div>' +
       '<section class="ce-form" id="ceForm" aria-labelledby="cfT" hidden></section>' +
+      '<p class="ce-chip" id="cePunto"></p>' +
       '<p class="ce-aviso" id="ceAviso" role="status"></p>' +
       '<div id="ceList"></div>' +
       '<p class="cal-note">Aquí se tramitan las solicitudes, concesiones y seguimientos de todos los puntos. Las cifras de arriba son las del Panel resumen. Una solicitud sin respuesta se marca como estancada a partir de ' + UMBRAL_ESTANCADA + " días; eso no cambia su estado. Cada cambio se guarda en Supabase y solo se da por hecho cuando lo confirma. Los avisos señalan datos incompletos o dudosos: no se corrigen solos.</p>";
@@ -4665,7 +4468,8 @@ const csvCell = (value) => {
     if (tab) { vista = tab.dataset.vista; mostrar = TRAMO; accion = null; draw(); return; }
     if (e.target.closest("[data-mas]")) { mostrar += TRAMO; draw(); return; }
     const nw = e.target.closest("[data-new]");
-    if (nw) { abreForm(nw.dataset.new, null, null); return; }
+    if (e.target.closest("[data-quita-punto]")) { punto = null; mostrar = TRAMO; accion = null; draw(); return; }
+    if (nw) { abreForm(nw.dataset.new, punto, null); return; }
     const pk = e.target.closest("[data-pick]");
     if (pk && form) { eligePunto(+pk.dataset.pick); return; }
     if (e.target.closest("#cfGuardar")) { guardaForm(); return; }
@@ -4675,7 +4479,7 @@ const csvCell = (value) => {
     const ac = e.target.closest("[data-act]");
     if (ac) { actuar(ac); return; }
     const pt = e.target.closest("[data-pt]");
-    if (pt) { const c = CENTERS.find((x) => String(x.id) === pt.dataset.pt); if (c) { fichaTabPedida = pt.dataset.tab || ""; dlg.close(); if (markers[c.id]) cluster.zoomToShowLayer(markers[c.id], () => markers[c.id].openPopup()); } }
+    if (pt) { const c = CENTERS.find((x) => String(x.id) === pt.dataset.pt); if (c) { dlg.close(); if (markers[c.id]) cluster.zoomToShowLayer(markers[c.id], () => markers[c.id].openPopup()); } }
   });
   body.addEventListener("change", (e) => {
     if (e.target.id === "ceProv") { prov = e.target.value; ong = ""; }

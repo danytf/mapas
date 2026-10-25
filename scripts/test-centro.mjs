@@ -162,4 +162,11 @@ ok(html.includes('id="pnCentro"') && html.includes('new CustomEvent("centro:abri
 ok(html.includes('data-centro="sol:pendiente"') && html.includes('data-centro="con:vigente"') && html.includes('data-centro="seg:todas"') && html.includes("detail: { vista, est, prov, ong }"), "El Calendario abre el Centro con su provincia y su ONG");
 ok(bloque.includes("claveOngDe(x) === ong.trim().toLowerCase()"), "El filtro de ONG del Centro no distingue mayúsculas, como el del Panel");
 
+// La ficha ya no gestiona expedientes: el Panel, el Calendario y la ficha llevan al Centro filtrado por ese punto.
+ok(!html.includes("fichaTabPedida"), "Ya no hay pestañas de permisos en la ficha que pedir");
+ok(html.includes('data-v="' + "' + f.v + '" + '"') || html.includes("data-v=\"' + f.v + '\""), "Las filas del detalle del Panel llevan su vista");
+ok(html.includes('detail: { punto: c, vista: tr.dataset.v || "sol", est: "todas" }') && html.includes('detail: { punto: c, vista: pt.dataset.v || "sol", est: "todas" }'), "Panel y Calendario abren el Centro filtrado por el punto");
+ok(bloque.includes("(!punto || String(x.c.id) === String(punto.id))") && bloque.includes("data-quita-punto") && bloque.includes("abreForm(nw.dataset.new, punto, null)"), "El Centro filtra por punto, permite quitar el filtro y da de alta en ese punto");
+ok(bloque.includes('new CustomEvent("permisos:cambio", { detail: { id: c.id } })'), "El Centro avisa a la ficha abierta de que el punto ha cambiado");
+
 console.log("Centro de permisos: " + n + " comprobaciones correctas.");
