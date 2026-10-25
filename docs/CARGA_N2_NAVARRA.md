@@ -1,6 +1,6 @@
-# Carga N2 de Navarra (preparada)
+# Carga N2 de Navarra (cargada)
 
-Estado: **preparada el 26/10/2026, pendiente de carga en producción por el titular con `cargar.sh`**. Novena comunidad con el mismo procedimiento (ver `docs/CARGA_N2_ASTURIAS.md` y `docs/CARGA_N2_CATALUNYA.md`).
+Estado: **cargada en producción el 26/10/2026** por el titular con `cargar.sh` y verificada en solo lectura (ver «Cierre»). Novena comunidad con el mismo procedimiento (ver `docs/CARGA_N2_ASTURIAS.md` y `docs/CARGA_N2_CATALUNYA.md`).
 
 ## Origen
 - Fichero: `navarra-latest.osm.pbf` (Geofabrik, edición del 24/10/2026 20:20 UTC, 37.504.269 bytes, MD5 `8de2bad7a5efe1d8bc5acab1e59a1403` verificado contra el `.md5` de Geofabrik), fuera del repositorio. OpenStreetMap, licencia ODbL.
@@ -28,7 +28,7 @@ Un SQL por lote en `supabase/seeds/navarra/<lote>/` (transaccionales e idempoten
 - Carrefour (29) entra completo (Market y Express), por decisión del titular. Fuera de municipios: «La Rhune», «Torino Box» y «La Venta Des Pottoks» (zona fronteriza).
 - No probado en el PostgreSQL local (sin la contraseña en esta sesión).
 
-## Cómo cargar (con aprobación)
+## Cómo se cargó (con aprobación)
 Desde la raíz del repositorio, con la rama `feat/carga-navarra`, en este orden:
 ```
 bash scripts/catalogue/cargar.sh supabase/seeds/navarra/municipios municipios
@@ -37,4 +37,9 @@ bash scripts/catalogue/cargar.sh supabase/seeds/navarra/estaciones estaciones
 bash scripts/catalogue/cargar.sh supabase/seeds/navarra/grandes-superficies grandes-superficies catalogo-navarra:navarra-grandes-superficies:
 bash scripts/catalogue/cargar.sh supabase/seeds/navarra/resto resto catalogo-navarra:navarra-resto:
 ```
-Después, en solo lectura: 271 municipios nuevos y 671 puntos (la base pasaría de 17.888 a 18.559 y los municipios de 2.621 a 2.892). Sin asignar a usuarios hasta terminar toda España (decisión del titular, 23/10/2026).
+Previsto en solo lectura: 271 municipios nuevos y 671 puntos (la base pasaría de 17.888 a 18.559 y los municipios de 2.621 a 2.892). Sin asignar a usuarios hasta terminar toda España (decisión del titular, 23/10/2026).
+
+## Cierre (26/10/2026)
+- **Carga verificada en solo lectura:** 271 municipios (271 códigos INE distintos) y 671 puntos, 671 `source_ref` `catalogo-navarra:` distintos, todos activos, ninguno sin coordenadas y ningún código postal con formato distinto de 31xxx. Por categoría: Supermercado 237, Entidad oficial 226, Centro de salud 55, Correos 33, Gimnasios 33, Carrefour 29, Estaciones 26, Centro comercial 10, Hospital 10, Bricolaje 4, Decathlon 3, Leroy Merlin 2, El Corte Inglés 1, IKEA 1, MediaMarkt 1. Total de la base 17.888 -> 18.559 y municipios 2.621 -> 2.892.
+- **Provincia:** Navarra (31) ya estaba activa.
+- **Pendiente:** 179 códigos postales y 16 calles (consulta de Nominatim con `--prov 31` por lanzar por el titular); revisar los dudosos de «Calidad y límites». Sin asignar a usuarios hasta terminar España.
