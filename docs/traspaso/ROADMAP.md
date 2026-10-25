@@ -93,3 +93,30 @@ Pendientes y recurrentes:
 12. **Carga N2 de Canarias: HECHA el 23/10/2026** (`docs/CARGA_N2_CANARIAS.md`): 88 municipios y 1.627 puntos en Las Palmas y Santa Cruz de Tenerife (base: 9.782). Pendiente: 437 códigos postales y 41 calles, y revisar los hospitales dudosos. Sin asignar a usuarios hasta terminar toda España.
 14. **Expedientes en tablas (23/10/2026): HECHO** (ver `ESTADO.md` y `docs/MIGRACION_PERMISOS_RELACIONAL.md`). Hecho el 23/10/2026: responsable y siguiente acción de los seguimientos, seguimiento del punto en la ficha y huellas del esquema recalculadas. Pendiente: prueba de dos usuarios con permisos reales; móvil físico y lector de pantalla; copia mensual (`scripts/backup-supabase.sh`); dejar `.claude/settings.local.json` vacío.
 15. **Centro de permisos (25/10/2026): v1 HECHA** (solo lectura, PR #198; ver `ESTADO.md`). Decisiones del titular: v1 de solo lectura primero, sección propia en el menú (fusionar Panel y Calendario más adelante, con datos de uso) y sin optimizar por volumen hasta medir. **Corrección (25/10/2026):** `followups` ya tiene `updated_at` y su trigger en producción; no hacía falta migración, solo que la app lo leyera y lo comprobara al escribir. **Hecho en la rama `feat/centro-seguimientos`:** control de versión de seguimientos en la app, bandejas de Seguimientos y Avisos de datos, y «Hecho» por seguimiento. **Decisión del titular (25/10/2026): las solicitudes, concesiones y seguimientos se gestionan solo desde el Centro de permisos; la ficha del punto queda con la información básica.** Se hace en dos tiempos. **Fase A (rama `feat/centro-gestion`): el Centro gestiona todo** (nueva solicitud y concesión con buscador de punto, editar, conceder, denegar, retirar, cancelar, reactivar, quitar solo administradores, cambiar y cerrar seguimientos, todo por `aplica()` con guardado verificable y control de conflictos); la ficha no se toca. **Fase B (HECHA el 25/10/2026, rama `feat/ficha-sin-permisos`): la ficha ya no gestiona permisos** (resumen de solo lectura y botón «Gestionar permisos en el Centro»; ubicación en un desplegable; Panel y Calendario abren el Centro filtrado por punto). Detalle en `docs/DISENO_FICHA_PUNTO.md`. **Pendiente además:** (a) prueba del titular con sesión real; (b) ~~enlaces cruzados desde Panel y Calendario~~ (hechos el 25/10/2026: cada cifra del Panel tiene su botón «Gestionar en el Centro de permisos» y el Calendario abre solicitudes, concesiones o seguimientos con su provincia y ONG; comunicación por el evento `centro:abrir`); (c) valorar acciones por lotes con resultado por punto. Limitación conocida: `relListas` representa un solo seguimiento por solicitud (el abierto o el último) e ignora los de concesión y los de punto ya cerrados; una bandeja con historial de seguimientos necesitaría leerlos como registros propios.
+
+## Pendientes del Centro de permisos (apuntados el 25/10/2026, tras el cierre de auditoría)
+
+Estado: el Centro es la única vía para solicitudes, concesiones y seguimientos; operaciones atómicas en la base (`20261025174656`, `20261025170441`), asignar responsable en bloque, `e2e-centro` obligatorio en `main`. Detalle de lo verificado en `ESTADO.md` (cierre de auditoría del 25/10/2026).
+
+**Del titular**
+1. Copiar `C:\Users\DanyT\backups-mapas\20261025T165228Z` a un sitio privado y cifrado, fuera de este equipo, de GitHub y de Supabase (sin confirmar).
+2. Quitar la regla `mcp__claude_ai_Supabase__apply_migration` de `.claude/settings.local.json` y dejarlo en `{"permissions":{"allow":[]}}`.
+3. Copia mensual con `scripts/backup-supabase.sh` y una antes de cada migración.
+4. Prueba con dos usuarios reales de provincias distintas (aislamiento por provincia en la interfaz y «asignar responsable en bloque» con varias provincias). No se crean cuentas en producción y la organización no tiene ramas de Supabase.
+5. Móvil físico y lector de pantalla.
+
+**Decisiones del titular**
+6. **Concesiones sin ninguna fecha:** el Panel y el Centro las cuentan como vigentes y el Calendario las omite (hoy no hay ninguna en producción). Opciones: aviso en el Calendario o dejar de contarlas como vigentes.
+7. **Provincia por defecto del Calendario:** abre con una provincia elegida automáticamente (`provAuto`); el Panel y el Centro, con todas. Igualar o dejar.
+8. Siguiente comunidad de la carga nacional; asignar provincias nuevas a usuarios (decidido: no hasta terminar España); 437 códigos postales y 41 calles de Canarias; hospitales dudosos; favoritos de Andalucía (~139).
+
+**Mejoras pequeñas detectadas en la inspección visual (25/10/2026)**
+9. Casillas de verificación nativas sin tema en modo oscuro.
+10. Móvil: «Reprogramar al» se parte en dos líneas en la barra de lote; los botones de la cabecera del Centro ocupan dos filas antes del contenido.
+11. Panel: la última tarjeta («Vigentes sin fecha de fin») queda sola en una fila.
+12. Calendario: conserva el título «Calendario semanal» en la vista mensual.
+13. La app no ofrece **crear** un seguimiento de una concesión (solo cambiar o cerrar uno existente); poner fecha a una concesión sin seguimiento no genera operaciones.
+
+**Auditorías futuras** (ya listadas arriba): privacidad jurídica, observabilidad, identidad (duración de sesión y recuperación por correo), reversión real de un despliegue, repetir índices sin uso con 8-12 semanas de estadísticas (H-36), licencia comercial de Esri.
+
+**Ideas de mejora tomadas de repositorios abiertos:** ver la sección siguiente (se completa tras la revisión de la lista).
