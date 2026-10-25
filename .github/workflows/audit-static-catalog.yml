@@ -31,6 +31,7 @@ on:
       - "scripts/test-tactil.mjs"
       - "scripts/test-paneles.mjs"
       - "scripts/test-escala.mjs"
+      - "scripts/test-mapa-limites.mjs"
       - "scripts/test-a11y-fase-d.mjs"
       - "scripts/e2e-centro.mjs"
       - "scripts/dev/seed-permits-demo.mjs"
@@ -95,6 +96,8 @@ jobs:
         run: node scripts/test-paneles.mjs
       - name: Test radius and font-size scale
         run: node scripts/test-escala.mjs
+      - name: Test map bounds (the map cannot leave Spain)
+        run: node scripts/test-mapa-limites.mjs
       - name: Test province outlines
         run: node scripts/test-provincias.mjs
       - name: Test bulk actions guarantees
