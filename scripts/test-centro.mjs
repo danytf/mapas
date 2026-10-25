@@ -122,4 +122,25 @@ ok(cp.solicitudes[0].seg === "" && cp.solicitudes[1].seg === undefined, "«Hecho
 cp = { segPunto: { fecha: "2026-10-30", fu: "f1" }, solicitudes: [], historial: [] }; M.mutadores.cerrarSeg({ punto: true, i: -1 })(cp);
 ok(!cp.segPunto, "«Hecho» cierra el seguimiento del punto");
 
+// Buscador de punto del formulario: sin tildes, por palabras sueltas, con el nombre que empieza igual primero.
+const b0 = bloque.indexOf("  const indiceBusqueda = "), b1 = bloque.indexOf("  const buscaPunto = ");
+ok(b0 >= 0 && b1 > b0, "No se encuentra el buscador de punto");
+const S = runInNewContext(
+  "const sinAcentos = (t) => String(t || '').normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').toLowerCase().trim();\nconst townOf = (c) => c.town || c.province || 'Sin municipio';\nconst antes = (a, b) => a.localeCompare(b, 'es');\n" + bloque.slice(b0, b1) + "\n({ encuentra })",
+  {}
+);
+const C = [
+  { id: 1, name: "Mercadona", town: "Almería", province: "Almería", street: "Calle Real 4", tipo: "Supermercado" },
+  { id: 2, name: "Hospital Mercedes", town: "Granada", province: "Granada", street: "Av. de la Constitución 2", tipo: "Hospital" },
+  { id: 3, name: "Super Mercadona Norte", town: "Roquetas de Mar", province: "Almería", street: "Camino Viejo", tipo: "Supermercado" },
+  { id: 4, name: "CS Armilla", town: "Armilla", province: "Granada", street: "Calle Mayor", tipo: "Centro de salud" }
+];
+const nombres = (txt) => S.encuentra(txt, C).map((c) => c.name);
+ok(nombres("almeria").join() === "Mercadona,Super Mercadona Norte", "Ignora tildes y busca también en el municipio y la provincia");
+ok(nombres("mercadona")[0] === "Mercadona" && nombres("mercadona").length === 2, "El nombre que empieza por lo escrito va primero");
+ok(nombres("merca roquetas").join() === "Super Mercadona Norte", "Varias palabras: todas deben aparecer, en nombre o lugar");
+ok(nombres("constitucion").join() === "Hospital Mercedes", "También busca en la calle");
+ok(nombres("a").length === 0 && nombres("   ").length === 0 && nombres("zzz").length === 0, "Menos de dos letras o sin coincidencias, nada");
+ok(bloque.includes("MAX_RESULTADOS") && bloque.includes("escribe más para afinar"), "Avisa cuando hay más resultados de los que se muestran");
+
 console.log("Centro de permisos: " + n + " comprobaciones correctas.");
