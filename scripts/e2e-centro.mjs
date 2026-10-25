@@ -324,7 +324,8 @@ const main = async () => {
     out.con = [b2().querySelector('#cfT')?.textContent, b2().querySelector('#cfDesde')?.value === dCon, b2().querySelector('#cfHasta')?.value === dCon, ong ? b2().querySelector('#cfOng')?.value === ong.value : null];
     b2().querySelector('#cfCancelar')?.click(); await w(200);
     return out;`);
-  ok(r3g.dias === 7 && r3g.conCon === 7 && r3g.conSol >= 1 && r3g.conSol < 7 && !r3g.solPasado, "cada día del Calendario ofrece «+ Concesión»; «+ Solicitud» solo desde hoy [" + r3g.conSol + "/" + r3g.conCon + "]");
+  /* En lunes (primer dia de la semana mostrada) no hay ningun dia pasado y las 7 casillas ofrecen solicitud: conSol puede ser 7. Lo que no puede ocurrir es ofrecerla en un dia pasado (solPasado). */
+  ok(r3g.dias === 7 && r3g.conCon === 7 && r3g.conSol >= 1 && r3g.conSol <= 7 && !r3g.solPasado, "cada día del Calendario ofrece «+ Concesión»; «+ Solicitud» solo desde hoy [" + r3g.conSol + "/" + r3g.conCon + "]");
   eq([r3g.abierto[0], r3g.abierto[1], r3g.abierto[2], r3g.abierto[3]], [true, "sol", true, "Nueva solicitud"], "«+ Solicitud» abre el Centro con el formulario de nueva solicitud");
   eq(r3g.fechas, [r3g.dia, r3g.dia], "el formulario llega con la fecha del día elegido (desde y hasta)");
   eq(r3g.guardada, [r3g.dia, r3g.dia, "pending"], "la solicitud creada desde el día se guarda con esa fecha [" + r3g.aviso + "]");
