@@ -1,6 +1,6 @@
-# Carga N2 de Ceuta (preparada)
+# Carga N2 de Ceuta (cargada)
 
-Estado: **preparada el 25/10/2026, pendiente de carga en producción por el titular con `cargar.sh`**. Primera ciudad autónoma con el mismo procedimiento que las regiones anteriores (ver `docs/CARGA_N2_CANTABRIA.md`).
+Estado: **cargada en producción el 25/10/2026** por el titular con `cargar.sh` y verificada en solo lectura (ver «Cierre»). Primera ciudad autónoma con el mismo procedimiento que las regiones anteriores (ver `docs/CARGA_N2_CANTABRIA.md`).
 
 ## Origen
 - Fichero: `ceuta-latest.osm.pbf` (Geofabrik, edición del 24/10/2026 20:20 UTC, 641.000 bytes, MD5 `c2ff22fad58453036829ddbf8f83d7d0` verificado contra el `.md5` de Geofabrik), fuera del repositorio. OpenStreetMap, licencia ODbL.
@@ -29,11 +29,16 @@ Un SQL por lote en `supabase/seeds/ceuta/<lote>/` (transaccionales e idempotente
 - Excepciones: un Carrefour repetido por la regla de Resto (entra por Grandes superficies), el nodo de Supeco y el área de Decathlon repetidos, «Juzgados» (nombre genérico) y el «El Corte Inglés Outlet».
 - No probado en el PostgreSQL local (sin la contraseña en esta sesión).
 
-## Cómo cargar (con aprobación)
+## Cómo se cargó (con aprobación)
 Desde la raíz del repositorio, en este orden:
 ```
 bash scripts/catalogue/cargar.sh supabase/seeds/ceuta/municipios municipios
 bash scripts/catalogue/cargar.sh supabase/seeds/ceuta/grandes-superficies grandes-superficies catalogo-ceuta:ceuta-grandes-superficies:
 bash scripts/catalogue/cargar.sh supabase/seeds/ceuta/resto resto catalogo-ceuta:ceuta-resto:
 ```
-Después, en solo lectura: 1 municipio nuevo y 21 puntos (la base pasaría de 10.505 a 10.526 y los municipios de 1.594 a 1.595). Sin asignar a usuarios hasta terminar toda España (decisión del titular, 23/10/2026).
+Previsto en solo lectura: 1 municipio nuevo y 21 puntos (la base pasaría de 10.505 a 10.526 y los municipios de 1.594 a 1.595). Sin asignar a usuarios hasta terminar toda España (decisión del titular, 23/10/2026).
+
+## Cierre (25/10/2026)
+- **Carga verificada en solo lectura:** 1 municipio (Ceuta) y 21 puntos, 21 `source_ref` `catalogo-ceuta:` distintos, todos activos, ninguno sin coordenadas, ningún código postal con formato distinto de 51xxx. Por categoría: Supermercado 6, Entidad oficial 6, Carrefour 3, Centro de salud 2, Centro comercial 2, Decathlon 1, Hospital 1. Total de la base 10.505 -> 10.526 y municipios 1.594 -> 1.595.
+- **Provincia:** Ceuta (51) ya estaba activa (`is_active = true`).
+- **Pendiente:** 11 códigos postales (0 calles). Sin asignar a usuarios hasta terminar España.
