@@ -143,4 +143,23 @@ ok(nombres("constitucion").join() === "Hospital Mercedes", "También busca en la
 ok(nombres("a").length === 0 && nombres("   ").length === 0 && nombres("zzz").length === 0, "Menos de dos letras o sin coincidencias, nada");
 ok(bloque.includes("MAX_RESULTADOS") && bloque.includes("escribe más para afinar"), "Avisa cuando hay más resultados de los que se muestran");
 
+// Enlaces cruzados: cada cifra del Panel tiene su filtro equivalente en el Centro y da la misma cifra.
+const pa0 = html.indexOf("const EN_CENTRO = {"), pa1 = html.indexOf("\n  };\n", pa0) + 6;
+ok(pa0 >= 0 && pa1 > pa0, "No se encuentra la tabla de enlaces del Panel");
+const tabla = Object.fromEntries([...html.slice(pa0, pa1).matchAll(/(\w+): \["(\w+)", "(\w+)"\]/g)].map((m) => [m[1], [m[2], m[3]]]));
+const claves = [...html.matchAll(/^      \["(\w+)", "[^"]+", "[^"]+", "[^"]+", "[^"]*"\]/gm)].map((m) => m[1]);
+ok(claves.length >= 15, "No se leen las cifras del Panel");
+for (const k of [...claves, "capacidadHoy"]) ok(tabla[k], "La cifra «" + k + "» del Panel no tiene enlace al Centro");
+const opcionesCentro = (v) => [...bloque.slice(bloque.indexOf("const OPC = {"), bloque.indexOf("const COLOR")).matchAll(new RegExp(v + ": \\[(.*)\\]", "g"))].map((m) => [...m[1].matchAll(/\["(\w+)"/g)].map((x) => x[1]))[0] || [];
+for (const [k, [v, e]] of Object.entries(tabla)) ok(v === "inc" || opcionesCentro(v).includes(e), "El enlace de «" + k + "» apunta a un filtro que no existe en el Centro: " + v + ":" + e);
+// Las cifras de vencimientos, futuras y pendientes sin seguimiento coinciden con las del Panel.
+const cnt = (v, e) => recs.filter((r) => r.k === v && ctx.pred[v](e, r, t)).length;
+ok(cnt("con", "vencen7") === ind.vencen7.length && ind.vencen7.length === 1, "Vencen en 0–7 días: Centro y Panel (1: el de 5 días)");
+ok(cnt("con", "vencen15") === ind.vencen15.length && cnt("con", "vencen30") === ind.vencen30.length && ind.vencen30.length === 1, "Vencen en 8–15 y 16–30 días coinciden con el Panel");
+ok(cnt("con", "futuras30") === ind.futuras30.length, "Empiezan en los próximos 30 días coincide con el Panel");
+ok(cnt("sol", "sinseg") === ind.sinSeguimiento.length && ind.sinSeguimiento.length === 2, "Pendientes sin seguimiento coincide con el Panel (2)");
+ok(html.includes('id="pnCentro"') && html.includes('new CustomEvent("centro:abrir"') && html.includes('document.addEventListener("centro:abrir"'), "Panel, Calendario y Centro se comunican con el evento centro:abrir");
+ok(html.includes('data-centro="sol:pendiente"') && html.includes('data-centro="con:vigente"') && html.includes('data-centro="seg:todas"') && html.includes("detail: { vista, est, prov, ong }"), "El Calendario abre el Centro con su provincia y su ONG");
+ok(bloque.includes("claveOngDe(x) === ong.trim().toLowerCase()"), "El filtro de ONG del Centro no distingue mayúsculas, como el del Panel");
+
 console.log("Centro de permisos: " + n + " comprobaciones correctas.");

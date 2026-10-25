@@ -593,6 +593,8 @@
   .cal-warn { font-size: var(--fs-label); font-weight: 650; color: var(--warn); }
   .cal-card.s-seguimiento { --st: var(--fg); --st-fg: var(--fg); border-left-style: double; }
   .cal-chip.s-seguimiento { --st: var(--fg); }
+  .cal-links { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 14px; font-size: var(--fs-label); color: var(--muted); }
+  .cal-links button { height: 32px; padding: 0 13px; font-size: var(--fs-label); border-radius: var(--r-pill); }
   .cal-modo { display: inline-flex; gap: 6px; margin-left: auto; }
   .cal-modo button { height: 32px; padding: 0 13px; font-size: var(--fs-label); border-radius: var(--r-pill); }
   .cal-modo button[aria-pressed="true"] { border-color: var(--fg); font-weight: 600; }
@@ -883,7 +885,7 @@
     .ce-tabs button, .ce-act, .cf-opt { min-height: 44px; }
     .lg-h button { min-height: 44px; }
     dialog input, dialog select, dialog button { min-height: 44px; }
-    .cal-nav button, .cal-chip { min-height: 44px; }
+    .cal-nav button, .cal-chip, .cal-links button { min-height: 44px; }
     .cal-nav button { min-width: 44px; }
     #login input, #login button { min-height: 44px; }
   }
@@ -4035,7 +4037,8 @@ const csvCell = (value) => {
   const renderLista = (key) => {
     const d = datos(), t = TITULO[key], fs = filas(key, d);
     const filtros = [fProv ? (provOpts().find(([id]) => id === fProv) || ["", ""])[1] : "", fOng ? ([...d.ongs].find(([k]) => k === fOng) || ["", ""])[1] : ""].filter(Boolean);
-    body.innerHTML = '<div class="pn-back"><button type="button" id="pnBack" data-ind="' + key + '">&#8249; Volver al resumen</button></div>' +
+    body.innerHTML = '<div class="pn-back"><button type="button" id="pnBack" data-ind="' + key + '">&#8249; Volver al resumen</button>' +
+      (EN_CENTRO[key] ? ' <button type="button" id="pnCentro" data-ind="' + key + '">Gestionar en el Centro de permisos</button>' : "") + "</div>" +
       '<h3 id="pnListT" tabindex="-1">' + esc(t[1]) + " · " + esc(plural(fs.length, key.startsWith("seg") ? "seguimiento" : (key === "incidencias" ? "aviso" : t[2]), key.startsWith("seg") ? "seguimientos" : (key === "incidencias" ? "avisos" : t[3]))) + "</h3>" +
       (filtros.length ? '<p class="pn-note">Filtros activos: ' + esc(filtros.join(" · ")) + "</p>" : "") +
       (fs.length ? '<div class="pn-scroll"><table class="pn-list"><thead><tr><th>Punto</th><th>Tipo</th><th>ONG</th><th>Periodo</th><th>Captadores</th><th>Detalle</th></tr></thead><tbody>' +
@@ -4044,10 +4047,22 @@ const csvCell = (value) => {
         : '<p class="pn-empty">No hay registros con los filtros elegidos.</p>');
     body.querySelector("#pnListT").focus();
   };
+  /* Cada cifra del Panel tiene su bandeja equivalente en el Centro de permisos (misma lista, mismos filtros de provincia y ONG). */
+  const EN_CENTRO = {
+    segVencidos: ["seg", "vencido"], segHoy: ["seg", "hoy"], segProximos: ["seg", "proximo"], sinSeguimiento: ["sol", "sinseg"],
+    pendientes: ["sol", "pendiente"], estancadas: ["sol", "estancada"], sinRespuesta: ["sol", "caducada"], aprobadas: ["sol", "aprobada"], denegadas: ["sol", "denegada"], retiradas: ["sol", "retirada"],
+    vigentes: ["con", "vigente"], capacidadHoy: ["con", "vigente"], futuras30: ["con", "futuras30"], vencen7: ["con", "vencen7"], vencen15: ["con", "vencen15"], vencen30: ["con", "vencen30"], sinFin: ["con", "sinfin"],
+    incidencias: ["inc", "todas"]
+  };
   const abre = (key) => renderLista(key);
   const volver = (key) => { render(); const b = body.querySelector('[data-ind="' + key + '"]'); if (b) b.focus(); };
   body.addEventListener("click", (e) => {
     if (e.target.closest("#pnBack")) { volver(e.target.closest("#pnBack").dataset.ind); return; }
+    const ac = e.target.closest("#pnCentro");
+    if (ac && EN_CENTRO[ac.dataset.ind]) {
+      const [vista, est] = EN_CENTRO[ac.dataset.ind], og = fOng ? ([...datos().ongs].find(([k]) => k === fOng) || ["", ""])[1] : "";
+      dlg.close(); document.dispatchEvent(new CustomEvent("centro:abrir", { detail: { vista, est, prov: fProv, ong: og } })); return;
+    }
     const kpi = e.target.closest("button[data-ind]");
     if (kpi) { abre(kpi.dataset.ind); return; }
     const bar = e.target.closest("[data-pt]");
@@ -4233,6 +4248,7 @@ const csvCell = (value) => {
       '<button type="button" class="cal-chip s-seguimiento" data-ver="seguimiento" aria-pressed="' + ver.seguimiento + '"><i></i>Seguimientos</button>' +
       '<button type="button" class="cal-chip s-cancelado" data-ver="historico" aria-pressed="' + ver.historico + '"><i></i>Histórico (denegadas, retiradas, canceladas)</button>' +
       '<span class="cal-modo" role="group" aria-label="Vista"><button type="button" data-modo="dias" aria-pressed="' + (modo === "dias") + '">Por día</button><button type="button" data-modo="ong" aria-pressed="' + (modo === "ong") + '">Por ONG</button></span></div>' +
+      '<div class="cal-links" role="group" aria-label="Abrir en el Centro de permisos"><span>Gestionar en el Centro de permisos:</span><button type="button" data-centro="sol:pendiente">Solicitudes pendientes</button><button type="button" data-centro="con:vigente">Concesiones vigentes</button><button type="button" data-centro="seg:todas">Seguimientos</button></div>' +
       '<p class="cal-note cal-past" id="calPast" role="note" hidden></p>' +
       '<div id="calGrid"></div>' +
       '<p class="cal-note">Un permiso aparece cada día entre su fecha de inicio y la de fin, las dos incluidas. Los captadores de un día no se suman entre registros de la misma ONG en un mismo punto (se toma el mayor) y sí entre ONG distintas. Autorizados, por aprobar y seguimientos se cuentan por separado. Pulsa una tarjeta para abrir el punto en la pestaña de ese registro.</p>';
@@ -4241,6 +4257,8 @@ const csvCell = (value) => {
     body.querySelector("#calProv").focus();
   };
   body.addEventListener("click", (e) => {
+    const cc = e.target.closest("[data-centro]");
+    if (cc) { const [vista, est] = cc.dataset.centro.split(":"); dlg.close(); document.dispatchEvent(new CustomEvent("centro:abrir", { detail: { vista, est, prov, ong } })); return; }
     const w = e.target.closest("[data-w]");
     if (w) { wk = w.dataset.w === "0" ? mondayOf(today()) : addDays(wk, 7 * +w.dataset.w); draw(); return; }
     const vv = e.target.closest("[data-ver]");
@@ -4267,21 +4285,22 @@ const csvCell = (value) => {
   const dlg = $("#dlgCentro"), body = $("#ceBody");
   const TRAMO = 100; /* filas que se dibujan de una vez */
   const OPC = {
-    sol: [["pendiente", "Pendientes"], ["estancada", "Estancadas (más de " + UMBRAL_ESTANCADA + " días)"], ["caducada", "Sin respuesta y caducadas"], ["aprobada", "Aprobadas"], ["denegada", "Denegadas"], ["retirada", "Retiradas"], ["todas", "Todas"]],
-    con: [["vigente", "Vigentes"], ["vencen", "Vencen en 30 días"], ["futura", "Futuras"], ["terminada", "Terminadas"], ["cancelada", "Canceladas"], ["sinfin", "Vigentes sin fecha de fin"], ["todas", "Todas"]],
+    sol: [["pendiente", "Pendientes"], ["sinseg", "Pendientes sin seguimiento"], ["estancada", "Estancadas (más de " + UMBRAL_ESTANCADA + " días)"], ["caducada", "Sin respuesta y caducadas"], ["aprobada", "Aprobadas"], ["denegada", "Denegadas"], ["retirada", "Retiradas"], ["todas", "Todas"]],
+    con: [["vigente", "Vigentes"], ["vencen", "Vencen en 30 días"], ["vencen7", "Vencen en 0–7 días"], ["vencen15", "Vencen en 8–15 días"], ["vencen30", "Vencen en 16–30 días"], ["futura", "Futuras"], ["futuras30", "Empiezan en los próximos 30 días"], ["terminada", "Terminadas"], ["cancelada", "Canceladas"], ["sinfin", "Vigentes sin fecha de fin"], ["todas", "Todas"]],
     seg: [["vencido", "Atrasados"], ["hoy", "Para hoy"], ["proximo", "Próximos 7 días"], ["sinresp", "Sin responsable"], ["todas", "Todos"]]
   };
   const COLOR = { pendiente: "solicitado", caducada: "caducado", aprobada: "concedido", denegada: "denegado", retirada: "caducado", vigente: "concedido", futura: "concedido", terminada: "caducado", cancelada: "cancelado" };
   const TEXTO = { pendiente: "Pendiente", caducada: "Caducada sin respuesta", aprobada: "Aprobada", denegada: "Denegada", retirada: "Retirada", vigente: "Vigente", futura: "Futura", terminada: "Terminada", cancelada: "Cancelada" };
   const pred = {
-    sol: (est, r, t) => est === "todas" ? true : est === "estancada" ? (r.est === "pendiente" && !!r.fecha && daysBetween(r.fecha, t) > UMBRAL_ESTANCADA) : r.est === est,
-    con: (est, r, t) => est === "todas" ? true : est === "vencen" ? (r.est === "vigente" && !!r.hasta && daysBetween(t, r.hasta) <= 30) : est === "sinfin" ? (r.est === "vigente" && !r.hasta) : r.est === est,
+    sol: (est, r, t) => est === "todas" ? true : est === "sinseg" ? (r.est === "pendiente" && !r.seg) : est === "estancada" ? (r.est === "pendiente" && !!r.fecha && daysBetween(r.fecha, t) > UMBRAL_ESTANCADA) : r.est === est,
+    con: (est, r, t) => est === "todas" ? true : (est === "vencen7" || est === "vencen15" || est === "vencen30") ? (r.est === "vigente" && !!r.hasta && ((d) => est === "vencen7" ? d <= 7 : est === "vencen15" ? d >= 8 && d <= 15 : d >= 16 && d <= 30)(daysBetween(t, r.hasta))) : est === "futuras30" ? (r.est === "futura" && !!r.desde && daysBetween(t, r.desde) <= 30) : est === "vencen" ? (r.est === "vigente" && !!r.hasta && daysBetween(t, r.hasta) <= 30) : est === "sinfin" ? (r.est === "vigente" && !r.hasta) : r.est === est,
     seg: (est, s, t) => est === "todas" ? true : est === "vencido" ? s.fecha < t : est === "hoy" ? s.fecha === t : est === "proximo" ? (s.fecha > t && s.fecha <= addDays(t, 7)) : !s.resp
   };
   const NOMBRE = { sol: ["solicitud", "solicitudes"], con: ["concesión", "concesiones"], seg: ["seguimiento", "seguimientos"], inc: ["aviso", "avisos"] };
   const COLS = { sol: 8, con: 7, seg: 7, inc: 4 };
   const plural = (n, uno, varios) => n + " " + (n === 1 ? uno : varios);
   const ongDe = (r) => r.ong || "Sin ONG";
+  const claveOngDe = (r) => ongDe(r).trim().toLowerCase();
   const esAdmin = () => window.mapaSession?.profile?.role === "admin";
   let vista = "sol", prov = "", ong = "", q = "", mostrar = TRAMO, ocupado = false, aviso = "";
   let accion = null; /* confirmación en línea de una fila: { a, key } */
@@ -4428,10 +4447,12 @@ const csvCell = (value) => {
 
   const draw = () => {
     const t = today(), { recs: todas, segs: todasSegs } = registros(prov);
-    const ongs = [...new Set(todas.map(ongDe).concat(todasSegs.map(ongDe)))].sort((x, y) => (x === "Sin ONG") - (y === "Sin ONG") || antes(x, y));
-    if (ong && !ongs.includes(ong)) ong = "";
-    body.querySelector("#ceOng").innerHTML = '<option value="">Todas las ONG</option>' + ongs.map((o) => '<option value="' + esc(o) + '"' + (o === ong ? " selected" : "") + ">" + esc(o) + "</option>").join("");
-    const ql = q.trim().toLowerCase(), okOng = (x) => !ong || ongDe(x) === ong, okF = (x) => okOng(x) && (!ql || textoDe(x).includes(ql));
+    /* Las ONG se agrupan sin distinguir mayúsculas ni espacios (igual que el Panel): «aecc» y «AECC» son la misma. */
+    const porClave = new Map(); todas.concat(todasSegs).forEach((x) => { const k = claveOngDe(x); if (!porClave.has(k)) porClave.set(k, ongDe(x)); });
+    const ongs = [...porClave.values()].sort((x, y) => (x === "Sin ONG") - (y === "Sin ONG") || antes(x, y));
+    if (ong && !porClave.has(ong.trim().toLowerCase())) ong = "";
+    body.querySelector("#ceOng").innerHTML = '<option value="">Todas las ONG</option>' + ongs.map((o) => '<option value="' + esc(o) + '"' + (o.trim().toLowerCase() === ong.trim().toLowerCase() ? " selected" : "") + ">" + esc(o) + "</option>").join("");
+    const ql = q.trim().toLowerCase(), okOng = (x) => !ong || claveOngDe(x) === ong.trim().toLowerCase(), okF = (x) => okOng(x) && (!ql || textoDe(x).includes(ql));
     const base = todas.filter(okF), baseSeg = todasSegs.filter(okF);
     const incs = incidencias(todas.filter(okOng), t).filter((x) => !ql || textoDe(x.r).includes(ql));
     const tipos = [...new Set(incs.map((x) => x.tipo))].sort(antes);
@@ -4593,11 +4614,12 @@ const csvCell = (value) => {
   };
 
   const abrir = (opts) => {
-    const o = opts && opts.punto ? opts : null, ps = provOpts();
+    const o = opts || null, ps = provOpts();
+    mostrar = TRAMO; aviso = ""; accion = null; form = null;
+    /* Al llegar desde el Panel, el Calendario o una ficha, se parte de los filtros que traen y se limpia el texto de búsqueda. */
+    if (o) { prov = o.prov || ""; ong = o.ong || ""; q = o.punto ? o.punto.name : ""; if (o.vista) { vista = o.vista; if (o.est) est[o.vista] = o.est; } }
     if (prov && !ps.some(([id]) => id === prov)) prov = "";
     if (ps.length === 1) prov = ps[0][0];
-    mostrar = TRAMO; aviso = ""; accion = null; form = null;
-    if (o) { prov = ""; ong = ""; q = o.punto.name; if (o.vista) vista = o.vista; }
     body.innerHTML =
       '<div class="cal-bar">' +
       '<label class="cal-f">Provincia<select id="ceProv">' + (ps.length > 1 ? '<option value="">Todas las provincias</option>' : "") +
@@ -4668,6 +4690,7 @@ const csvCell = (value) => {
   });
   body.addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target.id === "cfPunto") { e.preventDefault(); if (form && form.cands && form.cands.length) eligePunto(0); } else if (e.key === "Enter" && e.target.id === "ceMotivo") { e.preventDefault(); confirma(); } else if (e.key === "Escape" && accion) { e.stopPropagation(); accion = null; draw(); } });
   $("#centroBtn").addEventListener("click", () => abrir());
+  document.addEventListener("centro:abrir", (e) => abrir(e.detail));
   $("#ceClose").addEventListener("click", () => dlg.close());
 })();
 
