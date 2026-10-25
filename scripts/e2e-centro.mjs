@@ -247,6 +247,38 @@ const main = async () => {
   });
   eq(r3c.variantes.map((x) => x.puntoAntes > 0), [false, true], "la prueba cubre una concesión sin seguimiento del punto y otra con él");
 
+  /* ===== 3e. Filtro por responsable en Seguimientos y reasignar todo lo de una persona a otra ===== */
+  const r3e = await ev(ayudas + `
+    const out = {}; const rel = () => fetch('http://127.0.0.1:8766/__rel').then(r => r.json()); const yo = window.mapaSession.user.id;
+    if (!document.getElementById('dlgCentro').open) { document.getElementById('menuBtn').click(); document.getElementById('centroBtn').click(); await w(1500); }
+    nav('sol'); await w(200); nav('seg'); await w(300); set('ceEst','todas'); await w(300);
+    const sel = () => b().querySelector('#ceResp'); const cuenta = (o) => +o.textContent.slice(o.textContent.lastIndexOf('(') + 1, -1); const nombre = (o) => o.textContent.slice(0, o.textContent.lastIndexOf('(')).trim();
+    out.visible = getComputedStyle(sel().closest('label')).display !== 'none'; out.opciones = [...sel().options].map(o => o.textContent);
+    const total = b().querySelector('.ce-count')?.textContent || '';
+    const personas = [...sel().options].filter(o => o.value && o.value !== '__ninguno'); const X = personas.filter(o => o.value !== yo).sort((a, c) => cuenta(c) - cuenta(a))[0] || personas[0];
+    set('ceResp', X.value); await w(400);
+    const filas = () => [...b().querySelectorAll('#ceList tr.ce-row')]; const col = (tr, l) => tr.querySelector('td[data-l="' + l + '"]')?.textContent.trim();
+    out.filtroX = { n: filas().length, esperado: cuenta(X), todasDeX: filas().every(tr => col(tr, 'Responsable') === nombre(X) || (X.value === yo && col(tr, 'Responsable') === 'tú')) };
+    set('ceResp', '__ninguno'); await w(400); out.sinResp = { n: filas().length, todas: filas().every(tr => col(tr, 'Responsable') === 'Sin responsable') };
+    const ningun = [...sel().options].find(o => o.value === '__ninguno'); out.sinRespEsperado = cuenta(ningun);
+    set('ceResp', X.value); await w(400);
+    const acciones = filas().map(tr => col(tr, 'Acción prevista')); const antes = await rel();
+    const idsDeX = acciones.map(a => antes.followups.find(f => !f.completed_at && f.next_action === a)).filter(Boolean).map(f => f.id);
+    out.antes = { n: idsDeX.length, todosDeX: idsDeX.every(id => antes.followups.find(f => f.id === id).assigned_to === X.value) };
+    const resto = antes.followups.filter(f => !f.completed_at && f.assigned_to === X.value && !idsDeX.includes(f.id)).length;
+    b().querySelector('#ceChkTodos').click(); await w(500); await w(1500);
+    const lr = b().querySelector('#ceLoteResp'); const Y = [...lr.options].find(o => o.value && o.value !== '__' && o.value !== X.value); out.destino = Y ? Y.textContent : null;
+    lr.value = Y.value; b().querySelector('[data-lote=resp]').click(); await w(300); out.previo = b().querySelector('#ceLote .ce-lote strong').textContent;
+    b().querySelector('[data-lote=ejecutar]').click(); await w(Math.max(6000, idsDeX.length * 900)); out.resultado = b().querySelector('#ceLote .ce-lote strong').textContent;
+    const despues = await rel(); out.despues = { movidos: idsDeX.filter(id => despues.followups.find(f => f.id === id).assigned_to === Y.value).length, sinTocar: despues.followups.filter(f => !f.completed_at && f.assigned_to === X.value).length === resto };
+    b().querySelector('[data-lote=cerrar]')?.click(); await w(200); set('ceResp', ''); await w(200);
+    return out;`);
+  ok(r3e.visible && r3e.opciones.length >= 3 && /^Todos \(/.test(r3e.opciones[0]) && /^Sin responsable \(/.test(r3e.opciones[1]), "Seguimientos ofrece el filtro «Responsable» con Todos, Sin responsable y personas (con su recuento) [" + r3e.opciones.join(" | ") + "]");
+  eq([r3e.filtroX.n, r3e.filtroX.todasDeX], [Math.min(r3e.filtroX.esperado, 100), true], "filtrar por una persona muestra solo sus seguimientos y el recuento cuadra");
+  eq([r3e.sinResp.n > 0, r3e.sinResp.todas, r3e.sinResp.n], [true, true, Math.min(r3e.sinRespEsperado, 100)], "«Sin responsable» muestra solo los que no tienen");
+  ok(r3e.antes.n >= 2, "hay al menos 2 seguimientos que reasignar (" + r3e.antes.n + ")"); eq(r3e.antes.todosDeX, true, "las filas filtradas son de esa persona en la base"); ok(/asignar a .*/.test(r3e.previo), "reasignar todo lo de una persona: resumen previo [" + r3e.previo + "]");
+  eq([r3e.despues.movidos, r3e.despues.sinTocar], [r3e.antes.n, true], "todo lo de esa persona pasa a la otra y no se toca nada más [" + r3e.resultado + "]");
+
   /* ===== 3d. Coherencia de cifras: las tablas fuente, recalculadas aquí de forma independiente, frente al Centro (menú y Resumen), el Panel y el Calendario ===== */
   const r3d = await ev(ayudas + `
     const out = {}; const rel = () => fetch('http://127.0.0.1:8766/__rel').then(r => r.json()); const t = today();
