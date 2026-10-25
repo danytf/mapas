@@ -163,6 +163,8 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261023170237_permit_conflict_code.sql
       - name: Make permit actions atomic (close follow-ups with the decision, create application with follow-up)
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261025170441_permit_atomic_followups.sql
+      - name: Delete follow-ups with their application or grant (cascade)
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261025174656_followups_cascade_on_parent_delete.sql
       - name: Verify every migration file is applied by this workflow
         shell: bash
         run: |
@@ -194,6 +196,8 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/permit_workflow.sql
       - name: Run atomic permit action tests
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/permit_atomic.sql
+      - name: Run follow-up cascade tests
+        run: psql -v ON_ERROR_STOP=1 -f supabase/tests/followups_cascade.sql
       - name: Run assignee listing tests
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/permit_assignees.sql
       - name: Run permit backfill and reconciliation tests

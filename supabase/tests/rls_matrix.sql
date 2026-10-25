@@ -241,8 +241,7 @@ select 'establishment_location_reviews', o.op, s.scope, s.scope,
 from (values ('select'),('update'),('delete'),('insert')) o(op)
 cross join (values ('G','e1','e3','d1'),('O','e2','e4','d2')) s(scope,row_sfx,del_sfx,est_sfx);
 
--- Fallo cerrado deliberado: followups.application_id/grant_id son inmutables, por lo que borrar una
--- solicitud o concesión con seguimientos asociados se rechaza incluso para administración.
+-- Borrar una solicitud o concesión con seguimientos: hasta la migración 20261025174656 se rechazaba incluso para administración (followups.application_id/grant_id son inmutables y la clave era SET NULL). Ahora la clave es CASCADE: la administración puede quitarla (los seguimientos se van con ella) y el resto sigue sin poder.
 insert into matrix_cells (tbl, op, target, tprov, stmt) values
   ('permit_applications','delete_referenced','G','G','delete from public.permit_applications where id={e5}'),
   ('permit_grants','delete_referenced','G','G','delete from public.permit_grants where id={e5}');
@@ -327,8 +326,8 @@ begin
         when 'select' then in_scope
         when 'update_location' then in_scope
         else a.is_admin end                               -- update_master, insert, delete
-    when 'permit_applications' then case p_op when 'delete' then a.is_admin when 'delete_referenced' then false else in_scope end
-    when 'permit_grants' then       case p_op when 'delete' then a.is_admin when 'delete_referenced' then false else in_scope end
+    when 'permit_applications' then case p_op when 'delete' then a.is_admin when 'delete_referenced' then a.is_admin else in_scope end
+    when 'permit_grants' then       case p_op when 'delete' then a.is_admin when 'delete_referenced' then a.is_admin else in_scope end
     when 'followups' then           case when p_op = 'delete' then a.is_admin else in_scope end
     when 'establishment_location_reviews' then case p_op
         when 'select' then in_scope
