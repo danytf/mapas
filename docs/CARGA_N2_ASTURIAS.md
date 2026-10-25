@@ -1,6 +1,6 @@
-# Carga N2 de Asturias (preparada)
+# Carga N2 de Asturias (cargada)
 
-Estado: **preparada el 25/10/2026, pendiente de carga en producción por el titular con `cargar.sh`**. Séptima comunidad con el mismo procedimiento (Andalucía, Extremadura, La Rioja, Murcia, Canarias, Cantabria; ver `docs/CARGA_N2_CANTABRIA.md`).
+Estado: **cargada en producción el 25/10/2026** por el titular con `cargar.sh` y verificada en solo lectura (ver «Cierre»). Séptima comunidad con el mismo procedimiento (Andalucía, Extremadura, La Rioja, Murcia, Canarias, Cantabria; ver `docs/CARGA_N2_CANTABRIA.md`).
 
 ## Origen
 - Fichero: `asturias-latest.osm.pbf` (Geofabrik, edición del 24/10/2026 20:20 UTC, 36.627.279 bytes, MD5 `b2a1f297f0f9f7c141ba1424078daff6` verificado contra el `.md5` de Geofabrik), fuera del repositorio. OpenStreetMap, licencia ODbL.
@@ -28,7 +28,7 @@ Un SQL por lote en `supabase/seeds/asturias/<lote>/` (transaccionales e idempote
 - Correos (65): hasta 9 oficinas en Oviedo y 5 en Gijón, plausible. Carrefour (24) entra completo (Market y Express), por decisión del titular.
 - No probado en el PostgreSQL local (sin la contraseña en esta sesión).
 
-## Cómo cargar (con aprobación)
+## Cómo se cargó (con aprobación)
 Desde la raíz del repositorio, con la rama `feat/carga-asturias`, en este orden:
 ```
 bash scripts/catalogue/cargar.sh supabase/seeds/asturias/municipios municipios
@@ -37,4 +37,9 @@ bash scripts/catalogue/cargar.sh supabase/seeds/asturias/estaciones estaciones
 bash scripts/catalogue/cargar.sh supabase/seeds/asturias/grandes-superficies grandes-superficies catalogo-asturias:asturias-grandes-superficies:
 bash scripts/catalogue/cargar.sh supabase/seeds/asturias/resto resto catalogo-asturias:asturias-resto:
 ```
-Después, en solo lectura: 78 municipios nuevos y 1.028 puntos (la base pasaría de 11.360 a 12.388, antes de cargar el Resto de Cataluña, y los municipios de 2.543 a 2.621). Sin asignar a usuarios hasta terminar toda España (decisión del titular, 23/10/2026).
+Previsto en solo lectura: 78 municipios nuevos y 1.028 puntos (la base pasaría de 11.360 a 12.388, antes de cargar el Resto de Cataluña, y los municipios de 2.543 a 2.621). Sin asignar a usuarios hasta terminar toda España (decisión del titular, 23/10/2026).
+
+## Cierre (25/10/2026)
+- **Carga verificada en solo lectura:** 78 municipios (78 códigos INE distintos) y 1.028 puntos, 1.028 `source_ref` `catalogo-asturias:` distintos, todos activos, ninguno sin coordenadas y ningún código postal con formato distinto de 33xxx. Por categoría: Supermercado 435, Estaciones 208, Entidad oficial 105, Gimnasios 67, Centro de salud 66, Correos 65, Carrefour 24, Hospital 19, Centro comercial 18, Decathlon 5, Bricolaje 5, El Corte Inglés 5, Leroy Merlin 3, MediaMarkt 2, IKEA 1. Total de la base 11.360 -> 12.388 y municipios 2.543 -> 2.621.
+- **Provincia:** Asturias (33) ya estaba activa.
+- **Pendiente:** 293 códigos postales y 130 calles; revisar los dudosos de «Calidad y límites». Sin asignar a usuarios hasta terminar España.
