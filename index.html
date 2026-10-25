@@ -786,7 +786,7 @@
   #dlgPanel .pn-head, #dlgAdm .pn-head { position: sticky; top: 0; z-index: 2; margin: 0; padding: 12px 18px 12px 22px; background: var(--panel); border-bottom: 1px solid var(--line); }
   #dlgPanel h2, #dlgAdm h2 { font-size: var(--fs-title); font-weight: 680; letter-spacing: -.02em; line-height: 1.2; }
   #pnBody { padding: 16px 22px 22px; }
-  /* Centro de permisos: bandejas de solicitudes y concesiones (solo lectura). */
+  /* Estilos del Centro de permisos (bandejas de expedientes y seguimientos). */
   #dlgCentro { width: min(1180px, 98vw); max-height: 94vh; overflow: auto; background: var(--bg); padding: 0; }
   #dlgCentro .pn-head { position: sticky; top: 0; z-index: 2; margin: 0; padding: 12px 18px 12px 22px; background: var(--panel); border-bottom: 1px solid var(--line); }
   #dlgCentro h2 { font-size: var(--fs-title); font-weight: 680; letter-spacing: -.02em; line-height: 1.2; }
@@ -811,6 +811,11 @@
   .ce-badge i { width: 9px; height: 9px; border-radius: 50%; background: var(--st, var(--muted)); flex: none; }
   .ce-badge.s-concedido { --st: var(--st-concedido); } .ce-badge.s-solicitado { --st: var(--st-solicitado); } .ce-badge.s-caducado { --st: var(--st-caducado); } .ce-badge.s-denegado { --st: var(--st-denegado); } .ce-badge.s-cancelado { --st: var(--st-cancelado); }
   .ce-warn { display: block; color: var(--warn); font-weight: 600; }
+  .ce-aviso { margin: 0 0 8px; min-height: 1.2em; font-size: var(--fs-label); color: var(--fg); }
+  .ce-hecho { font: inherit; font-size: var(--fs-label); color: var(--fg); background: var(--panel); border: 1px solid var(--line-2); border-radius: var(--r-pill); height: 30px; padding: 0 14px; cursor: pointer; }
+  .ce-hecho:hover:not(:disabled) { border-color: var(--muted); }
+  .ce-hecho:disabled { opacity: .5; cursor: default; }
+  .ce-hecho:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .ce-count { margin: 0 0 8px; color: var(--muted); font-size: var(--fs-label); }
   .ce-more { margin: 12px 0 0; }
   #dlgAdm .adm-note, #dlgAdm #admMsg, #dlgAdm #admBody { margin-left: 22px; margin-right: 22px; }
@@ -846,7 +851,7 @@
     #menuBtn { width: 44px; height: 44px; }
     #menuPanel button { min-height: 44px; }
     #pnClose, #admClose, #calClose, #ceClose, #ayClose { width: 44px; height: 44px; }
-    .ce-tabs button { min-height: 44px; }
+    .ce-tabs button, .ce-hecho { min-height: 44px; }
     .lg-h button { min-height: 44px; }
     dialog input, dialog select, dialog button { min-height: 44px; }
     .cal-nav button, .cal-chip { min-height: 44px; }
@@ -1503,6 +1508,8 @@ const recargaRelPunto = async (c) => {
   try { aplicaListasRel(c, (await leeFilasRel(client, c.databaseId)).get(c.databaseId)); return true; }
   catch (e) { console.error("[Mapa] No se pudieron leer los expedientes del punto:", e); return false; }
 };
+/* Control de versión de un seguimiento: solo actúa si sigue como lo leyó esta sesión (updated_at). Sin versión conocida no restringe. */
+const conVersion = (consulta, ver) => ver ? consulta.eq("updated_at", ver) : consulta;
 const conTiempoLimite = (ms = 15000) => { const ac = new AbortController(); setTimeout(() => ac.abort(), ms); return ac.signal; };
 // Ejecuta las operaciones de diffRel una a una. Devuelve «ok», «conflict» (otra persona cambió el registro) o «error».
 const ejecutaOpsRel = async (client, userId, c, ops) => {
@@ -1541,11 +1548,13 @@ const ejecutaOpsRel = async (client, userId, c, ops) => {
         if (!r.error && !(r.data && r.data.length)) return "error";
       } else if (op.t === "fuSet") {
         r = op.fu
-          ? await client.from("followups").update({ due_on: op.due, completed_at: null, assigned_to: op.resp || null, next_action: op.accion || null }).eq("id", op.fu).abortSignal(conTiempoLimite())
+          ? await conVersion(client.from("followups").update({ due_on: op.due, completed_at: null, assigned_to: op.resp || null, next_action: op.accion || null }).eq("id", op.fu), op.ver).select("id").abortSignal(conTiempoLimite())
           : await client.from("followups").insert({ establishment_id: est, application_id: op.app || null, due_on: op.due, assigned_to: op.resp || null, next_action: op.accion || null, created_by: userId }).abortSignal(conTiempoLimite());
+        if (op.fu && !r.error && !(r.data && r.data.length)) return "conflict"; /* otra persona cambió el seguimiento */
       } else if (op.t === "fuDone") {
         if (!op.fu) continue;
-        r = await client.from("followups").update({ completed_at: new Date().toISOString() }).eq("id", op.fu).is("completed_at", null).abortSignal(conTiempoLimite());
+        r = await conVersion(client.from("followups").update({ completed_at: new Date().toISOString() }).eq("id", op.fu).is("completed_at", null), op.ver).select("id").abortSignal(conTiempoLimite());
+        if (!r.error && !(r.data && r.data.length)) return "conflict"; /* ya cerrado o cambiado por otra persona */
       } else continue;
     } catch (e) { console.error("[Mapa] Error al guardar expedientes:", e); return "error"; }
     if (r && r.error) {
@@ -1893,7 +1902,7 @@ const calendarioSemana = (recs, segs, wk, t) => Array.from({ length: 7 }, (_, k)
 const REL_COLS = {
   permit_applications: "id,establishment_id,status,requested_from,requested_until,organization,capturer_count,requested_at,contact_details,notes,resolved_at,resolution_reason,updated_at",
   permit_grants: "id,establishment_id,application_id,status,valid_from,valid_until,organization,capturer_count,contact_details,notes,cancelled_at,cancelled_reason,created_at,updated_at",
-  followups: "id,establishment_id,application_id,grant_id,due_on,completed_at,assigned_to,next_action"
+  followups: "id,establishment_id,application_id,grant_id,due_on,completed_at,assigned_to,next_action,updated_at"
 };
 const APP_RES = { approved: "aprobada", denied: "denegada", withdrawn: "retirada" };
 const RES_APP = { aprobada: "approved", denegada: "denied", retirada: "withdrawn" };
@@ -1914,13 +1923,13 @@ const relListas = (apps, grants, fups) => {
     if (a.notes) x.notas = a.notes;
     if (grantDeApp.has(a.id)) x.conc = grantDeApp.get(a.id);
     if (!res && abierto) x.seg = abierto.due_on;
-    if (ultimo) { x.fu = ultimo.id; if (ultimo.assigned_to) x.resp = ultimo.assigned_to; if (ultimo.next_action) x.accion = ultimo.next_action; }
+    if (ultimo) { x.fu = ultimo.id; x.fuver = ultimo.updated_at; if (ultimo.assigned_to) x.resp = ultimo.assigned_to; if (ultimo.next_action) x.accion = ultimo.next_action; }
     get(a.establishment_id).solicitudes.push(x);
   });
   (fups || []).forEach((f) => {
     if (f.application_id || f.grant_id || f.completed_at || !f.due_on) return;
     const o = get(f.establishment_id);
-    if (!o.punto || f.due_on < o.punto.fecha) o.punto = { fecha: f.due_on, fu: f.id, accion: f.next_action || "", resp: f.assigned_to || "" };
+    if (!o.punto || f.due_on < o.punto.fecha) o.punto = { fecha: f.due_on, fu: f.id, fuver: f.updated_at, accion: f.next_action || "", resp: f.assigned_to || "" };
   });
   (grants || []).forEach((g) => {
     const h = { id: g.id, ver: g.updated_at, desde: g.valid_from || "", hasta: g.valid_until || "", ong: g.organization || "", captadores: g.capturer_count || 0, alta: diaMadrid(g.created_at) };
@@ -1949,11 +1958,11 @@ const diffRel = (base, cur) => {
         if (g.id) aprobadas.add(g.id);
         ops.push({ t: "approve", id: x.id, ver: b.ver, g });
       } else if (RES_APP[x.res]) ops.push({ t: "resolve", id: x.id, st: RES_APP[x.res], motivo: x.motivo || "", ver: b.ver });
-      if (b.seg && b.fu) ops.push({ t: "fuDone", fu: b.fu });
+      if (b.seg && b.fu) ops.push({ t: "fuDone", fu: b.fu, ver: b.fuver });
     } else {
       if (cambiaRel(x, b)) ops.push({ t: "updApp", id: x.id, ver: b.ver, x });
       const cambiaSeg = (x.seg || "") !== (b.seg || ""), cambiaResp = (x.resp || "") !== (b.resp || "") || (x.accion || "") !== (b.accion || "");
-      if (!x.res && (cambiaSeg || (cambiaResp && x.seg))) ops.push(x.seg ? { t: "fuSet", app: x.id, fu: b.fu || "", due: x.seg, resp: x.resp || "", accion: x.accion || "" } : { t: "fuDone", fu: b.fu || "" });
+      if (!x.res && (cambiaSeg || (cambiaResp && x.seg))) ops.push(x.seg ? { t: "fuSet", app: x.id, fu: b.fu || "", ver: b.fuver, due: x.seg, resp: x.resp || "", accion: x.accion || "" } : { t: "fuDone", fu: b.fu || "", ver: b.fuver });
     }
   });
   base.sols.forEach((b) => { if (!cs.has(b.id)) ops.push({ t: "delApp", id: b.id }); });
@@ -1965,8 +1974,8 @@ const diffRel = (base, cur) => {
   });
   base.hist.forEach((b) => { if (!ch.has(b.id)) ops.push({ t: "delGrant", id: b.id }); });
   const bp = base.punto, cp = cur.punto;
-  if (bp && !cp) ops.push({ t: "fuDone", fu: bp.fu });
-  else if (cp && (!bp || cp.fecha !== bp.fecha || (cp.accion || "") !== (bp.accion || "") || (cp.resp || "") !== (bp.resp || ""))) ops.push({ t: "fuSet", app: "", fu: bp ? bp.fu : "", due: cp.fecha, resp: cp.resp || "", accion: cp.accion || "" });
+  if (bp && !cp) ops.push({ t: "fuDone", fu: bp.fu, ver: bp.fuver });
+  else if (cp && (!bp || cp.fecha !== bp.fecha || (cp.accion || "") !== (bp.accion || "") || (cp.resp || "") !== (bp.resp || ""))) ops.push({ t: "fuSet", app: "", fu: bp ? bp.fu : "", ver: bp ? bp.fuver : undefined, due: cp.fecha, resp: cp.resp || "", accion: cp.accion || "" });
   return ops;
 };
 /* === fin de la capa relacional === */
@@ -4221,25 +4230,29 @@ const csvCell = (value) => {
   $("#calClose").addEventListener("click", () => dlg.close());
 })();
 
-/* Centro de permisos (v1, solo lectura): bandejas de solicitudes y concesiones de todos los puntos del ámbito del usuario. Solo lee lo que ya hay
-   en memoria y usa las reglas compartidas de expedientes (expedientesDe, indicadores): sus cifras son las del Panel resumen. No guarda nada. */
+/* Centro de permisos: bandejas de solicitudes, concesiones, seguimientos y avisos de datos de todos los puntos del ámbito del usuario. Lee lo que ya hay
+   en memoria y usa las reglas compartidas de expedientes (expedientesDe, seguimientosDe, indicadores, incidencias): sus cifras son las del Panel resumen.
+   Lo único que escribe es «Hecho» en un seguimiento, con el mismo guardado verificable y control de conflictos que la ficha (guardaPunto). */
 (() => {
   const dlg = $("#dlgCentro"), body = $("#ceBody");
   const TRAMO = 100; /* filas que se dibujan de una vez */
   const OPC = {
     sol: [["pendiente", "Pendientes"], ["estancada", "Estancadas (más de " + UMBRAL_ESTANCADA + " días)"], ["caducada", "Sin respuesta y caducadas"], ["aprobada", "Aprobadas"], ["denegada", "Denegadas"], ["retirada", "Retiradas"], ["todas", "Todas"]],
-    con: [["vigente", "Vigentes"], ["vencen", "Vencen en 30 días"], ["futura", "Futuras"], ["terminada", "Terminadas"], ["cancelada", "Canceladas"], ["sinfin", "Vigentes sin fecha de fin"], ["todas", "Todas"]]
+    con: [["vigente", "Vigentes"], ["vencen", "Vencen en 30 días"], ["futura", "Futuras"], ["terminada", "Terminadas"], ["cancelada", "Canceladas"], ["sinfin", "Vigentes sin fecha de fin"], ["todas", "Todas"]],
+    seg: [["vencido", "Atrasados"], ["hoy", "Para hoy"], ["proximo", "Próximos 7 días"], ["sinresp", "Sin responsable"], ["todas", "Todos"]]
   };
   const COLOR = { pendiente: "solicitado", caducada: "caducado", aprobada: "concedido", denegada: "denegado", retirada: "caducado", vigente: "concedido", futura: "concedido", terminada: "caducado", cancelada: "cancelado" };
   const TEXTO = { pendiente: "Pendiente", caducada: "Caducada sin respuesta", aprobada: "Aprobada", denegada: "Denegada", retirada: "Retirada", vigente: "Vigente", futura: "Futura", terminada: "Terminada", cancelada: "Cancelada" };
   const pred = {
     sol: (est, r, t) => est === "todas" ? true : est === "estancada" ? (r.est === "pendiente" && !!r.fecha && daysBetween(r.fecha, t) > UMBRAL_ESTANCADA) : r.est === est,
-    con: (est, r, t) => est === "todas" ? true : est === "vencen" ? (r.est === "vigente" && !!r.hasta && daysBetween(t, r.hasta) <= 30) : est === "sinfin" ? (r.est === "vigente" && !r.hasta) : r.est === est
+    con: (est, r, t) => est === "todas" ? true : est === "vencen" ? (r.est === "vigente" && !!r.hasta && daysBetween(t, r.hasta) <= 30) : est === "sinfin" ? (r.est === "vigente" && !r.hasta) : r.est === est,
+    seg: (est, s, t) => est === "todas" ? true : est === "vencido" ? s.fecha < t : est === "hoy" ? s.fecha === t : est === "proximo" ? (s.fecha > t && s.fecha <= addDays(t, 7)) : !s.resp
   };
+  const NOMBRE = { sol: ["solicitud", "solicitudes"], con: ["concesión", "concesiones"], seg: ["seguimiento", "seguimientos"], inc: ["aviso", "avisos"] };
   const plural = (n, uno, varios) => n + " " + (n === 1 ? uno : varios);
   const ongDe = (r) => r.ong || "Sin ONG";
-  let vista = "sol", prov = "", ong = "", q = "", mostrar = TRAMO;
-  const est = { sol: "pendiente", con: "vigente" };
+  let vista = "sol", prov = "", ong = "", q = "", mostrar = TRAMO, ocupado = false, aviso = "";
+  const est = { sol: "pendiente", con: "vigente", seg: "vencido", inc: "todas" };
 
   const provOpts = () => {
     const m = new Map();
@@ -4247,25 +4260,26 @@ const csvCell = (value) => {
     return [...m].sort((x, y) => x[1].localeCompare(y[1], "es"));
   };
   const registros = (provId) => {
-    const recs = [];
+    const recs = [], segs = [];
     CENTERS.forEach((c) => {
       if (isOut(c) || (provId && c.provinceId !== provId)) return;
       const p = permits[permitKey(c)]; if (!p) return;
       expedientesDe(c, p).forEach((r) => recs.push(r));
+      seguimientosDe(c, p).forEach((s) => segs.push(s));
     });
-    return recs;
+    return { recs, segs };
   };
-  const textoDe = (r) => (r.c.name + " " + townOf(r.c) + " " + (r.c.province || "") + " " + ongDe(r)).toLowerCase();
+  const textoDe = (x) => (x.c.name + " " + townOf(x.c) + " " + (x.c.province || "") + " " + ongDe(x)).toLowerCase();
   const antes = (a, b) => a.localeCompare(b, "es");
   const periodo = (r) => (!r.desde && !r.hasta) ? "Sin fechas" : fmtD(r.desde) + " – " + fmtD(r.hasta);
 
-  const celdaPunto = (r) => '<button type="button" class="ce-pt" data-pt="' + esc(String(r.c.id)) + '" data-tab="' + (r.k === "sol" ? "s" : "h") + '"><strong>' + esc(r.c.name) + "</strong><span>" +
-    esc(townOf(r.c) + (r.c.province && r.c.province !== townOf(r.c) ? " · " + r.c.province : "")) + "</span></button>";
+  const celdaPunto = (x, tab) => '<button type="button" class="ce-pt" data-pt="' + esc(String(x.c.id)) + '" data-tab="' + tab + '"><strong>' + esc(x.c.name) + "</strong><span>" +
+    esc(townOf(x.c) + (x.c.province && x.c.province !== townOf(x.c) ? " · " + x.c.province : "")) + "</span></button>";
   const badge = (e) => '<span class="ce-badge s-' + COLOR[e] + '"><i aria-hidden="true"></i>' + esc(TEXTO[e]) + "</span>";
 
   const filaSol = (r, t) => {
     const edad = r.fecha ? daysBetween(r.fecha, t) : null, estancada = r.est === "pendiente" && edad !== null && edad > UMBRAL_ESTANCADA;
-    return "<tr><td>" + celdaPunto(r) + "</td><td>" + esc(ongDe(r)) + "</td><td>" + esc(periodo(r)) + '</td><td class="n">' + (r.n || "—") + "</td><td>" +
+    return "<tr><td>" + celdaPunto(r, "s") + "</td><td>" + esc(ongDe(r)) + "</td><td>" + esc(periodo(r)) + '</td><td class="n">' + (r.n || "—") + "</td><td>" +
       (r.fecha ? esc(fmtD(r.fecha)) + (r.est === "pendiente" && edad >= 0 ? '<span class="ce-sub">hace ' + esc(plural(edad, "día", "días")) + "</span>" : "") : "No consta") + "</td><td>" + badge(r.est) +
       (estancada ? '<span class="ce-warn">Estancada</span>' : "") + "</td><td>" + (r.seg ? esc(fmtD(r.seg)) + (r.seg < t ? '<span class="ce-warn">Atrasado</span>' : "") : (r.est === "pendiente" ? "Sin seguimiento" : "")) + "</td></tr>";
   };
@@ -4275,11 +4289,19 @@ const csvCell = (value) => {
     if (r.est === "terminada") return "Terminó el " + fmtD(r.hasta);
     return "Cancelada" + (r.resFecha ? " el " + fmtD(r.resFecha) : "") + (r.motivo ? ": " + r.motivo : "");
   };
-  const filaCon = (r, t) => "<tr><td>" + celdaPunto(r) + "</td><td>" + esc(ongDe(r)) + "</td><td>" + esc(periodo(r)) + '</td><td class="n">' + (r.n || "—") + "</td><td>" + badge(r.est) + "</td><td>" +
+  const filaCon = (r, t) => "<tr><td>" + celdaPunto(r, "h") + "</td><td>" + esc(ongDe(r)) + "</td><td>" + esc(periodo(r)) + '</td><td class="n">' + (r.n || "—") + "</td><td>" + badge(r.est) + "</td><td>" +
     esc(detalleCon(r, t)) + (r.sol ? "" : '<span class="ce-sub">Sin solicitud enlazada</span>') + "</td></tr>";
+  const filaSeg = (s, t, k) => {
+    const dias = daysBetween(s.fecha, t), origen = s.i >= 0 && !s.punto ? "Solicitud pendiente" : "Seguimiento del punto";
+    return "<tr><td>" + celdaPunto(s, "s") + "</td><td>" + esc(ongDe(s)) + "</td><td>" + esc(fmtD(s.fecha)) +
+      (dias > 0 ? '<span class="ce-warn">Atrasado ' + esc(plural(dias, "día", "días")) + "</span>" : dias === 0 ? '<span class="ce-sub">Hoy</span>' : "") + "</td><td>" + (s.accion ? esc(s.accion) : "—") + "</td><td>" +
+      (s.resp ? esc(nombreResp(s.resp)) : "Sin responsable") + "</td><td>" + esc(origen) + '</td><td><button type="button" class="ce-hecho" data-hecho="' + k + '"' + (ocupado ? " disabled" : "") + ">Hecho</button></td></tr>";
+  };
+  const filaInc = (x) => "<tr><td>" + celdaPunto(x.r, x.r.k === "sol" ? "s" : "h") + "</td><td>" + esc(x.tipo) + "</td><td>" + esc(ongDe(x.r)) + "</td><td>" + esc(x.r.k === "sol" ? "Solicitud" : "Concesión") + " · " + esc(periodo(x.r)) + "</td></tr>";
 
   /* Orden: lo pendiente de resolver, de más antiguo a más reciente; lo ya resuelto o terminado, de más reciente a más antiguo. */
   const ordena = (arr, k, e) => {
+    if (k === "seg") return arr.slice().sort((a, b) => antes(a.fecha, b.fecha) || antes(a.c.name, b.c.name));
     const abierto = k === "sol" ? (e === "pendiente" || e === "estancada" || e === "caducada") : (e === "vigente" || e === "vencen" || e === "futura" || e === "sinfin");
     const clave = k === "sol" ? (abierto ? (r) => r.fecha : (r) => r.resFecha || r.fecha) : (abierto ? (r) => r.hasta : (r) => r.hasta || r.resFecha);
     return arr.slice().sort((a, b) => {
@@ -4288,39 +4310,79 @@ const csvCell = (value) => {
       return (abierto ? antes(x, y) : antes(y, x)) || antes(a.c.name, b.c.name);
     });
   };
+  let filasSeg = []; /* seguimientos de la tabla en pantalla, para el botón «Hecho» */
 
   const draw = () => {
-    const t = today(), todas = registros(prov);
-    const ongs = [...new Set(todas.map(ongDe))].sort((x, y) => (x === "Sin ONG") - (y === "Sin ONG") || antes(x, y));
+    const t = today(), { recs: todas, segs: todasSegs } = registros(prov);
+    const ongs = [...new Set(todas.map(ongDe).concat(todasSegs.map(ongDe)))].sort((x, y) => (x === "Sin ONG") - (y === "Sin ONG") || antes(x, y));
     if (ong && !ongs.includes(ong)) ong = "";
     body.querySelector("#ceOng").innerHTML = '<option value="">Todas las ONG</option>' + ongs.map((o) => '<option value="' + esc(o) + '"' + (o === ong ? " selected" : "") + ">" + esc(o) + "</option>").join("");
-    const ql = q.trim().toLowerCase(), base = todas.filter((r) => (!ong || ongDe(r) === ong) && (!ql || textoDe(r).includes(ql)));
-    const delTipo = base.filter((r) => r.k === vista);
-    body.querySelector("#ceEst").innerHTML = OPC[vista].map(([k, n]) => '<option value="' + k + '"' + (k === est[vista] ? " selected" : "") + ">" + esc(n + " (" + delTipo.filter((r) => pred[vista](k, r, t)).length + ")") + "</option>").join("");
+    const ql = q.trim().toLowerCase(), okOng = (x) => !ong || ongDe(x) === ong, okF = (x) => okOng(x) && (!ql || textoDe(x).includes(ql));
+    const base = todas.filter(okF), baseSeg = todasSegs.filter(okF);
+    const incs = incidencias(todas.filter(okOng), t).filter((x) => !ql || textoDe(x.r).includes(ql));
+    const tipos = [...new Set(incs.map((x) => x.tipo))].sort(antes);
+    if (vista === "inc" && est.inc !== "todas" && !tipos.includes(est.inc)) est.inc = "todas";
+    const delTipo = vista === "seg" ? baseSeg : vista === "inc" ? incs : base.filter((r) => r.k === vista);
+    const opciones = vista === "inc" ? [["todas", "Todos"]].concat(tipos.map((x) => [x, x])) : OPC[vista];
+    const cuenta = (k) => vista === "inc" ? delTipo.filter((x) => k === "todas" || x.tipo === k).length : delTipo.filter((r) => pred[vista](k, r, t)).length;
+    body.querySelector("#ceEst").innerHTML = opciones.map(([k, n]) => '<option value="' + esc(k) + '"' + (k === est[vista] ? " selected" : "") + ">" + esc(n + " (" + cuenta(k) + ")") + "</option>").join("");
     /* Resumen: las mismas cifras del Panel resumen (indicadores), con los filtros de provincia y ONG. */
-    const ind = indicadores(todas.filter((r) => !ong || ongDe(r) === ong), [], t), venc = ind.vencen7.length + ind.vencen15.length + ind.vencen30.length;
-    const tile = (v, e, n, txt, cls) => '<button type="button" class="kpi' + (n && cls ? " " + cls : "") + '" data-go="' + v + ":" + e + '"><b>' + n + "</b><span>" + esc(txt) + "</span></button>";
+    const ind = indicadores(todas.filter(okOng), todasSegs.filter(okOng), t), venc = ind.vencen7.length + ind.vencen15.length + ind.vencen30.length;
+    const tile = (v, e, n, txt, cls) => '<button type="button" class="kpi' + (n && cls ? " " + cls : "") + '" data-go="' + v + ":" + esc(e) + '"><b>' + n + "</b><span>" + esc(txt) + "</span></button>";
     body.querySelector("#ceSum").innerHTML = tile("sol", "pendiente", ind.pendientes.length, "Solicitudes pendientes", "al") + tile("sol", "estancada", ind.estancadas.length, "Solicitudes estancadas", "al") +
-      tile("con", "vigente", ind.vigentes.length, "Concesiones vigentes", "hl") + tile("con", "vencen", venc, "Vencen en 30 días", "al") + tile("con", "sinfin", ind.sinFin.length, "Vigentes sin fecha de fin", "al");
+      tile("con", "vigente", ind.vigentes.length, "Concesiones vigentes", "hl") + tile("con", "vencen", venc, "Vencen en 30 días", "al") + tile("con", "sinfin", ind.sinFin.length, "Vigentes sin fecha de fin", "al") +
+      tile("seg", "vencido", ind.segVencidos.length, "Seguimientos atrasados", "al") + tile("inc", "todas", ind.incidencias.length, "Avisos de datos", "al");
     body.querySelectorAll("#ceTabs button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.vista === vista)));
-    const filas = ordena(delTipo.filter((r) => pred[vista](est[vista], r, t)), vista, est[vista]), lista = body.querySelector("#ceList");
-    const nombre = vista === "sol" ? ["solicitud", "solicitudes"] : ["concesión", "concesiones"];
+    body.querySelector("#ceAviso").textContent = aviso;
+    const lista = body.querySelector("#ceList"), nombre = NOMBRE[vista];
+    const filas = vista === "inc" ? delTipo.filter((x) => est.inc === "todas" || x.tipo === est.inc).sort((a, b) => antes(a.tipo, b.tipo) || antes(a.r.c.name, b.r.c.name))
+      : ordena(delTipo.filter((r) => pred[vista](est[vista], r, t)), vista, est[vista]);
+    filasSeg = vista === "seg" ? filas : [];
     if (!filas.length) {
-      lista.innerHTML = '<div class="pn-empty">' + (todas.length ? "No hay " + nombre[1] + " con estos filtros." : "Todavía no hay solicitudes ni concesiones en las provincias a las que tienes acceso.") + "</div>";
+      lista.innerHTML = '<div class="pn-empty">' + (todas.length || todasSegs.length ? "No hay " + nombre[1] + " con estos filtros." : "Todavía no hay solicitudes ni concesiones en las provincias a las que tienes acceso.") + "</div>";
       return;
     }
     const vis = filas.slice(0, mostrar);
-    const cab = vista === "sol" ? "<th>Punto</th><th>ONG</th><th>Periodo solicitado</th><th class=\"n\">Captadores</th><th>Solicitada</th><th>Estado</th><th>Seguimiento</th>" : "<th>Punto</th><th>ONG</th><th>Periodo</th><th class=\"n\">Captadores</th><th>Estado</th><th>Detalle</th>";
+    const cabs = {
+      sol: '<th>Punto</th><th>ONG</th><th>Periodo solicitado</th><th class="n">Captadores</th><th>Solicitada</th><th>Estado</th><th>Seguimiento</th>',
+      con: '<th>Punto</th><th>ONG</th><th>Periodo</th><th class="n">Captadores</th><th>Estado</th><th>Detalle</th>',
+      seg: '<th>Punto</th><th>ONG</th><th>Fecha</th><th>Acción prevista</th><th>Responsable</th><th>Origen</th><th><span class="adm-sr">Acción</span></th>',
+      inc: "<th>Punto</th><th>Qué revisar</th><th>ONG</th><th>Expediente</th>"
+    };
+    const titulo = { sol: "Solicitudes", con: "Concesiones", seg: "Seguimientos", inc: "Avisos de datos" };
     lista.innerHTML = '<p class="ce-count" role="status">' + esc(plural(filas.length, nombre[0], nombre[1]) + (filas.length > vis.length ? " · se muestran " + vis.length : "")) + "</p>" +
-      '<div class="pn-scroll"><table><caption class="adm-sr">' + esc(vista === "sol" ? "Solicitudes" : "Concesiones") + '</caption><thead><tr>' + cab + "</tr></thead><tbody>" +
-      vis.map((r) => vista === "sol" ? filaSol(r, t) : filaCon(r, t)).join("") + "</tbody></table></div>" +
+      '<div class="pn-scroll"><table><caption class="adm-sr">' + esc(titulo[vista]) + "</caption><thead><tr>" + cabs[vista] + "</tr></thead><tbody>" +
+      vis.map((x, k) => vista === "sol" ? filaSol(x, t) : vista === "con" ? filaCon(x, t) : vista === "seg" ? filaSeg(x, t, k) : filaInc(x)).join("") + "</tbody></table></div>" +
       (filas.length > vis.length ? '<p class="ce-more"><button type="button" data-mas="1">Mostrar ' + Math.min(TRAMO, filas.length - vis.length) + " más</button></p>" : "");
+  };
+
+  /* Cierra un seguimiento concreto (no todos los del punto) con el guardado verificable de la ficha. */
+  const cierraSeguimiento = async (s) => {
+    const c = s.c, previo = permits[permitKey(c)]; if (!previo) return "error";
+    const copia = JSON.parse(JSON.stringify(previo));
+    if (s.punto) delete copia.segPunto;
+    else if (s.i >= 0) {
+      const x = solsOf(copia)[s.i]; if (!x || x.res || !x.seg) return "error";
+      x.seg = "";
+      if (solsOf(copia).length) { const sg = segCalc(copia); if (sg) copia.seguimiento = sg; else delete copia.seguimiento; }
+    } else delete copia.seguimiento;
+    return guardaPunto(c, copia, previo);
+  };
+  const hecho = async (k) => {
+    const s = filasSeg[k]; if (!s || ocupado) return;
+    ocupado = true; aviso = "Guardando…"; draw();
+    const r = await cierraSeguimiento(s);
+    ocupado = false; refrescaPunto(s.c); refreshSelects(); renderList();
+    aviso = r === "ok" ? "Seguimiento cerrado en «" + s.c.name + "»."
+      : r === "conflict" ? "Otra persona ha cambiado «" + s.c.name + "»: se ha recargado y no se ha tocado su cambio. Revísalo y repite."
+      : "No se pudo confirmar el guardado de «" + s.c.name + "». No se ha cerrado.";
+    draw();
   };
   const abrir = () => {
     const opts = provOpts();
     if (prov && !opts.some(([id]) => id === prov)) prov = "";
     if (opts.length === 1) prov = opts[0][0];
-    mostrar = TRAMO;
+    mostrar = TRAMO; aviso = "";
     body.innerHTML =
       '<div class="cal-bar">' +
       '<label class="cal-f">Provincia<select id="ceProv">' + (opts.length > 1 ? '<option value="">Todas las provincias</option>' : "") +
@@ -4329,9 +4391,10 @@ const csvCell = (value) => {
       '<label class="cal-f">Estado<select id="ceEst"></select></label>' +
       '<label class="cal-f ce-q">Buscar<input type="search" id="ceQ" autocomplete="off" placeholder="Punto, municipio u ONG" value="' + esc(q) + '"></label></div>' +
       '<div class="kpis" id="ceSum"></div>' +
-      '<div class="ce-tabs" id="ceTabs" role="group" aria-label="Qué se muestra"><button type="button" data-vista="sol" aria-pressed="true">Solicitudes</button><button type="button" data-vista="con" aria-pressed="false">Concesiones</button></div>' +
+      '<div class="ce-tabs" id="ceTabs" role="group" aria-label="Qué se muestra"><button type="button" data-vista="sol" aria-pressed="true">Solicitudes</button><button type="button" data-vista="con" aria-pressed="false">Concesiones</button><button type="button" data-vista="seg" aria-pressed="false">Seguimientos</button><button type="button" data-vista="inc" aria-pressed="false">Avisos de datos</button></div>' +
+      '<p class="ce-aviso" id="ceAviso" role="status"></p>' +
       '<div id="ceList"></div>' +
-      '<p class="cal-note">Esta vista solo consulta: para aprobar, denegar, cancelar o editar, abre el punto desde la fila. Las cifras de arriba son las del Panel resumen. Una solicitud sin respuesta se marca como estancada a partir de ' + UMBRAL_ESTANCADA + " días; eso no cambia su estado.</p>";
+      '<p class="cal-note">Para aprobar, denegar, cancelar o editar, abre el punto desde la fila. Lo único que se guarda desde aquí es «Hecho» en un seguimiento. Las cifras de arriba son las del Panel resumen. Una solicitud sin respuesta se marca como estancada a partir de ' + UMBRAL_ESTANCADA + " días; eso no cambia su estado. Los avisos señalan datos incompletos o dudosos: no se corrigen solos.</p>";
     draw();
     dlg.showModal();
     body.querySelector("#ceProv").focus();
@@ -4342,6 +4405,8 @@ const csvCell = (value) => {
     const tab = e.target.closest("[data-vista]");
     if (tab) { vista = tab.dataset.vista; mostrar = TRAMO; draw(); return; }
     if (e.target.closest("[data-mas]")) { mostrar += TRAMO; draw(); return; }
+    const hb = e.target.closest("[data-hecho]");
+    if (hb) { hecho(+hb.dataset.hecho); return; }
     const pt = e.target.closest("[data-pt]");
     if (pt) { const c = CENTERS.find((x) => String(x.id) === pt.dataset.pt); if (c) { fichaTabPedida = pt.dataset.tab || ""; dlg.close(); if (markers[c.id]) cluster.zoomToShowLayer(markers[c.id], () => markers[c.id].openPopup()); } }
   });

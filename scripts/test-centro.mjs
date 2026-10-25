@@ -5,7 +5,7 @@ import { readFileSync } from "node:fs";
 import { runInNewContext } from "node:vm";
 
 const html = readFileSync(process.argv[2] || "index.html", "utf8");
-const a = html.indexOf("/* Centro de permisos (v1, solo lectura)");
+const a = html.indexOf("/* Centro de permisos: bandejas");
 assert.ok(a >= 0, "No se encuentra el bloque del Centro de permisos en index.html");
 const fin = html.indexOf("\n})();\n", a);
 const bloque = html.slice(a, fin + 7);
@@ -17,15 +17,18 @@ ok(/<dialog id="dlgCentro" aria-labelledby="ceT">/.test(html), "dlgCentro sin ar
 ok(/<h2 id="ceT">Centro de permisos<\/h2>/.test(html), "Falta el título del diálogo");
 ok(/id="centroBtn" type="button" role="menuitem">Centro de permisos<\/button>/.test(html), "Falta la opción «Centro de permisos» en el menú");
 ok(html.includes('id="ceClose" aria-label="Cerrar"'), "El botón de cerrar necesita nombre accesible");
-ok(bloque.includes('aria-pressed="true">Solicitudes') && bloque.includes('data-vista="con"'), "Hay pestañas de solicitudes y concesiones con aria-pressed");
+ok(bloque.includes('aria-pressed="true">Solicitudes') && ["con", "seg", "inc"].every((v) => bloque.includes('data-vista="' + v + '"')), "Hay pestañas de solicitudes, concesiones, seguimientos y avisos con aria-pressed");
 ok(bloque.includes('role="status"') && bloque.includes('<caption class="adm-sr">'), "Recuento en role=status y tabla con título");
 ok(bloque.includes("badge(r.est)") && bloque.includes("esc(TEXTO[e])"), "El estado va también en texto, no solo en color");
 
-// Solo lee lo que hay en memoria; no guarda nada ni consulta la red.
-ok(!/localStorage|sessionStorage|indexedDB|document\.cookie|caches\.|fetch\(|\.from\(|\.rpc\(|supabase|savePermits|ejecutaOpsRel/.test(bloque), "El Centro (v1) no puede guardar ni llamar a la red");
+// No toca la red ni el navegador; lo único que guarda es «Hecho» en un seguimiento, por guardaPunto (guardado verificable con control de conflictos).
+ok(!/localStorage|sessionStorage|indexedDB|document\.cookie|caches\.|fetch\(|\.from\(|\.rpc\(|supabase|savePermits|ejecutaOpsRel/.test(bloque), "El Centro no puede llamar a la red ni guardar fuera de guardaPunto");
+ok((bloque.match(/guardaPunto\(/g) || []).length === 1 && bloque.includes("return guardaPunto(c, copia, previo)"), "Solo hay una escritura: cerrar un seguimiento con guardaPunto");
+ok(bloque.includes("if (s.punto) delete copia.segPunto") && bloque.includes('x.seg = ""'), "«Hecho» cierra solo el seguimiento elegido, no todos los del punto");
+ok(bloque.includes("No se pudo confirmar el guardado") && bloque.includes("Otra persona ha cambiado"), "Los errores y conflictos no se presentan como guardados");
 
 // Los textos que vienen de los datos pasan por esc().
-for (const t of ["esc(r.c.name)", "esc(ongDe(r))", "esc(periodo(r))", "esc(detalleCon(r, t))", "esc(String(r.c.id))", "esc(q)", "esc(n + \" (\""]) ok(bloque.includes(t), "Falta escapar con esc(): " + t);
+for (const t of ["esc(x.c.name)", "esc(ongDe(r))", "esc(ongDe(s))", "esc(periodo(r))", "esc(detalleCon(r, t))", "esc(String(x.c.id))", "esc(q)", "esc(n + \" (\"", "esc(s.accion)", "esc(nombreResp(s.resp))", "esc(x.tipo)"]) ok(bloque.includes(t), "Falta escapar con esc(): " + t);
 
 // Ámbito y reglas compartidas.
 ok(bloque.includes("isOut(c) ||") && bloque.includes("c.provinceId !== provId"), "Respeta puntos quitados/archivados y la provincia");
@@ -39,7 +42,7 @@ ok(i0 >= 0 && i1 > i0 && i2 > i1 && p0 >= 0 && p1 > p0, "No se encuentran las re
 const Real = Date;
 class Falsa extends Real { constructor(...args) { if (args.length) super(...args); else super("2026-10-25T10:00:00Z"); } static now() { return new Real("2026-10-25T10:00:00Z").getTime(); } }
 const ctx = runInNewContext(
-  "const permits = {}; const permitKey = (c) => c.id; const permOf = (c) => permits[permitKey(c)] || {};\n" + html.slice(i0, i2) + "\n" + bloque.slice(p0, p1) + "\n({ today, expedientesDe, indicadores, pred })",
+  "const permits = {}; const permitKey = (c) => c.id; const permOf = (c) => permits[permitKey(c)] || {};\n" + html.slice(i0, i2) + "\n" + bloque.slice(p0, p1) + "\n({ today, addDays, expedientesDe, seguimientosDe, indicadores, incidencias, pred })",
   { Date: Falsa, self: {} }
 );
 const t = ctx.today();
@@ -73,5 +76,22 @@ ok(cuenta("con", "vencen") === venc && venc === 2, "Vencen en 30 días coinciden
 ok(cuenta("con", "sinfin") === ind.sinFin.length && ind.sinFin.length === 1, "Sin fecha de fin coinciden con el Panel (1)");
 ok(cuenta("con", "futura") === 1 && cuenta("con", "terminada") === 1 && cuenta("con", "cancelada") === 1 && cuenta("con", "todas") === 7, "Futuras, terminadas, canceladas y total");
 ok(ind.vigentes.every((r) => r.k === "con") && recs.length === 12, "Se separan solicitudes (5) y concesiones (7)");
+
+// Seguimientos: cada filtro cuenta lo mismo que el Panel resumen.
+const pt2 = punto(2), p2 = p({ solicitudes: [
+  { id: "q1", desde: "2026-11-01", hasta: "2026-11-10", ong: "A", captadores: 1, fecha: "2026-10-20", seg: "2026-10-20" },                       /* atrasado, sin responsable */
+  { id: "q2", desde: "2026-11-01", hasta: "2026-11-10", ong: "A", captadores: 1, fecha: "2026-10-20", seg: t, resp: "u1" },                     /* hoy */
+  { id: "q3", desde: "2026-11-01", hasta: "2026-11-10", ong: "B", captadores: 1, fecha: "2026-10-20", seg: ctx.addDays(t, 7), resp: "u1" },    /* en 7 días */
+  { id: "q4", desde: "2026-11-01", hasta: "2026-11-10", ong: "B", captadores: 1, fecha: "2026-10-20", seg: ctx.addDays(t, 8), resp: "u1" },    /* fuera de 7 días */
+  { id: "q5", desde: "2026-11-01", hasta: "2026-11-10", ong: "B", captadores: 1, fecha: "2026-10-20", res: "denegada", seg: "2026-10-01" }      /* resuelta: no cuenta */
+] });
+const segs = ctx.seguimientosDe(pt2, p2), recs2 = ctx.expedientesDe(pt2, p2), ind2 = ctx.indicadores(recs2, segs, t), cs = (e) => segs.filter((x) => ctx.pred.seg(e, x, t)).length;
+ok(segs.length === 4, "Solo cuentan los seguimientos de solicitudes pendientes (4)");
+ok(cs("vencido") === ind2.segVencidos.length && cs("vencido") === 1, "Atrasados coinciden con el Panel (1)");
+ok(cs("hoy") === ind2.segHoy.length && cs("hoy") === 1, "Para hoy coinciden con el Panel (1)");
+ok(cs("proximo") === ind2.segProximos.length && cs("proximo") === 1, "Próximos 7 días coinciden con el Panel (1: el de 7 días sí, el de 8 no)");
+ok(cs("sinresp") === 1 && cs("todas") === 4, "Sin responsable y total");
+// Avisos: la bandeja usa la misma lista de incidencias que el Panel.
+ok(bloque.includes("incidencias(todas.filter(okOng), t)") && ind2.incidencias.length === ctx.incidencias(recs2, t).length, "Los avisos salen de incidencias()");
 
 console.log("Centro de permisos: " + n + " comprobaciones correctas.");
