@@ -305,6 +305,16 @@ const T = "2026-10-23";
   const cerrado = copia(); cerrado.sols[0].seg = ""; cerrado.sols[0].fu = "fu-1";
   cur = copia(); cur.sols[0].seg = "2026-10-30"; cur.sols[0].fu = "fu-1";
   eq(R.diffRel({ sols: cerrado.sols, hist: cerrado.hist }, cur), [{ t: "fuSet", app: "app-1", fu: "fu-1", due: "2026-10-30", resp: "", accion: "" }]);
+  // control de versión de los seguimientos (updated_at): se lee, se conserva y viaja en la operación
+  const conVer = R.relListas(apps, grants, [{ id: "fu-1", establishment_id: E, application_id: "app-1", due_on: "2026-10-30", completed_at: null, updated_at: "2026-10-24T09:00:00+00:00" }]).get(E);
+  eq(conVer.solicitudes.find((x) => x.id === "app-1").fuver, "2026-10-24T09:00:00+00:00", "la solicitud conserva la versión de su seguimiento");
+  const bv = JSON.parse(JSON.stringify({ sols: conVer.solicitudes, hist: conVer.historial })), cv = JSON.parse(JSON.stringify(bv));
+  cv.sols.find((x) => x.id === "app-1").seg = "2026-11-03";
+  eq(R.diffRel(bv, cv).map((o) => [o.t, o.ver]), [["fuSet", "2026-10-24T09:00:00+00:00"]], "reprogramar envía la versión leída");
+  cv.sols.find((x) => x.id === "app-1").seg = "";
+  eq(R.diffRel(bv, cv).map((o) => [o.t, o.ver]), [["fuDone", "2026-10-24T09:00:00+00:00"]], "cerrar envía la versión leída");
+  const pv = R.relListas([], [], [{ id: "fp-9", establishment_id: E, application_id: null, grant_id: null, due_on: "2026-10-28", completed_at: null, updated_at: "2026-10-24T10:00:00+00:00" }]).get(E);
+  eq(R.diffRel({ sols: [], hist: [], punto: pv.punto }, { sols: [], hist: [], punto: undefined }).map((o) => [o.t, o.ver]), [["fuDone", "2026-10-24T10:00:00+00:00"]], "el seguimiento del punto también lleva su versión");
 }
 
 console.log("Reglas de expedientes: " + n + " comprobaciones correctas.");
