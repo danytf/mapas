@@ -1,0 +1,684 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/10004542428;;;Barcelona;41.385253;2.152396;sin nombre en OpenStreetMap
+descartado;node/1002492011;;Ajuntament;Lladó;42.248017;2.81358;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/1002492017;;CAP;Lladó;42.248094;2.813449;nombre generico o dudoso en OpenStreetMap: CAP
+descartado;node/10048961317;;;Barcelona;41.353216;2.134784;sin nombre en OpenStreetMap
+descartado;node/10083827417;;;Barcelona;41.437112;2.18409;sin nombre en OpenStreetMap
+descartado;node/10087223670;;Alimentació;Les;42.811473;0.710016;nombre generico o dudoso en OpenStreetMap: Alimentació
+descartado;node/10095132926;;;Vila-rodona;41.311198;1.358674;sin nombre en OpenStreetMap
+descartado;node/10172005118;;Carrefour Market;Barcelona;41.386415;2.17595;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/10175655822;;;Vila-seca;41.108494;1.145185;sin nombre en OpenStreetMap
+descartado;node/10175799670;;Carrefour express;Barcelona;41.399564;2.163593;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/10185182545;;;Vilassar de Mar;41.500864;2.379259;sin nombre en OpenStreetMap
+descartado;node/10238253510;;Supermercat del Mar;Barcelona;41.380063;2.19223;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/10560142342;;;Premià de Dalt;41.497309;2.362297;sin nombre en OpenStreetMap
+descartado;node/10690372771;;Centre de Salut Mental d'Adults del Maresme;el Masnou;41.483771;2.328552;texto excluido (mental|veterinari|dental|fisioter|rehabilitaci|consultori|dispensari)
+descartado;node/10707783804;;Carrefour;Tarragona;41.128144;1.207238;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/10743605605;;;Barcelona;41.361496;2.145585;sin nombre en OpenStreetMap
+descartado;node/10793473605;;Mercat de pagès de Sants;Barcelona;41.37953;2.129113;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/10844258805;;;Barcelona;41.411758;2.183905;sin nombre en OpenStreetMap
+descartado;node/10856469376;;El Mercat de Les Marines;Gavà;41.270738;2.033674;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/10924915949;;;Sant Pere Pescador;42.189366;3.107937;sin nombre en OpenStreetMap
+descartado;node/10981601573;;Supermercat;Vilanova i la Geltrú;41.223856;1.706626;nombre generico o dudoso en OpenStreetMap: Supermercat
+descartado;node/10992828646;;Supermercats JR;Vilanova i la Geltrú;41.22224;1.714473;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/10994725085;;Supermercats JR;Vilanova i la Geltrú;41.216746;1.733166;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/10995049824;;Supermercats JR;Vilanova i la Geltrú;41.217717;1.730076;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/10996125978;;Supermercats Jr;Vilanova i la Geltrú;41.229758;1.727427;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/11020613133;;Supermercat de Caputxins;Vilanova i la Geltrú;41.22628;1.725259;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/11030761430;;;Manresa;41.729635;1.832294;sin nombre en OpenStreetMap
+descartado;node/11032902026;;Supermercat;Vilanova i la Geltrú;41.22665;1.725037;nombre generico o dudoso en OpenStreetMap: Supermercat
+descartado;node/11032902065;;Supermercat;Vilanova i la Geltrú;41.224291;1.730523;nombre generico o dudoso en OpenStreetMap: Supermercat
+descartado;node/11032915844;;Supermercats JR;Vilanova i la Geltrú;41.224513;1.719693;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/11077789638;;Supermercats J. Rigual;Vilanova i la Geltrú;41.227103;1.727318;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/11077789774;;Supermercats Jr;Vilanova i la Geltrú;41.22402;1.723826;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/11136628865;;;Barcelona;41.415653;2.157585;sin nombre en OpenStreetMap
+descartado;node/11236463640;;;Torredembarra;41.140939;1.404361;sin nombre en OpenStreetMap
+descartado;node/11331659165;;;Tortosa;40.81683;0.524114;sin nombre en OpenStreetMap
+descartado;node/11371456144;;;Santa Susanna;41.634648;2.724818;sin nombre en OpenStreetMap
+descartado;node/11420433469;;;Barcelona;41.387597;2.154465;sin nombre en OpenStreetMap
+descartado;node/11420433470;;;Barcelona;41.402713;2.13592;sin nombre en OpenStreetMap
+descartado;node/11420471769;;;Barcelona;41.4366;2.174981;sin nombre en OpenStreetMap
+descartado;node/11420874869;;;Barcelona;41.394455;2.143168;sin nombre en OpenStreetMap
+descartado;node/11420879670;;;Barcelona;41.397441;2.162159;sin nombre en OpenStreetMap
+descartado;node/11432298507;;;Viladecans;41.312604;2.014245;sin nombre en OpenStreetMap
+descartado;node/11432298512;;;Viladecans;41.314263;2.017873;sin nombre en OpenStreetMap
+descartado;node/11432298558;;;Viladecans;41.32163;2.018367;sin nombre en OpenStreetMap
+descartado;node/11432298563;;;Viladecans;41.323361;2.014324;sin nombre en OpenStreetMap
+descartado;node/11432307459;;;Viladecans;41.31749;2.009431;sin nombre en OpenStreetMap
+descartado;node/11432307460;;;Viladecans;41.32205;2.018683;sin nombre en OpenStreetMap
+descartado;node/11433029546;;Carrefour;Manresa;41.73082;1.822846;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/11433029547;;Carrefour;Manresa;41.730516;1.8229;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/1156477283;;Carrefour;Lleida;41.617147;0.61283;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/11768474737;;Condis;Barcelona;41.409409;2.163849;duplicado en el lote de node/2351467127 (79 m)
+descartado;node/11775075582;;;Begur;41.940711;3.199126;sin nombre en OpenStreetMap
+descartado;node/11813557519;;CAP Rialp (Dispensari Municipal);Rialp;42.443013;1.134131;texto excluido (mental|veterinari|dental|fisioter|rehabilitaci|consultori|dispensari)
+descartado;node/11816306869;;;Barcelona;41.380974;2.11462;sin nombre en OpenStreetMap
+descartado;node/11818060769;;Carrefour express;Mataró;41.534335;2.445922;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/11876564669;;;Barcelona;41.404502;2.196485;sin nombre en OpenStreetMap
+descartado;node/12026440389;;Pròxim Supermercats;Molins de Rei;41.415091;2.018937;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/12096447977;;;Girona;41.972256;2.826021;sin nombre en OpenStreetMap
+descartado;node/12103988457;;CAP;Ossó de Sió;41.747295;1.173667;nombre generico o dudoso en OpenStreetMap: CAP
+descartado;node/12104502468;;;Cunit;41.196397;1.635075;sin nombre en OpenStreetMap
+descartado;node/12170270544;;Jutjats;Blanes;41.676101;2.782931;nombre generico o dudoso en OpenStreetMap: Jutjats
+descartado;node/12177032243;;;Torroella de Montgrí;42.052967;3.199712;sin nombre en OpenStreetMap
+descartado;node/12238933364;;Unitat d'Hospitalització de la FSSJ;Igualada;41.582604;1.61872;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;node/12258605904;;Centre de Salut Mental d'Adults Valls;Valls;41.289213;1.250305;texto excluido (mental|veterinari|dental|fisioter|rehabilitaci|consultori|dispensari)
+descartado;node/12378902159;;;Figueres;42.262414;2.966093;sin nombre en OpenStreetMap
+descartado;node/12378988993;;;Figueres;42.266806;2.966153;sin nombre en OpenStreetMap
+descartado;node/12390144155;;;l'Aldea;40.748604;0.624502;sin nombre en OpenStreetMap
+descartado;node/12400402828;;Supermercat;Barcelona;41.395219;2.171438;nombre generico o dudoso en OpenStreetMap: Supermercat
+descartado;node/12402959585;;;la Vall de Boí;42.514053;0.8589;sin nombre en OpenStreetMap
+descartado;node/12441928153;;Mercat Sahrawi;Valls;41.288011;1.254438;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/12480929999;;Pròxim Supermercats;Viladrau;41.847428;2.390254;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/12542238201;;;Barcelona;41.409202;2.173758;sin nombre en OpenStreetMap
+descartado;node/12628090501;;Carrefour Market;Barcelona;41.397888;2.174039;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/12649689415;;CAP;Montgat;41.465478;2.267906;nombre generico o dudoso en OpenStreetMap: CAP
+descartado;node/12652697482;;Centre de Salut Mental Infantil i Juvenil;Reus;41.154258;1.103273;texto excluido (mental|veterinari|dental|fisioter|rehabilitaci|consultori|dispensari)
+descartado;node/12677096554;;;Llavorsí;42.49612;1.210867;sin nombre en OpenStreetMap
+descartado;node/1268257245;;;Flix;41.22921;0.549546;sin nombre en OpenStreetMap
+descartado;node/12757571256;;Mutua;Sant Celoni;41.686001;2.486878;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;node/1278184285;;Ajuntament;Sant Julià del Llor i Bonmatí;41.968011;2.670293;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/12798315873;;Centre de Salut Mental Tarragona Nord;Tarragona;41.117921;1.249953;texto excluido (mental|veterinari|dental|fisioter|rehabilitaci|consultori|dispensari)
+descartado;node/12836448095;;;Barcelona;41.379602;2.167675;sin nombre en OpenStreetMap
+descartado;node/12873859139;;CLINICFISIO Fisioteràpia i Osteopatia;Sabadell;41.550245;2.099416;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;node/12882941401;;;Manresa;41.726566;1.836664;sin nombre en OpenStreetMap
+descartado;node/12883539292;;Nau PZ VDD;Vilassar de Dalt;41.515038;2.367313;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;node/12912876801;;Aldi;Barcelona;41.405928;2.15344;duplicado en el lote de node/12848411576 (3 m)
+descartado;node/12949191532;;Tot d'Avui Supermercats Estalvi;Sant Cugat del Vallès;41.473653;2.088272;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/12957353057;;;Salou;41.069222;1.152878;sin nombre en OpenStreetMap
+descartado;node/12957559315;;;Salou;41.069287;1.153622;sin nombre en OpenStreetMap
+descartado;node/13001928501;;;Barcelona;41.412015;2.169336;sin nombre en OpenStreetMap
+descartado;node/1300736841;;Carrefour;Gavà;41.295876;2.007594;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/13039445854;;;Calella;41.611805;2.656017;sin nombre en OpenStreetMap
+descartado;node/13045862701;;Supermercats Dia;Alcarràs;41.563822;0.527215;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/13062958157;;;Figueres;42.26003;2.966888;sin nombre en OpenStreetMap
+descartado;node/13154982469;;;l'Escala;42.116893;3.129085;sin nombre en OpenStreetMap
+descartado;node/13174228075;;;Barcelona;41.394942;2.20092;sin nombre en OpenStreetMap
+descartado;node/13190874380;;Supermercat Disbo Sala;Vilanova de Meià;41.992678;1.020397;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/13191235901;;Supermercat;Barcelona;41.385158;2.18326;nombre generico o dudoso en OpenStreetMap: Supermercat
+descartado;node/13203804560;;SDS Dental Clinic;Vilafranca del Penedès;41.347293;1.700864;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;node/13230386169;;;Badalona;41.446312;2.236949;sin nombre en OpenStreetMap
+descartado;node/13249600601;;Centre Mèdic Aragó;Barcelona;41.382859;2.153384;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;node/13250794380;;;Barcelona;41.374452;2.162623;sin nombre en OpenStreetMap
+descartado;node/13264846990;;Servei Salut Laboral PSSJD;Sant Boi de Llobregat;41.351614;2.034849;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;node/13274420001;;CSMA 1 - Centre de Salut Mental d'Adults 1;Badalona;41.453036;2.254001;texto excluido (mental|veterinari|dental|fisioter|rehabilitaci|consultori|dispensari)
+descartado;node/13291235401;;Sorli;Badalona;41.450711;2.230031;duplicado en el lote de node/13139773201 (4 m)
+descartado;node/13299025001;;Condis;Badalona;41.431646;2.23748;duplicado en el lote de node/10682702806 (120 m)
+descartado;node/13305938736;;Super mercat d'en Bas;la Vall d'en Bas;42.118521;2.455877;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/13353778058;;;Blanes;41.672551;2.776237;sin nombre en OpenStreetMap
+descartado;node/13363996644;;;Camarles;40.771513;0.671166;sin nombre en OpenStreetMap
+descartado;node/13406424601;;Carrefour Express;Barcelona;41.436733;2.161587;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/13452975770;;Ayuntamiento de Sopeira;;42.31643;0.746109;fuera de los municipios oficiales cargados
+descartado;node/13480911601;;Fit-plus gym;Santa Coloma de Gramenet;41.449061;2.207678;duplicado en el lote de node/13461357802 (18 m)
+descartado;node/1349063304;;Supermercats Ferre S.a.;Salou;41.073318;1.145114;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/1349063305;;Supermercado;Salou;41.075882;1.140281;nombre generico o dudoso en OpenStreetMap: Supermercado
+descartado;node/13524347093;;;Mont-roig del Camp;41.014289;0.946306;sin nombre en OpenStreetMap
+descartado;node/13532659829;;;Premià de Mar;41.490692;2.366904;sin nombre en OpenStreetMap
+descartado;node/13532675226;;;Cornellà de Llobregat;41.353288;2.083511;sin nombre en OpenStreetMap
+descartado;node/13534922003;;Casa de la Vila;;42.151144;0.694599;fuera de los municipios oficiales cargados
+descartado;node/13593776901;;BonÀrea;Barcelona;41.409582;2.163004;duplicado en el lote de node/10579667430 (54 m)
+descartado;node/13620098635;;Clasalut Servicios;Montmeló;41.551972;2.248586;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;node/13685386901;;;Badalona;41.462225;2.248514;sin nombre en OpenStreetMap
+descartado;node/13708126602;;Carrefour Express;Badalona;41.452772;2.230469;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/1374638141;;;Barcelona;41.385468;2.162576;sin nombre en OpenStreetMap
+descartado;node/1376723734;;;Sant Pere Pescador;42.153073;3.112382;sin nombre en OpenStreetMap
+descartado;node/13770682207;;Condis;Sant Boi de Llobregat;41.344966;2.037713;duplicado en el lote de node/13746025660 (147 m)
+descartado;node/13785056696;;;Anglès;41.955217;2.639148;sin nombre en OpenStreetMap
+descartado;node/13826008528;;VivaGym;Barcelona;41.384953;2.162804;duplicado en el lote de node/13160199901 (11 m)
+descartado;node/1388470267;;;Sant Pere Pescador;42.187964;3.102414;sin nombre en OpenStreetMap
+descartado;node/1395168631;;Jespac Supermercats;Barcelona;41.38693;2.160392;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/13968164801;;Caprabo;Sant Boi de Llobregat;41.34563;2.028252;duplicado en el lote de node/13968164701 (0 m)
+descartado;node/14022349601;;Proxim supermercats;Salt;41.973388;2.784944;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/14024933285;;Supermercat;Barcelona;41.379026;2.175622;nombre generico o dudoso en OpenStreetMap: Supermercat
+descartado;node/14028629676;;;la Jonquera;42.405259;2.879746;sin nombre en OpenStreetMap
+descartado;node/14075856658;;;Barcelona;41.381405;2.141543;sin nombre en OpenStreetMap
+descartado;node/1412078179;;Carrefour;Sant Cugat del Vallès;41.482144;2.053418;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/14155561552;;;Maçanet de la Selva;41.74946;2.779659;sin nombre en OpenStreetMap
+descartado;node/1420741824;;Consum;Reus;41.151605;1.105084;duplicado en el lote de node/12056900886 (68 m)
+descartado;node/14209616101;;;Barcelona;41.399396;2.154536;sin nombre en OpenStreetMap
+descartado;node/14212074570;;Urgències Mútua 24h;Terrassa;41.563522;2.017663;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;node/14235272601;;Supermercat;Barcelona;41.410913;2.15678;nombre generico o dudoso en OpenStreetMap: Supermercat
+descartado;node/14245158549;;;Barcelona;41.396;2.187172;sin nombre en OpenStreetMap
+descartado;node/14245950590;;;Barcelona;41.395424;2.187155;sin nombre en OpenStreetMap
+descartado;node/14245950592;;;Barcelona;41.395756;2.18718;sin nombre en OpenStreetMap
+descartado;node/14254256096;;Clinica Dental Dra Jaume;Sant Cugat del Vallès;41.475127;2.079955;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;node/14257727603;;Carrefour Express;Badalona;41.452819;2.230412;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/14314430499;;;Balenyà;41.814695;2.235081;sin nombre en OpenStreetMap
+descartado;node/14315058158;;;Balenyà;41.814571;2.235704;sin nombre en OpenStreetMap
+descartado;node/1552739079;;Carrefour;el Vendrell;41.213998;1.534527;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/1567357285;;;Terrassa;41.580311;2.033815;sin nombre en OpenStreetMap
+descartado;node/1597699130;;Spar;Barcelona;41.380346;2.188753;duplicado en el lote de node/1597699128 (49 m)
+descartado;node/1609172350;;Mercat Villalba;Barcelona;41.377368;2.119519;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/1617957270;;;Girona;41.98374;2.816145;sin nombre en OpenStreetMap
+descartado;node/1635342626;;;Salou;41.075853;1.140491;sin nombre en OpenStreetMap
+descartado;node/1659740698;;;Barcelona;41.395542;2.142354;sin nombre en OpenStreetMap
+descartado;node/1708289577;;Ajuntament;Castelló d'Empúries;42.258153;3.073909;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/1710746461;;Mercadona;Barcelona;41.40644;2.210159;duplicado en el lote de node/1710746453 (73 m)
+descartado;node/1711359436;;Mercadona;Barcelona;41.379473;2.143214;duplicado en el lote de node/12895097614 (77 m)
+descartado;node/1732689600;;;Sant Fruitós de Bages;41.751595;1.874713;sin nombre en OpenStreetMap
+descartado;node/1754693997;;Carrefour;Cabrera de Mar;41.519497;2.422377;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/1755468911;;Plusfresc;Barcelona;41.406409;2.137143;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/1790772905;;Carrefour Market;Palafrugell;41.911257;3.16725;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/1808977738;;Ajuntament;els Torms;41.394185;0.719886;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/1825782768;;SPAR;Calonge i Sant Antoni;41.848078;3.108338;duplicado en el lote de node/7735007399 (41 m)
+descartado;node/1845505620;;Caprabo;Barcelona;41.406457;2.177272;duplicado en el lote de node/3682089125 (118 m)
+descartado;node/1878636901;;;Barcelona;41.372897;2.125696;sin nombre en OpenStreetMap
+descartado;node/1999525573;;;Calaf;41.733218;1.513599;sin nombre en OpenStreetMap
+descartado;node/2031932011;;;Arenys de Munt;41.612498;2.538386;sin nombre en OpenStreetMap
+descartado;node/2034780552;;Supermercat;Barcelona;41.406703;2.151699;nombre generico o dudoso en OpenStreetMap: Supermercat
+descartado;node/2063950821;;;Barcelona;41.428823;2.183324;sin nombre en OpenStreetMap
+descartado;node/2066042073;;;Barcelona;41.436113;2.172858;sin nombre en OpenStreetMap
+descartado;node/2069534978;;Ajuntament;Blancafort;41.437925;1.159281;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/2070011321;;Ajuntament;Pontils;41.47734;1.387881;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/2085452061;;Ajuntament;Vilaller;42.476283;0.716972;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/2089869692;;Creu Roja;Valls;41.290281;1.246444;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;node/2089889073;;Ajuntament;el Perelló;40.875089;0.712392;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/2150260930;;Ajuntament;Biosca;41.841782;1.358282;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/2154662145;;;Cornellà del Terri;42.089805;2.816265;sin nombre en OpenStreetMap
+descartado;node/2181431810;;Ajuntament;Santa Coloma de Queralt;41.532375;1.383546;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/2191032918;;Ajuntament;Llorac;41.55667;1.307588;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/2193421646;;Carrefour;Barcelona;41.405634;2.191703;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/2203515986;;Ajuntament;les Piles;41.503805;1.34244;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/2236057340;;Hipercor;Cornellà de Llobregat;41.354565;2.08832;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/2278012856;;;Maçanet de la Selva;41.779787;2.738563;sin nombre en OpenStreetMap
+descartado;node/2319458353;;Ajuntament;la Galera;40.681529;0.463714;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/2320703727;;Ajuntament;Godall;40.655567;0.468515;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/2322288572;;Jespac Supermercats;Barcelona;41.392733;2.15119;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/2337414726;;Ajuntament;Tortosa;40.85935;0.524062;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/2338303689;;Ajuntament;Aldover;40.879853;0.499912;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/2338409730;;Ajuntament;Xerta;40.906805;0.49061;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/2339461963;;Ajuntament;Tivenys;40.906993;0.511666;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/2398449181;;Ajuntament;Torà;41.812874;1.402856;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/2408061002;;Ajuntament;Horta de Sant Joan;40.953848;0.316849;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/2408717119;;Ajuntament;la Fatarella;41.162384;0.473046;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/2408920286;;Ajuntament;Batea;41.094906;0.31075;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/2411783593;;Carrefour;Girona;41.978608;2.812848;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/2411832138;;Ajuntament;els Guiamets;41.101917;0.752148;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/2459311058;;;Sant Joan Despí;41.372492;2.070203;sin nombre en OpenStreetMap
+descartado;node/2472889647;;Caprabo;Barcelona;41.417346;2.189043;duplicado en el lote de node/2430077720 (93 m)
+descartado;node/2485081460;;B.H.G Supermercat del Món;Barcelona;41.376378;2.162292;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/2501068122;;;Barcelona;41.38624;2.165088;sin nombre en OpenStreetMap
+descartado;node/2801517336;;Ajuntament;Riudoms;41.137697;1.050884;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/2803967202;;Ajuntament;la Torre de Fontaubella;41.124425;0.864148;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/2906510494;;Ajuntament;Falset;41.146112;0.820125;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/2962042533;;Carrefour Market;Barcelona;41.420022;2.196276;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/296278854;;Carrefour Market;Pineda de Mar;41.629379;2.692215;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/2986066961;;Supermercat;l'Ametlla de Mar;40.927661;0.842541;nombre generico o dudoso en OpenStreetMap: Supermercat
+descartado;node/2995592149;;;Calonge i Sant Antoni;41.831167;3.080981;sin nombre en OpenStreetMap
+descartado;node/2997299832;;Ajuntament;Santa Susanna;41.635271;2.707564;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/2999460770;;;Girona;41.978813;2.810099;sin nombre en OpenStreetMap
+descartado;node/3014959053;;;Girona;41.977017;2.808085;sin nombre en OpenStreetMap
+descartado;node/3044226106;;Dia;Sant Pere de Ribes;41.25933;1.776814;duplicado en el lote de node/3044226105 (11 m)
+descartado;node/3051617314;;;Girona;41.975268;2.803027;sin nombre en OpenStreetMap
+descartado;node/3071525763;;;Roses;42.247643;3.196113;sin nombre en OpenStreetMap
+descartado;node/3079351585;;;Barcelona;41.373437;2.146591;sin nombre en OpenStreetMap
+descartado;node/3106831730;;Consum;Barcelona;41.376366;2.165843;duplicado en el lote de node/4568287591 (129 m)
+descartado;node/312050319;;Carrefour;Granollers;41.596001;2.284232;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/3165052456;;mini market;Sitges;41.235618;1.80914;nombre generico o dudoso en OpenStreetMap: mini market
+descartado;node/3177643969;;;Calldetenes;41.925158;2.283632;sin nombre en OpenStreetMap
+descartado;node/3177694626;;;Calldetenes;41.924729;2.283821;sin nombre en OpenStreetMap
+descartado;node/3201921461;;Raül Girona Supermercats;Torroella de Montgrí;42.050684;3.195689;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/3225179632;;Carrefour Market;Vallfogona de Balaguer;41.787477;0.826119;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/3307712699;;Ajuntament;Espot;42.57557;1.089901;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/3317172306;;Condis;Barcelona;41.412942;2.139086;duplicado en el lote de node/3317171463 (93 m)
+descartado;node/3378352156;;;Girona;41.984525;2.822547;sin nombre en OpenStreetMap
+descartado;node/3493468105;;;Montblanc;41.376781;1.16415;sin nombre en OpenStreetMap
+descartado;node/3508263957;;;Girona;41.971423;2.811288;sin nombre en OpenStreetMap
+descartado;node/3551358305;;Dia;Barcelona;41.38211;2.16987;duplicado en el lote de node/1083144031 (123 m)
+descartado;node/3561003493;;Supermercats Legou;Badalona;41.444102;2.223528;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/357134889;;Bonpreu;Cerdanyola del Vallès;41.487938;2.12918;etiqueta disused:amenity
+descartado;node/3584480662;;;Sarrià de Ter;42.005616;2.816708;sin nombre en OpenStreetMap
+descartado;node/3635028367;;;Girona;41.969559;2.810251;sin nombre en OpenStreetMap
+descartado;node/3635031170;;;Girona;41.970174;2.809715;sin nombre en OpenStreetMap
+descartado;node/3640658705;;;Barcelona;41.377608;2.175603;sin nombre en OpenStreetMap
+descartado;node/3661120609;;;Girona;41.969105;2.81007;sin nombre en OpenStreetMap
+descartado;node/3694795178;;;Girona;41.975657;2.821989;sin nombre en OpenStreetMap
+descartado;node/3743065780;;;Barcelona;41.37949;2.167279;sin nombre en OpenStreetMap
+descartado;node/3749411839;;;Barcelona;41.38058;2.167645;sin nombre en OpenStreetMap
+descartado;node/3759187724;;Condis;Sant Feliu de Llobregat;41.388215;2.045288;duplicado en el lote de node/3757650540 (120 m)
+descartado;node/3835404996;;Mercat Més Barat;Cervera;41.670726;1.271848;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/3878579155;;Ajuntament;l'Arboç;41.267762;1.603787;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/3887840743;;Ajuntament;Salàs de Pallars;42.211925;0.932305;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/3890671063;;Ajuntament;l'Argentera;41.137443;0.909231;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/393934062;;Carrefour;l'Ametlla del Vallès;41.663896;2.26971;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/4041505537;;Ayuntamiento de Arens de Lledó;;40.992511;0.270901;fuera de los municipios oficiales cargados
+descartado;node/4052472693;;CAP;la Pobla de Lillet;42.246203;1.974583;nombre generico o dudoso en OpenStreetMap: CAP
+descartado;node/4067664610;;Centre de Salut Mental CESAM Manresa;Manresa;41.721196;1.834682;texto excluido (mental|veterinari|dental|fisioter|rehabilitaci|consultori|dispensari)
+descartado;node/4079785033;;;Girona;41.972801;2.807106;sin nombre en OpenStreetMap
+descartado;node/4104816097;;;Montcada i Reixac;41.48541;2.166619;sin nombre en OpenStreetMap
+descartado;node/4171862198;;;la Jonquera;42.427592;2.868047;sin nombre en OpenStreetMap
+descartado;node/4212224496;;Proxim Supermercats;Salou;41.070237;1.150744;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/4325282538;;;Girona;41.973732;2.807731;sin nombre en OpenStreetMap
+descartado;node/4325282539;;;Girona;41.974658;2.80825;sin nombre en OpenStreetMap
+descartado;node/4327120989;;;Girona;41.97386;2.803146;sin nombre en OpenStreetMap
+descartado;node/4335094161;;;Girona;41.969603;2.817259;sin nombre en OpenStreetMap
+descartado;node/4343636990;;Supermercats MICHELANGELO;Vila-seca;41.078952;1.181966;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/4346499997;;Carrefour Market;Tarragona;41.115836;1.254014;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/4362285506;;CAP;l'Ametlla del Vallès;41.667125;2.262346;nombre generico o dudoso en OpenStreetMap: CAP
+descartado;node/4391046091;;;Barcelona;41.375711;2.189374;sin nombre en OpenStreetMap
+descartado;node/4391716589;;;Barcelona;41.393118;2.199599;sin nombre en OpenStreetMap
+descartado;node/4395426789;;Piscina municipal;Altafulla;41.139375;1.373642;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal|pavell[oó]|camp de futbol|piscina)
+descartado;node/4414952591;;;Barcelona;41.382478;2.159508;sin nombre en OpenStreetMap
+descartado;node/441947265;;;Santa Margarida de Montbui;41.574202;1.608252;sin nombre en OpenStreetMap
+descartado;node/4426326894;;;Navàs;41.90165;1.879129;sin nombre en OpenStreetMap
+descartado;node/4430326635;;Supermercats Llobet;Balsareny;41.865104;1.874848;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/4439580498;;Centre de Salut Mental Infantil i Juvenil;Vilanova i la Geltrú;41.228837;1.72263;texto excluido (mental|veterinari|dental|fisioter|rehabilitaci|consultori|dispensari)
+descartado;node/4496995705;;;Barcelona;41.437427;2.173055;sin nombre en OpenStreetMap
+descartado;node/4545084827;;la Torrassa - Carrefour Express;Espot;42.577148;1.13923;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/4582037089;;Mercadona;Lleida;41.624112;0.623208;duplicado en el lote de node/13061887532 (95 m)
+descartado;node/4608724758;;Centre de Salut Mental Infantil i Juvenil Sant Boi;Sant Boi de Llobregat;41.346385;2.038078;texto excluido (mental|veterinari|dental|fisioter|rehabilitaci|consultori|dispensari)
+descartado;node/4698682129;;;Barcelona;41.376497;2.167813;sin nombre en OpenStreetMap
+descartado;node/4698792689;;;Esplugues de Llobregat;41.374029;2.100438;sin nombre en OpenStreetMap
+descartado;node/4709933979;;Carrefour;l'Hospitalet de Llobregat;41.358679;2.129897;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/4721547996;;BonÀrea;Barcelona;41.423382;2.178396;duplicado en el lote de node/11302888869 (15 m)
+descartado;node/4725692789;;;Barcelona;41.375847;2.163853;sin nombre en OpenStreetMap
+descartado;node/4762934625;;Caprabo;Barcelona;41.422002;2.180992;duplicado en el lote de node/3009190770 (15 m)
+descartado;node/4785060726;;Bonpreu Supermercats;la Bisbal d'Empordà;41.96676;3.033113;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/478861282;;Mercadona;Barcelona;41.43757;2.180496;duplicado en el lote de node/12239457001 (69 m)
+descartado;node/4788760626;;Mercat;Barcelona;41.415189;2.181136;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/4798481437;;;Barcelona;41.376579;2.169343;sin nombre en OpenStreetMap
+descartado;node/4822990824;;;Vilassar de Mar;41.504404;2.395614;sin nombre en OpenStreetMap
+descartado;node/4823518621;;Carrefour Market;Barcelona;41.419304;2.178937;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/482999089;;Mercat Ambulant Pla d' en Boet;Mataró;41.53179;2.431951;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/482999091;;Mercat privat de Cerdanyola;Mataró;41.535674;2.423353;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/482999100;;Mercat privat el Pilar;Mataró;41.536834;2.431727;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/482999106;;Mercat Ambulant de Cirera Molins;Mataró;41.549182;2.440389;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/4847681490;;;Paüls;40.921334;0.399586;sin nombre en OpenStreetMap
+descartado;node/4847681814;;;Duesaigües;41.146187;0.931127;sin nombre en OpenStreetMap
+descartado;node/4890466391;;Ajuntament de Sant Rafel del Riu;Sant Rafel del Riu;40.605711;0.349822;fuera de las provincias del lote (12)
+descartado;node/4908825608;;Supermercats Juma;Ripollet;41.504097;2.159394;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/492443729;;;Sabadell;41.575589;2.086773;sin nombre en OpenStreetMap
+descartado;node/492667703;;Carrefour;Figueres;42.268786;3.001499;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/4983765006;;Sorli;Badalona;41.441115;2.22343;duplicado en el lote de node/3059741281 (117 m)
+descartado;node/5035084859;;;Calonge i Sant Antoni;41.833089;3.087932;sin nombre en OpenStreetMap
+descartado;node/504563230;;;Palamós;41.857526;3.137955;sin nombre en OpenStreetMap
+descartado;node/5083266926;;BonÀrea;Barcelona;41.382641;2.138054;duplicado en el lote de node/13182210908 (129 m)
+descartado;node/5105067321;;;Barcelona;41.385898;2.174645;sin nombre en OpenStreetMap
+descartado;node/5110032621;;Condis;Barcelona;41.406574;2.159032;duplicado en el lote de node/7550814385 (106 m)
+descartado;node/5149996026;;Centre de Salut Mental d'Adults;Sant Boi de Llobregat;41.349519;2.038098;texto excluido (mental|veterinari|dental|fisioter|rehabilitaci|consultori|dispensari)
+descartado;node/5198201123;;;Barcelona;41.395184;2.170447;sin nombre en OpenStreetMap
+descartado;node/5220028422;;;Sant Pere Pescador;42.176707;3.107969;sin nombre en OpenStreetMap
+descartado;node/5231525296;;Supermercat Llobet;Prats de Lluçanès;42.008339;2.028895;duplicado en el lote de node/3116659114 (18 m)
+descartado;node/5235661122;;Veritas;Barcelona;41.384763;2.177911;duplicado en el lote de node/4172419190 (38 m)
+descartado;node/5258545265;;UDIAT;Sabadell;41.557474;2.111516;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;node/5258545269;;Albada;Sabadell;41.556131;2.11312;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;node/5298404573;;;Badalona;41.439666;2.225223;sin nombre en OpenStreetMap
+descartado;node/5299922529;;Awami;Badalona;41.434415;2.218607;duplicado en el lote de node/5108495822 (114 m)
+descartado;node/5310124795;;Urgencias Taulí;Sabadell;41.556773;2.109977;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;node/5318409429;;Supermercat;Barcelona;41.391739;2.14372;nombre generico o dudoso en OpenStreetMap: Supermercat
+descartado;node/5318460690;;Spar;Palafrugell;41.918908;3.207021;duplicado en el lote de node/5318460691 (74 m)
+descartado;node/5336472358;;CAP;Santpedor;41.7826;1.836191;nombre generico o dudoso en OpenStreetMap: CAP
+descartado;node/533817733;;Carrefour;Badalona;41.456306;2.227651;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/5347967001;;Supermercats Chaouia;Badalona;41.446841;2.220799;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/5462444822;;Carrefour Market;Pineda de Mar;41.622644;2.673502;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/5468965750;;;Vallbona d'Anoia;41.518298;1.707291;sin nombre en OpenStreetMap
+descartado;node/5469440199;;Alimentació;Cerdanyola del Vallès;41.492873;2.147837;nombre generico o dudoso en OpenStreetMap: Alimentació
+descartado;node/5521367225;;;Tiana;41.482584;2.268685;sin nombre en OpenStreetMap
+descartado;node/5538136361;;Centre de Salut Mental Guinardó;Barcelona;41.419153;2.178455;texto excluido (mental|veterinari|dental|fisioter|rehabilitaci|consultori|dispensari)
+descartado;node/5571047044;;;Sabadell;41.548723;2.12806;sin nombre en OpenStreetMap
+descartado;node/5660831206;;Carrefour;Santa Susanna;41.636743;2.717438;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/5660831902;;CAP;Santa Susanna;41.635605;2.707379;nombre generico o dudoso en OpenStreetMap: CAP
+descartado;node/5682674609;;;Torroella de Montgrí;42.013017;3.189103;sin nombre en OpenStreetMap
+descartado;node/5807191693;;Carrefour;Barberà del Vallès;41.507869;2.138847;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/5809047330;;Mercat Orient;Sabadell;41.542154;2.110946;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/5829402302;;;Rubí;41.487415;2.030788;sin nombre en OpenStreetMap
+descartado;node/5850666787;;Mercat de la Creu Alta;Sabadell;41.560701;2.101666;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/5856752093;;Spar;la Bisbal d'Empordà;41.961084;3.03846;duplicado en el lote de node/3670311505 (38 m)
+descartado;node/5918370167;;Mutua Universal;Tortosa;40.803492;0.52141;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;node/5954257597;;Consum;Barcelona;41.380174;2.16146;duplicado en el lote de node/2487142966 (106 m)
+descartado;node/6002139096;;;Lloret de Mar;41.703421;2.845278;sin nombre en OpenStreetMap
+descartado;node/6053107259;;Cruz Roja Sabadell;Sabadell;41.545023;2.116283;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;node/6125628293;;CAP;Falset;41.147467;0.823336;nombre generico o dudoso en OpenStreetMap: CAP
+descartado;node/6174756388;;Supermercat;Vic;41.93219;2.25327;nombre generico o dudoso en OpenStreetMap: Supermercat
+descartado;node/6214109911;;;Barcelona;41.381319;2.180771;sin nombre en OpenStreetMap
+descartado;node/6223074927;;Centre de Salut Mental s'Adults;Figueres;42.269649;2.959631;texto excluido (mental|veterinari|dental|fisioter|rehabilitaci|consultori|dispensari)
+descartado;node/6223074928;;Centre de Salut Mental Infantil i Juvenil;Figueres;42.269573;2.959672;texto excluido (mental|veterinari|dental|fisioter|rehabilitaci|consultori|dispensari)
+descartado;node/6254619276;;;Barcelona;41.383418;2.158943;sin nombre en OpenStreetMap
+descartado;node/6276382505;;;Torroella de Montgrí;42.042936;3.183395;sin nombre en OpenStreetMap
+descartado;node/6319918185;;Michelangelo;Salou;41.076202;1.143899;duplicado en el lote de node/2324644234 (146 m)
+descartado;node/6355587421;;Carrefour Market;Barcelona;41.375457;2.128278;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/6374571514;;;Barcelona;41.409888;2.155892;sin nombre en OpenStreetMap
+descartado;node/6381482404;;Lidl;Barcelona;41.366715;2.137269;duplicado en el lote de node/13532672266 (19 m)
+descartado;node/638864455;;;Molins de Rei;41.414493;2.02206;sin nombre en OpenStreetMap
+descartado;node/6400631167;;Supermercat;Barcelona;41.399707;2.168701;nombre generico o dudoso en OpenStreetMap: Supermercat
+descartado;node/6447958939;;Super;Barcelona;41.374436;2.18825;nombre generico o dudoso en OpenStreetMap: Super
+descartado;node/6516462085;;;Sant Pere Pescador;42.160882;3.108447;sin nombre en OpenStreetMap
+descartado;node/6538042985;;Caprabo;Barcelona;41.392346;2.18877;duplicado en el lote de node/2085902181 (81 m)
+descartado;node/6540195894;;;Sant Joan de les Abadesses;42.233435;2.286556;sin nombre en OpenStreetMap
+descartado;node/6546306195;;Consum;Girona;41.978703;2.822824;duplicado en el lote de node/4338337699 (68 m)
+descartado;node/6582866737;;Mercadona;Girona;41.962676;2.811634;duplicado en el lote de node/3704549703 (72 m)
+descartado;node/6602450586;;;Caldes de Malavella;41.836058;2.799799;sin nombre en OpenStreetMap
+descartado;node/6615896129;;Supermercats Jr;Vilanova i la Geltrú;41.224746;1.726352;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/6699956277;;Supermercats Llobet;Artés;41.797368;1.953958;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/6729050007;;;Castellterçol;41.751464;2.119556;sin nombre en OpenStreetMap
+descartado;node/6750690097;;Supermercat;Barcelona;41.401728;2.175118;nombre generico o dudoso en OpenStreetMap: Supermercat
+descartado;node/6750710086;;Supermercat;Barcelona;41.403493;2.17743;nombre generico o dudoso en OpenStreetMap: Supermercat
+descartado;node/6769086635;;Supermercats Coaliment;la Secuita;41.201776;1.279996;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/6798443762;;Ajuntament;Alàs i Cerc;42.341668;1.552886;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/682377234;;;Sant Just Desvern;41.382812;2.080646;sin nombre en OpenStreetMap
+descartado;node/6886341368;;Supermercats Martin;Cerdanyola del Vallès;41.490406;2.146745;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/6938863405;;;l'Espluga de Francolí;41.395211;1.098675;sin nombre en OpenStreetMap
+descartado;node/6998054485;;;Figueres;42.268606;2.960203;sin nombre en OpenStreetMap
+descartado;node/7003296915;;Dia;Barcelona;41.375196;2.162417;duplicado en el lote de node/1706985411 (120 m)
+descartado;node/7035127186;;Carrefour;Manresa;41.731011;1.8235;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/7040898591;;;Barcelona;41.391036;2.197712;sin nombre en OpenStreetMap
+descartado;node/7071612841;;Supermercats Charter;Manresa;41.730992;1.820985;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/7101891834;;;la Jonquera;42.419939;2.871225;sin nombre en OpenStreetMap
+descartado;node/7206503785;;McFit;Rubí;41.485075;2.042666;duplicado en el lote de node/7080907347 (3 m)
+descartado;node/7223095580;;BonÀrea;Cerdanyola del Vallès;41.490754;2.144795;duplicado en el lote de node/12347704301 (23 m)
+descartado;node/7274118532;;PROXIM supermercats;Roses;42.262981;3.177622;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/7529253172;;Mercadona;Barcelona;41.417381;2.188395;duplicado en el lote de node/3298739648 (83 m)
+descartado;node/7556742489;;;Barcelona;41.403491;2.195969;sin nombre en OpenStreetMap
+descartado;node/7733842090;;;Sant Andreu de la Barca;41.451272;1.966397;sin nombre en OpenStreetMap
+descartado;node/776978847;;Ajuntament;Alcanar;40.542832;0.481877;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/7869097190;;Ajuntament;Bossòst;42.785658;0.692309;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/7889645886;;;Bàscara;42.157748;2.909336;sin nombre en OpenStreetMap
+descartado;node/7954927869;;CAP;Gratallops;41.193416;0.778123;nombre generico o dudoso en OpenStreetMap: CAP
+descartado;node/7981397996;;;Ripollet;41.494269;2.149577;sin nombre en OpenStreetMap
+descartado;node/7987058386;;;Barcelona;41.419766;2.175461;sin nombre en OpenStreetMap
+descartado;node/7987071185;;Rapid supermercats;Barcelona;41.420823;2.174439;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/7989011197;;Mercadona;Barcelona;41.413007;2.170687;duplicado en el lote de node/6761811693 (43 m)
+descartado;node/8062399091;;Ajuntament;Llambilles;41.921208;2.859266;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/8063317580;;Ajuntament;Mont-ras;41.908018;3.144693;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/8063369922;;Ajuntament;Flaçà;42.04684;2.958102;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/8063662509;;Ajuntament;Sant Martí Vell;42.019659;2.930533;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/8077128421;;Bonpreu;Barcelona;41.401134;2.202545;duplicado en el lote de node/5509171592 (96 m)
+descartado;node/814747316;;Carrefour;Girona;41.995674;2.819901;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/8184617417;;Mercadona;Barcelona;41.390295;2.175817;duplicado en el lote de node/4172413191 (37 m)
+descartado;node/8184769985;;;Anglès;41.956432;2.636701;sin nombre en OpenStreetMap
+descartado;node/8237528848;;Proxim;Menàrguens;41.729709;0.74401;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/824199748;;;Parets del Vallès;41.573472;2.234746;sin nombre en OpenStreetMap
+descartado;node/8251986919;;Mercadona;Barcelona;41.403483;2.17228;duplicado en el lote de node/8463558417 (36 m)
+descartado;node/8280569572;;Carrefour;Olèrdola;41.355554;1.739584;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/8320711544;;;Barcelona;41.421576;2.146017;sin nombre en OpenStreetMap
+descartado;node/8342793327;;;Barcelona;41.421925;2.148656;sin nombre en OpenStreetMap
+descartado;node/8345980070;;;Barcelona;41.424698;2.151659;sin nombre en OpenStreetMap
+descartado;node/8388129591;;Mercadona;Barcelona;41.375612;2.131362;duplicado en el lote de node/532408861 (66 m)
+descartado;node/8396138417;;Supermercat;Barcelona;41.40378;2.168538;nombre generico o dudoso en OpenStreetMap: Supermercat
+descartado;node/8399272331;;;Martorell;41.474411;1.918773;sin nombre en OpenStreetMap
+descartado;node/8406330417;;;Cerdanyola del Vallès;41.489566;2.132817;sin nombre en OpenStreetMap
+descartado;node/8488677115;;Centro médico Illa de Salut;Sils;41.810547;2.742676;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;node/8512874618;;Condis;Barcelona;41.408125;2.177237;duplicado en el lote de node/8512874521 (84 m)
+descartado;node/853199513;;Mercadona;Esplugues de Llobregat;41.371244;2.08708;duplicado en el lote de node/1596290145 (54 m)
+descartado;node/8545107617;;Supermercat;Barcelona;41.405147;2.157368;nombre generico o dudoso en OpenStreetMap: Supermercat
+descartado;node/8553081920;;Supermercat;Barcelona;41.406867;2.177459;nombre generico o dudoso en OpenStreetMap: Supermercat
+descartado;node/8561846807;;Carrefour Market;Badalona;41.438406;2.224682;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/8614386876;;;Barcelona;41.425183;2.155794;sin nombre en OpenStreetMap
+descartado;node/8616821487;;Monmas;Barcelona;41.377223;2.162597;duplicado en el lote de node/5424673421 (108 m)
+descartado;node/8636244675;;;Barcelona;41.37506;2.172892;sin nombre en OpenStreetMap
+descartado;node/8659204807;;;Barcelona;41.426007;2.154229;sin nombre en OpenStreetMap
+descartado;node/8706851062;;;Barcelona;41.425536;2.155421;sin nombre en OpenStreetMap
+descartado;node/8709754529;;;Barcelona;41.425272;2.154544;sin nombre en OpenStreetMap
+descartado;node/8709834299;;Carrefour;Barcelona;41.426654;2.155143;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/8709834314;;;Barcelona;41.426754;2.155268;sin nombre en OpenStreetMap
+descartado;node/8731226580;;;Barcelona;41.422076;2.155454;sin nombre en OpenStreetMap
+descartado;node/8731305832;;;Barcelona;41.423319;2.154607;sin nombre en OpenStreetMap
+descartado;node/8749204637;;Caprabo;Barcelona;41.375252;2.137377;duplicado en el lote de node/1711347768 (139 m)
+descartado;node/8752202017;;;Prullans;42.379215;1.737564;sin nombre en OpenStreetMap
+descartado;node/8937707716;;Aldi;Barcelona;41.385439;2.160064;duplicado en el lote de node/8119059811 (47 m)
+descartado;node/8962202817;;Condis;Barcelona;41.401896;2.159869;duplicado en el lote de node/11241832590 (118 m)
+descartado;node/9022626869;;;Soriguera;42.397794;1.137566;sin nombre en OpenStreetMap
+descartado;node/9028471124;;;Girona;41.97633;2.800454;sin nombre en OpenStreetMap
+descartado;node/9034077762;;;Bàscara;42.158174;2.910899;sin nombre en OpenStreetMap
+descartado;node/9035673437;;;Sant Llorenç de la Muga;42.320015;2.789965;sin nombre en OpenStreetMap
+descartado;node/9046345266;;;la Jonquera;42.399665;2.885391;sin nombre en OpenStreetMap
+descartado;node/9111987822;;;Salou;41.077222;1.116421;sin nombre en OpenStreetMap
+descartado;node/9138108918;;Aldi;Barcelona;41.38585;2.137747;duplicado en el lote de node/6209019704 (79 m)
+descartado;node/9139940345;;Aldi;Barcelona;41.385352;2.137005;duplicado en el lote de node/6209019704 (8 m)
+descartado;node/9172254533;;;Salt;41.973183;2.789284;sin nombre en OpenStreetMap
+descartado;node/9209711417;;;Bàscara;42.159313;2.910482;sin nombre en OpenStreetMap
+descartado;node/9250123392;;Proxim Supermercats;Castellfollit de la Roca;42.219235;2.548904;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/9351266005;;;Barcelona;41.38583;2.154432;sin nombre en OpenStreetMap
+descartado;node/9372795451;;Condis;l'Hospitalet de Llobregat;41.372796;2.109064;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/9427171420;;;Cornellà de Llobregat;41.356274;2.071609;sin nombre en OpenStreetMap
+descartado;node/9431449117;;;Matadepera;41.599244;2.025565;sin nombre en OpenStreetMap
+descartado;node/9500556776;;;Llançà;42.370973;3.163047;sin nombre en OpenStreetMap
+descartado;node/9531795377;;Suma;Reus;41.159195;1.111817;duplicado en el lote de node/10239646813 (63 m)
+descartado;node/9559937797;;;Sant Andreu de Llavaneres;41.572929;2.482074;sin nombre en OpenStreetMap
+descartado;node/9574771756;;Coaliment Supermercats;Barcelona;41.404467;2.144129;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/966698459;;;Amer;42.008641;2.60386;sin nombre en OpenStreetMap
+descartado;node/9729210161;;Mercadona;l'Hospitalet de Llobregat;41.364289;2.127622;duplicado en el lote de node/2941793612 (2 m)
+descartado;node/9759339663;;Carrefour Market;Barcelona;41.386773;2.17523;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/9804605331;;Supermercat;Barcelona;41.405934;2.151597;duplicado en el lote de node/2034780552 (85 m)
+descartado;node/9806808418;;;Barcelona;41.375015;2.147156;sin nombre en OpenStreetMap
+descartado;node/9806972218;;;Barcelona;41.365713;2.136303;sin nombre en OpenStreetMap
+descartado;node/9807002318;;;Barcelona;41.369109;2.139288;sin nombre en OpenStreetMap
+descartado;node/9807002319;;;Barcelona;41.372285;2.14136;sin nombre en OpenStreetMap
+descartado;node/9807039918;;;Barcelona;41.377447;2.145919;sin nombre en OpenStreetMap
+descartado;node/9808545118;;;Barcelona;41.390624;2.147521;sin nombre en OpenStreetMap
+descartado;node/9812455817;;;Barcelona;41.399662;2.197846;sin nombre en OpenStreetMap
+descartado;node/9814908617;;;Barcelona;41.393915;2.146304;sin nombre en OpenStreetMap
+descartado;node/9823584919;;;Barcelona;41.391366;2.154574;sin nombre en OpenStreetMap
+descartado;node/9833600259;;;Calonge i Sant Antoni;41.833412;3.083393;sin nombre en OpenStreetMap
+descartado;node/9846873721;;;Barcelona;41.395998;2.146765;sin nombre en OpenStreetMap
+descartado;node/9848472325;;;Barcelona;41.37903;2.137475;sin nombre en OpenStreetMap
+descartado;node/9853364474;;Consum;Tarragona;41.117999;1.246003;duplicado en el lote de node/10126484779 (58 m)
+descartado;node/9866006617;;Supermercat;Barcelona;41.382342;2.146755;nombre generico o dudoso en OpenStreetMap: Supermercat
+descartado;node/9866526321;;Proxim supermercats;Barcelona;41.40186;2.173474;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/9874079961;;Carrefour Market;Barcelona;41.383952;2.170831;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/9887641818;;;l'Hospitalet de Llobregat;41.360492;2.110393;sin nombre en OpenStreetMap
+descartado;node/9887681717;;;l'Hospitalet de Llobregat;41.360432;2.110242;sin nombre en OpenStreetMap
+descartado;node/9890125317;;;Barcelona;41.406705;2.124036;sin nombre en OpenStreetMap
+descartado;node/9890128717;;Alimentació;Badalona;41.446604;2.239091;nombre generico o dudoso en OpenStreetMap: Alimentació
+descartado;node/9938269868;;;Castelldefels;41.265153;1.963834;sin nombre en OpenStreetMap
+descartado;relation/12969624;;;Borrassà;42.222765;2.925935;sin nombre en OpenStreetMap
+descartado;relation/13932810;;;Torroella de Montgrí;42.051275;3.179666;sin nombre en OpenStreetMap
+descartado;relation/18325338;;Carrefour;Martorell;41.482517;1.918612;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;relation/18408261;;;Girona;41.979296;2.815886;sin nombre en OpenStreetMap
+descartado;relation/20173165;;Centre de salut;Vila-seca;41.111182;1.152537;nombre generico o dudoso en OpenStreetMap: Centre de salut
+descartado;relation/2755214;;;Banyoles;42.11423;2.775784;sin nombre en OpenStreetMap
+descartado;relation/7323156;;;Barcelona;41.405944;2.192195;sin nombre en OpenStreetMap
+descartado;way/107419504;;Centre de Salut Mental Segrià;Lleida;41.623192;0.616325;texto excluido (mental|veterinari|dental|fisioter|rehabilitaci|consultori|dispensari)
+descartado;way/1075684649;;ALDI;Tarragona;41.11979;1.272029;duplicado en el lote de node/9891737417 (26 m)
+descartado;way/108159617;;Hospital Casa Blanca;Tarragona;41.121394;1.263869;etiqueta abandoned:amenity
+descartado;way/1090049444;;Ajuntament;la Ràpita;40.62033;0.592326;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/1104828238;;Mercadona;Terrassa;41.576299;2.034694;duplicado en el lote de node/4691189000 (27 m)
+descartado;way/111184467;;Ajuntament;Gironella;42.033591;1.882516;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/1132248296;;Clínica Psiquiàtrica Universitària;Reus;41.165691;1.088142;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;way/115317630;;Hipercor;Barcelona;41.427975;2.185483;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/1193641863;;;Tàrrega;41.651917;1.148741;sin nombre en OpenStreetMap
+descartado;way/1196109260;;Consultori local de Ger;Ger;42.410708;1.845595;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;way/1217799579;;;Deltebre;40.721405;0.700253;sin nombre en OpenStreetMap
+descartado;way/1226218919;;Ajuntament;Castellnou de Seana;41.648209;0.971266;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/1239763485;;Mercadona;Vic;41.939561;2.254923;duplicado en el lote de node/6056018583 (34 m)
+descartado;way/124198596;;Carrefour Market;Viladecans;41.309476;2.01279;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/1263305917;;Residència disminuits psíquics profunds Can Ruti;Badalona;41.475738;2.238952;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;way/127222766;;Mercat Municipal;Roses;42.265804;3.17632;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/1299827908;;Plusfresc;Tarragona;41.118662;1.240947;duplicado en el lote de node/11346998926 (15 m)
+descartado;way/1299827911;;Tresoreria General de la Seguretat Social;Tarragona;41.118787;1.241711;duplicado en el lote de node/11346998931 (16 m)
+descartado;way/131343866;;Centre de Salut Mental (Pins d'Or);Sant Feliu de Llobregat;41.384457;2.048364;texto excluido (mental|veterinari|dental|fisioter|rehabilitaci|consultori|dispensari)
+descartado;way/132839206;;Hospital de Dia Sant Jordi;Terrassa;41.555325;2.004307;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;way/1343502526;;Bauhaus;Girona;41.959028;2.812344;duplicado en el lote de way/63917350 (80 m)
+descartado;way/1360564291;;Obramat;Salt;41.961843;2.798051;duplicado en el lote de node/14087754261 (47 m)
+descartado;way/1370108776;;Pic Supermercat de la Carn;Esplugues de Llobregat;41.372018;2.082729;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/1396842305;;Mercadona;Cambrils;41.07374;1.056049;duplicado en el lote de node/3057430014 (89 m)
+descartado;way/1415115725;;;Tarragona;41.113424;1.201787;sin nombre en OpenStreetMap
+descartado;way/1421811122;;;Sant Boi de Llobregat;41.356263;2.026628;sin nombre en OpenStreetMap
+descartado;way/1447704244;;;Castellgalí;41.673024;1.843434;sin nombre en OpenStreetMap
+descartado;way/147025044;;;Olesa de Montserrat;41.541373;1.900527;sin nombre en OpenStreetMap
+descartado;way/151430166;;Ajuntament;Sant Joan de Vilatorrada;41.745658;1.805332;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/153832806;;Supermercats Charter;Llívia;42.46294;1.985172;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/154324872;;;Tarragona;41.10732;1.250626;sin nombre en OpenStreetMap
+descartado;way/1553650736;;Carrefour Market;Sitges;41.238834;1.819975;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/1554505202;;;Sant Joan les Fonts;42.21127;2.515795;sin nombre en OpenStreetMap
+descartado;way/1561984028;;;Terrassa;41.563528;2.017665;sin nombre en OpenStreetMap
+descartado;way/156357088;;Carrefour;Manresa;41.7228;1.844766;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/170962106;;;Sant Joan Despí;41.373424;2.073334;sin nombre en OpenStreetMap
+descartado;way/170969558;;Carrefour Market;Torroella de Montgrí;42.037149;3.127912;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/174297341;;Creu Roja;Sant Feliu de Guíxols;41.788744;3.04068;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;way/174374288;;Ajuntament;Torrent;41.951839;3.128201;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/180222391;;Carrefour Market;Vic;41.930368;2.266095;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/181226855;;;Mollet del Vallès;41.548155;2.203677;sin nombre en OpenStreetMap
+descartado;way/182223897;;Ajuntament;Santa Coloma de Farners;41.861335;2.663;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/183795394;;Hospital de Figueres;Figueres;42.26827;2.953765;duplicado en el lote de way/1362262566 (19 m)
+descartado;way/184132257;;Ajuntament;Riudecanyes;41.130038;0.960929;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/185180481;;;Mataró;41.539708;2.449377;sin nombre en OpenStreetMap
+descartado;way/185965910;;Ajuntament;Lladurs;42.044696;1.507684;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/187152166;;Aldi;Sant Vicenç dels Horts;41.386467;2.010141;duplicado en el lote de node/9916673388 (15 m)
+descartado;way/188437912;;Carrefour express;Sant Feliu de Guíxols;41.783886;3.034528;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/196599854;;;Mataró;41.554422;2.439958;sin nombre en OpenStreetMap
+descartado;way/197646279;;Ajuntament;Navès;41.992283;1.636778;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/199356749;;Carrefour;Reus;41.162084;1.114745;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/200724523;;Carrefour;l'Escala;42.11563;3.129098;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/200820681;;Ajuntament;Castell d'Aro, Platja d'Aro i s'Agaró;41.817551;3.067392;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/205670416;;Ajuntament;Vall-llobrega;41.88065;3.126204;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/207605796;;Ajuntament;Castellterçol;41.751354;2.12056;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/208865620;;Hospital Mútua de Terrassa;Terrassa;41.563701;2.01653;duplicado en el lote de way/28176308 (53 m)
+descartado;way/210277934;;;Calella;41.614845;2.657186;sin nombre en OpenStreetMap
+descartado;way/212508031;;Carrefour Market;Cubelles;41.200354;1.649844;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/213373783;;Carrefour;Sant Fruitós de Bages;41.751186;1.862009;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/227481400;;Ajuntament;Alins;42.54845;1.317378;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/230235627;;;Santa Susanna;41.637314;2.718879;sin nombre en OpenStreetMap
+descartado;way/231345715;;Ajuntament;Palamós;41.846379;3.129263;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/232258061;;Jutjats;Puigcerdà;42.432713;1.932693;nombre generico o dudoso en OpenStreetMap: Jutjats
+descartado;way/232512740;;CAP Turó;Barcelona;41.432968;2.170561;duplicado en el lote de node/13371404303 (32 m)
+descartado;way/238211976;;Jutjat;Montblanc;41.37712;1.160968;nombre generico o dudoso en OpenStreetMap: Jutjat
+descartado;way/240665405;;Ajuntament;Fornells de la Selva;41.934636;2.810343;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/241288064;;CAP;Breda;41.749206;2.562028;nombre generico o dudoso en OpenStreetMap: CAP
+descartado;way/249408389;;Eudona Barcelona;Barcelona;41.388009;2.138318;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;way/249493288;;;Salou;41.059514;1.16488;sin nombre en OpenStreetMap
+descartado;way/255352395;;Ajuntament de Llinars del Vallès;Llinars del Vallès;41.639282;2.404338;duplicado en el lote de node/2043922391 (27 m)
+descartado;way/256086008;;Ajuntament;Santpedor;41.78311;1.839506;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/258161222;;8- (CEMCAT) Centre d'Esclerosi Múltiple de Catalunya;Barcelona;41.42927;2.138877;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;way/263978375;;Ajuntament;Seròs;41.463819;0.41106;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/264194005;;Ambulatorio CAP Nord;Sabadell;41.572075;2.083233;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;way/267001862;;Ajuntament;Montblanc;41.376751;1.161326;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/268469396;;Condis;Barcelona;41.433515;2.173605;duplicado en el lote de node/4189391489 (35 m)
+descartado;way/268566987;;CAP;Polinyà;41.559446;2.154285;nombre generico o dudoso en OpenStreetMap: CAP
+descartado;way/28176309;;Hospital Mútua de Terrassa;Terrassa;41.564943;2.01768;duplicado en el lote de way/28176308 (131 m)
+descartado;way/286804910;;Mercadona;Sant Fost de Campsentelles;41.522387;2.223423;duplicado en el lote de node/10795794767 (46 m)
+descartado;way/288738967;;2- Hospital Infantil / 3- Hospital de la Dona Vall Hebron;Barcelona;41.42888;2.143354;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;way/289341146;;Mercat Municipal de Vic;Vic;41.929798;2.250062;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/292490790;;Carrefour Market;Torredembarra;41.14786;1.413628;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/294949034;;Ajuntament;Celrà;42.026554;2.874418;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/295253356;;Carrefour;el Prat de Llobregat;41.33499;2.088402;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/296430200;;Ajuntament;Santa Cristina d'Aro;41.812029;2.996888;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/297537179;;Ajuntament;Vilamacolum;42.196335;3.057041;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/299415998;;;Deltebre;40.715262;0.746444;sin nombre en OpenStreetMap
+descartado;way/306299559;;;Mont-roig del Camp;41.037721;0.975251;sin nombre en OpenStreetMap
+descartado;way/316081856;;Carrefour;Vic;41.926223;2.246169;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/319119169;;;Vic;41.942537;2.25302;sin nombre en OpenStreetMap
+descartado;way/322742505;;Ajuntament;Vallmoll;41.242614;1.248892;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/331217865;;Ajuntament;Naut Aran;42.707172;0.902443;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/337746552;;;la Jonquera;42.428176;2.866994;sin nombre en OpenStreetMap
+descartado;way/338172138;;Ajuntament;Coll de Nargó;42.173542;1.315663;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/341728120;;CAP;Guardiola de Berguedà;42.229819;1.877192;nombre generico o dudoso en OpenStreetMap: CAP
+descartado;way/34210754;;1- Hospital General Vall d'Hebron;Barcelona;41.427711;2.141734;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;way/351080377;;Carrefour;Berga;42.095649;1.849042;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/355655587;;Ajuntament;Riu de Cerdanya;42.345731;1.82624;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/356848053;;;Figueres;42.256448;2.967873;sin nombre en OpenStreetMap
+descartado;way/36845031;;Carrefour;Igualada;41.59056;1.616964;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/368878927;;Ajuntament;Beuda;42.236845;2.709474;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/373604123;;Ajuntament;Vilablareix;41.952528;2.793783;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/374873335;;Ajuntament;Prades;41.309813;0.9882;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/375058235;;Ajuntament;Vilaplana;41.228509;1.033033;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/375062150;;Ajuntament;l'Aleixar;41.201748;1.04612;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/375340883;;Ajuntament;Cornudella de Montsant;41.264664;0.90515;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/375370752;;Ajuntament;Ulldemolins;41.3227;0.876278;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/376575712;;Supermercats Michelangelo;Mont-roig del Camp;41.015835;0.947472;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/377823964;;Ajuntament;Santa Oliva;41.25324;1.550863;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/378097267;;Ajuntament;Isona i Conca Dellà;42.116934;1.04398;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/388931531;;Jutjat;la Bisbal d'Empordà;41.958061;3.042089;nombre generico o dudoso en OpenStreetMap: Jutjat
+descartado;way/39184792;;Mercat de Sant Pere;Terrassa;41.572416;2.012894;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/39405447;;Aldi;Montcada i Reixac;41.492215;2.183981;duplicado en el lote de node/13822424316 (2 m)
+descartado;way/394448301;;CAP;Arnes;40.910247;0.261235;nombre generico o dudoso en OpenStreetMap: CAP
+descartado;way/396664984;;Ajuntament;Senterada;42.32603;0.936779;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/401941636;;Raül Girona Supermercats;Gualta;42.026801;3.132915;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/403379167;;Hospital del Mar-urgències;Barcelona;41.383659;2.193371;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;way/408844581;;CAP;Tordera;41.699522;2.716476;nombre generico o dudoso en OpenStreetMap: CAP
+descartado;way/411300395;;Ajuntament;Rocafort de Queralt;41.477472;1.280758;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/423296507;;Ajuntament;els Prats de Rei;41.705569;1.541615;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/435361381;;Ajuntament;Montbrió del Camp;41.120794;1.003389;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/441890702;;Jutjats;Vielha e Mijaran;42.703209;0.79461;nombre generico o dudoso en OpenStreetMap: Jutjats
+descartado;way/444972582;;GP Supermercats;Torroella de Montgrí;42.048088;3.167741;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/448305588;;Carrefour;Roses;42.271289;3.150551;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/450023801;;ALDI;Castelldefels;41.279153;1.986632;duplicado en el lote de way/398971884 (29 m)
+descartado;way/452549026;;Centre de Salut;Vilafranca del Penedès;41.344424;1.699528;nombre generico o dudoso en OpenStreetMap: Centre de Salut
+descartado;way/456178338;;;Sant Boi de Llobregat;41.331381;2.050428;sin nombre en OpenStreetMap
+descartado;way/456178351;;;Sant Boi de Llobregat;41.331464;2.05054;sin nombre en OpenStreetMap
+descartado;way/456178352;;;Sant Boi de Llobregat;41.331105;2.050048;sin nombre en OpenStreetMap
+descartado;way/456178361;;;Sant Boi de Llobregat;41.331749;2.050925;sin nombre en OpenStreetMap
+descartado;way/457989784;;Hospital Residència Sant Camil;Sant Pere de Ribes;41.253746;1.765936;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;way/465976680;;Centre d'atenció primària Montclar;Sant Boi de Llobregat;41.346616;2.034382;duplicado en el lote de way/460175569 (17 m)
+descartado;way/465976914;;Complex Assistencial en Salut Mental Benito Menni;Sant Boi de Llobregat;41.349786;2.037239;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;way/482711684;;;Terrassa;41.594114;2.041874;sin nombre en OpenStreetMap
+descartado;way/499719311;;Ajuntament;Mont-ral;41.286902;1.09701;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/51245229;;Carrefour;Terrassa;41.565114;2.036935;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/512843101;;Ajuntament;les Preses;42.141794;2.461038;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/534297837;;Ajuntament;Gandesa;41.052042;0.438954;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/539042418;;;Vandellòs i l'Hospitalet de l'Infant;40.977902;0.903419;sin nombre en OpenStreetMap
+descartado;way/542809379;;Ajuntament d'Arbúcies;Arbúcies;41.816985;2.513987;duplicado en el lote de way/481137148 (96 m)
+descartado;way/551450006;;Lidl;Sabadell;41.541801;2.093132;duplicado en el lote de way/551450007 (24 m)
+descartado;way/567568129;;Creu Roja;Mont-roig del Camp;40.998357;0.934801;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;way/582536491;;CAP;Sabadell;41.547778;2.128804;nombre generico o dudoso en OpenStreetMap: CAP
+descartado;way/583621959;;Mercat del Lléo;Girona;41.979618;2.82288;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/599427246;;Mercadona;Reus;41.153277;1.09658;duplicado en el lote de node/13938774170 (58 m)
+descartado;way/600101709;;Ajuntament;Amposta;40.645222;0.686777;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/603998281;;Esportiu la Piscina. Centre Municipal d'Esport i Salut;Vilanova i la Geltrú;41.221276;1.71933;texto excluido (pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal|pavell[oó]|camp de futbol|piscina)
+descartado;way/607458325;;Jutjats;Reus;41.160965;1.115654;nombre generico o dudoso en OpenStreetMap: Jutjats
+descartado;way/619213975;;Carrefour;Barcelona;41.442119;2.198754;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/633375067;;Centre de Salut;l'Aldea;40.745157;0.623493;nombre generico o dudoso en OpenStreetMap: Centre de Salut
+descartado;way/634391738;;Ajuntament;Tortosa;40.810921;0.521015;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/634426080;;Tribunal d'Instància de Tortosa;Tortosa;40.81405;0.524236;duplicado en el lote de way/1458979549 (78 m)
+descartado;way/635325116;;CAP;Xerta;40.905612;0.490445;nombre generico o dudoso en OpenStreetMap: CAP
+descartado;way/636399874;;;Castellar del Vallès;41.610472;2.089537;sin nombre en OpenStreetMap
+descartado;way/639047799;;;Castellar del Vallès;41.614228;2.08348;sin nombre en OpenStreetMap
+descartado;way/639357869;;;Castellar del Vallès;41.619651;2.091525;sin nombre en OpenStreetMap
+descartado;way/63938518;;;Girona;41.955909;2.820734;sin nombre en OpenStreetMap
+descartado;way/641347420;;;Barcelona;41.430676;2.169991;sin nombre en OpenStreetMap
+descartado;way/648805637;;CAP;Mont-roig del Camp;41.085876;0.957849;nombre generico o dudoso en OpenStreetMap: CAP
+descartado;way/658399548;;Fremap;Barcelona;41.401521;2.150388;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;way/659285368;;Residència Sant Martí - Fundació Vella Terra;Arenys de Munt;41.609909;2.539922;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;way/659285445;;Residència Verge del Remei;Arenys de Munt;41.607971;2.539968;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;way/668160156;;Carrefour;Palau-solità i Plegamans;41.57805;2.181315;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/671022641;;Ajuntament;Campllong;41.892702;2.831313;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/675108256;;;Vilada;42.136469;1.930115;sin nombre en OpenStreetMap
+descartado;way/67553747;;Ajuntament;Vilassar de Mar;41.502478;2.392436;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/678184664;;Ajuntament;Sant Climent de Llobregat;41.337322;1.995817;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/691541939;;Ajuntament;Forallac;41.959138;3.055471;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/698864531;;;Torroella de Montgrí;42.012799;3.188742;sin nombre en OpenStreetMap
+descartado;way/699922262;;;Vic;41.940708;2.254406;sin nombre en OpenStreetMap
+descartado;way/70249373;;Dia;Vilassar de Mar;41.51128;2.381491;duplicado en el lote de way/308896181 (20 m)
+descartado;way/704208934;;Coaliment;Mont-roig del Camp;41.030751;0.968152;duplicado en el lote de node/3799736223 (2 m)
+descartado;way/719969309;;;Cerdanyola del Vallès;41.494084;2.139864;sin nombre en OpenStreetMap
+descartado;way/722044748;;;Sant Jaume dels Domenys;41.29823;1.559351;sin nombre en OpenStreetMap
+descartado;way/722051275;;Ajuntament;Llorenç del Penedès;41.281837;1.551578;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/725350307;;Ajuntament;Sant Jaume d'Enveja;40.707043;0.719146;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/72850565;;;Granollers;41.616351;2.293102;sin nombre en OpenStreetMap
+descartado;way/735241590;;Ajuntament;Cabó;42.237214;1.246974;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/749871099;;Centre Comercial Can Montcau;Lliçà d'Amunt;41.603299;2.259442;duplicado en el lote de node/7011813142 (46 m)
+descartado;way/755775802;;;el Vendrell;41.222661;1.539306;sin nombre en OpenStreetMap
+descartado;way/756019297;;CAP;el Vendrell;41.21685;1.530778;nombre generico o dudoso en OpenStreetMap: CAP
+descartado;way/761649407;;Ajuntament;Montellà i Martinet;42.360212;1.695042;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/770659186;;Hospital del Mar;Barcelona;41.383708;2.193958;duplicado en el lote de relation/6046838 (13 m)
+descartado;way/843825570;;;Bossòst;42.784853;0.695342;sin nombre en OpenStreetMap
+descartado;way/846909477;;Mini Market;Roses;42.265267;3.163571;nombre generico o dudoso en OpenStreetMap: Mini Market
+descartado;way/848868468;;;Castelló d'Empúries;42.237127;3.121376;sin nombre en OpenStreetMap
+descartado;way/851942869;;;Vidreres;41.790897;2.766429;sin nombre en OpenStreetMap
+descartado;way/852013087;;;Vidreres;41.789181;2.767025;sin nombre en OpenStreetMap
+descartado;way/863294694;;Carrefour Market;Valls;41.291687;1.258614;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/865081641;;Ajuntament;Maçanet de la Selva;41.77623;2.731429;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/865085452;;Ajuntament;Sant Jaume de Llierca;42.212596;2.607072;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/865086847;;Ajuntament;Viladasens;42.095803;2.930292;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/865090182;;Ajuntament;Ullastret;42.000007;3.068367;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/865093947;;Ajuntament;Gualta;42.028365;3.103529;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/865129317;;Ajuntament;Montagut i Oix;42.232757;2.59602;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/865132296;;Ajuntament;Madremanya;41.990217;2.957233;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/865383730;;Ajuntament;Foixà;42.038851;2.99822;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/865385610;;Ajuntament;Ultramort;42.037047;3.034785;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/865388596;;Ajuntament;Jafre;42.071923;3.010755;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/865390551;;Ajuntament;Parlavà;42.02395;3.031987;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/866897664;;Carrefour Market Ur;;42.448653;1.946292;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/867328857;;Ajuntament;Sant Julià de Vilatorta;41.922576;2.3255;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/872247496;;Ajuntament;Santa Bàrbara;40.714352;0.492831;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/874011630;;Ajuntament;Mas de Barberans;40.735761;0.373907;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/87824531;;CAP;la Garriga;41.685834;2.284648;nombre generico o dudoso en OpenStreetMap: CAP
+descartado;way/886143691;;Jutjats;Valls;41.288679;1.252733;nombre generico o dudoso en OpenStreetMap: Jutjats
+descartado;way/908335200;;ALDI;Manresa;41.735739;1.842041;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/925266751;;;Vallirana;41.384695;1.93269;sin nombre en OpenStreetMap
+descartado;way/936124094;;;Barcelona;41.429752;2.182394;sin nombre en OpenStreetMap
+descartado;way/948429218;;;Igualada;41.584356;1.626494;sin nombre en OpenStreetMap
+descartado;way/970599106;;;Vilafranca del Penedès;41.356453;1.70507;sin nombre en OpenStreetMap
+descartado;way/983866634;;4-  Hospital Traumatología, Rehabilitació Cremats Vall Hebron;Barcelona;41.427365;2.139941;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;way/984001691;;;Sabadell;41.550229;2.099488;sin nombre en OpenStreetMap
+descartado;way/995948380;;;Tarragona;41.133077;1.365216;sin nombre en OpenStreetMap

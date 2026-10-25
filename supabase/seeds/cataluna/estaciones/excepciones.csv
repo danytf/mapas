@@ -1,0 +1,249 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/10727812905;Autobús;;Sant Quirze del Vallès;41.532272;2.083912;sin nombre en OpenStreetMap
+descartado;node/10793625886;Tren;Sarrià;Barcelona;41.398843;2.125175;etiqueta station=subway
+descartado;node/11082027515;Autobús;;la Secuita;41.192332;1.272146;sin nombre en OpenStreetMap
+por revisar;node/11287324208;Autobús;Estación de autobuses de Aerobús T1 (el Prat de Llobregat) – Terminal 1 & 2 Llegadas;el Prat de Llobregat;41.28858;2.072518;posible duplicado de way/979373385 (Aeroport Barcelona T1) a 145 m
+descartado;node/11436011991;Tren;Mercat Nou;Barcelona;41.372795;2.133331;etiqueta station=subway
+descartado;node/11438164378;Tren;Plaça de Sants;Barcelona;41.37563;2.135323;etiqueta station=subway
+descartado;node/11883124918;Tren;Torrassa;l'Hospitalet de Llobregat;41.368017;2.11563;etiqueta station=subway
+descartado;node/13326746926;Tren;Passeig de Gràcia;Barcelona;41.391597;2.165356;etiqueta station=subway
+descartado;node/13429021010;Tren;Zona Franca;Barcelona;41.342998;2.144979;etiqueta station=subway
+descartado;node/13429021011;Tren;Port Comercial | la Factoria;Barcelona;41.335951;2.140652;etiqueta station=subway
+descartado;node/13429021012;Tren;Passeig de Gràcia;Barcelona;41.389964;2.167943;etiqueta station=subway
+descartado;node/13430688671;Tren;Catalunya;Barcelona;41.387689;2.169185;etiqueta station=subway
+descartado;node/13575528247;Tren;Barcelona-Plaça Espanya;Barcelona;41.374578;2.148625;etiqueta station=subway
+descartado;node/13605019494;Tren;Espanya;Barcelona;41.375012;2.151523;etiqueta station=subway
+descartado;node/13665716148;Tren;Vallvidrera Superior;Barcelona;41.414166;2.105739;etiqueta station=funicular
+descartado;node/13665716153;Tren;Carretera de les Aigües;Barcelona;41.412311;2.107967;etiqueta station=funicular
+descartado;node/13669668532;Tren;Parc de Montjuïc;Barcelona;41.368769;2.163038;etiqueta station=funicular
+descartado;node/13671950492;Tren;Barcelona-Plaça Catalunya;Barcelona;41.385771;2.168329;etiqueta station=subway
+por revisar;node/13686592278;Tren;Estación de tren de Aeroport T2 (el Prat de Llobregat) – Carrer de Salvador Hedilla Pineda;el Prat de Llobregat;41.303445;2.074324;posible duplicado de node/7201979110 (Aeroport) a 116 m
+descartado;node/13717263717;Autobús;Estació d'autobusos de Cervera;Cervera;41.673698;1.273929;etiqueta public_transport=platform
+descartado;node/1497802227;Tren;Gelida Inferior;Gelida;41.448155;1.86474;etiqueta station=funicular
+descartado;node/1497802242;Tren;Gelida Superior;Gelida;41.440591;1.864589;etiqueta station=funicular
+por revisar;node/1595874365;Autobús;Estación de autobuses de L2 (Mataró) – Ronda de Ramon Turró;Mataró;41.543837;2.431378;nombre dudoso en OpenStreetMap: L2
+descartado;node/1708943387;Tren;Ecoparc;Barcelona;41.330184;2.137088;etiqueta station=subway
+descartado;node/1708943427;Tren;ZAL | Riu Vell;Barcelona;41.323743;2.133124;etiqueta station=subway
+descartado;node/1709193859;Autobús;;Benifallet;40.974678;0.517173;sin nombre en OpenStreetMap
+descartado;node/1722575450;Autobús;;Castelló d'Empúries;42.253023;3.0731;sin nombre en OpenStreetMap
+descartado;node/2004306672;Autobús;Galicia;Mataró;41.546846;2.42701;etiqueta public_transport=platform
+descartado;node/247074190;Autobús;Navàs - Estació d'autobusos;Navàs;41.902021;1.878689;etiqueta public_transport=platform
+descartado;node/2981726993;Tren;Vallvidrera Inferior;Barcelona;41.409261;2.111314;etiqueta station=funicular
+descartado;node/2989645245;Tren;Béna-Fanès;;42.458077;1.916719;fuera de los municipios oficiales cargados
+descartado;node/2992332327;Tren;el Prat Estació;el Prat de Llobregat;41.331667;2.090129;etiqueta station=subway
+descartado;node/2992332329;Tren;Les Moreres;el Prat de Llobregat;41.328984;2.103071;etiqueta station=subway
+descartado;node/2992352638;Tren;Mercabarna;Barcelona;41.333563;2.111268;etiqueta station=subway
+descartado;node/3088261891;Autobús;;Sant Pere de Torelló;42.075248;2.29382;sin nombre en OpenStreetMap
+descartado;node/3397396364;Tren;Badal;Barcelona;41.375552;2.128926;etiqueta station=subway
+descartado;node/3397396373;Tren;Bon Pastor;Barcelona;41.436126;2.204808;etiqueta station=subway
+descartado;node/3397396374;Tren;Camp de l'Arpa;Barcelona;41.414686;2.181013;etiqueta station=subway
+descartado;node/3397396375;Tren;Can Boixeres;l'Hospitalet de Llobregat;41.366582;2.091518;etiqueta station=subway
+descartado;node/3397396378;Tren;Canyelles;Barcelona;41.44177;2.166439;etiqueta station=subway
+descartado;node/3397396384;Tren;Collblanc;l'Hospitalet de Llobregat;41.375873;2.118405;etiqueta station=subway
+descartado;node/3397396385;Tren;Congrés | Indians;Barcelona;41.423416;2.181285;etiqueta station=subway
+descartado;node/3397396389;Tren;La Rambla | Drassanes;Barcelona;41.376673;2.175774;etiqueta station=subway
+descartado;node/3397396595;Tren;Entença;Barcelona;41.383982;2.14496;etiqueta station=subway
+descartado;node/3397396601;Tren;Fontana;Barcelona;41.402056;2.152979;etiqueta station=subway
+descartado;node/3397396602;Tren;Gavarra;Cornellà de Llobregat;41.357985;2.079215;etiqueta station=subway
+descartado;node/3397396606;Tren;Gorg;Badalona;41.440441;2.233692;etiqueta station=subway
+descartado;node/3397396608;Tren;Horta;Barcelona;41.42969;2.160315;etiqueta station=subway
+descartado;node/3397396609;Tren;Hospital Clínic;Barcelona;41.388162;2.150542;etiqueta station=subway
+descartado;node/3397396622;Tren;Llefià;Badalona;41.441303;2.217548;etiqueta station=subway
+descartado;node/3397396625;Tren;Maragall;Barcelona;41.425028;2.176504;etiqueta station=subway
+descartado;node/3397396626;Tren;Maria Cristina;Barcelona;41.38794;2.126222;etiqueta station=subway
+descartado;node/3397396629;Tren;Montbau;Barcelona;41.430633;2.145064;etiqueta station=subway
+descartado;node/3397396631;Tren;Mundet;Barcelona;41.435542;2.148383;etiqueta station=subway
+descartado;node/3397396633;Tren;Onze de Setembre;Barcelona;41.42976;2.193435;etiqueta station=subway
+descartado;node/3397396640;Tren;Penitents;Barcelona;41.417541;2.141133;etiqueta station=subway
+descartado;node/3397396644;Tren;Plaça del Centre;Barcelona;41.381821;2.13563;etiqueta station=subway
+descartado;node/3397396647;Tren;Pubilla Cases;l'Hospitalet de Llobregat;41.373813;2.107121;etiqueta station=subway
+descartado;node/3397396650;Tren;Roquetes;Barcelona;41.447355;2.175783;etiqueta station=subway
+descartado;node/3397396664;Tren;Tarragona;Barcelona;41.378444;2.145367;etiqueta station=subway
+descartado;node/3397396678;Tren;Vallcarca;Barcelona;41.411907;2.144524;etiqueta station=subway
+descartado;node/3397396679;Tren;Valldaura;Barcelona;41.438004;2.156876;etiqueta station=subway
+descartado;node/3397396684;Tren;Vilapicina;Barcelona;41.43046;2.168172;etiqueta station=subway
+descartado;node/3397396686;Tren;Zona Universitària;Barcelona;41.384244;2.111686;etiqueta station=subway
+descartado;node/3397396687;Tren;la Salut;Badalona;41.442733;2.224576;etiqueta station=subway
+descartado;node/3397396688;Tren;les Corts;Barcelona;41.384134;2.130878;etiqueta station=subway
+descartado;node/341968236;Tren;Ur-les-Escaldes;;42.457477;1.940466;fuera de los municipios oficiales cargados
+descartado;node/367715785;Tren;Montserrat;Collbató;41.591975;1.836342;etiqueta station=funicular
+descartado;node/367715798;Tren;Sant Joan;Collbató;41.588765;1.833355;etiqueta station=funicular
+descartado;node/373377538;Tren;Montserrat;Collbató;41.592308;1.836846;etiqueta station=funicular
+descartado;node/373377542;Tren;Santa Cova;Collbató;41.592436;1.839419;etiqueta station=funicular
+descartado;node/373391181;Autobús;Manresa Estació d'autobusos - FGC;Manresa;41.73198;1.83352;etiqueta public_transport=platform
+descartado;node/3979312391;Tren;Rambla Just Oliveras;l'Hospitalet de Llobregat;41.363965;2.099872;etiqueta station=subway
+descartado;node/4447955596;Tren;Paral·lel;Barcelona;41.374406;2.16943;etiqueta station=funicular
+descartado;node/5227216905;Tren;Cornellà Centre;Cornellà de Llobregat;41.357303;2.070552;etiqueta station=subway
+descartado;node/5264057221;Tren;Girona;Barcelona;41.395024;2.17096;etiqueta station=subway
+descartado;node/5264057222;Tren;Universitat;Barcelona;41.385694;2.164305;etiqueta station=subway
+descartado;node/5264057223;Tren;Sant Antoni;Barcelona;41.379786;2.16327;etiqueta station=subway
+descartado;node/5264057227;Tren;Arc de Triomf;Barcelona;41.392114;2.180909;etiqueta station=subway
+descartado;node/5264057229;Tren;Verdaguer;Barcelona;41.400091;2.168427;etiqueta station=subway
+descartado;node/5264057230;Tren;Aeroport T1;el Prat de Llobregat;41.288258;2.07104;etiqueta station=subway
+descartado;node/5264057231;Tren;Aeroport T2;el Prat de Llobregat;41.303826;2.073121;etiqueta station=subway
+descartado;node/5264057233;Tren;Molí Nou | Ciutat Cooperativa;Sant Boi de Llobregat;41.357524;2.035278;etiqueta station=subway
+descartado;node/5264057235;Tren;Diagonal;Barcelona;41.395956;2.159963;etiqueta station=subway
+descartado;node/5264057236;Tren;Provença;Barcelona;41.392874;2.157979;etiqueta station=subway
+descartado;node/5296477082;Tren;Hospital de Bellvitge;l'Hospitalet de Llobregat;41.34465;2.107201;etiqueta station=subway
+descartado;node/5296569385;Tren;El Coll | La Teixonera;Barcelona;41.421657;2.149362;etiqueta station=subway
+descartado;node/5296577420;Tren;Baró de Viver;Barcelona;41.449947;2.199539;etiqueta station=subway
+descartado;node/5305515771;Tren;Bellvitge Rambla Marina;l'Hospitalet de Llobregat;41.350965;2.110935;etiqueta station=subway
+descartado;node/5305562114;Tren;Avinguda Carrilet;l'Hospitalet de Llobregat;41.358913;2.102483;etiqueta station=subway
+descartado;node/5305586823;Tren;Can Serra;l'Hospitalet de Llobregat;41.367684;2.102736;etiqueta station=subway
+descartado;node/5305619081;Tren;Florida;l'Hospitalet de Llobregat;41.368323;2.109832;etiqueta station=subway
+descartado;node/5306327174;Tren;Torrassa;l'Hospitalet de Llobregat;41.368406;2.11663;etiqueta station=subway
+descartado;node/5306572501;Tren;Santa Eulàlia;l'Hospitalet de Llobregat;41.368799;2.128605;etiqueta station=subway
+descartado;node/5306846276;Tren;Hostafrancs;Barcelona;41.375242;2.143419;etiqueta station=subway
+descartado;node/5306846302;Tren;Plaça de Sants;Barcelona;41.375376;2.137913;etiqueta station=subway
+descartado;node/5306885845;Tren;Espanya;Barcelona;41.375568;2.149524;etiqueta station=subway
+descartado;node/5307549252;Tren;Rocafort;Barcelona;41.379237;2.154573;etiqueta station=subway
+descartado;node/5307598389;Tren;Artigues | Sant Adrià;Badalona;41.433721;2.217573;etiqueta station=subway
+por revisar;node/530777095;Tren;Estación de tren de Vic – Plaça de l'Estació;Vic;41.93099;2.248591;nombre dudoso en OpenStreetMap: Vic
+descartado;node/5308259398;Tren;Sant Josep;l'Hospitalet de Llobregat;41.360951;2.110361;etiqueta station=subway
+descartado;node/5308271838;Tren;Gràcia;Barcelona;41.399757;2.152155;etiqueta station=subway
+descartado;node/5308350664;Tren;Llucmajor | República;Barcelona;41.437009;2.173364;etiqueta station=subway
+descartado;node/5308480500;Tren;La Sagrera;Barcelona;41.422623;2.187024;etiqueta station=subway
+descartado;node/5308481070;Tren;La Sagrera;Barcelona;41.42041;2.186816;etiqueta station=subway
+descartado;node/5308481074;Tren;La Sagrera;Barcelona;41.421278;2.186574;etiqueta station=subway
+descartado;node/5308768761;Tren;Virrei Amat;Barcelona;41.429594;2.174999;etiqueta station=subway
+descartado;node/5308859849;Tren;Sagrada Família;Barcelona;41.404034;2.173882;etiqueta station=subway
+descartado;node/5308901391;Tren;Sagrada Família;Barcelona;41.40398;2.175114;etiqueta station=subway
+descartado;node/5309027172;Tren;Fondo;Santa Coloma de Gramenet;41.451673;2.218408;etiqueta station=subway
+descartado;node/5309027419;Tren;Fondo;Santa Coloma de Gramenet;41.451588;2.218392;etiqueta station=subway
+descartado;node/5310387159;Tren;Fabra i Puig;Barcelona;41.429781;2.183639;etiqueta station=subway
+descartado;node/5310442668;Tren;Torras i Bages;Barcelona;41.443127;2.190714;etiqueta station=subway
+descartado;node/5310507552;Tren;Reina Elisenda;Barcelona;41.39879;2.119034;etiqueta station=subway
+descartado;node/5310684212;Tren;Catalunya;Barcelona;41.386547;2.170084;etiqueta station=subway
+descartado;node/5310784729;Tren;Can Peixauet;Santa Coloma de Gramenet;41.444472;2.210286;etiqueta station=subway
+descartado;node/5310802488;Tren;Can Zam;Santa Coloma de Gramenet;41.457679;2.198494;etiqueta station=subway
+descartado;node/5310881429;Tren;Singuerlín;Santa Coloma de Gramenet;41.459458;2.205593;etiqueta station=subway
+descartado;node/5311209954;Tren;Liceu;Barcelona;41.381396;2.173071;etiqueta station=subway
+descartado;node/5311871042;Tren;Badalona Pompeu Fabra;Badalona;41.448961;2.244221;etiqueta station=subway
+descartado;node/5312013485;Tren;Església Major;Santa Coloma de Gramenet;41.454758;2.212402;etiqueta station=subway
+descartado;node/5312130801;Tren;Pep Ventura;Badalona;41.443939;2.238052;etiqueta station=subway
+descartado;node/5312699735;Tren;Mas Blau;el Prat de Llobregat;41.311319;2.073422;etiqueta station=subway
+descartado;node/5312699736;Tren;Parc Nou;el Prat de Llobregat;41.316707;2.087351;etiqueta station=subway
+descartado;node/5312699737;Tren;Cèntric;el Prat de Llobregat;41.321844;2.093565;etiqueta station=subway
+descartado;node/5312699738;Tren;Parc Logístic;Barcelona;41.341806;2.127982;etiqueta station=subway
+descartado;node/5312699739;Tren;Fira;l'Hospitalet de Llobregat;41.351923;2.130679;etiqueta station=subway
+descartado;node/5312699740;Tren;Europa | Fira;l'Hospitalet de Llobregat;41.357249;2.12569;etiqueta station=subway
+descartado;node/5312699741;Tren;Can Tries - Gornal;l'Hospitalet de Llobregat;41.360721;2.118199;etiqueta station=subway
+descartado;node/5312699743;Tren;Palau Reial;Barcelona;41.385808;2.117855;etiqueta station=subway
+descartado;node/5312707122;Tren;Sants Estació;Barcelona;41.381469;2.141114;etiqueta station=subway
+descartado;node/5312707123;Tren;El Poble-sec;Barcelona;41.37498;2.160572;etiqueta station=subway
+descartado;node/5312707124;Tren;Trinitat Nova;Barcelona;41.449483;2.184162;etiqueta station=subway
+descartado;node/5312707126;Tren;Lesseps;Barcelona;41.406163;2.150025;etiqueta station=subway
+descartado;node/5313275890;Tren;Sant Roc;Badalona;41.435317;2.22786;etiqueta station=subway
+descartado;node/5313296732;Tren;Monumental;Barcelona;41.400524;2.179454;etiqueta station=subway
+descartado;node/5313315534;Tren;La Pau;Barcelona;41.424039;2.205618;etiqueta station=subway
+descartado;node/5313315535;Tren;Encants;Barcelona;41.407075;2.182523;etiqueta station=subway
+descartado;node/5313315536;Tren;Verneda;Sant Adrià de Besòs;41.42989;2.209774;etiqueta station=subway
+descartado;node/5313328722;Tren;Magòria-La Campana;Barcelona;41.367858;2.139368;etiqueta station=subway
+descartado;node/5313328723;Tren;Ildefons Cerdà;l'Hospitalet de Llobregat;41.361165;2.130169;etiqueta station=subway
+descartado;node/5313328724;Tren;Gornal;l'Hospitalet de Llobregat;41.354775;2.117073;etiqueta station=subway
+descartado;node/5313328725;Tren;Avinguda Carrilet;l'Hospitalet de Llobregat;41.357927;2.102912;etiqueta station=subway
+descartado;node/5313328726;Tren;Bac de Roda;Barcelona;41.414881;2.195106;etiqueta station=subway
+descartado;node/5313328855;Tren;Santa Coloma;Santa Coloma de Gramenet;41.451076;2.208049;etiqueta station=subway
+descartado;node/5313340296;Tren;Urquinaona;Barcelona;41.388085;2.173311;etiqueta station=subway
+descartado;node/5313340297;Tren;Jaume I;Barcelona;41.384001;2.178706;etiqueta station=subway
+descartado;node/5313340298;Tren;Barceloneta;Barcelona;41.38209;2.185515;etiqueta station=subway
+descartado;node/5313340299;Tren;Ciutadella | Vila Olímpica;Barcelona;41.387816;2.193578;etiqueta station=subway
+descartado;node/5313340300;Tren;Bogatell;Barcelona;41.395099;2.19204;etiqueta station=subway
+descartado;node/5313340301;Tren;Llacuna;Barcelona;41.399381;2.197649;etiqueta station=subway
+descartado;node/5313340302;Tren;Poblenou;Barcelona;41.403642;2.203275;etiqueta station=subway
+descartado;node/5313340303;Tren;Selva de Mar;Barcelona;41.408015;2.209109;etiqueta station=subway
+descartado;node/5313340304;Tren;El Maresme | Fòrum;Barcelona;41.411775;2.216678;etiqueta station=subway
+descartado;node/5313340305;Tren;Besòs;Barcelona;41.420369;2.209713;etiqueta station=subway
+descartado;node/5313340306;Tren;Besòs Mar;Barcelona;41.415094;2.216085;etiqueta station=subway
+descartado;node/5313340852;Tren;Sant Martí;Barcelona;41.419057;2.200731;etiqueta station=subway
+descartado;node/5313434190;Tren;El Clot;Barcelona;41.410139;2.186916;etiqueta station=subway
+descartado;node/5313447376;Tren;Tetuan;Barcelona;41.394822;2.175521;etiqueta station=subway
+descartado;node/5313819558;Tren;Urquinaona;Barcelona;41.389637;2.174561;etiqueta station=subway
+descartado;node/5313865123;Tren;Sants Estació;Barcelona;41.379889;2.140322;etiqueta station=subway
+descartado;node/5314011844;Tren;Plaça Molina;Barcelona;41.401299;2.147523;etiqueta station=subway
+descartado;node/5314011845;Tren;Pàdua;Barcelona;41.40331;2.143041;etiqueta station=subway
+descartado;node/5314011846;Tren;El Putxet;Barcelona;41.405814;2.139136;etiqueta station=subway
+descartado;node/5314011847;Tren;Avinguda Tibidabo;Barcelona;41.40966;2.137157;etiqueta station=subway
+descartado;node/5314017683;Tren;Sant Ildefons;Cornellà de Llobregat;41.363343;2.08433;etiqueta station=subway
+descartado;node/5314017684;Tren;Can Vidalet;Esplugues de Llobregat;41.371737;2.09976;etiqueta station=subway
+descartado;node/5314022321;Tren;Via Júlia;Barcelona;41.443847;2.178604;etiqueta station=subway
+descartado;node/5314022322;Tren;Trinitat Nova;Barcelona;41.449185;2.182427;etiqueta station=subway
+descartado;node/5314022323;Tren;Casa de l'Aigua;Barcelona;41.451237;2.184953;etiqueta station=subway
+descartado;node/5314022324;Tren;Torre Baró | Vallbona;Barcelona;41.459218;2.179945;etiqueta station=subway
+descartado;node/5314022325;Tren;Can Cuiàs;Montcada i Reixac;41.46234;2.17311;etiqueta station=subway
+descartado;node/5314022326;Tren;Ciutat Meridiana;Barcelona;41.460783;2.1746;etiqueta station=subway
+descartado;node/5314028225;Tren;el Carmel;Barcelona;41.424399;2.155114;etiqueta station=subway
+descartado;node/5314028226;Tren;Maragall;Barcelona;41.423106;2.177398;etiqueta station=subway
+descartado;node/5314028227;Tren;Sant Pau | Dos de Maig;Barcelona;41.410731;2.175983;etiqueta station=subway
+descartado;node/5314613396;Tren;Sant Gervasi;Barcelona;41.401067;2.14708;etiqueta station=subway
+descartado;node/5315505594;Tren;Les Tres Torres;Barcelona;41.397781;2.130867;etiqueta station=subway
+descartado;node/5315505595;Tren;La Bonanova;Barcelona;41.39779;2.136153;etiqueta station=subway
+descartado;node/5315505596;Tren;Santa Rosa;Santa Coloma de Gramenet;41.446842;2.215813;etiqueta station=subway
+descartado;node/5315505597;Tren;Muntaner;Barcelona;41.398667;2.142806;etiqueta station=subway
+descartado;node/5315505598;Tren;Joanic;Barcelona;41.406267;2.163188;etiqueta station=subway
+descartado;node/5315505599;Tren;Guinardó | Hospital de Sant Pau;Barcelona;41.416075;2.174074;etiqueta station=subway
+descartado;node/5315505600;Tren;Cornellà-Riera;Cornellà de Llobregat;41.351472;2.07066;etiqueta station=subway
+descartado;node/5315505601;Tren;Almeda;Cornellà de Llobregat;41.353036;2.084512;etiqueta station=subway
+descartado;node/5315505602;Tren;Alfons X;Barcelona;41.412101;2.165506;etiqueta station=subway
+descartado;node/5318185973;Tren;Urgell;Barcelona;41.382486;2.158889;etiqueta station=subway
+descartado;node/5318792450;Tren;Marina;Barcelona;41.394996;2.186268;etiqueta station=subway
+descartado;node/5318926007;Tren;Glòries;Barcelona;41.402211;2.187518;etiqueta station=subway
+descartado;node/5319133652;Tren;Navas;Barcelona;41.416044;2.186938;etiqueta station=subway
+descartado;node/5319156658;Tren;Sant Andreu;Barcelona;41.436629;2.191138;etiqueta station=subway
+descartado;node/5319167399;Tren;Trinitat Vella;Barcelona;41.448768;2.193737;etiqueta station=subway
+descartado;node/5319186240;Tren;Paral·lel;Barcelona;41.374941;2.169256;etiqueta station=subway
+descartado;node/5319195828;Tren;Universitat;Barcelona;41.384725;2.16391;etiqueta station=subway
+descartado;node/5319230410;Tren;El Clot;Barcelona;41.410283;2.186726;etiqueta station=subway
+descartado;node/5319269956;Tren;La Pau;Barcelona;41.423683;2.205196;etiqueta station=subway
+descartado;node/5319308366;Tren;Trinitat Nova;Barcelona;41.449205;2.182423;etiqueta station=subway
+descartado;node/5331527847;Tren;Zona Universitària;Barcelona;41.384056;2.111535;etiqueta station=subway
+descartado;node/5331527848;Tren;Verdaguer;Barcelona;41.398829;2.166921;etiqueta station=subway
+descartado;node/5331527849;Tren;Vall d’Hebron | Sant Genís;Barcelona;41.424913;2.142396;etiqueta station=subway
+descartado;node/5331527850;Tren;Gorg;Badalona;41.440504;2.233707;etiqueta station=subway
+descartado;node/5331527851;Tren;Europa | Fira;l'Hospitalet de Llobregat;41.357202;2.125028;etiqueta station=subway
+descartado;node/5331527852;Tren;Diagonal;Barcelona;41.394469;2.158865;etiqueta station=subway
+descartado;node/5362838962;Tren;Passeig de Gràcia;Barcelona;41.389443;2.168277;etiqueta station=subway
+por revisar;node/5419793198;Tren;Estación de tren de Ribes-Enllaç (Ribes de Freser) – Eix Pirinenc;Ribes de Freser;42.299735;2.166062;posible duplicado de node/5419793235 (Ribes de Freser) a 78 m
+por revisar;node/5419793235;Tren;Estación de tren de Ribes de Freser – Eix Pirinenc;Ribes de Freser;42.299193;2.165458;posible duplicado de node/5419793198 (Ribes-Enllaç) a 78 m
+descartado;node/5891860142;Tren;Foc;Barcelona;41.355851;2.142162;etiqueta station=subway
+descartado;node/5891864891;Tren;Foneria;Barcelona;41.360491;2.13874;etiqueta station=subway
+descartado;node/6183533485;Tren;Gelida Baixador;Gelida;41.441762;1.864605;etiqueta station=funicular
+descartado;node/6312297622;Tren;Provençana;l'Hospitalet de Llobregat;41.361387;2.124293;etiqueta station=subway
+descartado;node/6917871385;Autobús;;Barcelona;41.355363;2.176985;sin nombre en OpenStreetMap
+descartado;node/7005588443;Tren;Ciutat de la Justícia;l'Hospitalet de Llobregat;41.363244;2.133008;etiqueta station=subway
+por revisar;node/7201979110;Tren;Estación de tren de Aeroport (el Prat de Llobregat) – Carrer de Salvador Hedilla Pineda;el Prat de Llobregat;41.304273;2.073468;posible duplicado de node/13686592278 (Aeroport T2) a 116 m
+descartado;node/7204814143;Tren;Martorell Enllaç;Martorell;41.484029;1.918602;operador o red de metro/tranvia
+descartado;node/7204816604;Tren;Martorell Central;Martorell;41.479094;1.926699;duplicado en el lote de node/7204816588 (86 m)
+descartado;node/7512362025;Tren;Sant Vicenç | Castellgalí;Sant Vicenç de Castellet;41.667938;1.859569;operador o red de metro/tranvia
+descartado;node/7512362039;Tren;Terrassa Estació del Nord;Terrassa;41.569867;2.014262;duplicado en el lote de node/7512362038 (162 m)
+descartado;node/7512362041;Tren;Sabadell Nord;Sabadell;41.561687;2.096548;duplicado en el lote de node/7512362042 (41 m)
+descartado;node/7515916367;Tren;Sant Boi;Sant Boi de Llobregat;41.348488;2.042951;etiqueta station=subway
+descartado;node/7515916378;Tren;Manresa Alta;Manresa;41.732216;1.833017;operador o red de metro/tranvia
+descartado;node/8939944750;Tren;Ernest Lluch;Barcelona;41.375895;2.112035;etiqueta station=subway
+descartado;node/9527760015;Autobús;;Ribes de Freser;42.30715;2.170644;sin nombre en OpenStreetMap
+descartado;node/971882774;Tren;Estació inferior;Puigcerdà;42.430454;1.926067;etiqueta station=funicular
+descartado;node/971882840;Tren;Estació superior;Puigcerdà;42.430906;1.926724;etiqueta station=funicular
+descartado;node/990933915;Autobús;Lleida Estació d'Autobusos Antiga;Lleida;41.611247;0.62255;etiqueta public_transport=stop_position
+descartado;relation/4487763;Autobús;;Lloret de Mar;41.701059;2.842402;sin nombre en OpenStreetMap
+descartado;way/120350119;Autobús;;Salou;41.074189;1.139377;etiqueta public_transport=platform
+descartado;way/1385583874;Autobús;;Sant Boi de Llobregat;41.353991;2.030625;sin nombre en OpenStreetMap
+descartado;way/1385584659;Autobús;;Sant Boi de Llobregat;41.354264;2.031236;sin nombre en OpenStreetMap
+descartado;way/1385586950;Autobús;;Sant Boi de Llobregat;41.35457;2.031382;sin nombre en OpenStreetMap
+descartado;way/1385587417;Autobús;;Sant Boi de Llobregat;41.35728;2.034513;sin nombre en OpenStreetMap
+descartado;way/1385587418;Autobús;;Sant Boi de Llobregat;41.358051;2.034588;sin nombre en OpenStreetMap
+descartado;way/156850833;Autobús;;Lloret de Mar;41.701059;2.842402;sin nombre en OpenStreetMap
+descartado;way/167677219;Autobús;Estació d'Autobusos de Palafrugell;Palafrugell;41.915808;3.158119;duplicado en el lote de way/167677073 (5 m)
+descartado;way/177693576;Autobús;Estació d'Autobusos d'Olot;Olot;42.180742;2.491531;etiqueta public_transport=platform
+descartado;way/187239957;Autobús;;Móra d'Ebre;41.088644;0.644469;sin nombre en OpenStreetMap
+descartado;way/303017541;Tren;Plaça del Funicular;Barcelona;41.416466;2.131058;etiqueta station=funicular
+descartado;way/54752416;Tren;Tibidabo;Barcelona;41.421433;2.119387;etiqueta station=funicular
+por revisar;way/586026629;Autobús;Estació d'autobusos de Tarragona – Carrer Dr. Battestini 4Bis;Tarragona;41.118186;1.244294;posible duplicado de way/86387183 (Intercanviador d'autobussos de Battestini) a 41 m
+descartado;way/61855975;Autobús;;Vilobí d'Onyar;41.896821;2.765628;sin nombre en OpenStreetMap
+descartado;way/71218773;Autobús;;Granollers;41.606401;2.290949;sin nombre en OpenStreetMap
+descartado;way/82443000;Autobús;Estació d'autobusos de Tarragona;Tarragona;41.118208;1.24413;etiqueta public_transport=platform
+descartado;way/82443001;Autobús;Estació d'autobusos de Tarragona;Tarragona;41.118263;1.244507;etiqueta public_transport=platform
+descartado;way/839972813;Autobús;;Terrassa;41.556741;2.00801;sin nombre en OpenStreetMap
+por revisar;way/86387183;Autobús;Intercanviador d'autobussos de Battestini (Tarragona) – Avinguda de Roma;Tarragona;41.118039;1.243845;posible duplicado de way/586026629 (Estació d'autobusos de Tarragona) a 41 m
+por revisar;way/922106655;Autobús;Parada bus IES Coster de la Torre (la Bisbal del Penedès) – Camí de Gosch;la Bisbal del Penedès;41.275759;1.489273;nombre dudoso en OpenStreetMap: Parada bus IES Coster de la Torre
+descartado;way/964500609;Autobús;;les Borges Blanques;41.5183;0.870166;sin nombre en OpenStreetMap
+por revisar;way/979373385;Autobús;Estación de autobuses de Aeroport Barcelona T1 (el Prat de Llobregat) – T1 Sortides;el Prat de Llobregat;41.287354;2.073128;posible duplicado de node/11287324208 (Aerobús T1) a 145 m
