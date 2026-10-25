@@ -21,7 +21,7 @@ const reglas = (ahoraIso) => {
   const sandbox = { Date: Falsa, self: {} };
   return runInNewContext(
     "const permits = {}; const permitKey = (c) => c.id; const permOf = (c) => permits[permitKey(c)] || {};\n" + codigo +
-    "\n({ today, addDays, mondayOf, daysBetween, solEstado, concEstado, estadoCalc, expedientesDe, seguimientosDe, capacidad, capacidadPorOng, incidencias, indicadores, estadoEnDia, calendarioSemana, sanitizeSharedPermitState, UMBRAL_ESTANCADA, relListas, diffRel, verificaOps })",
+    "\n({ today, addDays, mondayOf, daysBetween, solEstado, concEstado, estadoCalc, expedientesDe, seguimientosDe, capacidad, capacidadPorOng, incidencias, indicadores, estadoEnDia, calendarioSemana, sanitizeSharedPermitState, UMBRAL_ESTANCADA, relListas, diffRel, verificaOps, SEV, SEV_ORDEN, resumenDatos })",
     sandbox
   );
 };
@@ -401,6 +401,61 @@ const T = "2026-10-23";
   const i2 = R.indicadores(sinFechas, [], t);
   ok(i2.vigentes.length === 1 && R.calendarioSemana(sinFechas, [], wk, t).every((d) => d.items.length === 0), "una concesión sin fechas es vigente para el Panel y no sale en el Calendario");
   ok(i2.incidencias.some((x) => /sin fechas/i.test(x.tipo)), "…y por eso se señala como incidencia");
+}
+
+// Centro de mando: gravedad de las incidencias y datos de cada bloque (funciones puras, fecha fija 25/10/2026).
+{
+  const R = reglas("2026-10-25T10:00:00Z"), t = R.today();
+  const P = (id, name, provinceId, province) => ({ id, name, provinceId, province });
+  const p1 = P(1, "Hospital Uno", "pr-1", "Granada"), p2 = P(2, "Super Dos", "pr-2", "Almería");
+  const recs = [
+    ...R.expedientesDe(p1, { solicitudes: [
+      { id: "s1", desde: "2026-10-27", hasta: "2026-11-02", ong: "AECC", captadores: 2, fecha: "2026-10-01", seg: "2026-10-20" },       /* pendiente, 24 días, empieza en 2 días */
+      { id: "s2", desde: "2026-11-10", hasta: "2026-11-05", ong: "Cruz Roja", captadores: 1, fecha: "2026-10-24" },                 /* fechas incoherentes */
+      { id: "s3", desde: "2026-11-10", hasta: "2026-11-12", ong: "WWF", captadores: 1, fecha: "2026-10-20" },
+      { id: "s4", desde: "2026-11-10", hasta: "2026-11-12", ong: "wwf", captadores: 1, fecha: "2026-10-21" },                       /* duplicada de s3 (misma ONG sin distinguir mayúsculas) */
+      { id: "s5", desde: "2026-10-01", hasta: "2026-10-05", ong: "WWF", captadores: 1, fecha: "2026-09-20" },                       /* caducada sin respuesta */
+      { id: "s6", desde: "2026-11-01", hasta: "2026-11-02", ong: "FJC", captadores: 1, fecha: "2026-10-01", res: "aprobada", resFecha: "2026-10-05" }, /* aprobada sin concesión: 4 días */
+      { id: "s7", desde: "2026-11-01", hasta: "2026-11-02", ong: "FJC", captadores: 1, fecha: "2026-10-10", res: "denegada", resFecha: "2026-10-20", motivo: "x" }, /* 10 días */
+      { id: "s8", desde: "2026-11-01", hasta: "2026-11-02", ong: "FJC", captadores: 1, fecha: "2026-10-01", res: "retirada", resFecha: "2026-10-04", conc: "gx" }  /* 3 días */,
+      { id: "s9", desde: "2026-10-24", hasta: "2026-10-30", ong: "FPM", captadores: 1, fecha: "2026-10-22" }                         /* el periodo ya empezó y sigue pendiente */
+    ], historial: [
+      { id: "g1", desde: "2026-10-20", hasta: "2026-10-28", ong: "AECC", captadores: 3 },                                            /* vigente, termina en 3 días */
+      { id: "g2", desde: "2026-10-25", hasta: "2026-11-20", ong: "aecc", captadores: 2 },                                            /* solapada con g1 (mismo punto y ONG) */
+      { id: "g3", ong: "FPM", captadores: 1 },                                                                                      /* sin fechas: bloqueante */
+      { id: "g4", desde: "2026-10-22", ong: "FEC", captadores: 1 }                                                                  /* sin fecha de fin: recomendación */
+    ] }),
+    ...R.expedientesDe(p2, { solicitudes: [{ id: "q1", desde: "2026-12-01", hasta: "2026-12-05", ong: "AECC", captadores: 4, fecha: "2026-10-23" }], historial: [{ id: "h1", desde: "2026-10-10", hasta: "2026-10-26", ong: "WWF", captadores: 6 }] })
+  ];
+  const segs = [{ c: p1, fecha: "2026-10-20", ong: "AECC", i: 0, resp: "u1", accion: "Llamar" }, { c: p1, fecha: t, ong: "", i: -1, resp: "", punto: true }, { c: p2, fecha: "2026-10-28", ong: "AECC", i: 0, resp: "u1" }, { c: p2, fecha: "2026-11-20", ong: "", i: -1, resp: "u2", punto: true }];
+  const incs = R.incidencias(recs, t), tipos = (sev) => incs.filter((x) => x.sev === sev).map((x) => x.tipo);
+  ok(incs.every((x) => R.SEV_ORDEN.includes(x.sev) && R.SEV[x.sev]), "toda incidencia lleva una gravedad conocida");
+  ok(tipos("bloqueante").filter((x) => /Fechas incoherentes/.test(x)).length === 1 && tipos("bloqueante").some((x) => /sin fechas/i.test(x)) && tipos("bloqueante").length === 2, "bloqueantes: fechas incoherentes y concesión sin fechas");
+  ok(tipos("aviso").filter((x) => /duplicada/.test(x)).length === 1, "una solicitud duplicada (misma ONG sin distinguir mayúsculas) se avisa una sola vez");
+  ok(tipos("aviso").some((x) => /ya empezó/.test(x)) && tipos("aviso").some((x) => /estancada/.test(x)) && tipos("aviso").some((x) => /fechas ya pasaron/.test(x)) && tipos("aviso").some((x) => /solapadas/.test(x)), "avisos: periodo ya empezado, estancada, caducada y concesiones solapadas");
+  ok(tipos("recomendacion").some((x) => /sin concesión enlazada/.test(x)) && tipos("recomendacion").some((x) => /sin fecha de fin/.test(x)) && tipos("recomendacion").length === 2, "recomendaciones: aprobada sin concesión enlazada y concesión sin fecha de fin (la retirada con concesión enlazada no cuenta)");
+  const rd = R.resumenDatos(recs, segs, t, incs), ind = R.indicadores(recs, segs, t);
+  eq(rd.antiguedad.map((x) => [x.nombre, x.lista.length]), [["0–7 días", 5], ["8–15 días", 0], ["16–30 días", 1], ["Más de 30 días", 0]], "antigüedad por tramos de las solicitudes pendientes");
+  ok(rd.antiguedad.reduce((n, x) => n + x.lista.length, 0) + rd.sinFechaSol.length === recs.filter((r) => r.k === "sol" && r.est === "pendiente").length, "los tramos suman todas las pendientes");
+  ok(rd.capacidadDias.length === 14 && rd.capacidadDias[0].d === t && rd.capacidadDias[13].d === R.addDays(t, 13), "14 días consecutivos desde hoy");
+  ok(rd.capacidadDias[0].aut === ind.capacidadHoy - 1, "capacidad de hoy = la del Calendario; la concesión sin fechas cuenta en el Panel y no en el Calendario (1 de diferencia, señalada como incidencia bloqueante)");
+  ok(rd.capacidadDias.every((d) => d.aut >= 0 && d.pen >= 0), "capacidad y demanda no negativas y separadas");
+  const dia27 = rd.capacidadDias.find((d) => d.d === "2026-10-27");
+  ok(dia27.pen >= 2 && dia27.nPen >= 1, "la demanda pendiente (s1, 2 captadores) aparece aparte el 27");
+  eq(rd.vencimientos.map((v) => [v.r.ong, v.dias]), [["WWF", 1], ["AECC", 3], ["aecc", 26]], "vencimientos ordenados por proximidad");
+  eq(rd.porProvincia.map((g) => [g.nombre, g.pend.length, g.vig.length, g.segAtr]).sort((a, b) => a[0].localeCompare(b[0])), [["Almería", 1, 1, 0], ["Granada", 5, 4, 1]], "carga por provincia");
+  ok(rd.porOng.some((g) => g.nombre.toLowerCase() === "wwf" && g.pend.length === 2), "las ONG se agrupan sin distinguir mayúsculas («WWF» y «wwf»)");
+  const u1 = rd.porResponsable.find((g) => g.resp === "u1"), sinResp = rd.porResponsable.find((g) => g.resp === "");
+  ok(u1.atrasados === 1 && u1.proximos === 1 && sinResp.hoy === 1 && rd.porResponsable.length === 3, "seguimientos por responsable (incluye «sin responsable»)");
+  eq(rd.calidad, { bloqueante: 2, aviso: tipos("aviso").length, recomendacion: 2 }, "calidad por gravedad");
+  eq([rd.resolucion.n, rd.resolucion.mediana, rd.resolucion.media, rd.resolucion.resueltas, rd.resolucion.sinFecha], [3, 4, 5.7, 3, 0], "tiempo de resolución: 3, 4 y 10 días → mediana 4, media 5,7");
+  ok(rd.actividad.length === 8 && rd.actividad[7].desde === R.mondayOf(t), "actividad de 8 semanas, la última es la actual");
+  const q = rd.cola;
+  ok(q.length > 0 && q.every((x, i) => i === 0 || q[i - 1].score >= x.score), "la cola de trabajo va de mayor a menor urgencia");
+  ok(q[0].titulo.startsWith("Seguimiento atrasado") && q[0].vista === "seg", "lo más urgente: un seguimiento atrasado");
+  ok(q.some((x) => x.titulo.startsWith("Empieza el periodo solicitado")) && q.some((x) => x.titulo.startsWith("La concesión termina")) && q.some((x) => x.sev === "bloqueante"), "la cola incluye periodos que empiezan sin respuesta, concesiones que terminan y bloqueantes");
+  const vacio = R.resumenDatos([], [], t, []);
+  ok(vacio.cola.length === 0 && vacio.resolucion.mediana === null && vacio.resolucion.media === null && vacio.vencimientos.length === 0 && vacio.porProvincia.length === 0 && vacio.capacidadDias.every((d) => d.aut === 0 && d.pen === 0), "sin expedientes: sin cola, sin tiempo de resolución y capacidad a cero (no se inventa nada)");
 }
 
 console.log("Reglas de expedientes: " + n + " comprobaciones correctas.");

@@ -47,4 +47,10 @@ for (const t of ['id="wkBox"', "Permisos por semana", "data-wkdate", "wkRender"]
 // Auditoría 25/10/2026: las ONG se agrupan sin distinguir mayúsculas ni espacios, igual que el Panel y el Centro.
 assert.ok(bloque.includes("const kOng = (x) => ongDe(x).trim().toLowerCase();") && bloque.includes("kOng(x) === ong.trim().toLowerCase()") && bloque.includes("porClave.has(kOng(y))"), "El filtro de ONG del Calendario debe usar la clave normalizada");
 
+// Vista mensual (25/10/2026): mismas reglas que la semana (calendarioSemana), capacidad y demanda por separado, y salto a la semana del día.
+assert.ok(bloque.includes('data-modo="mes"') && bloque.includes("const drawMes = ") && bloque.includes("calendarioSemana(recs, segs, ini, t)"), "La vista mensual usa calendarioSemana");
+assert.ok(bloque.includes("data-dia=") && bloque.includes("wk = mondayOf(dd.dataset.dia); modo = \"dias\""), "Pulsar un día abre su semana");
+assert.ok(bloque.includes("captadores autorizados") && bloque.includes("por aprobar") && bloque.includes('aria-label="' + "' + esc(lbl)"), "Cada día dice sus captadores autorizados y por aprobar por separado, con nombre accesible");
+assert.ok(bloque.includes("Mes anterior") && bloque.includes("desplazaMes(+w.dataset.w)"), "La navegación avanza por meses en la vista mensual");
+
 console.log("Calendario semanal: comprobaciones estáticas correctas.");

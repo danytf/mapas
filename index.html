@@ -56,6 +56,7 @@
     --star-off: #8a94a3;
     --star-on: #c47a00;
     --st-concedido: #16a34a; --st-solicitado: #d97706; --st-caducado: #7c8aa0; --st-denegado: #475569; --st-cancelado: #dc2626;
+    --ch-aut: #16a34a; --ch-dem: #d97706; --ch-1: #3b6fb6; --ch-a1: #8794ab; --ch-a2: #61708a; --ch-a3: #3d4b66;
     --t: 160ms;
     --shadow: 0 1px 2px rgba(23,27,35,.06), 0 6px 20px rgba(23,27,35,.09);
     --r: 10px;
@@ -70,6 +71,7 @@
       --ink: #070b12; --ink-2: #111a29;
       --err: #ff7084; --star-off: #7f8da3; --star-on: #f59e0b;
       --st-concedido: #4ade80; --st-solicitado: #fbbf24; --st-caducado: #7c8aa0; --st-denegado: #e2e8f0; --st-cancelado: #ff7084;
+      --ch-a1: #55647e; --ch-a2: #7d8ca6; --ch-a3: #a9b6ca;
       --gam-gold-soft: var(--warn-bg); --gam-gold-ink: var(--warn);
       --pin-denegado: #e2e8f0; --res-ok-bg: #12341f; --res-ok-line: #2f6b45; --res-err-bg: #3a121b; --res-err-line: #7a2a36;
       --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.45);
@@ -569,6 +571,23 @@
   .cal-warn { font-size: var(--fs-label); font-weight: 650; color: var(--warn); }
   .cal-card.s-seguimiento { --st: var(--fg); --st-fg: var(--fg); border-left-style: double; }
   .cal-chip.s-seguimiento { --st: var(--fg); }
+  .cal-mleg { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: var(--fs-label); color: var(--muted); margin: 0 0 8px; }
+  .cal-mleg i, .cal-m .m i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+  .cal-mleg .a, .cal-m .m .a { background: var(--ch-aut); }
+  .cal-mleg .p, .cal-m .m .p { background: repeating-linear-gradient(45deg, var(--ch-dem) 0 2px, var(--panel) 2px 4px); }
+  .cal-mes { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+  .cal-mh { color: var(--muted); font-size: var(--fs-label); font-weight: 600; text-align: center; padding: 2px 0; }
+  .cal-m { display: grid; align-content: start; gap: 3px; height: auto; min-height: 84px; padding: 6px 7px; text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-control); font: inherit; color: var(--fg); cursor: pointer; }
+  .cal-m:hover { border-color: var(--muted); background: var(--ok-bg); }
+  .cal-m:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .cal-m.we { background: var(--bg); }
+  .cal-m.fuera { opacity: .5; }
+  .cal-m.hoy { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+  .cal-m .d { font-weight: 650; font-variant-numeric: tabular-nums; }
+  .cal-m.hoy .d { color: var(--accent); }
+  .cal-m .m, .cal-m .sg { font-size: var(--fs-label); font-variant-numeric: tabular-nums; color: var(--fg); }
+  .cal-m .sg { color: var(--muted); }
+  .cal-m .sg.late { color: var(--accent); font-weight: 600; }
   .cal-links { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 14px; font-size: var(--fs-label); color: var(--muted); }
   .cal-links button { height: 32px; padding: 0 13px; font-size: var(--fs-label); border-radius: var(--r-pill); }
   .cal-modo { display: inline-flex; gap: 6px; margin-left: auto; }
@@ -764,45 +783,177 @@
   #dlgPanel .pn-head, #dlgAdm .pn-head { position: sticky; top: 0; z-index: 2; margin: 0; padding: 12px 18px 12px 22px; background: var(--panel); border-bottom: 1px solid var(--line); }
   #dlgPanel h2, #dlgAdm h2 { font-size: var(--fs-title); font-weight: 680; letter-spacing: -.02em; line-height: 1.2; }
   #pnBody { padding: 16px 22px 22px; }
-  /* Estilos del Centro de permisos (bandejas de expedientes y seguimientos). */
-  #dlgCentro { width: min(1180px, 98vw); max-height: 94vh; overflow: auto; background: var(--bg); padding: 0; }
-  #dlgCentro .pn-head { position: sticky; top: 0; z-index: 2; margin: 0; padding: 12px 18px 12px 22px; background: var(--panel); border-bottom: 1px solid var(--line); }
+  /* Estilos del Centro de permisos: centro de mando y espacio de trabajo. Colores de gráficos validados (guía dataviz) en claro y oscuro. */
+  #dlgCentro { width: min(1360px, 98vw); max-height: 95vh; overflow: auto; background: var(--bg); padding: 0; }
+  #dlgCentro .pn-head { position: sticky; top: 0; z-index: 4; margin: 0; padding: 12px 18px 12px 22px; background: var(--panel); border-bottom: 1px solid var(--line); }
   #dlgCentro h2 { font-size: var(--fs-title); font-weight: 680; letter-spacing: -.02em; line-height: 1.2; }
-  #ceBody { padding: 16px 22px 22px; }
+  #ceBody { padding: 0 22px 22px; }
+  #ceBody ul, #ceBody ol { list-style: none; margin: 0; padding: 0; overflow: visible; flex: none; }
+  /* «li» tiene una regla global (la lista de puntos del mapa): aquí no aplica. */
+  #ceBody li { display: block; grid-template-columns: none; gap: 0; padding: 0; border: 0; cursor: default; position: static; }
+  #ceBody li::before { display: none; }
+  #ceBody li:hover { background: none; }
   #dlgCentro .cal-f select, #dlgCentro .cal-f input { width: auto; min-width: 170px; }
   #dlgCentro .cal-f.ce-q input { min-width: 220px; }
-  .ce-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
-  .ce-tabs button { font: inherit; color: var(--fg); background: var(--panel); border: 1px solid var(--line-2); cursor: pointer; height: 32px; padding: 0 14px; border-radius: var(--r-pill); font-size: var(--fs-label); }
-  .ce-tabs button[aria-pressed="true"] { border-color: var(--fg); font-weight: 600; }
-  .ce-tabs button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .ce-top { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-content: space-between; padding: 14px 0 6px; }
+  .ce-ctx { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; }
+  .ce-hoy { margin: 0; color: var(--muted); font-size: var(--fs-label); }
+  .ce-new { display: flex; gap: 8px; flex-wrap: wrap; }
+  .ce-nav { position: sticky; top: 53px; z-index: 3; display: flex; gap: 2px; overflow-x: auto; background: var(--bg); border-bottom: 1px solid var(--line); margin: 6px -22px 14px; padding: 0 22px; scrollbar-width: none; }
+  .ce-nav::-webkit-scrollbar { display: none; }
+  .ce-nav button { height: 42px; padding: 0 14px; background: none; border: 0; border-bottom: 2px solid transparent; border-radius: 0; color: var(--muted); font-size: var(--fs-body); font-weight: 620; white-space: nowrap; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; flex: none; }
+  .ce-nav button:hover { background: none; color: var(--fg); border-color: transparent; border-bottom-color: var(--line-2); }
+  .ce-nav button[aria-current="page"] { color: var(--fg); border-bottom-color: var(--accent); }
+  .ce-nav button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .ce-nav .n { min-width: 22px; height: 22px; padding: 0 6px; border-radius: var(--r-pill); background: var(--line); color: var(--fg); font-size: var(--fs-label); font-weight: 650; display: inline-grid; place-items: center; font-variant-numeric: tabular-nums; }
+  .ce-nav .n[hidden] { display: none; }
+  .ce-nav .n.al { background: var(--accent); color: var(--accent-fg); }
+  #ceBody[data-vista="res"] .ce-solo-lista { display: none; }
+  .ce-filtros { margin-bottom: 10px; }
+  /* Tablas de trabajo */
   #ceBody table { width: 100%; border-collapse: collapse; font-size: var(--fs-label); font-variant-numeric: tabular-nums; }
-  #ceBody th, #ceBody td { padding: 8px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+  #ceBody th, #ceBody td { padding: 9px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
   #ceBody thead th { background: var(--panel); font-weight: 600; color: var(--muted); border-bottom: 1px solid var(--line-2); }
   #ceBody tbody tr:last-child td { border-bottom: 0; }
-  #ceBody tbody tr:hover { background: var(--ok-bg); }
+  #ceBody tr.ce-row { cursor: pointer; }
+  #ceBody tr.ce-row:hover { background: var(--ok-bg); }
+  #ceBody tr.ce-row.is-sel { background: var(--accent-soft); }
+  #ceBody tr.ce-row.urg td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
   #ceBody td.n, #ceBody th.n { text-align: right; }
   #ceBody .ce-pt { all: unset; box-sizing: border-box; cursor: pointer; display: block; font: inherit; color: inherit; border-radius: var(--r-xs); }
   #ceBody .ce-pt strong { display: block; font-weight: 620; }
   #ceBody .ce-pt span, #ceBody .ce-sub { display: block; color: var(--muted); }
   #ceBody .ce-pt:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  .ce-badge { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
-  .ce-badge i { width: 9px; height: 9px; border-radius: 50%; background: var(--st, var(--muted)); flex: none; }
+  .ce-chk { width: 44px; padding-left: 4px; padding-right: 0; }
+  .ce-chkl { display: grid; place-items: center; min-width: 32px; min-height: 32px; cursor: pointer; }
+  #ceBody input[type="checkbox"] { width: 18px; height: 18px; min-height: 0; accent-color: var(--accent); }
+  .ce-badge, .ce-sev { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+  .ce-badge i, .ce-sev i { width: 9px; height: 9px; border-radius: 50%; background: var(--st, var(--sv, var(--muted))); flex: none; }
   .ce-badge.s-concedido { --st: var(--st-concedido); } .ce-badge.s-solicitado { --st: var(--st-solicitado); } .ce-badge.s-caducado { --st: var(--st-caducado); } .ce-badge.s-denegado { --st: var(--st-denegado); } .ce-badge.s-cancelado { --st: var(--st-cancelado); }
+  /* Gravedad: color y forma (rombo, punto, anillo), nunca solo color */
+  .ce-sev.bl { --sv: var(--err); } .ce-sev.bl i { border-radius: 2px; transform: rotate(45deg); }
+  .ce-sev.av { --sv: var(--st-solicitado); }
+  .ce-sev.re { --sv: var(--st-caducado); } .ce-sev.re i { background: transparent; border: 2px solid var(--sv); }
   .ce-warn { display: block; color: var(--warn); font-weight: 600; }
   .ce-act { font: inherit; font-size: var(--fs-label); color: var(--fg); background: var(--panel); border: 1px solid var(--line-2); border-radius: var(--r-pill); height: 30px; padding: 0 12px; cursor: pointer; white-space: nowrap; }
   .ce-act:hover:not(:disabled) { border-color: var(--muted); }
   .ce-act:disabled { opacity: .5; cursor: default; }
   .ce-act:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .ce-act.ok { color: var(--ok); border-color: var(--ok); }
+  .ce-act.pri { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); font-weight: 600; }
+  .ce-act.pri:hover:not(:disabled) { background: var(--accent-d); border-color: var(--accent-d); }
   #ceBody td.ce-acts { text-align: right; }
   #ceBody td.ce-acts .ce-act { margin: 0 0 4px 6px; }
-  .ce-top { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-  .ce-top .ce-tabs { margin-bottom: 0; }
-  .ce-new { display: flex; gap: 8px; flex-wrap: wrap; }
-  #ceBody tr.ce-conf td { background: var(--panel); }
-  #ceBody tr.ce-conf label { display: grid; gap: 4px; color: var(--muted); margin-bottom: 8px; max-width: 520px; }
-  #ceBody tr.ce-conf p { margin: 0 0 8px; }
+  .ce-link { height: auto; padding: 0; background: none; border: 0; border-radius: var(--r-xs); color: var(--accent); font: inherit; font-size: var(--fs-label); text-decoration: underline; cursor: pointer; }
+  .ce-link:hover { background: none; border: 0; }
+  .ce-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  #ceBody tr.ce-confrow td { background: var(--panel); }
+  .ce-conf { display: grid; gap: 6px; padding: 6px 0; }
+  .ce-conf label { display: grid; gap: 4px; color: var(--muted); max-width: 520px; }
+  .ce-conf p { margin: 0; }
   .ce-confb { display: inline-flex; gap: 8px; }
+  /* Espacio de trabajo con detalle lateral */
+  .ce-work { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; align-items: start; }
+  .ce-work[hidden] { display: none; }
+  .ce-work.con-lado { grid-template-columns: minmax(0, 1fr) 380px; }
+  .ce-main { min-width: 0; }
+  .ce-side { position: sticky; top: 104px; max-height: calc(95vh - 130px); overflow: auto; background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-card); padding: 14px 16px 16px; }
+  .ce-side[hidden] { display: none; }
+  .ce-sidehead { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+  .ce-kicker { color: var(--muted); font-size: var(--fs-label); font-weight: 600; }
+  .ce-sidehead h3 { margin: 2px 0; font-size: var(--fs-title); font-weight: 680; letter-spacing: -.015em; line-height: 1.2; overflow-wrap: anywhere; }
+  .ce-sidehead p { margin: 0; color: var(--muted); font-size: var(--fs-label); }
+  .ce-x { width: 32px; height: 32px; padding: 0; font-size: var(--fs-title); line-height: 1; flex: none; }
+  .ce-datos { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 7px 10px; margin: 12px 0 0; font-size: var(--fs-label); }
+  .ce-datos dt { color: var(--muted); }
+  .ce-datos dd { margin: 0; overflow-wrap: anywhere; }
+  .ce-sec { margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--line); }
+  .ce-sec h4 { margin: 0 0 8px; font-size: var(--fs-label); font-weight: 650; color: var(--muted); }
+  .ce-btns { display: flex; flex-wrap: wrap; gap: 6px; }
+  .ce-razones { margin-top: 8px !important; display: grid; gap: 4px; color: var(--muted); font-size: var(--fs-label); }
+  .ce-avisos { display: grid; gap: 6px; font-size: var(--fs-label); }
+  .ce-linea { display: grid; gap: 4px; }
+  .ce-linea button { display: flex; gap: 8px; align-items: center; width: 100%; height: auto; padding: 6px 8px; text-align: left; background: none; border: 1px solid var(--line); border-radius: var(--r-control); font: inherit; font-size: var(--fs-label); color: var(--fg); cursor: pointer; }
+  .ce-linea button[aria-current="true"] { border-color: var(--accent); }
+  .ce-hist { display: grid; }
+  .ce-hist li { display: grid !important; gap: 1px; padding: 6px 0 !important; border-bottom: 1px solid var(--line) !important; font-size: var(--fs-label); }
+  .ce-hist li span { color: var(--muted); }
+  .ce-err { color: var(--err); }
+  /* Lotes */
+  .ce-lote { background: var(--panel); border: 1px solid var(--line-2); border-left: 4px solid var(--accent); border-radius: var(--r-card); padding: 10px 14px; margin-bottom: 10px; display: grid; gap: 8px; }
+  .ce-lotef { display: inline-flex; gap: 6px; align-items: center; font-size: var(--fs-label); color: var(--muted); }
+  .ce-res-lote { display: grid; gap: 2px; font-size: var(--fs-label); }
+  .ce-res-lote li { display: grid !important; grid-template-columns: minmax(120px, 220px) 1fr; gap: 8px !important; }
+  .ce-res-lote li.ok b { color: var(--ok); }
+  .ce-res-lote li.mal b { color: var(--err); }
+  /* Centro de mando */
+  .ce-kpis { margin-bottom: 14px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+  .ce-g2 { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 14px; margin-bottom: 14px; }
+  .ce-g3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-bottom: 14px; }
+  .ce-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-card); padding: 14px 16px 16px; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+  .ce-ch { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .ce-card h3 { margin: 0; font-size: var(--fs-body); font-weight: 650; }
+  .ce-def { margin: 0; color: var(--muted); font-size: var(--fs-label); }
+  .ce-vacio { margin: 6px 0; color: var(--muted); }
+  .ce-cola { display: grid; }
+  .ce-item { display: block; width: 100%; height: auto; text-align: left; padding: 9px 4px; background: none; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; font: inherit; color: var(--fg); cursor: pointer; }
+  .ce-item:hover { background: var(--ok-bg); border-color: transparent; border-bottom-color: var(--line); }
+  .ce-item:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .ce-item strong { font-weight: 620; }
+  .ce-item span { color: var(--muted); font-size: var(--fs-label); }
+  .ce-cola .ce-item { display: grid; grid-template-columns: 16px minmax(0, 1fr); column-gap: 8px; }
+  .ce-cola .ce-item .ce-sev { grid-row: 1 / span 2; align-self: center; }
+  .ce-cola .ce-item strong, .ce-cola .ce-item > span:last-child { grid-column: 2; }
+  .ce-ley { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: var(--fs-label); color: var(--muted); }
+  .ce-ley i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -2px; }
+  .ce-ley .aut { background: var(--ch-aut); }
+  .ce-ley .dem { background: repeating-linear-gradient(45deg, var(--ch-dem) 0 2px, var(--panel) 2px 5px); }
+  .ce-svg { width: 100%; height: auto; display: block; }
+  .ce-svg text { font-family: inherit; }
+  .ce-grid { stroke: var(--line); stroke-width: 1; }
+  .ce-base { stroke: var(--line-2); stroke-width: 1; }
+  .ce-tick { fill: var(--muted); font-size: var(--fs-label); font-variant-numeric: tabular-nums; }
+  .ce-tick.fin { opacity: .65; }
+  .ce-tick.hoy { fill: var(--accent); font-weight: 650; }
+  .ce-val { fill: var(--fg); font-size: var(--fs-label); font-weight: 650; }
+  .ce-hoyband { fill: var(--accent-soft); opacity: .55; }
+  .ce-b-aut { fill: var(--ch-aut); }
+  .ce-b-dem { fill: url(#ceHatch); }
+  .ce-b-uno { fill: var(--ch-1); }
+  .ce-col rect[fill="transparent"] { pointer-events: all; }
+  .ce-col:hover rect[fill="transparent"] { fill: var(--ok-bg); }
+  .ce-dos { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .ce-dos figure { margin: 0; }
+  .ce-dos figcaption { color: var(--muted); font-size: var(--fs-label); }
+  .ce-barras { display: grid; gap: 2px; }
+  .ce-barra { display: grid; grid-template-columns: 112px minmax(0, 1fr) 40px; align-items: center; gap: 10px; width: 100%; height: auto; padding: 6px 4px; background: none; border: 0; border-radius: var(--r-control); text-align: left; font: inherit; color: var(--fg); cursor: pointer; }
+  .ce-barra:hover { background: var(--ok-bg); border: 0; }
+  .ce-barra:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .ce-barra .l { color: var(--muted); font-size: var(--fs-label); }
+  .ce-barra .tr { display: block; height: 14px; background: var(--line); border-radius: var(--r-xs); }
+  .ce-barra .rl { display: block; height: 100%; width: var(--w); background: var(--c); border-top-right-radius: var(--r-xs); border-bottom-right-radius: var(--r-xs); }
+  .ce-barra b { text-align: right; font-variant-numeric: tabular-nums; }
+  .ce-barra.a1 { --c: var(--ch-a1); } .ce-barra.a2 { --c: var(--ch-a2); } .ce-barra.a3 { --c: var(--ch-a3); } .ce-barra.a4 { --c: var(--accent); }
+  .ce-calidad { display: grid; gap: 4px; }
+  .ce-calidad button { display: flex; justify-content: space-between; align-items: center; width: 100%; height: auto; padding: 8px 10px; background: none; border: 1px solid var(--line); border-radius: var(--r-control); font: inherit; color: var(--fg); cursor: pointer; }
+  .ce-calidad b { font-size: var(--fs-title); font-variant-numeric: tabular-nums; }
+  .ce-seg { display: inline-flex; gap: 0; }
+  .ce-seg button { height: 28px; padding: 0 12px; background: var(--panel); border: 1px solid var(--line-2); font-size: var(--fs-label); border-radius: 0; }
+  .ce-seg button:first-child { border-top-left-radius: var(--r-pill); border-bottom-left-radius: var(--r-pill); } .ce-seg button:last-child { border-top-right-radius: var(--r-pill); border-bottom-right-radius: var(--r-pill); }
+  .ce-seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+  .ce-tcarga tbody tr[data-filtra] { cursor: pointer; }
+  .ce-tcarga tbody tr[data-filtra]:hover { background: var(--ok-bg); }
+  .ce-mini { display: inline-block; width: 72px; height: 8px; background: var(--line); border-radius: var(--r-xs); vertical-align: middle; overflow: hidden; }
+  .ce-mini span { display: block; height: 100%; background: var(--ch-1); border-top-right-radius: var(--r-xs); border-bottom-right-radius: var(--r-xs); }
+  .ce-rojo { color: var(--accent); }
+  .ce-hero { margin: 4px 0 0; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .ce-hero b { font-size: 48px; font-weight: 680; letter-spacing: -.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .ce-hero span { color: var(--muted); }
+  .ce-defs { margin: 0 0 14px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-card); padding: 10px 16px; }
+  .ce-defs summary { cursor: pointer; font-weight: 600; min-height: 32px; display: flex; align-items: center; }
+  .ce-defs dl { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 6px 14px; margin: 8px 0 4px; font-size: var(--fs-label); }
+  .ce-defs dt { font-weight: 600; } .ce-defs dd { margin: 0; color: var(--muted); }
+  /* Formularios */
   .ce-form { border: 1px solid var(--line-2); border-radius: var(--r-card); background: var(--panel); padding: 14px 16px; margin-bottom: 14px; display: grid; gap: 10px; }
   .ce-form[hidden] { display: none; }
   .ce-form h3 { margin: 0; font-size: var(--fs-body); font-weight: 650; }
@@ -810,23 +961,44 @@
   .cf-f { display: grid; gap: 4px; font-size: var(--fs-label); font-weight: 560; color: var(--muted); }
   .cf-f input, .cf-f select, .cf-f textarea { min-width: 150px; }
   .cf-pt { margin: 0; font-size: var(--fs-label); color: var(--muted); }
-  .cf-res { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; max-height: 280px; overflow-y: auto; }
+  .cf-res { display: grid; gap: 4px; max-height: 280px; overflow-y: auto !important; }
   .cf-res:empty { display: none; }
-  /* La regla global de «li» es la de la lista de puntos del mapa (rejilla de 34 px, borde y cursor): aquí no aplica. */
-  .cf-res li { display: block; grid-template-columns: none; padding: 0; border: 0; cursor: default; }
-  .cf-res li::before { display: none; }
-  .cf-res li:hover { background: none; }
   .cf-opt { display: grid; gap: 2px; width: 100%; height: auto; text-align: left; font: inherit; color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-card); padding: 8px 12px; cursor: pointer; }
   .cf-opt strong { font-weight: 620; }
   .cf-opt span { font-size: var(--fs-label); color: var(--muted); overflow-wrap: anywhere; }
   .cf-opt:hover { border-color: var(--muted); background: var(--ok-bg); }
   .cf-opt:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .cf-btns { display: flex; gap: 8px; }
-  .ce-chip { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 8px; font-size: var(--fs-label); color: var(--muted); }
+  .ce-chip { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0; font-size: var(--fs-label); color: var(--muted); }
   .ce-chip:empty { display: none; }
   .ce-aviso { margin: 0 0 8px; min-height: 1.2em; font-size: var(--fs-label); color: var(--fg); }
   .ce-count { margin: 0 0 8px; color: var(--muted); font-size: var(--fs-label); }
   .ce-more { margin: 12px 0 0; }
+  @media (max-width: 1100px) { .ce-g3 { grid-template-columns: 1fr 1fr; } .ce-work.con-lado { grid-template-columns: minmax(0, 1fr) 330px; } }
+  @media (max-width: 900px) {
+    .ce-g2, .ce-g3 { grid-template-columns: 1fr; }
+    .ce-work.con-lado { grid-template-columns: minmax(0, 1fr); }
+    .ce-side { position: fixed; inset: 0; z-index: 20; max-height: none; border-radius: 0; border: 0; padding: 16px 16px 24px; }
+    .ce-defs dl { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 700px) {
+    #ceBody { padding: 0 14px 18px; }
+    .ce-nav { margin-left: -14px; margin-right: -14px; padding: 0 14px; }
+    .ce-dos { grid-template-columns: 1fr; }
+    .ce-tabla { border: 0; background: none; overflow: visible; }
+    .ce-tabla table, .ce-tabla tbody, .ce-tabla tr, .ce-tabla td { display: block; width: 100%; }
+    .ce-tabla thead { display: none; }
+    .ce-tabla tr.ce-row { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-card); margin-bottom: 8px; padding: 6px 10px; }
+    .ce-tabla tr.ce-row.is-sel { background: var(--accent-soft); }
+    .ce-tabla td { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 8px; border: 0 !important; padding: 4px 0; text-align: left !important; }
+    .ce-tabla td::before { content: attr(data-l); color: var(--muted); font-size: var(--fs-label); }
+    .ce-tabla td.ce-acts { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-start; padding-top: 8px; }
+    .ce-tabla td.ce-acts::before, .ce-tabla td.ce-chk::before { content: none; }
+    .ce-tabla td.ce-chk { display: block; width: auto; }
+    .ce-tabla tr.ce-confrow { padding: 0; border: 0; }
+    .ce-tabla tr.ce-confrow td { display: block; }
+    .ce-tabla tr.ce-confrow td::before { content: none; }
+  }
   #dlgAdm .adm-note, #dlgAdm #admMsg, #dlgAdm #admBody { margin-left: 22px; margin-right: 22px; }
   #dlgAdm .adm-note { margin-top: 14px; }
   #dlgAdm #admBody { padding-bottom: 22px; }
@@ -860,11 +1032,17 @@
     #menuBtn { width: 44px; height: 44px; }
     #menuPanel button { min-height: 44px; }
     #pnClose, #admClose, #calClose, #ceClose, #ayClose { width: 44px; height: 44px; }
-    .ce-tabs button, .ce-act, .cf-opt, #ficha .fi-gestion button { min-height: 44px; }
+    .ce-nav button, .ce-act, .cf-opt, .ce-item, .ce-barra, .ce-seg button, .ce-calidad button, .ce-linea button, .ce-x, #ficha .fi-gestion button { min-height: 44px; }
+    .ce-x { min-width: 44px; }
+    #ceBody .ce-pt { min-height: 44px; display: flex; flex-direction: column; justify-content: center; }
+    .ce-chkl { min-width: 44px; min-height: 44px; }
+    .ce-link { min-height: 44px; display: inline-flex; align-items: center; }
     #ficha details.fi-loc > summary { min-height: 44px; }
     .lg-h button { min-height: 44px; }
     dialog input, dialog select, dialog button { min-height: 44px; }
     .cal-nav button, .cal-chip, .cal-links button { min-height: 44px; }
+    .cal-m { min-height: 56px; padding: 4px 4px; }
+    .cal-m .m, .cal-m .sg { font-size: var(--fs-label); }
     .cal-nav button { min-width: 44px; }
     #login input, #login button { min-height: 44px; }
   }
@@ -1828,7 +2006,7 @@ const seguimientoDue = (c) => { const p = permOf(c), d = [segCalc(p), p.seguimie
 /* Expedientes de un punto en forma uniforme (k: «sol» o «con»; est: estado de su ciclo de vida). */
 const expedientesDe = (c, p) => {
   const t = today(), out = [];
-  solsOf(p).forEach((q, i) => out.push({ k: "sol", c, i, id: q.id || "", est: solEstado(q, t), desde: q.desde || "", hasta: q.hasta || "", ong: (q.ong || "").trim(), n: safeCount(q.captadores), seg: q.res ? "" : (q.seg || ""), fecha: q.fecha || "", resFecha: q.resFecha || "", motivo: q.motivo || "" }));
+  solsOf(p).forEach((q, i) => out.push({ k: "sol", c, i, id: q.id || "", est: solEstado(q, t), desde: q.desde || "", hasta: q.hasta || "", ong: (q.ong || "").trim(), n: safeCount(q.captadores), seg: q.res ? "" : (q.seg || ""), fecha: q.fecha || "", resFecha: q.resFecha || "", motivo: q.motivo || "", conc: q.conc || "" }));
   ((p && p.historial) || []).forEach((h, i) => out.push({ k: "con", c, i, id: h.id || "", est: concEstado(h, t), desde: h.desde || "", hasta: h.hasta || "", ong: (h.ong || "").trim(), n: safeCount(h.captadores), seg: "", fecha: h.alta || "", resFecha: h.resFecha || "", motivo: h.motivo || "", sol: h.sol || "" }));
   return out;
 };
@@ -1846,27 +2024,38 @@ const claveOng = (r) => r.c.id + "|" + r.ong.toLowerCase();
 /* Captadores de un conjunto de expedientes de un mismo día: mayor por punto y ONG, sumando entre ONG distintas. */
 const capacidad = (recs) => { const m = new Map(); recs.forEach((r) => m.set(claveOng(r), Math.max(m.get(claveOng(r)) || 0, r.n))); return [...m.values()].reduce((a, b) => a + b, 0); };
 const capacidadPorOng = (recs) => { const m = new Map(); recs.forEach((r) => { const k = claveOng(r), v = m.get(k); if (!v || r.n > v.n) m.set(k, { ong: v ? v.ong : (r.ong || "Sin ONG"), lc: r.ong.toLowerCase(), n: r.n }); }); const nombre = new Map(), out = new Map(); m.forEach((v) => { if (!nombre.has(v.lc)) nombre.set(v.lc, v.ong); const nm = nombre.get(v.lc); out.set(nm, (out.get(nm) || 0) + v.n); }); return out; };
-/* Posibles incoherencias o datos incompletos que requieren revisión (no se corrigen solas). */
+/* Posibles incoherencias o datos incompletos que requieren revisión (no se corrigen solas). Cada una lleva su gravedad:
+   «bloqueante» (el dato impide que el expediente se lea o se planifique bien), «aviso» (requiere atención) o «recomendacion» (mejora del dato). */
+const SEV = { bloqueante: "Bloqueante", aviso: "Aviso", recomendacion: "Recomendación" };
+const SEV_ORDEN = ["bloqueante", "aviso", "recomendacion"];
 const incidencias = (recs, t) => {
-  const out = [], activas = recs.filter((r) => r.k === "con" && (r.est === "vigente" || r.est === "futura"));
+  const out = [], add = (r, sev, tipo) => out.push({ r, sev, tipo }), activas = new Map(), pendientes = new Map();
   recs.forEach((r) => {
+    const activa = r.k === "con" && (r.est === "vigente" || r.est === "futura");
     if (r.k === "sol" && r.est === "pendiente") {
-      if (!r.ong) out.push({ r, tipo: "Solicitud sin ONG" });
-      if (!r.n) out.push({ r, tipo: "Solicitud sin número de captadores" });
-      if (r.fecha && daysBetween(r.fecha, t) > UMBRAL_ESTANCADA) out.push({ r, tipo: "Solicitud estancada: más de " + UMBRAL_ESTANCADA + " días sin respuesta" });
+      if (r.desde && r.hasta && r.desde > r.hasta) add(r, "bloqueante", "Fechas incoherentes: el inicio es posterior al fin");
+      if (!r.ong) add(r, "aviso", "Solicitud sin ONG");
+      if (!r.n) add(r, "aviso", "Solicitud sin número de captadores");
+      if (r.fecha && daysBetween(r.fecha, t) > UMBRAL_ESTANCADA) add(r, "aviso", "Solicitud estancada: más de " + UMBRAL_ESTANCADA + " días sin respuesta");
+      if (r.desde && r.desde <= t) add(r, "aviso", "El periodo solicitado ya empezó y la solicitud sigue sin respuesta");
+      const k = [r.c.id, r.ong.toLowerCase(), r.desde, r.hasta].join("|"), g = pendientes.get(k) || []; g.push(r); pendientes.set(k, g);
     }
-    if (r.k === "sol" && r.est === "caducada") out.push({ r, tipo: "Solicitud sin respuesta cuyas fechas ya pasaron" });
-    if (r.k === "con" && (r.est === "vigente" || r.est === "futura")) {
-      if (!r.ong) out.push({ r, tipo: "Concesión sin ONG" });
-      if (!r.n) out.push({ r, tipo: "Concesión sin número de captadores" });
-      if (!r.desde && !r.hasta) out.push({ r, tipo: "Concesión sin fechas: cuenta como vigente pero no aparece en el calendario" });
-      else if (!r.hasta) out.push({ r, tipo: "Concesión sin fecha de fin" });
+    if (r.k === "sol" && r.est === "caducada") add(r, "aviso", "Solicitud sin respuesta cuyas fechas ya pasaron");
+    if (r.k === "sol" && r.est === "aprobada" && !r.conc) add(r, "recomendacion", "Solicitud aprobada sin concesión enlazada");
+    if (activa) {
+      if (r.desde && r.hasta && r.desde > r.hasta) add(r, "bloqueante", "Fechas incoherentes: el inicio es posterior al fin");
+      if (!r.ong) add(r, "aviso", "Concesión sin ONG");
+      if (!r.n) add(r, "aviso", "Concesión sin número de captadores");
+      if (!r.desde && !r.hasta) add(r, "bloqueante", "Concesión sin fechas: cuenta como vigente pero no aparece en el calendario");
+      else if (!r.hasta) add(r, "recomendacion", "Concesión sin fecha de fin");
+      const k = r.c.id + "|" + r.ong.toLowerCase(), g = activas.get(k) || []; g.push(r); activas.set(k, g);
     }
   });
-  for (let a = 0; a < activas.length; a++) for (let b = a + 1; b < activas.length; b++) {
-    const x = activas[a], y = activas[b];
-    if (x.c.id === y.c.id && x.ong.toLowerCase() === y.ong.toLowerCase() && (!x.desde || !y.hasta || x.desde <= y.hasta) && (!y.desde || !x.hasta || y.desde <= x.hasta)) out.push({ r: x, tipo: "Concesiones solapadas de la misma ONG en este punto" });
-  }
+  pendientes.forEach((g) => { if (g.length > 1) g.slice(1).forEach((r) => add(r, "aviso", "Posible solicitud duplicada: mismo punto, ONG y fechas que otra pendiente")); });
+  activas.forEach((g) => { for (let a = 0; a < g.length; a++) for (let b = a + 1; b < g.length; b++) {
+    const x = g[a], y = g[b];
+    if ((!x.desde || !y.hasta || x.desde <= y.hasta) && (!y.desde || !x.hasta || y.desde <= x.hasta)) add(x, "aviso", "Concesiones solapadas de la misma ONG en este punto");
+  } });
   return out;
 };
 /* Indicadores del panel: cada lista contiene los expedientes exactos que componen la cifra. */
@@ -1892,6 +2081,59 @@ const indicadores = (recs, segs, t) => {
     muestraTiempo: conTiempo.length, resueltas: res.length, solicitudes: sol.length,
     incidencias: incidencias(recs, t)
   };
+};
+/* Datos del centro de mando del Centro de permisos. Todo sale de los mismos expedientes y seguimientos que el Panel resumen (recs, segs) y de las mismas
+   reglas; cada bloque dice qué cuenta. Nada se inventa: sin fecha de decisión no hay tiempo de resolución, y no hay histórico más allá de las fechas que constan. */
+const TRAMOS_EDAD = [["0–7 días", 0, 7], ["8–15 días", 8, 15], ["16–30 días", 16, 30], ["Más de 30 días", 31, Infinity]];
+const resumenDatos = (recs, segs, t, incs) => {
+  const sol = recs.filter((r) => r.k === "sol"), con = recs.filter((r) => r.k === "con"), pend = sol.filter((r) => r.est === "pendiente"), vig = con.filter((r) => r.est === "vigente");
+  const edad = (r) => daysBetween(r.fecha, t);
+  /* Antigüedad de las solicitudes pendientes de decisión (desde su fecha de solicitud). */
+  const antiguedad = TRAMOS_EDAD.map(([nombre, a, b]) => ({ nombre, a, b, lista: pend.filter((r) => r.fecha && edad(r) >= a && edad(r) <= b) }));
+  const sinFechaSol = pend.filter((r) => !r.fecha);
+  /* Capacidad autorizada frente a demanda pendiente en los próximos 14 días: las mismas cifras del Calendario (calendarioSemana). */
+  const semanas = [0, 7, 14].flatMap((n) => calendarioSemana(recs, segs, mondayOf(addDays(t, n)), t));
+  const capacidadDias = semanas.filter((d) => d.d >= t).slice(0, 14).map((d) => ({ d: d.d, aut: d.aut, pen: d.pen, nAut: d.nAut, nPen: d.nPen, seg: d.seg.length }));
+  /* Concesiones vigentes que terminan primero. */
+  const vencimientos = vig.filter((r) => r.hasta).sort((x, y) => x.hasta.localeCompare(y.hasta)).map((r) => ({ r, dias: daysBetween(t, r.hasta) }));
+  /* Carga por provincia y por ONG. */
+  const grupo = (clave, nombre) => {
+    const m = new Map(), get = (k, n) => { let g = m.get(k); if (!g) m.set(k, g = { clave: k, nombre: n, pend: [], estanc: [], vig: [], segAtr: 0, segs: 0 }); return g; };
+    recs.forEach((r) => { const g = get(clave(r), nombre(r)); if (r.k === "sol" && r.est === "pendiente") { g.pend.push(r); if (r.fecha && edad(r) > UMBRAL_ESTANCADA) g.estanc.push(r); } if (r.k === "con" && r.est === "vigente") g.vig.push(r); });
+    segs.forEach((x) => { const g = get(clave(x), nombre(x)); g.segs++; if (x.fecha < t) g.segAtr++; });
+    return [...m.values()].map((g) => Object.assign(g, { capt: capacidad(g.vig) })).sort((x, y) => (y.pend.length + y.segAtr) - (x.pend.length + x.segAtr) || y.capt - x.capt || x.nombre.localeCompare(y.nombre, "es"));
+  };
+  const porProvincia = grupo((x) => x.c.provinceId || "", (x) => x.c.province || "Sin provincia");
+  const porOng = grupo((x) => (x.ong || "").trim().toLowerCase(), (x) => x.ong || "Sin ONG");
+  /* Seguimientos por responsable (el id; el nombre lo pone quien dibuja). */
+  const resp = new Map();
+  segs.forEach((x) => { const k = x.resp || ""; let g = resp.get(k); if (!g) resp.set(k, g = { resp: k, atrasados: 0, hoy: 0, proximos: 0, total: 0 }); g.total++; if (x.fecha < t) g.atrasados++; else if (x.fecha === t) g.hoy++; else if (x.fecha <= addDays(t, 7)) g.proximos++; });
+  const porResponsable = [...resp.values()].sort((x, y) => y.atrasados - x.atrasados || y.hoy - x.hoy || y.total - x.total);
+  /* Calidad del dato por gravedad. */
+  const calidad = Object.fromEntries(SEV_ORDEN.map((k) => [k, (incs || []).filter((x) => x.sev === k).length]));
+  /* Tiempo de resolución: solo solicitudes resueltas con fecha de solicitud y de decisión coherentes. */
+  const dias = sol.filter((r) => r.fecha && r.resFecha && r.resFecha >= r.fecha && (r.est === "aprobada" || r.est === "denegada" || r.est === "retirada")).map((r) => daysBetween(r.fecha, r.resFecha)).sort((x, y) => x - y);
+  const mediana = dias.length ? (dias.length % 2 ? dias[(dias.length - 1) / 2] : (dias[dias.length / 2 - 1] + dias[dias.length / 2]) / 2) : null;
+  const resueltas = sol.filter((r) => r.est === "aprobada" || r.est === "denegada" || r.est === "retirada");
+  const resolucion = { n: dias.length, mediana, media: dias.length ? Math.round(10 * dias.reduce((a, b) => a + b, 0) / dias.length) / 10 : null, resueltas: resueltas.length, sinFecha: resueltas.length - dias.length };
+  /* Actividad de las últimas 8 semanas: solicitudes recibidas (fecha de solicitud) y resueltas (fecha de decisión). */
+  const lunes = mondayOf(t), actividad = Array.from({ length: 8 }, (_, i) => {
+    const a = addDays(lunes, -7 * (7 - i)), b = addDays(a, 6);
+    return { desde: a, hasta: b, recibidas: sol.filter((r) => r.fecha >= a && r.fecha <= b).length, resueltas: resueltas.filter((r) => r.resFecha && r.resFecha >= a && r.resFecha <= b).length };
+  });
+  /* Cola de trabajo: lo que más pide intervención hoy, con su motivo. Un registro aparece una sola vez, con su motivo más grave. */
+  const cola = [], mejor = new Map(), ofrece = (clave, item) => { const v = mejor.get(clave); if (!v || item.score > v.score) mejor.set(clave, item); };
+  segs.forEach((x, i) => { if (x.fecha < t) ofrece("s" + i, { c: x.c, score: 100 + Math.min(daysBetween(x.fecha, t), 60), sev: "aviso", titulo: "Seguimiento atrasado " + daysBetween(x.fecha, t) + " días", detalle: x.accion || "", vista: "seg", est: "vencido" }); });
+  pend.forEach((r, i) => {
+    if (r.desde && r.desde >= t && daysBetween(t, r.desde) <= 7) ofrece("p" + i, { c: r.c, score: 90 - daysBetween(t, r.desde), sev: "aviso", titulo: "Empieza el periodo solicitado " + (r.desde === t ? "hoy" : "en " + daysBetween(t, r.desde) + " días") + " y sigue sin respuesta", detalle: r.ong, vista: "sol", est: "pendiente" });
+    if (r.fecha && edad(r) > UMBRAL_ESTANCADA) ofrece("p" + i, { c: r.c, score: 80 + Math.min(edad(r) - UMBRAL_ESTANCADA, 60) / 3, sev: "aviso", titulo: "Solicitud sin respuesta desde hace " + edad(r) + " días", detalle: r.ong, vista: "sol", est: "estancada" });
+  });
+  sol.filter((r) => r.est === "caducada").forEach((r, i) => ofrece("k" + i, { c: r.c, score: 75, sev: "aviso", titulo: "Solicitud caducada sin respuesta", detalle: r.ong, vista: "sol", est: "caducada" }));
+  vencimientos.filter((v) => v.dias <= 7).forEach((v, i) => ofrece("v" + i, { c: v.r.c, score: 70 + (7 - v.dias), sev: "aviso", titulo: "La concesión termina " + (v.dias === 0 ? "hoy" : "en " + v.dias + " días"), detalle: v.r.ong, vista: "con", est: "vencen7" }));
+  (incs || []).filter((x) => x.sev === "bloqueante").forEach((x, i) => ofrece("b" + i, { c: x.r.c, score: 60, sev: "bloqueante", titulo: x.tipo, detalle: x.r.ong, vista: "inc", est: "todas" }));
+  mejor.forEach((v) => cola.push(v));
+  cola.sort((x, y) => y.score - x.score || x.c.name.localeCompare(y.c.name, "es"));
+  return { antiguedad, sinFechaSol, capacidadDias, vencimientos, porProvincia, porOng, porResponsable, calidad, resolucion, actividad, cola };
 };
 /* Estado de un expediente en un día concreto, solo con lo que consta en los registros (no se inventa el pasado).
    Concesión: «autorizada» o «cancelada»; si está cancelada y no consta cuándo, «desconocida».
@@ -4008,6 +4250,7 @@ const csvCell = (value) => {
   const draw = () => {
     const a = wk, b = addDays(wk, 6), t = today();
     const { recs: todasRecs, segs: todasSegs } = registros(prov);
+    body.querySelector('[data-w="-1"]').setAttribute("aria-label", modo === "mes" ? "Mes anterior" : "Semana anterior"); body.querySelector('[data-w="1"]').setAttribute("aria-label", modo === "mes" ? "Mes siguiente" : "Semana siguiente");
     const semana = calendarioSemana(todasRecs, todasSegs, a, t);
     /* Las ONG se agrupan sin distinguir mayúsculas ni espacios (igual que el Panel y el Centro). */
     const porClave = new Map(); semana.forEach((x) => x.items.map((i) => i.r).concat(x.seg).forEach((y) => { if (!porClave.has(kOng(y))) porClave.set(kOng(y), ongDe(y)); }));
@@ -4017,6 +4260,7 @@ const csvCell = (value) => {
     body.querySelector("#calRange").textContent = (+a.slice(8)) + (mesDe(a) === mesDe(b) ? "" : " " + mesDe(a)) + " – " + (+b.slice(8)) + " " + mesDe(b) + " " + b.slice(0, 4);
     body.querySelector("#calDate").value = a;
     const okOng = (x) => !ong || kOng(x) === ong.trim().toLowerCase();
+    if (modo === "mes") { drawMes(todasRecs.filter(okOng), todasSegs.filter(okOng), t); return; }
     /* Las cifras se recalculan con el filtro de ONG; los totales del día no mezclan captadores autorizados, por aprobar y seguimientos. */
     const sem = calendarioSemana(todasRecs.filter(okOng), todasSegs.filter(okOng), a, t);
     const pico = (k) => sem.reduce((m, x) => x[k] > m.n ? { n: x[k], d: x.d } : m, { n: 0, d: "" });
@@ -4056,6 +4300,32 @@ const csvCell = (value) => {
         '<ul class="cal-list">' + (arr.length || sg.length ? sg.map((s) => tarjetaSeg(s, t)).join("") + arr.map((i) => tarjeta(i, x.d, t)).join("") : '<li class="cal-empty">Sin permisos</li>') + "</ul></section>";
     }).join("") + "</div></div>";
   };
+  /* Vista mensual: una celda por día con los captadores autorizados, los por aprobar (aparte) y los seguimientos, con las mismas reglas que la semana. Pulsar un día abre su semana. */
+  const MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+  const mesRef = () => addDays(wk, 3).slice(0, 7); /* el mes de la semana mostrada es el de su jueves */
+  const desplazaMes = (delta) => { const [y, m] = mesRef().split("-").map(Number); wk = mondayOf(new Date(Date.UTC(y, m - 1 + delta, 15)).toISOString().slice(0, 10)); };
+  const drawMes = (recs, segs, t) => {
+    const ref = mesRef(), [y, m] = ref.split("-").map(Number), primero = ref + "-01", ultimo = ref + "-" + String(new Date(Date.UTC(y, m, 0)).getUTCDate()).padStart(2, "0");
+    const semanas = []; for (let ini = mondayOf(primero); ini <= ultimo; ini = addDays(ini, 7)) semanas.push(calendarioSemana(recs, segs, ini, t));
+    const delMes = semanas.flat().filter((d) => d.d >= primero && d.d <= ultimo);
+    body.querySelector("#calRange").textContent = MESES[m - 1] + " " + y;
+    body.querySelector("#calDate").value = wk;
+    const pico = (k) => delMes.reduce((mx, x) => x[k] > mx.n ? { n: x[k], d: x.d } : mx, { n: 0, d: "" }), pa = pico("aut"), pp = pico("pen");
+    const nSeg = delMes.reduce((n, x) => n + x.seg.length, 0), nAtr = delMes.reduce((n, x) => n + x.segAtras, 0), cuando = (d) => (+d.slice(8)) + " " + mesDe(d);
+    body.querySelector("#calSum").innerHTML =
+      '<div class="c"><b>' + pa.n + "</b><span>captadores autorizados como máximo en un día" + (pa.n ? " (" + cuando(pa.d) + ")" : "") + "</span></div>" +
+      '<div class="s"><b>' + pp.n + "</b><span>captadores por aprobar como máximo en un día" + (pp.n ? " (" + cuando(pp.d) + ")" : "") + "</span></div>" +
+      '<div class="t"><b>' + nSeg + "</b><span>" + (nSeg === 1 ? "seguimiento" : "seguimientos") + " en el mes" + (nAtr ? " · " + nAtr + " atrasado" + (nAtr === 1 ? "" : "s") : "") + "</span></div>";
+    const nota = body.querySelector("#calPast"); nota.hidden = true;
+    const ini = ref + "-01" >= t.slice(0, 7) + "-01" ? "" : "Mes pasado: las concesiones se muestran con sus fechas y las solicitudes solo cuando constan sus fechas de alta y de decisión."; if (ini) { nota.hidden = false; nota.textContent = ini; }
+    body.querySelector("#calGrid").innerHTML = '<div class="cal-mleg"><span><i class="a"></i>Autorizados (concesiones)</span><span><i class="p"></i>Por aprobar (solicitudes pendientes)</span><span>seg. = seguimientos</span></div>' +
+      '<div class="cal-mes" role="group" aria-label="Calendario de ' + esc(MESES[m - 1] + " " + y) + '">' + DIAS.map((n) => '<span class="cal-mh">' + n.slice(0, 3) + "</span>").join("") +
+      semanas.map((sem) => sem.map((x, k) => {
+        const fuera = x.d < primero || x.d > ultimo, lbl = DIAS[k] + " " + (+x.d.slice(8)) + " de " + MESES[+x.d.slice(5, 7) - 1] + ": " + plural(x.aut, "captador autorizado", "captadores autorizados") + ", " + x.pen + " por aprobar, " + plural(x.seg.length, "seguimiento", "seguimientos");
+        return '<button type="button" class="cal-m' + (x.d === t ? " hoy" : "") + (fuera ? " fuera" : "") + (k >= 5 ? " we" : "") + '" data-dia="' + x.d + '" aria-label="' + esc(lbl) + '"' + (x.d === t ? ' aria-current="date"' : "") + '><span class="d">' + (+x.d.slice(8)) + "</span>" +
+          (x.aut ? '<span class="m"><i class="a"></i>' + x.aut + "</span>" : "") + (x.pen ? '<span class="m"><i class="p"></i>' + x.pen + "</span>" : "") + (x.seg.length ? '<span class="sg' + (x.d < t ? " late" : "") + '">' + x.seg.length + (x.d < t ? " atr." : " seg.") + "</span>" : "") + "</button>";
+      }).join("")).join("") + "</div>";
+  };
   /* Vista por ONG: captadores autorizados y por aprobar de cada ONG en cada día, en una tabla. */
   const tablaOng = (sem, t) => {
     const filas = new Map();
@@ -4089,7 +4359,7 @@ const csvCell = (value) => {
       '<button type="button" class="cal-chip s-solicitado" data-ver="pendiente" aria-pressed="' + ver.pendiente + '"><i></i>Solicitudes por aprobar</button>' +
       '<button type="button" class="cal-chip s-seguimiento" data-ver="seguimiento" aria-pressed="' + ver.seguimiento + '"><i></i>Seguimientos</button>' +
       '<button type="button" class="cal-chip s-cancelado" data-ver="historico" aria-pressed="' + ver.historico + '"><i></i>Histórico (denegadas, retiradas, canceladas)</button>' +
-      '<span class="cal-modo" role="group" aria-label="Vista"><button type="button" data-modo="dias" aria-pressed="' + (modo === "dias") + '">Por día</button><button type="button" data-modo="ong" aria-pressed="' + (modo === "ong") + '">Por ONG</button></span></div>' +
+      '<span class="cal-modo" role="group" aria-label="Vista"><button type="button" data-modo="dias" aria-pressed="' + (modo === "dias") + '">Por día</button><button type="button" data-modo="mes" aria-pressed="' + (modo === "mes") + '">Mes</button><button type="button" data-modo="ong" aria-pressed="' + (modo === "ong") + '">Por ONG</button></span></div>' +
       '<div class="cal-links" role="group" aria-label="Abrir en el Centro de permisos"><span>Gestionar en el Centro de permisos:</span><button type="button" data-centro="sol:pendiente">Solicitudes pendientes</button><button type="button" data-centro="con:vigente">Concesiones vigentes</button><button type="button" data-centro="seg:todas">Seguimientos</button></div>' +
       '<p class="cal-note cal-past" id="calPast" role="note" hidden></p>' +
       '<div id="calGrid"></div>' +
@@ -4101,8 +4371,10 @@ const csvCell = (value) => {
   body.addEventListener("click", (e) => {
     const cc = e.target.closest("[data-centro]");
     if (cc) { const [vista, est] = cc.dataset.centro.split(":"); dlg.close(); document.dispatchEvent(new CustomEvent("centro:abrir", { detail: { vista, est, prov, ong } })); return; }
+    const dd = e.target.closest("[data-dia]");
+    if (dd) { wk = mondayOf(dd.dataset.dia); modo = "dias"; body.querySelectorAll("[data-modo]").forEach((b2) => b2.setAttribute("aria-pressed", String(b2.dataset.modo === modo))); draw(); return; }
     const w = e.target.closest("[data-w]");
-    if (w) { wk = w.dataset.w === "0" ? mondayOf(today()) : addDays(wk, 7 * +w.dataset.w); draw(); return; }
+    if (w) { if (w.dataset.w === "0") wk = mondayOf(today()); else if (modo === "mes") desplazaMes(+w.dataset.w); else wk = addDays(wk, 7 * +w.dataset.w); draw(); return; }
     const vv = e.target.closest("[data-ver]");
     if (vv) { const k = vv.dataset.ver; ver[k] = !ver[k]; vv.setAttribute("aria-pressed", String(ver[k])); draw(); return; }
     const md = e.target.closest("[data-modo]");
@@ -4119,36 +4391,53 @@ const csvCell = (value) => {
   $("#calClose").addEventListener("click", () => dlg.close());
 })();
 
-/* Centro de permisos: bandejas de solicitudes, concesiones, seguimientos y avisos de datos de todos los puntos del ámbito del usuario, y desde donde se tramitan.
-   Lee lo que ya hay en memoria y usa las reglas compartidas de expedientes (expedientesDe, seguimientosDe, indicadores, incidencias): sus cifras son las del Panel resumen.
-   Toda escritura pasa por aplica(): copia el estado del punto, aplica un cambio, lo guarda con savePermits (aprobar, denegar y cancelar con sus funciones atómicas,
-   control de versión y relectura de lo confirmado) y no da nada por guardado hasta que Supabase lo confirma. */
+/* Centro de permisos: centro de mando (Resumen) y espacio de trabajo (solicitudes, concesiones, seguimientos y avisos de datos) de todos los puntos del ámbito del usuario.
+   Lee lo que ya hay en memoria y usa las reglas compartidas de expedientes (expedientesDe, seguimientosDe, indicadores, incidencias, resumenDatos): sus cifras son las del Panel
+   resumen y el Calendario. Toda escritura pasa por aplica(): copia el estado del punto, aplica un cambio, lo guarda con savePermits (aprobar, denegar y cancelar con sus
+   funciones atómicas, control de versión y relectura de lo confirmado) y no da nada por guardado hasta que Supabase lo confirma. */
 (() => {
   const dlg = $("#dlgCentro"), body = $("#ceBody");
   const TRAMO = 100; /* filas que se dibujan de una vez */
   const OPC = {
-    sol: [["pendiente", "Pendientes"], ["sinseg", "Pendientes sin seguimiento"], ["estancada", "Estancadas (más de " + UMBRAL_ESTANCADA + " días)"], ["caducada", "Sin respuesta y caducadas"], ["aprobada", "Aprobadas"], ["denegada", "Denegadas"], ["retirada", "Retiradas"], ["todas", "Todas"]],
+    sol: [["pendiente", "Pendientes"], ["sinseg", "Pendientes sin seguimiento"], ["estancada", "Estancadas (más de " + UMBRAL_ESTANCADA + " días)"], ["edad0", "Pendientes de 0–7 días"], ["edad8", "Pendientes de 8–15 días"], ["edad16", "Pendientes de 16–30 días"], ["edad31", "Pendientes de más de 30 días"], ["caducada", "Sin respuesta y caducadas"], ["aprobada", "Aprobadas"], ["denegada", "Denegadas"], ["retirada", "Retiradas"], ["todas", "Todas"]],
     con: [["vigente", "Vigentes"], ["vencen", "Vencen en 30 días"], ["vencen7", "Vencen en 0–7 días"], ["vencen15", "Vencen en 8–15 días"], ["vencen30", "Vencen en 16–30 días"], ["futura", "Futuras"], ["futuras30", "Empiezan en los próximos 30 días"], ["terminada", "Terminadas"], ["cancelada", "Canceladas"], ["sinfin", "Vigentes sin fecha de fin"], ["todas", "Todas"]],
     seg: [["vencido", "Atrasados"], ["hoy", "Para hoy"], ["proximo", "Próximos 7 días"], ["sinresp", "Sin responsable"], ["todas", "Todos"]]
   };
   const COLOR = { pendiente: "solicitado", caducada: "caducado", aprobada: "concedido", denegada: "denegado", retirada: "caducado", vigente: "concedido", futura: "concedido", terminada: "caducado", cancelada: "cancelado" };
   const TEXTO = { pendiente: "Pendiente", caducada: "Caducada sin respuesta", aprobada: "Aprobada", denegada: "Denegada", retirada: "Retirada", vigente: "Vigente", futura: "Futura", terminada: "Terminada", cancelada: "Cancelada" };
+  const edadEn = (r, t, a, b) => !!r.fecha && ((d) => d >= a && d <= b)(daysBetween(r.fecha, t));
   const pred = {
-    sol: (est, r, t) => est === "todas" ? true : est === "sinseg" ? (r.est === "pendiente" && !r.seg) : est === "estancada" ? (r.est === "pendiente" && !!r.fecha && daysBetween(r.fecha, t) > UMBRAL_ESTANCADA) : r.est === est,
+    sol: (est, r, t) => est === "todas" ? true : est === "sinseg" ? (r.est === "pendiente" && !r.seg) : est === "estancada" ? (r.est === "pendiente" && !!r.fecha && daysBetween(r.fecha, t) > UMBRAL_ESTANCADA)
+      : est === "edad0" ? (r.est === "pendiente" && edadEn(r, t, 0, 7)) : est === "edad8" ? (r.est === "pendiente" && edadEn(r, t, 8, 15)) : est === "edad16" ? (r.est === "pendiente" && edadEn(r, t, 16, 30)) : est === "edad31" ? (r.est === "pendiente" && edadEn(r, t, 31, Infinity)) : r.est === est,
     con: (est, r, t) => est === "todas" ? true : (est === "vencen7" || est === "vencen15" || est === "vencen30") ? (r.est === "vigente" && !!r.hasta && ((d) => est === "vencen7" ? d <= 7 : est === "vencen15" ? d >= 8 && d <= 15 : d >= 16 && d <= 30)(daysBetween(t, r.hasta))) : est === "futuras30" ? (r.est === "futura" && !!r.desde && daysBetween(t, r.desde) <= 30) : est === "vencen" ? (r.est === "vigente" && !!r.hasta && daysBetween(t, r.hasta) <= 30) : est === "sinfin" ? (r.est === "vigente" && !r.hasta) : r.est === est,
     seg: (est, s, t) => est === "todas" ? true : est === "vencido" ? s.fecha < t : est === "hoy" ? s.fecha === t : est === "proximo" ? (s.fecha > t && s.fecha <= addDays(t, 7)) : !s.resp
   };
   const NOMBRE = { sol: ["solicitud", "solicitudes"], con: ["concesión", "concesiones"], seg: ["seguimiento", "seguimientos"], inc: ["aviso", "avisos"] };
-  const COLS = { sol: 8, con: 7, seg: 7, inc: 4 };
+  const TITULO = { res: "Resumen", sol: "Solicitudes", con: "Concesiones", seg: "Seguimientos", inc: "Avisos de datos" };
+  const COLS = { sol: 8, con: 7, seg: 8, inc: 5 };
   const plural = (n, uno, varios) => n + " " + (n === 1 ? uno : varios);
   const ongDe = (r) => r.ong || "Sin ONG";
   const claveOngDe = (r) => ongDe(r).trim().toLowerCase();
   const esAdmin = () => window.mapaSession?.profile?.role === "admin";
-  let vista = "sol", prov = "", ong = "", q = "", mostrar = TRAMO, ocupado = false, aviso = "";
+  const MES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"], DIA = ["lun", "mar", "mié", "jue", "vie", "sáb", "dom"];
+  const corto = (d) => (+d.slice(8)) + " " + MES[+d.slice(5, 7) - 1];
+  const diaSem = (d) => DIA[(new Date(d + "T00:00:00Z").getUTCDay() + 6) % 7];
+  let vista = "res", prov = "", ong = "", q = "", mostrar = TRAMO, ocupado = false, aviso = "";
   let punto = null;  /* si se llega desde la ficha, el Panel o el Calendario: solo los expedientes de ese punto */
   let accion = null; /* confirmación en línea de una fila: { a, key } */
   let form = null;   /* formulario abierto: { tipo: "sol" | "con" | "seg", c, r } (r = registro que se edita; sin r, alta) */
+  let sel = "";      /* expediente abierto en el panel de detalle (su clave) */
+  let multi = new Set(), lote = null; /* selección múltiple de seguimientos y el lote en curso: { fase: "confirmar" | "resultado", tipo, fecha, res } */
+  let cargaGrupo = "provincia", verTabla = {}, historial = new Map(), nombresCargados = false;
   const est = { sol: "pendiente", con: "vigente", seg: "vencido", inc: "todas" };
+  const orden = { sol: "auto", con: "auto", seg: "auto", inc: "auto" };
+  const ORDENES = {
+    sol: [["auto", "Recomendado"], ["inicio", "Inicio solicitado más próximo"], ["captadores", "Más captadores"], ["ong", "ONG"], ["punto", "Punto"]],
+    con: [["auto", "Recomendado"], ["inicio", "Inicio más próximo"], ["captadores", "Más captadores"], ["ong", "ONG"], ["punto", "Punto"]],
+    seg: [["auto", "Fecha (más atrasados primero)"], ["resp", "Responsable"], ["ong", "ONG"], ["punto", "Punto"]],
+    inc: [["auto", "Gravedad"], ["tipo", "Tipo"], ["punto", "Punto"]]
+  };
+  let indice = new Map(); /* clave → registro de todo el ámbito en pantalla */
 
   const provOpts = () => {
     const m = new Map();
@@ -4169,6 +4458,13 @@ const csvCell = (value) => {
   const antes = (a, b) => a.localeCompare(b, "es");
   const periodo = (r) => (!r.desde && !r.hasta) ? "Sin fechas" : fmtD(r.desde) + " – " + fmtD(r.hasta);
   const clave = (x) => String(x.c.id) + "|" + (x.k || "seg") + "|" + (x.id || (x.punto ? "p" : (x.con ? "c" : "") + x.i));
+  const rawDe = (r) => {
+    const p = permits[permitKey(r.c)] || {}, sols = solsOf(p), hist = p.historial || [];
+    if (r.k === "sol") return sols[ubica(sols, r)] || {};
+    if (r.k === "con") return hist[ubica(hist, r)] || {};
+    if (r.punto) return p.segPunto || {};
+    return (r.con ? hist[r.i] : sols[r.i]) || {};
+  };
 
   /* === Escritura === */
   /* Aplica un cambio a un punto y lo guarda. «muta» recibe una copia del estado del punto y puede devolver un texto para abortar sin guardar.
@@ -4192,6 +4488,15 @@ const csvCell = (value) => {
     if (c.databaseId) await reloadSharedPermit(c); else if (previo === undefined) delete permits[key]; else permits[key] = previo;
     return "error";
   };
+  /* Texto que el usuario entiende para el resultado de una escritura (explica un guardado parcial o no verificado). */
+  const textoResultado = (c, res, txtOk) => {
+    const parcial = ultimoGuardado && ultimoGuardado.hechas > 0 && ultimoGuardado.total > ultimoGuardado.hechas ? " Se aplicaron " + ultimoGuardado.hechas + " de " + ultimoGuardado.total + " pasos: la pantalla muestra lo que ha quedado guardado; revísalo antes de repetir." : "";
+    const sinVerificar = ultimoGuardado && ultimoGuardado.noVerificadas && ultimoGuardado.noVerificadas.length ? " Lo guardado no coincide con lo esperado: revisa el expediente antes de repetir." : "";
+    return res === "ok" ? txtOk
+      : res === "conflict" ? "Otra persona ha cambiado «" + c.name + "»: se ha recargado y no se ha tocado su cambio." + (parcial || " Revísalo y repite.")
+      : res === "error" ? "No se pudo confirmar el guardado de «" + c.name + "»." + (parcial || sinVerificar || " No se ha aplicado.")
+      : res;
+  };
   /* Guarda y deja el aviso: nada se da por guardado sin confirmación de Supabase. Devuelve { ok, texto }. */
   const ejecuta = async (c, muta, txtOk) => {
     if (ocupado) return { ok: false, texto: "Hay otro guardado en curso." };
@@ -4205,13 +4510,8 @@ const csvCell = (value) => {
     } finally { ocupado = false; } /* si algo falla, el Centro no se queda bloqueado */
     try { refrescaPunto(c); refreshSelects(); renderList(); } catch (e) { console.error(e); }
     document.dispatchEvent(new CustomEvent("permisos:cambio", { detail: { id: c.id } }));
-    /* Si algunas operaciones llegaron a aplicarse antes del fallo, se dice claramente (la pantalla ya muestra lo que hay guardado). */
-    const parcial = ultimoGuardado && ultimoGuardado.hechas > 0 && ultimoGuardado.total > ultimoGuardado.hechas ? " Se aplicaron " + ultimoGuardado.hechas + " de " + ultimoGuardado.total + " pasos: la pantalla muestra lo que ha quedado guardado; revísalo antes de repetir." : "";
-    const sinVerificar = ultimoGuardado && ultimoGuardado.noVerificadas && ultimoGuardado.noVerificadas.length ? " Lo guardado no coincide con lo esperado: revisa el expediente antes de repetir." : "";
-    const texto = res === "ok" ? txtOk
-      : res === "conflict" ? "Otra persona ha cambiado «" + c.name + "»: se ha recargado y no se ha tocado su cambio." + (parcial || " Revísalo y repite.")
-      : res === "error" ? "No se pudo confirmar el guardado de «" + c.name + "»." + (parcial || sinVerificar || " No se ha aplicado.")
-      : res;
+    historial.clear();
+    const texto = textoResultado(c, res, txtOk);
     aviso = texto; draw();
     return { ok: res === "ok", texto };
   };
@@ -4244,21 +4544,48 @@ const csvCell = (value) => {
       else if (s.con) { const h = copia.historial[s.i]; if (!h || h.cancelada || !h.seg) return NOEXISTE; h.seg = ""; }
       else if (s.i >= 0) { const x = copia.solicitudes[s.i]; if (!x || x.res || !x.seg) return NOEXISTE; x.seg = ""; }
       else delete copia.seguimiento;
+    },
+    /* Cambia la fecha de un seguimiento; la acción y el responsable solo se cambian si se pasan (en una reprogramación en lote se conservan). */
+    cambiarSeg: (s, fecha, ac, rs) => (copia) => {
+      const aplicaA = (o) => { o.seg = fecha; if (ac !== undefined) { if (ac) o.accion = ac; else delete o.accion; } if (rs !== undefined) { if (rs) o.resp = rs; else delete o.resp; } };
+      if (s.punto) { if (!copia.segPunto) return NOEXISTE; copia.segPunto.fecha = fecha; if (ac !== undefined) copia.segPunto.accion = ac; if (rs !== undefined) copia.segPunto.resp = rs; }
+      else if (s.con) { const h = copia.historial[s.i]; if (!h || h.cancelada || !h.seg) return NOEXISTE; aplicaA(h); }
+      else { const x = copia.solicitudes[s.i]; if (!x || x.res || !x.seg) return NOEXISTE; aplicaA(x); }
     }
   };
 
+  /* === Qué se puede hacer con cada registro, y por qué no === */
+  const accionesDe = (r) => {
+    if (r.k === "sol") { const abierta = !(r.est === "aprobada" || r.est === "denegada" || r.est === "retirada"); return (abierta ? [["conceder", "Conceder", "ok"], ["den", "Denegar"], ["ret", "Retirar"]] : []).concat([["ed", "Editar"]], esAdmin() || r.c.custom ? [["quitS", "Quitar"]] : []); }
+    if (r.k === "con") return [["ed", "Editar"], r.est === "cancelada" ? ["rea", "Reactivar"] : ["can", "Cancelar"]].concat(esAdmin() || r.c.custom ? [["quitC", "Quitar"]] : []);
+    return [["hecho", "Hecho", "ok"]].concat(r.c.databaseId ? [["edseg", "Cambiar"]] : []);
+  };
+  const bloqueosDe = (r) => {
+    const out = [];
+    if (r.k === "sol" && (r.est === "aprobada" || r.est === "denegada" || r.est === "retirada")) out.push("La solicitud ya está " + TEXTO[r.est].toLowerCase() + (r.resFecha ? " (" + fmtD(r.resFecha) + ")" : "") + ": no se puede conceder, denegar ni retirar de nuevo. Sus datos sí se pueden editar.");
+    if (r.k === "con" && r.est === "terminada") out.push("La concesión terminó el " + fmtD(r.hasta) + ". Para volver a autorizar, crea una concesión nueva.");
+    if ((r.k === "sol" || r.k === "con") && !(esAdmin() || r.c.custom)) out.push("Borrar un registro solo está permitido a los administradores; para conservarlo, " + (r.k === "sol" ? "deniégalo o retíralo." : "cancélalo."));
+    if (r.k === undefined && !r.c.databaseId) out.push("Este punto es personal: su seguimiento no se puede cambiar desde aquí.");
+    return out;
+  };
+
   /* === Filas === */
-  const celdaPunto = (x) => '<button type="button" class="ce-pt" data-pt="' + esc(String(x.c.id)) + '"><strong>' + esc(x.c.name) + "</strong><span>" +
+  const celdaPunto = (x) => '<button type="button" class="ce-pt" data-sel="' + esc(clave(x)) + '"><strong>' + esc(x.c.name) + "</strong><span>" +
     esc(townOf(x.c) + (x.c.province && x.c.province !== townOf(x.c) ? " · " + x.c.province : "")) + "</span></button>";
   const badge = (e) => '<span class="ce-badge s-' + COLOR[e] + '"><i aria-hidden="true"></i>' + esc(TEXTO[e]) + "</span>";
-  const btn = (a, k, txt, extra) => '<button type="button" class="ce-act' + (extra ? " " + extra : "") + '" data-act="' + a + '" data-k="' + k + '"' + (ocupado ? " disabled" : "") + ">" + esc(txt) + "</button>";
+  const btn = (a, key, txt, extra) => '<button type="button" class="ce-act' + (extra ? " " + extra : "") + '" data-act="' + a + '" data-key="' + esc(key) + '"' + (ocupado ? " disabled" : "") + ">" + esc(txt) + "</button>";
+  const botones = (r, max) => accionesDe(r).slice(0, max || 99).map(([a, txt, cls]) => btn(a, clave(r), txt, cls)).join(""); /* en las filas, las dos acciones principales; el resto, en el detalle */
+  const SEVCLASE = { bloqueante: "bl", aviso: "av", recomendacion: "re" };
+  const sevBadge = (sev) => '<span class="ce-sev ' + SEVCLASE[sev] + '"><i aria-hidden="true"></i>' + esc(SEV[sev]) + "</span>";
+  const fila = (x, k, extra, celdas) => '<tr data-key="' + esc(clave(x)) + '" class="ce-row' + (sel === clave(x) ? " is-sel" : "") + (extra ? " " + extra : "") + '">' + celdas + "</tr>";
+  const td = (l, c, cls) => "<td" + (cls ? ' class="' + cls + '"' : "") + ' data-l="' + esc(l) + '">' + c + "</td>";
 
-  const filaSol = (r, t, k) => {
-    const edad = r.fecha ? daysBetween(r.fecha, t) : null, estancada = r.est === "pendiente" && edad !== null && edad > UMBRAL_ESTANCADA, abierta = !(r.est === "aprobada" || r.est === "denegada" || r.est === "retirada");
-    return "<tr><td>" + celdaPunto(r) + "</td><td>" + esc(ongDe(r)) + "</td><td>" + esc(periodo(r)) + '</td><td class="n">' + (r.n || "—") + "</td><td>" +
-      (r.fecha ? esc(fmtD(r.fecha)) + (r.est === "pendiente" && edad >= 0 ? '<span class="ce-sub">hace ' + esc(plural(edad, "día", "días")) + "</span>" : "") : "No consta") + "</td><td>" + badge(r.est) +
-      (estancada ? '<span class="ce-warn">Estancada</span>' : "") + "</td><td>" + (r.seg ? esc(fmtD(r.seg)) + (r.seg < t ? '<span class="ce-warn">Atrasado</span>' : "") : (r.est === "pendiente" ? "Sin seguimiento" : "")) + '</td><td class="ce-acts">' +
-      (abierta ? btn("conceder", k, "Conceder", "ok") + btn("den", k, "Denegar") + btn("ret", k, "Retirar") : "") + btn("ed", k, "Editar") + (esAdmin() || r.c.custom ? btn("quitS", k, "Quitar") : "") + "</td></tr>";
+  const filaSol = (r, t) => {
+    const edad = r.fecha ? daysBetween(r.fecha, t) : null, estancada = r.est === "pendiente" && edad !== null && edad > UMBRAL_ESTANCADA;
+    return fila(r, 0, estancada ? "urg" : "", td("Punto", celdaPunto(r)) + td("ONG", esc(ongDe(r))) + td("Periodo solicitado", esc(periodo(r))) + td("Captadores", r.n || "—", "n") +
+      td("Solicitada", r.fecha ? esc(fmtD(r.fecha)) + (r.est === "pendiente" && edad >= 0 ? '<span class="ce-sub">hace ' + esc(plural(edad, "día", "días")) + "</span>" : "") : "No consta") +
+      td("Estado", badge(r.est) + (estancada ? '<span class="ce-warn">Estancada</span>' : "")) +
+      td("Seguimiento", r.seg ? esc(fmtD(r.seg)) + (r.seg < t ? '<span class="ce-warn">Atrasado</span>' : "") : (r.est === "pendiente" ? "Sin seguimiento" : "")) + td("Acciones", botones(r, 2), "ce-acts"));
   };
   const detalleCon = (r, t) => {
     if (r.est === "vigente") return !r.hasta ? "Sin fecha de fin" : r.hasta === t ? "Termina hoy" : "Termina en " + plural(daysBetween(t, r.hasta), "día", "días");
@@ -4266,97 +4593,306 @@ const csvCell = (value) => {
     if (r.est === "terminada") return "Terminó el " + fmtD(r.hasta);
     return "Cancelada" + (r.resFecha ? " el " + fmtD(r.resFecha) : "") + (r.motivo ? ": " + r.motivo : "");
   };
-  const filaCon = (r, t, k) => "<tr><td>" + celdaPunto(r) + "</td><td>" + esc(ongDe(r)) + "</td><td>" + esc(periodo(r)) + '</td><td class="n">' + (r.n || "—") + "</td><td>" + badge(r.est) + "</td><td>" +
-    esc(detalleCon(r, t)) + (r.sol ? "" : '<span class="ce-sub">Sin solicitud enlazada</span>') + '</td><td class="ce-acts">' +
-    btn("ed", k, "Editar") + (r.est === "cancelada" ? btn("rea", k, "Reactivar") : btn("can", k, "Cancelar")) + (esAdmin() || r.c.custom ? btn("quitC", k, "Quitar") : "") + "</td></tr>";
-  const filaSeg = (s, t, k) => {
-    const dias = daysBetween(s.fecha, t), origen = s.con ? "Concesión" : s.i >= 0 && !s.punto ? "Solicitud pendiente" : "Seguimiento del punto", editable = !!s.c.databaseId;
-    return "<tr><td>" + celdaPunto(s) + "</td><td>" + esc(ongDe(s)) + "</td><td>" + esc(fmtD(s.fecha)) +
-      (dias > 0 ? '<span class="ce-warn">Atrasado ' + esc(plural(dias, "día", "días")) + "</span>" : dias === 0 ? '<span class="ce-sub">Hoy</span>' : "") + "</td><td>" + (s.accion ? esc(s.accion) : "—") + "</td><td>" +
-      (s.resp ? esc(nombreResp(s.resp)) : "Sin responsable") + "</td><td>" + esc(origen) + '</td><td class="ce-acts">' + btn("hecho", k, "Hecho") + (editable ? btn("edseg", k, "Cambiar") : "") + "</td></tr>";
+  const filaCon = (r, t) => fila(r, 0, r.est === "vigente" && r.hasta && daysBetween(t, r.hasta) <= 7 ? "urg" : "", td("Punto", celdaPunto(r)) + td("ONG", esc(ongDe(r))) + td("Periodo", esc(periodo(r))) + td("Captadores", r.n || "—", "n") + td("Estado", badge(r.est)) +
+    td("Detalle", esc(detalleCon(r, t)) + (r.sol ? "" : '<span class="ce-sub">Sin solicitud enlazada</span>')) + td("Acciones", botones(r, 2), "ce-acts"));
+  const filaSeg = (s, t) => {
+    const dias = daysBetween(s.fecha, t), origen = s.con ? "Concesión" : s.i >= 0 && !s.punto ? "Solicitud pendiente" : "Seguimiento del punto", k = clave(s);
+    return fila(s, 0, dias > 0 ? "urg" : "", td("", '<label class="ce-chkl"><input type="checkbox" data-chk="' + esc(k) + '" aria-label="Seleccionar el seguimiento de ' + esc(s.c.name) + '"' + (multi.has(k) ? " checked" : "") + (ocupado ? " disabled" : "") + "></label>", "ce-chk") + td("Punto", celdaPunto(s)) + td("ONG", esc(ongDe(s))) +
+      td("Fecha", esc(fmtD(s.fecha)) + (dias > 0 ? '<span class="ce-warn">Atrasado ' + esc(plural(dias, "día", "días")) + "</span>" : dias === 0 ? '<span class="ce-sub">Hoy</span>' : "")) + td("Acción prevista", s.accion ? esc(s.accion) : "—") +
+      td("Responsable", s.resp ? esc(nombreResp(s.resp)) : "Sin responsable") + td("Origen", esc(origen)) + td("Acciones", botones(s, 2), "ce-acts"));
   };
-  const filaInc = (x) => "<tr><td>" + celdaPunto(x.r) + "</td><td>" + esc(x.tipo) + "</td><td>" + esc(ongDe(x.r)) + "</td><td>" + esc(x.r.k === "sol" ? "Solicitud" : "Concesión") + " · " + esc(periodo(x.r)) + "</td></tr>";
+  const filaInc = (x) => fila(x.r, 0, x.sev === "bloqueante" ? "urg" : "", td("Punto", celdaPunto(x.r)) + td("Gravedad", sevBadge(x.sev)) + td("Qué revisar", esc(x.tipo)) + td("ONG", esc(ongDe(x.r))) + td("Expediente", esc(x.r.k === "sol" ? "Solicitud" : "Concesión") + " · " + esc(periodo(x.r))));
   /* Confirmación en línea bajo la fila: motivo opcional para denegar, retirar o cancelar; texto fijo para borrar. */
   const TEXTOS_CONF = {
     den: ["Motivo de la denegación (opcional)", "Denegar la solicitud", true], ret: ["Motivo de la retirada (opcional)", "Retirar la solicitud", true], can: ["Motivo de la cancelación (opcional)", "Cancelar la concesión", true],
     quitS: ["Se borra la solicitud del historial y no se puede deshacer. Si ya se aprobó, la concesión creada se queda.", "Borrar la solicitud", false], quitC: ["Se borra la concesión del historial y no se puede deshacer. Para conservarla, usa Cancelar.", "Borrar la concesión", false]
   };
-  const filaConf = (cols) => {
+  const confirmacion = () => {
     const [txt, ok, conCampo] = TEXTOS_CONF[accion.a];
-    return '<tr class="ce-conf"><td colspan="' + cols + '">' + (conCampo ? '<label>' + esc(txt) + '<input type="text" id="ceMotivo" maxlength="500" autocomplete="off"></label>' : "<p>" + esc(txt) + "</p>") +
-      '<span class="ce-confb"><button type="button" class="ce-act ok" data-conf="ok">' + esc(ok) + '</button><button type="button" class="ce-act" data-conf="no">No, volver</button></span></td></tr>';
+    return '<div class="ce-conf">' + (conCampo ? '<label>' + esc(txt) + '<input type="text" id="ceMotivo" maxlength="500" autocomplete="off"></label>' : "<p>" + esc(txt) + "</p>") +
+      '<span class="ce-confb"><button type="button" class="ce-act ok" data-conf="ok">' + esc(ok) + '</button><button type="button" class="ce-act" data-conf="no">No, volver</button></span></div>';
   };
+  const filaConf = (cols) => '<tr class="ce-confrow"><td colspan="' + cols + '">' + confirmacion() + "</td></tr>";
 
-  /* Orden: lo pendiente de resolver, de más antiguo a más reciente; lo ya resuelto o terminado, de más reciente a más antiguo. */
-  const ordena = (arr, k, e) => {
-    if (k === "seg") return arr.slice().sort((a, b) => antes(a.fecha, b.fecha) || antes(a.c.name, b.c.name));
-    const abierto = k === "sol" ? (e === "pendiente" || e === "estancada" || e === "caducada") : (e === "vigente" || e === "vencen" || e === "futura" || e === "sinfin");
+  /* Orden: «recomendado» pone arriba lo pendiente de resolver, de más antiguo a más reciente, y lo ya resuelto o terminado, de más reciente a más antiguo. */
+  const ordena = (arr, k, e, o) => {
+    const porPunto = (a, b) => antes(a.c.name, b.c.name), sinFechaAlFinal = (x, y, f) => (!x !== !y) ? (x ? -1 : 1) : f(x, y);
+    if (k === "inc") return arr.slice().sort((a, b) => o === "tipo" ? antes(a.tipo, b.tipo) || porPunto(a.r, b.r) : o === "punto" ? porPunto(a.r, b.r) : SEV_ORDEN.indexOf(a.sev) - SEV_ORDEN.indexOf(b.sev) || antes(a.tipo, b.tipo) || porPunto(a.r, b.r));
+    if (o === "punto") return arr.slice().sort((a, b) => porPunto(a, b) || antes(a.fecha || a.desde || "", b.fecha || b.desde || ""));
+    if (o === "ong") return arr.slice().sort((a, b) => antes(ongDe(a), ongDe(b)) || porPunto(a, b));
+    if (o === "captadores") return arr.slice().sort((a, b) => (b.n || 0) - (a.n || 0) || porPunto(a, b));
+    if (o === "inicio") return arr.slice().sort((a, b) => sinFechaAlFinal(a.desde || "", b.desde || "", (x, y) => antes(x, y)) || porPunto(a, b));
+    if (o === "resp") return arr.slice().sort((a, b) => (!a.resp - !b.resp) || antes(nombreResp(a.resp || "") || "", nombreResp(b.resp || "") || "") || antes(a.fecha, b.fecha));
+    if (k === "seg") return arr.slice().sort((a, b) => antes(a.fecha, b.fecha) || porPunto(a, b));
+    const abierto = k === "sol" ? (e === "pendiente" || e === "estancada" || e === "caducada" || e === "sinseg" || /^edad/.test(e)) : (e === "vigente" || e === "vencen" || /^vencen\d/.test(e) || e === "futura" || e === "futuras30" || e === "sinfin");
     const claveO = k === "sol" ? (abierto ? (r) => r.fecha : (r) => r.resFecha || r.fecha) : (abierto ? (r) => r.hasta : (r) => r.hasta || r.resFecha);
-    return arr.slice().sort((a, b) => {
-      const x = claveO(a) || "", y = claveO(b) || "";
-      if (!x !== !y) return x ? -1 : 1; /* sin fecha, al final */
-      return (abierto ? antes(x, y) : antes(y, x)) || antes(a.c.name, b.c.name);
-    });
+    return arr.slice().sort((a, b) => sinFechaAlFinal(claveO(a) || "", claveO(b) || "", (x, y) => abierto ? antes(x, y) : antes(y, x)) || porPunto(a, b));
   };
-  let filasVis = []; /* filas de la tabla en pantalla: los botones apuntan a ellas por posición */
+  let filasVis = []; /* filas de la tabla en pantalla (para «Mostrar más» y la selección) */
 
+  /* === Gráficos (SVG y HTML, sin dependencias): marcas finas, extremos redondeados de 4 px, sin cuadrículas pesadas, colores validados en claro y oscuro === */
+  const barraSvg = (x, y, w, h, r) => {
+    if (h <= 0) return "";
+    const rr = Math.min(r, h, w / 2);
+    return "M" + x + " " + (y + h) + "V" + (y + rr) + "Q" + x + " " + y + " " + (x + rr) + " " + y + "H" + (x + w - rr) + "Q" + (x + w) + " " + y + " " + (x + w) + " " + (y + rr) + "V" + (y + h) + "Z";
+  };
+  const nice = (m) => { const e = Math.pow(10, Math.floor(Math.log10(Math.max(m, 1)))), f = m / e; return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10) * e; };
+  const grafCapacidad = (dias) => {
+    const W = 600, H = 220, mL = 30, mR = 6, mT = 20, mB = 36, iw = W - mL - mR, ih = H - mT - mB, top = nice(Math.max(1, ...dias.map((d) => Math.max(d.aut, d.pen)))), slot = iw / dias.length, bw = Math.min(14, (slot - 8) / 2);
+    const y = (v) => mT + ih - (v / top) * ih, ticks = [0, top / 2, top];
+    const pico = (k) => dias.reduce((m, d) => d[k] > m.v ? { v: d[k], d: d.d } : m, { v: 0, d: "" });
+    const pa = pico("aut"), pp = pico("pen");
+    let s = '<svg class="ce-svg" viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Captadores autorizados y por aprobar en los próximos 14 días. ' + (pa.v ? "Máximo autorizado: " + pa.v + " el " + corto(pa.d) + ". " : "No hay captadores autorizados. ") + (pp.v ? "Máxima demanda pendiente: " + pp.v + " el " + corto(pp.d) + "." : "No hay demanda pendiente.") + '">' +
+      '<defs><pattern id="ceHatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" style="fill:var(--panel)"/><rect width="2.4" height="6" style="fill:var(--ch-dem)"/></pattern></defs>';
+    ticks.forEach((v) => { s += '<line x1="' + mL + '" x2="' + (W - mR) + '" y1="' + y(v) + '" y2="' + y(v) + '" class="ce-grid"/><text x="' + (mL - 6) + '" y="' + (y(v) + 4) + '" text-anchor="end" class="ce-tick">' + v + "</text>"; });
+    dias.forEach((d, i) => {
+      const x0 = mL + i * slot + (slot - (2 * bw + 2)) / 2, hoy = i === 0, fin = diaSem(d.d) === "sáb" || diaSem(d.d) === "dom";
+      if (hoy) s += '<rect x="' + (mL + i * slot) + '" y="' + mT + '" width="' + slot + '" height="' + ih + '" class="ce-hoyband"/>';
+      s += '<g class="ce-col" tabindex="-1"><title>' + esc(diaSem(d.d) + " " + corto(d.d) + ": " + d.aut + " captadores autorizados · " + d.pen + " por aprobar" + (d.seg ? " · " + d.seg + " seguimientos" : "")) + "</title>" +
+        '<rect x="' + (mL + i * slot) + '" y="' + mT + '" width="' + slot + '" height="' + (ih + 22) + '" fill="transparent"/>' +
+        '<path d="' + barraSvg(x0, y(d.aut), bw, ih - (y(d.aut) - mT), 4) + '" class="ce-b-aut"/><path d="' + barraSvg(x0 + bw + 2, y(d.pen), bw, ih - (y(d.pen) - mT), 4) + '" class="ce-b-dem"/></g>' +
+        '<text x="' + (mL + i * slot + slot / 2) + '" y="' + (H - 18) + '" text-anchor="middle" class="ce-tick' + (fin ? " fin" : "") + (hoy ? " hoy" : "") + '">' + esc(hoy ? "Hoy" : diaSem(d.d)) + '</text><text x="' + (mL + i * slot + slot / 2) + '" y="' + (H - 5) + '" text-anchor="middle" class="ce-tick' + (fin ? " fin" : "") + '">' + (+d.d.slice(8)) + "</text>";
+    });
+    s += '<line x1="' + mL + '" x2="' + (W - mR) + '" y1="' + y(0) + '" y2="' + y(0) + '" class="ce-base"/></svg>';
+    return s;
+  };
+  const tablaCapacidad = (dias) => '<div class="pn-scroll"><table><caption class="adm-sr">Captadores autorizados y por aprobar por día</caption><thead><tr><th>Día</th><th class="n">Autorizados</th><th class="n">Por aprobar</th><th class="n">Seguimientos</th></tr></thead><tbody>' +
+    dias.map((d) => "<tr><td>" + esc(diaSem(d.d) + " " + corto(d.d)) + '</td><td class="n">' + d.aut + '</td><td class="n">' + d.pen + '</td><td class="n">' + d.seg + "</td></tr>").join("") + "</tbody></table></div>";
+  const grafSemanas = (datos, campo, nombre) => {
+    const W = 280, H = 130, mL = 22, mR = 4, mT = 18, mB = 22, iw = W - mL - mR, ih = H - mT - mB, top = nice(Math.max(1, ...datos.map((d) => d[campo]))), slot = iw / datos.length, bw = Math.min(18, slot - 6), y = (v) => mT + ih - (v / top) * ih;
+    const iMax = datos.reduce((m, d, i) => d[campo] > datos[m][campo] ? i : m, 0);
+    let s = '<svg class="ce-svg" viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="' + esc(nombre + " por semana, últimas 8 semanas. Esta semana: " + datos[7][campo] + ".") + '">';
+    [0, top].forEach((v) => { s += '<line x1="' + mL + '" x2="' + (W - mR) + '" y1="' + y(v) + '" y2="' + y(v) + '" class="ce-grid"/><text x="' + (mL - 4) + '" y="' + (y(v) + 4) + '" text-anchor="end" class="ce-tick">' + v + "</text>"; });
+    datos.forEach((d, i) => {
+      const x0 = mL + i * slot + (slot - bw) / 2;
+      s += '<g class="ce-col"><title>' + esc("Semana del " + corto(d.desde) + ": " + d[campo]) + '</title><rect x="' + (mL + i * slot) + '" y="' + mT + '" width="' + slot + '" height="' + (ih + 16) + '" fill="transparent"/><path d="' + barraSvg(x0, y(d[campo]), bw, ih - (y(d[campo]) - mT), 4) + '" class="ce-b-uno' + (i === 7 ? " ahora" : "") + '"/></g>';
+      if ((i === iMax && d[campo] > 0) || i === 7) s += '<text x="' + (x0 + bw / 2) + '" y="' + (y(d[campo]) - 4) + '" text-anchor="middle" class="ce-val">' + d[campo] + "</text>";
+      if (i === 0 || i === 7) s += '<text x="' + (x0 + bw / 2) + '" y="' + (H - 5) + '" text-anchor="middle" class="ce-tick">' + esc(i === 7 ? "Esta" : corto(d.desde)) + "</text>";
+    });
+    return s + '<line x1="' + mL + '" x2="' + (W - mR) + '" y1="' + y(0) + '" y2="' + y(0) + '" class="ce-base"/></svg>';
+  };
+  const tablaSemanas = (datos) => '<div class="pn-scroll"><table><caption class="adm-sr">Solicitudes recibidas y resueltas por semana</caption><thead><tr><th>Semana del</th><th class="n">Recibidas</th><th class="n">Resueltas</th></tr></thead><tbody>' +
+    datos.map((d) => "<tr><td>" + esc(corto(d.desde)) + '</td><td class="n">' + d.recibidas + '</td><td class="n">' + d.resueltas + "</td></tr>").join("") + "</tbody></table></div>";
+
+  /* === Centro de mando === */
+  const tarjeta = (id, titulo, descripcion, cuerpo, extra) => '<section class="ce-card" aria-labelledby="ct-' + id + '"><div class="ce-ch"><h3 id="ct-' + id + '">' + esc(titulo) + "</h3>" + (extra || "") + '</div><p class="ce-def">' + esc(descripcion) + "</p>" + cuerpo + "</section>";
+  const conmuta = (id) => '<button type="button" class="ce-link" data-tabla="' + id + '" aria-pressed="' + !!verTabla[id] + '">' + (verTabla[id] ? "Ver gráfico" : "Ver como tabla") + "</button>";
+  const drawResumen = (rd, ind, t, todasAmb) => {
+    const box = body.querySelector("#ceRes"), venc = ind.vencen7.length + ind.vencen15.length + ind.vencen30.length;
+    const tile = (v, e, n, txt, cls, sub) => '<button type="button" class="kpi' + (n && cls ? " " + cls : "") + '" data-go="' + v + ":" + esc(e) + '"><b>' + n + "</b><span>" + esc(txt) + "</span>" + (sub ? "<small>" + esc(sub) + "</small>" : "") + "</button>";
+    const cap = rd.capacidadDias, pend = ind.pendientes;
+    const kpis = '<div class="kpis ce-kpis">' + tile("sol", "pendiente", pend.length, "Solicitudes pendientes", "al", pend.length ? plural(capacidad(pend), "captador pedido", "captadores pedidos") : "") + tile("sol", "estancada", ind.estancadas.length, "Estancadas", "al", "más de " + UMBRAL_ESTANCADA + " días sin respuesta") +
+      tile("con", "vigente", ind.vigentes.length, "Concesiones vigentes", "hl", plural(ind.capacidadHoy, "captador autorizado hoy", "captadores autorizados hoy")) + tile("con", "vencen", venc, "Vencen en 30 días", "al", ind.vencen7.length + " en los próximos 7") +
+      tile("seg", "vencido", ind.segVencidos.length, "Seguimientos atrasados", "al", plural(ind.segHoy.length, "para hoy", "para hoy")) + tile("inc", "todas", rd.calidad.bloqueante + rd.calidad.aviso, "Avisos de datos", rd.calidad.bloqueante ? "al" : "", (rd.calidad.bloqueante ? plural(rd.calidad.bloqueante, "bloqueante", "bloqueantes") : "ninguno bloqueante") + (rd.calidad.recomendacion ? " · " + plural(rd.calidad.recomendacion, "recomendación", "recomendaciones") : "")) + "</div>";
+    /* Cola de trabajo */
+    const cola = rd.cola.slice(0, 8), colaH = cola.length ? '<ol class="ce-cola">' + cola.map((x) => '<li><button type="button" class="ce-item" data-abre="' + esc(x.c.id) + "|" + x.vista + "|" + x.est + '"><span class="ce-sev ' + SEVCLASE[x.sev] + '"><i aria-hidden="true"></i><span class="adm-sr">' + esc(SEV[x.sev]) + '</span></span><strong>' + esc(x.c.name) + "</strong><span>" + esc(x.titulo) + (x.detalle ? " · " + esc(x.detalle) : "") + "</span></button></li>").join("") + "</ol>" + (rd.cola.length > cola.length ? '<p class="ce-def">Y ' + (rd.cola.length - cola.length) + " más; usa las bandejas para verlas todas.</p>" : "")
+      : '<p class="ce-vacio">No hay nada urgente: ningún seguimiento atrasado, solicitud estancada o concesión a punto de terminar.</p>';
+    /* Capacidad frente a demanda */
+    const leyenda = '<div class="ce-ley"><span><i class="aut"></i>Autorizados (concesiones)</span><span><i class="dem"></i>Por aprobar (solicitudes pendientes)</span></div>';
+    const pico = (k) => cap.reduce((m, d) => d[k] > m.v ? { v: d[k], d: d.d } : m, { v: 0, d: "" }), pA = pico("aut"), pD = pico("pen");
+    const capH = verTabla.cap ? tablaCapacidad(cap) : leyenda + grafCapacidad(cap) + '<p class="ce-def">' + (pA.v ? "Máximo autorizado: " + plural(pA.v, "captador", "captadores") + " el " + corto(pA.d) + ". " : "Sin captadores autorizados en estos días. ") + (pD.v ? "Mayor demanda por aprobar: " + plural(pD.v, "captador", "captadores") + " el " + corto(pD.d) + "." : "Sin demanda por aprobar en estos días.") + "</p>";
+    /* Antigüedad */
+    const maxEd = Math.max(1, ...rd.antiguedad.map((x) => x.lista.length)), ed = rd.antiguedad.map((x, i) => '<li><button type="button" class="ce-barra a' + (i + 1) + '" data-go="sol:edad' + [0, 8, 16, 31][i] + '" style="--w:' + (100 * x.lista.length / maxEd) + '%"><span class="l">' + esc(x.nombre) + '</span><span class="tr"><span class="rl"></span></span><b>' + x.lista.length + "</b></button></li>").join("");
+    const edH = pend.length ? '<ul class="ce-barras">' + ed + "</ul>" + (rd.sinFechaSol.length ? '<p class="ce-def">' + plural(rd.sinFechaSol.length, "solicitud sin fecha de solicitud no se puede situar", "solicitudes sin fecha de solicitud no se pueden situar") + " en ningún tramo.</p>" : "") : '<p class="ce-vacio">No hay solicitudes pendientes.</p>';
+    /* Vencimientos */
+    const vH = rd.vencimientos.length ? '<ul class="ce-lista">' + rd.vencimientos.slice(0, 7).map((v) => '<li><button type="button" class="ce-item" data-abre="' + esc(v.r.c.id) + '|con|vigente"><strong>' + esc(v.r.c.name) + "</strong><span>" + esc(ongDe(v.r) + " · " + (v.dias === 0 ? "termina hoy" : "termina en " + plural(v.dias, "día", "días")) + " (" + fmtD(v.r.hasta) + ")") + "</span></button></li>").join("") + "</ul>" : '<p class="ce-vacio">Ninguna concesión vigente tiene fecha de fin.</p>';
+    /* Calidad */
+    const calH = '<ul class="ce-calidad">' + SEV_ORDEN.map((k) => '<li><button type="button" data-go="inc:todas" data-sev="' + k + '">' + sevBadge(k) + "<b>" + rd.calidad[k] + "</b></button></li>").join("") + "</ul>" + '<p class="ce-def">Los avisos señalan datos incompletos o dudosos; no se corrigen solos.</p>';
+    /* Carga */
+    const grupos = cargaGrupo === "provincia" ? rd.porProvincia : rd.porOng, maxC = Math.max(1, ...grupos.map((g) => g.pend.length));
+    const cargaH = grupos.length ? '<div class="pn-scroll"><table class="ce-tcarga"><thead><tr><th>' + (cargaGrupo === "provincia" ? "Provincia" : "ONG") + '</th><th>Pendientes</th><th class="n">Estancadas</th><th class="n">Seg. atrasados</th><th class="n">Vigentes</th><th class="n">Captadores hoy</th></tr></thead><tbody>' +
+      grupos.slice(0, 12).map((g) => '<tr data-filtra="' + cargaGrupo + "|" + esc(cargaGrupo === "provincia" ? g.clave : g.nombre) + '"><td><button type="button" class="ce-pt">' + esc(g.nombre) + '</button></td><td><span class="ce-mini"><span style="width:' + (100 * g.pend.length / maxC) + '%"></span></span> <b>' + g.pend.length + '</b></td><td class="n">' + g.estanc.length + '</td><td class="n">' + g.segAtr + '</td><td class="n">' + g.vig.length + '</td><td class="n">' + g.capt + "</td></tr>").join("") + "</tbody></table></div>" + (grupos.length > 12 ? '<p class="ce-def">Se muestran los 12 con más carga de ' + grupos.length + ".</p>" : "") : '<p class="ce-vacio">Todavía no hay expedientes.</p>';
+    const conmutaGrupo = '<span class="ce-seg" role="group" aria-label="Agrupar por"><button type="button" data-grupo="provincia" aria-pressed="' + (cargaGrupo === "provincia") + '">Provincia</button><button type="button" data-grupo="ong" aria-pressed="' + (cargaGrupo === "ong") + '">ONG</button></span>';
+    /* Responsables */
+    const rH = rd.porResponsable.length ? '<div class="pn-scroll"><table><thead><tr><th>Responsable</th><th class="n">Atrasados</th><th class="n">Hoy</th><th class="n">Próx. 7 días</th><th class="n">Total</th></tr></thead><tbody>' + rd.porResponsable.slice(0, 10).map((g) => "<tr><td>" + (g.resp ? esc(nombreResp(g.resp)) : "<em>Sin responsable</em>") + '</td><td class="n">' + (g.atrasados ? '<b class="ce-rojo">' + g.atrasados + "</b>" : 0) + '</td><td class="n">' + g.hoy + '</td><td class="n">' + g.proximos + '</td><td class="n">' + g.total + "</td></tr>").join("") + "</tbody></table></div>" : '<p class="ce-vacio">No hay seguimientos programados.</p>';
+    /* Actividad y tiempo de resolución */
+    const act = rd.actividad, rs = rd.resolucion;
+    const actH = verTabla.act ? tablaSemanas(act) : '<div class="ce-dos"><figure><figcaption>Recibidas</figcaption>' + grafSemanas(act, "recibidas", "Solicitudes recibidas") + "</figure><figure><figcaption>Resueltas</figcaption>" + grafSemanas(act, "resueltas", "Solicitudes resueltas") + "</figure></div>";
+    const resH = rs.n ? '<p class="ce-hero"><b>' + String(rs.mediana).replace(".", ",") + '</b><span>días de mediana hasta la decisión</span></p><p class="ce-def">Media: ' + String(rs.media).replace(".", ",") + " días, sobre " + plural(rs.n, "solicitud resuelta con fecha de solicitud y de decisión", "solicitudes resueltas con fecha de solicitud y de decisión") + (rs.sinFecha ? ". " + plural(rs.sinFecha, "resuelta sin fecha de decisión no cuenta", "resueltas sin fecha de decisión no cuentan") + " (las anteriores al 23/10/2026 no la guardaban)." : ".") + "</p>" : '<p class="ce-vacio">Todavía no se puede calcular: ninguna solicitud resuelta tiene fecha de solicitud y de decisión.</p>';
+    const defs = '<details class="ce-defs"><summary>Cómo se calcula cada indicador</summary><dl>' +
+      [["Solicitudes pendientes", "Solicitudes sin decisión cuya fecha de fin aún no ha pasado. Fuente: permit_applications."], ["Estancadas", "Pendientes con más de " + UMBRAL_ESTANCADA + " días desde su fecha de solicitud. No cambia su estado."], ["Concesiones vigentes", "Concesiones no canceladas cuyo periodo incluye hoy. Fuente: permit_grants."],
+       ["Captadores autorizados", "Mayor número de captadores por punto y ONG entre concesiones vigentes ese día, sumando entre ONG distintas. Es la capacidad real."], ["Demanda por aprobar", "Lo mismo, con las solicitudes pendientes. Nunca se suma a la capacidad autorizada."], ["Seguimientos", "Tareas con fecha de solicitudes pendientes, concesiones o del punto (permisos.followups). Atrasado: su fecha ya pasó."],
+       ["Antigüedad", "Días desde la fecha de solicitud de las pendientes."], ["Tiempo de resolución", "Días entre la fecha de solicitud y la de decisión, solo cuando ambas constan. Se da la mediana (la media se distorsiona con los casos extremos)."], ["Actividad", "Solicitudes por la fecha de solicitud y de decisión de las últimas 8 semanas. No hay histórico de estados anteriores."],
+       ["Avisos de datos", "Incoherencias o datos incompletos. Bloqueante: impide leer o planificar el expediente; aviso: requiere atención; recomendación: mejora del dato."]].map(([a, b]) => "<dt>" + esc(a) + "</dt><dd>" + esc(b) + "</dd>").join("") + "</dl></details>";
+    box.innerHTML = kpis +
+      '<div class="ce-g2">' + tarjeta("cola", "Requieren atención ahora", "Seguimientos atrasados, periodos que empiezan sin respuesta, solicitudes estancadas, concesiones que terminan en 7 días y avisos bloqueantes, por urgencia.", colaH) +
+      tarjeta("cap", "Capacidad frente a demanda · próximos 14 días", "Captadores por día: autorizados por concesiones y por aprobar en solicitudes pendientes. Son cifras distintas y no se suman.", capH, conmuta("cap")) + "</div>" +
+      '<div class="ce-g3">' + tarjeta("edad", "Antigüedad de las solicitudes pendientes", "Días desde la fecha de solicitud. Pulsa un tramo para ver esas solicitudes.", edH) + tarjeta("venc", "Concesiones que terminan primero", "Vigentes con fecha de fin, de la más próxima a la más lejana.", vH) + tarjeta("cal", "Calidad del dato", "Avisos abiertos por gravedad.", calH) + "</div>" +
+      '<div class="ce-g2">' + tarjeta("carga", "Carga de trabajo", "Solicitudes pendientes, estancadas, seguimientos atrasados y concesiones vigentes. Pulsa una fila para filtrar.", cargaH, conmutaGrupo) + tarjeta("resp", "Seguimientos por responsable", "Tareas con fecha agrupadas por quien las tiene asignadas.", rH) + "</div>" +
+      '<div class="ce-g2">' + tarjeta("act", "Actividad · últimas 8 semanas", "Solicitudes recibidas y resueltas por semana, según sus fechas registradas.", actH, conmuta("act")) + tarjeta("res", "Tiempo de resolución", "Solo con fecha de solicitud y de decisión.", resH) + "</div>" + defs;
+  };
+
+  /* === Panel de detalle del expediente === */
+  const dato = (l, v) => v ? "<dt>" + esc(l) + "</dt><dd>" + v + "</dd>" : "";
+  const NOMBRE_CAMPO = { status: "estado", organization: "ONG", capturer_count: "captadores", requested_from: "inicio solicitado", requested_until: "fin solicitado", requested_at: "fecha de solicitud", valid_from: "inicio", valid_until: "fin", due_on: "fecha", assigned_to: "responsable", next_action: "acción", completed_at: "completado", resolution_reason: "motivo de la decisión", cancelled_reason: "motivo de la cancelación", contact_details: "contacto", notes: "notas", application_id: "solicitud enlazada", grant_id: "concesión enlazada" };
+  const OCULTOS = new Set(["updated_by", "created_by", "resolved_by", "resolved_at", "cancelled_at", "legacy_ref", "id", "establishment_id", "created_at", "outcome"]);
+  const idsHistorial = (r) => { const w = rawDe(r); return [...new Set([w.id, w.conc, w.sol, w.fu].filter(Boolean))]; };
+  const cargaHistorial = async (r) => {
+    const k = clave(r); if (!esAdmin() || historial.has(k)) return;
+    const ids = idsHistorial(r); if (!ids.length) { historial.set(k, { filas: [] }); return; }
+    historial.set(k, { cargando: true });
+    try {
+      const { data, error } = await window.mapaSession.supabase.from("audit_log").select("action,table_name,created_at,actor_id,details").in("record_id", ids).order("created_at", { ascending: false }).range(0, 29);
+      if (error) throw error;
+      historial.set(k, { filas: data || [] });
+    } catch (e) { console.error("[Mapa] No se pudo leer el historial:", e); historial.set(k, { error: friendlyError(e, "No se pudo leer el historial.") }); }
+    if (sel === k) drawDetalle();
+  };
+  const TABLA_TXT = { permit_applications: "solicitud", permit_grants: "concesión", followups: "seguimiento" }, ACCION_TXT = { insert: "Creada", update: "Modificada", delete: "Borrada" };
+  const historialH = (r) => {
+    if (!esAdmin()) return "";
+    const h = historial.get(clave(r));
+    const cuerpo = !h || h.cargando ? '<p class="ce-def">Cargando historial…</p>' : h.error ? '<p class="ce-def ce-err">' + esc(h.error) + "</p>" : !h.filas.length ? '<p class="ce-def">Sin cambios registrados para este expediente.</p>'
+      : '<ol class="ce-hist">' + h.filas.map((f) => {
+        const campos = ((f.details && f.details.changed_fields) || []).filter((c) => !OCULTOS.has(c)).map((c) => NOMBRE_CAMPO[c] || c);
+        const quien = f.actor_id ? (nombreResp(f.actor_id) === "otra persona" ? "Un usuario" : nombreResp(f.actor_id)) : "Sistema";
+        return "<li><b>" + esc((TABLA_TXT[f.table_name] || f.table_name) + " · " + (ACCION_TXT[f.action] || f.action)) + "</b><span>" + esc(new Date(f.created_at).toLocaleString("es-ES", { dateStyle: "short", timeStyle: "short", timeZone: "Europe/Madrid" }) + " · " + quien) + "</span>" + (campos.length && f.action === "update" ? "<span>" + esc("Cambió: " + campos.join(", ")) + "</span>" : "") + "</li>";
+      }).join("") + "</ol>";
+    return '<section class="ce-sec"><h4>Historial de cambios</h4>' + cuerpo + "</section>";
+  };
+  const drawDetalle = () => {
+    const box = body.querySelector("#ceSide"), grid = body.querySelector(".ce-work"), r = sel ? indice.get(sel) : null;
+    if (!r) { sel = ""; box.hidden = true; box.innerHTML = ""; grid.classList.remove("con-lado"); return; }
+    const t = today(), w = rawDe(r), p = permits[permitKey(r.c)] || {}, key = clave(r);
+    grid.classList.add("con-lado"); box.hidden = false;
+    const tipo = r.k === "sol" ? "Solicitud" : r.k === "con" ? "Concesión" : "Seguimiento";
+    const estado = r.k ? badge(r.est) : "";
+    let datos = "";
+    if (r.k === "sol") {
+      datos = dato("Estado", estado) + dato("ONG", esc(ongDe(r))) + dato("Periodo solicitado", esc(periodo(r))) + dato("Captadores", r.n ? String(r.n) : "") + dato("Solicitada", r.fecha ? esc(fmtD(r.fecha) + " (hace " + plural(daysBetween(r.fecha, t), "día", "días") + ")") : "No consta") +
+        dato("Decisión", r.resFecha && (r.est === "aprobada" || r.est === "denegada" || r.est === "retirada") ? esc(TEXTO[r.est] + " el " + fmtD(r.resFecha) + (r.motivo ? " · " + r.motivo : "")) : "") + dato("Seguimiento", r.seg ? esc(fmtD(r.seg) + (w.accion ? " · " + w.accion : "") + (w.resp ? " · " + nombreResp(w.resp) : " · sin responsable")) : r.est === "pendiente" ? "Sin seguimiento programado" : "") +
+        dato("Contacto", w.contacto ? esc(w.contacto) : "") + dato("Notas", w.notas ? esc(w.notas) : "") + (r.conc ? dato("Concesión enlazada", '<button type="button" class="ce-link" data-sel="' + esc(String(r.c.id) + "|con|" + r.conc) + '">Ver la concesión</button>') : "");
+    } else if (r.k === "con") {
+      datos = dato("Estado", estado) + dato("ONG", esc(ongDe(r))) + dato("Periodo", esc(periodo(r))) + dato("Captadores", r.n ? String(r.n) : "") + dato("Alta", r.fecha ? esc(fmtD(r.fecha)) : "") + dato("Situación", esc(detalleCon(r, t))) +
+        dato("Seguimiento", w.seg ? esc(fmtD(w.seg) + (w.accion ? " · " + w.accion : "") + (w.resp ? " · " + nombreResp(w.resp) : " · sin responsable")) : "") + dato("Contacto", w.contacto ? esc(w.contacto) : "") + dato("Notas", w.notas ? esc(w.notas) : "") +
+        (r.sol ? dato("Solicitud de origen", '<button type="button" class="ce-link" data-sel="' + esc(String(r.c.id) + "|sol|" + r.sol) + '">Ver la solicitud</button>') : dato("Solicitud de origen", "Sin solicitud enlazada"));
+    } else {
+      const dias = daysBetween(r.fecha, t);
+      datos = dato("Fecha", esc(fmtD(r.fecha) + (dias > 0 ? " · atrasado " + plural(dias, "día", "días") : dias === 0 ? " · hoy" : ""))) + dato("Acción prevista", r.accion ? esc(r.accion) : "—") + dato("Responsable", r.resp ? esc(nombreResp(r.resp)) : "Sin responsable") +
+        dato("Origen", esc(r.con ? "Concesión de " + ongDe(r) : r.i >= 0 && !r.punto ? "Solicitud pendiente de " + ongDe(r) : "Seguimiento del punto"));
+    }
+    const bloqueos = bloqueosDe(r), avisos = incidencias(expedientesDe(r.c, p), t).filter((x) => r.k && x.r.k === r.k && ((x.r.id && x.r.id === r.id) || (!x.r.id && x.r.i === r.i)));
+    const delPunto = expedientesDe(r.c, p).sort((a, b) => (b.desde || b.fecha || "").localeCompare(a.desde || a.fecha || ""));
+    box.innerHTML = '<div class="ce-sidehead"><div><span class="ce-kicker">' + esc(tipo) + "</span><h3>" + esc(r.c.name) + '</h3><p>' + esc(townOf(r.c) + (r.c.province && r.c.province !== townOf(r.c) ? " · " + r.c.province : "") + (r.c.tipo ? " · " + r.c.tipo : "")) + '</p></div><button type="button" class="ce-x" data-cierra-lado="1" aria-label="Cerrar el detalle">&times;</button></div>' +
+      '<dl class="ce-datos">' + datos + "</dl>" +
+      (avisos.length ? '<section class="ce-sec"><h4>Avisos de este expediente</h4><ul class="ce-avisos">' + avisos.map((x) => "<li>" + sevBadge(x.sev) + " " + esc(x.tipo) + "</li>").join("") + "</ul></section>" : "") +
+      '<section class="ce-sec"><h4>Acciones</h4><div class="ce-btns">' + botones(r) + '<button type="button" class="ce-act" data-pt="' + esc(String(r.c.id)) + '">Abrir el punto en el mapa</button></div>' + (bloqueos.length ? '<ul class="ce-razones">' + bloqueos.map((b) => "<li>" + esc(b) + "</li>").join("") + "</ul>" : "") +
+      (accion && accion.key === key ? confirmacion() : "") + "</section>" +
+      '<section class="ce-sec"><h4>Expedientes de este punto</h4><ul class="ce-linea">' + (delPunto.length ? delPunto.slice(0, 12).map((x) => "<li><button type=\"button\" data-sel=\"" + esc(clave(x)) + '"' + (clave(x) === key ? ' aria-current="true"' : "") + ">" + badge(x.est) + "<span>" + esc((x.k === "sol" ? "Solicitud" : "Concesión") + " · " + ongDe(x) + " · " + periodo(x)) + "</span></button></li>").join("") : "<li>Este punto no tiene solicitudes ni concesiones.</li>") + "</ul></section>" + historialH(r);
+    cargaHistorial(r);
+  };
+
+  /* === Lotes de seguimientos: selección explícita, resumen previo, un guardado verificado por registro y resultado individual === */
+  const drawLote = () => {
+    const box = body.querySelector("#ceLote"); if (!box) return;
+    const n = multi.size;
+    if (vista !== "seg" || (!n && !lote)) { box.hidden = true; box.innerHTML = ""; return; }
+    box.hidden = false;
+    if (lote && lote.fase === "resultado") {
+      const ok = lote.res.filter((x) => x.ok).length, mal = lote.res.length - ok;
+      box.innerHTML = '<div class="ce-lote" role="status"><strong>' + esc(lote.titulo + ": " + ok + " guardados" + (mal ? " y " + mal + " sin guardar" : "")) + '</strong><ul class="ce-res-lote">' + lote.res.map((x) => '<li class="' + (x.ok ? "ok" : "mal") + '"><b>' + esc(x.nombre) + "</b><span>" + esc(x.texto) + "</span></li>").join("") + '</ul><button type="button" class="ce-act" data-lote="cerrar">Cerrar resultado</button></div>';
+      return;
+    }
+    const sels = [...multi].map((k) => indice.get(k)).filter(Boolean);
+    if (lote && lote.fase === "confirmar") {
+      const que = lote.tipo === "hecho" ? "cerrar " + plural(sels.length, "seguimiento", "seguimientos") : "pasar " + plural(sels.length, "seguimiento", "seguimientos") + " al " + fmtD(lote.fecha);
+      box.innerHTML = '<div class="ce-lote"><strong>Vas a ' + esc(que) + '.</strong><p class="ce-def">Cada seguimiento se guarda y se comprueba por separado; si alguno ha cambiado o falla, se te dirá cuál y el resto sigue su curso. ' + esc("Puntos: " + [...new Set(sels.map((s) => s.c.name))].slice(0, 6).join(", ") + (new Set(sels.map((s) => s.c.id)).size > 6 ? "…" : "") + ".") + '</p><div class="ce-btns"><button type="button" class="ce-act ok" data-lote="ejecutar"' + (ocupado ? " disabled" : "") + '>Confirmar</button><button type="button" class="ce-act" data-lote="cancelar"' + (ocupado ? " disabled" : "") + ">Volver</button></div></div>";
+      return;
+    }
+    box.innerHTML = '<div class="ce-lote"><strong>' + esc(plural(n, "seguimiento seleccionado", "seguimientos seleccionados")) + '</strong><div class="ce-btns"><button type="button" class="ce-act ok" data-lote="hecho">Marcar como hechos</button><label class="ce-lotef">Reprogramar al <input type="date" id="ceLoteFecha" min="' + today() + '"></label><button type="button" class="ce-act" data-lote="rep">Reprogramar</button><button type="button" class="ce-act" data-lote="limpiar">Quitar selección</button></div></div>';
+  };
+  const ejecutaLote = async () => {
+    if (ocupado || !lote || lote.fase !== "confirmar") return;
+    const sels = [...multi].map((k) => indice.get(k)).filter(Boolean), res = [], tocados = new Set();
+    ocupado = true; aviso = "Guardando " + sels.length + " seguimientos…"; draw();
+    try {
+      for (let i = 0; i < sels.length; i++) {
+        const s = sels[i]; ultimoGuardado = {};
+        aviso = "Guardando " + (i + 1) + " de " + sels.length + "…"; body.querySelector("#ceAviso").textContent = aviso;
+        let r;
+        try { r = await aplica(s.c, lote.tipo === "hecho" ? mutadores.cerrarSeg(s) : mutadores.cambiarSeg(s, lote.fecha)); }
+        catch (e) { console.error(e); r = "error"; }
+        tocados.add(s.c);
+        res.push({ nombre: s.c.name, ok: r === "ok", texto: textoResultado(s.c, r, lote.tipo === "hecho" ? "Cerrado" : "Reprogramado al " + fmtD(lote.fecha)) });
+      }
+    } finally { ocupado = false; }
+    tocados.forEach((c) => { try { refrescaPunto(c); } catch (e) { console.error(e); } document.dispatchEvent(new CustomEvent("permisos:cambio", { detail: { id: c.id } })); });
+    try { refreshSelects(); renderList(); } catch (e) { console.error(e); }
+    historial.clear();
+    const ok = res.filter((x) => x.ok).length;
+    multi = new Set(res.map((x, i) => x.ok ? null : clave(sels[i])).filter(Boolean)); /* quedan seleccionados los que no se pudieron guardar, para reintentar */
+    lote = { fase: "resultado", titulo: lote.tipo === "hecho" ? "Seguimientos cerrados" : "Seguimientos reprogramados", res };
+    aviso = ok === res.length ? "Lote completado: " + ok + " guardados." : "Lote terminado con incidencias: " + ok + " guardados y " + (res.length - ok) + " sin guardar. Revisa el detalle.";
+    draw();
+  };
+
+  /* === Pantalla principal === */
   const draw = () => {
     const t = today(), { recs: todas, segs: todasSegs } = registros(prov);
     /* Las ONG se agrupan sin distinguir mayúsculas ni espacios (igual que el Panel): «aecc» y «AECC» son la misma. */
     const porClave = new Map(); todas.concat(todasSegs).forEach((x) => { const k = claveOngDe(x); if (!porClave.has(k)) porClave.set(k, ongDe(x)); });
     const ongs = [...porClave.values()].sort((x, y) => (x === "Sin ONG") - (y === "Sin ONG") || antes(x, y));
     if (ong && !porClave.has(ong.trim().toLowerCase())) ong = "";
+    body.dataset.vista = vista;
+    const selProv = body.querySelector("#ceProv"); if (selProv.value !== prov) selProv.value = prov; /* el filtro puede cambiar desde el Resumen o un enlace: el selector debe decir lo mismo */
     body.querySelector("#ceOng").innerHTML = '<option value="">Todas las ONG</option>' + ongs.map((o) => '<option value="' + esc(o) + '"' + (o.trim().toLowerCase() === ong.trim().toLowerCase() ? " selected" : "") + ">" + esc(o) + "</option>").join("");
     const ql = q.trim().toLowerCase(), okOng = (x) => (!ong || claveOngDe(x) === ong.trim().toLowerCase()) && (!punto || String(x.c.id) === String(punto.id)), okF = (x) => okOng(x) && (!ql || textoDe(x).includes(ql));
-    const base = todas.filter(okF), baseSeg = todasSegs.filter(okF);
-    const incs = incidencias(todas.filter(okOng), t).filter((x) => !ql || textoDe(x.r).includes(ql));
-    const tipos = [...new Set(incs.map((x) => x.tipo))].sort(antes);
-    if (vista === "inc" && est.inc !== "todas" && !tipos.includes(est.inc)) est.inc = "todas";
-    const delTipo = vista === "seg" ? baseSeg : vista === "inc" ? incs : base.filter((r) => r.k === vista);
-    const opciones = vista === "inc" ? [["todas", "Todos"]].concat(tipos.map((x) => [x, x])) : OPC[vista];
-    const cuenta = (k) => vista === "inc" ? delTipo.filter((x) => k === "todas" || x.tipo === k).length : delTipo.filter((r) => pred[vista](k, r, t)).length;
-    body.querySelector("#ceEst").innerHTML = opciones.map(([k, n]) => '<option value="' + esc(k) + '"' + (k === est[vista] ? " selected" : "") + ">" + esc(n + " (" + cuenta(k) + ")") + "</option>").join("");
-    /* Resumen: las mismas cifras del Panel resumen (indicadores), con los filtros de provincia y ONG. */
-    const ind = indicadores(todas.filter(okOng), todasSegs.filter(okOng), t), venc = ind.vencen7.length + ind.vencen15.length + ind.vencen30.length;
-    const tile = (v, e, n, txt, cls) => '<button type="button" class="kpi' + (n && cls ? " " + cls : "") + '" data-go="' + v + ":" + esc(e) + '"><b>' + n + "</b><span>" + esc(txt) + "</span></button>";
-    body.querySelector("#ceSum").innerHTML = tile("sol", "pendiente", ind.pendientes.length, "Solicitudes pendientes", "al") + tile("sol", "estancada", ind.estancadas.length, "Solicitudes estancadas", "al") +
-      tile("con", "vigente", ind.vigentes.length, "Concesiones vigentes", "hl") + tile("con", "vencen", venc, "Vencen en 30 días", "al") + tile("con", "sinfin", ind.sinFin.length, "Vigentes sin fecha de fin", "al") +
-      tile("seg", "vencido", ind.segVencidos.length, "Seguimientos atrasados", "al") + tile("inc", "todas", ind.incidencias.length, "Avisos de datos", "al");
-    body.querySelectorAll("#ceTabs button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.vista === vista)));
+    const base = todas.filter(okF), baseSeg = todasSegs.filter(okF), recsAmb = todas.filter(okOng), segsAmb = todasSegs.filter(okOng);
+    indice = new Map(); todas.concat(todasSegs).forEach((x) => indice.set(clave(x), x));
+    const incsAmb = incidencias(recsAmb, t), ind = indicadores(recsAmb, segsAmb, t);
+    /* Navegación con el número que pide atención en cada sección (con los filtros de provincia, ONG y punto) */
+    const cnt = { sol: ind.pendientes.length, con: ind.vigentes.length, seg: ind.segVencidos.length, inc: incsAmb.filter((x) => x.sev !== "recomendacion").length };
+    body.querySelectorAll("#ceNav button").forEach((b) => { const v = b.dataset.vista; b.setAttribute("aria-current", v === vista ? "page" : "false"); const c = b.querySelector(".n"); if (c) { c.textContent = cnt[v]; c.classList.toggle("al", v === "seg" ? cnt[v] > 0 : v === "inc" ? incsAmb.some((x) => x.sev === "bloqueante") : false); c.hidden = !cnt[v]; } });
+    body.querySelector("#ceHoy").textContent = "Hoy, " + fmtD(t).slice(0, 5) + " · " + plural(new Set(recsAmb.map((x) => x.c.id)).size, "punto con expedientes", "puntos con expedientes");
     body.querySelector("#ceAviso").textContent = aviso;
     body.querySelector("#cePunto").innerHTML = punto ? "<span>Solo «" + esc(punto.name) + "» · " + esc(townOf(punto)) + '</span><button type="button" class="ce-act" data-quita-punto="1">Ver todos los puntos</button>' : "";
+    const res = body.querySelector("#ceRes"), trabajo = body.querySelector(".ce-work");
+    if (vista === "res") {
+      res.hidden = false; trabajo.hidden = true; filasVis = [];
+      drawResumen(resumenDatos(recsAmb, segsAmb, t, incsAmb), ind, t, todas);
+      drawLote(); body.querySelector("#ceSide").hidden = true; return;
+    }
+    res.hidden = true; trabajo.hidden = false;
+    const incs = incsAmb.filter((x) => !ql || textoDe(x.r).includes(ql));
+    const tipos = [...new Set(incs.map((x) => x.tipo))].sort(antes);
+    const delTipo = vista === "seg" ? baseSeg : vista === "inc" ? incs : base.filter((r) => r.k === vista);
+    const opciones = vista === "inc" ? [["todas", "Todos"]].concat(SEV_ORDEN.map((k) => ["sev:" + k, SEV[k] + "s"])).concat(tipos.map((x) => [x, x])) : OPC[vista];
+    if (vista === "inc" && est.inc !== "todas" && !opciones.some(([k]) => k === est.inc)) est.inc = "todas";
+    const cuenta = (k) => vista === "inc" ? delTipo.filter((x) => k === "todas" || (k.startsWith("sev:") ? x.sev === k.slice(4) : x.tipo === k)).length : delTipo.filter((r) => pred[vista](k, r, t)).length;
+    body.querySelector("#ceEst").innerHTML = opciones.map(([k, n]) => '<option value="' + esc(k) + '"' + (k === est[vista] ? " selected" : "") + ">" + esc(n + " (" + cuenta(k) + ")") + "</option>").join("");
+    body.querySelector("#ceOrd").innerHTML = ORDENES[vista].map(([k, n]) => '<option value="' + k + '"' + (k === orden[vista] ? " selected" : "") + ">" + esc(n) + "</option>").join("");
     const lista = body.querySelector("#ceList"), nombre = NOMBRE[vista];
-    const filas = vista === "inc" ? delTipo.filter((x) => est.inc === "todas" || x.tipo === est.inc).sort((a, b) => antes(a.tipo, b.tipo) || antes(a.r.c.name, b.r.c.name))
-      : ordena(delTipo.filter((r) => pred[vista](est[vista], r, t)), vista, est[vista]);
+    const filtradas = vista === "inc" ? delTipo.filter((x) => est.inc === "todas" || (est.inc.startsWith("sev:") ? x.sev === est.inc.slice(4) : x.tipo === est.inc)) : delTipo.filter((r) => pred[vista](est[vista], r, t));
+    const filas = ordena(filtradas, vista, est[vista], orden[vista]);
     filasVis = filas.slice(0, mostrar);
     if (!filas.length) {
       lista.innerHTML = '<div class="pn-empty">' + (todas.length || todasSegs.length ? "No hay " + nombre[1] + " con estos filtros." : "Todavía no hay solicitudes ni concesiones en las provincias a las que tienes acceso.") + "</div>";
-      return;
+      drawLote(); drawDetalle(); return;
     }
     const vis = filasVis;
     const cabs = {
       sol: '<th>Punto</th><th>ONG</th><th>Periodo solicitado</th><th class="n">Captadores</th><th>Solicitada</th><th>Estado</th><th>Seguimiento</th><th><span class="adm-sr">Acciones</span></th>',
       con: '<th>Punto</th><th>ONG</th><th>Periodo</th><th class="n">Captadores</th><th>Estado</th><th>Detalle</th><th><span class="adm-sr">Acciones</span></th>',
-      seg: '<th>Punto</th><th>ONG</th><th>Fecha</th><th>Acción prevista</th><th>Responsable</th><th>Origen</th><th><span class="adm-sr">Acciones</span></th>',
-      inc: "<th>Punto</th><th>Qué revisar</th><th>ONG</th><th>Expediente</th>"
+      seg: '<th class="ce-chk"><label class="ce-chkl"><input type="checkbox" id="ceChkTodos" aria-label="Seleccionar todos los seguimientos que se ven"' + (vis.length && vis.every((s) => multi.has(clave(s))) ? " checked" : "") + '></label></th><th>Punto</th><th>ONG</th><th>Fecha</th><th>Acción prevista</th><th>Responsable</th><th>Origen</th><th><span class="adm-sr">Acciones</span></th>',
+      inc: "<th>Punto</th><th>Gravedad</th><th>Qué revisar</th><th>ONG</th><th>Expediente</th>"
     };
-    const titulo = { sol: "Solicitudes", con: "Concesiones", seg: "Seguimientos", inc: "Avisos de datos" };
     lista.innerHTML = '<p class="ce-count" role="status">' + esc(plural(filas.length, nombre[0], nombre[1]) + (filas.length > vis.length ? " · se muestran " + vis.length : "")) + "</p>" +
-      '<div class="pn-scroll"><table><caption class="adm-sr">' + esc(titulo[vista]) + "</caption><thead><tr>" + cabs[vista] + "</tr></thead><tbody>" +
-      vis.map((x, k) => (vista === "sol" ? filaSol(x, t, k) : vista === "con" ? filaCon(x, t, k) : vista === "seg" ? filaSeg(x, t, k) : filaInc(x)) + (accion && vista !== "inc" && accion.key === clave(x) ? filaConf(COLS[vista]) : "")).join("") + "</tbody></table></div>" +
+      '<div class="pn-scroll ce-tabla"><table><caption class="adm-sr">' + esc(TITULO[vista]) + "</caption><thead><tr>" + cabs[vista] + "</tr></thead><tbody>" +
+      vis.map((x) => (vista === "sol" ? filaSol(x, t) : vista === "con" ? filaCon(x, t) : vista === "seg" ? filaSeg(x, t) : filaInc(x)) + (accion && vista !== "inc" && accion.key === clave(x) && sel !== clave(x) ? filaConf(COLS[vista]) : "")).join("") + "</tbody></table></div>" +
       (filas.length > vis.length ? '<p class="ce-more"><button type="button" data-mas="1">Mostrar ' + Math.min(TRAMO, filas.length - vis.length) + " más</button></p>" : "");
-    const mot = lista.querySelector("#ceMotivo"); if (mot) mot.focus(); else { const ok = lista.querySelector('[data-conf="ok"]'); if (ok) ok.focus(); }
+    drawLote(); drawDetalle();
+    const mot = body.querySelector("#ceMotivo"); if (mot) mot.focus(); else { const ok = body.querySelector('[data-conf="ok"]'); if (ok) ok.focus(); }
   };
 
   /* === Formularios === */
   const ongSugeridas = () => [...new Set(["AECC", "Cruz Roja", "WWF", "FJC", "FPM", "FEC", "Aldeas Infantiles"].concat(Object.values(permits).reduce((a, x) => a.concat(solsOf(x).map((z) => z.ong), ((x && x.historial) || []).map((h) => h.ong)), []).filter(Boolean)))];
   const pintaResp = async (c, actual) => {
-    const sel = body.querySelector("#cfResp"); if (!sel) return;
+    const sel2 = body.querySelector("#cfResp"); if (!sel2) return;
     const lista = asignables.get(c.databaseId) || await cargaAsignables(c), miId = window.mapaSession?.user?.id || "";
     if (!body.querySelector("#cfResp")) return;
-    sel.innerHTML = '<option value="">Sin asignar</option>' + lista.map((r) => '<option value="' + esc(r.id) + '">' + esc(r.id === miId ? r.label + " (yo)" : r.label) + "</option>").join("");
-    if (actual && ![...sel.options].some((o) => o.value === actual)) { const op = document.createElement("option"); op.value = actual; op.textContent = nombresPersona.get(actual) || "Otra persona"; sel.appendChild(op); }
-    sel.value = actual || "";
+    sel2.innerHTML = '<option value="">Sin asignar</option>' + lista.map((r) => '<option value="' + esc(r.id) + '">' + esc(r.id === miId ? r.label + " (yo)" : r.label) + "</option>").join("");
+    if (actual && ![...sel2.options].some((o) => o.value === actual)) { const op = document.createElement("option"); op.value = actual; op.textContent = nombresPersona.get(actual) || "Otra persona"; sel2.appendChild(op); }
+    sel2.value = actual || "";
   };
   const campo = (id, etiqueta, tipo, valor, extra) => '<label class="cf-f">' + esc(etiqueta) + '<input id="' + id + '" type="' + tipo + '" value="' + esc(valor == null ? "" : String(valor)) + '"' + (extra || "") + "></label>";
   const dibujaForm = () => {
@@ -4368,7 +4904,7 @@ const csvCell = (value) => {
     box.hidden = false;
     box.innerHTML = '<h3 id="cfT">' + esc(titulo) + "</h3>" +
       (editar || tipo === "seg" ? '<p class="cf-pt">Punto: <strong>' + esc(c.name) + "</strong> · " + esc(townOf(c)) + "</p>"
-        : '<div class="cf-pick"><label class="cf-f">Punto<input id="cfPunto" type="search" autocomplete="off" placeholder="Busca por nombre o municipio"' + (c ? "" : "") + '></label><p id="cfElegido" class="cf-pt">' + (c ? "Punto: <strong>" + esc(c.name) + "</strong> · " + esc(townOf(c)) : "Ningún punto elegido") + '</p><p id="cfCuenta" class="cf-pt" role="status"></p><ul id="cfRes" class="cf-res"></ul></div>') +
+        : '<div class="cf-pick"><label class="cf-f">Punto<input id="cfPunto" type="search" autocomplete="off" placeholder="Busca por nombre o municipio"></label><p id="cfElegido" class="cf-pt">' + (c ? "Punto: <strong>" + esc(c.name) + "</strong> · " + esc(townOf(c)) : "Ningún punto elegido") + '</p><p id="cfCuenta" class="cf-pt" role="status"></p><ul id="cfRes" class="cf-res"></ul></div>') +
       (tipo === "seg"
         ? '<div class="cf-row">' + campo("cfSeg", "Fecha del seguimiento", "date", sg.fecha) + campo("cfAccion", "Siguiente acción", "text", sg.accion || "", ' maxlength="200" autocomplete="off"') + '<label class="cf-f">Responsable<select id="cfResp"><option value="">Sin asignar</option></select></label></div>'
         : '<div class="cf-row">' + campo("cfDesde", "Desde", "date", o.desde) + campo("cfHasta", "Hasta", "date", o.hasta) + campo("cfN", "Captadores", "number", o.captadores || "", ' min="1" step="1"') +
@@ -4382,6 +4918,7 @@ const csvCell = (value) => {
     if (c && c.databaseId && (tipo === "seg" || tipo === "sol")) pintaResp(c, tipo === "seg" ? sg.resp : o.resp || "");
     else if (tipo === "sol" && body.querySelector("#cfResp")) body.querySelector("#cfResp").closest("label").hidden = true;
     const foco = body.querySelector("#cfPunto") || body.querySelector("#cfDesde") || body.querySelector("#cfSeg"); if (foco) foco.focus();
+    box.scrollIntoView({ block: "nearest" });
   };
   const abreForm = (tipo, c, r) => { form = { tipo, c: c || null, r: r || null }; dibujaForm(); };
   const cuenta = (raw) => { const t = String(raw).trim(); if (!t) return { n: 0 }; const n = Number(t); return Number.isInteger(n) && n >= 1 && n <= 100000 ? { n } : { err: "El número de captadores debe ser un entero entre 1 y 100000." }; };
@@ -4395,11 +4932,7 @@ const csvCell = (value) => {
     if (tipo === "seg") {
       const fecha = val("cfSeg"), ac = val("cfAccion").trim(), rs = val("cfResp");
       if (!validIsoDate(fecha)) { msg.textContent = "Indica una fecha válida para el seguimiento."; return; }
-      muta = (copia) => {
-        if (r.punto) { if (!copia.segPunto) return NOEXISTE; copia.segPunto.fecha = fecha; copia.segPunto.accion = ac; copia.segPunto.resp = rs; }
-        else if (r.con) { const h = copia.historial[r.i]; if (!h || h.cancelada) return NOEXISTE; h.seg = fecha; h.accion = ac; h.resp = rs; if (!ac) delete h.accion; if (!rs) delete h.resp; }
-        else { const x = copia.solicitudes[r.i]; if (!x || x.res) return NOEXISTE; x.seg = fecha; x.accion = ac; x.resp = rs; if (!ac) delete x.accion; if (!rs) delete x.resp; }
-      };
+      muta = mutadores.cambiarSeg(r, fecha, ac, rs);
       ok = "Seguimiento guardado en «" + c.name + "».";
     } else {
       const d = val("cfDesde"), h = val("cfHasta"), cn = cuenta(val("cfN")), og = val("cfOng").trim();
@@ -4466,50 +4999,59 @@ const csvCell = (value) => {
     form.c = form.cands[i]; if (!form.c) return;
     body.querySelector("#cfElegido").innerHTML = "Punto: <strong>" + esc(form.c.name) + "</strong> · " + esc(townOf(form.c));
     body.querySelector("#cfRes").innerHTML = ""; body.querySelector("#cfCuenta").textContent = "";
-    const sel = body.querySelector("#cfResp");
-    if (sel) { sel.closest("label").hidden = !form.c.databaseId; if (form.c.databaseId) pintaResp(form.c, ""); }
+    const sel2 = body.querySelector("#cfResp");
+    if (sel2) { sel2.closest("label").hidden = !form.c.databaseId; if (form.c.databaseId) pintaResp(form.c, ""); }
     const sig = body.querySelector("#cfDesde"); if (sig) sig.focus();
   };
+  /* Los nombres de quienes tienen seguimientos asignados se cargan una vez (uno por provincia) para mostrarlos en el resumen. */
+  const precargaNombres = async () => {
+    if (nombresCargados) return; nombresCargados = true;
+    const porProv = new Map(); CENTERS.forEach((c) => { if (!isOut(c) && c.databaseId && c.provinceId && !porProv.has(c.provinceId)) porProv.set(c.provinceId, c); });
+    await Promise.all([...porProv.values()].slice(0, 12).map((c) => cargaAsignables(c).catch(() => [])));
+    if (dlg.open && vista !== "inc") draw();
+  };
 
+  const NAV = [["res", "Resumen"], ["sol", "Solicitudes"], ["con", "Concesiones"], ["seg", "Seguimientos"], ["inc", "Avisos de datos"]];
   const abrir = (opts) => {
     const o = opts || null, ps = provOpts();
-    mostrar = TRAMO; aviso = ""; accion = null; form = null;
+    mostrar = TRAMO; aviso = ""; accion = null; form = null; sel = ""; multi = new Set(); lote = null;
     /* Al llegar desde el Panel, el Calendario o una ficha, se parte de los filtros que traen y se limpia el texto de búsqueda. */
     punto = o && o.punto ? o.punto : null;
     if (o) { prov = o.prov || ""; ong = o.ong || ""; q = ""; if (o.vista) { vista = o.vista; if (o.est) est[o.vista] = o.est; } }
     if (prov && !ps.some(([id]) => id === prov)) prov = "";
     if (ps.length === 1) prov = ps[0][0];
     body.innerHTML =
-      '<div class="cal-bar">' +
+      '<div class="ce-top"><div class="ce-ctx"><p id="ceHoy" class="ce-hoy"></p><p id="cePunto" class="ce-chip"></p></div><div class="ce-new"><button type="button" class="ce-act pri" data-new="sol">Nueva solicitud</button><button type="button" class="ce-act" data-new="con">Nueva concesión</button><button type="button" class="ce-act" data-cal="1">Calendario</button></div></div>' +
+      '<nav class="ce-nav" id="ceNav" aria-label="Secciones del Centro de permisos">' + NAV.map(([v, n]) => '<button type="button" data-vista="' + v + '" aria-current="false">' + esc(n) + (v === "res" ? "" : ' <span class="n" hidden></span>') + "</button>").join("") + "</nav>" +
+      '<div class="cal-bar ce-filtros">' +
       '<label class="cal-f">Provincia<select id="ceProv">' + (ps.length > 1 ? '<option value="">Todas las provincias</option>' : "") +
       ps.map(([id, n]) => '<option value="' + esc(id) + '"' + (id === prov ? " selected" : "") + ">" + esc(n) + "</option>").join("") + "</select></label>" +
       '<label class="cal-f">ONG<select id="ceOng"></select></label>' +
-      '<label class="cal-f">Estado<select id="ceEst"></select></label>' +
-      '<label class="cal-f ce-q">Buscar<input type="search" id="ceQ" autocomplete="off" placeholder="Punto, municipio u ONG" value="' + esc(q) + '"></label></div>' +
-      '<div class="kpis" id="ceSum"></div>' +
-      '<div class="ce-top"><div class="ce-tabs" id="ceTabs" role="group" aria-label="Qué se muestra"><button type="button" data-vista="sol" aria-pressed="true">Solicitudes</button><button type="button" data-vista="con" aria-pressed="false">Concesiones</button><button type="button" data-vista="seg" aria-pressed="false">Seguimientos</button><button type="button" data-vista="inc" aria-pressed="false">Avisos de datos</button></div>' +
-      '<div class="ce-new"><button type="button" class="ce-act ok" data-new="sol">Nueva solicitud</button><button type="button" class="ce-act ok" data-new="con">Nueva concesión</button></div></div>' +
+      '<label class="cal-f ce-solo-lista">Estado<select id="ceEst"></select></label>' +
+      '<label class="cal-f ce-solo-lista">Ordenar por<select id="ceOrd"></select></label>' +
+      '<label class="cal-f ce-q ce-solo-lista">Buscar<input type="search" id="ceQ" autocomplete="off" placeholder="Punto, municipio u ONG" value="' + esc(q) + '"></label></div>' +
       '<section class="ce-form" id="ceForm" aria-labelledby="cfT" hidden></section>' +
-      '<p class="ce-chip" id="cePunto"></p>' +
       '<p class="ce-aviso" id="ceAviso" role="status"></p>' +
-      '<div id="ceList"></div>' +
-      '<p class="cal-note">Aquí se tramitan las solicitudes, concesiones y seguimientos de todos los puntos. Las cifras de arriba son las del Panel resumen. Una solicitud sin respuesta se marca como estancada a partir de ' + UMBRAL_ESTANCADA + " días; eso no cambia su estado. Cada cambio se guarda en Supabase y solo se da por hecho cuando lo confirma. Los avisos señalan datos incompletos o dudosos: no se corrigen solos.</p>";
+      '<div id="ceRes" hidden></div>' +
+      '<div class="ce-work"><div class="ce-main"><div id="ceLote" hidden></div><div id="ceList"></div></div><aside class="ce-side" id="ceSide" aria-label="Detalle del expediente" hidden></aside></div>' +
+      '<p class="cal-note">Aquí se tramitan las solicitudes, concesiones y seguimientos de todos los puntos. Las cifras son las del Panel resumen y el Calendario. Cada cambio se guarda en Supabase y solo se da por hecho cuando lo confirma. Una solicitud sin respuesta se marca como estancada a partir de ' + UMBRAL_ESTANCADA + " días; eso no cambia su estado.</p>";
     draw();
     if (!dlg.open) dlg.showModal();
-    body.querySelector("#ceProv").focus();
+    body.querySelector("#ceNav [aria-current=page]").focus();
+    precargaNombres();
   };
   const actuar = (b) => {
-    const r = filasVis[+b.dataset.k]; if (!r || ocupado) return;
-    const a = b.dataset.a || b.dataset.act, c = r.c;
+    const r = indice.get(b.dataset.key); if (!r || ocupado) return;
+    const a = b.dataset.act, c = r.c;
     if (a === "conceder") ejecuta(c, mutadores.conceder(r), "Aprobada y guardada en «" + c.name + "»: la solicitud se conserva y se ha creado la concesión. Si te dieron otras fechas o captadores, usa Editar en Concesiones.");
     else if (a === "rea") ejecuta(c, mutadores.reactivar(r), "Concesión reactivada en «" + c.name + "».");
     else if (a === "hecho") ejecuta(c, mutadores.cerrarSeg(r), "Seguimiento cerrado en «" + c.name + "».");
     else if (a === "ed") abreForm(r.k, c, r);
     else if (a === "edseg") abreForm("seg", c, r);
-    else if (TEXTOS_CONF[a]) { accion = { a, key: clave(r) }; draw(); }
+    else if (TEXTOS_CONF[a]) { accion = { a, key: b.dataset.key }; draw(); }
   };
   const confirma = async () => {
-    const r = filasVis.find((x) => clave(x) === accion.key), a = accion.a, mot = body.querySelector("#ceMotivo"), motivo = mot ? mot.value.trim() : "";
+    const r = indice.get(accion.key), a = accion.a, mot = body.querySelector("#ceMotivo"), motivo = mot ? mot.value.trim() : "";
     accion = null; if (!r) { draw(); return; }
     const c = r.c;
     if (a === "den") await ejecuta(c, mutadores.resolver(r, "denegada", motivo), "Denegación guardada en «" + c.name + "».");
@@ -4518,14 +5060,24 @@ const csvCell = (value) => {
     else if (a === "quitS") await ejecuta(c, mutadores.quitarSol(r), "Solicitud borrada en «" + c.name + "».");
     else if (a === "quitC") await ejecuta(c, mutadores.quitarCon(r), "Concesión borrada en «" + c.name + "».");
   };
+  const reinicia = () => { mostrar = TRAMO; accion = null; };
   body.addEventListener("click", (e) => {
     const go = e.target.closest("[data-go]");
-    if (go) { const [v, k] = go.dataset.go.split(":"); vista = v; est[v] = k; mostrar = TRAMO; accion = null; draw(); return; }
-    const tab = e.target.closest("[data-vista]");
-    if (tab) { vista = tab.dataset.vista; mostrar = TRAMO; accion = null; draw(); return; }
+    if (go) { const [v, k] = go.dataset.go.split(":"); vista = v; if (go.dataset.sev) est[v] = "sev:" + go.dataset.sev; else est[v] = k; reinicia(); draw(); return; }
+    const ab = e.target.closest("[data-abre]");
+    if (ab) { const [id, v, k] = ab.dataset.abre.split("|"), c = CENTERS.find((x) => String(x.id) === id); if (c) { punto = c; vista = v; est[v] = k; reinicia(); draw(); } return; }
+    const nv = e.target.closest("#ceNav [data-vista]");
+    if (nv) { vista = nv.dataset.vista; reinicia(); draw(); return; }
+    const tb = e.target.closest("[data-tabla]");
+    if (tb) { verTabla[tb.dataset.tabla] = !verTabla[tb.dataset.tabla]; draw(); return; }
+    const gr = e.target.closest("[data-grupo]");
+    if (gr) { cargaGrupo = gr.dataset.grupo; draw(); return; }
+    const fl = e.target.closest("tr[data-filtra]");
+    if (fl && vista === "res") { const i = fl.dataset.filtra.indexOf("|"), tipo = fl.dataset.filtra.slice(0, i), valor = fl.dataset.filtra.slice(i + 1); if (tipo === "provincia") { if (valor && provOpts().some(([id]) => id === valor)) prov = valor; } else ong = valor; vista = "sol"; est.sol = "pendiente"; reinicia(); draw(); return; }
     if (e.target.closest("[data-mas]")) { mostrar += TRAMO; draw(); return; }
+    if (e.target.closest("[data-cal]")) { dlg.close(); $("#calBtn").click(); return; }
+    if (e.target.closest("[data-quita-punto]")) { punto = null; sel = ""; reinicia(); draw(); return; }
     const nw = e.target.closest("[data-new]");
-    if (e.target.closest("[data-quita-punto]")) { punto = null; mostrar = TRAMO; accion = null; draw(); return; }
     if (nw) { abreForm(nw.dataset.new, punto, null); return; }
     const pk = e.target.closest("[data-pick]");
     if (pk && form) { eligePunto(+pk.dataset.pick); return; }
@@ -4533,23 +5085,48 @@ const csvCell = (value) => {
     if (e.target.closest("#cfCancelar")) { form = null; dibujaForm(); return; }
     const cf = e.target.closest("[data-conf]");
     if (cf) { if (cf.dataset.conf === "ok") confirma(); else { accion = null; draw(); } return; }
+    const lt = e.target.closest("[data-lote]");
+    if (lt) {
+      const a = lt.dataset.lote;
+      if (a === "hecho") { lote = { fase: "confirmar", tipo: "hecho" }; draw(); }
+      else if (a === "rep") { const f = val("ceLoteFecha"); if (!validIsoDate(f)) { aviso = "Elige una fecha válida para reprogramar."; draw(); return; } lote = { fase: "confirmar", tipo: "rep", fecha: f }; aviso = ""; draw(); }
+      else if (a === "ejecutar") ejecutaLote();
+      else if (a === "cancelar") { lote = null; draw(); }
+      else if (a === "cerrar") { lote = null; aviso = ""; draw(); }
+      else if (a === "limpiar") { multi = new Set(); lote = null; draw(); }
+      return;
+    }
     const ac = e.target.closest("[data-act]");
     if (ac) { actuar(ac); return; }
+    if (e.target.closest("[data-cierra-lado]")) { sel = ""; draw(); return; }
     const pt = e.target.closest("[data-pt]");
-    if (pt) { const c = CENTERS.find((x) => String(x.id) === pt.dataset.pt); if (c) { dlg.close(); if (markers[c.id]) cluster.zoomToShowLayer(markers[c.id], () => markers[c.id].openPopup()); } }
+    if (pt) { const c = CENTERS.find((x) => String(x.id) === pt.dataset.pt); if (c) { dlg.close(); if (markers[c.id]) cluster.zoomToShowLayer(markers[c.id], () => markers[c.id].openPopup()); } return; }
+    const se = e.target.closest("[data-sel]");
+    if (se) { sel = se.dataset.sel; accion = null; draw(); const lado = body.querySelector("#ceSide"); if (lado && !lado.hidden) { lado.scrollTop = 0; if (matchMedia("(max-width: 900px)").matches) lado.querySelector(".ce-x")?.focus(); } return; }
+    const fr = e.target.closest("tr.ce-row");
+    if (fr && !e.target.closest("button, input, select, a, label")) { sel = fr.dataset.key; accion = null; draw(); }
   });
   body.addEventListener("change", (e) => {
     if (e.target.id === "ceProv") { prov = e.target.value; ong = ""; }
     else if (e.target.id === "ceOng") ong = e.target.value;
     else if (e.target.id === "ceEst") est[vista] = e.target.value;
+    else if (e.target.id === "ceOrd") orden[vista] = e.target.value;
+    else if (e.target.dataset && e.target.dataset.chk !== undefined) { if (e.target.checked) multi.add(e.target.dataset.chk); else multi.delete(e.target.dataset.chk); lote = null; draw(); return; }
+    else if (e.target.id === "ceChkTodos") { filasVis.forEach((s) => { if (e.target.checked) multi.add(clave(s)); else multi.delete(clave(s)); }); lote = null; draw(); return; }
     else return;
-    mostrar = TRAMO; accion = null; draw();
+    reinicia(); draw();
   });
   body.addEventListener("input", (e) => {
-    if (e.target.id === "ceQ") { q = e.target.value; mostrar = TRAMO; accion = null; draw(); }
+    if (e.target.id === "ceQ") { q = e.target.value; reinicia(); draw(); }
     else if (e.target.id === "cfPunto" && form) { form.c = null; body.querySelector("#cfElegido").textContent = "Ningún punto elegido"; buscaPunto(e.target.value); } /* cambiar la búsqueda anula el punto elegido: no se guarda en uno que ya no se ve */
   });
-  body.addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target.id === "cfPunto") { e.preventDefault(); if (form && form.cands && form.cands.length) eligePunto(0); } else if (e.key === "Enter" && e.target.id === "ceMotivo") { e.preventDefault(); confirma(); } else if (e.key === "Escape" && accion) { e.stopPropagation(); accion = null; draw(); } });
+  body.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && e.target.id === "cfPunto") { e.preventDefault(); if (form && form.cands && form.cands.length) eligePunto(0); }
+    else if (e.key === "Enter" && e.target.id === "ceMotivo") { e.preventDefault(); confirma(); }
+    else if (e.key === "Escape" && accion) { e.stopPropagation(); accion = null; draw(); }
+    else if (e.key === "Escape" && sel && !e.target.closest("input, select, textarea")) { e.preventDefault(); e.stopPropagation(); sel = ""; draw(); }
+  });
+  dlg.addEventListener("close", () => { historial.clear(); });
   $("#centroBtn").addEventListener("click", () => abrir());
   document.addEventListener("centro:abrir", (e) => abrir(e.detail));
   $("#ceClose").addEventListener("click", () => dlg.close());
