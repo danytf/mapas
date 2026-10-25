@@ -1,5 +1,5 @@
 ---
-name: Mapa del Responsable de Gestión de Recursos de Wesser
+name: Centro de Gestión de Recursos de Wesser
 description: Sala de control de oficina para solicitar y seguir permisos de captación en toda Andalucía, sobre un mapa.
 colors:
   wesser-red: "#c8102e"
@@ -122,7 +122,7 @@ components:
     height: "32px"
 ---
 
-# Design System: Mapa del Responsable de Gestión de Recursos de Wesser
+# Design System: Centro de Gestión de Recursos de Wesser
 
 ## Overview
 

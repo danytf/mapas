@@ -279,6 +279,57 @@ const main = async () => {
   ok(r3e.antes.n >= 2, "hay al menos 2 seguimientos que reasignar (" + r3e.antes.n + ")"); eq(r3e.antes.todosDeX, true, "las filas filtradas son de esa persona en la base"); ok(/asignar a .*/.test(r3e.previo), "reasignar todo lo de una persona: resumen previo [" + r3e.previo + "]");
   eq([r3e.despues.movidos, r3e.despues.sinTocar], [r3e.antes.n, true], "todo lo de esa persona pasa a la otra y no se toca nada más [" + r3e.resultado + "]");
 
+  /* ===== 3f. Exportar a CSV lo que se ve en cada lista, con los filtros ===== */
+  const r3f = await ev(ayudas + `
+    const out = { listas: {} }; const CRLF = String.fromCharCode(13, 10); window.confirm = () => true; const crea = URL.createObjectURL.bind(URL); URL.createObjectURL = (bl) => { window.__csv = bl; return crea(bl); };
+    if (!document.getElementById('dlgCentro').open) { document.getElementById('menuBtn').click(); document.getElementById('centroBtn').click(); await w(1500); }
+    const exporta = async () => { window.__csv = null; b().querySelector('[data-csv]').click(); await w(300); return window.__csv ? await window.__csv.text() : null; };
+    const total = () => +(b().querySelector('.ce-count')?.textContent.match(/^[0-9]+/) || [0])[0];
+    for (const [v, est] of [['sol', 'todas'], ['con', 'todas'], ['seg', 'todas'], ['inc', 'todas']]) {
+      nav(v); await w(300); set('ceEst', est); await w(400); set('ceResp', ''); await w(100);
+      const n = total(), primera = b().querySelector('#ceList tr.ce-row .ce-pt strong')?.textContent, txt = await exporta(); const bytes = window.__csv ? new Uint8Array(await window.__csv.arrayBuffer()) : null; const lineas = txt ? txt.split(CRLF) : [];
+      out.listas[v] = { n, bom: !!bytes && bytes[0] === 239 && bytes[1] === 187 && bytes[2] === 191, cabecera: lineas[0] || '', filas: lineas.length - 1, tienePrimera: !!primera && txt.includes(primera), aviso: b().querySelector('#ceAviso').textContent };
+    }
+    nav('seg'); await w(300); set('ceEst', 'todas'); await w(300);
+    const sel = b().querySelector('#ceResp'); const X = [...sel.options].find(o => o.value && o.value !== '__ninguno'); set('ceResp', X.value); await w(400);
+    const nX = total(), txtX = await exporta(); out.filtrado = { n: nX, filas: txtX ? txtX.split(CRLF).length - 1 : -1 };
+    set('ceResp', ''); await w(200);
+    return out;`);
+  const CAB = { sol: 'provincia;municipio;punto;direccion;ong;desde;hasta;captadores;estado;solicitada;resuelta;motivo;seguimiento;responsable_seguimiento;accion_seguimiento', con: 'provincia;municipio;punto;direccion;ong;desde;hasta;captadores;estado;alta;cancelada_el;motivo;solicitud_enlazada', seg: 'provincia;municipio;punto;direccion;ong;fecha;situacion;dias_de_retraso;accion;responsable;origen', inc: 'gravedad;aviso;provincia;municipio;punto;ong;expediente;periodo' };
+  Object.entries(r3f.listas).forEach(([v, x]) => {
+    ok(x.bom && x.n > 0, "[" + v + "] el CSV se crea con BOM y la lista no está vacía");
+    eq(x.cabecera.split('"').join(''), CAB[v], "[" + v + "] cabecera del CSV"); eq(x.filas, x.n, "[" + v + "] el CSV tiene una fila por cada elemento de la lista (" + x.n + ")"); ok(x.tienePrimera && /CSV creado con/.test(x.aviso), "[" + v + "] contiene lo que se ve y avisa");
+  });
+  eq([r3f.filtrado.n > 0, r3f.filtrado.filas], [true, r3f.filtrado.n], "el CSV respeta el filtro de responsable");
+
+  /* ===== 3g. Crear desde un día del Calendario: el formulario llega con la fecha de ese día ===== */
+  const r3g = await ev(ayudas + `
+    const out = {}; const rel = () => fetch('http://127.0.0.1:8766/__rel').then(r => r.json()); const cb = () => document.getElementById('calBody'); const t = today();
+    if (document.getElementById('dlgCentro').open) { document.getElementById('ceClose').click(); await w(200); }
+    document.getElementById('menuBtn').click(); document.getElementById('calBtn').click(); await w(900);
+    const dias = [...cb().querySelectorAll('.cal-day')].map(d => ({ sol: d.querySelector('[data-nuevo=sol]')?.dataset.nuevoDia || null, con: d.querySelector('[data-nuevo=con]')?.dataset.nuevoDia || null }));
+    out.dias = dias.length; out.conSol = dias.filter(d => d.sol).length; out.conCon = dias.filter(d => d.con).length; out.solPasado = dias.some(d => d.sol && d.sol < t);
+    const dia = dias.find(d => d.sol && d.sol >= t).sol; out.dia = dia;
+    cb().querySelector('[data-nuevo=sol][data-nuevo-dia="' + dia + '"]').click(); await w(1200);
+    const b2 = () => document.getElementById('ceBody');
+    out.abierto = [document.getElementById('dlgCentro').open, b2().dataset.vista, !b2().querySelector('#ceForm').hidden, b2().querySelector('#cfT')?.textContent];
+    out.fechas = [b2().querySelector('#cfDesde')?.value, b2().querySelector('#cfHasta')?.value];
+    const set2 = (id, v) => { const e = b2().querySelector('#' + id); e.value = v; e.dispatchEvent(new Event('input', { bubbles: true })); e.dispatchEvent(new Event('change', { bubbles: true })); };
+    set2('cfPunto', 'roquetas'); await w(300); b2().querySelector('[data-pick="0"]').click(); await w(300); set2('cfN', '2'); set2('cfOng', 'ONG Calendario E2E'); b2().querySelector('#cfGuardar').click(); await w(3000);
+    const r = await rel(); const a = r.permit_applications.find(x => x.organization === 'ONG Calendario E2E'); out.guardada = a ? [a.requested_from, a.requested_until, a.status] : null; out.aviso = b2().querySelector('#ceAviso').textContent;
+    /* concesión desde un día, con el filtro de ONG del Calendario */
+    document.getElementById('ceClose').click(); await w(200); document.getElementById('menuBtn').click(); document.getElementById('calBtn').click(); await w(900);
+    const oc = cb().querySelector('#calOng'); const ong = [...oc.options].find(o => o.value); if (ong) { oc.value = ong.value; oc.dispatchEvent(new Event('change', { bubbles: true })); await w(400); }
+    const dCon = cb().querySelector('[data-nuevo=con]').dataset.nuevoDia; cb().querySelector('[data-nuevo=con][data-nuevo-dia="' + dCon + '"]').click(); await w(1200);
+    out.con = [b2().querySelector('#cfT')?.textContent, b2().querySelector('#cfDesde')?.value === dCon, b2().querySelector('#cfHasta')?.value === dCon, ong ? b2().querySelector('#cfOng')?.value === ong.value : null];
+    b2().querySelector('#cfCancelar')?.click(); await w(200);
+    return out;`);
+  ok(r3g.dias === 7 && r3g.conCon === 7 && r3g.conSol >= 1 && r3g.conSol < 7 && !r3g.solPasado, "cada día del Calendario ofrece «+ Concesión»; «+ Solicitud» solo desde hoy [" + r3g.conSol + "/" + r3g.conCon + "]");
+  eq([r3g.abierto[0], r3g.abierto[1], r3g.abierto[2], r3g.abierto[3]], [true, "sol", true, "Nueva solicitud"], "«+ Solicitud» abre el Centro con el formulario de nueva solicitud");
+  eq(r3g.fechas, [r3g.dia, r3g.dia], "el formulario llega con la fecha del día elegido (desde y hasta)");
+  eq(r3g.guardada, [r3g.dia, r3g.dia, "pending"], "la solicitud creada desde el día se guarda con esa fecha [" + r3g.aviso + "]");
+  eq(r3g.con.slice(0, 3), ["Nueva concesión", true, true], "«+ Concesión» abre el formulario con la fecha del día"); ok(r3g.con[3] !== false, "…y con la ONG que se estaba filtrando en el Calendario");
+
   /* ===== 3d. Coherencia de cifras: las tablas fuente, recalculadas aquí de forma independiente, frente al Centro (menú y Resumen), el Panel y el Calendario ===== */
   const r3d = await ev(ayudas + `
     const out = {}; const rel = () => fetch('http://127.0.0.1:8766/__rel').then(r => r.json()); const t = today();
@@ -309,7 +360,7 @@ const main = async () => {
     capCal.forEach((n, k) => { const pv = provDe.get(k.split('|')[0]); if (pv) out.autPorProv[pv] = (out.autPorProv[pv] || 0) + n; });
     /* Centro: etiquetas del menú y tarjetas del Resumen */
     document.getElementById('dlgCentro').open || (document.getElementById('menuBtn').click(), document.getElementById('centroBtn').click(), await w(1200));
-    nav('res'); await w(400); const num = (el) => el && !el.hidden ? +el.textContent : 0;
+    nav('res'); await w(300); set('ceProv', ''); await w(200); set('ceOng', ''); await w(300); const num = (el) => el && !el.hidden ? +el.textContent : 0;
     out.menu = { pendientes: num(b().querySelector('#ceNav [data-vista=sol] .n')), vigentes: num(b().querySelector('#ceNav [data-vista=con] .n')), segVencidos: num(b().querySelector('#ceNav [data-vista=seg] .n')) };
     const k = [...b().querySelectorAll('.ce-kpis .kpi')].map(x => +x.querySelector('b').textContent); out.resumen = { pendientes: k[0], estancadas: k[1], vigentes: k[2], segVencidos: k[4] };
     /* Panel resumen */
