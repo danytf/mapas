@@ -1,0 +1,32 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/13401733757;Tren;Son Fuster Vell;Palma;39.595466;2.671493;etiqueta station=light_rail
+descartado;node/13401733758;Tren;Son Castelló;Palma;39.602348;2.672247;etiqueta station=light_rail
+descartado;node/13401733759;Tren;Gran via Asima;Palma;39.606385;2.668754;etiqueta station=light_rail
+descartado;node/13401733760;Tren;Camí dels Reis;Palma;39.61051;2.665179;etiqueta station=light_rail
+descartado;node/1362170795;Tren;UIB;Palma;39.634609;2.648001;etiqueta station=light_rail
+descartado;node/1818610787;Autobús;Estació d'autobusos de Sant Antoni;Sant Antoni de Portmany;38.981324;1.306434;etiqueta public_transport=platform
+descartado;node/3960299858;Autobús;;Ciutadella;39.997139;3.833913;sin nombre en OpenStreetMap
+descartado;node/5089585421;Autobús;;Palma;39.547196;2.729587;sin nombre en OpenStreetMap
+por revisar;node/5216013158;Tren;Estación de tren de Palma – Carrer d'Eusebi Estada;Palma;39.576803;2.653874;posible duplicado de node/5263686386 (Plaça d'Espanya) a 56 m
+descartado;node/5263686385;Tren;Son Sardina;Palma;39.620656;2.661223;etiqueta station=light_rail
+por revisar;node/5263686386;Tren;Estación de tren de Plaça d'Espanya (Palma) – Pl. d'Espanya;Palma;39.576457;2.654359;posible duplicado de node/5216013158 (Palma) a 56 m
+descartado;node/6135118008;Autobús;Inca Llevant 1 (Inca);Inca;39.715984;2.916181;etiqueta public_transport=platform
+descartado;node/6391882118;Tren;ParcBit;Palma;39.634413;2.636478;etiqueta station=light_rail
+descartado;node/8043190541;Tren;Jacint Verdaguer;Palma;39.580054;2.659969;etiqueta station=light_rail
+descartado;node/8045413471;Tren;Son Cladera - Es Vivero;Palma;39.593485;2.679338;etiqueta station=light_rail
+descartado;node/8048726800;Tren;es Pont d'Inca;Marratxí;39.59812;2.691732;etiqueta station=light_rail
+descartado;node/8048727321;Tren;Son Costa - Son Fortesa;Palma;39.58417;2.665794;etiqueta station=light_rail
+descartado;node/8048740478;Tren;Son Fuster;Palma;39.590201;2.674606;etiqueta station=light_rail
+descartado;node/8048748498;Tren;Verge de Lluc;Palma;39.596766;2.686395;etiqueta station=light_rail
+descartado;node/8599841959;Autobús;Estació Intermodal (Palma);Palma;39.576557;2.655454;etiqueta public_transport=platform
+descartado;way/181752411;Autobús;;Manacor;39.570023;3.202341;sin nombre en OpenStreetMap
+descartado;way/202955301;Autobús;;Sineu;39.643088;3.014622;sin nombre en OpenStreetMap
+descartado;way/23950615;Tren;Polígon de Marratxí;Marratxí;39.615485;2.716769;etiqueta station=light_rail
+descartado;way/54639778;Autobús;;Manacor;39.540702;3.334751;sin nombre en OpenStreetMap
+descartado;way/886761002;Tren;;Marratxí;39.62914;2.731337;sin nombre en OpenStreetMap
+descartado;way/893281134;Autobús;;Palma;39.548175;2.729092;sin nombre en OpenStreetMap
+descartado;way/893281135;Autobús;;Palma;39.547681;2.729271;sin nombre en OpenStreetMap
+descartado;way/893281137;Autobús;;Palma;39.54708;2.729944;sin nombre en OpenStreetMap
+descartado;way/893281138;Autobús;;Palma;39.546738;2.730211;sin nombre en OpenStreetMap
+descartado;way/893281139;Autobús;;Palma;39.546395;2.730475;sin nombre en OpenStreetMap
+descartado;way/893281140;Autobús;;Palma;39.546076;2.730741;sin nombre en OpenStreetMap

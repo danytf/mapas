@@ -1,0 +1,4 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/2243153750;;El Corte Inglés;Palma;39.549804;2.736482;duplicado en el lote de node/2243153720 (48 m)
+descartado;node/2243153757;;El Corte Inglés;Palma;39.550083;2.736239;duplicado en el lote de node/2243153720 (67 m)
+descartado;way/91885963;;IKEA;Palma;39.566901;2.678545;duplicado en el lote de way/370942116 (102 m)

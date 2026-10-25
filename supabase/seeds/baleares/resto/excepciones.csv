@@ -1,0 +1,198 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/10116445432;;;Sant Llorenç des Cardassar;39.578964;3.376562;sin nombre en OpenStreetMap
+descartado;node/10135894549;;;Calvià;39.538832;2.591957;sin nombre en OpenStreetMap
+descartado;node/10250881342;;Supermercat des Port;es Castell;39.877898;4.291852;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/1075471259;;Carrefour;Palma;39.551283;2.621517;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/10978619672;;;es Migjorn Gran;39.914186;4.044302;sin nombre en OpenStreetMap
+descartado;node/11039451953;;;Sant Josep de sa Talaia;38.970682;1.286317;sin nombre en OpenStreetMap
+descartado;node/11135878930;;Cife Supermercats;es Mercadal;40.047785;4.110979;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/11163372905;;Nou Mercat;Ciutadella;40.000853;3.840016;duplicado en el lote de node/4128049913 (71 m)
+descartado;node/11264224883;;;Manacor;39.465474;3.279467;sin nombre en OpenStreetMap
+descartado;node/11591749317;;;Sant Josep de sa Talaia;38.887518;1.406096;sin nombre en OpenStreetMap
+descartado;node/11645242278;;Aprop supermercats;Porreres;39.512078;3.026869;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/11775256183;;;Campos;39.427125;3.024878;sin nombre en OpenStreetMap
+descartado;node/11813476311;;;Sant Josep de sa Talaia;38.967271;1.296754;sin nombre en OpenStreetMap
+descartado;node/11873537467;;;Inca;39.721075;2.913417;sin nombre en OpenStreetMap
+descartado;node/11886716849;;;Sant Josep de sa Talaia;38.970725;1.282268;sin nombre en OpenStreetMap
+descartado;node/11887059737;;;Sant Josep de sa Talaia;38.97067;1.280973;sin nombre en OpenStreetMap
+descartado;node/11935434787;;;Santa Margalida;39.76828;3.148963;sin nombre en OpenStreetMap
+descartado;node/11935515569;;;Santa Margalida;39.768767;3.150857;sin nombre en OpenStreetMap
+descartado;node/12127936362;;;Sant Antoni de Portmany;38.984452;1.298728;sin nombre en OpenStreetMap
+descartado;node/12127952374;;;Sant Antoni de Portmany;38.979709;1.306421;sin nombre en OpenStreetMap
+descartado;node/12134342377;;;Santa Eulària des Riu;38.982783;1.511847;sin nombre en OpenStreetMap
+descartado;node/12351437002;;;Sant Antoni de Portmany;38.962185;1.308966;sin nombre en OpenStreetMap
+descartado;node/12700603821;;;Sant Antoni de Portmany;38.982593;1.30073;sin nombre en OpenStreetMap
+descartado;node/13040774906;;Supermercat;es Migjorn Gran;39.91553;4.040518;nombre generico o dudoso en OpenStreetMap: Supermercat
+descartado;node/1309179449;;;Pollença;39.874685;3.017346;sin nombre en OpenStreetMap
+descartado;node/13115908965;;;Calvià;39.509851;2.540286;sin nombre en OpenStreetMap
+descartado;node/13866688677;;Supermercat;Formentera;38.721392;1.456998;nombre generico o dudoso en OpenStreetMap: Supermercat
+descartado;node/14031569490;;;Palma;39.578944;2.650034;sin nombre en OpenStreetMap
+descartado;node/14031569492;;;Palma;39.579131;2.649829;sin nombre en OpenStreetMap
+descartado;node/1441731874;;Centre de Salut;es Mercadal;39.986817;4.092563;nombre generico o dudoso en OpenStreetMap: Centre de Salut
+descartado;node/1499045224;;Mercadona;Palma;39.575824;2.640812;duplicado en el lote de node/13828848376 (27 m)
+descartado;node/1752659783;;;Maó;39.892216;4.297415;sin nombre en OpenStreetMap
+descartado;node/1756736197;;;es Mercadal;40.020728;4.180484;sin nombre en OpenStreetMap
+descartado;node/1768403691;;;Alaior;39.909796;4.067882;sin nombre en OpenStreetMap
+descartado;node/1843372338;;Ajuntament;Eivissa;38.907082;1.437992;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/1867153553;;;Sant Antoni de Portmany;38.970787;1.310165;sin nombre en OpenStreetMap
+descartado;node/1891370243;;;Sant Antoni de Portmany;38.971741;1.307247;sin nombre en OpenStreetMap
+descartado;node/1912996834;;;Capdepera;39.744949;3.430183;sin nombre en OpenStreetMap
+descartado;node/1949001788;;Spar;Sant Llorenç des Cardassar;39.59832;3.382909;duplicado en el lote de node/1935711315 (103 m)
+descartado;node/1963309150;;;Ciutadella;39.98264;3.83644;sin nombre en OpenStreetMap
+descartado;node/1964262977;;;Llucmajor;39.363073;2.836526;sin nombre en OpenStreetMap
+descartado;node/2154673399;;Mini Market;Calvià;39.532655;2.459965;nombre generico o dudoso en OpenStreetMap: Mini Market
+descartado;node/2241354741;;;Sant Josep de sa Talaia;38.87951;1.402211;sin nombre en OpenStreetMap
+descartado;node/2489250832;;;Sant Josep de sa Talaia;38.942205;1.235858;sin nombre en OpenStreetMap
+descartado;node/2700138179;;;Sant Joan de Labritja;39.079624;1.439681;sin nombre en OpenStreetMap
+descartado;node/2727936374;;;Alaró;39.703973;2.792338;sin nombre en OpenStreetMap
+descartado;node/283189809;;Spar;Alcúdia;39.842345;3.128781;duplicado en el lote de node/283189782 (75 m)
+descartado;node/283189967;;Spar;Alcúdia;39.842098;3.129746;duplicado en el lote de node/283189782 (78 m)
+descartado;node/2865322793;;;Muro;39.807265;3.115264;sin nombre en OpenStreetMap
+descartado;node/2945329633;;;Palma;39.53512;2.712385;sin nombre en OpenStreetMap
+descartado;node/296859509;;Spar;Capdepera;39.718704;3.458876;duplicado en el lote de node/3049417847 (99 m)
+descartado;node/3073487835;;;Capdepera;39.658268;3.440094;sin nombre en OpenStreetMap
+descartado;node/3077322107;;;Felanitx;39.47197;3.144982;sin nombre en OpenStreetMap
+descartado;node/317661778;;;Palma;39.523128;2.739108;sin nombre en OpenStreetMap
+descartado;node/3178557825;;Spar;Capdepera;39.709878;3.459473;duplicado en el lote de node/3049417846 (40 m)
+descartado;node/3296478327;;Mercat Nou;Eivissa;38.909148;1.427035;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/3297003284;;Spar;Eivissa;38.906082;1.423382;duplicado en el lote de node/3296338160 (81 m)
+descartado;node/3308415876;;;Formentera;38.687376;1.443841;sin nombre en OpenStreetMap
+descartado;node/3325171826;;Eroski;Eivissa;38.90963;1.427897;duplicado en el lote de node/3296479343 (72 m)
+descartado;node/3531391828;;;es Migjorn Gran;39.915726;4.038805;sin nombre en OpenStreetMap
+descartado;node/3544682522;;;Santanyí;39.375084;3.22993;sin nombre en OpenStreetMap
+descartado;node/3555602893;;Spar;Santanyí;39.376203;3.232512;duplicado en el lote de node/3555602393 (84 m)
+descartado;node/3688125971;;HiperDino Express Supermarcat;Calvià;39.520574;2.472169;duplicado en el lote de node/6049850571 (47 m)
+descartado;node/3693596741;;;Ciutadella;39.926768;3.833727;sin nombre en OpenStreetMap
+descartado;node/3901315135;;;Palma;39.580274;2.655944;sin nombre en OpenStreetMap
+descartado;node/4076444341;;;Palma;39.570621;2.652232;sin nombre en OpenStreetMap
+descartado;node/4082482537;;;Lloseta;39.717022;2.868839;sin nombre en OpenStreetMap
+descartado;node/4290889321;;Spar;Capdepera;39.710213;3.460348;duplicado en el lote de node/3049417846 (52 m)
+descartado;node/4311385706;;Spar;Capdepera;39.714025;3.46015;duplicado en el lote de node/3045779147 (146 m)
+descartado;node/4312990255;;Spar;Capdepera;39.717708;3.46052;duplicado en el lote de node/3049417847 (87 m)
+descartado;node/4330776435;;Spar;Capdepera;39.706488;3.456452;duplicado en el lote de node/4330776420 (82 m)
+descartado;node/4426431976;;Supermercado;Ferreries;39.938922;3.964184;nombre generico o dudoso en OpenStreetMap: Supermercado
+descartado;node/4486567390;;;Muro;39.810034;3.115609;sin nombre en OpenStreetMap
+descartado;node/4488202084;;;Inca;39.71844;2.910709;sin nombre en OpenStreetMap
+descartado;node/4488258014;;;Lloseta;39.714785;2.866705;sin nombre en OpenStreetMap
+descartado;node/4503126342;;Ajuntament;Valldemossa;39.709191;2.621763;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/4579376782;;Spar;Pollença;39.903416;3.080542;duplicado en el lote de node/2894352811 (50 m)
+descartado;node/4579795821;;;Palma;39.551686;2.621948;sin nombre en OpenStreetMap
+descartado;node/4597271228;;Spar;Pollença;39.905126;3.080646;duplicado en el lote de node/2894352811 (148 m)
+descartado;node/461265272;;Spar;Sant Llorenç des Cardassar;39.570273;3.375349;duplicado en el lote de node/3198420898 (24 m)
+descartado;node/461811069;;Carrefour;Palma;39.552517;2.706316;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/4687792125;;;Palma;39.579943;2.66183;sin nombre en OpenStreetMap
+descartado;node/4705878739;;;Sant Josep de sa Talaia;38.890404;1.408743;sin nombre en OpenStreetMap
+descartado;node/4905187258;;;Calvià;39.507829;2.530216;sin nombre en OpenStreetMap
+descartado;node/4929117522;;;Ciutadella;40.000221;3.845471;sin nombre en OpenStreetMap
+descartado;node/4933219321;;;Ciutadella;40.00335;3.81255;sin nombre en OpenStreetMap
+descartado;node/4979794951;;Spar;Son Servera;39.601247;3.385178;duplicado en el lote de node/1787248415 (130 m)
+descartado;node/5044805226;;;Formentera;38.68917;1.462988;sin nombre en OpenStreetMap
+descartado;node/5046872423;;;Formentera;38.722884;1.453838;sin nombre en OpenStreetMap
+descartado;node/5147376633;;;es Mercadal;40.044067;4.110114;sin nombre en OpenStreetMap
+descartado;node/5147403450;;;es Mercadal;40.029684;4.164584;sin nombre en OpenStreetMap
+descartado;node/5147414301;;;es Mercadal;40.006978;4.193178;sin nombre en OpenStreetMap
+descartado;node/5147443541;;;Alaior;39.874624;4.135191;sin nombre en OpenStreetMap
+descartado;node/514968580;;;Ciutadella;40.00257;3.800762;sin nombre en OpenStreetMap
+descartado;node/5427540993;;;Andratx;39.573402;2.420528;sin nombre en OpenStreetMap
+descartado;node/5452317186;;Oficinas ayuntamiento;Santa Eulària des Riu;38.984002;1.532996;duplicado en el lote de node/5451913660 (73 m)
+descartado;node/5584700366;;;Sant Lluís;39.814673;4.281273;sin nombre en OpenStreetMap
+descartado;node/5599891254;;;Sant Josep de sa Talaia;38.965724;1.267928;sin nombre en OpenStreetMap
+descartado;node/5622925504;;Supermercat;es Castell;39.874314;4.298094;nombre generico o dudoso en OpenStreetMap: Supermercat
+descartado;node/5633633162;;;Sant Llorenç des Cardassar;39.569831;3.370788;sin nombre en OpenStreetMap
+descartado;node/5751835552;;;Muro;39.789764;3.127605;sin nombre en OpenStreetMap
+descartado;node/6240564007;;Spar;Calvià;39.537883;2.452541;duplicado en el lote de node/2322879639 (95 m)
+descartado;node/6266078649;;Spar;Sant Llorenç des Cardassar;39.576706;3.375179;duplicado en el lote de node/11078745712 (54 m)
+descartado;node/6453981141;;;Calvià;39.537235;2.447366;sin nombre en OpenStreetMap
+descartado;node/6879536495;;;Sant Llorenç des Cardassar;39.56774;3.373147;sin nombre en OpenStreetMap
+descartado;node/6894060811;;Spar;Eivissa;38.892974;1.408977;duplicado en el lote de node/4706557729 (128 m)
+descartado;node/7293175281;;;Ciutadella;39.983364;3.835245;sin nombre en OpenStreetMap
+descartado;node/735769989;;;Manacor;39.513352;3.217059;sin nombre en OpenStreetMap
+descartado;node/7430979491;;;Palma;39.570581;2.638301;sin nombre en OpenStreetMap
+descartado;node/7524284651;;;es Mercadal;40.021798;4.186916;sin nombre en OpenStreetMap
+descartado;node/7533562471;;;Sant Josep de sa Talaia;38.959888;1.309818;sin nombre en OpenStreetMap
+descartado;node/7533562478;;;Sant Antoni de Portmany;38.960118;1.31005;sin nombre en OpenStreetMap
+descartado;node/7626085760;;;Palma;39.549765;2.701953;sin nombre en OpenStreetMap
+descartado;node/7728617765;;;Santa Margalida;39.76617;3.152459;sin nombre en OpenStreetMap
+descartado;node/7899577869;;;Palma;39.570715;2.634517;sin nombre en OpenStreetMap
+descartado;node/8576815300;;;Manacor;39.563863;3.213265;sin nombre en OpenStreetMap
+descartado;node/8779238530;;;Sant Josep de sa Talaia;38.912208;1.224954;sin nombre en OpenStreetMap
+descartado;node/888448002;;Spar;Alcúdia;39.831105;3.117688;duplicado en el lote de node/5026952504 (36 m)
+descartado;node/915447559;;Ajuntament;Llucmajor;39.491163;2.891281;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;node/9198093513;;;Maó;39.889204;4.258164;sin nombre en OpenStreetMap
+descartado;node/925237425;;Spar;Santanyí;39.377394;3.237485;duplicado en el lote de node/3040132669 (124 m)
+descartado;node/960854160;;Spar;Pollença;39.909473;3.085173;duplicado en el lote de node/1745594028 (144 m)
+descartado;node/9770649515;;;Ciutadella;39.941332;3.957179;sin nombre en OpenStreetMap
+descartado;node/9888463492;;;Llucmajor;39.474441;2.828107;sin nombre en OpenStreetMap
+descartado;node/9908127797;;Spar;Sant Llorenç des Cardassar;39.597201;3.383877;duplicado en el lote de node/1935711315 (98 m)
+descartado;node/9908127984;;Spar;Sant Llorenç des Cardassar;39.598296;3.382811;duplicado en el lote de node/1935711315 (100 m)
+descartado;node/9930343587;;Spar;Sant Llorenç des Cardassar;39.597178;3.384295;duplicado en el lote de node/1935711315 (133 m)
+descartado;node/9930355814;;Spar;Sant Llorenç des Cardassar;39.598687;3.384325;duplicado en el lote de node/2921803009 (52 m)
+descartado;node/9930355815;;;Sant Llorenç des Cardassar;39.597355;3.38433;sin nombre en OpenStreetMap
+descartado;node/9930372118;;;Sant Llorenç des Cardassar;39.599502;3.384689;sin nombre en OpenStreetMap
+descartado;relation/14785872;;Psiquiàtric;Palma;39.584404;2.643219;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;way/1022981975;;;Calvià;39.51122;2.529753;sin nombre en OpenStreetMap
+descartado;way/1105413870;;;Calvià;39.540399;2.581739;sin nombre en OpenStreetMap
+descartado;way/1158839653;;Spar;Sant Llorenç des Cardassar;39.569687;3.37327;duplicado en el lote de node/3078093680 (75 m)
+descartado;way/1213022100;;Ibiza Gallery;Sant Josep de sa Talaia;38.883897;1.403458;duplicado en el lote de way/1211923139 (80 m)
+descartado;way/1219071878;;;Palma;39.585791;2.642178;sin nombre en OpenStreetMap
+descartado;way/1224893797;;Carrefour Express;Andratx;39.543909;2.390392;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/126391125;;Ajuntament;sa Pobla;39.769795;3.024783;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/1274169516;;Spar;Sant Josep de sa Talaia;38.890249;1.407204;duplicado en el lote de node/3710350297 (141 m)
+descartado;way/1284706960;;Cruz Roja;Palma;39.584102;2.653289;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada)
+descartado;way/1316848980;;;Palma;39.516543;2.74623;sin nombre en OpenStreetMap
+descartado;way/145311246;;Centre de Salut;Calvià;39.5267;2.536166;nombre generico o dudoso en OpenStreetMap: Centre de Salut
+descartado;way/146736757;;;Calvià;39.503572;2.531032;sin nombre en OpenStreetMap
+descartado;way/146736759;;;Calvià;39.503205;2.530755;sin nombre en OpenStreetMap
+descartado;way/146736761;;;Calvià;39.50461;2.531807;sin nombre en OpenStreetMap
+descartado;way/146897364;;;Calvià;39.510512;2.531008;sin nombre en OpenStreetMap
+descartado;way/146897366;;;Calvià;39.510569;2.532469;sin nombre en OpenStreetMap
+descartado;way/154568352;;;Alaior;39.873117;4.135943;sin nombre en OpenStreetMap
+descartado;way/154568357;;;Alaior;39.872625;4.135836;sin nombre en OpenStreetMap
+descartado;way/157608940;;Carrefour;ses Salines;39.317006;2.996662;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/160775318;;;Marratxí;39.60521;2.700821;sin nombre en OpenStreetMap
+descartado;way/160932825;;Centre de Salut Verge del Toro;Maó;39.889227;4.271476;duplicado en el lote de node/4758348831 (3 m)
+descartado;way/208750955;;;Santanyí;39.351981;3.134392;sin nombre en OpenStreetMap
+descartado;way/278572290;;;Capdepera;39.687283;3.451284;sin nombre en OpenStreetMap
+descartado;way/288633881;;Spar;Son Servera;39.610668;3.388539;duplicado en el lote de node/2921843881 (141 m)
+descartado;way/290521642;;antic centre comercial Es Foro;Binissalem;39.696422;2.875622;etiqueta abandoned=yes
+descartado;way/294548595;;Ajuntament;Búger;39.75834;2.983272;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/296680161;;Centre de Salut;Felanitx;39.474857;3.153053;nombre generico o dudoso en OpenStreetMap: Centre de Salut
+descartado;way/296687771;;;Marratxí;39.60985;2.693691;sin nombre en OpenStreetMap
+descartado;way/296733025;;;Marratxí;39.611124;2.699517;sin nombre en OpenStreetMap
+descartado;way/298532960;;;Muro;39.805069;3.116808;sin nombre en OpenStreetMap
+descartado;way/303467222;;;Formentera;38.667617;1.516792;sin nombre en OpenStreetMap
+descartado;way/328436213;;Centre de salut;Capdepera;39.702547;3.431456;nombre generico o dudoso en OpenStreetMap: Centre de salut
+descartado;way/332464411;;Centre de Salut;Manacor;39.542553;3.335539;nombre generico o dudoso en OpenStreetMap: Centre de Salut
+descartado;way/338833491;;Centre de salut;Vilafranca de Bonany;39.57025;3.083494;nombre generico o dudoso en OpenStreetMap: Centre de salut
+descartado;way/347388669;;Centre de salut;Muro;39.737852;3.051446;nombre generico o dudoso en OpenStreetMap: Centre de salut
+descartado;way/356861025;;Carrefour;Sant Llorenç des Cardassar;39.580144;3.372913;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/377308805;;centre de salut;Son Servera;39.617163;3.361192;nombre generico o dudoso en OpenStreetMap: centre de salut
+descartado;way/378426346;;;Marratxí;39.63198;2.732807;sin nombre en OpenStreetMap
+descartado;way/396138122;;Ajuntament;Deià;39.748602;2.648315;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/406141005;;Centre de Salut;Lloseta;39.717507;2.866514;nombre generico o dudoso en OpenStreetMap: Centre de Salut
+descartado;way/448872430;;;Son Servera;39.622515;3.359827;sin nombre en OpenStreetMap
+descartado;way/458257989;;;Alcúdia;39.845124;3.122425;sin nombre en OpenStreetMap
+descartado;way/460074757;;Spar;Calvià;39.507531;2.531269;duplicado en el lote de node/3214175544 (50 m)
+descartado;way/462949748;;;Alaior;39.903012;4.073371;sin nombre en OpenStreetMap
+descartado;way/472886373;;;Marratxí;39.610102;2.688147;sin nombre en OpenStreetMap
+descartado;way/473445948;;;Andratx;39.570247;2.414174;sin nombre en OpenStreetMap
+descartado;way/481665060;;Spar;Alcúdia;39.833784;3.118077;duplicado en el lote de node/4350648191 (148 m)
+descartado;way/493599847;;;Sant Llorenç des Cardassar;39.581117;3.366872;sin nombre en OpenStreetMap
+descartado;way/49864873;;Carrefour;Palma;39.582448;2.63261;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/51829843;;Agromart;Palma;39.580633;2.624467;duplicado en el lote de node/10300590533 (54 m)
+descartado;way/520525588;;;Son Servera;39.613007;3.387529;sin nombre en OpenStreetMap
+descartado;way/532204365;;centre de salut;Esporles;39.666161;2.577995;nombre generico o dudoso en OpenStreetMap: centre de salut
+descartado;way/544406167;;Centre de Salut;Campos;39.428269;3.016364;nombre generico o dudoso en OpenStreetMap: Centre de Salut
+descartado;way/54518213;;Carrefour;Palma;39.594184;2.644787;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/574833405;;Ajuntament;Palma;39.569084;2.650428;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/672509272;;;Alcúdia;39.81862;3.112576;sin nombre en OpenStreetMap
+descartado;way/698867015;;;Ciutadella;39.972588;3.834255;sin nombre en OpenStreetMap
+descartado;way/698867017;;;Ciutadella;39.972612;3.834526;sin nombre en OpenStreetMap
+descartado;way/73492398;;Megasport;Palma;39.592091;2.637712;duplicado en el lote de way/73492375 (86 m)
+descartado;way/781609096;;Ajuntament;Lloseta;39.717238;2.864381;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/806349587;;;Palma;39.579369;2.679347;sin nombre en OpenStreetMap
+descartado;way/80948154;;Ajuntament;Calvià;39.563567;2.505094;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/844649983;;Ajuntament;Sóller;39.766097;2.715026;nombre generico o dudoso en OpenStreetMap: Ajuntament
+descartado;way/85289342;;Mallorca Fashion outlet;Marratxí;39.632495;2.732063;duplicado en el lote de relation/1272034 (51 m)
+descartado;way/855922874;;Lidl;Palma;39.585486;2.641591;duplicado en el lote de way/617366442 (50 m)
+descartado;way/916205561;;BIP BIP;Santa Margalida;39.760588;3.16723;duplicado en el lote de node/4943664627 (13 m)
