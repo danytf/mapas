@@ -247,6 +247,64 @@ const main = async () => {
   });
   eq(r3c.variantes.map((x) => x.puntoAntes > 0), [false, true], "la prueba cubre una concesión sin seguimiento del punto y otra con él");
 
+  /* ===== 3d. Coherencia de cifras: las tablas fuente, recalculadas aquí de forma independiente, frente al Centro (menú y Resumen), el Panel y el Calendario ===== */
+  const r3d = await ev(ayudas + `
+    const out = {}; const rel = () => fetch('http://127.0.0.1:8766/__rel').then(r => r.json()); const t = today();
+    const dias = (a, b) => Math.round((Date.parse(b) - Date.parse(a)) / 864e5), suma = (iso, n) => new Date(Date.parse(iso) + n * 864e5).toISOString().slice(0, 10);
+    const R = await rel(), apps = R.permit_applications, grants = R.permit_grants, abiertos = R.followups.filter(f => !f.completed_at && f.due_on);
+    const estSol = (a) => a.status === 'approved' ? 'aprobada' : a.status === 'denied' ? 'denegada' : a.status === 'withdrawn' ? 'retirada' : (a.requested_until && a.requested_until < t ? 'caducada' : 'pendiente');
+    const estCon = (g) => g.status === 'cancelled' ? 'cancelada' : (g.valid_from && g.valid_from > t) ? 'futura' : (g.valid_until && g.valid_until < t) ? 'terminada' : 'vigente';
+    const masProximo = (lista) => lista.slice().sort((a, b) => a.due_on.localeCompare(b.due_on))[0];
+    /* seguimientos que se muestran: el más próximo abierto de cada solicitud sin resolver, de cada concesión no cancelada (sin solicitud) y de cada punto */
+    const visibles = [];
+    for (const a of apps.filter(a => ['pendiente', 'caducada'].includes(estSol(a)))) { const f = masProximo(abiertos.filter(f => f.application_id === a.id)); if (f) visibles.push({ id: f.id, due: f.due_on, app: a.id }); }
+    for (const g of grants.filter(g => estCon(g) !== 'cancelada')) { const f = masProximo(abiertos.filter(f => f.grant_id === g.id && !f.application_id)); if (f) visibles.push({ id: f.id, due: f.due_on }); }
+    const porEst = new Map(); abiertos.filter(f => !f.application_id && !f.grant_id).forEach(f => { const v = porEst.get(f.establishment_id); if (!v || f.due_on < v.due_on) porEst.set(f.establishment_id, f); });
+    porEst.forEach(f => visibles.push({ id: f.id, due: f.due_on }));
+    const pend = apps.filter(a => estSol(a) === 'pendiente'), vig = grants.filter(g => estCon(g) === 'vigente');
+    const conSeg = new Set(visibles.filter(v => v.app).map(v => v.app));
+    const esp = { pendientes: pend.length, sinSeguimiento: pend.filter(a => !conSeg.has(a.id)).length, estancadas: pend.filter(a => a.requested_at && dias(a.requested_at, t) > UMBRAL_ESTANCADA).length,
+      sinRespuesta: apps.filter(a => estSol(a) === 'caducada').length, aprobadas: apps.filter(a => estSol(a) === 'aprobada').length, denegadas: apps.filter(a => estSol(a) === 'denegada').length, retiradas: apps.filter(a => estSol(a) === 'retirada').length,
+      segVencidos: visibles.filter(v => v.due < t).length, segHoy: visibles.filter(v => v.due === t).length, segProximos: visibles.filter(v => v.due > t && v.due <= suma(t, 7)).length,
+      vigentes: vig.length, futuras30: grants.filter(g => estCon(g) === 'futura' && g.valid_from <= suma(t, 30)).length, sinFin: vig.filter(g => !g.valid_until).length,
+      vencen7: vig.filter(g => g.valid_until && dias(t, g.valid_until) >= 0 && dias(t, g.valid_until) <= 7).length };
+    const cap = new Map(); vig.forEach(g => { const k = g.establishment_id + '|' + (g.organization || '').trim().toLowerCase(); cap.set(k, Math.max(cap.get(k) || 0, g.capturer_count || 0)); });
+    esp.autorizadosHoy = [...cap.values()].reduce((x, y) => x + y, 0); out.esp = esp;
+    /* El Calendario coloca cada concesión en días concretos: las que no tienen ni fecha de inicio ni de fin no aparecen en él (sí cuentan como vigentes en el Panel y el Centro). */
+    const capCal = new Map(); vig.filter(g => g.valid_from || g.valid_until).forEach(g => { const k = g.establishment_id + '|' + (g.organization || '').trim().toLowerCase(); capCal.set(k, Math.max(capCal.get(k) || 0, g.capturer_count || 0)); });
+    esp.autorizadosCalendario = [...capCal.values()].reduce((x, y) => x + y, 0); esp.sinFechas = vig.filter(g => !g.valid_from && !g.valid_until).length;
+    const provDe = new Map(CENTERS.map(c => [c.databaseId, c.provinceId])); out.autPorProv = {};
+    capCal.forEach((n, k) => { const pv = provDe.get(k.split('|')[0]); if (pv) out.autPorProv[pv] = (out.autPorProv[pv] || 0) + n; });
+    /* Centro: etiquetas del menú y tarjetas del Resumen */
+    document.getElementById('dlgCentro').open || (document.getElementById('menuBtn').click(), document.getElementById('centroBtn').click(), await w(1200));
+    nav('res'); await w(400); const num = (el) => el && !el.hidden ? +el.textContent : 0;
+    out.menu = { pendientes: num(b().querySelector('#ceNav [data-vista=sol] .n')), vigentes: num(b().querySelector('#ceNav [data-vista=con] .n')), segVencidos: num(b().querySelector('#ceNav [data-vista=seg] .n')) };
+    const k = [...b().querySelectorAll('.ce-kpis .kpi')].map(x => +x.querySelector('b').textContent); out.resumen = { pendientes: k[0], estancadas: k[1], vigentes: k[2], segVencidos: k[4] };
+    /* Panel resumen */
+    document.getElementById('ceClose').click(); await w(200); document.getElementById('menuBtn').click(); document.getElementById('panelBtn').click(); await w(800);
+    out.panel = {}; for (const key of Object.keys(esp)) { const el = document.querySelector('#pnBody [data-ind=' + key + '] b'); if (el) out.panel[key] = +el.textContent; }
+    const capEl = document.querySelector('#pnBody [data-ind=capacidadHoy] b'); if (capEl) out.panel.autorizadosHoy = +capEl.textContent;
+    document.getElementById('pnClose').click(); await w(200);
+    /* Calendario: captadores autorizados hoy */
+    document.getElementById('menuBtn').click(); document.getElementById('calBtn').click(); await w(800); const cb = () => document.getElementById('calBody');
+    const selP = cb().querySelector('#calProv'); out.calProvDefecto = selP.selectedOptions[0].textContent; const provs = [...selP.options].map(o => [o.value, o.textContent]);
+    const leeCal = async (valor) => { selP.value = valor; selP.dispatchEvent(new Event('change', { bubbles: true })); await w(400); cb().querySelector('[data-modo=mes]').click(); await w(400); cb().querySelector('.cal-m.hoy').click(); await w(400); const tt = cb().querySelector('.cal-day.today .cal-tot')?.innerText || ''; return +((tt.match(/(\\d+)\\s*autorizad/) || [])[1] || 0); };
+    out.calPorProv = {}; for (const [v, n] of provs) if (v) out.calPorProv[v] = [n, await leeCal(v)];
+    await leeCal('');
+    const tot = cb().querySelector('.cal-day.today .cal-tot')?.innerText || ''; out.calendario = { texto: tot.replace(/\\n/g, ' '), autorizados: +((tot.match(/(\\d+)\\s*autorizad/) || [])[1] || 0) };
+    document.getElementById('calClose')?.click(); await w(200);
+    return out;`);
+  const e = r3d.esp;
+  eq(r3d.menu, { pendientes: e.pendientes, vigentes: e.vigentes, segVencidos: e.segVencidos }, "menú del Centro = tablas fuente (pendientes, concesiones vigentes hoy, seguimientos atrasados)");
+  eq(r3d.resumen, { pendientes: e.pendientes, estancadas: e.estancadas, vigentes: e.vigentes, segVencidos: e.segVencidos }, "Resumen del Centro = tablas fuente");
+  eq(Object.keys(r3d.panel).length >= 10, true, "el Panel muestra al menos 10 de los indicadores comprobados (" + Object.keys(r3d.panel).join(",") + ")");
+  Object.entries(r3d.panel).forEach(([key, v]) => eq([key, v], [key, e[key]], "Panel «" + key + "» = tablas fuente"));
+  ok(e.sinFechas > 0 && e.autorizadosCalendario < e.autorizadosHoy, "hay concesiones vigentes sin fechas: cuentan en el Panel y el Centro (" + e.autorizadosHoy + ") pero el Calendario no puede colocarlas (" + e.autorizadosCalendario + ")");
+  eq(r3d.calendario.autorizados, e.autorizadosCalendario, "Calendario (todas las provincias): captadores autorizados hoy = tablas fuente con fechas [" + r3d.calendario.texto + "]");
+  ok(Object.keys(r3d.calPorProv).length >= 2, "el Calendario ofrece varias provincias");
+  Object.entries(r3d.calPorProv).forEach(([pv, [nombre, val]]) => eq([nombre, val], [nombre, r3d.autPorProv[pv] || 0], "Calendario de «" + nombre + "»: captadores autorizados hoy = tablas fuente"));
+  eq(Object.values(r3d.autPorProv).reduce((x, y) => x + y, 0), e.autorizadosCalendario, "la suma por provincias = el total del Calendario");
+
   /* ===== 4. Calendario, enlaces cruzados y almacenamiento local ===== */
   const r4 = await ev(ayudas + `
     const out = {}; document.getElementById('ceClose').click(); await w(200);
