@@ -18,15 +18,15 @@ assert.ok(/map\.on\("popupopen"[\s\S]{0,400}openFicha\(c\)/.test(html) && /map\.
 assert.ok(html.includes("const t = fichaToken; setTimeout(() => { if (t === fichaToken) closeFicha(); }, 0);"), "Cambiar de punto no debe cerrar y reabrir el panel");
 assert.ok(/main\.fi-open \{ grid-template-columns: 408px 1fr 440px; \}/.test(html), "El panel debe ser una tercera columna que no tape el mapa");
 
-// Contenido y orden: cabecera, estado, valoración, contacto y notas siempre visibles; después las pestañas.
-const orden = ["fi-top", "fi-state", "fi-rate", "fi-contact", "fi-tabs", "fi-foot"].map((k) => ficha.indexOf('class="' + k));
-assert.ok(orden.every((n, i) => n > 0 && (i === 0 || n > orden[i - 1])), "El orden de la ficha debe ser cabecera, estado, valoración, contacto, pestañas y pie");
+// Contenido y orden: cabecera, estado, valoración, contacto y notas siempre visibles; después la ubicación (desplegable).
+const orden = ["fi-top", "fi-state", "fi-rate", "fi-contact", "fi-loc", "fi-foot"].map((k) => ficha.indexOf('class="' + k));
+assert.ok(orden.every((n, i) => n > 0 && (i === 0 || n > orden[i - 1])), "El orden de la ficha debe ser cabecera, estado, valoración, contacto, ubicación y pie");
 assert.ok(ficha.includes('class="fi-addrrow"') && ficha.includes("Cómo llegar"), "La dirección y «Cómo llegar» van en la cabecera");
 assert.ok(ficha.includes('class="fi-flag"') && ficha.includes("f-rev"), "El aviso de ubicación por revisar y su acción van en la cabecera");
 assert.ok(ficha.includes("Próximo seguimiento") === true && html.includes("(toca ya)"), "El próximo seguimiento debe verse siempre");
 
 // Todo lo que usan los manejadores sigue existiendo (se localizan por clase).
-for (const k of ["pform", "ef", "pinfo", "stars", "sv", "f-contacto", "f-notas", "s-list", "h-list", "s-form", "h-form", "s-desde", "s-hasta", "s-n", "s-ong", "s-seg", "s-add", "s-cancel", "s-msg", "h-desde", "h-hasta", "h-n", "h-ong", "h-add", "h-cancel", "h-msg", "l-in", "l-address", "l-save-location", "l-mv", "l-cp", "lmsg", "l-gm", "f-save", "f-inact", "f-arch", "f-del", "f-rev", "saved"]) {
+for (const k of ["pform", "ef", "pinfo", "stars", "sv", "f-contacto", "f-notas", "f-centro", "fi-loc", "l-in", "l-address", "l-save-location", "l-mv", "l-cp", "lmsg", "l-gm", "f-save", "f-inact", "f-arch", "f-del", "f-rev", "saved"]) {
   assert.ok(ficha.includes(k), "Falta la clase " + k + " que usan los manejadores");
 }
 for (const k of ["setCommitControlsDisabled", "savePermits(c)", "gamPermit(c, previous.permit)", "gamRev(c)", "saveInactive()", "saveRemoved()", "reloadSharedPermit(c)", "dirty(false)", "setLoc(c, r[0], r[1], address)"]) {
@@ -36,7 +36,16 @@ assert.ok(ficha.includes('class="fi-menu"') && ficha.indexOf("f-inact") > ficha.
 assert.ok(ficha.includes('class="f-save">Guardar cambios') && ficha.indexOf("f-save") < ficha.indexOf('class="fi-more"'), "Guardar es la acción primaria y va antes de «Más acciones»");
 
 // Accesibilidad: pestañas, cierre, foco y Escape.
-assert.ok(ficha.includes('role="tablist"') && ficha.includes('setAttribute("role", "tab")') && ficha.includes("e.key === \"ArrowRight\"") && ficha.includes("b.tabIndex = on ? 0 : -1"), "Pestañas con patrón completo (flechas y tabindex itinerante)");
+// Los expedientes se gestionan solo en el Centro de permisos: la ficha no tiene formularios ni botones de solicitudes, concesiones o seguimientos.
+for (const k of ["s-add", "h-add", "s-list", "h-list", "s-form", "h-form", "ptabs", "role=\"tablist\"", "f-segpunto", "paintSols", "paintHist", "askReason", "fichaTabPedida", "ejecutaOpsRel"]) {
+  assert.ok(!html.slice(a, fin).includes(k), "La ficha ya no debe tener: " + k);
+}
+assert.ok(ficha.includes('<details class="fi-loc"><summary>Ubicación y dirección</summary>'), "La ubicación va en un desplegable con su summary");
+assert.ok(ficha.includes('class="f-centro">Gestionar permisos en el Centro') && ficha.includes('new CustomEvent("centro:abrir", { detail: { punto: c, vista: "sol", est: "todas" } })'), "El botón abre el Centro de permisos filtrado por este punto");
+assert.ok(ficha.includes('document.addEventListener("permisos:cambio", alCambiar)') && ficha.includes("paintEf()"), "Si el Centro cambia el punto, el resumen de la ficha se repinta con lo confirmado");
+// El guardado de la ficha parte de lo confirmado en memoria: no reescribe solicitudes, concesiones ni seguimientos (una ficha abierta no puede pisar lo hecho en el Centro).
+const iCommit = ficha.indexOf("const commit = async () => {"), commitFicha = ficha.slice(iCommit, ficha.indexOf('el.querySelectorAll(".stars button")', iCommit));
+assert.ok(commitFicha.includes("Object.assign({}, permits[permitKey(c)] || {}, { contacto:") && !/historial: hist|solicitudes = sols|sols\.forEach|hist\.forEach/.test(commitFicha), "Guardar en la ficha solo cambia contacto, notas y valoración"); 
 assert.ok(ficha.includes('aria-label="Cerrar la ficha"') && ficha.includes('class="fi-title" tabindex="-1"'), "Cerrar con nombre accesible y título enfocable");
 assert.ok(html.includes('fichaEl.addEventListener("keydown", (ev) => { if (ev.key === "Escape") map.closePopup(); });'), "Escape cierra la ficha");
 
@@ -53,7 +62,7 @@ assert.ok(!/font-size: (1[01](\.5)?|12\.5|13|13\.5|19)px/.test(css), "Los tamañ
 // con confirmación, escribiendo únicamente municipality_id (la base ya exige ser administrador) y sin guardar nada en el navegador.
 assert.ok(ficha.includes("(admin && c.provinceId ? '<div class=\"loc-muni\">"), "El bloque «Municipio» solo se pinta para administradores");
 assert.ok(html.includes('.from("municipalities").select("id, name", opts).eq("province_id", provId), "id")') && html.includes("municipiosConId(c.provinceId)"), "Los municipios ofrecidos son solo los de la provincia del punto");
-assert.ok(html.includes('if (k === "l" && cargaMuni) cargaMuni();'), "Los municipios se cargan al abrir la pestaña Ubicación, no al abrir cada ficha");
+assert.ok(ficha.includes('addEventListener("toggle", (e) => { if (e.target.open) { if (cargaMuni) cargaMuni(); if (cargaCp) cargaCp(); } })'), "Los municipios y el código postal se cargan al abrir el desplegable de ubicación, no al abrir cada ficha");
 assert.ok(ficha.includes('update({ municipality_id: sel.value }).eq("id", c.databaseId).select("id")'), "Solo se escribe municipality_id");
 assert.ok(ficha.includes("El cambio afecta a todos los usuarios.") && ficha.includes("window.confirm("), "El cambio pide confirmación");
 assert.ok(ficha.includes("res.data.length !== 1") && ficha.includes('friendlyError(res.error, "No se pudo cambiar el municipio.")'), "Un rechazo de la base se explica y no cambia nada en pantalla");
@@ -65,7 +74,6 @@ assert.ok(!/localStorage|sessionStorage|indexedDB|document\.cookie/.test(muni), 
 const cpBloque = html.slice(html.indexOf('const cb = el.querySelector(".loc-cp");'), html.indexOf('const rv = el.querySelector(".f-rev");'));
 assert.ok(cpBloque.length > 500, "No se encuentra el manejador del código postal");
 assert.ok(ficha.includes("(admin && c.databaseId ? '<div class=\"loc-cp\">"), "El bloque «Código postal» solo se pinta para administradores");
-assert.ok(html.includes('if (k === "l" && cargaCp) cargaCp();'), "El código postal se lee al abrir la pestaña Ubicación, no al abrir cada ficha");
 assert.ok(cpBloque.includes('update({ postal_code: nuevo }).eq("id", c.databaseId).select("id")'), "Solo se escribe postal_code");
 assert.ok(cpBloque.includes("/^\\d{5}$/.test(inp.value.trim())"), "El código postal debe tener 5 cifras");
 assert.ok(cpBloque.includes("res.data.length !== 1") && cpBloque.includes('friendlyError(res.error, "No se pudo guardar el código postal.")'), "Un rechazo de la base se explica");
@@ -75,8 +83,8 @@ assert.ok(!/localStorage|sessionStorage|indexedDB|document\.cookie/.test(cpBloqu
 assert.ok(/#ficha \.loc-muni \.lb, #ficha \.loc-cp \.lb \{[^}]*background: var\(--accent-soft\); color: var\(--accent\)/.test(css), "Los botones de municipio y código postal usan el fondo tintado de acento (el relleno pleno es de «Guardar cambios»)");
 assert.ok(/#ficha \.loc-muni \.lb:disabled, #ficha \.loc-cp \.lb:disabled \{[^}]*opacity: 1; background: var\(--bg\); color: var\(--muted\)/.test(css), "Desactivados se apagan sin parecer un campo de texto");
 
-// Los formularios de las pestañas no ensanchan el panel: la rejilla de pestañas y las columnas de fechas pueden encoger (antes salía una barra horizontal).
-assert.ok(/\.fi-tabs \{ display: grid; grid-template-columns: minmax\(0, 1fr\);/.test(html), "La rejilla de pestañas debe poder encoger");
-assert.ok(/#ficha \.row3 \{ display: grid; grid-template-columns: minmax\(0, 1fr\) minmax\(0, 1fr\) 84px;/.test(html) && html.includes("#ficha .row3 input { min-width: 0; }"), "Las columnas del formulario de solicitudes y concesiones deben poder encoger");
+// Sin restos de los formularios de permisos en los estilos, y el desplegable de ubicación y el botón del Centro tienen los suyos (con 44 px en táctil).
+assert.ok(!/\.fi-tabs|\.ptabs|\.row3|\.aform|ul\.fi-list/.test(css), "Los estilos de las pestañas y formularios de permisos de la ficha ya no deben existir");
+assert.ok(/#ficha details\.fi-loc \{/.test(css) && /#ficha \.fi-gestion button \{ width: 100%; \}/.test(css), "El desplegable de ubicación y el botón del Centro tienen estilo");
 
 console.log("Ficha del punto: comprobaciones estáticas correctas.");

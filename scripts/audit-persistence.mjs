@@ -208,8 +208,8 @@ if (commitStart < 0 || commitEnd < 0) {
       !/const leido = await reloadSharedPermit\(c\)/.test(permitCommit) ||
       !/setCommitControlsDisabled\(true\)/.test(permitCommit) ||
       !/setCommitControlsDisabled\(false\)/.test(permitCommit) ||
-      !/hist = clone\(base\.hist\); sols = clone\(base\.sols\)/.test(permitCommit) ||
-      !/paint\(\); paintHist\(\); paintSols\(\); paintEf\(\);/.test(permitCommit) ||
+      !/val = base\.val/.test(permitCommit) ||
+      !/paint\(\); paintEf\(\);/.test(permitCommit) ||
       !/gamPermit\(c, previous\.permit\)/.test(permitCommit)) {
     failures.push("El guardado de permisos debe bloquear ediciones concurrentes, revertir el estado ante fallo y otorgar progreso solo tras guardar.");
   }

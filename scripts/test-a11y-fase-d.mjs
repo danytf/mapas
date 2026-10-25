@@ -190,8 +190,6 @@ for (const [name, re] of [
   ["#status", /<div class="status" id="status" role="status">/],
   ["#n-msg (diálogo de alta)", /id="n-msg" role="status"/],
   ["#lgErr (acceso)", /id="lgErr" role="alert"/],
-  [".s-msg (solicitudes)", /class="s-msg fi-msg" role="status"/],
-  [".h-msg (concesiones)", /class="h-msg fi-msg" role="status"/],
   [".ef (estado del permiso)", /class="ef" aria-live="polite"/],
   [".saved (ficha)", /class="saved" role="status"/],
   [".lmsg (ubicación)", /class="lmsg" role="status"/],
@@ -204,7 +202,7 @@ if (!/function openFicha\(c\)[\s\S]{0,1200}\.fi-title"\)\.focus\(/.test(html)) f
 if (!/id="ficha" role="complementary" aria-label="Ficha del punto"/.test(html)) fail("la ficha no expone una región con nombre (role=complementary y aria-label)");
 if (!/fichaEl\.addEventListener\("keydown", \(ev\) => \{ if \(ev\.key === "Escape"\) map\.closePopup\(\)/.test(html)) fail("la ficha no se cierra con Escape cuando el foco está dentro");
 if (!/function closeFicha\(\)[\s\S]{0,700}ret\.focus\(/.test(html)) fail("al cerrar la ficha el foco no vuelve al elemento de la lista");
-if (!/class="ptabs" role="tablist"/.test(html) || !/e\.key === "ArrowRight"/.test(html) || !/b\.tabIndex = on \? 0 : -1/.test(html)) fail("las pestañas de la ficha deben seguir el patrón de pestañas (tablist, flechas y tabindex itinerante)");
+if (/class="ptabs"/.test(html) || !/<details class="fi-loc"><summary>/.test(html)) fail("la ficha ya no tiene pestañas de permisos: la ubicación va en un desplegable con summary");
 if (!/aria-label="Cerrar la ficha"/.test(html)) fail("el botón de cerrar la ficha necesita nombre accesible");
 if (!/o\.addEventListener\("keydown", \(ev\) => \{ if \(ev\.key === "Escape"\) close\(\); \}\)/.test(html)) fail("el aviso de nivel (alertdialog) no se cierra con Escape");
 if (!/const prev = document\.activeElement;[\s\S]{0,700}prev\.focus\(\)/.test(html)) fail("el aviso de nivel no devuelve el foco al cerrarse");
