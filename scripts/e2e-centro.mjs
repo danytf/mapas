@@ -133,10 +133,24 @@ const main = async () => {
     nav('sol'); b().querySelector('[data-new=sol]').click(); await w(300); set('cfPunto','roquetas'); await w(250); b().querySelector('[data-pick="0"]').click(); await w(250);
     set('cfDesde', d(5)); set('cfHasta', d(9)); set('cfN','3'); set('cfOng','ONG E2E'); set('cfSeg', d(2)); set('cfAccion','Llamar E2E'); b().querySelector('#cfGuardar').click(); await w(2800);
     r = await rel(); out.alta = [r.permit_applications.filter(a => a.organization === 'ONG E2E').length, r.followups.filter(f => f.next_action === 'Llamar E2E').length]; out.formCerrado = b().querySelector('#ceForm').hidden;
+    /* añadir un seguimiento a una solicitud ya guardada sin él: debe aparecer en la base y en la lista de Seguimientos */
+    b().querySelector('[data-new=sol]').click(); await w(300); set('cfPunto','roquetas'); await w(250); b().querySelector('[data-pick="0"]').click(); await w(250);
+    set('cfDesde', d(6)); set('cfHasta', d(10)); set('cfN','2'); set('cfOng','ONG SinSeg'); b().querySelector('#cfGuardar').click(); await w(2800);
+    r = await rel(); const appSin = r.permit_applications.find(a => a.organization === 'ONG SinSeg'); out.sinSeg = [!!appSin, appSin ? r.followups.filter(f => f.application_id === appSin.id).length : -1];
+    set('ceEst','todas'); await w(300);
+    const fila = [...b().querySelectorAll('#ceList tr.ce-row')].find(tr => tr.textContent.includes('ONG SinSeg')); out.filaSinSeg = !!fila;
+    fila.querySelector('.ce-pt').click(); await w(300); b().querySelector('#ceSide [data-act=ed]').click(); await w(400);
+    set('cfSeg', d(4)); set('cfAccion', 'Seguimiento añadido después'); b().querySelector('#cfGuardar').click(); await w(2800);
+    out.avisoSinSeg = b().querySelector('#ceAviso').textContent;
+    r = await rel(); out.trasEditar = appSin ? r.followups.filter(f => f.application_id === appSin.id && !f.completed_at && f.due_on === d(4)).length : -1;
+    nav('seg'); await w(250); set('ceEst','todas'); await w(300); out.enLista = [...b().querySelectorAll('#ceList tr')].filter(tr => tr.textContent.includes('Seguimiento añadido después')).length;
+    /* una solicitud ya resuelta no ofrece un seguimiento que luego se descartaría */
+    nav('sol'); await w(250); set('ceEst','aprobada'); await w(300); b().querySelector('#ceList tr.ce-row .ce-pt').click(); await w(300); b().querySelector('#ceSide [data-act=ed]').click(); await w(400);
+    out.resuelta = [!!b().querySelector('#cfSeg'), !!b().querySelector('#cfSinSeg'), !!b().querySelector('#cfDesde')]; b().querySelector('#cfCancelar').click(); await w(200);
     return out;`);
   eq([r2.aprobadas, r2.enlazada >= 1], [1, true], "conceder aprueba la solicitud y crea su concesión enlazada"); ok(/Aprobada y guardada/.test(r2.conceder), "conceder confirma tras verificar");
   ok(r2.motivoEnfocado && r2.denegadas === 1 && /Denegación guardada/.test(r2.denegar), "denegar con motivo desde el detalle");
-  eq([r2.cancelada, r2.reactivada], [1, 1], "cancelar con motivo y reactivar una concesión"); eq(r2.alta, [1, 1], "alta de solicitud con su seguimiento (una sola solicitud)"); ok(r2.formCerrado, "el formulario se cierra al guardar");
+  eq([r2.cancelada, r2.reactivada], [1, 1], "cancelar con motivo y reactivar una concesión"); eq(r2.alta, [1, 1], "alta de solicitud con su seguimiento (una sola solicitud)"); ok(r2.formCerrado, "el formulario se cierra al guardar"); eq(r2.sinSeg, [true, 0], "una solicitud sin seguimiento no crea ninguno"); ok(r2.filaSinSeg, "la solicitud sin seguimiento aparece en la lista"); eq(r2.trasEditar, 1, "añadir un seguimiento a una solicitud ya guardada lo crea en la base ["+r2.avisoSinSeg+"]"); eq(r2.enLista, 1, "…y aparece en la lista de Seguimientos"); eq(r2.resuelta, [false, true, true], "editar una solicitud resuelta no ofrece seguimiento y lo explica");
 
   /* ===== 3. Lotes y fallos: resultado por registro, conflicto, caída del servidor y reintento sin duplicados ===== */
   permitidos = [/\[Mapa\] (Error al guardar expedientes|Supabase rechazó una operación de expedientes|Error inesperado)/];
