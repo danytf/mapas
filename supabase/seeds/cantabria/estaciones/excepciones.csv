@@ -1,0 +1,30 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/12492170547;Autobús;Avda. Oviedo 1;Torrelavega;43.353733;-4.064728;etiqueta public_transport=platform
+por revisar;node/13333702366;Tren;Estación de tren de Mar (Polanco) – Barrio La Cantera;Polanco;43.398301;-4.010026;nombre dudoso en OpenStreetMap: Mar
+por revisar;node/13333883588;Tren;Estación de tren de Reinosa – Calle Casimiro Sainz;Reinosa;42.994772;-4.140447;posible duplicado de relation/6439767 (Estación de Renfe, ADIF) a 67 m
+por revisar;node/13389024737;Tren;Estación de tren de Boo (El Astillero) – Calle del Boo;El Astillero;43.410414;-3.841453;nombre dudoso en OpenStreetMap: Boo
+por revisar;node/13728429303;Tren;Estación de tren de Renedo (Piélagos) – Avenida de Luis de la Concha;Piélagos;43.353053;-3.949509;posible duplicado de way/432558973 (Renedo de Piélagos) a 5 m
+por revisar;node/3141688651;Autobús;Estación de autobuses de Parada Riocorvo (Cartes) – San José;Cartes;43.310962;-4.072589;nombre dudoso en OpenStreetMap: Parada Riocorvo
+descartado;node/3157032945;Autobús;Estación de ferrocarril de Sierrapando;Torrelavega;43.341814;-4.026698;etiqueta public_transport=platform
+descartado;node/3205243812;Autobús;Parada Riocorvo;Cartes;43.311123;-4.072803;duplicado en el lote de node/3141688651 (24 m)
+descartado;node/3206662375;Autobús;Hospital Sierrallana;Torrelavega;43.362469;-4.075161;duplicado en el lote de node/12492170553 (41 m)
+descartado;node/4402357590;Autobús;;Camaleño;43.150221;-4.653585;sin nombre en OpenStreetMap
+descartado;node/5888318522;Tren;Karrantza;Karrantza Harana / Valle de Carranza;43.23893;-3.357748;fuera de las provincias del lote (48)
+descartado;node/6570628980;Tren;Villaverde de Trucios;;43.241229;-3.25055;fuera de los municipios oficiales cargados
+descartado;node/9729363464;Autobús;Ganzo 71;Torrelavega;43.359968;-4.067063;etiqueta public_transport=platform
+descartado;node/9879276439;Tren;Mataporquera;Valdeolea;42.871206;-4.165059;duplicado en el lote de node/14273209205 (178 m)
+por revisar;relation/6439767;Tren;Estación de Renfe, ADIF (Reinosa) – Calle Casimiro Sainz;Reinosa;42.994344;-4.141032;posible duplicado de node/13333883588 (Reinosa) a 67 m
+descartado;relation/8522067;Tren;Las Caldas de Besaya;San Felices de Buelna;43.298593;-4.073231;duplicado en el lote de node/13389024738 (9 m)
+descartado;way/1027319949;Tren;Treto;Bárcena de Cicero;43.394181;-3.469289;duplicado en el lote de node/13333752667 (6 m)
+descartado;way/1081345493;Tren;Nueva Montaña;Santander;43.444714;-3.847189;duplicado en el lote de node/33727552 (34 m)
+descartado;way/1102282850;Tren;La Cantábrica;El Astillero;43.397294;-3.814935;duplicado en el lote de node/6283419316 (4 m)
+descartado;way/1356147727;Tren;;Bárcena de Cicero;43.42312;-3.524955;sin nombre en OpenStreetMap
+descartado;way/1356147728;Tren;;Bárcena de Cicero;43.423065;-3.524746;sin nombre en OpenStreetMap
+descartado;way/199117089;Autobús;Estación de autobuses de Laredo;Laredo;43.409651;-3.413237;duplicado en el lote de way/199117088 (8 m)
+descartado;way/21777514;Tren;Solares;Medio Cudeyo;43.387232;-3.731331;duplicado en el lote de node/13335703978 (9 m)
+descartado;way/342602313;Tren;;Rionansa;43.295938;-4.411478;sin nombre en OpenStreetMap
+descartado;way/372798985;Tren;Los Corrales de Buelna;Los Corrales de Buelna;43.255073;-4.063971;duplicado en el lote de node/13728429302 (9 m)
+descartado;way/432420156;Tren;Vioño;Piélagos;43.360635;-3.964901;duplicado en el lote de node/13728429304 (3 m)
+por revisar;way/432558973;Tren;Estación de tren de Renedo de Piélagos – Avenida de Luis de la Concha;Piélagos;43.353004;-3.949517;posible duplicado de node/13728429303 (Renedo) a 5 m
+descartado;way/589678628;Tren;Torrelavega-Centro;Torrelavega;43.350959;-4.051206;duplicado en el lote de node/13338126376 (10 m)
+descartado;way/706946792;Autobús;Estación de autobuses de Santander;Santander;43.459531;-3.80968;etiqueta public_transport=platform
