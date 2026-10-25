@@ -41,4 +41,4 @@ Previsto en solo lectura: 1 municipio nuevo y 21 puntos (la base pasaría de 10.
 ## Cierre (25/10/2026)
 - **Carga verificada en solo lectura:** 1 municipio (Ceuta) y 21 puntos, 21 `source_ref` `catalogo-ceuta:` distintos, todos activos, ninguno sin coordenadas, ningún código postal con formato distinto de 51xxx. Por categoría: Supermercado 6, Entidad oficial 6, Carrefour 3, Centro de salud 2, Centro comercial 2, Decathlon 1, Hospital 1. Total de la base 10.505 -> 10.526 y municipios 1.594 -> 1.595.
 - **Provincia:** Ceuta (51) ya estaba activa (`is_active = true`).
-- **Pendiente:** 11 códigos postales (0 calles). Sin asignar a usuarios hasta terminar España.
+- **Códigos postales (25/10/2026):** los 11 puntos sin código se consultaron con Nominatim inverso y se escribieron con `admin_set_postal_codes` desde la sesión de administrador (11 actualizados, 0 omitidos, 11 entradas en `audit_log`): 51001 (2), 51002 (7) y 51003 (2), todos de los códigos ya presentes en la ciudad. Quedan **0 sin código postal y 0 sin calle**. Sin asignar a usuarios hasta terminar España.
