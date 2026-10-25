@@ -6,7 +6,7 @@ Lee este fichero entero al empezar y después `docs/traspaso/ESTADO.md` y `docs/
 
 Aplicación web estática (`index.html` + Leaflet) publicada en GitHub Pages: https://danytf.github.io/mapas/ . Mapa de lugares de Granada donde solicitar permisos para equipos de captación de socios. Datos en Supabase (PostgreSQL con RLS), proyecto `wwoczmihhupofwmlmgga`. Repositorio `danytf/mapas`, rama `main`.
 
-Estamos en una auditoría integral por fases A-F (ver `docs/traspaso/ROADMAP.md`). A, B, C, D y E están cerradas y la Fase F (informe final, `docs/AUDITORIA_INFORME_FINAL_2026-10-19.md`) también: **la auditoría A-F está cerrada**. Lo que queda (auditorías futuras y tareas del titular) está en `docs/traspaso/ROADMAP.md`.
+Estamos en una auditoría integral por fases A-F (ver `docs/traspaso/ROADMAP.md`). A, B, C, D y E están cerradas y la Fase F (informe final, `docs/AUDITORIA_INFORME_FINAL_2026-10-19.md`) también: **la auditoría A-F está cerrada**. Lo que queda (auditorías futuras y tareas del titular) está en `docs/traspaso/ROADMAP.md`. El Centro de permisos (solicitudes, concesiones y seguimientos, única vía de gestión) y sus pendientes están en `ESTADO.md` y en la sección «Pendientes del Centro de permisos» del ROADMAP.
 
 ## Reglas inviolables (del titular)
 
@@ -91,7 +91,7 @@ node scripts/test-contadores-filtros.mjs
 node scripts/test-a11y-fase-d.mjs index.html
 ```
 
-Pruebas SQL: ver `docs/traspaso/PRUEBAS.md`. Un cambio de esquema exige migración + prueba + paso en `schema-smoke.yml`.
+Pruebas SQL y E2E: ver `docs/traspaso/PRUEBAS.md` (el E2E es `node scripts/e2e-centro.mjs`; los tres checks obligatorios de `main` son `audit`, `postgres-smoke` y `e2e-centro`). Un cambio de esquema exige migración + prueba + paso en `schema-smoke.yml`.
 
 ## Qué no hay en el repositorio
 

@@ -119,4 +119,15 @@ Estado: el Centro es la única vía para solicitudes, concesiones y seguimientos
 
 **Auditorías futuras** (ya listadas arriba): privacidad jurídica, observabilidad, identidad (duración de sesión y recuperación por correo), reversión real de un despliegue, repetir índices sin uso con 8-12 semanas de estadísticas (H-36), licencia comercial de Esri.
 
-**Ideas de mejora tomadas de repositorios abiertos:** ver la sección siguiente (se completa tras la revisión de la lista).
+**Hecho el 25/10/2026 (ya no son pendientes):** filtro por responsable en Seguimientos (#223), exportar CSV de las cuatro listas y crear desde un día del Calendario (#224), logo transparente y nombre «Centro de Gestión de Recursos», menú con secciones desplegables con solo Informes abierta (#225), asignar responsable en bloque (#215), insignias con ayuda (#213).
+
+**Ideas de mejora tomadas de repositorios abiertos (revisión del 25/10/2026; se leyeron los READMEs y páginas de funciones de Zammad, Plane, Frappe CRM/Helpdesk, EspoCRM, OpenProject y Chapter, no su código; el esfuerzo es estimación propia).** Ideas 1, 2 y 3 hechas (ver arriba). Pendientes, en el orden recomendado:
+- **4. Vistas guardadas y compartidas** (Zammad overviews, Frappe CRM, Plane): guardarlas en Supabase (no en el navegador). Migración + RLS + prueba. Esfuerzo M.
+- **5. Plazos de respuesta configurables / SLA** (Zammad, Frappe): hoy «estancada» son 15 días fijos (`UMBRAL_ESTANCADA`); por provincia u ONG y «vence en N días». Tabla de configuración. M.
+- **6. Historial por expediente visible** (Zammad): `audit_log` solo lo lee un administrador; abrir una vista con RLS por provincia. Migración + prueba SQL. M.
+- **7. Tabla de transiciones permitidas** (xstate): ya la imponen las funciones; documentar y probar. P, solo pruebas.
+- **8. Más edición múltiple** (Plane): siguiente acción, denegar con motivo común. P-M.
+- **9. Ficha única con notas y tareas por solicitud** (Frappe CRM): tabla nueva. M-G.
+- **10. «Novedades desde tu última visita»** (Zammad): guardar la última visita en Supabase. M.
+- **Descartadas por ahora:** tablero kanban con arrastrar (cambios accidentales), columnas a medida (la preferencia no puede ir al navegador), calendario iCal (enlace público con datos), menciones y seguir compañeros, portal de solo lectura para las ONG (decisión de producto).
+- Idea aparte: que el Calendario avise de las concesiones sin fechas que omite (ver punto 6 de arriba).
