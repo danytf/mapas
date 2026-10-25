@@ -196,6 +196,8 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/permit_workflow.sql
       - name: Run atomic permit action tests
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/permit_atomic.sql
+      - name: Run permit RPC province isolation tests
+        run: psql -v ON_ERROR_STOP=1 -f supabase/tests/permit_rpc_isolation.sql
       - name: Run follow-up cascade tests
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/followups_cascade.sql
       - name: Run assignee listing tests
