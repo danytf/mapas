@@ -3,7 +3,7 @@
 begin;
 
 create function pg_temp.u(sfx text) returns uuid language sql immutable as
-$$ select ('00000000-0000-4000-8000-0000000000' || sfx)::uuid $$;
+$$ select ('00000000-0000-4000-8000-00000000a7' || sfx)::uuid $$;
 
 select set_config('request.jwt.claim.sub', pg_temp.u('e1')::text, true);
 insert into auth.users (id, raw_user_meta_data)
