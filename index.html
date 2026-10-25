@@ -4868,7 +4868,10 @@ const csvCell = (value) => {
     const incsAmb = incidencias(recsAmb, t), ind = indicadores(recsAmb, segsAmb, t);
     /* Navegación con el número que pide atención en cada sección (con los filtros de provincia, ONG y punto) */
     const cnt = { sol: ind.pendientes.length, con: ind.vigentes.length, seg: ind.segVencidos.length, inc: incsAmb.filter((x) => x.sev !== "recomendacion").length };
-    body.querySelectorAll("#ceNav button").forEach((b) => { const v = b.dataset.vista; b.setAttribute("aria-current", v === vista ? "page" : "false"); const c = b.querySelector(".n"); if (c) { c.textContent = cnt[v]; c.classList.toggle("al", v === "seg" ? cnt[v] > 0 : v === "inc" ? incsAmb.some((x) => x.sev === "bloqueante") : false); c.hidden = !cnt[v]; } });
+    /* Cada número dice qué cuenta (también para lectores de pantalla); el nombre visible va primero. */
+    const QUE = { sol: ["pendiente", "pendientes"], con: ["vigente hoy", "vigentes hoy"], seg: ["vencido", "vencidos"], inc: ["aviso que revisar", "avisos que revisar"] };
+    body.querySelectorAll("#ceNav button").forEach((b) => { const v = b.dataset.vista; b.setAttribute("aria-current", v === vista ? "page" : "false"); const c = b.querySelector(".n"); if (c) { c.textContent = cnt[v]; c.classList.toggle("al", v === "seg" ? cnt[v] > 0 : v === "inc" ? incsAmb.some((x) => x.sev === "bloqueante") : false); c.hidden = !cnt[v];
+      const ayuda = plural(cnt[v], QUE[v][0], QUE[v][1]); b.title = ayuda; b.setAttribute("aria-label", b.firstChild.textContent.trim() + ": " + ayuda); } });
     body.querySelector("#ceHoy").textContent = "Hoy, " + fmtD(t).slice(0, 5) + " · " + plural(new Set(recsAmb.map((x) => x.c.id)).size, "punto con expedientes", "puntos con expedientes");
     body.querySelector("#ceAviso").textContent = aviso;
     body.querySelector("#cePunto").innerHTML = punto ? "<span>Solo «" + esc(punto.name) + "» · " + esc(townOf(punto)) + '</span><button type="button" class="ce-act" data-quita-punto="1">Ver todos los puntos</button>' : "";
