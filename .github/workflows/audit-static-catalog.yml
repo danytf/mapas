@@ -22,6 +22,7 @@ on:
       - "scripts/test-app-mejoras.mjs"
       - "scripts/test-calendario.mjs"
       - "scripts/test-centro.mjs"
+      - "scripts/test-persistencia-expedientes.mjs"
       - "scripts/test-expedientes.mjs"
       - "scripts/test-cabecera-filtros.mjs"
       - "scripts/test-texto-minimo.mjs"
@@ -74,6 +75,8 @@ jobs:
         run: node scripts/test-calendario.mjs
       - name: Test permits center section
         run: node scripts/test-centro.mjs
+      - name: Test permits persistence (partial writes, duplicates, conflicts)
+        run: node scripts/test-persistencia-expedientes.mjs
       - name: Test header indicators and collapsible filters
         run: node scripts/test-cabecera-filtros.mjs
       - name: Test minimum text size

@@ -1523,10 +1523,12 @@ const recargaRelPunto = async (c) => {
 const conVersion = (consulta, ver) => ver ? consulta.eq("updated_at", ver) : consulta;
 const conTiempoLimite = (ms = 15000) => { const ac = new AbortController(); setTimeout(() => ac.abort(), ms); return ac.signal; };
 // Ejecuta las operaciones de diffRel una a una. Devuelve «ok», «conflict» (otra persona cambió el registro) o «error».
-const ejecutaOpsRel = async (client, userId, c, ops) => {
+const ejecutaOpsRel = async (client, userId, c, ops, estado) => {
   const est = c.databaseId, hoy = today();
   const filaApp = (x) => ({ organization: x.ong || null, capturer_count: x.captadores || null, requested_from: x.desde || null, requested_until: x.hasta || null, contact_details: x.contacto || null, notes: x.notas || null });
   const filaGrant = (h) => ({ organization: h.ong || null, capturer_count: h.captadores || null, valid_from: h.desde || null, valid_until: h.hasta || null, contact_details: h.contacto || null, notes: h.notas || null });
+  let hechas = 0;
+  try {
   for (const op of ops) {
     let r;
     try {
@@ -1572,8 +1574,10 @@ const ejecutaOpsRel = async (client, userId, c, ops) => {
       console.error("[Mapa] Supabase rechazó una operación de expedientes:", op.t, r.error);
       return (r.error.code === "PT409" || r.status === 409) ? "conflict" : "error";
     }
+    hechas++;
   }
   return "ok";
+  } finally { if (estado) { estado.hechas = hechas; estado.total = ops.length; } } /* cuántas operaciones llegaron a aplicarse antes de un conflicto o un error */
 };
 // Estado propio del punto en establishment_app_state: contacto, notas y valoración, más las listas antiguas intactas.
 const estadoBlobPunto = (c) => {
@@ -1587,6 +1591,7 @@ const legacyDe = (state) => { const raw = {}; LEGACY_KEYS.forEach((k) => { if (s
 // Guarda el estado de permisos de un punto. Devuelve "ok", "conflict" o "error"; nunca da por bueno
 // un guardado que no ha llegado a Supabase. Los puntos del catálogo guardan sus solicitudes, concesiones y seguimientos en sus tablas
 // (con funciones atómicas para aprobar, denegar, retirar y cancelar) y solo contacto, notas y valoración en el estado compartido.
+let ultimoGuardado = {}; /* resultado de la última escritura de expedientes: { hechas, total, noVerificadas } (para explicar un guardado parcial) */
 const savePermits = async (c) => {
   const session = window.mapaSession;
   const client = session?.supabase;
@@ -1602,9 +1607,15 @@ const savePermits = async (c) => {
   const key = nombreRel(c), cur = permits[key] || {};
   const ops = diffRel(relBase.get(key) || { sols: [], hist: [] }, { sols: solsOf(cur), hist: cur.historial || [], punto: cur.segPunto });
   if (ops.length) {
-    let result = await ejecutaOpsRel(client, userId, c, ops);
+    const estadoOps = {};
+    let result = await ejecutaOpsRel(client, userId, c, ops, estadoOps);
     const releido = await recargaRelPunto(c);
     if (result === "ok" && !releido) result = "error";
+    if (result === "ok") {
+      const mal = verificaOps(ops, relBase.get(key) || { sols: [], hist: [] });
+      if (mal.length) { console.error("[Mapa] La relectura no coincide con lo guardado:", mal); estadoOps.noVerificadas = mal; result = "error"; }
+    }
+    ultimoGuardado = estadoOps;
     if (result !== "ok") {
       if (status) status.textContent = result === "conflict"
         ? "Aviso: otra persona ha cambiado este punto mientras lo editabas; no se ha sobrescrito su cambio."
@@ -1826,6 +1837,7 @@ const seguimientosDe = (c, p) => {
   const out = [];
   solsOf(p).forEach((q, i) => { if (!q.res && q.seg) out.push({ c, fecha: q.seg, ong: (q.ong || "").trim(), i, resp: q.resp || "", accion: q.accion || "" }); });
   if (!solsOf(p).length && p && p.seguimiento && !p.segPunto) out.push({ c, fecha: p.seguimiento, ong: "", i: -1 });
+  ((p && p.historial) || []).forEach((h, i) => { if (!h.cancelada && h.seg) out.push({ c, fecha: h.seg, ong: (h.ong || "").trim(), i, resp: h.resp || "", accion: h.accion || "", con: true }); });
   if (p && p.segPunto) out.push({ c, fecha: p.segPunto.fecha, ong: "", i: -1, resp: p.segPunto.resp || "", accion: p.segPunto.accion || "", punto: true });
   return out;
 };
@@ -1847,7 +1859,8 @@ const incidencias = (recs, t) => {
     if (r.k === "con" && (r.est === "vigente" || r.est === "futura")) {
       if (!r.ong) out.push({ r, tipo: "Concesión sin ONG" });
       if (!r.n) out.push({ r, tipo: "Concesión sin número de captadores" });
-      if (!r.hasta) out.push({ r, tipo: "Concesión sin fecha de fin" });
+      if (!r.desde && !r.hasta) out.push({ r, tipo: "Concesión sin fechas: cuenta como vigente pero no aparece en el calendario" });
+      else if (!r.hasta) out.push({ r, tipo: "Concesión sin fecha de fin" });
     }
   });
   for (let a = 0; a < activas.length; a++) for (let b = a + 1; b < activas.length; b++) {
@@ -1922,6 +1935,8 @@ const relListas = (apps, grants, fups) => {
   const out = new Map(), get = (e) => { let o = out.get(e); if (!o) out.set(e, o = { solicitudes: [], historial: [] }); return o; };
   const fuPorApp = new Map();
   (fups || []).forEach((f) => { if (f.application_id) { const a = fuPorApp.get(f.application_id) || []; a.push(f); fuPorApp.set(f.application_id, a); } });
+  const fuPorGrant = new Map(); /* seguimientos abiertos de una concesión (los que también cuelgan de una solicitud van con ella) */
+  (fups || []).forEach((f) => { if (f.grant_id && !f.application_id && !f.completed_at && f.due_on) { const a = fuPorGrant.get(f.grant_id) || []; a.push(f); fuPorGrant.set(f.grant_id, a); } });
   const grantDeApp = new Map();
   (grants || []).forEach((g) => { if (g.application_id) grantDeApp.set(g.application_id, g.id); });
   (apps || []).forEach((a) => {
@@ -1949,6 +1964,8 @@ const relListas = (apps, grants, fups) => {
     if (g.cancelled_reason) h.motivo = g.cancelled_reason;
     if (g.contact_details) h.contacto = g.contact_details;
     if (g.notes) h.notas = g.notes;
+    const fg = (fuPorGrant.get(g.id) || []).sort((x, y) => String(x.due_on).localeCompare(String(y.due_on)))[0];
+    if (fg && g.status !== "cancelled") { h.seg = fg.due_on; h.fu = fg.id; h.fuver = fg.updated_at; if (fg.assigned_to) h.resp = fg.assigned_to; if (fg.next_action) h.accion = fg.next_action; }
     get(g.establishment_id).historial.push(h);
   });
   return out;
@@ -1982,12 +1999,36 @@ const diffRel = (base, cur) => {
     if (!b) { if (!aprobadas.has(h.id)) ops.push({ t: "insGrant", h }); return; }
     if (!!h.cancelada !== !!b.cancelada) ops.push(h.cancelada ? { t: "cancel", id: h.id, motivo: h.motivo || "", ver: b.ver } : { t: "reactivate", id: h.id, ver: b.ver });
     else if (cambiaRel(h, b)) ops.push({ t: "updGrant", id: h.id, ver: b.ver, h });
+    /* Seguimiento de la concesión: cerrarlo, reprogramarlo o cambiar su responsable o su acción. Al cancelar la concesión se cierra también. */
+    if (b.fu && b.seg) {
+      if (h.cancelada && !b.cancelada) ops.push({ t: "fuDone", fu: b.fu, ver: b.fuver });
+      else if (!h.cancelada && ((h.seg || "") !== (b.seg || "") || (h.resp || "") !== (b.resp || "") || (h.accion || "") !== (b.accion || ""))) ops.push(h.seg ? { t: "fuSet", app: "", fu: b.fu, ver: b.fuver, due: h.seg, resp: h.resp || "", accion: h.accion || "" } : { t: "fuDone", fu: b.fu, ver: b.fuver });
+    }
   });
   base.hist.forEach((b) => { if (!ch.has(b.id)) ops.push({ t: "delGrant", id: b.id }); });
   const bp = base.punto, cp = cur.punto;
   if (bp && !cp) ops.push({ t: "fuDone", fu: bp.fu, ver: bp.fuver });
   else if (cp && (!bp || cp.fecha !== bp.fecha || (cp.accion || "") !== (bp.accion || "") || (cp.resp || "") !== (bp.resp || ""))) ops.push({ t: "fuSet", app: "", fu: bp ? bp.fu : "", ver: bp ? bp.fuver : undefined, due: cp.fecha, resp: cp.resp || "", accion: cp.accion || "" });
   return ops;
+};
+/* Tras escribir, la base se relee y cada operación se comprueba contra lo leído: que el alta exista, que lo aprobado tenga su concesión enlazada,
+   que lo cancelado figure cancelado, que lo borrado ya no esté. Un duplicado (23505) de un reintento solo se da por bueno si la fila existe así. */
+const verificaOps = (ops, base) => {
+  const sols = new Map(base.sols.map((x) => [x.id, x])), hist = new Map(base.hist.map((x) => [x.id, x])), mal = [];
+  ops.forEach((op) => {
+    const a = op.t === "insApp" ? op.x.id : op.id, g = op.t === "insGrant" ? op.h.id : op.id;
+    if (op.t === "insApp" && !sols.has(a)) mal.push(op.t);
+    else if (op.t === "updApp" && (!sols.has(a) || cambiaRel(op.x, sols.get(a)))) mal.push(op.t);
+    else if (op.t === "delApp" && sols.has(a)) mal.push(op.t);
+    else if (op.t === "approve" && !(sols.get(a) && sols.get(a).res === "aprobada" && base.hist.some((h) => h.sol === a))) mal.push(op.t);
+    else if (op.t === "resolve" && !(sols.get(a) && sols.get(a).res === APP_RES[op.st])) mal.push(op.t);
+    else if (op.t === "insGrant" && !hist.has(g)) mal.push(op.t);
+    else if (op.t === "updGrant" && (!hist.has(g) || cambiaRel(op.h, hist.get(g)))) mal.push(op.t);
+    else if (op.t === "cancel" && !(hist.get(g) && hist.get(g).cancelada)) mal.push(op.t);
+    else if (op.t === "reactivate" && !(hist.get(g) && !hist.get(g).cancelada)) mal.push(op.t);
+    else if (op.t === "delGrant" && hist.has(g)) mal.push(op.t);
+  });
+  return mal;
 };
 /* === fin de la capa relacional === */
 /* Revisiones y correcciones se guardan en el estado del usuario en Supabase. */
@@ -3939,6 +3980,7 @@ const csvCell = (value) => {
     return best && opts.some(([id]) => id === best[0]) ? best[0] : (opts[0] ? opts[0][0] : "");
   };
   const ongDe = (x) => x.ong || "Sin ONG";
+  const kOng = (x) => ongDe(x).trim().toLowerCase();
   const visible = (e) => (e === "autorizada" || e === "pendiente") ? ver[e] : ver.historico;
 
   const tarjeta = (i, d, t) => {
@@ -3967,12 +4009,14 @@ const csvCell = (value) => {
     const a = wk, b = addDays(wk, 6), t = today();
     const { recs: todasRecs, segs: todasSegs } = registros(prov);
     const semana = calendarioSemana(todasRecs, todasSegs, a, t);
-    const ongs = [...new Set(semana.flatMap((x) => x.items.map((i) => ongDe(i.r)).concat(x.seg.map(ongDe))))].sort((x, y) => (x === "Sin ONG") - (y === "Sin ONG") || x.localeCompare(y, "es"));
-    if (ong && !ongs.includes(ong)) ong = "";
-    body.querySelector("#calOng").innerHTML = '<option value="">Todas las ONG</option>' + ongs.map((o) => '<option value="' + esc(o) + '"' + (o === ong ? " selected" : "") + ">" + esc(o) + "</option>").join("");
+    /* Las ONG se agrupan sin distinguir mayúsculas ni espacios (igual que el Panel y el Centro). */
+    const porClave = new Map(); semana.forEach((x) => x.items.map((i) => i.r).concat(x.seg).forEach((y) => { if (!porClave.has(kOng(y))) porClave.set(kOng(y), ongDe(y)); }));
+    const ongs = [...porClave.values()].sort((x, y) => (x === "Sin ONG") - (y === "Sin ONG") || x.localeCompare(y, "es"));
+    if (ong && !porClave.has(ong.trim().toLowerCase())) ong = "";
+    body.querySelector("#calOng").innerHTML = '<option value="">Todas las ONG</option>' + ongs.map((o) => '<option value="' + esc(o) + '"' + (o.trim().toLowerCase() === ong.trim().toLowerCase() ? " selected" : "") + ">" + esc(o) + "</option>").join("");
     body.querySelector("#calRange").textContent = (+a.slice(8)) + (mesDe(a) === mesDe(b) ? "" : " " + mesDe(a)) + " – " + (+b.slice(8)) + " " + mesDe(b) + " " + b.slice(0, 4);
     body.querySelector("#calDate").value = a;
-    const okOng = (x) => !ong || ongDe(x) === ong;
+    const okOng = (x) => !ong || kOng(x) === ong.trim().toLowerCase();
     /* Las cifras se recalculan con el filtro de ONG; los totales del día no mezclan captadores autorizados, por aprobar y seguimientos. */
     const sem = calendarioSemana(todasRecs.filter(okOng), todasSegs.filter(okOng), a, t);
     const pico = (k) => sem.reduce((m, x) => x[k] > m.n ? { n: x[k], d: x.d } : m, { n: 0, d: "" });
@@ -4124,7 +4168,7 @@ const csvCell = (value) => {
   const textoDe = (x) => (x.c.name + " " + townOf(x.c) + " " + (x.c.province || "") + " " + ongDe(x)).toLowerCase();
   const antes = (a, b) => a.localeCompare(b, "es");
   const periodo = (r) => (!r.desde && !r.hasta) ? "Sin fechas" : fmtD(r.desde) + " – " + fmtD(r.hasta);
-  const clave = (x) => String(x.c.id) + "|" + (x.k || "seg") + "|" + (x.id || (x.punto ? "p" : x.i));
+  const clave = (x) => String(x.c.id) + "|" + (x.k || "seg") + "|" + (x.id || (x.punto ? "p" : (x.con ? "c" : "") + x.i));
 
   /* === Escritura === */
   /* Aplica un cambio a un punto y lo guarda. «muta» recibe una copia del estado del punto y puede devolver un texto para abortar sin guardar.
@@ -4141,8 +4185,9 @@ const csvCell = (value) => {
     }
     if (copia.estado === "sin" && !copia.fecha && !copia.contacto && !copia.notas && !copia.valoracion && !copia.historial.length && !copia.seguimiento && !copia.solicitudes && !copia.segPunto) delete permits[key];
     else permits[key] = copia;
-    const r = await savePermits(c);
-    if (r === "ok") { gamPermit(c, previo); return "ok"; }
+    let r;
+    try { r = await savePermits(c); } catch (e) { console.error("[Mapa] Error inesperado en savePermits:", e); r = "error"; }
+    if (r === "ok") { try { gamPermit(c, previo); } catch (e) { console.error(e); } return "ok"; }
     if (r === "conflict") { await reloadSharedPermit(c); return "conflict"; }
     if (c.databaseId) await reloadSharedPermit(c); else if (previo === undefined) delete permits[key]; else permits[key] = previo;
     return "error";
@@ -4150,13 +4195,22 @@ const csvCell = (value) => {
   /* Guarda y deja el aviso: nada se da por guardado sin confirmación de Supabase. Devuelve { ok, texto }. */
   const ejecuta = async (c, muta, txtOk) => {
     if (ocupado) return { ok: false, texto: "Hay otro guardado en curso." };
-    ocupado = true; aviso = "Guardando…"; draw();
-    const res = await aplica(c, muta);
-    ocupado = false; refrescaPunto(c); refreshSelects(); renderList();
+    ultimoGuardado = {}; ocupado = true; aviso = "Guardando…"; draw();
+    let res;
+    try { res = await aplica(c, muta); }
+    catch (e) {
+      console.error("[Mapa] Error inesperado al guardar en el Centro:", e);
+      try { if (c.databaseId) await reloadSharedPermit(c); } catch (e2) { console.error(e2); }
+      res = "error";
+    } finally { ocupado = false; } /* si algo falla, el Centro no se queda bloqueado */
+    try { refrescaPunto(c); refreshSelects(); renderList(); } catch (e) { console.error(e); }
     document.dispatchEvent(new CustomEvent("permisos:cambio", { detail: { id: c.id } }));
+    /* Si algunas operaciones llegaron a aplicarse antes del fallo, se dice claramente (la pantalla ya muestra lo que hay guardado). */
+    const parcial = ultimoGuardado && ultimoGuardado.hechas > 0 && ultimoGuardado.total > ultimoGuardado.hechas ? " Se aplicaron " + ultimoGuardado.hechas + " de " + ultimoGuardado.total + " pasos: la pantalla muestra lo que ha quedado guardado; revísalo antes de repetir." : "";
+    const sinVerificar = ultimoGuardado && ultimoGuardado.noVerificadas && ultimoGuardado.noVerificadas.length ? " Lo guardado no coincide con lo esperado: revisa el expediente antes de repetir." : "";
     const texto = res === "ok" ? txtOk
-      : res === "conflict" ? "Otra persona ha cambiado «" + c.name + "»: se ha recargado y no se ha tocado su cambio. Revísalo y repite."
-      : res === "error" ? "No se pudo confirmar el guardado de «" + c.name + "». No se ha aplicado."
+      : res === "conflict" ? "Otra persona ha cambiado «" + c.name + "»: se ha recargado y no se ha tocado su cambio." + (parcial || " Revísalo y repite.")
+      : res === "error" ? "No se pudo confirmar el guardado de «" + c.name + "»." + (parcial || sinVerificar || " No se ha aplicado.")
       : res;
     aviso = texto; draw();
     return { ok: res === "ok", texto };
@@ -4187,6 +4241,7 @@ const csvCell = (value) => {
     quitarCon: (r) => (copia) => { const i = ubica(copia.historial, r); if (i < 0) return NOEXISTE; copia.historial.splice(i, 1); },
     cerrarSeg: (s) => (copia) => {
       if (s.punto) delete copia.segPunto;
+      else if (s.con) { const h = copia.historial[s.i]; if (!h || h.cancelada || !h.seg) return NOEXISTE; h.seg = ""; }
       else if (s.i >= 0) { const x = copia.solicitudes[s.i]; if (!x || x.res || !x.seg) return NOEXISTE; x.seg = ""; }
       else delete copia.seguimiento;
     }
@@ -4215,7 +4270,7 @@ const csvCell = (value) => {
     esc(detalleCon(r, t)) + (r.sol ? "" : '<span class="ce-sub">Sin solicitud enlazada</span>') + '</td><td class="ce-acts">' +
     btn("ed", k, "Editar") + (r.est === "cancelada" ? btn("rea", k, "Reactivar") : btn("can", k, "Cancelar")) + (esAdmin() || r.c.custom ? btn("quitC", k, "Quitar") : "") + "</td></tr>";
   const filaSeg = (s, t, k) => {
-    const dias = daysBetween(s.fecha, t), origen = s.i >= 0 && !s.punto ? "Solicitud pendiente" : "Seguimiento del punto", editable = !!s.c.databaseId;
+    const dias = daysBetween(s.fecha, t), origen = s.con ? "Concesión" : s.i >= 0 && !s.punto ? "Solicitud pendiente" : "Seguimiento del punto", editable = !!s.c.databaseId;
     return "<tr><td>" + celdaPunto(s) + "</td><td>" + esc(ongDe(s)) + "</td><td>" + esc(fmtD(s.fecha)) +
       (dias > 0 ? '<span class="ce-warn">Atrasado ' + esc(plural(dias, "día", "días")) + "</span>" : dias === 0 ? '<span class="ce-sub">Hoy</span>' : "") + "</td><td>" + (s.accion ? esc(s.accion) : "—") + "</td><td>" +
       (s.resp ? esc(nombreResp(s.resp)) : "Sin responsable") + "</td><td>" + esc(origen) + '</td><td class="ce-acts">' + btn("hecho", k, "Hecho") + (editable ? btn("edseg", k, "Cambiar") : "") + "</td></tr>";
@@ -4342,6 +4397,7 @@ const csvCell = (value) => {
       if (!validIsoDate(fecha)) { msg.textContent = "Indica una fecha válida para el seguimiento."; return; }
       muta = (copia) => {
         if (r.punto) { if (!copia.segPunto) return NOEXISTE; copia.segPunto.fecha = fecha; copia.segPunto.accion = ac; copia.segPunto.resp = rs; }
+        else if (r.con) { const h = copia.historial[r.i]; if (!h || h.cancelada) return NOEXISTE; h.seg = fecha; h.accion = ac; h.resp = rs; if (!ac) delete h.accion; if (!rs) delete h.resp; }
         else { const x = copia.solicitudes[r.i]; if (!x || x.res) return NOEXISTE; x.seg = fecha; x.accion = ac; x.resp = rs; if (!ac) delete x.accion; if (!rs) delete x.resp; }
       };
       ok = "Seguimiento guardado en «" + c.name + "».";
@@ -4357,6 +4413,7 @@ const csvCell = (value) => {
         if (x.seg && !validIsoDate(x.seg)) { msg.textContent = "La fecha del seguimiento no es válida."; return; }
         if (c.databaseId && x.seg) { if (ac) x.accion = ac; if (rs) x.resp = rs; }
         if (!x.seg) delete x.seg;
+        if (!r) x.id = form.idNuevo || (form.idNuevo = newId()); /* el mismo identificador en cada intento: un reintento tras un fallo parcial no duplica la solicitud */
         if (contacto) x.contacto = contacto;
         if (notas) x.notas = notas;
         muta = (copia) => {
@@ -4371,7 +4428,7 @@ const csvCell = (value) => {
         if (contacto) g.contacto = contacto;
         if (notas) g.notas = notas;
         muta = (copia) => {
-          if (!r) { g.id = newId(); g.alta = t; copia.historial.push(g); return; }
+          if (!r) { g.id = form.idNuevo || (form.idNuevo = newId()); g.alta = t; copia.historial.push(g); return; }
           const i = ubica(copia.historial, r); if (i < 0) return NOEXISTE;
           const o = copia.historial[i]; ["id", "sol", "alta", "cancelada", "resFecha", "motivo"].forEach((k) => { if (o[k]) g[k] = o[k]; });
           copia.historial[i] = g;
