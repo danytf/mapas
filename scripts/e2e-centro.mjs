@@ -146,6 +146,15 @@ const main = async () => {
     nav('seg'); await w(250); set('ceEst','vencido'); await w(250); await marca(3); out.seleccion = b().querySelectorAll('input[data-chk]:checked').length;
     b().querySelector('#ceLoteFecha').value = d(11); b().querySelector('[data-lote=rep]').click(); await w(250); out.previo = b().querySelector('#ceLote .ce-lote strong').textContent;
     b().querySelector('[data-lote=ejecutar]').click(); await w(6000); out.lote1 = b().querySelector('#ceLote .ce-lote strong').textContent; out.reprogramados = (await rel()).followups.filter(f => f.due_on === d(11)).length; b().querySelector('[data-lote=cerrar]').click(); await w(200);
+    /* asignar responsable en bloque: solo ofrece a quien vale para todos los puntos y se comprueba en la base */
+    set('ceEst','todas'); await w(300); await marca(2); await w(1200);
+    { const accs = [...b().querySelectorAll('input[data-chk]:checked')].map(i => i.closest('tr').querySelector('td[data-l="Acción prevista"]').textContent);
+      const sel = b().querySelector('#ceLoteResp'), opt = [...sel.options].find(o => o.value && o.value !== '__'); out.opcionesResp = [...sel.options].map(o => o.textContent);
+      out.sinElegir = (b().querySelector('[data-lote=resp]').click(), await w(200), b().querySelector('#ceAviso').textContent);
+      await w(1200); const sel2 = b().querySelector('#ceLoteResp'); sel2.value = opt.value; b().querySelector('[data-lote=resp]').click(); await w(250); out.previoResp = b().querySelector('#ceLote .ce-lote strong').textContent;
+      b().querySelector('[data-lote=ejecutar]').click(); await w(5000); out.loteResp = b().querySelector('#ceLote .ce-lote strong').textContent;
+      const rr = await rel(); out.respOk = accs.length === 2 && accs.every(a => rr.followups.find(f => f.next_action === a && !f.completed_at)?.assigned_to === opt.value);
+      b().querySelector('[data-lote=cerrar]').click(); await w(200); out.accsResp = accs; out.idResp = opt.value; }
     set('ceEst','vencido'); await w(250); await marca(3);
     const acc = [...b().querySelectorAll('input[data-chk]:checked')][0].closest('tr').querySelector('td[data-l="Acción prevista"]').textContent;
     const objetivo = (await rel()).followups.find(f => !f.completed_at && f.next_action === acc);
@@ -168,6 +177,7 @@ const main = async () => {
     b().querySelector('#cfGuardar').click(); await w(3000); const r = await rel(); out.reintento = [r.permit_applications.filter(a => a.organization === 'ONG Reintento').length, r.followups.filter(f => f.next_action === 'Reintento E2E').length];
     return out;`);
   eq(r3.seleccion, 3, "se seleccionan 3 seguimientos"); ok(/Vas a pasar 3 seguimientos/.test(r3.previo), "el lote enseña un resumen previo");
+  ok(r3.opcionesResp.length >= 3 && r3.opcionesResp[1] === "Sin responsable", "el selector de responsable ofrece «Sin responsable» y personas"); ok(/Elige un responsable/.test(r3.sinElegir), "no se asigna sin elegir responsable"); ok(/Vas a asignar a .* 2 seguimientos/.test(r3.previoResp), "el lote de responsable enseña un resumen previo"); ok(/Responsable asignado: 2 guardados/.test(r3.loteResp) && r3.respOk, "asignar responsable en bloque se guarda y se comprueba en la base");
   ok(/3 guardados/.test(r3.lote1) && r3.reprogramados === 3, "reprogramar 3 seguimientos en lote");
   ok(/2 guardados y 1 sin guardar/.test(r3.lote2) && r3.lineas.filter((x) => x === "mal").length === 1 && r3.quedan === 1, "lote con un conflicto: 2 guardados, 1 sin guardar y queda seleccionado");
   ok(/No se pudo confirmar el guardado/.test(r3.caida) && r3.sinCambios && r3.libre, "caída del servidor: no se aplica nada y el Centro sigue operativo");
