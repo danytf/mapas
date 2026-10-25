@@ -30,6 +30,12 @@ node scripts/test-a11y-fase-d.mjs index.html          # contraste WCAG AA claro/
 ```
 Cada una devuelve código distinto de cero si falla. `audit-a11y` y `audit-cdn-integrity` fallan en versiones anteriores a #81 y #80 (control negativo).
 
+## Extremo a extremo en Chrome (Centro de permisos)
+```
+node scripts/e2e-centro.mjs
+```
+Necesita Chrome o Chromium (`CHROME_PATH` para indicar otro) y acceso a internet para las bibliotecas externas. Levanta el Supabase simulado, carga datos sintéticos (`scripts/dev/seed-permits-demo.mjs`) y recorre el Centro como administrador, como usuario de una provincia y en un móvil de 390 px; falla ante cualquier excepción de la página o error de consola no esperado. `E2E_HTML=<ruta>` prueba otro `index.html` (por ejemplo, una versión anterior para comprobar que la prueba detecta un fallo conocido). En CI es el trabajo `e2e-centro` (no obligatorio todavía).
+
 ## SQL (PostgreSQL local, usuario con permisos de superusuario)
 Reconstruir el esquema desde cero reproduciendo el orden de `schema-smoke.yml` (necesita bash, por ejemplo Git Bash en Windows, y `psql` en el PATH):
 ```
