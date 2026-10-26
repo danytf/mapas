@@ -1,6 +1,6 @@
-# Carga N2 de Madrid (preparada)
+# Carga N2 de Madrid (cargada)
 
-Estado: **preparada el 26/10/2026, pendiente de carga en producción por el titular con `cargar.sh`**. Duodécima comunidad con el mismo procedimiento (ver `docs/CARGA_N2_ASTURIAS.md` y `docs/CARGA_N2_PAIS_VASCO.md`). Provincia 28.
+Estado: **cargada en producción el 26/10/2026** por el titular con `cargar.sh` y verificada en solo lectura (ver «Cierre»). Duodécima comunidad con el mismo procedimiento (ver `docs/CARGA_N2_ASTURIAS.md` y `docs/CARGA_N2_PAIS_VASCO.md`). Provincia 28.
 
 ## Origen
 - Fichero: `madrid-latest.osm.pbf` (Geofabrik, edición del **25/10/2026 21:21 UTC**, 85.440.296 bytes, MD5 `797a2ad83d681ab0f0ca60bb6d67aa90` verificado contra el `.md5` de Geofabrik), fuera del repositorio. OpenStreetMap, licencia ODbL.
@@ -29,7 +29,7 @@ Un SQL por lote en `supabase/seeds/madrid/<lote>/` (transaccionales e idempotent
 - Carrefour (204) entra completo (Market y Express), por decisión del titular: es una cifra alta, y la categoría con más peso de Grandes superficies.
 - No probado en el PostgreSQL local (sin la contraseña en esta sesión).
 
-## Cómo cargar (con aprobación)
+## Cómo se cargó (con aprobación)
 Desde la raíz del repositorio, con `main` actualizada (`git pull origin main`), en este orden:
 ```
 bash scripts/catalogue/cargar.sh supabase/seeds/madrid/municipios municipios
@@ -38,4 +38,10 @@ bash scripts/catalogue/cargar.sh supabase/seeds/madrid/estaciones estaciones
 bash scripts/catalogue/cargar.sh supabase/seeds/madrid/grandes-superficies grandes-superficies catalogo-madrid:madrid-grandes-superficies:
 bash scripts/catalogue/cargar.sh supabase/seeds/madrid/resto resto catalogo-madrid:madrid-resto:
 ```
-Después, en solo lectura: 178 municipios nuevos y 3.620 puntos (la base pasaría de 21.456 a 25.076 y los municipios de 3.210 a 3.388). Sin asignar a usuarios hasta terminar toda España (decisión del titular, 23/10/2026).
+Previsto en solo lectura: 178 municipios nuevos y 3.620 puntos (la base pasaría de 21.456 a 25.076 y los municipios de 3.210 a 3.388). Sin asignar a usuarios hasta terminar toda España (decisión del titular, 23/10/2026).
+
+## Cierre (26/10/2026)
+- **Carga verificada en solo lectura:** 178 municipios (178 códigos INE distintos) y 3.620 puntos, 3.620 `source_ref` `catalogo-madrid:` distintos, todos activos, ninguno sin coordenadas y ningún código postal con formato distinto de 28xxx. Por categoría: Supermercado 1.643, Gimnasios 505, Entidad oficial 296, Centro de salud 268, Carrefour 204, Correos 190, Centro comercial 167, Estaciones 119, Hospital 88, Bricolaje 55, Decathlon 25, El Corte Inglés 18, MediaMarkt 17, Leroy Merlin 16, IKEA 9. Total de la base 21.456 -> 25.076 y municipios 3.210 -> 3.388.
+- **Códigos postales y calles (26/10/2026):** 320 puntos consultados con Nominatim (`completar_cp_desde_base.py --prov 28 --con-calle`, lanzado por el titular). Se escribieron **244 códigos** con `admin_set_postal_codes` desde la sesión de administrador (244 actualizados, 0 omitidos, auditados; la huella md5 de los pares id:código coincide con la de la base). Se dejaron **44 dudosos sin escribir** y 5 sin respuesta. Se escribieron **32 calles** (solo en puntos con la dirección vacía); se descartaron 5: dos de «Camino Natural del Tajo - GR 113» (una ruta), dos de «Vía de Servicio» y «Calle Carretera de la Estación». Verificado en solo lectura: **49 sin código postal y 34 sin calle**, ningún código con formato erróneo.
+- **Provincia:** Madrid (28) ya estaba activa. Sin asignar a usuarios hasta terminar España.
+

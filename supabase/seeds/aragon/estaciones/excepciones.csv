@@ -1,0 +1,18 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/12549357004;Tren;Marcén-Poliñino;Lalueza;41.881906;-0.283318;duplicado en el lote de node/12547037421 (0 m)
+por revisar;node/248952708;Autobús;Estación de Autobuses (Teruel) – Ronda Ambeles 6A;Teruel;40.342267;-1.104342;posible duplicado de node/8576900308 (Estación de Autobuses de Teruel) a 10 m
+descartado;node/2961586517;Tren;Cortes de Navarra;;41.915358;-1.420871;fuera de los municipios oficiales cargados
+descartado;node/4422448385;Autobús;Estación de Autobuses;Huesca/Uesca;42.133267;-0.409354;etiqueta public_transport=stop_position
+descartado;node/4422448386;Autobús;Estación de Autobuses;Huesca/Uesca;42.133405;-0.410215;etiqueta public_transport=stop_position
+descartado;node/5251163666;Tren;Pozo de Santa Bárbara;Utrillas;40.806974;-0.844808;operador o red de metro/tranvia
+descartado;node/5251163667;Tren;Entronque;Utrillas;40.808003;-0.843658;operador o red de metro/tranvia
+descartado;node/5251163668;Tren;Mirador de Buenos Aires;Utrillas;40.809482;-0.842449;operador o red de metro/tranvia
+descartado;node/5251163669;Tren;Manuel Beltrán (antiguo Hospital);Utrillas;40.811114;-0.843949;operador o red de metro/tranvia
+descartado;node/5254872335;Tren;Las Escuelas;Utrillas;40.807568;-0.844715;operador o red de metro/tranvia
+descartado;node/7557284885;Tren;Faió - la Pobla de Massaluca;;41.224981;0.350777;fuera de los municipios oficiales cargados
+por revisar;node/8576900308;Autobús;Estación de Autobuses de Teruel – Ronda Ambeles 6A;Teruel;40.342263;-1.104213;posible duplicado de node/248952708 (Estación de Autobuses) a 10 m
+descartado;way/1301271140;Tren;;Alcorisa;40.928906;-0.391403;sin nombre en OpenStreetMap
+descartado;way/1309417984;Tren;Tormillo-Lastanosa;Peralta de Alcofea;41.847965;-0.040937;duplicado en el lote de node/12549357005 (297 m)
+descartado;way/230085197;Tren;;Alcorisa;40.924502;-0.3513;sin nombre en OpenStreetMap
+descartado;way/659276785;Autobús;Estación de Therpasa;Tarazona;41.905886;-1.72525;duplicado en el lote de node/6172542869 (12 m)
+descartado;way/93271262;Autobús;;Alcorisa;40.8895;-0.386766;sin nombre en OpenStreetMap

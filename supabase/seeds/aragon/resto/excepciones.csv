@@ -1,0 +1,159 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/10287559774;;Ayuntamiento;Alquézar;42.172483;0.026705;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/10296829503;;Ayuntamiento;Zuera;41.936155;-0.756433;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/11190995277;;;Azaila;41.290709;-0.495439;sin nombre en OpenStreetMap
+descartado;node/1120260312;;Carrefour;Huesca/Uesca;42.14718;-0.425633;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/11891796832;;Supermercado;Albarracín;40.408319;-1.437114;nombre generico o dudoso en OpenStreetMap: Supermercado
+descartado;node/1267576457;;Carrefour;Zaragoza;41.675699;-0.890028;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/12989041459;;;Benasque;42.624386;0.541446;sin nombre en OpenStreetMap
+descartado;node/13009202705;;Alcampo Supermercado;Cariñena;41.337235;-1.226039;duplicado en el lote de node/13009198802 (0 m)
+descartado;node/13009230001;;Alcampo Supermercado;Cariñena;41.337235;-1.226039;duplicado en el lote de node/13009198802 (0 m)
+descartado;node/13011514350;;;Zaragoza;41.643304;-0.883702;sin nombre en OpenStreetMap
+descartado;node/13014838901;;;Azuara;41.257734;-0.872298;sin nombre en OpenStreetMap
+descartado;node/13150947972;;Ayuntamiento;Mezalocha;41.425344;-1.083835;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/1328825891;;Ayuntamiento;Alcalá del Obispo/Alcalá d’o Bispe;42.07561;-0.273327;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/13304583633;;;Alcalá de la Selva;40.37155;-0.718459;sin nombre en OpenStreetMap
+descartado;node/13372011983;;;Jaca;42.562643;-0.567734;sin nombre en OpenStreetMap
+descartado;node/13401631864;;Centro de Salud;Calaceite / Calaceit;41.015015;0.185542;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;node/13406623527;;Centro de Atención Primaria;Monteagudo;41.962526;-1.692262;fuera de las provincias del lote (31)
+descartado;node/13406623541;;Centro de Atención Primaria;;41.970964;-1.663046;fuera de los municipios oficiales cargados
+descartado;node/13563614143;;Ayuntamiento de El Pedregal;El Pedregal;40.779947;-1.57098;fuera de las provincias del lote (19)
+descartado;node/1363400939;;;La Puebla de Alfindén;41.632001;-0.75086;sin nombre en OpenStreetMap
+descartado;node/13666477050;;Covirán;Arnes;40.91031;0.260471;fuera de las provincias del lote (43)
+descartado;node/14203483163;;Carrefour Express;Benasque;42.604161;0.522802;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/14255065401;;;Épila;41.599073;-1.282187;sin nombre en OpenStreetMap
+descartado;node/1820998769;;Centro de Salud y consultorio Médico de Luceni;Luceni;41.828103;-1.239404;texto excluido (mental|veterinari|dental|fisioter|rehabilitaci|consultori|dispensari)
+descartado;node/1923902036;;;Manzanera;40.045472;-0.863542;sin nombre en OpenStreetMap
+descartado;node/1923902054;;;Manzanera;40.057101;-0.831506;sin nombre en OpenStreetMap
+descartado;node/2028366086;;Ayuntamiento;San Miguel del Cinca;41.850595;0.129484;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/2126030790;;Ayuntamiento;Manchones;41.149998;-1.466036;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/2419623928;;Centro de Salud;Zuera;41.866335;-0.790443;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;node/249092450;;Alcampo;Zaragoza;41.661358;-0.899653;duplicado en el lote de node/3215607258 (56 m)
+descartado;node/2724088559;;Iron Salfer;Zaragoza;41.642395;-0.883711;duplicado en el lote de node/14066955720 (13 m)
+descartado;node/2976483378;;Centro de Salud;Zaragoza;41.684189;-1.026335;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;node/2981289955;;Ayuntamiento de Puebla de Arenoso;;40.104684;-0.590921;fuera de los municipios oficiales cargados
+descartado;node/3005480690;;Ayuntamiento;Mazaleón / Massalió;41.04972;0.103777;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/3032130156;;Ayuntamiento;Sesa;41.995603;-0.244061;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/3052627108;;Centro de Salud;Sarrión;40.140389;-0.812076;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;node/3052646077;;Residencia de ancianos;Sarrión;40.142252;-0.811056;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada|salud mental|laboral|hospital de d[ií]a)
+descartado;node/3105215762;;;Zaragoza;41.642346;-0.872945;sin nombre en OpenStreetMap
+descartado;node/3105215763;;;Zaragoza;41.643475;-0.885767;sin nombre en OpenStreetMap
+descartado;node/3105215765;;;Zaragoza;41.648706;-0.87077;sin nombre en OpenStreetMap
+descartado;node/3200906265;;;La Muela;41.581977;-1.114;sin nombre en OpenStreetMap
+descartado;node/3200906266;;;La Muela;41.580416;-1.118324;sin nombre en OpenStreetMap
+descartado;node/356851445;;Mercadona;Zaragoza;41.643604;-0.871748;duplicado en el lote de node/5810707517 (63 m)
+descartado;node/3611219756;;Ayuntamiento;Almudévar;42.042989;-0.583094;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/3646439125;;Ayuntamiento;Ayerbe;42.277583;-0.689237;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/3878143316;;Ayuntamiento de Petilla de Aragón;Petilla de Aragón;42.461534;-1.092616;fuera de las provincias del lote (31)
+descartado;node/4032069535;;Carrefour;Jaca;42.576966;-0.528011;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/4088539963;;Centro de Salud;Báguena;41.041012;-1.360415;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;node/4088546143;;;Báguena;41.040734;-1.358832;sin nombre en OpenStreetMap
+descartado;node/410460760;;Hipercor;Zaragoza;41.6723;-0.890047;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/4139137790;;;Ejea de los Caballeros;42.176544;-1.200149;sin nombre en OpenStreetMap
+descartado;node/4382019390;;Alcampo;Zaragoza;41.657942;-0.892722;duplicado en el lote de node/12553459129 (105 m)
+descartado;node/4440484699;;Centro de Salud;Tella-Sin;42.54407;0.197544;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;node/4440484700;;Centro de Salud;Castejón de Sos;42.511921;0.485442;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;node/4456561024;;;Calatorao;41.52267;-1.347351;sin nombre en OpenStreetMap
+descartado;node/473831541;;Carrefour;Zaragoza;41.65952;-0.922461;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/4831114660;;Centro comercial Delicias;Zaragoza;41.647756;-0.914198;duplicado en el lote de node/4821481335 (39 m)
+descartado;node/4844562579;;Centro de Salud Mental Delicias;Zaragoza;41.648758;-0.915224;texto excluido (mental|veterinari|dental|fisioter|rehabilitaci|consultori|dispensari)
+descartado;node/4852195187;;;Zaragoza;41.643433;-0.910755;sin nombre en OpenStreetMap
+descartado;node/4902922139;;;Bujaraloz;41.498768;-0.152087;sin nombre en OpenStreetMap
+descartado;node/518081127;;;Andorra;40.976775;-0.452436;sin nombre en OpenStreetMap
+descartado;node/5247270621;;Mercadona;Barbastro;42.038106;0.130436;duplicado en el lote de node/11960017228 (67 m)
+descartado;node/5323701594;;Centro de salud;Valdeltormo / la Vall del Tormo;40.985793;0.087963;nombre generico o dudoso en OpenStreetMap: Centro de salud
+descartado;node/5343903623;;Supermercado;Mallén;41.898689;-1.419758;nombre generico o dudoso en OpenStreetMap: Supermercado
+descartado;node/5353836094;;Supermercado;Perales del Alfambra;40.633932;-1.001285;nombre generico o dudoso en OpenStreetMap: Supermercado
+descartado;node/5372963834;;Ayuntamiento;Teruel;40.405819;-1.073179;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/5615616231;;La Plaza de DIA;Zaragoza;41.641587;-0.892369;duplicado en el lote de node/4985689060 (50 m)
+descartado;node/5813484754;;;Escucha;40.795482;-0.812321;sin nombre en OpenStreetMap
+descartado;node/5871894118;;Tanatorio Municipal;Alloza;40.970008;-0.525536;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada|salud mental|laboral|hospital de d[ií]a)
+descartado;node/6017327172;;Centro de salud;Albalate de Cinca;41.720726;0.147468;nombre generico o dudoso en OpenStreetMap: Centro de salud
+descartado;node/6039731814;;Hipercor;Zaragoza;41.608992;-0.887849;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/6248723195;;;Montanuy / Montanui;42.438356;0.700868;sin nombre en OpenStreetMap
+descartado;node/625896086;;Centro de Salud;Zaragoza;41.65303;-0.870725;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;node/6356688985;;Alcampo;Zaragoza;41.644174;-0.874731;duplicado en el lote de node/5813340155 (17 m)
+descartado;node/6448282718;;Cruz Roja;Zuera;41.875682;-0.77047;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada|salud mental|laboral|hospital de d[ií]a)
+descartado;node/651013899;;Mercadona;Zaragoza;41.650368;-0.916852;duplicado en el lote de node/4844645652 (80 m)
+descartado;node/6558247324;;;Sabiñánigo;42.557801;-0.337811;sin nombre en OpenStreetMap
+descartado;node/6614881973;;;Sallent de Gállego;42.773681;-0.360204;sin nombre en OpenStreetMap
+descartado;node/7244897387;;Centro de Salud;Sádaba;42.279245;-1.268776;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;node/7437194435;;Centro de Salud;Loporzano;42.16123;-0.323692;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;node/8694311130;;Centro de salud;Aniñón;41.444424;-1.706353;nombre generico o dudoso en OpenStreetMap: Centro de salud
+descartado;node/914298725;;;Alcorisa;40.89173;-0.381318;sin nombre en OpenStreetMap
+descartado;node/914298738;;;Alcorisa;40.891573;-0.38186;sin nombre en OpenStreetMap
+descartado;node/9199669564;;Alcampo;Zaragoza;41.630406;-0.909291;duplicado en el lote de node/651014177 (69 m)
+descartado;node/9560848621;;;Albalate del Arzobispo;41.121784;-0.51117;sin nombre en OpenStreetMap
+descartado;node/9929211289;;;Villanueva de Huerva;41.353288;-1.034332;sin nombre en OpenStreetMap
+descartado;node/9981158820;;Supermercado;Campo;42.402663;0.397457;nombre generico o dudoso en OpenStreetMap: Supermercado
+descartado;relation/12621636;;Hospital de Día Quirónsalud La Floresta;Zaragoza;41.639934;-0.918642;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada|salud mental|laboral|hospital de d[ií]a)
+descartado;way/1007617353;;Ayuntamiento;Tobed;41.339263;-1.398879;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/1229442153;;Centro de Salud;Alhama de Aragón;41.298796;-1.894459;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/1264335750;;Ayuntamiento;Ejulve;40.775267;-0.55446;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/1292220559;;Centro de Salud Picarral;Zaragoza;41.667969;-0.871944;duplicado en el lote de node/626874191 (15 m)
+descartado;way/1345130421;;;Valderrobres / Vall de Roures;40.873267;0.148094;sin nombre en OpenStreetMap
+descartado;way/1500878011;;;Zaragoza;41.645918;-0.859974;sin nombre en OpenStreetMap
+descartado;way/163042051;;Centro Neuropsiquiátrico Nuestra Señora del Carmen;Zaragoza;41.677605;-0.9868;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada|salud mental|laboral|hospital de d[ií]a)
+descartado;way/176218659;;Centro de Salud;Graus;42.191329;0.340716;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/184299486;;;Monzón;41.901378;0.206735;sin nombre en OpenStreetMap
+descartado;way/185300850;;Juzgados;Monzón;41.913209;0.194357;nombre generico o dudoso en OpenStreetMap: Juzgados
+descartado;way/190612205;;Ayuntamiento;Alcolea de Cinca;41.718107;0.118077;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/199892468;;Ayuntamiento;Yebra de Basa;42.486098;-0.282177;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/201348523;;Alcampo;Teruel;40.334026;-1.088231;duplicado en el lote de node/13690649804 (27 m)
+descartado;way/203687320;;;Bierge;42.281556;-0.076578;sin nombre en OpenStreetMap
+descartado;way/205143320;;Cruz Roja Alagon;Alagón;41.774155;-1.125932;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada|salud mental|laboral|hospital de d[ií]a)
+descartado;way/229816374;;Cruz Roja;La Almunia de Doña Godina;41.476425;-1.369169;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada|salud mental|laboral|hospital de d[ií]a)
+descartado;way/23095983;;Ayuntamiento;Allepuz;40.491921;-0.729723;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/238015340;;Ayuntamiento;Cubla;40.210802;-1.078987;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/248336905;;Casa de la Vila;Arnes;40.909901;0.260774;fuera de las provincias del lote (43)
+descartado;way/255624204;;Centro de Salud;Cella;40.457447;-1.2872;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/256169116;;Centro de Salud;Monreal del Campo;40.788437;-1.357365;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/256390528;;Ayuntamiento;Montalbán;40.832622;-0.798388;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/271564754;;Ajuntament de Pont de Suert;;42.407544;0.740306;fuera de los municipios oficiales cargados
+descartado;way/314283800;;;La Muela;41.580506;-1.116608;sin nombre en OpenStreetMap
+descartado;way/356581357;;;Labuerda;42.435216;0.135646;sin nombre en OpenStreetMap
+descartado;way/374467946;;Cruz Roja;Biescas;42.630681;-0.327327;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada|salud mental|laboral|hospital de d[ií]a)
+descartado;way/377875908;;;Biescas;42.629639;-0.325025;sin nombre en OpenStreetMap
+descartado;way/380787523;;Centro de Salud;Sabiñánigo;42.515303;-0.362314;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/394448301;;CAP;Arnes;40.910247;0.261235;fuera de las provincias del lote (43)
+descartado;way/434886315;;;Aínsa-Sobrarbe/L'Aínsa-Sobrarbe;42.375875;0.154131;sin nombre en OpenStreetMap
+descartado;way/444765335;;Dia;Jaca;42.571858;-0.547935;duplicado en el lote de node/12829606362 (12 m)
+descartado;way/468742773;;Eroski;Zaragoza;41.64908;-0.861752;duplicado en el lote de node/6934240218 (16 m)
+descartado;way/485874802;;Centro de Salud;Andorra;40.976585;-0.453738;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/494460057;;Ayuntamiento de Montagudo;Monteagudo;41.962687;-1.69154;fuera de las provincias del lote (31)
+descartado;way/515557132;;Ayuntamiento;Remolinos;41.838673;-1.176308;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/519424114;;Ayuntamiento;Retascón;41.144294;-1.381341;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/536061271;;Ayuntamiento de Castielfabib;;40.131065;-1.303989;fuera de los municipios oficiales cargados
+descartado;way/548746544;;Centro de Salud;Calanda;40.938277;-0.230175;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/558394376;;;La Almunia de Doña Godina;41.478648;-1.377373;sin nombre en OpenStreetMap
+descartado;way/561465189;;Ayuntamiento;Híjar;41.175817;-0.452638;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/562303376;;;Fuentes de Ebro;41.505749;-0.622879;sin nombre en OpenStreetMap
+descartado;way/577553089;;Ayuntamiento de Robres;Robres;41.86643;-0.461035;duplicado en el lote de node/5536475748 (7 m)
+descartado;way/581299907;;Centro de Salud;Almudévar;42.041326;-0.581705;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/61767066;;;Jaca;42.576873;-0.528039;sin nombre en OpenStreetMap
+descartado;way/655984160;;;Sallent de Gállego;42.770319;-0.336262;sin nombre en OpenStreetMap
+descartado;way/656151744;;Ayuntamiento;Calamocha;40.935266;-1.184631;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/672290471;;Alcampo;Zaragoza;41.688316;-0.874665;duplicado en el lote de way/1359905156 (22 m)
+descartado;way/676137311;;Mercadona;Zaragoza;41.63457;-0.944939;duplicado en el lote de node/526974189 (42 m)
+descartado;way/685654751;;Ayuntamiento de Villanueva de Viver;Villanueva de Viver;40.059013;-0.64664;fuera de las provincias del lote (12)
+descartado;way/699234358;;Centro de Salud;Alcañiz;41.045224;-0.128053;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/740643654;;Alcampo;Zaragoza;41.646321;-0.862616;duplicado en el lote de node/6934240220 (22 m)
+descartado;way/770672256;;Centro de Salud Actur Sur;Zaragoza;41.6624;-0.885191;duplicado en el lote de node/4380683595 (16 m)
+descartado;way/770686677;;;Zaragoza;41.663407;-0.88153;sin nombre en OpenStreetMap
+descartado;way/770686678;;;Zaragoza;41.663407;-0.881775;sin nombre en OpenStreetMap
+descartado;way/782157892;;Prisma: Finca El Cantal: Centro Hospitalario de Recuperación Psiquiátrica;Zaragoza;41.719536;-0.834659;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada|salud mental|laboral|hospital de d[ií]a)
+descartado;way/815860876;;;Zaragoza;41.676221;-0.950082;sin nombre en OpenStreetMap
+descartado;way/815860877;;;Zaragoza;41.675881;-0.951788;sin nombre en OpenStreetMap
+descartado;way/835279844;;Centro Médico;Alcalá de la Selva;40.371042;-0.717076;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada|salud mental|laboral|hospital de d[ií]a)
+descartado;way/838530939;;Ayuntamiento;Urrea de Gaén;41.158603;-0.470177;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/849346312;;Ajuntament d'Herbers;;40.721072;-0.004299;fuera de los municipios oficiales cargados
+descartado;way/850427699;;Ayuntamiento de Barillas;;41.970211;-1.66339;fuera de los municipios oficiales cargados
+descartado;way/850427700;;Ayuntamiento de Tulebras;Tulebras;41.975751;-1.678105;fuera de las provincias del lote (31)
+descartado;way/852019887;;;Ejea de los Caballeros;42.128555;-1.126276;sin nombre en OpenStreetMap
+descartado;way/884054384;;Ajuntament de Caseres;;41.038629;0.250494;fuera de los municipios oficiales cargados
+descartado;way/956281191;;Centro de Salud;Mas de las Matas;40.834861;-0.240254;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;node/8694290792;;Farmacia Lahoz Aniñón – Plaza Antonino Peiró, 2, 50313 Aniñón, Zaragoza;Aniñón;41.444981;-1.705806;texto excluido tras revisión (no es hospital): farmacia|consultas externas|centro de rehabilitaci[oó]n|^cme 
+descartado;relation/12374493;;CME San José Zaragoza – Calle de Luis Aula;Zaragoza;41.638194;-0.872399;texto excluido tras revisión (no es hospital): farmacia|consultas externas|centro de rehabilitaci[oó]n|^cme 
+descartado;relation/14211117;;Consultas Externas Miguel Servet Zaragoza – Calle Padre Arrupe;Zaragoza;41.633601;-0.90166;texto excluido tras revisión (no es hospital): farmacia|consultas externas|centro de rehabilitaci[oó]n|^cme 
+descartado;relation/2336182;;Centro de Rehabilitación Psicosocial Nuestra Señora del Pilar Zaragoza – Vía Univérsitas;Zaragoza;41.647537;-0.909339;texto excluido tras revisión (no es hospital): farmacia|consultas externas|centro de rehabilitaci[oó]n|^cme 
+descartado;way/231510741;;Centro de Rehabilitación San Juan de Dios Teruel – Avenida de Zaragoza;Teruel;40.345289;-1.113316;texto excluido tras revisión (no es hospital): farmacia|consultas externas|centro de rehabilitaci[oó]n|^cme 

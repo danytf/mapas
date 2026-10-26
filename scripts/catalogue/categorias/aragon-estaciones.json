@@ -1,0 +1,85 @@
+{
+  "codigo": "estaciones",
+  "categoria": "Estaciones",
+  "prefijo": "catalogo",
+  "criterio": "Estaciones de tren (railway=station/halt de ferrocarril convencional) y de autobus (amenity=bus_station). Excluidos: metro, tren ligero, tranvia, funicular, estaciones maritimas, elementos en desuso, abandonados o en construccion, y elementos de autobus que son andenes o paradas (public_transport=platform/stop_position). Sin nombre se descarta. Mismo tipo y mismo nombre a menos de 300 m: se conserva uno.",
+  "reglas": [
+    {
+      "subtipo": "Tren",
+      "etiquetas": {
+        "railway": [
+          "station",
+          "halt"
+        ]
+      },
+      "excluir_si": {
+        "station": [
+          "subway",
+          "light_rail",
+          "tram",
+          "monorail",
+          "funicular",
+          "abandoned"
+        ],
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    },
+    {
+      "subtipo": "Autobús",
+      "etiquetas": {
+        "amenity": [
+          "bus_station"
+        ]
+      },
+      "excluir_si": {
+        "public_transport": [
+          "platform",
+          "stop_position"
+        ],
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    }
+  ],
+  "excluir_claves": [
+    "disused:railway",
+    "abandoned:railway",
+    "disused:amenity"
+  ],
+  "nombre": {
+    "Tren": "Estación de tren de {nombre}",
+    "Autobús": "Estación de autobuses de {nombre}"
+  },
+  "distancia_duplicado_m": 300,
+  "distancia_existente_m": 300,
+  "excluir_flags": {
+    "subtipos": [
+      "Tren"
+    ],
+    "cualquiera": [
+      "subway",
+      "light_rail",
+      "tram"
+    ],
+    "salvo": "train",
+    "operador_regex": "metro de|metro-|tranv|tram\\b|metro malaga|metro sevilla|metro granada"
+  },
+  "nombre_sospechoso_regex": "^\\d+$|^bus$|parada|salidas|\\bS\\.?L\\.?\\b|^.{1,3}$",
+  "nota_informe": "OpenStreetMap no indica si una estación tiene hoy servicio de viajeros; no se puede deducir de las etiquetas.",
+  "solo_provincias": [
+    "22",
+    "44",
+    "50"
+  ],
+  "region": "aragon",
+  "nombre_ya_descriptivo": "estaci[oó]|apeader|intercanviador|intercambiador|terminal|autob|autobus|\\bbus\\b"
+}
