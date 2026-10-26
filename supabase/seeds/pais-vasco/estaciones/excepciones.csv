@@ -1,0 +1,115 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/11985184869;Autobús;;Ordizia;43.053848;-2.184007;sin nombre en OpenStreetMap
+descartado;node/12063493769;Autobús;;Gabiria;43.052201;-2.262823;sin nombre en OpenStreetMap
+descartado;node/12086836777;Tren;;Güeñes;43.199931;-3.047076;sin nombre en OpenStreetMap
+descartado;node/12385062257;Tren;Erandio;Erandio;43.303881;-2.974465;etiqueta station=subway
+por revisar;node/12779959265;Tren;Estación de tren de Ola (Sondika) – Izartza bidea;Sondika;43.291882;-2.925239;nombre dudoso en OpenStreetMap: Ola
+descartado;node/13415700225;Tren;Castaños;Bilbao;43.268715;-2.925962;etiqueta station=funicular
+descartado;node/13581745246;Tren;Funicular de Masustegi;Bilbao;43.255515;-2.955112;etiqueta station=funicular
+descartado;node/13581745247;Tren;Funicular de Masustegi;Bilbao;43.254946;-2.955785;etiqueta station=funicular
+por revisar;node/13691559903;Autobús;Estación de autobuses de Vitoria-Gasteiz – Euskaltzaindiaren plaza;Vitoria-Gasteiz;42.858933;-2.684963;posible duplicado de way/489639101 (Gasteizko autobus geltokia) a 5 m
+por revisar;node/13692644138;Autobús;Estación de autobuses de Donostia (Donostia / San Sebastián) – Federico Garcia Lorca pasealekua;Donostia / San Sebastián;43.316939;-1.977464;posible duplicado de node/4194898831 (Donostiako Autobus Geltokia) a 53 m
+descartado;node/13927059949;Tren;Euskal Herria;Etxebarri;43.251656;-2.8879;etiqueta station=funicular
+descartado;node/14245206746;Tren;Algorta;Getxo;43.346958;-3.010791;etiqueta station=funicular
+descartado;node/14245206748;Tren;Ereaga;Getxo;43.346709;-3.011448;etiqueta station=funicular
+descartado;node/14245243243;Tren;La Escontrilla;Valle de Trápaga-Trapagaran;43.301226;-3.041955;etiqueta station=funicular
+descartado;node/14245243246;Tren;Larreineta;Valle de Trápaga-Trapagaran;43.292602;-3.048815;etiqueta station=funicular
+descartado;node/14247665508;Tren;Artxanda;Bilbao;43.27399;-2.920219;etiqueta station=funicular
+descartado;node/14249204623;Tren;Kukullaga;Etxebarri;43.251306;-2.889359;etiqueta station=funicular
+descartado;node/14250315924;Tren;Lamiako;Leioa;43.321432;-3.000131;etiqueta station=funicular
+descartado;node/14250315925;Tren;Txorierri;Leioa;43.322345;-2.999324;etiqueta station=funicular
+descartado;node/14250321056;Tren;Elorriaga;Bilbao;43.27367;-2.951031;etiqueta station=funicular
+descartado;node/14250321057;Tren;Arangoiti;Bilbao;43.273121;-2.951618;etiqueta station=funicular
+descartado;node/14250321058;Tren;Araneko;Bilbao;43.274219;-2.950413;etiqueta station=funicular
+descartado;node/14250321059;Tren;Garro;Bilbao;43.274028;-2.950649;etiqueta station=funicular
+descartado;node/14250351207;Tren;Juan Carlos de Gortazar;Bilbao;43.250951;-2.925963;etiqueta station=funicular
+descartado;node/14250351208;Tren;Askatasuna;Bilbao;43.251309;-2.925721;etiqueta station=funicular
+descartado;node/2046477536;Tren;La Puebla de Arganzón;La Puebla de Arganzón;42.765222;-2.830234;fuera de las provincias del lote (09)
+por revisar;node/3778184661;Autobús;Gernikako Autobus geltokia (Gernika-Lumo) – Iparragirre kalea;Gernika-Lumo;43.31374;-2.676712;posible duplicado de way/218664177 (Estación autobuses Gernika) a 15 m
+por revisar;node/3899928383;Tren;Estación de tren de Bilbao - Mercancías / Merkantziak (Santurtzi);Santurtzi;43.344724;-3.060723;posible duplicado de node/3899928384 (Puerto (CLH)) a 66 m
+por revisar;node/3899928384;Tren;Estación de tren de Puerto (CLH) (Santurtzi);Santurtzi;43.344195;-3.060351;posible duplicado de node/3899928383 (Bilbao - Mercancías / Merkantziak) a 66 m
+descartado;node/3934286489;Tren;Ibarbengoa;Getxo;43.363276;-3.006978;etiqueta station=subway
+descartado;node/418624071;Tren;Donostia;Donostia / San Sebastián;43.319152;-2.006417;etiqueta station=funicular
+descartado;node/418624074;Tren;Igeldo;Donostia / San Sebastián;43.321289;-2.008767;etiqueta station=funicular
+por revisar;node/4194898831;Autobús;Donostiako Autobus Geltokia (Donostia / San Sebastián) – Federico Garcia Lorca pasealekua;Donostia / San Sebastián;43.317405;-1.977642;posible duplicado de node/13692644138 (Estación de autobuses de Donostia) a 53 m
+descartado;node/4556990099;Tren;San Antonio;Etxebarri;43.251864;-2.887018;etiqueta station=funicular
+descartado;node/5061716164;Tren;Matiko;Bilbao;43.269028;-2.925455;etiqueta station=subway
+descartado;node/5263800703;Tren;Lutxana;Erandio;43.291007;-2.969818;etiqueta station=subway
+descartado;node/5263800704;Tren;Bidezabal;Getxo;43.356445;-3.011273;etiqueta station=subway
+descartado;node/5294695226;Tren;Eliptikoa;Bilbao;43.262581;-2.933036;etiqueta station=subway
+descartado;node/5294695227;Tren;Zazpikaleak / Casco Viejo;Bilbao;43.26017;-2.921824;etiqueta station=subway
+descartado;node/5294695228;Tren;Abando;Bilbao;43.261363;-2.927437;etiqueta station=subway
+descartado;node/5294695229;Tren;Zazpikaleak / Casco Viejo;Bilbao;43.259641;-2.920709;etiqueta station=subway
+descartado;node/5294695230;Tren;Santutxu;Bilbao;43.254297;-2.913287;etiqueta station=subway
+descartado;node/5294695231;Tren;Basarrate;Bilbao;43.251151;-2.910744;etiqueta station=subway
+descartado;node/5294695232;Tren;Bolueta;Bilbao;43.246951;-2.905644;etiqueta station=subway
+descartado;node/5294695233;Tren;Etxebarri;Etxebarri;43.243873;-2.897741;etiqueta station=subway
+descartado;node/5294695234;Tren;Ariz;Basauri;43.238007;-2.88203;etiqueta station=subway
+descartado;node/5294695235;Tren;Basauri;Basauri;43.236227;-2.893483;etiqueta station=subway
+descartado;node/5294695236;Tren;Indautxu;Bilbao;43.261294;-2.941861;etiqueta station=subway
+descartado;node/5294695237;Tren;San Mamés;Bilbao;43.262552;-2.947596;etiqueta station=subway
+descartado;node/5294695238;Tren;Deustu;Bilbao;43.271545;-2.9496;etiqueta station=subway
+descartado;node/5294695239;Tren;Sarriko;Bilbao;43.274783;-2.958491;etiqueta station=subway
+descartado;node/5294695240;Tren;San Ignazio;Bilbao;43.280785;-2.962474;etiqueta station=subway
+descartado;node/5294695241;Tren;Gurutzeta / Cruces;Barakaldo;43.283038;-2.982483;etiqueta station=subway
+descartado;node/5294695242;Tren;Ansio;Barakaldo;43.289696;-2.986892;etiqueta station=subway
+descartado;node/5294695243;Tren;Barakaldo;Barakaldo;43.295709;-2.989436;etiqueta station=subway
+descartado;node/5294695244;Tren;Bagatza;Barakaldo;43.298809;-2.992626;etiqueta station=subway
+descartado;node/5294695245;Tren;Urbinaga;Sestao;43.305731;-2.992614;etiqueta station=subway
+descartado;node/5294695246;Tren;Sestao;Sestao;43.30917;-3.005685;etiqueta station=subway
+descartado;node/5294695247;Tren;Abatxolo;Portugalete;43.314316;-3.013594;etiqueta station=subway
+descartado;node/5294695248;Tren;Portugalete;Portugalete;43.317667;-3.020735;etiqueta station=subway
+descartado;node/5294695249;Tren;Peñota;Portugalete;43.321972;-3.025367;etiqueta station=subway
+descartado;node/5294695250;Tren;Santurtzi;Santurtzi;43.32885;-3.034286;etiqueta station=subway
+descartado;node/5294695251;Tren;Kabiezes;Santurtzi;43.322357;-3.037821;etiqueta station=subway
+descartado;node/5294711012;Tren;Kukullaga;Etxebarri;43.251137;-2.889727;etiqueta station=subway
+descartado;node/5294711013;Tren;Otxarkoaga;Bilbao;43.258687;-2.898687;etiqueta station=subway
+descartado;node/5294711014;Tren;Txurdinaga;Bilbao;43.259163;-2.906432;etiqueta station=subway
+descartado;node/5294711015;Tren;Zurbaranbarri;Bilbao;43.263726;-2.913724;etiqueta station=subway
+descartado;node/5294711016;Tren;Uribarri;Bilbao;43.266839;-2.919947;etiqueta station=subway
+descartado;node/5295678051;Tren;Leioa;Leioa;43.3179;-2.991707;etiqueta station=subway
+descartado;node/5295678083;Tren;Astrabudua;Erandio;43.314623;-2.986798;etiqueta station=subway
+descartado;node/5295689396;Tren;Lamiako;Leioa;43.321362;-3.001097;etiqueta station=subway
+descartado;node/5299570322;Tren;Plentzia;Plentzia;43.401223;-2.946352;etiqueta station=subway
+descartado;node/5299570330;Tren;Urduliz;Urduliz;43.379004;-2.958142;etiqueta station=subway
+descartado;node/5299570331;Tren;Sopela;Sopela;43.38022;-2.978972;etiqueta station=subway
+descartado;node/5299570338;Tren;Larrabasterra;Sopela;43.375674;-2.991499;etiqueta station=subway
+descartado;node/5299570339;Tren;Berango;Berango;43.366967;-2.999522;etiqueta station=subway
+descartado;node/5299570340;Tren;Algorta;Getxo;43.350331;-3.009294;etiqueta station=subway
+descartado;node/5299570341;Tren;Aiboa;Getxo;43.34406;-3.002687;etiqueta station=subway
+descartado;node/5299570342;Tren;Neguri;Getxo;43.340231;-3.005547;etiqueta station=subway
+descartado;node/5299570343;Tren;Gobela;Getxo;43.333025;-3.007381;etiqueta station=subway
+descartado;node/5299570344;Tren;Areeta;Getxo;43.325997;-3.009635;etiqueta station=subway
+descartado;node/552964731;Tren;Gallarta;Ortuella;43.319369;-3.067438;duplicado en el lote de node/11872156806 (4 m)
+descartado;node/5661671297;Tren;Lazkano;Donostia / San Sebastián;43.307921;-1.989406;etiqueta station=funicular
+descartado;node/5661671298;Tren;Morlans;Donostia / San Sebastián;43.308048;-1.987887;etiqueta station=funicular
+descartado;node/5669495725;Tren;;Santurtzi;43.325462;-3.031661;sin nombre en OpenStreetMap
+descartado;node/5669495727;Tren;;Santurtzi;43.325012;-3.031611;sin nombre en OpenStreetMap
+descartado;node/5669495742;Tren;;Santurtzi;43.32518;-3.03163;sin nombre en OpenStreetMap
+descartado;node/569074658;Autobús;Alegiko geltokia;Alegia;43.100901;-2.098416;duplicado en el lote de node/569074657 (69 m)
+descartado;node/6786551613;Tren;Herrera;Donostia / San Sebastián;43.319849;-1.938126;duplicado en el lote de node/6083584004 (117 m)
+por revisar;node/6786551619;Tren;Estación de tren de Bentak (Irun) – Elizatxo hiribidea;Irun;43.33036;-1.817057;posible duplicado de node/6856255913 (Ventas de Irún) a 128 m
+descartado;node/6786551620;Tren;Gaintxurizketa;Lezo;43.326755;-1.857599;etiqueta subway=yes sin train=yes
+descartado;node/678832648;Tren;Orduña;;42.994663;-3.015976;fuera de los municipios oficiales cargados
+descartado;node/683124105;Tren;Ugao-Miraballes;Ugao-Miraballes;43.179195;-2.90283;etiqueta station=light_rail
+por revisar;node/6856255913;Tren;Estación de tren de Ventas de Irún – Elizatxo hiribidea;Irun;43.329747;-1.818401;posible duplicado de node/6786551619 (Bentak) a 128 m
+descartado;node/6856255915;Tren;Pasaia;Pasaia;43.318981;-1.917073;duplicado en el lote de node/14023250584 (216 m)
+descartado;node/8171114203;Tren;Larratxo;Donostia / San Sebastián;43.313566;-1.937894;etiqueta station=funicular
+descartado;node/8171114204;Tren;Larraundi;Donostia / San Sebastián;43.313711;-1.936727;etiqueta station=funicular
+descartado;way/113679360;Tren;Santurtzi;Santurtzi;43.328538;-3.029609;duplicado en el lote de node/10212476577 (9 m)
+descartado;way/1206756962;Autobús;;Deba;43.294932;-2.355243;sin nombre en OpenStreetMap
+descartado;way/1252785304;Autobús;Autobus geltokia;Ispaster;43.361986;-2.545359;duplicado en el lote de way/1252784911 (15 m)
+descartado;way/1359905644;Tren;;Hernani;43.2662;-1.972798;sin nombre en OpenStreetMap
+descartado;way/1359905645;Tren;;Hernani;43.266253;-1.972924;sin nombre en OpenStreetMap
+descartado;way/1528739394;Autobús;;Galdakao;43.235954;-2.833014;sin nombre en OpenStreetMap
+descartado;way/1528739398;Autobús;;Galdakao;43.235748;-2.832995;sin nombre en OpenStreetMap
+descartado;way/198911963;Autobús;;Zumarraga;43.087119;-2.32036;sin nombre en OpenStreetMap
+descartado;way/216245599;Autobús;Bus eta metro geltokia;Etxebarri;43.243988;-2.896815;etiqueta public_transport=platform
+por revisar;way/218664177;Autobús;Estación autobuses Gernika (Gernika-Lumo) – Iparragirre kalea;Gernika-Lumo;43.31368;-2.676541;posible duplicado de node/3778184661 (Gernikako Autobus geltokia) a 15 m
+descartado;way/310141806;Autobús;;Mungia;43.353547;-2.840988;sin nombre en OpenStreetMap
+descartado;way/375213472;Autobús;Gernikako autobus geltokia;Gernika-Lumo;43.313726;-2.676727;duplicado en el lote de node/3778184661 (1 m)
+descartado;way/402170994;Tren;;Bilbao;43.259694;-2.953256;sin nombre en OpenStreetMap
+descartado;way/405952656;Autobús;Donostiako Autobus Geltokia;Donostia / San Sebastián;43.31688;-1.97741;duplicado en el lote de node/4194898831 (61 m)
+descartado;way/45107948;Autobús;;Arrasate / Mondragón;43.063123;-2.481667;sin nombre en OpenStreetMap
+por revisar;way/489639101;Autobús;Gasteizko autobus geltokia (Vitoria-Gasteiz) – Euskaltzaindiaren plaza;Vitoria-Gasteiz;42.858982;-2.684988;posible duplicado de node/13691559903 (Estación de autobuses de Vitoria-Gasteiz) a 5 m
+descartado;way/515736964;Autobús;;Aia;43.23759;-2.147898;sin nombre en OpenStreetMap

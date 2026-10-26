@@ -1,0 +1,279 @@
+{
+  "codigo": "pais-vasco-resto",
+  "prefijo": "catalogo",
+  "criterio": "Siete categorias de una vez: Hospital (amenity o healthcare = hospital), Centro de salud (clinica o consulta cuyo nombre es «centro de salud», «centre d'atenció primària» o «CAP»; los consultorios no entran), Supermercado (shop=supermarket sin Carrefour ni Hipercor, que tienen su categoria), Centro comercial (shop=mall), Gimnasios (leisure=fitness_centre), Bricolaje (shop=doityourself sin Leroy Merlin y con nombre de ferreteria o bricolaje: en Cataluña esa etiqueta esta mal usada en muchos comercios) y Entidad oficial (ayuntamientos, juzgados y oficinas de la AEAT, la Seguridad Social, la DGT y similares). Se excluyen los elementos en desuso o abandonados. El nombre se compone con el de OpenStreetMap y, si no contiene el municipio, se le anade; nunca se inventa. Un punto de la misma categoria y el mismo nombre a menos de 150 m se considera el mismo. Un nombre generico («Supermercado», «Gimnasio»…) no entra y va a excepciones.",
+  "reglas": [
+    {
+      "categoria": "Centro de salud",
+      "subtipo": null,
+      "etiquetas": {
+        "amenity": [
+          "hospital"
+        ]
+      },
+      "exigir_texto": "centro de salud|centro salud|centro de atenci[oó]n primaria|centre d.atenci[oó] prim[aà]ria|centre de salut|^cap\\b|^cs\\b|osasun etxea|osasun zentroa|osasun-zentroa|ambulatorio",
+      "excluir_texto": "mental|veterinari|dental|fisioter|rehabilitaci|consultori|dispensari",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    },
+    {
+      "categoria": "Centro de salud",
+      "subtipo": null,
+      "etiquetas": {
+        "healthcare": [
+          "hospital"
+        ]
+      },
+      "exigir_texto": "centro de salud|centro salud|centro de atenci[oó]n primaria|centre d.atenci[oó] prim[aà]ria|centre de salut|^cap\\b|^cs\\b|osasun etxea|osasun zentroa|osasun-zentroa|ambulatorio",
+      "excluir_texto": "mental|veterinari|dental|fisioter|rehabilitaci|consultori|dispensari",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    },
+    {
+      "categoria": "Hospital",
+      "subtipo": null,
+      "etiquetas": {
+        "amenity": [
+          "hospital"
+        ]
+      },
+      "excluir_texto": "veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\\.?a\\.?e\\.?\\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada|salud mental|laboral|hospital de d[ií]a|psikiatriko|osasun mental|eguneko ospital|adikzio|eguneko hospital",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    },
+    {
+      "categoria": "Hospital",
+      "subtipo": null,
+      "etiquetas": {
+        "healthcare": [
+          "hospital"
+        ]
+      },
+      "excluir_texto": "veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\\.?a\\.?e\\.?\\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada|salud mental|laboral|hospital de d[ií]a|psikiatriko|osasun mental|eguneko ospital|adikzio|eguneko hospital",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    },
+    {
+      "categoria": "Centro de salud",
+      "subtipo": null,
+      "etiquetas": {
+        "amenity": [
+          "clinic",
+          "doctors"
+        ]
+      },
+      "exigir_texto": "centro de salud|centro salud|centro de atenci[oó]n primaria|centre d.atenci[oó] prim[aà]ria|centre de salut|^cap\\b|^cs\\b|osasun etxea|osasun zentroa|osasun-zentroa|ambulatorio",
+      "excluir_texto": "mental|veterinari|dental|fisioter|rehabilitaci|consultori|dispensari",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    },
+    {
+      "categoria": "Centro de salud",
+      "subtipo": null,
+      "etiquetas": {
+        "healthcare": [
+          "clinic",
+          "centre",
+          "doctor"
+        ]
+      },
+      "exigir_texto": "centro de salud|centro salud|centro de atenci[oó]n primaria|centre d.atenci[oó] prim[aà]ria|centre de salut|^cap\\b|^cs\\b|osasun etxea|osasun zentroa|osasun-zentroa|ambulatorio",
+      "excluir_texto": "mental|veterinari|dental|fisioter|rehabilitaci|consultori|dispensari",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    },
+    {
+      "categoria": "Supermercado",
+      "subtipo": null,
+      "etiquetas": {
+        "shop": [
+          "supermarket"
+        ]
+      },
+      "excluir_texto": "carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\\b|mercats\\b|plaça del mercat",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    },
+    {
+      "categoria": "Centro comercial",
+      "subtipo": null,
+      "etiquetas": {
+        "shop": [
+          "mall"
+        ]
+      },
+      "excluir_texto": "aparcamiento|parking|duty free",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    },
+    {
+      "categoria": "Gimnasios",
+      "subtipo": null,
+      "etiquetas": {
+        "leisure": [
+          "fitness_centre"
+        ]
+      },
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      },
+      "excluir_texto": "pabell[oó]n|campo de f[uú]tbol|pista de|piscina municipal|pavell[oó]|camp de futbol|piscina"
+    },
+    {
+      "categoria": "Bricolaje",
+      "subtipo": null,
+      "etiquetas": {
+        "shop": [
+          "doityourself"
+        ]
+      },
+      "excluir_texto": "leroy merlin|click|recogida|porcelanosa|m[aá]rmol|marbre|piscin|cer[aà]mic|alufasa|alumini|suministros|subministraments|electro|materiales de construcci|materials de construcci",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      },
+      "exigir_texto": "brico|ferret|ferreter|ferreria|bauhaus|obramat|bigmat|saltoki|bricomart|aki\\b|weber"
+    },
+    {
+      "categoria": "Entidad oficial",
+      "subtipo": null,
+      "etiquetas": {
+        "amenity": [
+          "townhall"
+        ]
+      },
+      "exigir_texto": "ayuntamiento|ajuntament|entidad local aut[oó]noma|entitat municipal descentralitzada|diputaci[oó]|consell comarcal|casa de la vila|casa de la ciutat|casa consistorial|ayuntamientu|conceyu|casa.l conceyu|udal|udaletxea|herriko etxea",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    },
+    {
+      "categoria": "Entidad oficial",
+      "subtipo": null,
+      "etiquetas": {
+        "amenity": [
+          "courthouse"
+        ]
+      },
+      "exigir_texto": "juzgado|jutjat|audiencia|tribunal|palacio de justicia|palau de just[ií]cia|registro civil|registre civil|xulg[aá]u|xulgados|epaitegi|juez de paz|juzgado de paz|justizia jauregia|bake epaitegia",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    },
+    {
+      "categoria": "Entidad oficial",
+      "subtipo": null,
+      "etiquetas": {
+        "office": [
+          "government"
+        ]
+      },
+      "exigir_texto": "aeat|agencia tributaria|ag[eè]ncia tributària|seguridad social|seguretat social|tresoreria general|inss|tgss|dgt|jefatura provincial de tr[aá]fico|sepe|subdelegaci[oó]|delegaci[oó] del govern|delegaci[oó]n del gobierno|oficina de empleo|oficina de treball|gizarte segurantza|ogasun|hacienda foral|diputaci[oó]n foral|foru aldundia",
+      "excluir_si": {
+        "disused": [
+          "yes"
+        ],
+        "abandoned": [
+          "yes"
+        ]
+      }
+    }
+  ],
+  "excluir_claves": [
+    "disused:shop",
+    "abandoned:shop",
+    "disused:amenity",
+    "abandoned:amenity"
+  ],
+  "nombre_por_categoria": {
+    "Hospital": "{nombre_municipio}",
+    "Centro de salud": "{nombre_municipio}",
+    "Supermercado": "{nombre_municipio}",
+    "Centro comercial": "{nombre_municipio}",
+    "Gimnasios": "{nombre_municipio}",
+    "Bricolaje": "{nombre_municipio}",
+    "Entidad oficial": "{nombre_municipio}"
+  },
+  "nombre_obligatorio": true,
+  "nombre_sospechoso_regex": "^(supermercado|super|tienda|alimentaci[oó]n|autoservicio|ultramarinos|minimarket|mini ?market|frutas?|panader[ií]a|gimnasio|gym|fitness|polideportivo|hospital|centro de salud|ayuntamiento|juzgado|centro comercial|supermercat|botiga|alimentaci[oó]|gimn[aà]s|poliesportiu|ajuntament|jutjat|centre comercial|centre de salut|cap|udaletxea|osasun etxea|osasun zentroa)s?$",
+  "excluir_revisar": true,
+  "calle_no_valida_regex": "^(carril|veh[ií]culos|vehicles|salida|sortida|acceso|acc[eé]s)\\b|\\bcarril (bici|taxi|de servicio)\\b|rotonda|rotonda|servicio|via de servei|^[A-Z]{1,2}-?\\d",
+  "solo_provincias": [
+    "01",
+    "20",
+    "48"
+  ],
+  "duplicado_ignora_nombre": false,
+  "distancia_duplicado_m": 150,
+  "distancia_existente_m": 150,
+  "distancia_revisar_m": 0,
+  "nota_informe": "OpenStreetMap puede tener puntos cerrados, trasladados o duplicados, y no indica el horario vigente. El codigo postal y, en parte, la calle son los del punto con direccion mas cercano: orientativos, no una direccion postal verificada.",
+  "region": "pais-vasco"
+}
