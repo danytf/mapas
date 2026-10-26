@@ -1996,29 +1996,37 @@ const saveInactive = () => typeof window.mapaPersistUserState === "function" ? w
 const saveRemoved = () => typeof window.mapaPersistUserState === "function" ? window.mapaPersistUserState("removed", [...removed]) : Promise.resolve(false);
 const saveCustoms = () => typeof window.mapaPersistUserState === "function" ? window.mapaPersistUserState("customs", customs) : Promise.resolve(false);
 const personalStateKey = (c) => c.databaseId ? (c.skey || (c.skey = "est:" + c.databaseId)) : "custom:" + c.name;
-const hasPersonalRef = (set, c) => set.has(personalStateKey(c)) || set.has(c.name);
+const hasPersonalRef = (set, c) => set.size > 0 && (set.has(personalStateKey(c)) || set.has(c.name)); /* conjuntos vacíos (lo habitual): sin calcular la clave */
 const addPersonalRef = (set, c) => { set.delete(c.name); set.add(personalStateKey(c)); };
 const deletePersonalRef = (set, c) => { set.delete(personalStateKey(c)); set.delete(c.name); };
+// Índices por nombre y por referencia (antes se recorrían todos los puntos por cada referencia). Se construyen solo si hay
+// alguna referencia y se comparten entre las cuatro listas personales de loadPersonalState, que los reinicia (indiceRefs = null) antes y después.
+let indiceRefs = null;
 const normalizePersonalRefs = (value) => {
-  // Índices por nombre y por referencia (antes se recorrían todos los puntos por cada referencia).
-  const porNombre = new Map(), porRef = new Map();
-  CENTERS.forEach((item) => {
-    if (!item.databaseId) return;
-    if (!porNombre.has(item.name)) porNombre.set(item.name, item);
-    porRef.set("est:" + item.databaseId, item);
-  });
-  return new Set((Array.isArray(value) ? value : [])
-    .filter(x => typeof x === "string")
-    .map(ref => {
-      const c = porRef.get(ref) || porNombre.get(ref);
-      return c ? personalStateKey(c) : ref;
-    }));
+  const refs = (Array.isArray(value) ? value : []).filter(x => typeof x === "string");
+  if (!refs.length) return new Set();
+  if (!indiceRefs) {
+    const porNombre = new Map(), porRef = new Map();
+    CENTERS.forEach((item) => {
+      if (!item.databaseId) return;
+      if (!porNombre.has(item.name)) porNombre.set(item.name, item);
+      porRef.set("est:" + item.databaseId, item);
+    });
+    indiceRefs = { porNombre, porRef };
+  }
+  const { porNombre, porRef } = indiceRefs;
+  return new Set(refs.map(ref => {
+    const c = porRef.get(ref) || porNombre.get(ref);
+    return c ? personalStateKey(c) : ref;
+  }));
 };
 const isArchived = (c) => c.archived === true;
 const isOut = (c) => hasPersonalRef(removed, c) || isArchived(c);
 // Desactivado (personal): sigue en la lista pero no se dibuja en el mapa.
 const isInactive = (c) => hasPersonalRef(inactive, c);
-const permOf = (c) => permits[permitKey(c)] || { estado: "sin", fecha: "", contacto: "", notas: "", valoracion: 0 };
+/* Estado por defecto de un punto sin expediente: un único objeto congelado (se pedía decenas de miles de veces al cargar y se creaba uno nuevo cada vez). Solo se lee; para editar se copia (Object.assign) y se guarda en permits. */
+const PERM_SIN = Object.freeze({ estado: "sin", fecha: "", contacto: "", notas: "", valoracion: 0 });
+const permOf = (c) => permits[permitKey(c)] || PERM_SIN;
 const stars = (n) => "★".repeat(n) + "☆".repeat(5 - n);
 const fmtD = (d) => {
   if (!d) return "…";
@@ -2129,7 +2137,7 @@ const solEstado = (q, t) => (q.res === "denegada" || q.res === "aprobada" || q.r
 const solValid = (q) => solEstado(q) === "pendiente";
 const concEstado = (h, t) => { t = t || today(); return h.cancelada ? "cancelada" : (h.desde && h.desde > t) ? "futura" : (h.hasta && h.hasta < t) ? "terminada" : "vigente"; };
 const isVig = (h) => concEstado(h) === "vigente";
-const histOf = (c) => ((permits[permitKey(c)] && permits[permitKey(c)].historial) || []).slice().sort((a, b) => (b.desde || "").localeCompare(a.desde || ""));
+const histOf = (c) => { const p = permits[permitKey(c)], h = p && p.historial; return h ? h.slice().sort((a, b) => (b.desde || "").localeCompare(a.desde || "")) : []; };
 const vigs = (c) => histOf(c).filter(isVig);
 const vigente = (c) => histOf(c).find(isVig);
 const histTxt = (h) => fmtD(h.desde) + " – " + fmtD(h.hasta) + (h.ong ? " · " + h.ong : "") + (safeCount(h.captadores) ? " · " + safeCount(h.captadores) + " captador" + (safeCount(h.captadores) === 1 ? "" : "es") : "");
@@ -2148,10 +2156,10 @@ const estadoCalc = (p) => {
   if (hs.length) return hs[0].cancelada ? "cancelado" : "sin"; /* última concesión cancelada / terminada */
   return sols.some((x) => x.res === "denegada") ? "denegado" : "sin";
 };
-const estadoOf = (c) => estadoCalc(permOf(c));
+const estadoOf = (c) => { const p = permits[permitKey(c)]; return p ? estadoCalc(p) : "sin"; }; /* sin expediente: «sin» sin más cálculo (igual que estadoCalc del estado por defecto) */
 const segCalc = (p) => solsOf(p).filter((x) => !x.res && x.seg).map((x) => x.seg).sort()[0] || "";
 const fechaCalc = (p) => solsOf(p).map((x) => x.fecha).filter(Boolean).sort().pop() || "";
-const seguimientoDue = (c) => { const p = permOf(c), d = [segCalc(p), p.seguimiento, p.segPunto && p.segPunto.fecha].filter(Boolean).sort()[0]; return d && d <= today() ? d : ""; };
+const seguimientoDue = (c) => { const p = permits[permitKey(c)]; if (!p) return ""; const d = [segCalc(p), p.seguimiento, p.segPunto && p.segPunto.fecha].filter(Boolean).sort()[0]; return d && d <= today() ? d : ""; };
 /* Expedientes de un punto en forma uniforme (k: «sol» o «con»; est: estado de su ciclo de vida). */
 const expedientesDe = (c, p) => {
   const t = today(), out = [];
@@ -3649,8 +3657,8 @@ function checkLogros() {
   const r = logros.racha, t = today(), ayer = addDays(t, -1);
   if (due === 0 && used > 0) { if (r.dia !== t) { r.n = r.dia === ayer ? r.n + 1 : 1; r.dia = t; } } else if (due > 0 && r.n) { r.n = 0; r.dia = ""; }
   r.mejor = Math.max(r.mejor, r.n);
-  const nuevos = [];
-  logrosCalc().forEach((b) => {
+  const nuevos = [], insignias = logrosCalc(); /* una sola vez: cuesta ~100 ms con 39.000 puntos */
+  insignias.forEach((b) => {
     const prev = logros.n[b.id] || 0;
     if (b.lv > prev) { logros.n[b.id] = b.lv; logros.f[b.id] = t; if (!LOG_FIRST) nuevos.push(b); }
   });
@@ -3659,7 +3667,7 @@ function checkLogros() {
   if (nuevos.length) logrosToast("Insignia conseguida: " + nuevos.map((b) => b.name + (b.max > 1 ? " (" + LV_NAMES[b.lv] + ")" : "")).join(", "));
   const tot = Object.keys(logros.n).filter((k) => logros.n[k] > 0).length;
   const lk = document.getElementById("logrosK"); if (lk) lk.querySelector("b").textContent = tot;
-  const mb = document.getElementById("logrosBtn"); if (mb) mb.textContent = "Logros (" + tot + " / " + logrosCalc().length + ")";
+  const mb = document.getElementById("logrosBtn"); if (mb) mb.textContent = "Logros (" + tot + " / " + insignias.length + ")";
   return tot;
 }
 
@@ -3994,18 +4002,23 @@ function filtrosActuales() {
   return { q: $("#q").value.trim().toLowerCase(), provincia: $("#provincia").value, muni: $("#muni").value, tipo: $("#tipo").value, permiso: $("#permiso").value,
     valor: $("#valor").value, cadena: $("#cadena").value, subtipo: $("#subtipo").value };
 }
-function coincide(c, f, omitir) {
-  if (isOut(c)) return false;
+function coincide(c, f, omitir, comunOk) {
+  if (!comunOk && !coincideComun(c, f)) return false; /* comunOk: el llamador ya comprobó las condiciones comunes (refreshCounts, una vez por punto) */
   if (omitir !== "muni" && f.muni && townOf(c) !== f.muni) return false;
   if (omitir !== "provincia" && f.provincia && provDe(c) !== f.provincia) return false;
   if (omitir !== "tipo" && !matchTipo(c, f.tipo)) return false;
   if (omitir !== "cadena" && f.cadena && chainOf(c) !== f.cadena) return false;
   if (omitir !== "subtipo" && f.subtipo && c.sub !== f.subtipo) return false;
   if (omitir !== "permiso" && f.permiso && estadoOf(c) !== f.permiso) return false;
+  if (omitir !== "valor" && f.valor) { const r = permOf(c).valoracion || 0; if (f.valor === "sin" ? r : r < +f.valor) return false; }
+  return true;
+}
+/* Condiciones que no se omiten nunca al contar las alternativas de un selector: el punto visible, «Por revisar», «Seguimientos», «Favoritos» y la búsqueda. */
+function coincideComun(c, f) {
+  if (isOut(c)) return false;
   if (onlyRev && !isRev(c)) return false;
   if (onlySeg && !seguimientoDue(c)) return false;
   if (onlyFav && !isFav(c)) return false;
-  if (omitir !== "valor" && f.valor) { const r = permOf(c).valoracion || 0; if (f.valor === "sin" ? r : r < +f.valor) return false; }
   if (f.q && !(c.name + " " + c.street + " " + townOf(c)).toLowerCase().includes(f.q)) return false;
   return true;
 }
@@ -4026,10 +4039,11 @@ function refreshCounts() {
     ["cadena", $("#cadena"), (c) => (c.tipo === "Supermercado" ? chainOf(c) : "")],
     ["subtipo", $("#subtipo"), (c) => (c.tipo === "Entidad oficial" ? c.sub : "")]
   ];
+  const comunes = CENTERS.filter((c) => coincideComun(c, f)); /* una sola vez, no una por selector */
   facetas.forEach(([clave, sel, valorDe]) => {
     const cuenta = {}; let total = 0;
-    for (const c of CENTERS) {
-      if (!coincide(c, f, clave)) continue;
+    for (const c of comunes) {
+      if (!coincide(c, f, clave, true)) continue;
       total++;
       const v = valorDe(c); if (v) cuenta[v] = (cuenta[v] || 0) + 1;
     }
@@ -4054,9 +4068,13 @@ function refreshSelects() {
   const vis = CENTERS.filter((c) => !isOut(c));
   const provinceValue = $("#provincia").value;
   const provinceCounts = {};
+  /* Recuentos por categoría y por estado en una sola pasada (antes, una pasada por categoría y por estado: 16 recorridos de 39.000 puntos). */
+  const porTipo = new Map(), porEstado = new Map();
   vis.forEach((c) => {
     const provinceName = (typeof c.province === "string" ? c.province : (typeof c.prov === "string" ? c.prov : "")).trim();
     if (provinceName) provinceCounts[provinceName] = (provinceCounts[provinceName] || 0) + 1;
+    porTipo.set(c.tipo, (porTipo.get(c.tipo) || 0) + 1);
+    const e = estadoOf(c); porEstado.set(e, (porEstado.get(e) || 0) + 1);
   });
   $("#provincia").innerHTML = '<option value="">Provincia: todas (' + vis.length + ')</option>' +
     Object.entries(provinceCounts).sort((a, b) => a[0].localeCompare(b[0], "es")).map(([name, count]) =>
@@ -4068,9 +4086,9 @@ function refreshSelects() {
   refreshMuniSelect();
   const tv = $("#tipo").value, pv = $("#permiso").value;
   $("#tipo").innerHTML = '<option value="">Categoría: todas</option>' +
-    TIPOS.map(([i, t]) => '<option value="' + t + '">' + i + " · " + t + " (" + vis.filter((c) => c.tipo === t).length + ")</option>").join("");
+    TIPOS.map(([i, t]) => '<option value="' + t + '">' + i + " · " + t + " (" + (porTipo.get(t) || 0) + ")</option>").join("");
   $("#permiso").innerHTML = '<option value="">Estado: todos</option>' +
-    ESTADOS.map(([k, t]) => '<option value="' + k + '">' + t + " (" + vis.filter((c) => estadoOf(c) === k).length + ")</option>").join("");
+    ESTADOS.map(([k, t]) => '<option value="' + k + '">' + t + " (" + (porEstado.get(k) || 0) + ")</option>").join("");
   const vv = $("#valor").value, ov = $("#orden").value;
   $("#valor").innerHTML = '<option value="">Valoración: todas</option><option value="5">★★★★★ · 5 estrellas</option><option value="4">★★★★☆ · 4 estrellas o más</option><option value="3">★★★☆☆ · 3 estrellas o más</option><option value="sin">Sin valorar</option>';
   $("#orden").innerHTML = '<option value="">Orden: normal</option><option value="val">Mejor valorados</option>';
@@ -4086,7 +4104,7 @@ function refreshSelects() {
   $("#subtipo").value = sv;
   $("#tipo").value = tv; $("#permiso").value = pv; $("#valor").value = vv; $("#orden").value = ov;
   $("#lgBody").innerHTML = "<h4>Color: categoría</h4>" +
-    TIPOS.filter(([i, t]) => vis.some((c) => c.tipo === t)).map(([i, t, col]) => '<div class="it"><i class="gi" style="background:' + col + '">' + glyphOf({ tipo: t }) + "</i>" + t + "</div>").join("") +
+    TIPOS.filter(([i, t]) => porTipo.has(t)).map(([i, t, col]) => '<div class="it"><i class="gi" style="background:' + col + '">' + glyphOf({ tipo: t }) + "</i>" + t + "</div>").join("") +
     '<h4>Aviso</h4><div class="it"><i class="rv">!</i>Ubicación por revisar</div>' +
     "<h4>Borde: permiso</h4>" +
     ESTADOS.map(([k, t, col]) => '<div class="it"><i class="ring" style="border-color:' + (k === "sin" ? "var(--pin-sin);box-shadow:0 0 0 1px var(--pin-sin-line)" : col) + '"></i>' + t + "</div>").join("");
@@ -4094,8 +4112,8 @@ function refreshSelects() {
   $("#restore").textContent = "Restaurar puntos quitados (" + nr + ")";
   $("#restore").disabled = !nr;
   {
-    const con = vis.filter((c) => estadoOf(c) === "concedido").length;
-    const capt = vis.reduce((a, c) => a + Math.max(0, ...vigs(c).map((h) => +h.captadores || 0)), 0);
+    const con = porEstado.get("concedido") || 0;
+    const capt = vis.reduce((a, c) => (permits[permitKey(c)] ? a + Math.max(0, ...vigs(c).map((h) => +h.captadores || 0)) : a), 0); /* sin expediente no hay vigencias */
     const seg = vis.filter(seguimientoDue).length;
     $("#kstrip").innerHTML = '<div class="kg kg-op" role="group" aria-label="Estado de la operación">' +
       '<div class="k"><b>' + vis.length + "</b><span>Puntos</span></div>" +
@@ -5991,10 +6009,12 @@ renderList();
       street: typeof p.street === "string" ? p.street : "",
       lat: Number(p.lat), lon: Number(p.lon), approx: Boolean(p.approx)
     })) : [];
+    indiceRefs = null;
     removed = normalizePersonalRefs(state.removed);
     inactive = normalizePersonalRefs(state.inactive);
     reviewed = normalizePersonalRefs(state.reviewed);
     favorites = normalizePersonalRefs(state.favorites);
+    indiceRefs = null;
     // Ignorar correcciones heredadas por usuario: la ubicación vigente procede del catálogo maestro Supabase.
     delete loadedPersonalState.locations;
     gam = Object.assign({ aw: {}, day: {}, dm: {}, wm: {}, lvl: 1, sound: true, log: [], fog: true, wsum: "" }, state.gamification || {});
@@ -6133,9 +6153,9 @@ renderList();
       });
 
       makeMarkers(CENTERS);
-      refreshSelects();
+      /* No se rellenan aquí los filtros, los indicadores ni la lista: la pantalla sigue bloqueada y loadPersonalState lo hace justo después,
+         con el estado personal ya aplicado (antes se calculaba dos veces con 39.000 puntos). */
       window.mapaListLoading = false;
-      renderList();
       if (rows.length) fitAll();
       else map.setView(SPAIN_CENTER, 6);
 
