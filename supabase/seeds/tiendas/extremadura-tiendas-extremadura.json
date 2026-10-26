@@ -1,0 +1,43 @@
+{
+ "format_version": 1,
+ "source": "openstreetmap",
+ "source_license": "ODbL 1.0 (c) OpenStreetMap contributors, https://www.openstreetmap.org/copyright",
+ "queried_at": "2026-10-26",
+ "osm_base_timestamp": "2026-10-20T20:23:47Z",
+ "selection_criteria": "Tiendas de mascotas de seis cadenas (Kiwoko, Tiendanimal, Miscota, Guaw, Mundo Animal y Cash Mascota), en la categoria Tiendas con el subtipo Mascotas: shop=pet cuyo nombre, marca u operador es de una de ellas. Alcance elegido por el titular el 26/10/2026 («cadenas tipo Tiendanimal», como en Granada). Se excluyen los elementos en desuso o abandonados y los puntos de recogida o de venta en linea. El nombre se compone con el de OpenStreetMap y, si no contiene el municipio, se le anade; nunca se inventa. Dos puntos del mismo nombre a menos de 150 m se consideran el mismo. Granada queda fuera porque su catalogo esta revisado a mano (7 tiendas de mascotas). OpenStreetMap recoge solo una parte de las tiendas reales de cada cadena: el lote es una base, no el censo completo.",
+ "province": "Andalucía",
+ "establishments": [
+  {
+   "source_ref": "catalogo-extremadura:extremadura-tiendas:node-2411991247",
+   "name": "Kiwoko Mérida – Calle Rafael Alberti Merello",
+   "category": "Tiendas",
+   "subtype": "Mascotas",
+   "municipality": "Mérida",
+   "municipality_ine": "06083",
+   "address": "Calle Rafael Alberti Merello",
+   "postal_code": null,
+   "latitude": 38.90634,
+   "longitude": -6.35125,
+   "location_precision": "address",
+   "location_source": "openstreetmap:node/2411991247",
+   "province": "Badajoz",
+   "status": "active"
+  },
+  {
+   "source_ref": "catalogo-extremadura:extremadura-tiendas:way-273210208",
+   "name": "Kiwoko Villanueva de la Serena – Calle Camino del Cerro de la Horca",
+   "category": "Tiendas",
+   "subtype": "Mascotas",
+   "municipality": "Villanueva de la Serena",
+   "municipality_ine": "06153",
+   "address": "Calle Camino del Cerro de la Horca",
+   "postal_code": null,
+   "latitude": 38.9681,
+   "longitude": -5.80643,
+   "location_precision": "address",
+   "location_source": "openstreetmap:way/273210208",
+   "province": "Badajoz",
+   "status": "active"
+  }
+ ]
+}
