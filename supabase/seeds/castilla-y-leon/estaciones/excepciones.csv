@@ -1,0 +1,32 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/10713113483;Tren;;Valladolid;41.640402;-4.757939;etiqueta station=funicular
+descartado;node/10713113484;Tren;;Valladolid;41.639595;-4.757913;etiqueta station=funicular
+descartado;node/11028627905;Tren;;Valladolid;41.634525;-4.749657;etiqueta station=funicular
+descartado;node/11028627906;Tren;;Valladolid;41.635329;-4.750542;etiqueta station=funicular
+descartado;node/12951536347;Autobús;;Isar;42.392433;-3.90436;sin nombre en OpenStreetMap
+descartado;node/14102485401;Autobús;;Candeleda;40.15388;-5.24476;sin nombre en OpenStreetMap
+por revisar;node/14144168377;Autobús;Estación de Autobuses de Astorga – Calle de Plinio el Joven;Astorga;42.459252;-6.055742;posible duplicado de way/62306151 (Estación Autobuses de Astorga) a 11 m
+descartado;node/1482356021;Autobús;;Cervera de Pisuerga;42.866852;-4.50075;sin nombre en OpenStreetMap
+por revisar;node/1705641818;Autobús;Estación de autobuses de Nava de la Asunción – Calle de Murillo;Nava de la Asunción;41.152116;-4.488315;posible duplicado de way/158341453 (Plaza de José Mata) a 3 m
+descartado;node/2046477540;Tren;Manzanos;;42.742736;-2.867335;fuera de los municipios oficiales cargados
+descartado;node/2091662260;Autobús;;Belorado;42.419028;-3.191745;sin nombre en OpenStreetMap
+descartado;node/2330586981;Tren;Barbadillo del Mercado;Barbadillo del Mercado;42.031619;-3.354692;etiqueta abandoned:railway
+descartado;node/2330593007;Tren;Cascajares de la Sierra;Cascajares de la Sierra;42.055632;-3.386996;etiqueta abandoned:railway
+descartado;node/2837248909;Autobús;;El Cabaco;40.566445;-6.128514;sin nombre en OpenStreetMap
+descartado;node/6181746477;Tren;Puerto de Navacerrada;;40.784382;-4.004742;fuera de los municipios oficiales cargados
+descartado;relation/18486477;Autobús;Estación de Autobuses de San Rafael;El Espinar;40.720501;-4.19259;etiqueta public_transport=platform
+descartado;way/1020007906;Autobús;;El Barco de Ávila;40.359358;-5.523686;sin nombre en OpenStreetMap
+descartado;way/122290127;Autobús;Estación de Autobuses de Zamora;Zamora;41.513857;-5.73843;duplicado en el lote de node/14141879025 (61 m)
+por revisar;way/158341453;Autobús;Estación de autobuses de Plaza de José Mata (Nava de la Asunción) – Calle de Murillo;Nava de la Asunción;41.152102;-4.488272;posible duplicado de node/1705641818 (Estación de autobuses de Nava de la Asunción) a 3 m
+descartado;way/239788744;Autobús;;Cebreros;40.456929;-4.462305;sin nombre en OpenStreetMap
+descartado;way/254558839;Autobús;;El Burgo de Osma-Ciudad de Osma;41.587977;-3.067713;sin nombre en OpenStreetMap
+descartado;way/283512776;Autobús;;Riaño;42.97595;-5.006995;sin nombre en OpenStreetMap
+descartado;way/406983415;Autobús;;Puebla de Sanabria;42.055239;-6.636938;sin nombre en OpenStreetMap
+descartado;way/425071389;Autobús;;El Barco de Ávila;40.359373;-5.523558;sin nombre en OpenStreetMap
+por revisar;way/496433202;Autobús;Parada de Autobús de Santa Eufemia del Arroyo – Calle Toro León;Santa Eufemia del Arroyo;41.896368;-5.265924;nombre dudoso en OpenStreetMap: Parada de Autobús de Santa Eufemia del Arroyo
+por revisar;way/508938589;Autobús;Parada de Autobús de Villardiga – Carretera de Villamartín de Campos a Zamora;Villárdiga;41.818901;-5.466767;nombre dudoso en OpenStreetMap: Parada de Autobús de Villardiga
+descartado;way/53493570;Autobús;Estación de Autobuses de Béjar;Béjar;40.384033;-5.761289;duplicado en el lote de node/14141879023 (10 m)
+por revisar;way/62306151;Autobús;Estación Autobuses de Astorga – Avenida de las Murallas;Astorga;42.459181;-6.055634;posible duplicado de node/14144168377 (Estación de Autobuses de Astorga) a 11 m
+descartado;way/80875239;Autobús;;Mansilla de las Mulas;42.495742;-5.415678;sin nombre en OpenStreetMap
+descartado;way/81151622;Autobús;Estación de autobuses de Burgos;Burgos;42.337946;-3.701124;duplicado en el lote de node/13809295632 (2 m)
+descartado;way/81426533;Autobús;Estación de Autobuses de Ponferrada;Ponferrada;42.552959;-6.601494;duplicado en el lote de node/14144168363 (19 m)
