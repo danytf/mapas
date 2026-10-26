@@ -31,6 +31,7 @@ node scripts/test-lista-jerarquia.mjs
 node scripts/test-panel-graficas.mjs
 node scripts/test-carga-paralela.mjs
 node scripts/test-expedientes.mjs
+node scripts/test-centro-detalles.mjs                # casillas con tema oscuro, cabecera y lote del Centro en móvil, rejilla del Panel, título del Calendario
 node scripts/test-a11y-fase-d.mjs index.html          # contraste WCAG AA claro/oscuro, nombres, aria-live y foco (Fase D)
 ```
 Cada una devuelve código distinto de cero si falla. `audit-a11y` y `audit-cdn-integrity` fallan en versiones anteriores a #81 y #80 (control negativo).

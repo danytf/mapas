@@ -36,6 +36,7 @@ on:
       - "scripts/test-lista-jerarquia.mjs"
       - "scripts/test-panel-graficas.mjs"
       - "scripts/test-carga-paralela.mjs"
+      - "scripts/test-centro-detalles.mjs"
       - "scripts/test-a11y-fase-d.mjs"
       - "scripts/e2e-centro.mjs"
       - "scripts/dev/seed-permits-demo.mjs"
@@ -118,6 +119,8 @@ jobs:
         run: node scripts/test-expedientes.mjs
       - name: Test filter counters
         run: node scripts/test-contadores-filtros.mjs
+      - name: Test Centro details (native checkbox theme, mobile header and batch bar, balanced Panel grid, Calendar title)
+        run: node scripts/test-centro-detalles.mjs
       - name: Run XSS regression audit
         run: node scripts/audit-xss.mjs index.html
       - name: Check keyboard access to statistics panel rows

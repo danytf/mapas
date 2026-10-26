@@ -127,7 +127,7 @@ Estado: el Centro es la única vía para solicitudes, concesiones y seguimientos
 7. **Provincia por defecto del Calendario:** abre con una provincia elegida automáticamente (`provAuto`); el Panel y el Centro, con todas. Igualar o dejar.
 8. Siguiente comunidad de la carga nacional; 153 códigos postales y 28 calles de Canarias; hospitales dudosos; favoritos de Andalucía (~139).
 
-**Mejoras pequeñas detectadas en la inspección visual (25/10/2026)**
+**Mejoras pequeñas detectadas en la inspección visual (25/10/2026)** (9 a 12 hechas en la rama `fix/centro-detalles-visuales`, prueba `scripts/test-centro-detalles.mjs`; la 13 sigue pendiente)
 9. Casillas de verificación nativas sin tema en modo oscuro.
 10. Móvil: «Reprogramar al» se parte en dos líneas en la barra de lote; los botones de la cabecera del Centro ocupan dos filas antes del contenido.
 11. Panel: la última tarjeta («Vigentes sin fecha de fin») queda sola en una fila.
