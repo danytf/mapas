@@ -125,7 +125,7 @@ Estado: el Centro es la única vía para solicitudes, concesiones y seguimientos
 **Decisiones del titular**
 6. **Concesiones sin ninguna fecha:** el Panel y el Centro las cuentan como vigentes y el Calendario las omite (hoy no hay ninguna en producción). Opciones: aviso en el Calendario o dejar de contarlas como vigentes.
 7. **Provincia por defecto del Calendario:** abre con una provincia elegida automáticamente (`provAuto`); el Panel y el Centro, con todas. Igualar o dejar.
-8. Siguiente comunidad de la carga nacional; asignar provincias nuevas a usuarios (decidido: no hasta terminar España); 153 códigos postales y 28 calles de Canarias; hospitales dudosos; favoritos de Andalucía (~139).
+8. Siguiente comunidad de la carga nacional; 153 códigos postales y 28 calles de Canarias; hospitales dudosos; favoritos de Andalucía (~139).
 
 **Mejoras pequeñas detectadas en la inspección visual (25/10/2026)**
 9. Casillas de verificación nativas sin tema en modo oscuro.
