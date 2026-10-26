@@ -1,0 +1,6 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/5316989621;;Oficina de Correos;Pozuelo de Alarcón;40.435842;-3.813887;duplicado en el lote de node/4751638232 (35 m)
+descartado;node/7458882106;;Oficina de Correos y Citypaq;Hoyo de Manzanares;40.62324;-3.906921;texto excluido (express|citypaq|mail boxes|mrw|tipsa|dhl|unipost|abacus|la poste|ups|gls)
+descartado;node/9366875426;;Oficina de Correos;Torrejón del Rey;40.642251;-3.334185;fuera de las provincias del lote (19)
+descartado;node/9901440185;;;Madrid;40.376734;-3.635995;duplicado en el lote de node/1812323465 (50 m)
+descartado;way/978377288;;Correos Express;Getafe;40.315048;-3.679033;texto excluido (express|citypaq|mail boxes|mrw|tipsa|dhl|unipost|abacus|la poste|ups|gls)
