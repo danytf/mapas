@@ -31,6 +31,13 @@ const barras = [...out.matchAll(/<li><span>([^<]+)<\/span><span class="pn-b" ari
 assert.deepEqual(barras.map((x) => [x[1], x[3]]), [["Madrid", "80"], ["Sevilla", "15"], ["Lugo", "5"]], "Provincias de mayor a menor");
 assert.deepEqual(barras.map((x) => Number(x[2])), [100, 18.8, 6.3], "El ancho es proporcional a la mayor");
 
+// Miles con punto en cuatro y más cifras, para que 8.426 y 16.929 se lean igual.
+const grande = [];
+for (let i = 0; i < 1234; i++) grande.push({ tipo: "Supermercado", province: "Madrid" });
+for (let i = 0; i < 16929; i++) grande.push({ tipo: "Hospital", province: "Sevilla" });
+const gg = graficas(grande);
+assert.ok(gg.includes("<b>1.234</b>") && gg.includes("<b>16.929</b>") && gg.includes("<b>18.163</b>"), "Los miles llevan punto también con cuatro cifras (1.234, 16.929, 18.163)");
+
 // 3) Con una sola provincia no hay barras; con más de diez se avisa; todo se escapa.
 assert.ok(!graficas(pts.filter((p) => p.province === "Madrid")).includes("pn-barras"), "Con una sola provincia no se dibujan barras");
 const muchas = []; for (let i = 0; i < 14; i++) muchas.push({ tipo: "Hospital", province: "Provincia " + i });

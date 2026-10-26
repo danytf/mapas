@@ -4219,7 +4219,8 @@ const csvCell = (value) => {
   };
   const rowsHtml = (map, kind) => map.map(([k, r]) => '<tr data-kind="' + kind + '" data-k="' + esc(k) + '"><td><button type="button" class="pn-rowbtn">' + esc(k) + "</button></td><td>" + r.n + "</td><td>" + r.pend + "</td><td>" + r.con + "</td><td>" + r.vig + "</td><td>" + r.capt + "</td></tr>").join("");
   const thead = (first) => "<thead><tr><th>" + first + "</th><th>Puntos</th><th>Solicitudes pendientes</th><th>Concesiones vigentes hoy</th><th>Puntos con vigencia hoy</th><th>Captadores autorizados hoy</th></tr></thead>";
-  const fmtN = (n) => n.toLocaleString("es-ES");
+  /* Miles con punto también en cuatro cifras (el formato español de serie no agrupa 1234, y 8426 junto a 16.929 queda desigual). */
+  const fmtN = (n) => String(n).replace(/\B(?=(?:\d{3})+(?!\d))/g, ".");
   const COLOR_TIPO = Object.fromEntries(TIPOS.map(([, n, v]) => [n, v]));
   /* El catálogo de un vistazo: reparto por categoría (anillo) y puntos por provincia (barras). Los números van también en texto. */
   const graficas = (pts) => {
