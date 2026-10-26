@@ -1,0 +1,152 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/100986804;Tren;Sant Isidre;València;39.45107;-0.402617;etiqueta station=subway
+descartado;node/10291996929;Tren;la Xara;Dénia;38.822983;0.063798;etiqueta station=light_rail
+descartado;node/10291997207;Tren;Pedrera-Vessanes;Dénia;38.831847;0.10082;etiqueta station=light_rail
+descartado;node/10292018480;Tren;Bosc de Diana;Dénia;38.834706;0.107202;etiqueta station=light_rail
+descartado;node/11363554764;Tren;Jesús;València;39.459362;-0.384649;etiqueta station=subway
+descartado;node/11372360330;Tren;;Crevillent;38.224553;-0.781076;sin nombre en OpenStreetMap
+descartado;node/11894850985;Tren;Font del Barranc;Paterna;39.51755;-0.469747;etiqueta station=subway
+descartado;node/12672737466;Tren;Benidorm;Benidorm;38.548281;-0.135576;etiqueta station=light_rail
+por revisar;node/13158211480;Autobús;Estació d'Autobusos d'Alacant / Estación de Autobuses de Alicante (Alacant / Alicante) – Carrer del Far del Cap de Sant Antoni;Alacant / Alicante;38.337377;-0.491375;posible duplicado de way/250304318 (Estació de Autobusos) a 27 m
+descartado;node/13585736151;Tren;MARQ-Castillo;Alacant / Alicante;38.352086;-0.475672;etiqueta tram=yes sin train=yes
+por revisar;node/13755311775;Autobús;Estació d'Autobusos de Guardamar del Segura – Carrer Molivent;Guardamar del Segura;38.087906;-0.656074;posible duplicado de way/184918562 (Estació d'Autobusos de Guardamar) a 2 m
+descartado;node/14082285481;Tren;Hospital Vila;la Vila Joiosa / Villajoyosa;38.530881;-0.198796;etiqueta station=light_rail
+descartado;node/14082290502;Tren;La Vila Joiosa;la Vila Joiosa / Villajoyosa;38.505854;-0.236428;etiqueta station=light_rail
+descartado;node/14082290503;Tren;Paradís;la Vila Joiosa / Villajoyosa;38.500251;-0.257379;etiqueta station=light_rail
+descartado;node/14082290504;Tren;Venta Lanuza;el Campello;38.476916;-0.318426;etiqueta station=light_rail
+descartado;node/14082290505;Tren;Cala Piteres;el Campello;38.454032;-0.352952;etiqueta station=light_rail
+descartado;node/14082290506;Tren;Coveta Fumà;el Campello;38.450116;-0.364495;etiqueta station=light_rail
+descartado;node/14082290511;Tren;Poble Espanyol;el Campello;38.439128;-0.382593;etiqueta station=light_rail
+descartado;node/14243583876;Tren;Camí Coves;Benidorm;38.559407;-0.104149;etiqueta station=light_rail
+descartado;node/14243625744;Tren;Garganes;Altea;38.602221;-0.047906;etiqueta station=light_rail
+descartado;node/14267833301;Tren;Amerador;el Campello;38.444815;-0.373364;etiqueta station=light_rail
+descartado;node/1657696033;Autobús;;Cullera;39.165954;-0.244842;sin nombre en OpenStreetMap
+descartado;node/1657703949;Autobús;;Cullera;39.169714;-0.243289;sin nombre en OpenStreetMap
+descartado;node/1735270823;Tren;Quart de Poblet;Quart de Poblet;39.480827;-0.441785;etiqueta station=subway
+descartado;node/2045680561;Autobús;;Llíber;38.742408;0.008353;sin nombre en OpenStreetMap
+descartado;node/2420238745;Tren;Rafelbunyol;Rafelbunyol;39.587968;-0.33087;etiqueta station=subway
+descartado;node/259044351;Tren;Gata;Gata de Gorgos;38.775223;0.087387;etiqueta light_rail=yes sin train=yes
+descartado;node/264605155;Tren;Masies;Montcada / Moncada;39.566508;-0.405263;etiqueta station=subway
+descartado;node/3344868499;Tren;Llíria;Llíria;39.622586;-0.590722;etiqueta station=subway
+descartado;node/3344868501;Tren;Benaguasil;Benaguasil;39.598988;-0.5842;etiqueta station=subway
+descartado;node/3344868510;Tren;Fondo de Benaguasil;Benaguasil;39.592694;-0.578306;etiqueta station=subway
+descartado;node/3344868521;Tren;La Pobla de Vallbona;la Pobla de Vallbona;39.582326;-0.56173;etiqueta station=subway
+descartado;node/3344868534;Tren;Gallipont - Torre del Virrei;la Pobla de Vallbona;39.568875;-0.542098;etiqueta station=subway
+descartado;node/3344868540;Tren;L'Eliana;l'Eliana;39.561624;-0.535952;etiqueta station=subway
+descartado;node/3344868555;Tren;Montesol;l'Eliana;39.555439;-0.531805;etiqueta station=subway
+descartado;node/3344868583;Tren;El Clot;Riba-roja de Túria;39.549904;-0.527975;etiqueta station=subway
+descartado;node/3344868893;Tren;Entrepins;l'Eliana;39.54326;-0.51402;etiqueta station=subway
+descartado;node/3344868907;Tren;La Canyada;Paterna;39.526957;-0.487104;etiqueta station=subway
+descartado;node/3344868933;Tren;Fuente del Jarro;Paterna;39.511157;-0.464076;etiqueta station=subway
+descartado;node/3344868942;Tren;Santa Rita;Paterna;39.505904;-0.455317;etiqueta station=subway
+descartado;node/3344868949;Tren;Paterna;Paterna;39.498891;-0.44194;etiqueta station=subway
+descartado;node/3345267594;Tren;Campament;Paterna;39.495819;-0.435273;etiqueta station=subway
+descartado;node/3345267612;Tren;Les Carolines-Fira;València;39.499015;-0.424924;etiqueta station=subway
+descartado;node/3345267627;Tren;Benimàmet;València;39.50185;-0.41872;etiqueta station=subway
+descartado;node/3345267630;Tren;Cantereria;Burjassot;39.502538;-0.411944;etiqueta station=subway
+descartado;node/3345948137;Tren;Bétera;Bétera;39.590729;-0.457496;etiqueta station=subway
+descartado;node/3345948138;Tren;Horta Vella;Bétera;39.582024;-0.442817;etiqueta station=subway
+descartado;node/3345948167;Tren;Seminari-CEU;Montcada / Moncada;39.549749;-0.38961;etiqueta station=subway
+descartado;node/3345948177;Tren;Moncada-Alfara;Montcada / Moncada;39.543501;-0.388571;etiqueta station=subway
+descartado;node/3345979148;Tren;Godella;Burjassot;39.519185;-0.4141;etiqueta station=subway
+descartado;node/3345979175;Tren;Burjassot-Godella;Burjassot;39.513126;-0.411667;etiqueta station=subway
+descartado;node/3345979191;Tren;Burjassot;Burjassot;39.508294;-0.406792;etiqueta station=subway
+descartado;node/3348096550;Tren;Beniferri;València;39.490871;-0.399391;etiqueta station=subway
+descartado;node/3348096551;Tren;Campanar;València;39.483551;-0.394109;etiqueta station=subway
+descartado;node/3348096560;Tren;Túria;València;39.478254;-0.390276;etiqueta station=subway
+descartado;node/3348096581;Tren;Plaça Espanya;València;39.46622;-0.382088;etiqueta station=subway
+descartado;node/3348104711;Tren;Safranar;València;39.455085;-0.397769;etiqueta station=subway
+descartado;node/3348104720;Tren;Patraix;València;39.456532;-0.390366;etiqueta station=subway
+descartado;node/3352043905;Tren;Paiporta;Paiporta;39.43222;-0.417878;etiqueta station=subway
+descartado;node/3352207373;Tren;Alboraia Peris Aragó;Alboraia / Alboraya;39.500891;-0.352361;etiqueta station=subway
+descartado;node/3352207380;Tren;Alboraia Palmaret;Alboraia / Alboraya;39.49582;-0.355561;etiqueta station=subway
+descartado;node/3352207389;Tren;Machado;València;39.492086;-0.358713;etiqueta station=subway
+descartado;node/3352213311;Tren;Benimaclet;València;39.48481;-0.362352;etiqueta station=subway
+descartado;node/3352213320;Tren;Facultats - Manuel Broseta;València;39.478104;-0.361884;etiqueta station=subway
+descartado;node/3352213337;Tren;Alameda;València;39.473108;-0.366018;etiqueta station=subway
+descartado;node/3352213360;Tren;Colón;València;39.470185;-0.370838;etiqueta station=subway
+descartado;node/3352213598;Tren;Avinguda del Cid;València;39.468547;-0.397934;etiqueta station=subway
+descartado;node/3353533804;Tren;Nou d'Octubre;València;39.470762;-0.406872;etiqueta station=subway
+descartado;node/3353533822;Tren;Mislata Almassil;Mislata;39.475487;-0.422783;etiqueta station=subway
+descartado;node/3353533834;Tren;Faitanar;Quart de Poblet;39.477678;-0.43341;etiqueta station=subway
+descartado;node/3353533852;Tren;Salt de l'Aigua;Manises;39.485307;-0.450439;etiqueta station=subway
+descartado;node/3353533866;Tren;Manises;Manises;39.489583;-0.459426;etiqueta station=subway
+descartado;node/3353533886;Tren;Aeroport;Manises;39.49219;-0.474374;etiqueta station=subway
+descartado;node/3354222947;Tren;Ayora;València;39.467775;-0.343127;etiqueta station=subway
+descartado;node/3354222956;Tren;Amistat;València;39.470333;-0.35049;etiqueta station=subway
+descartado;node/3354222973;Tren;Bailén;València;39.463596;-0.379276;etiqueta station=subway
+descartado;node/3355509822;Tren;Almàssera;Almàssera;39.512224;-0.354204;etiqueta station=subway
+descartado;node/3355509840;Tren;Meliana;Meliana;39.528017;-0.351626;etiqueta station=subway
+descartado;node/3355509854;Tren;Foios;Foios;39.537273;-0.353825;etiqueta station=subway
+descartado;node/3355509874;Tren;Albalat dels Sorells;Albalat dels Sorells;39.545339;-0.347981;etiqueta station=subway
+descartado;node/3356644308;Tren;Museros;Museros;39.561747;-0.340704;etiqueta station=subway
+descartado;node/3356644325;Tren;Massamagrell;Massamagrell;39.570499;-0.332612;etiqueta station=subway
+descartado;node/3356644330;Tren;La Pobla de Farnals;la Pobla de Farnals;39.578913;-0.330055;etiqueta station=subway
+descartado;node/3357315762;Tren;La Cova;Manises;39.498913;-0.484703;etiqueta station=subway
+descartado;node/3357315772;Tren;la Presa;Manises;39.517079;-0.515991;etiqueta station=subway
+descartado;node/3357315784;Tren;Masia de Traver;Riba-roja de Túria;39.538265;-0.546633;etiqueta station=subway
+descartado;node/3357315808;Tren;Riba-roja de Túria;Riba-roja de Túria;39.543307;-0.559427;etiqueta station=subway
+descartado;node/3361694307;Tren;Col·legi El Vedat;Torrent;39.411275;-0.460251;etiqueta station=subway
+descartado;node/3361694319;Tren;Realón;Alcàsser;39.393988;-0.464049;etiqueta station=subway
+descartado;node/3361694328;Tren;Sant Ramon;Picassent;39.384379;-0.467127;etiqueta station=subway
+descartado;node/3361694354;Tren;Picassent;Picassent;39.363056;-0.46467;etiqueta station=subway
+descartado;node/3361694361;Tren;Omet;Picassent;39.353152;-0.473753;etiqueta station=subway
+descartado;node/3361694364;Tren;Espioca;Picassent;39.326419;-0.468678;etiqueta station=subway
+descartado;node/3363474821;Tren;Font Almaguer;Benifaió;39.289331;-0.46454;etiqueta station=subway
+descartado;node/3363474837;Tren;Alginet;Alginet;39.262932;-0.474863;etiqueta station=subway
+descartado;node/3363474842;Tren;Ausiàs March;Carlet;39.249372;-0.49221;etiqueta station=subway
+descartado;node/3363474849;Tren;Carlet;Carlet;39.227393;-0.525128;etiqueta station=subway
+descartado;node/3363474852;Tren;Benimodo;Carlet;39.216471;-0.519594;etiqueta station=subway
+descartado;node/3363474876;Tren;Montortal;l'Alcúdia;39.174151;-0.515714;etiqueta station=subway
+descartado;node/3363474879;Tren;Massalavés;Massalavés;39.144006;-0.518462;etiqueta station=subway
+descartado;node/3420418504;Tren;Roses;Manises;39.492673;-0.467162;etiqueta station=subway
+por revisar;node/4338272266;Tren;Estación de tren de Santa Magdalena de Pulpis;Santa Magdalena de Pulpis;40.358592;0.293588;posible duplicado de way/561189401 (Estació de Santa Madalena de Pulpis) a 16 m
+descartado;node/4348737763;Tren;Aragó;València;39.472407;-0.35754;etiqueta station=subway
+descartado;node/4424671695;Autobús;;Gandia;38.969098;-0.185868;sin nombre en OpenStreetMap
+descartado;node/4424683890;Autobús;;Gandia;38.965402;-0.18936;sin nombre en OpenStreetMap
+descartado;node/4487185564;Tren;Dénia;Dénia;38.839402;0.11271;etiqueta light_rail=yes sin train=yes
+descartado;node/4758060125;Tren;Cala Finestrat;Finestrat;38.540659;-0.175038;etiqueta light_rail=yes sin train=yes
+descartado;node/5492057955;Tren;Rocafort;Rocafort;39.529191;-0.407305;etiqueta station=subway
+descartado;node/5492075760;Tren;Torrent Avinguda;Torrent;39.431683;-0.472632;etiqueta station=subway
+descartado;node/5493122753;Tren;Alberic;Alberic;39.117012;-0.523655;etiqueta station=subway
+descartado;node/5495852822;Tren;Empalme;Burjassot;39.499552;-0.402169;etiqueta station=subway
+descartado;node/5495852823;Tren;València Sud;València;39.439591;-0.411464;etiqueta station=subway
+descartado;node/5495852824;Tren;Torrent;Torrent;39.436098;-0.460926;etiqueta station=subway
+descartado;node/5497241958;Tren;Marítim;València;39.464855;-0.338635;etiqueta station=subway
+descartado;node/5498369221;Tren;Castelló;Castelló;39.080707;-0.513377;etiqueta station=subway
+descartado;node/6017550478;Tren;València la Vella;Riba-roja de Túria;39.530481;-0.534227;etiqueta station=subway
+descartado;node/6893721763;Tren;la Vallesa;Paterna;39.535989;-0.495404;etiqueta station=subway
+descartado;node/9551853097;Tren;Teulada;Teulada;38.729248;0.097966;etiqueta light_rail=yes sin train=yes
+descartado;node/9552078485;Tren;Benissa;Benissa;38.715005;0.076462;etiqueta light_rail=yes sin train=yes
+descartado;node/9552249196;Tren;Benidorm Intermodal;Benidorm;38.548322;-0.123389;etiqueta station=light_rail
+descartado;node/9552249206;Tren;l'Alfàs del Pi;Benidorm;38.567646;-0.092964;etiqueta station=light_rail
+descartado;node/9552256024;Tren;Altea;Altea;38.5959;-0.052178;etiqueta light_rail=yes sin train=yes
+descartado;node/9552256038;Tren;Olla Altea;Altea;38.621507;-0.032776;etiqueta light_rail=yes sin train=yes
+descartado;node/9552256040;Tren;Calp;Calp;38.649931;0.032912;etiqueta light_rail=yes sin train=yes
+descartado;relation/13354784;Tren;;Burjassot;39.500723;-0.403249;etiqueta station=subway
+descartado;way/1039831480;Tren;Massarrojos;València;39.536505;-0.403039;etiqueta station=subway
+descartado;way/1191258710;Autobús;;Almoradí;38.11329;-0.786906;sin nombre en OpenStreetMap
+descartado;way/1279412388;Tren;Àngel Guimerà;València;39.470148;-0.38621;etiqueta station=subway
+descartado;way/1279897792;Tren;Xàtiva;València;39.46755;-0.376867;etiqueta station=subway
+descartado;way/1311473249;Tren;;l'Énova;39.050117;-0.477765;sin nombre en OpenStreetMap
+descartado;way/1343564636;Autobús;;Castelló de la Plana / Castellón de la Plana;39.989142;-0.051573;sin nombre en OpenStreetMap
+descartado;way/135243564;Autobús;Estació d'autobusos d'Alacant Estación de Autobuses de Alicante;Alacant / Alicante;38.337337;-0.491446;duplicado en el lote de node/13158211480 (7 m)
+descartado;way/1362670948;Tren;Les Valls;Sagunt / Sagunto;39.719296;-0.239797;duplicado en el lote de node/503196005 (13 m)
+descartado;way/1388648199;Autobús;;Xàtiva;38.992065;-0.524366;sin nombre en OpenStreetMap
+descartado;way/1552965166;Tren;Mislata;Mislata;39.473586;-0.416983;etiqueta station=subway
+descartado;way/167179214;Tren;;València;39.452686;-0.40589;sin nombre en OpenStreetMap
+descartado;way/172817940;Autobús;;Petrer;38.478567;-0.78385;sin nombre en OpenStreetMap
+por revisar;way/184918562;Autobús;Estació d'Autobusos de Guardamar (Guardamar del Segura) – Carrer Molivent;Guardamar del Segura;38.087927;-0.656053;posible duplicado de node/13755311775 (Estació d'Autobusos de Guardamar del Segura) a 2 m
+descartado;way/195533935;Tren;;Altea;38.596085;-0.051824;sin nombre en OpenStreetMap
+por revisar;way/250304318;Autobús;Estació de Autobusos (Alacant / Alicante) – Carrer del Far del Cap de Santa Pola;Alacant / Alicante;38.337219;-0.491614;posible duplicado de node/13158211480 (Estació d'Autobusos d'Alacant / Estación de Autobuses de Alicante) a 27 m
+descartado;way/262530351;Tren;Beniel;;38.047148;-0.995492;fuera de los municipios oficiales cargados
+por revisar;way/426128384;Tren;Estación de tren de Sax – Calle Luís barceló;Sax;38.544724;-0.814198;nombre dudoso en OpenStreetMap: Sax
+descartado;way/520479147;Tren;Terra Mítica;Benidorm;38.546696;-0.158857;etiqueta station=light_rail
+por revisar;way/549815360;Autobús;Parada de autobus (Manuel) – Carrer les Foies;Manuel;39.052307;-0.495655;nombre dudoso en OpenStreetMap: Parada de autobus
+por revisar;way/561189401;Tren;Estació de Santa Madalena de Pulpis (Santa Magdalena de Pulpis);Santa Magdalena de Pulpis;40.358481;0.293719;posible duplicado de node/4338272266 (Santa Magdalena de Pulpis) a 16 m
+descartado;way/661288833;Tren;Antiga estació d'Alcossebre;Alcalà de Xivert;40.25833;0.255071;etiqueta abandoned:railway
+descartado;way/666559901;Tren;Picanya;Picanya;39.433224;-0.437093;etiqueta station=subway
+descartado;way/711114213;Tren;L'Alcúdia;l'Alcúdia;39.193249;-0.5101;etiqueta station=subway
+descartado;way/886739598;Tren;Foios;Foios;39.537275;-0.353818;etiqueta station=subway
+descartado;way/887921804;Tren;;Meliana;39.528015;-0.351624;sin nombre en OpenStreetMap
+descartado;way/995559880;Tren;;Burjassot;39.500754;-0.403264;etiqueta station=subway

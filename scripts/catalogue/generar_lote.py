@@ -6,9 +6,10 @@ Uso: python generar_lote.py <validados.json> <categoria.json> --osm-base <ISO> -
 import argparse
 import json
 import os
+import unicodedata
 from collections import defaultdict
 
-PROV = {"01": "Araba/Álava", "02": "Albacete", "04": "Almería", "06": "Badajoz", "07": "Illes Balears", "08": "Barcelona", "10": "Cáceres", "11": "Cádiz", "13": "Ciudad Real", "14": "Córdoba", "16": "Cuenca", "17": "Girona", "18": "Granada", "19": "Guadalajara", "20": "Gipuzkoa", "21": "Huelva", "22": "Huesca", "23": "Jaén", "25": "Lleida", "26": "La Rioja", "28": "Madrid", "29": "Málaga", "30": "Murcia", "31": "Navarra", "33": "Asturias", "35": "Las Palmas", "38": "Santa Cruz de Tenerife", "39": "Cantabria", "41": "Sevilla", "43": "Tarragona", "44": "Teruel", "45": "Toledo", "48": "Bizkaia", "50": "Zaragoza", "51": "Ceuta", "52": "Melilla"}
+PROV = {"01": "Araba/Álava", "02": "Albacete", "03": "Alicante/Alacant", "04": "Almería", "06": "Badajoz", "07": "Illes Balears", "08": "Barcelona", "10": "Cáceres", "11": "Cádiz", "12": "Castellón/Castelló", "13": "Ciudad Real", "14": "Córdoba", "16": "Cuenca", "17": "Girona", "18": "Granada", "19": "Guadalajara", "20": "Gipuzkoa", "21": "Huelva", "22": "Huesca", "23": "Jaén", "25": "Lleida", "26": "La Rioja", "28": "Madrid", "29": "Málaga", "30": "Murcia", "31": "Navarra", "33": "Asturias", "35": "Las Palmas", "38": "Santa Cruz de Tenerife", "39": "Cantabria", "41": "Sevilla", "43": "Tarragona", "44": "Teruel", "45": "Toledo", "46": "Valencia/València", "48": "Bizkaia", "50": "Zaragoza", "51": "Ceuta", "52": "Melilla"}
 
 ap = argparse.ArgumentParser()
 ap.add_argument("validados")
@@ -125,5 +126,5 @@ COMMIT;
   END IF;""")
         sql = sql.replace(f"JOIN public.categories cat ON cat.code = '{cod}'", "JOIN public.categories cat ON cat.name = c.categoria")
         assert "cat.code" not in sql and "categoria text" in sql, "plantilla de varias categorias no aplicada"
-    open(os.path.join(a.dir_salida, f"import_{cod}_{ine}_{nombre.lower().replace('í', 'i').replace('á', 'a').replace('é', 'e').replace('ó', 'o').replace('ú', 'u').replace(' ', '_').replace('/', '-')}.sql"), "w", encoding="utf-8", newline="\n").write(sql)
+    open(os.path.join(a.dir_salida, f"import_{cod}_{ine}_{unicodedata.normalize('NFD', nombre.lower()).encode('ascii', 'ignore').decode().replace(' ', '_').replace('/', '-')}.sql"), "w", encoding="utf-8", newline="\n").write(sql)
     print(ine, nombre, n)
