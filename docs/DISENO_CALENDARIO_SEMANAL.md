@@ -15,7 +15,7 @@ Estado: **hecho y desplegado el 19/10/2026** (PR #137, commit `fcde338`). Verifi
 - Solo lee lo que ya está en memoria (solicitudes y concesiones de cada punto, con las mismas reglas de estado que la ficha). **No cambia la base de datos, no escribe y no guarda nada en el navegador.**
 - Un permiso aparece cada día entre su fecha de inicio y la de fin (si falta una, queda abierto por ese lado). Los puntos quitados o archivados no aparecen.
 - Los captadores de un día suman, por punto, el mayor número declarado en sus permisos de ese estado.
-- Al abrir se elige la provincia con más captadores esa semana (o la primera por orden alfabético). «Todas las provincias» está disponible si hay más de una.
+- Al abrir muestra todas las provincias del usuario, como el Panel y el Centro (decisión del titular, 26/10/2026); si solo tiene una, esa. El selector permite elegir una concreta y la elección se mantiene mientras la sesión siga abierta.
 - Se retiró «Permisos por semana» del panel resumen (la vista de barras por ONG).
 
 ## Accesibilidad y diseño

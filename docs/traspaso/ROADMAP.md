@@ -127,7 +127,7 @@ Estado: el Centro es la única vía para solicitudes, concesiones y seguimientos
 
 **Decisiones del titular**
 6. **Concesiones sin ninguna fecha: RESUELTO el 26/10/2026** (decisión del titular: una concesión necesita al menos una fecha; restricción en la base y mensaje claro al aprobar; ver la entrada «12 duodevicies»). Migración aplicada en producción el 26/10/2026 (versión 20261026190927).
-7. **Provincia por defecto del Calendario:** abre con una provincia elegida automáticamente (`provAuto`); el Panel y el Centro, con todas. Igualar o dejar.
+7. **Provincia por defecto del Calendario: RESUELTO el 26/10/2026** (decisión del titular, opción A): abre con todas las provincias del usuario, como el Panel y el Centro (PR `feat/calendario-todas-provincias`).
 8. Siguiente comunidad de la carga nacional; 153 códigos postales y 28 calles de Canarias; hospitales dudosos; favoritos de Andalucía (~139).
 
 **Mejoras pequeñas detectadas en la inspección visual (25/10/2026)** (9 a 12 hechas en la rama `fix/centro-detalles-visuales`, prueba `scripts/test-centro-detalles.mjs`; la 13 sigue pendiente)

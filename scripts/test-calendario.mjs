@@ -53,4 +53,11 @@ assert.ok(bloque.includes("data-dia=") && bloque.includes("wk = mondayOf(dd.data
 assert.ok(bloque.includes("captadores autorizados") && bloque.includes("por aprobar") && bloque.includes('aria-label="' + "' + esc(lbl)"), "Cada día dice sus captadores autorizados y por aprobar por separado, con nombre accesible");
 assert.ok(bloque.includes("Mes anterior") && bloque.includes("desplazaMes(+w.dataset.w)"), "La navegación avanza por meses en la vista mensual");
 
+// Provincia por defecto (26/10/2026, decisión del titular): como el Panel y el Centro, abre con todas las provincias del usuario; ya no se elige una sola a mano.
+assert.ok(!html.includes("provAuto"), "El Calendario ya no elige una provincia automáticamente");
+assert.ok(/let wk = mondayOf\(today\(\)\), prov = null,/.test(html), "La provincia empieza sin elegir (null) hasta la primera apertura");
+assert.ok(/prov = opts\.length > 1 \? "" : \(opts\[0\] \? opts\[0\]\[0\] : ""\)/.test(bloque), "Con más de una provincia abre con «todas»; con una sola, esa");
+assert.ok(/<option value="">Todas las provincias<\/option>/.test(bloque), "«Todas las provincias» sigue en el selector");
+assert.ok(bloque.includes('if (e.target.id === "calProv") { prov = e.target.value;'), "Elegir una provincia en el selector se mantiene durante la sesión");
+
 console.log("Calendario semanal: comprobaciones estáticas correctas.");
