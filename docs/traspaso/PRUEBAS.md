@@ -29,9 +29,11 @@ node scripts/test-escala.mjs
 node scripts/test-mapa-limites.mjs
 node scripts/test-mapa-vista.mjs
 node scripts/test-lista-jerarquia.mjs
+node scripts/test-oscuro-contraste.mjs
 node scripts/test-panel-graficas.mjs
 node scripts/test-carga-paralela.mjs
 node scripts/test-expedientes.mjs
+node scripts/test-centro-detalles.mjs                # casillas con tema oscuro, cabecera y lote del Centro en móvil, rejilla del Panel, título del Calendario
 node scripts/test-a11y-fase-d.mjs index.html          # contraste WCAG AA claro/oscuro, nombres, aria-live y foco (Fase D)
 ```
 Cada una devuelve código distinto de cero si falla. `audit-a11y` y `audit-cdn-integrity` fallan en versiones anteriores a #81 y #80 (control negativo).
@@ -87,7 +89,7 @@ Reconstruir sin la migración `20261018123313_allow_author_set_null_on_profile_d
 
 ## Pruebas añadidas el 25/10/2026
 
-- SQL (todas en `schema-smoke.yml`, en una transacción con `rollback`; los ids propios de cada prueba usan un prefijo distinto porque otras pruebas dejan filas confirmadas): `permit_atomic.sql` (cierres atómicos, `create_permit_application` idempotente, aislamiento), `permit_rpc_isolation.sql` (20 intentos denegados de las cuatro RPC entre provincias, sin provincia y desactivado, con controles positivos), `followups_cascade.sql` (borrado de solicitudes y concesiones con seguimientos), y la matriz `rls_matrix.sql` actualizada (el administrador puede quitar un expediente con seguimientos; el resto no).
+- SQL (todas en `schema-smoke.yml`, en una transacción con `rollback`; los ids propios de cada prueba usan un prefijo distinto porque otras pruebas dejan filas confirmadas): `permit_grant_dates.sql` (una concesión necesita al menos una fecha; la importada del modelo antiguo queda exenta; aprobar sin fechas falla con mensaje claro y deja la solicitud pendiente), `permit_atomic.sql` (cierres atómicos, `create_permit_application` idempotente, aislamiento), `permit_rpc_isolation.sql` (20 intentos denegados de las cuatro RPC entre provincias, sin provincia y desactivado, con controles positivos), `followups_cascade.sql` (borrado de solicitudes y concesiones con seguimientos), y la matriz `rls_matrix.sql` actualizada (el administrador puede quitar un expediente con seguimientos; el resto no).
 - E2E `scripts/e2e-centro.mjs` (133 comprobaciones; el check `e2e-centro` es obligatorio en `main`): altas y fallos, lotes, seguimientos de concesión con y sin seguimiento del punto, filtro por responsable y reasignación, exportación CSV, crear desde el Calendario, coherencia de cifras con recálculo independiente (15 indicadores frente a menú, Resumen, Panel y Calendario) y menú desplegable.
 - Inspección visual: `node scripts/dev/capturas-centro.mjs <carpeta>` genera capturas de escritorio, móvil y modo oscuro contra el simulador (datos sintéticos).
 - Comprobar producción sin escribir: huellas con `supabase/tools/schema_fingerprint.sql`, `list_migrations` frente a `supabase/migrations/`, y hash del cuerpo de las funciones (los saltos de línea CRLF en dos funciones de producción son la única diferencia conocida).

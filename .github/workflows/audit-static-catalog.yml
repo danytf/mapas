@@ -35,8 +35,10 @@ on:
       - "scripts/test-mapa-limites.mjs"
       - "scripts/test-mapa-vista.mjs"
       - "scripts/test-lista-jerarquia.mjs"
+      - "scripts/test-oscuro-contraste.mjs"
       - "scripts/test-panel-graficas.mjs"
       - "scripts/test-carga-paralela.mjs"
+      - "scripts/test-centro-detalles.mjs"
       - "scripts/test-a11y-fase-d.mjs"
       - "scripts/e2e-centro.mjs"
       - "scripts/dev/seed-permits-demo.mjs"
@@ -109,6 +111,8 @@ jobs:
         run: node scripts/test-ficha-mejorada.mjs
       - name: Test list hierarchy (category icon, short title, status pill)
         run: node scripts/test-lista-jerarquia.mjs
+      - name: Test dark mode contrast (list, summary panel, cluster density, zone shortcuts)
+        run: node scripts/test-oscuro-contraste.mjs
       - name: Test summary panel charts (category ring, province bars, empty state)
         run: node scripts/test-panel-graficas.mjs
       - name: Test parallel catalogue load (per-province reads, total check, serial fallback)
@@ -121,6 +125,8 @@ jobs:
         run: node scripts/test-expedientes.mjs
       - name: Test filter counters
         run: node scripts/test-contadores-filtros.mjs
+      - name: Test Centro details (native checkbox theme, mobile header and batch bar, balanced Panel grid, Calendar title)
+        run: node scripts/test-centro-detalles.mjs
       - name: Run XSS regression audit
         run: node scripts/audit-xss.mjs index.html
       - name: Check keyboard access to statistics panel rows

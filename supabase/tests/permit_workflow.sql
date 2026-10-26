@@ -67,7 +67,7 @@ select pg_temp.check('la concesión hereda fechas, ONG y captadores y enlaza la 
   (select valid_from = '2026-11-02' and valid_until = '2026-11-30' and organization = 'AECC' and capturer_count = 3 and status = 'active' and created_by = pg_temp.u('e2')
    from public.permit_grants where application_id = pg_temp.u('b1')));
 select pg_temp.check('segunda concesión para la misma solicitud: rechazada por el índice único',
-  pg_temp.as_user('e2', format($q$insert into public.permit_grants (establishment_id, application_id, created_by, updated_by) values (%L, %L, %L, %L)$q$, pg_temp.u('a1'), pg_temp.u('b1'), pg_temp.u('e2'), pg_temp.u('e2'))) = '23505');
+  pg_temp.as_user('e2', format($q$insert into public.permit_grants (establishment_id, application_id, valid_from, created_by, updated_by) values (%L, %L, '2026-11-02', %L, %L)$q$, pg_temp.u('a1'), pg_temp.u('b1'), pg_temp.u('e2'), pg_temp.u('e2'))) = '23505');
 
 -- Denegar con motivo; retirar; estados terminales.
 select pg_temp.check('denegar con motivo', pg_temp.as_user('e3', format($q$select public.resolve_permit_application(%L, 'denied', 'Sin cupo')$q$, pg_temp.u('b2'))) = 'ok');

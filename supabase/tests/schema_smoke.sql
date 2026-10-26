@@ -91,12 +91,13 @@ insert into public.permit_applications (
 );
 
 insert into public.permit_grants (
-  id, establishment_id, application_id, organization, created_by, updated_by
+  id, establishment_id, application_id, organization, valid_from, created_by, updated_by
 ) values (
   '00000000-0000-4000-8000-000000000008',
   '00000000-0000-4000-8000-000000000005',
   '00000000-0000-4000-8000-000000000007',
   'Smoke organization',
+  '2026-11-02',
   '00000000-0000-4000-8000-0000000000a1',
   '00000000-0000-4000-8000-0000000000a1'
 );
@@ -114,12 +115,13 @@ insert into public.permit_applications (
 );
 
 insert into public.permit_grants (
-  id, establishment_id, application_id, organization, created_by, updated_by
+  id, establishment_id, application_id, organization, valid_from, created_by, updated_by
 ) values (
   '00000000-0000-4000-8000-0000000000c2',
   '00000000-0000-4000-8000-000000000006',
   '00000000-0000-4000-8000-0000000000c1',
   'Smoke organization B',
+  '2026-11-02',
   '00000000-0000-4000-8000-0000000000a1',
   '00000000-0000-4000-8000-0000000000a1'
 );
@@ -176,10 +178,11 @@ begin
 
   begin
     insert into public.permit_grants (
-      establishment_id, application_id, created_by, updated_by
+      establishment_id, application_id, valid_from, created_by, updated_by
     ) values (
       '00000000-0000-4000-8000-000000000006',
       '00000000-0000-4000-8000-000000000007',
+      '2026-11-02',
       '00000000-0000-4000-8000-0000000000a1',
       '00000000-0000-4000-8000-0000000000a1'
     );
@@ -526,10 +529,11 @@ begin
 
   begin
     insert into public.permit_grants (
-      establishment_id, organization, created_by, updated_by
+      establishment_id, organization, valid_from, created_by, updated_by
     ) values (
       '00000000-0000-4000-8000-000000000006',
       'Cross-province forbidden',
+      '2026-11-02',
       auth.uid(), auth.uid()
     );
     raise exception 'FALLO RLS: usuario A pudo insertar concesión en provincia B';
@@ -994,8 +998,8 @@ begin
   end;
 
   begin
-    insert into public.permit_grants (establishment_id, organization, created_by, updated_by)
-    values ('00000000-0000-4000-8000-000000000005', 'Inactive user forbidden', auth.uid(), auth.uid());
+    insert into public.permit_grants (establishment_id, organization, valid_from, created_by, updated_by)
+    values ('00000000-0000-4000-8000-000000000005', 'Inactive user forbidden', '2026-11-02', auth.uid(), auth.uid());
     raise exception 'FALLO RLS: una cuenta desactivada insertó una concesión';
   exception when insufficient_privilege then null;
   end;

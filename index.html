@@ -57,7 +57,10 @@
     --star-on: #c47a00;
     --st-concedido: #16a34a; --st-solicitado: #d97706; --st-caducado: #7c8aa0; --st-denegado: #475569; --st-cancelado: #dc2626;
     --ch-aut: #16a34a; --ch-dem: #d97706; --ch-1: #3b6fb6; --ch-a1: #8794ab; --ch-a2: #61708a; --ch-a3: #3d4b66;
+    /* Grupos de marcadores por densidad (.cl.n1 a .n4): fondos fijos en claro y oscuro con texto blanco (5,0, 8,8 y 5,9 a 1; los --ch-* se invierten en oscuro y no sirven aquí). */
+    --cl-n1: #61708a; --cl-n2: #3d4b66; --cl-n4: #c8102e;
     --t: 160ms;
+    color-scheme: light; /* controles nativos (casillas, fechas, desplegables, barras) con el tema claro */
     --shadow: 0 1px 2px rgba(23,27,35,.06), 0 6px 20px rgba(23,27,35,.09);
     --r: 10px;
     --font: "Figtree", "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
@@ -75,8 +78,10 @@
       --gam-gold-soft: var(--warn-bg); --gam-gold-ink: var(--warn);
       --pin-denegado: #e2e8f0; --res-ok-bg: #12341f; --res-ok-line: #2f6b45; --res-err-bg: #3a121b; --res-err-line: #7a2a36;
       --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.45);
+      color-scheme: dark; /* y con el oscuro: casillas, fechas y desplegables dejan de verse blancos */
     }
   }
+  input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
   * { box-sizing: border-box; }
   html, body { height: 100%; margin: 0; }
   body {
@@ -239,10 +244,10 @@
   .cl span { display: block; }
   .cl.big { font-size: var(--fs-label-lg); }
   /* Grupos por densidad: del gris azulado (pocos puntos) al rojo de marca (miles), con tamaño creciente. */
-  .cl.n1 { background: var(--ch-a2); }
-  .cl.n2 { background: var(--ch-a3); }
+  .cl.n1 { background: var(--cl-n1); }
+  .cl.n2 { background: var(--cl-n2); }
   .cl.n3 { background: var(--ink); font-size: var(--fs-label-lg); }
-  .cl.n4 { background: var(--accent); font-size: var(--fs-body); }
+  .cl.n4 { background: var(--cl-n4); font-size: var(--fs-body); }
   /* Atajos de zona bajo los botones de zoom (Península, Canarias y Baleares): solo los de zonas con puntos. */
   #regiones { display: flex; flex-direction: column; align-items: stretch; gap: 6px; margin-top: 10px; }
   #regiones[hidden] { display: none; }
@@ -524,6 +529,11 @@
   li.inactive .num { filter: grayscale(1); }
   li.inactive strong { text-decoration: line-through; text-decoration-thickness: 1px; }
   .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); gap: 10px; margin-bottom: 18px; }
+  #pnBody .kpis { grid-template-columns: repeat(auto-fit, minmax(max(128px, calc((100% - 10px * (var(--cols, 6) - 1)) / var(--cols, 6))), 1fr)); } /* --cols: tope de tarjetas por fila, para repartirlas por igual */
+  @media (max-width: 700px) {
+    #pnBody .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    #pnBody .kpis > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+  }
   .kpi { border: 1px solid var(--line); border-radius: var(--r-card); padding: 12px 14px; background: var(--panel); }
   .kpi b { display: block; font-size: 28px; font-weight: 680; line-height: 1.05; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
   .kpi span { font-size: var(--fs-label); color: var(--muted); }
@@ -799,7 +809,7 @@
   #login h2 { margin: 0; font-size: var(--fs-display); letter-spacing: -.015em; font-weight: 680; color: var(--fg); }
   #login p { margin: -6px 0 0; font-size: var(--fs-label); color: var(--muted); }
   #login label { display: grid; gap: 4px; font-size: var(--fs-label); font-weight: 560; color: var(--muted); }
-  #login input[type=text], #login input[type=password] { font: inherit; font-weight: 400; height: 40px; padding: 0 12px; border: 1px solid var(--field-line); border-radius: var(--r-control); background: var(--panel); color: var(--fg); width: 100%; box-sizing: border-box; }
+  #login input[type=text], #login input[type=email], #login input[type=password] { font: inherit; font-weight: 400; height: 40px; padding: 0 12px; border: 1px solid var(--field-line); border-radius: var(--r-control); background: var(--panel); color: var(--fg); width: 100%; box-sizing: border-box; }
   #login input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); outline: 0; }
   #login .rem { display: flex; flex-direction: row; align-items: center; gap: 8px; font-weight: 400; }
   #login button { height: 42px; border: 0; border-radius: var(--r-control); background: var(--accent); color: var(--accent-fg); font: inherit; font-weight: 640; cursor: pointer; }
@@ -953,7 +963,7 @@
   .ce-err { color: var(--err); }
   /* Lotes */
   .ce-lote { background: var(--panel); border: 1px solid var(--line-2); border-left: 4px solid var(--accent); border-radius: var(--r-card); padding: 10px 14px; margin-bottom: 10px; display: grid; gap: 8px; }
-  .ce-lotef { display: inline-flex; gap: 6px; align-items: center; font-size: var(--fs-label); color: var(--muted); }
+  .ce-lotef { display: inline-flex; gap: 6px; align-items: center; font-size: var(--fs-label); color: var(--muted); white-space: nowrap; }
   .ce-res-lote { display: grid; gap: 2px; font-size: var(--fs-label); }
   .ce-res-lote li { display: grid !important; grid-template-columns: minmax(120px, 220px) 1fr; gap: 8px !important; }
   .ce-res-lote li.ok b { color: var(--ok); }
@@ -1057,6 +1067,8 @@
   @media (max-width: 700px) {
     #ceBody { padding: 0 14px 18px; }
     .ce-nav { margin-left: -14px; margin-right: -14px; padding: 0 14px; }
+    .ce-new { flex-wrap: nowrap; gap: 6px; width: 100%; }
+    .ce-new .ce-act { flex: 1 1 auto; padding: 0 8px; } /* las tres acciones de la cabecera caben en una fila a 390 px */
     .ce-dos { grid-template-columns: 1fr; }
     .ce-tabla { border: 0; background: none; overflow: visible; }
     .ce-tabla table, .ce-tabla tbody, .ce-tabla tr, .ce-tabla td { display: block; width: 100%; }
@@ -4344,7 +4356,7 @@ const csvCell = (value) => {
   };
   const barra = (d) => {
     const po = provOpts(), og = [...d.ongs].sort((x, y) => (x[0] === SIN_ONG) - (y[0] === SIN_ONG) || x[1].localeCompare(y[1], "es"));
-    return '<div class="pn-bar"><label class="cal-f">Provincia<select id="pnProv">' + (po.length > 1 ? '<option value="">Todas las provincias</option>' : "") +
+    return '<div class="pn-bar"><label class="cal-f">Provincia<select id="pnProv">' + (po.length > 1 ? '<option value="">Todas las provincias</option>' : po.length ? "" : '<option value="">Sin puntos todavía</option>') +
       po.map(([id, n]) => '<option value="' + esc(id) + '"' + (id === fProv ? " selected" : "") + ">" + esc(n) + "</option>").join("") + "</select></label>" +
       '<label class="cal-f">ONG<select id="pnOng"><option value="">Todas las ONG</option>' + og.map(([k, n]) => '<option value="' + esc(k) + '"' + (k === fOng ? " selected" : "") + ">" + esc(n) + "</option>").join("") + "</select></label>" +
       '<p class="pn-hoy">Datos de hoy, ' + esc(fmtD(d.t)) + " (hora de Madrid)</p></div>";
@@ -4410,7 +4422,8 @@ const csvCell = (value) => {
       "Resueltas (aprobadas, denegadas o retiradas): <b>" + ind.resueltas + " de " + ind.solicitudes + "</b> solicitudes (" + ind.tasaResolucion + " %). Las caducadas sin respuesta no cuentan como resueltas. " +
       (ind.diasMedios === null ? "Tiempo medio hasta la decisión: no calculable todavía (ninguna solicitud resuelta tiene fecha de decisión)." : "Tiempo medio hasta la decisión: <b>" + String(ind.diasMedios).replace(".", ",") + " días</b>, sobre " + plural(ind.muestraTiempo, "solicitud resuelta con fecha", "solicitudes resueltas con fecha") + " (las anteriores no guardaban la fecha de decisión).")) + "</p>";
     body.innerHTML = barra(d) + graficas(d.pts) + (d.recs.length ? "" : '<p class="pn-vacio"><b>Todavía no hay permisos que gestionar.</b> Cuando empieces a pedir permisos, aquí verás las solicitudes, las concesiones vigentes y los seguimientos de cada día.</p>') +
-      GRUPOS.map(([g, ts]) => "<h3>" + esc(g) + '</h3><div class="kpis">' + (g === "Concesiones" ? tile("capacidadHoy", d) : "") + ts.map(([k]) => tile(k, d)).join("") + "</div>").join("") +
+      GRUPOS.map(([g, ts]) => { const n = ts.length + (g === "Concesiones" ? 1 : 0); /* reparto equilibrado: como mucho 6 por fila y sin una tarjeta sola en la última (7 = 4 + 3) */
+        return "<h3>" + esc(g) + '</h3><div class="kpis" style="--cols:' + Math.ceil(n / Math.ceil(n / 6)) + '">' + (g === "Concesiones" ? tile("capacidadHoy", d) : "") + ts.map(([k]) => tile(k, d)).join("") + "</div>"; }).join("") +
       analitica + capacidadOng(d) +
       "<h3>Por categoría</h3><div class=\"pn-scroll\"><table>" + thead("Categoría") + "<tbody>" + rowsHtml(byTipo, "tipo") + '<tr class="tot"><td>Total</td><td>' + t.n + "</td><td>" + t.pend + "</td><td>" + t.con + "</td><td>" + t.vig + "</td><td>" + t.capt + "</td></tr></tbody></table></div>" +
       "<h3>" + (multiProv ? "Por provincia" : "Por municipio") + "</h3><div class=\"pn-scroll\"><table>" + thead(multiProv ? "Provincia" : "Municipio") + "<tbody>" + rowsHtml(byTown, multiProv ? "prov" : "town") + "</tbody></table></div>" +
@@ -4562,6 +4575,7 @@ const csvCell = (value) => {
 
   const draw = () => {
     const a = wk, b = addDays(wk, 6), t = today();
+    document.getElementById("calT").textContent = modo === "mes" ? "Calendario mensual" : "Calendario semanal"; /* el título sigue a la vista */
     const { recs: todasRecs, segs: todasSegs } = registros(prov);
     body.querySelector('[data-w="-1"]').setAttribute("aria-label", modo === "mes" ? "Mes anterior" : "Semana anterior"); body.querySelector('[data-w="1"]').setAttribute("aria-label", modo === "mes" ? "Mes siguiente" : "Semana siguiente");
     const semana = calendarioSemana(todasRecs, todasSegs, a, t);

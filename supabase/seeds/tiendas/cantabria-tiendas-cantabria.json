@@ -1,0 +1,59 @@
+{
+ "format_version": 1,
+ "source": "openstreetmap",
+ "source_license": "ODbL 1.0 (c) OpenStreetMap contributors, https://www.openstreetmap.org/copyright",
+ "queried_at": "2026-10-26",
+ "osm_base_timestamp": "2026-10-24T20:20:51Z",
+ "selection_criteria": "Tiendas de mascotas de seis cadenas (Kiwoko, Tiendanimal, Miscota, Guaw, Mundo Animal y Cash Mascota), en la categoria Tiendas con el subtipo Mascotas: shop=pet cuyo nombre, marca u operador es de una de ellas. Alcance elegido por el titular el 26/10/2026 («cadenas tipo Tiendanimal», como en Granada). Se excluyen los elementos en desuso o abandonados y los puntos de recogida o de venta en linea. El nombre se compone con el de OpenStreetMap y, si no contiene el municipio, se le anade; nunca se inventa. Dos puntos del mismo nombre a menos de 150 m se consideran el mismo. Granada queda fuera porque su catalogo esta revisado a mano (7 tiendas de mascotas). OpenStreetMap recoge solo una parte de las tiendas reales de cada cadena: el lote es una base, no el censo completo.",
+ "province": "Andalucía",
+ "establishments": [
+  {
+   "source_ref": "catalogo-cantabria:cantabria-tiendas:node-13070314115",
+   "name": "Kiwoko Santander – Calle Joaquín Rodrigo",
+   "category": "Tiendas",
+   "subtype": "Mascotas",
+   "municipality": "Santander",
+   "municipality_ine": "39075",
+   "address": "Calle Joaquín Rodrigo 2",
+   "postal_code": "39011",
+   "latitude": 43.45691,
+   "longitude": -3.86306,
+   "location_precision": "address",
+   "location_source": "openstreetmap:node/13070314115",
+   "province": "Cantabria",
+   "status": "active"
+  },
+  {
+   "source_ref": "catalogo-cantabria:cantabria-tiendas:node-9923945247",
+   "name": "Tiendanimal Camargo – Calle de Enrique Gran",
+   "category": "Tiendas",
+   "subtype": "Mascotas",
+   "municipality": "Camargo",
+   "municipality_ine": "39016",
+   "address": "Calle de Enrique Gran 2",
+   "postal_code": "39600",
+   "latitude": 43.42447,
+   "longitude": -3.83874,
+   "location_precision": "address",
+   "location_source": "openstreetmap:node/9923945247",
+   "province": "Cantabria",
+   "status": "active"
+  },
+  {
+   "source_ref": "catalogo-cantabria:cantabria-tiendas:way-741769495",
+   "name": "Kiwoko Torrelavega – Área Comercial La Maderera",
+   "category": "Tiendas",
+   "subtype": "Mascotas",
+   "municipality": "Torrelavega",
+   "municipality_ine": "39087",
+   "address": "Área Comercial La Maderera",
+   "postal_code": "39300",
+   "latitude": 43.35778,
+   "longitude": -4.06367,
+   "location_precision": "address",
+   "location_source": "openstreetmap:way/741769495",
+   "province": "Cantabria",
+   "status": "active"
+  }
+ ]
+}
