@@ -4,7 +4,7 @@ La carga nacional N2 de OpenStreetMap está **completa**: las 17 comunidades aut
 
 ## Cifras de la base (consulta en solo lectura)
 - **39.122 puntos** (39.050 activos y 72 archivados), todos del catálogo (`source_ref` `catalogo-...`), y **8.143 municipios**.
-- **3.315 sin código postal** y **874 sin calle**.
+- **2.294 sin código postal** y **844 sin calle** (tras escribir los de Castilla y León).
 - 52 provincias, todas activas. 9 perfiles de usuario, 2 administradores.
 
 | Comunidad | Puntos | Municipios | Sin código postal | Sin calle |
@@ -25,9 +25,9 @@ La carga nacional N2 de OpenStreetMap está **completa**: las 17 comunidades aut
 | Castilla-La Mancha | 1.960 | 919 | 289 | 27 |
 | Comunidad Valenciana | 3.537 | 542 | 156 | 56 |
 | Galicia | 2.737 | 313 | 146 | 188 |
-| Castilla y León | 4.215 | 2.248 | 1.498 | 84 |
+| Castilla y León | 4.215 | 2.248 | 477 | 54 |
 | Ceuta y Melilla | 45 | 2 | 0 | 0 |
-| **Total** | **39.122** | **8.143** | **3.315** | **874** |
+| **Total** | **39.122** | **8.143** | **2.294** | **844** |
 
 Por categoría: Supermercado 16.929, Entidad oficial 8.426, Gimnasios 2.998, Centro de salud 2.631, Estaciones 2.260, Correos 2.236, Carrefour 947, Centro comercial 915, Hospital 753, Bricolaje 457, Decathlon 175, Leroy Merlin 129, El Corte Inglés 102, MediaMarkt 100, IKEA 57 y Tiendas 7.
 
@@ -35,13 +35,13 @@ Por categoría: Supermercado 16.929, Entidad oficial 8.426, Gimnasios 2.998, Cen
 Resultado: **sin incidencias en los datos de los puntos.**
 - 0 puntos sin provincia, municipio o categoría; 0 sin coordenadas; 0 fuera de España (caja de las Canarias a Baleares); 0 con el municipio de otra provincia.
 - 0 `source_ref` duplicados; 0 códigos INE duplicados; 0 códigos postales cuyo prefijo no coincide con la provincia.
-- Los totales por comunidad de la tabla suman exactamente los de la base (39.122 puntos, 3.315 sin código y 874 sin calle).
+- Los totales por comunidad de la tabla suman exactamente los de la base (39.122 puntos y, antes de escribir Castilla y León, 3.315 sin código y 874 sin calle; la tabla ya refleja 2.294 y 844).
 - **Un hallazgo:** 12 municipios de Granada sin código INE (ver «Decisiones»). Con ellos fuera, los municipios con INE son 8.131.
 
 ## Pendientes
 
 ### A. Completar códigos postales y calles (Nominatim, lo lanza el titular)
-1. **Castilla y León:** 1.498 sin código y 84 sin calle (consulta por provincia: `completar_cp_desde_base.py ~/osm-trabajo/cp-cyl-NN.json --prov NN --con-calle`, unos 35 minutos).
+1. **Castilla y León:** consulta hecha el 26/10/2026 (1.021 códigos y 30 calles escritos); quedan 477 sin código y 54 sin calle, sobre todo sin respuesta de Nominatim (421) y 52 dudosos.
 2. **Reconsultar los que no respondieron** y los dudosos que no se escribieron (Nominatim puede dar otra respuesta, sin garantía): Aragón (235 sin respuesta), Castilla-La Mancha (269), Extremadura (Badajoz 155, Cáceres 64) y Murcia (111).
 3. **Asturias:** 114 sin calle (116 sin código, casi todos dudosos).
 4. El resto de comunidades tiene pocos huecos (ver tabla).
