@@ -1,4 +1,4 @@
--- Pruebas de la regla «una concesión necesita al menos una fecha» (migración 20261026182000_permit_grants_require_date). Una transacción que termina en ROLLBACK.
+-- Pruebas de la regla «una concesión necesita al menos una fecha» (migración 20261026190927_permit_grants_require_date). Una transacción que termina en ROLLBACK.
 -- Ejecución: psql -v ON_ERROR_STOP=1 -f supabase/tests/permit_grant_dates.sql
 begin;
 

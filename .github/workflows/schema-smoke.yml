@@ -168,7 +168,7 @@ jobs:
       - name: Allow deleting a user who resolved permit applications
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261025212400_allow_resolver_set_null_on_profile_delete.sql
       - name: Require at least one date on a permit grant (and a clear error when approving without dates)
-        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261026182000_permit_grants_require_date.sql
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261026190927_permit_grants_require_date.sql
       - name: Verify every migration file is applied by this workflow
         shell: bash
         run: |
