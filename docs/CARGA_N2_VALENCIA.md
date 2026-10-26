@@ -1,6 +1,6 @@
-# Carga N2 de la Comunidad Valenciana (preparada)
+# Carga N2 de la Comunidad Valenciana (cargada)
 
-Estado: **preparada el 26/10/2026, pendiente de carga en producción por el titular con `cargar.sh`**. Decimoquinta comunidad con el mismo procedimiento (ver `docs/CARGA_N2_CASTILLA_LA_MANCHA.md` y `docs/CARGA_N2_ARAGON.md`). Las tres provincias (03 Alicante/Alacant, 12 Castellón/Castelló y 46 Valencia/València) se cargan de una vez.
+Estado: **cargada en producción el 26/10/2026** por el titular con `cargar.sh` y verificada en solo lectura (ver «Cierre»). Decimoquinta comunidad con el mismo procedimiento (ver `docs/CARGA_N2_CASTILLA_LA_MANCHA.md` y `docs/CARGA_N2_ARAGON.md`). Las tres provincias (03 Alicante/Alacant, 12 Castellón/Castelló y 46 Valencia/València) se cargan de una vez.
 
 ## Origen
 - Fichero: `valencia-latest.osm.pbf` (Geofabrik, edición del **25/10/2026 21:21 UTC**, 140.860.862 bytes, MD5 `5d700aa4cd73648760c2abc14eae4a62` verificado contra el `.md5` de Geofabrik), fuera del repositorio. La primera descarga quedó cortada (116 MB) y se reanudó hasta completar el fichero. OpenStreetMap, licencia ODbL.
@@ -29,7 +29,7 @@ Por provincia: Alicante 1.377, Castellón 532 y Valencia 1.628. Un SQL por lote 
 - Carrefour (95) entra completo (Market y Express), por decisión del titular.
 - No probado en el PostgreSQL local (sin la contraseña en esta sesión).
 
-## Cómo cargar (con aprobación)
+## Cómo se cargó (con aprobación)
 Desde la raíz del repositorio, con `main` actualizada (`git pull origin main`), en este orden:
 ```
 bash scripts/catalogue/cargar.sh supabase/seeds/valencia/municipios municipios
@@ -38,4 +38,8 @@ bash scripts/catalogue/cargar.sh supabase/seeds/valencia/estaciones estaciones
 bash scripts/catalogue/cargar.sh supabase/seeds/valencia/grandes-superficies grandes-superficies catalogo-valencia:valencia-grandes-superficies:
 bash scripts/catalogue/cargar.sh supabase/seeds/valencia/resto resto catalogo-valencia:valencia-resto:
 ```
-Después, en solo lectura: 542 municipios nuevos y 3.537 puntos (la base pasaría de 28.633 a 32.170 y los municipios de 5.040 a 5.582). Sin asignar a usuarios hasta terminar toda España (decisión del titular, 23/10/2026).
+Previsto en solo lectura: 542 municipios nuevos y 3.537 puntos (la base pasaría de 28.633 a 32.170 y los municipios de 5.040 a 5.582). Sin asignar a usuarios hasta terminar toda España (decisión del titular, 23/10/2026).
+
+## Cierre (26/10/2026)
+- **Carga verificada en solo lectura:** 542 municipios (Alicante 141, Castellón 135, Valencia 266) y 3.537 puntos (1.377, 532 y 1.628), 3.537 `source_ref` `catalogo-valencia:` distintos, todos activos, ninguno sin coordenadas y ningún código postal con formato erróneo. Por categoría: Supermercado 1.659, Entidad oficial 634, Gimnasios 293, Centro de salud 230, Correos 208, Estaciones 140, Centro comercial 97, Carrefour 95, Hospital 65, Bricolaje 49, Decathlon 20, Leroy Merlin 20, MediaMarkt 12, El Corte Inglés 12, IKEA 3. Total de la base 28.633 -> 32.170 y municipios 5.040 -> 5.582.
+- **Pendiente:** 800 códigos postales (Alicante 314, Castellón 154, Valencia 332) y 94 calles (44, 9 y 41), por completar con Nominatim por provincia (`completar_cp_desde_base.py --prov NN --con-calle`) y `admin_set_postal_codes`; revisar los dudosos de «Calidad y límites». Sin asignar a usuarios hasta terminar España.
