@@ -57,6 +57,8 @@
     --star-on: #c47a00;
     --st-concedido: #16a34a; --st-solicitado: #d97706; --st-caducado: #7c8aa0; --st-denegado: #475569; --st-cancelado: #dc2626;
     --ch-aut: #16a34a; --ch-dem: #d97706; --ch-1: #3b6fb6; --ch-a1: #8794ab; --ch-a2: #61708a; --ch-a3: #3d4b66;
+    /* Grupos de marcadores por densidad (.cl.n1 a .n4): fondos fijos en claro y oscuro con texto blanco (5,0, 8,8 y 5,9 a 1; los --ch-* se invierten en oscuro y no sirven aquí). */
+    --cl-n1: #61708a; --cl-n2: #3d4b66; --cl-n4: #c8102e;
     --t: 160ms;
     color-scheme: light; /* controles nativos (casillas, fechas, desplegables, barras) con el tema claro */
     --shadow: 0 1px 2px rgba(23,27,35,.06), 0 6px 20px rgba(23,27,35,.09);
@@ -242,10 +244,10 @@
   .cl span { display: block; }
   .cl.big { font-size: var(--fs-label-lg); }
   /* Grupos por densidad: del gris azulado (pocos puntos) al rojo de marca (miles), con tamaño creciente. */
-  .cl.n1 { background: var(--ch-a2); }
-  .cl.n2 { background: var(--ch-a3); }
+  .cl.n1 { background: var(--cl-n1); }
+  .cl.n2 { background: var(--cl-n2); }
   .cl.n3 { background: var(--ink); font-size: var(--fs-label-lg); }
-  .cl.n4 { background: var(--accent); font-size: var(--fs-body); }
+  .cl.n4 { background: var(--cl-n4); font-size: var(--fs-body); }
   /* Atajos de zona bajo los botones de zoom (Península, Canarias y Baleares): solo los de zonas con puntos. */
   #regiones { display: flex; flex-direction: column; align-items: stretch; gap: 6px; margin-top: 10px; }
   #regiones[hidden] { display: none; }
@@ -778,7 +780,7 @@
   #login h2 { margin: 0; font-size: var(--fs-display); letter-spacing: -.015em; font-weight: 680; color: var(--fg); }
   #login p { margin: -6px 0 0; font-size: var(--fs-label); color: var(--muted); }
   #login label { display: grid; gap: 4px; font-size: var(--fs-label); font-weight: 560; color: var(--muted); }
-  #login input[type=text], #login input[type=password] { font: inherit; font-weight: 400; height: 40px; padding: 0 12px; border: 1px solid var(--field-line); border-radius: var(--r-control); background: var(--panel); color: var(--fg); width: 100%; box-sizing: border-box; }
+  #login input[type=text], #login input[type=email], #login input[type=password] { font: inherit; font-weight: 400; height: 40px; padding: 0 12px; border: 1px solid var(--field-line); border-radius: var(--r-control); background: var(--panel); color: var(--fg); width: 100%; box-sizing: border-box; }
   #login input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); outline: 0; }
   #login .rem { display: flex; flex-direction: row; align-items: center; gap: 8px; font-weight: 400; }
   #login button { height: 42px; border: 0; border-radius: var(--r-control); background: var(--accent); color: var(--accent-fg); font: inherit; font-weight: 640; cursor: pointer; }
@@ -4230,7 +4232,7 @@ const csvCell = (value) => {
   };
   const barra = (d) => {
     const po = provOpts(), og = [...d.ongs].sort((x, y) => (x[0] === SIN_ONG) - (y[0] === SIN_ONG) || x[1].localeCompare(y[1], "es"));
-    return '<div class="pn-bar"><label class="cal-f">Provincia<select id="pnProv">' + (po.length > 1 ? '<option value="">Todas las provincias</option>' : "") +
+    return '<div class="pn-bar"><label class="cal-f">Provincia<select id="pnProv">' + (po.length > 1 ? '<option value="">Todas las provincias</option>' : po.length ? "" : '<option value="">Sin puntos todavía</option>') +
       po.map(([id, n]) => '<option value="' + esc(id) + '"' + (id === fProv ? " selected" : "") + ">" + esc(n) + "</option>").join("") + "</select></label>" +
       '<label class="cal-f">ONG<select id="pnOng"><option value="">Todas las ONG</option>' + og.map(([k, n]) => '<option value="' + esc(k) + '"' + (k === fOng ? " selected" : "") + ">" + esc(n) + "</option>").join("") + "</select></label>" +
       '<p class="pn-hoy">Datos de hoy, ' + esc(fmtD(d.t)) + " (hora de Madrid)</p></div>";
