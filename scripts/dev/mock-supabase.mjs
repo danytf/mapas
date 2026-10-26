@@ -6,7 +6,7 @@
 // GET /__fail?n=<veces>&modo=500|perdida (las próximas escrituras del estado compartido fallan con un 500, o se aplican y se corta la respuesta).
 import { createServer } from "node:http";
 
-const PORT = 8766;
+const PORT = Number(process.env.MOCK_PORT || 8766); /* MOCK_PORT: otro puerto, p. ej. para medir sin chocar con la prueba E2E */
 let FALLO = { n: 0, modo: "500" };
 const id = (n) => "00000000-0000-4000-8000-" + String(n).padStart(12, "0");
 const b64 = (o) => Buffer.from(JSON.stringify(o)).toString("base64url");

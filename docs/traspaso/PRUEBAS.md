@@ -30,6 +30,7 @@ node scripts/test-mapa-vista.mjs
 node scripts/test-lista-jerarquia.mjs
 node scripts/test-panel-graficas.mjs
 node scripts/test-carga-paralela.mjs
+node scripts/test-rendimiento-cliente.mjs        # equivalencia de las rutas rápidas y carga sin cálculo duplicado (39.000 puntos)
 node scripts/test-expedientes.mjs
 node scripts/test-a11y-fase-d.mjs index.html          # contraste WCAG AA claro/oscuro, nombres, aria-live y foco (Fase D)
 ```
@@ -73,7 +74,7 @@ Con una base PostgreSQL local reconstruida (`scripts/dev/rebuild-local-db.sh`):
 2. `psql -v ON_ERROR_STOP=1 -f supabase/tools/volume/measure_catalogue_load.sql`: tiempos de la carga del catálogo (recuento exacto y páginas de 1.000 por clave) y del estado compartido con las políticas RLS reales. Referencia tras H-26: administrador unos 90 ms, dos provincias unos 10 ms, una provincia unos 2 ms. Detalle y comparación con las políticas anteriores en `docs/AUDITORIA_FASE_D_2026-10-18.md`.
 
 ## Volumen en el navegador (sin proyecto ni coste)
-Con el Supabase simulado: `GET http://127.0.0.1:8766/__reset?n=<puntos>&estados=1` genera puntos sintéticos reproducibles en las 52 provincias (o `MOCK_POINTS` al arrancar). `scripts/dev/measure-load.js` mide la carga del administrador (tiempo hasta el mapa, tiempo por función, tareas largas, DOM, memoria, filtro) y `scripts/dev/list-scenarios.js` compara la lista de dos versiones de la app en 9 escenarios (mismo HTML byte a byte). Referencia tras H-27 con 50.000 puntos: 3,9 s hasta el mapa. Detalle y comparación con el código anterior en `docs/AUDITORIA_FASE_D_2026-10-18.md`. Si el navegador se queda congelado (con el código anterior ocurría con 20.000 puntos), esperar: la tarea termina.
+Con el Supabase simulado: `GET http://127.0.0.1:8766/__reset?n=<puntos>&estados=1` genera puntos sintéticos reproducibles en las 52 provincias (o `MOCK_POINTS` al arrancar). `scripts/dev/measure-load.js` mide la carga del administrador (tiempo hasta el mapa, tiempo por función, tareas largas, DOM, memoria, filtro) y `scripts/dev/list-scenarios.js` compara la lista de dos versiones de la app en 9 escenarios (mismo HTML byte a byte). Referencia tras H-27 con 50.000 puntos: 3,9 s hasta el mapa. Detalle y comparación con el código anterior en `docs/AUDITORIA_FASE_D_2026-10-18.md`. Si el navegador se queda congelado (con el código anterior ocurría con 20.000 puntos), esperar: la tarea termina. Para medir la carga en Chrome comparando versiones (con puertos propios 8786/8787/9343, sin chocar con el E2E): `node scripts/dev/medir-carga.mjs tiempos anterior=<index.html anterior> actual=index.html` (modos `tiempos`, `bench`, `snap` y `perfil`; cabecera del fichero con las variables). `MOCK_PORT` y `MOCK_URL` cambian el puerto del simulado y de la copia de prueba.
 
 ## Interfaz con un Supabase simulado (sin proyecto ni coste)
 Para probar lógica del navegador (provincias, geocodificación, valores por defecto, nombre de ficheros) sin crear un proyecto:
