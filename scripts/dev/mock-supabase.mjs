@@ -3,6 +3,7 @@
 // Nominatim simulado que registra las peticiones. Puerto 8766 (MOCK_PORT lo cambia), estado en memoria. Uso: node scripts/dev/mock-supabase.mjs
 // Usuarios (contraseña «x»): multi@test.es (Granada y Almería), alm@test.es (Almería), vacio@test.es (Jaén, sin puntos), admin@test.es.
 // Utilidades: GET /__log (peticiones registradas), GET /__state (estado), GET /__reset (opcional ?n=<puntos>&estados=1&realista=1&zonas=1|c|b|x),
+// demo=1 (con realista=1) pone a los puntos nombres de presentación genéricos («Supermercado · Sevilla 12») en lugar de «Punto de prueba».
 // GET /__fail?n=<veces>&modo=500|perdida (las próximas escrituras del estado compartido fallan con un 500, o se aplican y se corta la respuesta).
 import { createServer } from "node:http";
 
@@ -13,7 +14,7 @@ const b64 = (o) => Buffer.from(JSON.stringify(o)).toString("base64url");
 
 // Prueba de volumen: MOCK_POINTS=<n> (o GET /__reset?n=<n>) genera n puntos sintéticos y reproducibles repartidos por
 // las 52 provincias, en lugar de los 7 de ejemplo. Granada (18) y Almería (04) conservan su nombre.
-const NOMBRES = { "18": "Granada", "04": "Almería", "23": "Jaén" };
+const NOMBRES = { "18": "Granada", "04": "Almería", "23": "Jaén", "11": "Cádiz", "14": "Córdoba", "21": "Huelva", "29": "Málaga", "41": "Sevilla" };
 const provinces = Array.from({ length: 52 }, (_, i) => {
   const code = String(i + 1).padStart(2, "0");
   return { id: id(900 + i + 1), code, name: NOMBRES[code] || "Provincia " + code, is_active: true };
@@ -163,7 +164,7 @@ createServer(async (req, res) => {
   if (path === "/__rel") return send(res, 200, S.rel);
   if (path === "/__log") return send(res, 200, S.log);
   if (path === "/__state") return send(res, 200, { userState: S.userState, establishments: S.establishments });
-  if (path === "/__reset") { const n = url.searchParams.get("n"); const e = url.searchParams.get("estados"); S = freshState(n === null ? undefined : Number(n), e === null ? undefined : e === "1", url.searchParams.get("realista") === "1", url.searchParams.get("zonas") || ""); ADM = admInicial(); for (const p of provinces) p.is_active = true; return send(res, 200, { ok: true, puntos: S.establishments.length, estados: S.conEstados }); }
+  if (path === "/__reset") { const n = url.searchParams.get("n"); const e = url.searchParams.get("estados"); S = freshState(n === null ? undefined : Number(n), e === null ? undefined : e === "1", url.searchParams.get("realista") === "1", url.searchParams.get("zonas") || ""); if (url.searchParams.get("demo") === "1") S.establishments.forEach((e, i) => { e.name = e.categories.name + " · " + e.municipalities.name + " " + (i + 1); }); ADM = admInicial(); for (const p of provinces) p.is_active = true; return send(res, 200, { ok: true, puntos: S.establishments.length, estados: S.conEstados }); }
 
   // Nominatim simulado: registra la petición y responde en el centro del área pedida (o en Madrid).
   if (path === "/nominatim/search") {
