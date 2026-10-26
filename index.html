@@ -237,6 +237,17 @@
   .cl { width: 100%; height: 100%; border-radius: 50%; display: grid; place-items: center; background: var(--ink); color: #fff; border: 3px solid #fff; box-sizing: border-box; box-shadow: 0 3px 10px rgba(23,27,35,.38); font: 650 12px var(--font); font-variant-numeric: tabular-nums; }
   .cl span { display: block; }
   .cl.big { font-size: var(--fs-label-lg); }
+  /* Grupos por densidad: del gris azulado (pocos puntos) al rojo de marca (miles), con tamaño creciente. */
+  .cl.n1 { background: var(--ch-a2); }
+  .cl.n2 { background: var(--ch-a3); }
+  .cl.n3 { background: var(--ink); font-size: var(--fs-label-lg); }
+  .cl.n4 { background: var(--accent); font-size: var(--fs-body); }
+  /* Atajos de zona bajo los botones de zoom (Península, Canarias y Baleares): solo los de zonas con puntos. */
+  #regiones { display: flex; flex-direction: column; align-items: stretch; gap: 6px; margin-top: 10px; }
+  #regiones[hidden] { display: none; }
+  #regiones button { height: 32px; padding: 0 12px; font: inherit; font-size: var(--fs-label-lg); font-weight: 600; border: 1px solid var(--line-2); border-radius: var(--r-pill); background: var(--panel); color: var(--fg); box-shadow: var(--shadow); cursor: pointer; }
+  #regiones button:hover { border-color: var(--muted); }
+  #regiones button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .marker-cluster, .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large { background: transparent; }
   .marker-cluster div, .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div { background: transparent; box-shadow: none; }
   .leaflet-cluster-anim .leaflet-marker-icon, .leaflet-cluster-anim .leaflet-marker-shadow { transition: transform .22s ease-out, opacity .22s ease-in; }
@@ -1039,6 +1050,7 @@
   @media (max-width: 900px), (pointer: coarse) {
     .tools input[type=search], .tools select, #moreBtn { min-height: 44px; }
     .chipbtn { height: 44px; padding: 0 16px; }
+    #regiones button { height: 44px; padding: 0 16px; }
     #menuBtn { width: 44px; height: 44px; }
     #menuPanel button { min-height: 44px; }
     #pnClose, #admClose, #calClose, #ceClose, #ayClose { width: 44px; height: 44px; }
@@ -1502,13 +1514,31 @@ L.control.layers(Object.assign(vectorialDisponible ? { "Wesser (vectorial, recom
 
 const markers = {};
 const cluster = L.markerClusterGroup({
-  maxClusterRadius: 38, showCoverageOnHover: false, disableClusteringAtZoom: 17,
+  maxClusterRadius: 60, showCoverageOnHover: false, disableClusteringAtZoom: 17,
   iconCreateFunction: (cl) => {
-    // Agrupación neutra: el recuento es lo que importa; el color de categoría vive solo en los marcadores.
-    const n = cl.getChildCount(), z = n >= 100 ? 54 : n >= 10 ? 44 : 36;
-    return L.divIcon({ className: "cl-wrap", iconSize: [z, z], html: '<div class="cl' + (n >= 10 ? " big" : "") + '"><span>' + n + "</span></div>" });
+    // Agrupación neutra en el color de categoría (vive solo en los marcadores); el color y el tamaño indican la densidad.
+    const n = cl.getChildCount(), nivel = n >= 1000 ? 4 : n >= 100 ? 3 : n >= 10 ? 2 : 1, z = [0, 34, 42, 52, 62][nivel];
+    return L.divIcon({ className: "cl-wrap", iconSize: [z, z], html: '<div class="cl n' + nivel + (n >= 10 ? " big" : "") + '"><span>' + n + "</span></div>" });
   }
 }).addTo(map);
+
+/* Zonas de España para encuadrar el mapa: las islas lejanas (Canarias) no deben encoger la península en la vista general. Ceuta y Melilla cuentan como península. */
+const REGIONES = [
+  { id: "peninsula", nombre: "Península" },
+  { id: "canarias", nombre: "Canarias", caja: [27.5, -18.3, 29.5, -13.3] },
+  { id: "baleares", nombre: "Baleares", caja: [38.5, 1.1, 40.2, 4.5] }
+];
+const regionDe = (lat, lon) => {
+  const r = REGIONES.find((z) => z.caja && lat >= z.caja[0] && lat <= z.caja[2] && lon >= z.caja[1] && lon <= z.caja[3]);
+  return r ? r.id : "peninsula";
+};
+const regCount = {};
+const regionesEl = document.createElement("div");
+regionesEl.id = "regiones"; regionesEl.hidden = true;
+regionesEl.setAttribute("role", "group"); regionesEl.setAttribute("aria-label", "Ir a una zona del mapa");
+L.DomEvent.disableClickPropagation(regionesEl); L.DomEvent.disableScrollPropagation(regionesEl);
+// Control de Leaflet en la esquina superior izquierda, debajo del zoom: no tapa el mapa ni los globos y hereda la posición de los demás controles.
+new (L.Control.extend({ options: { position: "topleft" }, onAdd: () => regionesEl }))().addTo(map);
 let touched = false;
 map.on("dragstart", () => { touched = true; });
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -2972,9 +3002,12 @@ function makeMarkers(list) {
     m.bindPopup(() => popupFor(c, cache[c.id]), { closeButton: false, closeOnClick: false, minWidth: 80, maxWidth: 240 });
     m.on("click", () => highlight(c.id, false));
     markers[c.id] = m;
+    const z = regionDe(pos.lat, pos.lon);
+    regCount[z] = (regCount[z] || 0) + 1;
     if (!isInactive(c)) nuevos.push(m);
   });
   if (nuevos.length) cluster.addLayers(nuevos);
+  pintaRegiones();
 }
 function makeMarker(c) { makeMarkers([c]); }
 
@@ -3231,7 +3264,26 @@ fichaEl.addEventListener("keydown", (ev) => { if (ev.key === "Escape") map.close
 
 function fitAll() {
   const pts = Object.values(markers).filter((m) => cluster.hasLayer(m)).map((m) => m.getLatLng());
-  if (pts.length) map.fitBounds(L.latLngBounds(pts).pad(0.12));
+  if (!pts.length) return;
+  // Vista general sin Canarias (si hay más puntos): así la península llena el mapa y Canarias se alcanza con su atajo.
+  const principales = pts.filter((p) => regionDe(p.lat, p.lng) !== "canarias");
+  map.fitBounds(L.latLngBounds(principales.length ? principales : pts).pad(0.12));
+}
+function irARegion(id) {
+  const pts = Object.values(markers).map((m) => m.getLatLng()).filter((p) => regionDe(p.lat, p.lng) === id);
+  if (!pts.length) return;
+  touched = true;
+  map.fitBounds(L.latLngBounds(pts).pad(0.12), { maxZoom: 9 });
+}
+function pintaRegiones() {
+  const vis = REGIONES.filter((r) => regCount[r.id] > 0);
+  regionesEl.hidden = vis.length < 2;
+  regionesEl.replaceChildren(...vis.map((r) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.textContent = r.nombre;
+    b.addEventListener("click", () => irARegion(r.id));
+    return b;
+  }));
 }
 
 // Busca una dirección en Nominatim (OpenStreetMap). Si se indica un área (viewbox «izq,arr,der,aba»), el
