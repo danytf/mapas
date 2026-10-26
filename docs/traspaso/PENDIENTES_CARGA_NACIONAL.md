@@ -56,7 +56,7 @@ Resultado: **sin incidencias en los datos de los puntos.**
 ### C. Revisiones menores
 - Prueba en un móvil real del plegado de «Puntos archivados» (comprobado en escritorio: sale cerrado) y del zoom mínimo del mapa (lo cubre `scripts/test-mapa-limites.mjs`).
 - Datos antiguos de Andalucía, Canarias, Murcia, Extremadura y La Rioja «por completar»: no consta qué faltaba exactamente; comprobarlo con las cifras de la tabla.
-- Categoría «Tiendas» (7 puntos de Granada): decidido el 26/10/2026 ampliarla a nivel nacional con seis cadenas (170 puntos preparados en `supabase/seeds/tiendas`, ver `docs/CARGA_N2_TIENDAS_MASCOTAS.md`); pendiente de cargar.
+- Categoría «Tiendas» (7 puntos de Granada): decidido el 26/10/2026 ampliarla a nivel nacional con seis cadenas (170 puntos preparados en `supabase/seeds/tiendas`, ver `docs/CARGA_N2_TIENDAS_MASCOTAS.md`); cargada el 26/10/2026 (177 puntos en Tiendas).
 - `.claude/settings.local.json`: conserva un permiso de lectura de las pestañas de Chrome (decisión del titular: dejarlo).
 - Copias de seguridad en `~/backups-mapas`: quedan dos completas (`20261025T165228Z`, sin copia fuera de esa carpeta, y `20261025T211312Z`, que contiene datos de prueba).
 

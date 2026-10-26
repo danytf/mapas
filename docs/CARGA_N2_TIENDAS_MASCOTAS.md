@@ -1,6 +1,6 @@
-# Carga N2 de tiendas de mascotas (preparada, pendiente de cargar)
+# Carga N2 de tiendas de mascotas (cargada)
 
-Estado: **preparada el 26/10/2026, sin cargar**. Lotes de SQL generados, revisados y comprobados en solo lectura (ver «Comprobaciones»). La carga la ejecuta el titular con `cargar.sh` tras fusionar el PR de los seeds.
+Estado: **cargada en producción el 26/10/2026** por el titular con `cargar.sh` y verificada en solo lectura (ver «Cierre»). Lotes de SQL generados, revisados y comprobados antes de cargar (ver «Comprobaciones»).
 
 ## Alcance
 - Decisión del titular (26/10/2026): carga nacional de **seis cadenas** de tiendas de mascotas, en la categoría **Tiendas** (subtipo «Mascotas»), el mismo criterio que en Granada («cadenas tipo Tiendanimal»): Kiwoko, Tiendanimal, Miscota, Guaw, Mundo Animal y Cash Mascota. Se descartaron las otras dos opciones: todas las tiendas con nombre (unas 1.040, muchos comercios sueltos) y las cadenas más las marcas con 3 o más locales.
@@ -31,4 +31,8 @@ Desde la raíz del repositorio, con `main` actualizada (`git pull origin main`):
 ```
 bash scripts/catalogue/cargar.sh supabase/seeds/tiendas tiendas
 ```
-Muestra el recuento antes y después (total y de la categoría Tiendas): debe pasar de `39122|7` a `39292|177`. Cada SQL es una transacción y el script se detiene en el primer error. Después se verifica en solo lectura y se actualiza este documento.
+Muestra el recuento antes y después (total y de la categoría Tiendas): pasó de `39122|7` a `39292|177`, como se esperaba. Cada SQL es una transacción y el script se detiene en el primer error.
+
+## Cierre (26/10/2026)
+- **Carga verificada en solo lectura:** 39.292 puntos (39.218 activos y 74 archivados), 177 en Tiendas (los 7 de Granada y 170 nuevos), 170 `source_ref` `…-tiendas:` distintos, todos activos, ninguno sin coordenadas, ninguno con el municipio de otra provincia y ningún código postal con prefijo de otra provincia. Siguen sin calle 20 y sin código postal 47, como se previó.
+- La cobertura es una base, no el censo de las cadenas (ver «Alcance»).
