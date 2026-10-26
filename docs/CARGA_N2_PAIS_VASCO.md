@@ -1,6 +1,6 @@
-# Carga N2 del País Vasco (preparada)
+# Carga N2 del País Vasco (cargada)
 
-Estado: **preparada el 26/10/2026, pendiente de carga en producción por el titular con `cargar.sh`**. Undécima comunidad con el mismo procedimiento (ver `docs/CARGA_N2_NAVARRA.md` y `docs/CARGA_N2_CATALUNYA.md`). Las tres provincias (01 Araba/Álava, 20 Gipuzkoa y 48 Bizkaia) se cargan de una vez.
+Estado: **cargada en producción el 26/10/2026** por el titular con `cargar.sh` y verificada en solo lectura (ver «Cierre»). Undécima comunidad con el mismo procedimiento (ver `docs/CARGA_N2_NAVARRA.md` y `docs/CARGA_N2_CATALUNYA.md`). Las tres provincias (01 Araba/Álava, 20 Gipuzkoa y 48 Bizkaia) se cargan de una vez.
 
 ## Origen
 - Fichero: `pais-vasco-latest.osm.pbf` (Geofabrik, edición del **25/10/2026 21:21 UTC**, 69.185.578 bytes, MD5 `141ca19847e0f9c7c2cfa6eacc8ccf28` verificado contra el `.md5` de Geofabrik; guardado como `paisvasco-latest.osm.pbf`), fuera del repositorio. OpenStreetMap, licencia ODbL.
@@ -29,7 +29,7 @@ Por provincia: Araba/Álava 230, Gipuzkoa 654 y Bizkaia 894. Un SQL por lote y p
 - Carrefour (46) entra completo (Market y Express), por decisión del titular.
 - No probado en el PostgreSQL local (sin la contraseña en esta sesión).
 
-## Cómo cargar (con aprobación)
+## Cómo se cargó (con aprobación)
 Desde la raíz del repositorio, con la rama `main` actualizada (`git pull origin main`), en este orden:
 ```
 bash scripts/catalogue/cargar.sh supabase/seeds/pais-vasco/municipios municipios
@@ -38,4 +38,10 @@ bash scripts/catalogue/cargar.sh supabase/seeds/pais-vasco/estaciones estaciones
 bash scripts/catalogue/cargar.sh supabase/seeds/pais-vasco/grandes-superficies grandes-superficies catalogo-pais-vasco:pais-vasco-grandes-superficies:
 bash scripts/catalogue/cargar.sh supabase/seeds/pais-vasco/resto resto catalogo-pais-vasco:pais-vasco-resto:
 ```
-Después, en solo lectura: 251 municipios nuevos y 1.778 puntos (la base pasaría de 19.678 a 21.456 y los municipios de 2.959 a 3.210). Sin asignar a usuarios hasta terminar toda España (decisión del titular, 23/10/2026).
+Previsto en solo lectura: 251 municipios nuevos y 1.778 puntos (la base pasaría de 19.678 a 21.456 y los municipios de 2.959 a 3.210). Sin asignar a usuarios hasta terminar toda España (decisión del titular, 23/10/2026).
+
+## Cierre (26/10/2026)
+- **Carga verificada en solo lectura:** 251 municipios y 1.778 puntos (Araba/Álava 230, Gipuzkoa 654, Bizkaia 894), 1.778 `source_ref` `catalogo-pais-vasco:` distintos, todos activos y ninguno sin coordenadas. Por categoría: Supermercado 805, Entidad oficial 221, Estaciones 206, Gimnasios 147, Centro de salud 144, Correos 101, Carrefour 46, Centro comercial 36, Hospital 34, Bricolaje 13, Decathlon 9, Leroy Merlin 6, MediaMarkt 5, IKEA 3, El Corte Inglés 2. Total de la base 19.678 -> 21.456 y municipios 2.959 -> 3.210.
+- **Código postal erróneo de OpenStreetMap corregido:** «AL-RAI Orio» (Gipuzkoa) traía el 28046 (Madrid); los otros 4 puntos de Orio tienen 20810 y se le puso 20810 con `admin_set_postal_codes(..., p_only_empty => false)`. Sin ningún código con prefijo de otra provincia en las tres provincias.
+- **Pendiente:** 104 códigos postales y 24 calles (consulta de Nominatim por provincia por lanzar), revisar los dudosos de «Calidad y límites». Sin asignar a usuarios hasta terminar España.
+
