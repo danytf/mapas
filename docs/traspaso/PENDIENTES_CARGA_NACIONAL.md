@@ -3,13 +3,13 @@
 La carga nacional N2 de OpenStreetMap está **completa**: las 17 comunidades autónomas, Ceuta y Melilla (52 provincias, todas activas). Este documento recoge el estado verificado en solo lectura el 26/10/2026, el resultado de la auditoría final y lo que queda por hacer. El detalle de cada comunidad está en `docs/CARGA_N2_<COMUNIDAD>.md` y en `docs/traspaso/ROADMAP.md` (entradas 12 a 12 quindecies).
 
 ## Cifras de la base (consulta en solo lectura)
-- **39.122 puntos** (39.050 activos y 72 archivados), todos del catálogo (`source_ref` `catalogo-...`), y **8.143 municipios**.
+- **39.122 puntos** (39.050 activos y 72 archivados), todos del catálogo (`source_ref` `catalogo-...`), y **8.131 municipios** (tras retirar los 12 heredados de Granada el 26/10/2026, ver «Decisiones»).
 - **2.294 sin código postal** y **844 sin calle** (tras escribir los de Castilla y León).
 - 52 provincias, todas activas. 9 perfiles de usuario, 2 administradores.
 
 | Comunidad | Puntos | Municipios | Sin código postal | Sin calle |
 |---|---|---|---|---|
-| Andalucía | 5.897 | 797 (785 con INE + 12 heredados, ver abajo) | 153 | 81 |
+| Andalucía | 5.897 | 785 | 153 | 81 |
 | Extremadura | 1.230 | 388 | 219 | 18 |
 | La Rioja | 246 | 174 | 15 | 7 |
 | Murcia | 782 | 45 | 111 | 32 |
@@ -27,7 +27,7 @@ La carga nacional N2 de OpenStreetMap está **completa**: las 17 comunidades aut
 | Galicia | 2.737 | 313 | 146 | 188 |
 | Castilla y León | 4.215 | 2.248 | 477 | 54 |
 | Ceuta y Melilla | 45 | 2 | 0 | 0 |
-| **Total** | **39.122** | **8.143** | **2.294** | **844** |
+| **Total** | **39.122** | **8.131** | **2.294** | **844** |
 
 Por categoría: Supermercado 16.929, Entidad oficial 8.426, Gimnasios 2.998, Centro de salud 2.631, Estaciones 2.260, Correos 2.236, Carrefour 947, Centro comercial 915, Hospital 753, Bricolaje 457, Decathlon 175, Leroy Merlin 129, El Corte Inglés 102, MediaMarkt 100, IKEA 57 y Tiendas 7.
 
@@ -36,7 +36,7 @@ Resultado: **sin incidencias en los datos de los puntos.**
 - 0 puntos sin provincia, municipio o categoría; 0 sin coordenadas; 0 fuera de España (caja de las Canarias a Baleares); 0 con el municipio de otra provincia.
 - 0 `source_ref` duplicados; 0 códigos INE duplicados; 0 códigos postales cuyo prefijo no coincide con la provincia.
 - Los totales por comunidad de la tabla suman exactamente los de la base (39.122 puntos y, antes de escribir Castilla y León, 3.315 sin código y 874 sin calle; la tabla ya refleja 2.294 y 844).
-- **Un hallazgo:** 12 municipios de Granada sin código INE (ver «Decisiones»). Con ellos fuera, los municipios con INE son 8.131.
+- **Un hallazgo:** 12 municipios de Granada sin código INE, resueltos después (ver «Decisiones»).
 
 ## Pendientes
 
@@ -48,22 +48,7 @@ Resultado: **sin incidencias en los datos de los puntos.**
 
 ### B. Decisiones del titular
 - **Dudosos de código postal sin escribir** (el código de Nominatim no coincide con los conocidos del municipio): unos 820 repartidos (Galicia 141, Canarias 136, Valencia 111, Asturias 111, Murcia 100, Cataluña 51, Madrid 44, Baleares 27, Cantabria 27, Aragón 19, Castilla-La Mancha 18, Extremadura 16, País Vasco 14, Navarra 9). Se probó cruzar 418 de ellos (los de las comunidades anteriores a Canarias) con los puntos vecinos de la base: solo 11 tienen apoyo, unos 85 los contradicen y unos 316 no tienen vecinos. Recomendación: dejarlos sin código.
-- **Granada, 12 municipios heredados sin INE** (de la carga inicial del 17/10/2026, un punto cada uno). Todos los puntos caen dentro de un municipio oficial. Propuesta, pendiente de aprobación: reasignar cada punto a ese municipio y, después, retirar los 12 municipios vacíos (hoy no se ha tocado nada):
-
-| Municipio heredado | Punto | Municipio oficial donde cae (INE) |
-|---|---|---|
-| Alcudia de Guadix | Covirán | Valle del Zalabí (18907) |
-| Bácor-Olivar | Ayuntamiento de Bácor-Olivar | Guadix (18089) |
-| Castillo de Baños | Covirán | Polopos (18162) |
-| El Turro | Ayuntamiento de El Turro | Cacín (18034) |
-| Fuentes de Cesna | Covirán | Algarinejo (18012) |
-| Híjar | Mercadona | Las Gabias (18905) |
-| La Herradura | Dia | Almuñécar (18017) |
-| Loreto | Covirán | Moraleda de Zafayona (18138) |
-| Otura | Mercadona | Villa de Otura (18149) |
-| Pitres | Covirán | La Taha (18901) |
-| Ventas de Zafarraya | Ayuntamiento de Ventas de Zafarraya | Alhama de Granada (18013) |
-| Ventorros de San José | Covirán | Loja (18122) |
+- **Granada, 12 municipios heredados sin INE: RESUELTO el 26/10/2026** (decisión del titular, opción A). Los 12 puntos (un Covirán por municipio en 7 casos, 2 Mercadona, 1 Dia y 3 ayuntamientos) se reasignaron al municipio oficial donde caen: Valle del Zalabí, Guadix, Polopos, Cacín, Algarinejo, Las Gabias, Almuñécar, Moraleda de Zafayona, Villa de Otura, La Taha, Alhama de Granada y Loja. Se escribió desde la sesión de administrador (12 `update` con comprobación del municipio anterior, 12 filas afectadas) y después se borraron los 12 municipios vacíos (0 puntos, sin INE). Verificado en solo lectura: 8.131 municipios, 0 sin INE, 174 en Granada, 39.122 puntos, 0 sin municipio y 0 con el municipio de otra provincia. Los tres ayuntamientos (Bácor-Olivar, El Turro y Ventas de Zafarraya) conservan su nombre dentro del municipio que los absorbió.
 - **Hospitales dudosos** (solo por el nombre, sin archivar): Castilla-La Mancha (Hospital Solimat, Instituto Valenciano de Oncología, Sanatorio de Alcohete, Instituto de Enfermedades Neurológicas), Aragón (Clínica Manzanera, Hospital Militar), Valencia (Instituto Social de la Marina - Casa del Mar, Hospital Centro Médico Acuario, Instituto de Traumatología Unión de Mutuas, Hospital Complementario de Segorbe), Galicia (Centro Oncolóxico de Galicia, Centro Materno Infantil Nosa Sra. de Belén, Hospital Naval, Sanatorio Hestia La Robleda, Hospital Montecelo y Hospital Gran Montecelo) y Castilla y León (Policlínica Santa Marta, Centro Hospitalario Benito Menni, San Juan de Dios en San Andrés del Rabanedo, Virgen del Mirón).
 - **Estaciones «por revisar» de Cataluña:** los pares marcados como posible duplicado (aeropuerto de El Prat, estación e intercambiador de autobuses de Tarragona); la app tiene el filtro «Por revisar» para decidirlo con el mapa delante.
 - **Asignar provincias a usuarios:** decidido no hacerlo hasta terminar España. La carga ya está terminada: ahora puede decidirse. Hay 9 perfiles (2 administradores).
