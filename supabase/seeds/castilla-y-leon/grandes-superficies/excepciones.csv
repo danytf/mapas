@@ -1,0 +1,4 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/4187204930;;Carrefour Express;Salamanca;40.965506;-5.652841;texto excluido (click|recogida|collect|pick|express shop|banco|bank|gasolinera|fuel|viajes)
+descartado;node/7523350321;;Outlet, El Corte Inglés;Arroyo de la Encomienda;41.622676;-4.769778;texto excluido (supercor|opencor|viajes|seguros|bricolaje|gourmet|outlet|aparcamiento|parking)
+descartado;way/45330823;;Centro Comercial el Mirador - Carrefour;Burgos;42.360168;-3.695503;duplicado en el lote de node/1990296691 (13 m)

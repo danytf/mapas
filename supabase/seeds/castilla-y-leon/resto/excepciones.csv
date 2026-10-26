@@ -1,0 +1,307 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/10002822668;;;Carracedelo;42.581681;-6.726263;sin nombre en OpenStreetMap
+descartado;node/10059452860;;;Quintanar de la Sierra;41.981842;-3.040095;sin nombre en OpenStreetMap
+descartado;node/1014747706;;Carrefour;Valladolid;41.623183;-4.749754;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/1070817065;;Alimerka;León;42.604033;-5.568343;duplicado en el lote de node/3206496778 (53 m)
+descartado;node/10735959283;;Gadis;Valladolid;41.641042;-4.719284;duplicado en el lote de node/7498226018 (63 m)
+descartado;node/10808102487;;Ayuntamiento;Oncala;41.970778;-2.312329;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/11226635130;;Dia;Medina de Rioseco;41.883969;-5.04425;duplicado en el lote de node/10259473722 (124 m)
+descartado;node/11357229118;;Ayuntamiento;Monteagudo de las Vicarías;41.365349;-2.167762;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/11584491424;;Alimerka;Valladolid;41.645533;-4.712852;duplicado en el lote de node/11584491423 (76 m)
+descartado;node/11584491442;;Gadis;Valladolid;41.636252;-4.722135;duplicado en el lote de node/10087931677 (35 m)
+descartado;node/1165805555;;Carrefour Market;Valladolid;41.650233;-4.728701;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/11663810917;;;Valladolid;41.644917;-4.704695;sin nombre en OpenStreetMap
+descartado;node/11694830966;;Centro de Salud Mental;León;42.595572;-5.571009;texto excluido (mental|veterinari|dental|fisioter|rehabilitaci|consultori|dispensari)
+descartado;node/11866685356;;Carrefour;Segovia;40.921351;-4.113367;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/12118989101;;Carrefour Express;Vega de Espinareda;42.725703;-6.655401;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/12167761285;;;Ponferrada;42.584413;-6.625848;sin nombre en OpenStreetMap
+descartado;node/12211884611;;Gadis;Segovia;40.944028;-4.116951;duplicado en el lote de node/12211884610 (48 m)
+descartado;node/12238751436;;;Tudela de Duero;41.586663;-4.584402;sin nombre en OpenStreetMap
+descartado;node/12870905401;;;San Pedro de Latarce;41.737267;-5.324623;sin nombre en OpenStreetMap
+descartado;node/12942322912;;Alimerka;León;42.596785;-5.564677;duplicado en el lote de node/11756489087 (25 m)
+descartado;node/13193384796;;Mercadona;Burgos;42.348592;-3.675798;duplicado en el lote de node/703084113 (65 m)
+descartado;node/13390094475;;Ayuntamiento de Foncea;Foncea;42.614483;-3.037618;fuera de las provincias del lote (26)
+descartado;node/13393417006;;Ayuntamiento de Cellorigo;Cellorigo;42.627356;-3.000524;fuera de las provincias del lote (26)
+descartado;node/13615753590;;El Corte Inglés;Burgos;42.342145;-3.693918;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/13673138653;;;Hontanares de Eresma;40.990621;-4.208763;sin nombre en OpenStreetMap
+descartado;node/13697315289;;Ayuntamiento de Bordalba;Bordalba;41.416545;-2.078383;fuera de las provincias del lote (50)
+descartado;node/14075289506;;Cruz Roja;Cigales;41.757537;-4.696875;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada|salud mental|laboral|hospital de d[ií]a|farmacia|forense|vacunaci[oó]n|centro de especialidades|centro de cuidados|cl[ií]nica del (pie|dolor)|est[eé]tica|summa ?112|suma 112|^asamblea|^sede |psicoterapia|centro de especialidades|consultas externas|centro de rehabilitaci[oó]n|^cme |^doctor|^entrada|ergoterapia)
+descartado;node/14103451127;;;Astudillo;42.192195;-4.294177;sin nombre en OpenStreetMap
+descartado;node/14301497089;;;Valle de Mena;43.100378;-3.283945;sin nombre en OpenStreetMap
+descartado;node/1434900841;;Carrefour Market;Salamanca;40.968153;-5.660745;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/1448802564;;Alcampo;Burgos;42.355661;-3.665108;duplicado en el lote de node/1107610435 (95 m)
+descartado;node/1467621930;;Alimerka;Ponferrada;42.546704;-6.599404;duplicado en el lote de node/1467621918 (38 m)
+descartado;node/1497910502;;Supermercado Ceci;Belorado;42.41986;-3.193195;etiqueta disused=yes
+descartado;node/1561093663;;Carrefour Market;Salamanca;40.971847;-5.649629;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/1667145612;;Ayuntamiento;La Pola de Gordón;42.854847;-5.670344;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/1667146275;;Carrefour Market;Palencia;42.010638;-4.53442;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/1707703596;;Alimerka;Valladolid;41.651672;-4.712567;duplicado en el lote de node/11328863155 (74 m)
+descartado;node/1752676611;;Ayuntamiento;Neila;42.060124;-2.996718;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/1800116123;;Alcampo;Salamanca;40.975684;-5.654257;duplicado en el lote de node/1800116122 (50 m)
+descartado;node/1800116125;;Alcampo;Salamanca;40.972068;-5.660776;duplicado en el lote de node/1759851014 (58 m)
+descartado;node/1886683875;;Lupa;Valladolid;41.636491;-4.719634;duplicado en el lote de node/1886683865 (75 m)
+descartado;node/1990296691;;Carrefour;Burgos;42.360236;-3.695632;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/2102998469;;Carrefour;Palencia;41.991823;-4.516391;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/2270029542;;Carrefour Market;Fuentes de Oñoro;40.603542;-6.819933;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/2502972861;;Ayuntamiento;Mambrillas de Lara;42.09462;-3.461033;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/2513484003;;Centro de Entrenamiento Alberto Ortiz Fernández;Villarcayo de Merindad de Castilla la Vieja;42.939667;-3.572004;etiqueta disused:shop
+descartado;node/2620840580;;Centro de Entrenamiento Level Up;Villarcayo de Merindad de Castilla la Vieja;42.939859;-3.567763;etiqueta disused:amenity
+descartado;node/2678008779;;Ultramarinos;Boca de Huérgano;42.973813;-4.924891;nombre generico o dudoso en OpenStreetMap: Ultramarinos
+descartado;node/2769302541;;Carrefour;Ponferrada;42.556998;-6.603597;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/2886091705;;Ayuntamiento;Los Rábanos;41.717259;-2.476284;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/2900017517;;Ayuntamiento;Berlanga de Duero;41.520365;-2.809612;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/2923982587;;Ayuntamiento;San Esteban de Gormaz;41.581926;-3.281116;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/3184157036;;;Salamanca;40.979304;-5.671287;sin nombre en OpenStreetMap
+descartado;node/3333757299;;Gadis;Valladolid;41.626884;-4.741257;duplicado en el lote de node/1613316467 (58 m)
+descartado;node/3440935269;;Ayuntamiento;Pobladura de Pelayo García;42.305665;-5.685887;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/3498740957;;Gadis;Medina del Campo;41.309857;-4.914778;duplicado en el lote de node/14113656502 (40 m)
+descartado;node/3572929186;;Ayuntamiento;Villafranca de Duero;41.432956;-5.301954;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/3825575420;;Ultramarinos;Palacios de Sanabria;42.058765;-6.52168;nombre generico o dudoso en OpenStreetMap: Ultramarinos
+descartado;node/3891671458;;Carrefour Express;Cabrerizos;40.979328;-5.608567;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/3893734696;;Supermercado;Casillas;40.323682;-4.572181;nombre generico o dudoso en OpenStreetMap: Supermercado
+descartado;node/4187204930;;Carrefour Express;Salamanca;40.965506;-5.652841;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/4234449692;;Familia;León;42.596699;-5.574134;duplicado en el lote de node/11645623882 (49 m)
+descartado;node/4341342528;;Ayuntamiento;Covarrubias;42.059247;-3.520372;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/4348530594;;;Rabanales;41.740426;-6.274077;sin nombre en OpenStreetMap
+descartado;node/4420093688;;;Toreno;42.697187;-6.515315;sin nombre en OpenStreetMap
+descartado;node/4437915115;;;Toreno;42.709619;-6.550888;sin nombre en OpenStreetMap
+descartado;node/4510503105;;Gadis;Valladolid;41.661887;-4.733849;duplicado en el lote de node/4510503104 (70 m)
+descartado;node/4526737242;;Ayuntamiento;Montamarta;41.649707;-5.806841;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/4529119816;;;Faramontanos de Tábara;41.836095;-5.885177;sin nombre en OpenStreetMap
+descartado;node/4722941707;;Mercadona;Miranda de Ebro;42.686163;-2.949143;duplicado en el lote de node/1926881991 (87 m)
+descartado;node/4724829027;;Mercadona;Miranda de Ebro;42.685939;-2.948903;duplicado en el lote de node/1926881991 (89 m)
+descartado;node/473238746;;;Maello;40.85996;-4.562094;sin nombre en OpenStreetMap
+descartado;node/4827849622;;;San Pedro de Rozados;40.789532;-5.737694;sin nombre en OpenStreetMap
+descartado;node/4848142469;;;Valladolid;41.653031;-4.716049;sin nombre en OpenStreetMap
+descartado;node/4930021422;;Juzgados;Carrión de los Condes;42.334407;-4.601977;nombre generico o dudoso en OpenStreetMap: Juzgados
+descartado;node/4988877250;;;San Emiliano;42.971378;-6.000181;sin nombre en OpenStreetMap
+descartado;node/4988877251;;;San Emiliano;42.973312;-6.000948;sin nombre en OpenStreetMap
+descartado;node/5111125625;;Juzgados;Piedrahíta;40.462738;-5.327427;nombre generico o dudoso en OpenStreetMap: Juzgados
+descartado;node/520309029;;Alcampo;Burgos;42.349529;-3.694753;duplicado en el lote de node/520309023 (46 m)
+descartado;node/5303927321;;Ayuntamiento;Villahoz;42.077526;-3.913001;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/5573904792;;;Candelario;40.366202;-5.741844;sin nombre en OpenStreetMap
+descartado;node/5859263067;;;Cuevas del Valle;40.293149;-5.009787;sin nombre en OpenStreetMap
+descartado;node/5859263070;;;Cuevas del Valle;40.29323;-5.009974;sin nombre en OpenStreetMap
+descartado;node/5861971001;;;Pampliega;42.215903;-3.998187;sin nombre en OpenStreetMap
+descartado;node/5879664385;;;Arévalo;41.06255;-4.720242;sin nombre en OpenStreetMap
+descartado;node/6011096859;;Alcampo;Burgos;42.350775;-3.671151;duplicado en el lote de node/2157844078 (65 m)
+descartado;node/6186124542;;Lupa;Burgos;42.335231;-3.705011;duplicado en el lote de node/5031094845 (41 m)
+descartado;node/6239799069;;Gadis;Ponferrada;42.545751;-6.597768;duplicado en el lote de node/1613316471 (36 m)
+descartado;node/6261663598;;;Navasfrías;40.296131;-6.819572;sin nombre en OpenStreetMap
+descartado;node/6286663393;;Ayuntamiento;Castrillo Mota de Judíos;42.307768;-4.172497;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/6296264200;;Ayuntamiento;Monterrubio de la Demanda;42.149385;-3.113184;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/6297691840;;Ayuntamiento;Villoruebo;42.168519;-3.441488;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/6317052703;;Ayuntamiento;Villaverde-Mogina;42.160769;-4.051359;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/6318245146;;Ayuntamiento;Los Balbases;42.215093;-4.065364;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/6318980396;;Ayuntamiento;Villaldemiro;42.247009;-3.983364;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/6324012058;;Ayuntamiento;Villegas;42.468212;-4.016851;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/6340320263;;Ayuntamiento;Cillaperlata;42.782204;-3.358461;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/6341041168;;Supermercado;Mijares;40.294205;-4.836399;nombre generico o dudoso en OpenStreetMap: Supermercado
+descartado;node/6341623424;;Ayuntamiento;;42.429768;-3.049197;fuera de los municipios oficiales cargados
+descartado;node/6353349083;;Carrefour;Zamora;41.514249;-5.747579;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/6372297639;;Ayuntamiento;Castrojeriz;42.337123;-4.155667;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/6372517800;;Ayuntamiento;Villamayor de Treviño;42.459618;-4.120177;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/6431500612;;Ayuntamiento;Frandovínez;42.309315;-3.83771;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/6465273964;;Ayuntamiento;Presencio;42.186224;-3.901321;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/649153588;;Carrefour;Ávila;40.669371;-4.660614;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/6533627074;;Centro de salud;Fermoselle;41.316705;-6.394787;nombre generico o dudoso en OpenStreetMap: Centro de salud
+descartado;node/6673912577;;Carrefour express;Benavides;42.503964;-5.896796;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/6755845287;;;Castrocontrigo;42.184241;-6.19019;sin nombre en OpenStreetMap
+descartado;node/6786268033;;Ayuntamiento;Retuerta;42.029555;-3.50646;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/6791239319;;Ayuntamiento;Cayuela;42.272442;-3.818479;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/687987942;;Gadis;Ponferrada;42.546709;-6.588492;duplicado en el lote de node/5332056651 (52 m)
+descartado;node/6918796226;;Ayuntamiento;Solarana;41.972213;-3.659181;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/6949571477;;Ayuntamiento;La Revilla y Ahedo;42.012867;-3.330977;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/6955594195;;Ayuntamiento;Quintanilla del Coco;41.978676;-3.51701;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/6983294486;;;Caleruega;41.823678;-3.489952;sin nombre en OpenStreetMap
+descartado;node/7018454488;;;Valladolid;41.645594;-4.719646;sin nombre en OpenStreetMap
+descartado;node/7049683190;;Alimentación;Sanchotello;40.437948;-5.752635;nombre generico o dudoso en OpenStreetMap: Alimentación
+descartado;node/7058081620;;Brico;Burgos;42.348472;-3.713827;duplicado en el lote de node/4689493407 (31 m)
+descartado;node/711051327;;Gadis;Ponferrada;42.546573;-6.588775;duplicado en el lote de node/5332056651 (62 m)
+descartado;node/7223516207;;Ayuntamiento;Jaramillo Quemado;42.085167;-3.358756;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/7248395657;;Urgencias;Valladolid;41.629985;-4.712354;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada|salud mental|laboral|hospital de d[ií]a|farmacia|forense|vacunaci[oó]n|centro de especialidades|centro de cuidados|cl[ií]nica del (pie|dolor)|est[eé]tica|summa ?112|suma 112|^asamblea|^sede |psicoterapia|centro de especialidades|consultas externas|centro de rehabilitaci[oó]n|^cme |^doctor|^entrada|ergoterapia)
+descartado;node/7267167677;;Ayuntamiento;Cuevas de San Clemente;42.130121;-3.568479;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/7326262597;;Ayuntamiento;Villanueva de Carazo;41.984597;-3.324565;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/7366638655;;;Valdelacasa;40.506175;-5.762186;sin nombre en OpenStreetMap
+descartado;node/7366639266;;;Valdelacasa;40.506785;-5.763291;sin nombre en OpenStreetMap
+descartado;node/7533837297;;Ayuntamiento;Huerta de Arriba;42.116944;-3.081901;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/7545652606;;Ayuntamiento;Quintanapalla;42.409124;-3.532829;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/764925623;;Alcampo;Burgos;42.350992;-3.665647;duplicado en el lote de node/764925622 (86 m)
+descartado;node/7655973585;;;Pozoantiguo;41.598437;-5.436527;sin nombre en OpenStreetMap
+descartado;node/7657137586;;;Faramontanos de Tábara;41.835511;-5.890115;sin nombre en OpenStreetMap
+descartado;node/7726575354;;;Vinuesa;41.909639;-2.763921;sin nombre en OpenStreetMap
+descartado;node/7825729809;;;Congosto;42.61686;-6.519459;sin nombre en OpenStreetMap
+descartado;node/7952313697;;Ayuntamiento;Jurisdicción de Lara;42.123092;-3.445024;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/801080185;;;Villagonzalo Pedernales;42.306813;-3.732049;sin nombre en OpenStreetMap
+descartado;node/8109902299;;Dia;Valladolid;41.661539;-4.721304;duplicado en el lote de node/7564334685 (123 m)
+descartado;node/8225403603;;Ayuntamiento;Celada del Camino;42.26357;-3.933855;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/8361964228;;Ayuntamiento;Fresno de Rodilla;42.420105;-3.483953;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/8400091365;;Ayuntamiento;Quintanavides;42.481444;-3.425755;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/8402788772;;Ayuntamiento;Castil de Peones;42.483896;-3.384265;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/8406280607;;Ayuntamiento;Prádanos de Bureba;42.502277;-3.347315;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/8418918375;;Ayuntamiento;Villaespasa;42.099752;-3.404505;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/8927842949;;;Renedo de Esgueva;41.656859;-4.629838;sin nombre en OpenStreetMap
+descartado;node/893559159;;;Puebla de Lillo;43.063865;-5.372763;sin nombre en OpenStreetMap
+descartado;node/9006934817;;;Navalperal de Pinares;40.593572;-4.411122;sin nombre en OpenStreetMap
+descartado;node/9006934832;;;Navalperal de Pinares;40.593586;-4.410311;sin nombre en OpenStreetMap
+descartado;node/9193823763;;Ayuntamiento;Sotragero;42.410336;-3.714446;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/9309332715;;Ayuntamiento;Brazacorta;41.717778;-3.36578;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/9442823435;;Hipercor;Burgos;42.317617;-3.70355;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;node/9454860749;;;;41.269092;-3.497095;fuera de los municipios oficiales cargados
+descartado;node/951403374;;Alcampo;Burgos;42.337592;-3.697016;duplicado en el lote de node/703084110 (34 m)
+descartado;node/969144721;;;Villares de la Reina;41.0203;-5.670832;sin nombre en OpenStreetMap
+descartado;node/969144725;;;Villares de la Reina;41.020098;-5.671111;sin nombre en OpenStreetMap
+descartado;node/9817786425;;;León;42.61913;-5.568108;sin nombre en OpenStreetMap
+descartado;node/9919779425;;Ayuntamiento;Iglesias;42.298124;-3.99062;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;node/9943339833;;Ayuntamiento;Manciles;42.456004;-3.944738;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;relation/19931985;;Juzgados;León;42.594719;-5.579726;nombre generico o dudoso en OpenStreetMap: Juzgados
+descartado;relation/2524616;;Hospital Clínico - Edificio Rondilla;Valladolid;41.658751;-4.72673;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada|salud mental|laboral|hospital de d[ií]a|farmacia|forense|vacunaci[oó]n|centro de especialidades|centro de cuidados|cl[ií]nica del (pie|dolor)|est[eé]tica|summa ?112|suma 112|^asamblea|^sede |psicoterapia|centro de especialidades|consultas externas|centro de rehabilitaci[oó]n|^cme |^doctor|^entrada|ergoterapia)
+descartado;relation/911164;;Juzgados;Salamanca;40.962198;-5.663155;nombre generico o dudoso en OpenStreetMap: Juzgados
+descartado;way/1090927961;;Clínica de Salud Mental Arévalo;Arévalo;41.053143;-4.720855;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada|salud mental|laboral|hospital de d[ií]a|farmacia|forense|vacunaci[oó]n|centro de especialidades|centro de cuidados|cl[ií]nica del (pie|dolor)|est[eé]tica|summa ?112|suma 112|^asamblea|^sede |psicoterapia|centro de especialidades|consultas externas|centro de rehabilitaci[oó]n|^cme |^doctor|^entrada|ergoterapia)
+descartado;way/1098107434;;;Valladolid;41.63578;-4.754993;sin nombre en OpenStreetMap
+descartado;way/115675386;;;Salamanca;40.943247;-5.671219;sin nombre en OpenStreetMap
+descartado;way/1224566056;;Ayuntamiento de Pozuel de Ariza;Pozuel de Ariza;41.35233;-2.15621;fuera de las provincias del lote (50)
+descartado;way/1285506903;;;Poza de la Sal;42.665113;-3.49986;sin nombre en OpenStreetMap
+descartado;way/1288547821;;Tifer;Valladolid;41.672599;-4.726876;duplicado en el lote de way/1124969070 (22 m)
+descartado;way/1324546907;;Ayuntamiento;;42.317586;-3.067349;fuera de los municipios oficiales cargados
+descartado;way/132741926;;Ayuntamiento;Villadiego;42.515918;-4.010129;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/1328165740;;Ayuntamiento de Castrobol;Castrobol;42.135846;-5.313041;duplicado en el lote de node/9107249040 (1 m)
+descartado;way/1329517175;;;Soria;41.759669;-2.484417;sin nombre en OpenStreetMap
+descartado;way/1331463287;;;Zamora;41.511353;-5.728218;sin nombre en OpenStreetMap
+descartado;way/1340158276;;;Zamora;41.501504;-5.73781;sin nombre en OpenStreetMap
+descartado;way/1364510347;;Ayuntamiento;Quintanar de la Sierra;41.981602;-3.039161;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/1369408449;;;Zamora;41.512018;-5.74016;sin nombre en OpenStreetMap
+descartado;way/1371901229;;;Zamora;41.511293;-5.737953;sin nombre en OpenStreetMap
+descartado;way/1410891717;;Dia;Fabero;42.774649;-6.619013;duplicado en el lote de node/11230570445 (3 m)
+descartado;way/1487308558;;Ayuntamiento de Narros de Saldueña;Narros de Saldueña;40.872731;-4.86818;duplicado en el lote de node/7567647877 (2 m)
+descartado;way/1490722359;;Ayuntamiento de Flores de Ávila;Flores de Ávila;40.934174;-5.079588;duplicado en el lote de node/7566873906 (2 m)
+descartado;way/1491194212;;Ayuntamiento de El Parral;El Parral;40.797829;-4.990465;duplicado en el lote de node/7603858644 (1 m)
+descartado;way/1498914745;;;Borobia;41.662946;-1.899168;sin nombre en OpenStreetMap
+descartado;way/1503464204;;Ayuntamiento de Chamartín;Chamartín;40.702163;-4.957502;duplicado en el lote de node/7603858620 (0 m)
+descartado;way/1548883777;;;Las Hormazas;42.525667;-3.927858;sin nombre en OpenStreetMap
+descartado;way/1565658816;;Ayuntamiento;Villaquirán de la Puebla;42.28261;-4.099892;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/160222034;;Ayuntamiento;Valle de Tobalina;42.793655;-3.270144;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/165473439;;Juzgados;Palencia;42.00975;-4.53374;nombre generico o dudoso en OpenStreetMap: Juzgados
+descartado;way/181759903;;Juzgados;Miranda de Ebro;42.683082;-2.945275;nombre generico o dudoso en OpenStreetMap: Juzgados
+descartado;way/181763191;;Ayuntamiento;Miranda de Ebro;42.682833;-2.952367;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/188979929;;;Galende;42.08362;-6.643774;sin nombre en OpenStreetMap
+descartado;way/191264143;;;Zamora;41.520417;-5.7232;sin nombre en OpenStreetMap
+descartado;way/196556938;;Ayuntamiento;Santo Domingo de Silos;41.962109;-3.418289;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/199198805;;Centro de Salud de Melgar de Fernamental;Melgar de Fernamental;42.40378;-4.247969;texto excluido (mental|veterinari|dental|fisioter|rehabilitaci|consultori|dispensari)
+descartado;way/201641857;;Ayuntamiento;Arcos;42.264802;-3.756409;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/202575868;;Ayuntamiento;Valle de Sedano;42.71613;-3.749795;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/203149243;;Ayuntamiento;Merindad de Río Ubierna;42.437197;-3.678341;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/205115883;;Ayuntamiento;Merindad de Valdeporres;43.006258;-3.741638;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/216176329;;Ayuntamiento;Villasur de Herreros;42.307371;-3.393742;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/218944473;;Ayuntamiento;Araúzo de Miel;41.860048;-3.387286;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/219033558;;Ayuntamiento;Merindad de Sotoscueva;43.027375;-3.627385;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/220680484;;Centro de Salud;Frómista;42.269516;-4.403478;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/229834790;;Ayuntamiento;Quemada;41.700932;-3.574891;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/233580096;;;Navalosa;40.401416;-4.931698;sin nombre en OpenStreetMap
+descartado;way/236332028;;Ayuntamiento;Buniel;42.310651;-3.822849;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/254558825;;Juzgados;El Burgo de Osma-Ciudad de Osma;41.587577;-3.062421;nombre generico o dudoso en OpenStreetMap: Juzgados
+descartado;way/26479122;;Juzgados;Benavente;42.002567;-5.675522;nombre generico o dudoso en OpenStreetMap: Juzgados
+descartado;way/26481923;;Ayuntamiento;Santa Colomba de las Monjas;41.956605;-5.683855;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/26947304;;Carrefour;Valladolid;41.64175;-4.761386;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/26947403;;Carrefour;Valladolid;41.669207;-4.709123;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/282223243;;;Marugán;40.880339;-4.383793;sin nombre en OpenStreetMap
+descartado;way/283512654;;Ayuntamiento;Riaño;42.975788;-5.005928;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/294713359;;Ayuntamiento;Valtiendas;41.478716;-3.952703;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/296785466;;Ayuntamiento;Oña;42.678036;-3.385628;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/326839852;;Juzgados;Villalpando;41.865928;-5.413682;nombre generico o dudoso en OpenStreetMap: Juzgados
+descartado;way/327287589;;Ayuntamiento;Cardeñosa;40.741912;-4.743223;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/330536633;;Ayuntamiento;Pradoluengo;42.32336;-3.199878;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/333170274;;;Navalosa;40.401642;-4.930149;sin nombre en OpenStreetMap
+descartado;way/341956148;;Ayuntamiento;El Hoyo de Pinares;40.502346;-4.422704;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/346843234;;;Hontanares de Eresma;40.990452;-4.208669;sin nombre en OpenStreetMap
+descartado;way/351942271;;Hospital Los Montalvos;Carrascal de Barregas;40.926337;-5.74099;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada|salud mental|laboral|hospital de d[ií]a|farmacia|forense|vacunaci[oó]n|centro de especialidades|centro de cuidados|cl[ií]nica del (pie|dolor)|est[eé]tica|summa ?112|suma 112|^asamblea|^sede |psicoterapia|centro de especialidades|consultas externas|centro de rehabilitaci[oó]n|^cme |^doctor|^entrada|ergoterapia)
+descartado;way/360762656;;Ayuntamiento;Mazuela;42.207085;-3.918764;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/361033637;;Ayuntamiento;Benavente;41.99723;-5.677561;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/363735496;;;Santiz;41.205438;-5.896397;sin nombre en OpenStreetMap
+descartado;way/370457444;;Clínica Mutualidad Deportiva;;40.788453;-4.002337;fuera de los municipios oficiales cargados
+descartado;way/380677996;;Ayuntamiento;Sotresgudo;42.578577;-4.177073;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/405904047;;;Villamanín;42.93841;-5.656567;sin nombre en OpenStreetMap
+descartado;way/429863738;;;Segovia;40.897604;-4.171473;sin nombre en OpenStreetMap
+descartado;way/44309588;;Carrefour;Salamanca;40.980399;-5.664469;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/445387394;;Ayuntamiento;Pampliega;42.206095;-3.987247;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/453082709;;Ayuntamiento;Valle de Valdebezana;42.969847;-3.786358;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/455949657;;;Valladolid;41.606828;-4.757994;sin nombre en OpenStreetMap
+descartado;way/462819068;;Ayuntamiento;Cavia;42.284313;-3.846727;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/464803776;;Ayuntamiento;Ameyugo;42.656033;-3.061619;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/465939117;;Ayuntamiento;Monasterio de Rodilla;42.457799;-3.469571;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/467258198;;Ayuntamiento;Alfoz de Quintanadueñas;42.384709;-3.736213;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/46972689;;Juzgados;Burgos;42.349335;-3.691893;nombre generico o dudoso en OpenStreetMap: Juzgados
+descartado;way/472222428;;Ayuntamiento;Isar;42.361869;-3.930096;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/472388205;;Ayuntamiento;Pedrosa de Río Úrbel;42.409714;-3.821427;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/474034087;;Ayuntamiento;Quintanaortuño;42.450131;-3.682951;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/480695648;;Ayuntamiento;Belbimbre;42.169136;-4.012013;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/496780909;;Ayuntamiento;Langa de Duero;41.619575;-3.321921;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/50895588;;Juzgados;Ávila;40.657053;-4.702143;nombre generico o dudoso en OpenStreetMap: Juzgados
+descartado;way/515011139;;Ayuntamiento;Pedrosa del Príncipe;42.248475;-4.198518;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/515011155;;Ayuntamiento;Grijalba;42.429371;-4.119094;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/515057857;;Ayuntamiento;Itero del Castillo;42.290201;-4.244727;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/517976701;;;Herradón de Pinares;40.593666;-4.495685;sin nombre en OpenStreetMap
+descartado;way/52040029;;;Burgos;42.361876;-3.680747;sin nombre en OpenStreetMap
+descartado;way/534344512;;ALDI;Benavente;41.99594;-5.65818;etiqueta abandoned=yes
+descartado;way/53493552;;Hospital Virgen del Castañar;Béjar;40.385161;-5.766451;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada|salud mental|laboral|hospital de d[ií]a|farmacia|forense|vacunaci[oó]n|centro de especialidades|centro de cuidados|cl[ií]nica del (pie|dolor)|est[eé]tica|summa ?112|suma 112|^asamblea|^sede |psicoterapia|centro de especialidades|consultas externas|centro de rehabilitaci[oó]n|^cme |^doctor|^entrada|ergoterapia)
+descartado;way/540738922;;Ayuntamiento;Castrillo del Val;42.314281;-3.584947;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/541895480;;Ayuntamiento;Magaña;41.900158;-2.161504;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/568692778;;Ayuntamiento;Arlanzón;42.32164;-3.460309;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/60418529;;Juzgados;Valladolid;41.656126;-4.724013;nombre generico o dudoso en OpenStreetMap: Juzgados
+descartado;way/608107555;;Ayuntamiento;Saldaña de Burgos;42.257859;-3.684478;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/608107608;;Ayuntamiento;Albillos;42.275816;-3.791189;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/608153362;;Ayuntamiento;Palazuelos de la Sierra;42.211694;-3.460537;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/608420673;;Ayuntamiento;Santibáñez del Val;41.973897;-3.480098;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/610888005;;Ayuntamiento;Rezmondo;42.515941;-4.238166;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/611666907;;Ayuntamiento;Hontanas;42.313231;-4.045613;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/611666910;;Ayuntamiento;Villazopeque;42.198723;-4.016767;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/611884324;;Ayuntamiento;Sordillos;42.461592;-4.107602;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/612753991;;Ayuntamiento;Barrio de Muñó;42.174479;-4.008534;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/613527206;;Ayuntamiento;Castrillo de Riopisuerga;42.515438;-4.252174;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/622067466;;Ayuntamiento;Tubilla del Agua;42.709179;-3.80267;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/622067586;;Ayuntamiento;Vilviestre del Pinar;41.952177;-3.0781;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/626500840;;Ayuntamiento;Quintanilla del Agua y Tordueles;42.03401;-3.653505;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/645695531;;Centro de Salud;Santas Martas;42.430988;-5.36913;nombre generico o dudoso en OpenStreetMap: Centro de Salud
+descartado;way/653791017;;Ayuntamiento;Rábanos;42.320181;-3.270423;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/669842962;;Ayuntamiento;Espinosa de los Monteros;43.097027;-3.565392;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/671339714;;Ayuntamiento;Fresneda de la Sierra Tirón;42.314779;-3.135906;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/671540062;;Ayuntamiento;Espinosa de Cervera;41.896275;-3.469875;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/672017717;;Ayuntamiento;Villafranca Montes de Oca;42.386628;-3.308796;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/672117653;;Ayuntamiento;Castildelgado;42.436634;-3.085564;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/672365980;;Ayuntamiento;San Millán de Lara;42.13633;-3.345072;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/672508679;;Ayuntamiento;Villamiel de la Sierra;42.191059;-3.417642;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/674521220;;Ayuntamiento;Palazuelos de Muñó;42.195785;-3.98824;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/675224782;;Ayuntamiento;Zarzosa de Río Pisuerga;42.536204;-4.267583;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/676262079;;Ayuntamiento;Úrbel del Castillo;42.617852;-3.84614;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/676604115;;;La Losa;40.853475;-4.16333;sin nombre en OpenStreetMap
+descartado;way/677269958;;Ayuntamiento;;42.429772;-3.049192;fuera de los municipios oficiales cargados
+descartado;way/680475427;;Ayuntamiento;Valle de Zamanzas;42.849725;-3.754436;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/682126741;;Ayuntamiento;Piérnigas;42.590286;-3.413204;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/682586399;;Ayuntamiento;Zuñeda;42.605396;-3.225654;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/682729472;;Ayuntamiento;Altable;42.602747;-3.077502;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/687050573;;Ayuntamiento;Aguilar de Bureba;42.589869;-3.328165;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/695864413;;Hospital Universitario de Salamanca;Salamanca;40.962937;-5.67597;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada|salud mental|laboral|hospital de d[ií]a|farmacia|forense|vacunaci[oó]n|centro de especialidades|centro de cuidados|cl[ií]nica del (pie|dolor)|est[eé]tica|summa ?112|suma 112|^asamblea|^sede |psicoterapia|centro de especialidades|consultas externas|centro de rehabilitaci[oó]n|^cme |^doctor|^entrada|ergoterapia)
+descartado;way/704381214;;Ayuntamiento;Valdeavellano de Tera;41.942669;-2.574729;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/717305790;;Ayuntamiento;Valle de Valdelucio;42.717306;-4.118425;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/722850913;;Ayuntamiento;Hurones;42.405979;-3.613324;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/733090406;;Ayuntamiento;La Gallega;41.898548;-3.26389;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/733877325;;Ayuntamiento;Rabanera del Pinar;41.892931;-3.193403;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/740528773;;Ayuntamiento;Fuentespina;41.631682;-3.686058;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/749255053;;Gimnasio;Burgos;42.336401;-3.723971;nombre generico o dudoso en OpenStreetMap: Gimnasio
+descartado;way/754609416;;Consultorio local (Sacyl);Sanchotello;40.437938;-5.752289;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada|salud mental|laboral|hospital de d[ií]a|farmacia|forense|vacunaci[oó]n|centro de especialidades|centro de cuidados|cl[ií]nica del (pie|dolor)|est[eé]tica|summa ?112|suma 112|^asamblea|^sede |psicoterapia|centro de especialidades|consultas externas|centro de rehabilitaci[oó]n|^cme |^doctor|^entrada|ergoterapia)
+descartado;way/840579721;;;Prádanos de Ojeda;42.680726;-4.351806;sin nombre en OpenStreetMap
+descartado;way/848858193;;;Arenas de San Pedro;40.211842;-5.083098;sin nombre en OpenStreetMap
+descartado;way/856554703;;Ayuntamiento;Junta de Traslaloma;43.042056;-3.388342;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/860862211;;Ayuntamiento;Valluércanes;42.571863;-3.121393;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/871870765;;Hospital Psiquiátrico Fuente Bermeja;Burgos;42.346888;-3.711111;texto excluido (veterinari|dental|residencia|geri[aá]trico|centro de salud|edificio|administraci[oó]n|mantenimiento|consultorio|lavander[ií]a|aparcamiento|^urgencias|^entrada a|^emergencias|^[aá]rea de |^informaci[oó]n |tanatorio|^desa\b|^cruz roja|minusv[aá]lidos|centro de d[ií]a|^centro salud|^cs\b|base del suc|^centro m[eé]dico|^mutua|^asepeyo|^c\.?a\.?e\.?\b|centro ambulatorio|ger.ncia|gerencia de servicios|prevenci[oó]n|^cem\b|instituto oftalmol|resid[eè]ncia|geri[aà]tric|centre d.atenci[oó]|centre de salut|centre m[eè]dic|consultori|dispensari|ambulatori|^creu (roja|blava)|^unitat|consultes externes|clinicfisio|fisioter|osteopat|cl[ií]nica dental|sds dental|^nau |clasalut|^urg[eè]ncies|centre sociosanitari|centre assist[eè]ncia|centre d.assist[eè]ncia|salut mental|psiqu|-urg[eè]ncies|^\d+-|fremap|cemcat|udiat|laboral|hospital de dia|eudona|albada|salud mental|laboral|hospital de d[ií]a|farmacia|forense|vacunaci[oó]n|centro de especialidades|centro de cuidados|cl[ií]nica del (pie|dolor)|est[eé]tica|summa ?112|suma 112|^asamblea|^sede |psicoterapia|centro de especialidades|consultas externas|centro de rehabilitaci[oó]n|^cme |^doctor|^entrada|ergoterapia)
+descartado;way/872717687;;Ayuntamiento;Nebreda;41.969784;-3.634392;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/872717692;;Ayuntamiento;Moncalvillo;41.95305;-3.198537;nombre generico o dudoso en OpenStreetMap: Ayuntamiento
+descartado;way/901524671;;Covirán;Ponferrada;42.544666;-6.572115;duplicado en el lote de way/537839817 (24 m)
+descartado;way/911661844;;;Valladolid;41.656185;-4.700821;sin nombre en OpenStreetMap
+descartado;way/92118528;;Hipercor;Arroyo de la Encomienda;41.622489;-4.7692;texto excluido (carrefour|hipercor|el corte ingl[eé]s|mercado de abastos|mercado municipal|plaza de abastos|mercat municipal|mercat d[eo]l? |mercat d.|^mercat\b|mercats\b|plaça del mercat)
+descartado;way/942855218;;;Ávila;40.667526;-4.668984;sin nombre en OpenStreetMap
+descartado;way/964645705;;;Antigüedad;41.947104;-4.116261;sin nombre en OpenStreetMap
+descartado;way/973128837;;;Navalperal de Pinares;40.593815;-4.410582;sin nombre en OpenStreetMap
+descartado;way/99904884;;;Villahoz;42.077319;-3.91975;sin nombre en OpenStreetMap
+descartado;node/5431715919;;Centro Polivalente Santa Teresa Zona Norte Ávila – Calle de Agustín Rodríguez Sahagún;Ávila;40.6481;-4.682458;texto excluido tras revisión (no es hospital): centro polivalente|sociosanitario
+descartado;way/164647097;;Centro Sociosanitario Hermanas Hospitalarias Palencia;Palencia;41.993463;-4.506489;texto excluido tras revisión (no es hospital): centro polivalente|sociosanitario
