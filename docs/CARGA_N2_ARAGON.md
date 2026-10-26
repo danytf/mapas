@@ -1,0 +1,42 @@
+# Carga N2 de Aragón (preparada)
+
+Estado: **preparada el 26/10/2026, pendiente de carga en producción por el titular con `cargar.sh`**. Decimotercera comunidad con el mismo procedimiento (ver `docs/CARGA_N2_MADRID.md` y `docs/CARGA_N2_ASTURIAS.md`). Las tres provincias (22 Huesca, 44 Teruel y 50 Zaragoza) se cargan de una vez.
+
+## Origen
+- Fichero: `aragon-latest.osm.pbf` (Geofabrik, edición del **25/10/2026 21:21 UTC**, 95.177.811 bytes, MD5 `cafae40507bfe5acc42d2231f9d1ff29` verificado contra el `.md5` de Geofabrik), fuera del repositorio. OpenStreetMap, licencia ODbL.
+- Definiciones: `scripts/catalogue/categorias/aragon-*.json`, derivadas de las de Asturias (castellano, con los términos en catalán de Cataluña para la Franja oriental) con `solo_provincias` 22, 44 y 50 y `region: aragon`. En `generar_lote.py` se añadieron los códigos 22, 44 y 50.
+- **Revisión tras la extracción:** el filtro de Hospital dejaba pasar 5 que no son hospitales (una farmacia, «Consultas Externas Miguel Servet», dos centros de rehabilitación y «CME San José»). Se quitaron del lote (anotados en `excepciones.csv` con su motivo) y se añadieron esas exclusiones a la definición de Resto de Aragón.
+
+## Municipios (N0)
+- `supabase/seeds/aragon/municipios/import_municipios_22_44_50.sql`: **731 municipios** con código INE (202 de Huesca, 236 de Teruel y 293 de Zaragoza, las cifras oficiales). El fichero trae además municipios de Castellón, Guadalajara, Lleida, Navarra, Soria, Tarragona y Valencia (borde): quedan fuera por `solo_provincias`. Hoy las tres provincias tienen 0 municipios y 0 puntos y **están activas** (`is_active = true`, comprobado en solo lectura el 26/10/2026): en cuanto se cargue, el administrador verá los puntos.
+
+## Puntos (1.594)
+| Lote | Puntos |
+|---|---|
+| Correos | 81 |
+| Estaciones | 113 |
+| Grandes superficies (Carrefour 15, Decathlon 5, El Corte Inglés 3, Leroy Merlin 2, MediaMarkt 1, IKEA 1) | 27 |
+| Resto (Entidad oficial 668, Supermercado 480, Gimnasios 89, Centro de salud 80, Hospital 26, Centro comercial 16, Bricolaje 14) | 1.373 |
+| **Total** | **1.594** |
+
+Por provincia: Huesca 356, Teruel 358 y Zaragoza 880. Un SQL por lote y provincia en `supabase/seeds/aragon/<lote>/` (transaccionales e idempotentes) y `excepciones.csv` por lote (178 filas en total). `source_ref` con el prefijo `catalogo-aragon:`.
+
+## Calidad y límites
+- Umbrales de siempre. Calle y código postal calculados con el propio fichero. Quedan **80 puntos sin calle y 624 sin código postal** (el 39 %), sobre todo en pueblos pequeños, donde OpenStreetMap trae pocas direcciones con código. Se completan con Nominatim tras la carga.
+- Entidad oficial (668) es la categoría más grande: ayuntamientos de casi todos los municipios, juzgados de paz y oficinas.
+- Estaciones: 2 entran «por revisar» («Estación de Autobuses de Teruel», repetida).
+- Hospital (26), dudosos tras la carga: «Clínica Manzanera», «Hospital Militar», «Ernest Lluch» (Calatayud, un centro de salud) y «Centro Sanitario Bajo Cinca» (Fraga).
+- Centro comercial (16) incluye hipermercados («Alcampo», «Centro Comercial Carrefour») que ya están en otras categorías.
+- Carrefour (15) entra completo (Market y Express), por decisión del titular.
+- No probado en el PostgreSQL local (sin la contraseña en esta sesión).
+
+## Cómo cargar (con aprobación)
+Desde la raíz del repositorio, con `main` actualizada (`git pull origin main`), en este orden:
+```
+bash scripts/catalogue/cargar.sh supabase/seeds/aragon/municipios municipios
+bash scripts/catalogue/cargar.sh supabase/seeds/aragon/correos postal_service
+bash scripts/catalogue/cargar.sh supabase/seeds/aragon/estaciones estaciones
+bash scripts/catalogue/cargar.sh supabase/seeds/aragon/grandes-superficies grandes-superficies catalogo-aragon:aragon-grandes-superficies:
+bash scripts/catalogue/cargar.sh supabase/seeds/aragon/resto resto catalogo-aragon:aragon-resto:
+```
+Después, en solo lectura: 731 municipios nuevos y 1.594 puntos (la base pasaría de 25.076 a 26.670 y los municipios de 3.388 a 4.119). Sin asignar a usuarios hasta terminar toda España (decisión del titular, 23/10/2026).

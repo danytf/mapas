@@ -1,0 +1,3 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/5749982912;;Carrefour Express;Teruel;40.336323;-1.104234;duplicado en el lote de node/13686852721 (24 m)
+descartado;way/23333218;;Centro Comercial Carrefour;Zaragoza;41.675508;-0.890025;duplicado en el lote de node/1267576457 (21 m)
