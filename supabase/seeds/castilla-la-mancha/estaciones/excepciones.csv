@@ -1,0 +1,23 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/10922195560;Tren;La Encina;;38.76545;-0.953854;fuera de los municipios oficiales cargados
+descartado;node/13103564570;Autobús;;Villanueva de la Fuente;38.694992;-2.691625;sin nombre en OpenStreetMap
+descartado;node/13103581782;Autobús;;Villanueva de la Fuente;38.696008;-2.698341;sin nombre en OpenStreetMap
+descartado;node/13648729797;Tren;Torralba;;41.136311;-2.493053;fuera de los municipios oficiales cargados
+por revisar;node/1438862436;Autobús;Estación de autobuses (Albacete) – Calle Federico García Lorca;Albacete;38.998586;-1.847244;posible duplicado de way/141428163 (Estación de Autobuses de Albacete) a 87 m
+descartado;node/1974499013;Autobús;;Alcalá del Júcar;39.194491;-1.428466;sin nombre en OpenStreetMap
+descartado;node/3745231670;Autobús;;Casas de Benítez;39.363377;-2.131022;sin nombre en OpenStreetMap
+por revisar;node/4181507647;Autobús;Parada para autobuses (Toledo) – Calle de la Carrera;Toledo;39.862517;-4.020708;nombre dudoso en OpenStreetMap: Parada para autobuses
+descartado;node/4475638471;Autobús;;La Roda;39.200623;-2.1587;sin nombre en OpenStreetMap
+descartado;node/5868423604;Tren;Castillejo-Añover;;39.949573;-3.738593;fuera de los municipios oficiales cargados
+por revisar;node/7966358582;Autobús;Estación de autobuses de Puerta Este (Quintanar de la Orden) – Avenida Jardines de la Estación;Quintanar de la Orden;39.59525;-3.047311;"posible duplicado de node/7966358583 (Puerta Sur) a 15 m; posible duplicado de node/7966358584 (Puerta Oeste) a 23 m; posible duplicado de way/466224362 (Estación de Autobuses de Quintanar de la Orden) a 12 m"
+por revisar;node/7966358583;Autobús;Estación de autobuses de Puerta Sur (Quintanar de la Orden) – Avenida Jardines de la Estación;Quintanar de la Orden;39.595122;-3.047391;"posible duplicado de node/7966358582 (Puerta Este) a 15 m; posible duplicado de node/7966358584 (Puerta Oeste) a 14 m; posible duplicado de way/466224362 (Estación de Autobuses de Quintanar de la Orden) a 7 m"
+por revisar;node/7966358584;Autobús;Estación de autobuses de Puerta Oeste (Quintanar de la Orden) – Avenida Jardines de la Estación;Quintanar de la Orden;39.595147;-3.047557;"posible duplicado de node/7966358582 (Puerta Este) a 23 m; posible duplicado de node/7966358583 (Puerta Sur) a 14 m; posible duplicado de way/466224362 (Estación de Autobuses de Quintanar de la Orden) a 12 m"
+por revisar;way/141428163;Autobús;Estación de Autobuses de Albacete – Calle Federico García Lorca;Albacete;38.998075;-1.846475;posible duplicado de node/1438862436 (Estación de autobuses) a 87 m
+descartado;way/149013957;Autobús;;Almorox;40.229609;-4.392565;sin nombre en OpenStreetMap
+descartado;way/244343648;Autobús;;Daimiel;39.071727;-3.616195;sin nombre en OpenStreetMap
+descartado;way/305870183;Autobús;;Ablanque;40.89772;-2.228195;sin nombre en OpenStreetMap
+por revisar;way/466224362;Autobús;Estación de Autobuses de Quintanar de la Orden – Avenida Jardines de la Estación;Quintanar de la Orden;39.595184;-3.047423;"posible duplicado de node/7966358582 (Puerta Este) a 12 m; posible duplicado de node/7966358583 (Puerta Sur) a 7 m; posible duplicado de node/7966358584 (Puerta Oeste) a 12 m"
+descartado;way/466224363;Autobús;;Quintanar de la Orden;39.595128;-3.047701;sin nombre en OpenStreetMap
+descartado;way/523016295;Autobús;;Tarancón;40.00693;-3.007121;sin nombre en OpenStreetMap
+descartado;way/671319591;Autobús;;Argamasilla de Alba;39.128644;-3.103011;sin nombre en OpenStreetMap
+descartado;way/840564455;Autobús;;Motilla del Palancar;39.563183;-1.916398;sin nombre en OpenStreetMap

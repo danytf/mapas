@@ -8,7 +8,7 @@ import json
 import os
 from collections import defaultdict
 
-PROV = {"01": "Araba/Álava", "04": "Almería", "06": "Badajoz", "07": "Illes Balears", "08": "Barcelona", "10": "Cáceres", "11": "Cádiz", "14": "Córdoba", "17": "Girona", "18": "Granada", "20": "Gipuzkoa", "21": "Huelva", "22": "Huesca", "23": "Jaén", "25": "Lleida", "26": "La Rioja", "28": "Madrid", "29": "Málaga", "30": "Murcia", "31": "Navarra", "33": "Asturias", "35": "Las Palmas", "38": "Santa Cruz de Tenerife", "39": "Cantabria", "41": "Sevilla", "43": "Tarragona", "44": "Teruel", "48": "Bizkaia", "50": "Zaragoza", "51": "Ceuta", "52": "Melilla"}
+PROV = {"01": "Araba/Álava", "02": "Albacete", "04": "Almería", "06": "Badajoz", "07": "Illes Balears", "08": "Barcelona", "10": "Cáceres", "11": "Cádiz", "13": "Ciudad Real", "14": "Córdoba", "16": "Cuenca", "17": "Girona", "18": "Granada", "19": "Guadalajara", "20": "Gipuzkoa", "21": "Huelva", "22": "Huesca", "23": "Jaén", "25": "Lleida", "26": "La Rioja", "28": "Madrid", "29": "Málaga", "30": "Murcia", "31": "Navarra", "33": "Asturias", "35": "Las Palmas", "38": "Santa Cruz de Tenerife", "39": "Cantabria", "41": "Sevilla", "43": "Tarragona", "44": "Teruel", "45": "Toledo", "48": "Bizkaia", "50": "Zaragoza", "51": "Ceuta", "52": "Melilla"}
 
 ap = argparse.ArgumentParser()
 ap.add_argument("validados")

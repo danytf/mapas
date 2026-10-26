@@ -1,6 +1,6 @@
-# Carga N2 de Aragón (preparada)
+# Carga N2 de Aragón (cargada)
 
-Estado: **preparada el 26/10/2026, pendiente de carga en producción por el titular con `cargar.sh`**. Decimotercera comunidad con el mismo procedimiento (ver `docs/CARGA_N2_MADRID.md` y `docs/CARGA_N2_ASTURIAS.md`). Las tres provincias (22 Huesca, 44 Teruel y 50 Zaragoza) se cargan de una vez.
+Estado: **cargada en producción el 26/10/2026** por el titular con `cargar.sh` y verificada en solo lectura (ver «Cierre»). Decimotercera comunidad con el mismo procedimiento (ver `docs/CARGA_N2_MADRID.md` y `docs/CARGA_N2_ASTURIAS.md`). Las tres provincias (22 Huesca, 44 Teruel y 50 Zaragoza) se cargan de una vez.
 
 ## Origen
 - Fichero: `aragon-latest.osm.pbf` (Geofabrik, edición del **25/10/2026 21:21 UTC**, 95.177.811 bytes, MD5 `cafae40507bfe5acc42d2231f9d1ff29` verificado contra el `.md5` de Geofabrik), fuera del repositorio. OpenStreetMap, licencia ODbL.
@@ -30,7 +30,7 @@ Por provincia: Huesca 356, Teruel 358 y Zaragoza 880. Un SQL por lote y provinci
 - Carrefour (15) entra completo (Market y Express), por decisión del titular.
 - No probado en el PostgreSQL local (sin la contraseña en esta sesión).
 
-## Cómo cargar (con aprobación)
+## Cómo se cargó (con aprobación)
 Desde la raíz del repositorio, con `main` actualizada (`git pull origin main`), en este orden:
 ```
 bash scripts/catalogue/cargar.sh supabase/seeds/aragon/municipios municipios
@@ -39,4 +39,9 @@ bash scripts/catalogue/cargar.sh supabase/seeds/aragon/estaciones estaciones
 bash scripts/catalogue/cargar.sh supabase/seeds/aragon/grandes-superficies grandes-superficies catalogo-aragon:aragon-grandes-superficies:
 bash scripts/catalogue/cargar.sh supabase/seeds/aragon/resto resto catalogo-aragon:aragon-resto:
 ```
-Después, en solo lectura: 731 municipios nuevos y 1.594 puntos (la base pasaría de 25.076 a 26.670 y los municipios de 3.388 a 4.119). Sin asignar a usuarios hasta terminar toda España (decisión del titular, 23/10/2026).
+Previsto en solo lectura: 731 municipios nuevos y 1.594 puntos (la base pasaría de 25.076 a 26.670 y los municipios de 3.388 a 4.119). Sin asignar a usuarios hasta terminar toda España (decisión del titular, 23/10/2026).
+
+## Cierre (26/10/2026)
+- **Carga verificada en solo lectura:** 731 municipios (Huesca 202, Teruel 236, Zaragoza 293) y 1.594 puntos (356, 358 y 880), 1.594 `source_ref` `catalogo-aragon:` distintos, todos activos, ninguno sin coordenadas y ningún código postal con formato erróneo. Por categoría: Entidad oficial 668, Supermercado 480, Estaciones 113, Gimnasios 89, Correos 81, Centro de salud 80, Hospital 26, Centro comercial 16, Carrefour 15, Bricolaje 14, Decathlon 5, El Corte Inglés 3, Leroy Merlin 2, IKEA 1, MediaMarkt 1. Total de la base 25.076 -> 26.670 y municipios 3.388 -> 4.119.
+- **Pendiente:** 624 códigos postales (Huesca 98, Teruel 209, Zaragoza 317) y 80 calles (27, 18 y 35), por completar con Nominatim por provincia y `admin_set_postal_codes`; revisar los dudosos de «Calidad y límites». Sin asignar a usuarios hasta terminar España.
+
