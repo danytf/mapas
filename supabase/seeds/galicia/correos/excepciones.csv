@@ -1,0 +1,4 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/4948792828;;Oficina de Correos;Santiago de Compostela;42.881815;-8.546954;duplicado en el lote de node/12312297688 (37 m)
+descartado;node/798217121;;Oficina de Correos;Portomarín;42.807603;-7.616109;duplicado en el lote de node/4940684921 (58 m)
+descartado;way/1350417000;;;Moaña;42.276618;-8.738725;duplicado en el lote de node/2392823856 (4 m)
