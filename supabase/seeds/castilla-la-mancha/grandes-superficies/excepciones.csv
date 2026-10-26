@@ -1,0 +1,4 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;way/141079194;;Decathlon;Albacete;39.025295;-1.889963;duplicado en el lote de way/130873903 (49 m)
+descartado;way/225295935;;Carrefour;Villarrobledo;39.284965;-2.580215;duplicado en el lote de node/4256128560 (5 m)
+descartado;way/258171751;;El Corte Inglés Outlet;Toledo;39.906194;-4.014995;texto excluido (supercor|opencor|viajes|seguros|bricolaje|gourmet|outlet|aparcamiento|parking)

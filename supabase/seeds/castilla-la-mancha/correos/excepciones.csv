@@ -1,0 +1,3 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/7135988303;;Correos Express;Cuenca;40.075488;-2.157915;texto excluido (express|citypaq|mail boxes|mrw|tipsa|dhl|unipost|abacus|la poste|ups|gls)
+descartado;way/765885402;;Correos;Villalba de la Sierra;40.23328;-2.089469;duplicado en el lote de node/8711058407 (0 m)
