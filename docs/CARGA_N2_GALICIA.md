@@ -1,6 +1,6 @@
-# Carga N2 de Galicia (preparada)
+# Carga N2 de Galicia (cargada)
 
-Estado: **preparada el 26/10/2026, pendiente de carga en producción por el titular con `cargar.sh`**. Decimosexta comunidad con el mismo procedimiento (ver `docs/CARGA_N2_VALENCIA.md` y `docs/CARGA_N2_CASTILLA_LA_MANCHA.md`). Las cuatro provincias (15 A Coruña, 27 Lugo, 32 Ourense y 36 Pontevedra) se cargan de una vez.
+Estado: **cargada en producción el 26/10/2026** por el titular con `cargar.sh` y verificada en solo lectura (ver «Cierre»). Decimosexta comunidad con el mismo procedimiento (ver `docs/CARGA_N2_VALENCIA.md` y `docs/CARGA_N2_CASTILLA_LA_MANCHA.md`). Las cuatro provincias (15 A Coruña, 27 Lugo, 32 Ourense y 36 Pontevedra) se cargan de una vez.
 
 ## Origen
 - Fichero: `galicia-latest.osm.pbf` (Geofabrik, edición del **26/10/2026 01:59 GMT**, 111.945.842 bytes, MD5 `23a8d24069f50392cf14154ca68c7ce6` verificado contra el `.md5` de Geofabrik; base de datos de OpenStreetMap del 25/10/2026 21:21 UTC), fuera del repositorio. OpenStreetMap, licencia ODbL.
@@ -30,7 +30,7 @@ Por provincia: A Coruña 1.160, Lugo 482, Ourense 396 y Pontevedra 699. Un SQL p
 - Carrefour (35) entra completo (Market y Express), por decisión del titular.
 - No probado en el PostgreSQL local (sin la contraseña en esta sesión).
 
-## Cómo cargar (con aprobación)
+## Cómo se cargó (con aprobación)
 Desde la raíz del repositorio, con `main` actualizada (`git pull origin main`), en este orden:
 ```
 bash scripts/catalogue/cargar.sh supabase/seeds/galicia/municipios municipios
@@ -39,4 +39,8 @@ bash scripts/catalogue/cargar.sh supabase/seeds/galicia/estaciones estaciones
 bash scripts/catalogue/cargar.sh supabase/seeds/galicia/grandes-superficies grandes-superficies catalogo-galicia:galicia-grandes-superficies:
 bash scripts/catalogue/cargar.sh supabase/seeds/galicia/resto resto catalogo-galicia:galicia-resto:
 ```
-Después, en solo lectura: 313 municipios nuevos y 2.737 puntos (la base pasaría de 32.170 a 34.907 y los municipios de 5.582 a 5.895). Sin asignar a usuarios hasta terminar toda España (decisión del titular, 23/10/2026).
+Previsto en solo lectura: 313 municipios nuevos y 2.737 puntos (la base pasaría de 32.170 a 34.907 y los municipios de 5.582 a 5.895). Sin asignar a usuarios hasta terminar toda España (decisión del titular, 23/10/2026).
+
+## Cierre (26/10/2026)
+- **Carga verificada en solo lectura:** 313 municipios (A Coruña 93, Lugo 67, Ourense 92, Pontevedra 61) y 2.737 puntos (1.160, 482, 396 y 699), 2.737 `source_ref` `catalogo-galicia:` distintos, todos activos, ninguno sin coordenadas y ningún código postal con formato erróneo. Por categoría: Supermercado 1.135, Entidad oficial 441, Centro de salud 408, Gimnasios 203, Correos 194, Estaciones 167, Centro comercial 57, Carrefour 35, Hospital 33, Bricolaje 30, Decathlon 12, Leroy Merlin 10, MediaMarkt 6, El Corte Inglés 5, IKEA 1. Total de la base 32.170 -> 34.907 y municipios 5.582 -> 5.895.
+- **Pendiente:** 570 códigos postales (A Coruña 105, Lugo 159, Ourense 159, Pontevedra 147) y 225 calles (59, 49, 51 y 66), por completar con Nominatim por provincia (`completar_cp_desde_base.py --prov NN --con-calle`) y `admin_set_postal_codes`; revisar los dudosos de «Calidad y límites». Sin asignar a usuarios hasta terminar España.
