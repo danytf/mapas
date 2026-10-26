@@ -4522,7 +4522,7 @@ const csvCell = (value) => {
   const mesDe = (d) => MES[+d.slice(5, 7) - 1];
   const hue = (s) => { let h = 7; for (const ch of s) h = (h * 31 + ch.codePointAt(0)) % 360; return h; };
   const plural = (n, uno, varios) => n + " " + (n === 1 ? uno : varios);
-  let wk = mondayOf(today()), prov = "", ong = "", modo = "dias";
+  let wk = mondayOf(today()), prov = null, ong = "", modo = "dias"; /* prov: null hasta la primera apertura; "" = todas las provincias */
   const ver = { autorizada: true, pendiente: true, seguimiento: true, historico: false }; /* qué se muestra; el histórico va apagado */
 
   const provOpts = () => {
@@ -4539,13 +4539,6 @@ const csvCell = (value) => {
       seguimientosDe(c, p).forEach((s) => segs.push(s));
     });
     return { recs, segs };
-  };
-  // Al abrir se elige la provincia con más captadores esa semana; si no hay actividad, la primera por orden alfabético.
-  const provAuto = (opts) => {
-    const { recs, segs } = registros(""), t = today(), tot = new Map();
-    calendarioSemana(recs, segs, wk, t).forEach((dia) => dia.items.forEach((i) => { if (i.e === "autorizada" || i.e === "pendiente") tot.set(i.r.c.provinceId, (tot.get(i.r.c.provinceId) || 0) + i.r.n); }));
-    const best = [...tot].sort((x, y) => y[1] - x[1])[0];
-    return best && opts.some(([id]) => id === best[0]) ? best[0] : (opts[0] ? opts[0][0] : "");
   };
   const ongDe = (x) => x.ong || "Sin ONG";
   const kOng = (x) => ongDe(x).trim().toLowerCase();
@@ -4672,7 +4665,8 @@ const csvCell = (value) => {
   const abrir = () => {
     wk = mondayOf(today());
     const opts = provOpts();
-    if (!prov || !opts.some(([id]) => id === prov)) prov = provAuto(opts);
+    /* Como el Panel y el Centro, abre con todas las provincias del usuario; si solo tiene una, esa. Lo elegido se mantiene mientras siga siendo válido. */
+    if (prov === null || (prov === "" ? opts.length < 2 : !opts.some(([id]) => id === prov))) prov = opts.length > 1 ? "" : (opts[0] ? opts[0][0] : "");
     body.innerHTML =
       '<div class="cal-bar">' +
       '<label class="cal-f">Provincia<select id="calProv">' + (opts.length > 1 ? '<option value="">Todas las provincias</option>' : "") +
