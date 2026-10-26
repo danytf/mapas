@@ -1,0 +1,27 @@
+{
+ "format_version": 1,
+ "source": "openstreetmap",
+ "source_license": "ODbL 1.0 (c) OpenStreetMap contributors, https://www.openstreetmap.org/copyright",
+ "queried_at": "2026-10-26",
+ "osm_base_timestamp": "2026-10-24T20:20:51Z",
+ "selection_criteria": "Tiendas de mascotas de seis cadenas (Kiwoko, Tiendanimal, Miscota, Guaw, Mundo Animal y Cash Mascota), en la categoria Tiendas con el subtipo Mascotas: shop=pet cuyo nombre, marca u operador es de una de ellas. Alcance elegido por el titular el 26/10/2026 («cadenas tipo Tiendanimal», como en Granada). Se excluyen los elementos en desuso o abandonados y los puntos de recogida o de venta en linea. El nombre se compone con el de OpenStreetMap y, si no contiene el municipio, se le anade; nunca se inventa. Dos puntos del mismo nombre a menos de 150 m se consideran el mismo. Granada queda fuera porque su catalogo esta revisado a mano (7 tiendas de mascotas). OpenStreetMap recoge solo una parte de las tiendas reales de cada cadena: el lote es una base, no el censo completo.",
+ "province": "Andalucía",
+ "establishments": [
+  {
+   "source_ref": "catalogo-navarra:navarra-tiendas:way-1134939231",
+   "name": "Tiendanimal Galar – Sadar kalea",
+   "category": "Tiendas",
+   "subtype": "Mascotas",
+   "municipality": "Galar",
+   "municipality_ine": "31109",
+   "address": "Sadar kalea",
+   "postal_code": "31191",
+   "latitude": 42.78834,
+   "longitude": -1.6321,
+   "location_precision": "address",
+   "location_source": "openstreetmap:way/1134939231",
+   "province": "Navarra",
+   "status": "active"
+  }
+ ]
+}
