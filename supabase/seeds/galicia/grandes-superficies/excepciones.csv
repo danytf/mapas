@@ -1,0 +1,5 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;way/158308295;;Centro Comercial Carrefour de Lugo;Lugo;43.00563;-7.573966;duplicado en el lote de node/12320761304 (12 m)
+descartado;way/370349439;;Outlet El Corte Inglés;Ferrol;43.483311;-8.236316;texto excluido (supercor|opencor|viajes|seguros|bricolaje|gourmet|outlet|aparcamiento|parking)
+descartado;way/54969614;;Centro Comercial Carrefour;A Coruña;43.338359;-8.407604;duplicado en el lote de node/5592798238 (77 m)
+descartado;way/77432615;;Centro Comercial Compostela;Santiago de Compostela;42.862546;-8.54339;duplicado en el lote de node/4774721107 (59 m)

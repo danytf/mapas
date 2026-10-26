@@ -1,0 +1,28 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/13727193373;Tren;Areas;Sober;42.45791;-7.629271;duplicado en el lote de node/12587266755 (84 m)
+por revisar;node/14246887155;Tren;Estación de tren de Foz;Foz;43.560924;-7.272184;nombre dudoso en OpenStreetMap: Foz
+descartado;node/2383612709;Autobús;;As Pontes de García Rodríguez;43.451571;-7.854444;sin nombre en OpenStreetMap
+descartado;node/2399489536;Autobús;;O Grove;42.483524;-8.851484;sin nombre en OpenStreetMap
+por revisar;node/338879384;Tren;Estación de tren de Tui;Tui;42.056604;-8.643259;nombre dudoso en OpenStreetMap: Tui
+descartado;way/1153863120;Autobús;Estación de Autobuses de Vigo (EI);Vigo;42.234744;-8.713792;duplicado en el lote de node/13808097212 (11 m)
+descartado;way/1167116201;Autobús;;Noia;42.785684;-8.890875;sin nombre en OpenStreetMap
+descartado;way/1257751763;Tren;Osebe;Teo;42.825249;-8.615858;duplicado en el lote de node/12589966787 (14 m)
+descartado;way/1278786692;Tren;Vedra-Ribadulla;Vedra;42.776602;-8.428203;duplicado en el lote de node/2021640848 (13 m)
+descartado;way/1298820145;Tren;Viveiro-Apeadoiro;Viveiro;43.663087;-7.592076;duplicado en el lote de node/1625248341 (4 m)
+descartado;way/1325270999;Tren;A Coruña;A Coruña;43.350424;-8.412083;duplicado en el lote de node/13782316672 (289 m)
+descartado;way/1385345343;Tren;Lalín;Lalín;42.63252;-8.142669;duplicado en el lote de node/1998751056 (18 m)
+descartado;way/1422383993;Tren;;Laza;42.118884;-7.457061;sin nombre en OpenStreetMap
+descartado;way/1472954800;Autobús;Estación de Autobuses de Ribadeo;Ribadeo;43.540559;-7.040648;duplicado en el lote de node/13817498338 (2 m)
+descartado;way/152275845;Autobús;;O Grove;42.49563;-8.861068;sin nombre en OpenStreetMap
+descartado;way/195442753;Tren;O Irixo;O Irixo;42.519677;-8.105027;duplicado en el lote de node/12593234166 (16 m)
+descartado;way/195577369;Tren;Pedroso;Narón;43.536743;-8.109211;duplicado en el lote de node/2059962962 (11 m)
+descartado;way/24930100;Autobús;;Ferrol;43.488606;-8.228758;sin nombre en OpenStreetMap
+descartado;way/267055052;Autobús;Estación de Autobuses de Vilalba;Vilalba;43.302658;-7.675027;duplicado en el lote de node/13821010281 (17 m)
+descartado;way/27817178;Autobús;Estación de Autobuses da Coruña;A Coruña;43.353315;-8.404647;duplicado en el lote de node/13817498310 (45 m)
+descartado;way/312656269;Autobús;;Vilalba;43.302758;-7.675487;sin nombre en OpenStreetMap
+descartado;way/379376293;Autobús;Estación de Autobuses de Lugo;Lugo;43.008328;-7.553674;duplicado en el lote de node/13817498312 (20 m)
+descartado;way/490270413;Tren;San Sadurniño;San Sadurniño;43.54603;-8.077917;duplicado en el lote de node/357554430 (15 m)
+descartado;way/497247369;Autobús;;Burela;43.659596;-7.360534;sin nombre en OpenStreetMap
+descartado;way/618992426;Autobús;;Cabanas;43.419172;-8.171249;sin nombre en OpenStreetMap
+descartado;way/662746160;Autobús;Fisterra;Fisterra;42.907688;-9.263335;duplicado en el lote de node/4321835595 (11 m)
+descartado;way/945502473;Autobús;Estación de Autobuses de Santiago de Compostela;Santiago de Compostela;42.87015;-8.543678;duplicado en el lote de node/13817498309 (16 m)
