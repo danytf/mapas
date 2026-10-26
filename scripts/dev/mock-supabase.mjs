@@ -1,12 +1,12 @@
 // Supabase simulado para probar la interfaz sin tocar ningún proyecto real (H-20 y H-21).
 // Imita lo mínimo de GoTrue y PostgREST que usa la app, con datos sintéticos de varias provincias, y un
-// Nominatim simulado que registra las peticiones. Puerto 8766, estado en memoria. Uso: node scripts/dev/mock-supabase.mjs
+// Nominatim simulado que registra las peticiones. Puerto 8766 (MOCK_PORT lo cambia), estado en memoria. Uso: node scripts/dev/mock-supabase.mjs
 // Usuarios (contraseña «x»): multi@test.es (Granada y Almería), alm@test.es (Almería), vacio@test.es (Jaén, sin puntos), admin@test.es.
-// Utilidades: GET /__log (peticiones registradas), GET /__state (estado), GET /__reset (opcional ?n=<puntos>&estados=1&realista=1),
+// Utilidades: GET /__log (peticiones registradas), GET /__state (estado), GET /__reset (opcional ?n=<puntos>&estados=1&realista=1&zonas=1|c|b|x),
 // GET /__fail?n=<veces>&modo=500|perdida (las próximas escrituras del estado compartido fallan con un 500, o se aplican y se corta la respuesta).
 import { createServer } from "node:http";
 
-const PORT = Number(process.env.MOCK_PORT || 8766); /* MOCK_PORT: otro puerto, p. ej. para medir sin chocar con la prueba E2E */
+const PORT = Number(process.env.MOCK_PORT) || 8766;
 let FALLO = { n: 0, modo: "500" };
 const id = (n) => "00000000-0000-4000-8000-" + String(n).padStart(12, "0");
 const b64 = (o) => Buffer.from(JSON.stringify(o)).toString("base64url");
@@ -38,14 +38,19 @@ const CATEGORIAS = ["Hospital", "Centro de salud", "Supermercado", "Centro comer
 // Modo realista (MOCK_REALISTA=1 o GET /__reset?realista=1&n=<puntos>): n puntos sintéticos agrupados alrededor de los núcleos urbanos
 // de Andalucía (centros aproximados de las capitales y de las ciudades grandes), para juzgar densidad, agrupaciones y rendimiento del mapa.
 // Son datos de prueba locales: no son establecimientos reales ni salen de este ordenador.
-const NUCLEOS = [
+const NUCLEOS_BASE = [
   ["Sevilla", "41", 37.389, -5.984, 10], ["Málaga", "29", 36.721, -4.421, 9], ["Granada", "18", 37.177, -3.599, 7], ["Córdoba", "14", 37.888, -4.779, 6],
   ["Almería", "04", 36.834, -2.464, 5], ["Cádiz", "11", 36.527, -6.289, 4], ["Jerez de la Frontera", "11", 36.686, -6.137, 4], ["Huelva", "21", 37.261, -6.945, 4],
   ["Jaén", "23", 37.779, -3.785, 3], ["Marbella", "29", 36.510, -4.886, 3], ["Algeciras", "11", 36.133, -5.455, 3], ["Dos Hermanas", "41", 37.283, -5.921, 2],
   ["Roquetas de Mar", "04", 36.764, -2.615, 2], ["El Ejido", "04", 36.776, -2.814, 2], ["Motril", "18", 36.745, -3.518, 2], ["Linares", "23", 38.095, -3.634, 2],
   ["Estepona", "29", 36.427, -5.146, 2], ["Vélez-Málaga", "29", 36.779, -4.100, 2], ["Écija", "41", 37.542, -4.728, 1], ["Lucena", "14", 37.409, -4.485, 1]
 ];
-function generadosRealistas(n) {
+// zonas=<letras> añade núcleos de otras zonas (pocos puntos, como un catálogo que empieza a crecer) para probar los atajos de zona: c = Canarias, b = Baleares,
+// 1 = las dos, x = quitar la península (solo las zonas pedidas). Sin el parámetro no cambia nada.
+const NUCLEOS_CANARIAS = [["Las Palmas de Gran Canaria", "35", 28.124, -15.436, 3], ["Santa Cruz de Tenerife", "38", 28.469, -16.254, 2]];
+const NUCLEOS_BALEARES = [["Palma", "07", 39.570, 2.650, 3]];
+function generadosRealistas(n, zonas = "") {
+  const NUCLEOS = (zonas.includes("x") ? [] : NUCLEOS_BASE).concat(zonas.includes("c") || zonas.includes("1") ? NUCLEOS_CANARIAS : [], zonas.includes("b") || zonas.includes("1") ? NUCLEOS_BALEARES : []);
   let semilla = 777;
   const azar = () => { semilla = (semilla * 1103515245 + 12345) % 2147483648; return semilla / 2147483648; };
   const normal = () => { let t = 0; for (let k = 0; k < 6; k++) t += azar(); return (t - 3) / Math.sqrt(0.5); };
@@ -90,9 +95,9 @@ function estadosDe(establishments) {
   });
   return filas;
 }
-const freshState = (n = Number(process.env.MOCK_POINTS || 0), conEstados = process.env.MOCK_STATES === "1", realista = process.env.MOCK_REALISTA === "1") => ({
+const freshState = (n = Number(process.env.MOCK_POINTS || 0), conEstados = process.env.MOCK_STATES === "1", realista = process.env.MOCK_REALISTA === "1", zonas = "") => ({
   conEstados,
-  establishments: realista && n > 0 ? generadosRealistas(n) : n > 0 ? generados(n) : seedPoints.map(([cat, name, code, muni, addr, lat, lon], i) => ({
+  establishments: realista && n > 0 ? generadosRealistas(n, zonas) : n > 0 ? generados(n) : seedPoints.map(([cat, name, code, muni, addr, lat, lon], i) => ({
     id: id(100 + i), province_id: P(code).id, name, address: addr, latitude: lat, longitude: lon,
     location_precision: "address", source_ref: "mock-" + i, status: "active", subtype: null,
     categories: { name: cat }, municipalities: { name: muni }, provinces: { name: P(code).name, code }
@@ -158,7 +163,7 @@ createServer(async (req, res) => {
   if (path === "/__rel") return send(res, 200, S.rel);
   if (path === "/__log") return send(res, 200, S.log);
   if (path === "/__state") return send(res, 200, { userState: S.userState, establishments: S.establishments });
-  if (path === "/__reset") { const n = url.searchParams.get("n"); const e = url.searchParams.get("estados"); S = freshState(n === null ? undefined : Number(n), e === null ? undefined : e === "1", url.searchParams.get("realista") === "1"); ADM = admInicial(); for (const p of provinces) p.is_active = true; return send(res, 200, { ok: true, puntos: S.establishments.length, estados: S.conEstados }); }
+  if (path === "/__reset") { const n = url.searchParams.get("n"); const e = url.searchParams.get("estados"); S = freshState(n === null ? undefined : Number(n), e === null ? undefined : e === "1", url.searchParams.get("realista") === "1", url.searchParams.get("zonas") || ""); ADM = admInicial(); for (const p of provinces) p.is_active = true; return send(res, 200, { ok: true, puntos: S.establishments.length, estados: S.conEstados }); }
 
   // Nominatim simulado: registra la petición y responde en el centro del área pedida (o en Madrid).
   if (path === "/nominatim/search") {

@@ -43,7 +43,7 @@ Resultado: **sin incidencias en los datos de los puntos.**
 ### A. Completar códigos postales y calles (Nominatim, lo lanza el titular)
 1. **Castilla y León:** consulta hecha el 26/10/2026 (1.021 códigos y 30 calles escritos); quedan 477 sin código y 54 sin calle, sobre todo sin respuesta de Nominatim (421) y 52 dudosos.
 2. **Reconsultar los que no respondieron** y los dudosos que no se escribieron (Nominatim puede dar otra respuesta, sin garantía): Aragón (235 sin respuesta), Castilla-La Mancha (269), Extremadura (Badajoz 155, Cáceres 64) y Murcia (111).
-3. **Asturias:** 114 sin calle (116 sin código, casi todos dudosos).
+3. **Asturias:** 114 sin calle: decidido el 26/10/2026 dejarlas (Nominatim solo devuelve tramos de carretera para esos puntos, y 78 son apeaderos rurales); 116 sin código, casi todos dudosos.
 4. El resto de comunidades tiene pocos huecos (ver tabla).
 
 ### B. Decisiones del titular
@@ -56,7 +56,7 @@ Resultado: **sin incidencias en los datos de los puntos.**
 ### C. Revisiones menores
 - Prueba en un móvil real del plegado de «Puntos archivados» (comprobado en escritorio: sale cerrado) y del zoom mínimo del mapa (lo cubre `scripts/test-mapa-limites.mjs`).
 - Datos antiguos de Andalucía, Canarias, Murcia, Extremadura y La Rioja «por completar»: no consta qué faltaba exactamente; comprobarlo con las cifras de la tabla.
-- Categoría «Tiendas» (7 puntos): herencia de la carga inicial; revisar si debe mantenerse.
+- Categoría «Tiendas» (7 puntos de Granada): decidido el 26/10/2026 ampliarla a nivel nacional con seis cadenas (170 puntos preparados en `supabase/seeds/tiendas`, ver `docs/CARGA_N2_TIENDAS_MASCOTAS.md`); cargada el 26/10/2026 (177 puntos en Tiendas).
 - `.claude/settings.local.json`: conserva un permiso de lectura de las pestañas de Chrome (decisión del titular: dejarlo).
 - Copias de seguridad en `~/backups-mapas`: quedan dos completas (`20261025T165228Z`, sin copia fuera de esa carpeta, y `20261025T211312Z`, que contiene datos de prueba).
 

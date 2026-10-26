@@ -80,6 +80,7 @@ node scripts/test-persistencia-expedientes.mjs
 node scripts/test-cabecera-filtros.mjs
 node scripts/test-texto-minimo.mjs
 node scripts/test-ficha.mjs
+node scripts/test-ficha-mejorada.mjs
 node scripts/test-favoritos.mjs
 node scripts/test-tactil.mjs
 node scripts/test-paneles.mjs
@@ -87,6 +88,7 @@ node scripts/test-escala.mjs
 node scripts/test-mapa-limites.mjs
 node scripts/test-mapa-vista.mjs
 node scripts/test-lista-jerarquia.mjs
+node scripts/test-oscuro-contraste.mjs
 node scripts/test-panel-graficas.mjs
 node scripts/test-carga-paralela.mjs
 node scripts/test-rendimiento-cliente.mjs
@@ -94,6 +96,7 @@ node scripts/test-expedientes.mjs
 node scripts/test-provincias.mjs
 node scripts/test-acciones-masivas.mjs
 node scripts/test-contadores-filtros.mjs
+node scripts/test-centro-detalles.mjs
 node scripts/test-a11y-fase-d.mjs index.html
 ```
 

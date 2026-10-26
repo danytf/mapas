@@ -7,7 +7,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 const [src, out] = process.argv.slice(2);
 if (!src || !out) { console.error("Uso: node scripts/dev/build-mock-site.mjs <origen> <salida>"); process.exit(2); }
 let html = readFileSync(src, "utf8");
-const MOCK = process.env.MOCK_URL || "http://127.0.0.1:8766"; /* MOCK_URL: otro puerto del simulado */
+const MOCK = "http://127.0.0.1:" + (process.env.MOCK_PORT || 8766);
 const replaceAll = (a, b) => {
   if (!html.includes(a)) throw new Error("No se encuentra en el origen: " + a.slice(0, 60));
   html = html.split(a).join(b);
