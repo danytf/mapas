@@ -1,6 +1,6 @@
-# Carga N2 de Castilla y León (preparada)
+# Carga N2 de Castilla y León (cargada)
 
-Estado: **preparada el 26/10/2026, pendiente de carga en producción por el titular con `cargar.sh`**. Decimoséptima y última comunidad con el mismo procedimiento (ver `docs/CARGA_N2_GALICIA.md` y `docs/CARGA_N2_VALENCIA.md`). Las nueve provincias (05 Ávila, 09 Burgos, 24 León, 34 Palencia, 37 Salamanca, 40 Segovia, 42 Soria, 47 Valladolid y 49 Zamora) se cargan de una vez.
+Estado: **cargada en producción el 26/10/2026** por el titular con `cargar.sh` y verificada en solo lectura (ver «Cierre»). Decimoséptima y última comunidad con el mismo procedimiento (ver `docs/CARGA_N2_GALICIA.md` y `docs/CARGA_N2_VALENCIA.md`). Las nueve provincias (05 Ávila, 09 Burgos, 24 León, 34 Palencia, 37 Salamanca, 40 Segovia, 42 Soria, 47 Valladolid y 49 Zamora) se cargan de una vez.
 
 ## Origen
 - Fichero: `castilla-y-leon-latest.osm.pbf` (Geofabrik, edición del **26/10/2026 01:48 GMT**, 178.758.807 bytes, MD5 `03194d6ffb6a38cdd9166442b3ac7373` verificado contra el `.md5` de Geofabrik; base de datos de OpenStreetMap del 25/10/2026 21:21 UTC; guardado como `cyl-latest.osm.pbf`), fuera del repositorio. OpenStreetMap, licencia ODbL.
@@ -30,7 +30,7 @@ Por provincia: Ávila 375, Burgos 625, León 556, Palencia 382, Salamanca 691, S
 - Carrefour (70) entra completo (Market y Express), por decisión del titular.
 - No probado en el PostgreSQL local (sin la contraseña en esta sesión).
 
-## Cómo cargar (con aprobación)
+## Cómo se cargó (con aprobación)
 Desde la raíz del repositorio, con `main` actualizada (`git pull origin main`), en este orden:
 ```
 bash scripts/catalogue/cargar.sh supabase/seeds/castilla-y-leon/municipios municipios
@@ -39,4 +39,9 @@ bash scripts/catalogue/cargar.sh supabase/seeds/castilla-y-leon/estaciones estac
 bash scripts/catalogue/cargar.sh supabase/seeds/castilla-y-leon/grandes-superficies grandes-superficies catalogo-castilla-y-leon:castilla-y-leon-grandes-superficies:
 bash scripts/catalogue/cargar.sh supabase/seeds/castilla-y-leon/resto resto catalogo-castilla-y-leon:castilla-y-leon-resto:
 ```
-Después, en solo lectura: 2.248 municipios nuevos y 4.215 puntos (la base pasaría de 34.907 a 39.122 y los municipios de 5.895 a 8.143). Sin asignar a usuarios hasta terminar toda España (decisión del titular, 23/10/2026): con esta carga se completan las 17 comunidades más Ceuta y Melilla.
+Previsto en solo lectura: 2.248 municipios nuevos y 4.215 puntos (la base pasaría de 34.907 a 39.122 y los municipios de 5.895 a 8.143). Sin asignar a usuarios hasta terminar toda España (decisión del titular, 23/10/2026): con esta carga se completan las 17 comunidades más Ceuta y Melilla.
+
+## Cierre (26/10/2026)
+- **Carga verificada en solo lectura:** 2.248 municipios (Ávila 248, Burgos 371, León 211, Palencia 191, Salamanca 362, Segovia 209, Soria 183, Valladolid 225, Zamora 248) y 4.215 puntos (375, 625, 556, 382, 691, 382, 244, 587 y 373), 4.215 `source_ref` `catalogo-castilla-y-leon:` distintos, todos activos, ninguno sin coordenadas y ningún código postal con formato erróneo. Por categoría: Entidad oficial 2.122, Supermercado 1.044, Centro de salud 244, Estaciones 244, Gimnasios 209, Correos 153, Carrefour 70, Hospital 40, Centro comercial 29, Bricolaje 28, Decathlon 11, Leroy Merlin 8, El Corte Inglés 5, IKEA 4, MediaMarkt 4. Total de la base 34.907 -> 39.122 y municipios 5.895 -> 8.143.
+- **Con esta carga queda completa la carga nacional N2:** 17 comunidades, Ceuta y Melilla.
+- **Pendiente:** 1.498 códigos postales (Ávila 209, Burgos 213, León 187, Palencia 82, Salamanca 203, Segovia 125, Soria 125, Valladolid 112, Zamora 242) y 84 calles (2, 22, 20, 12, 7, 5, 2, 4 y 10), por completar con Nominatim por provincia (`completar_cp_desde_base.py --prov NN --con-calle`) y `admin_set_postal_codes`; revisar los dudosos de «Calidad y límites». Sin asignar a usuarios hasta terminar España (decisión del titular): ahora ya se puede decidir.
