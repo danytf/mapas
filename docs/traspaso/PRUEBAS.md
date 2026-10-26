@@ -21,6 +21,7 @@ node scripts/test-persistencia-expedientes.mjs
 node scripts/test-cabecera-filtros.mjs
 node scripts/test-texto-minimo.mjs
 node scripts/test-ficha.mjs
+node scripts/test-ficha-mejorada.mjs
 node scripts/test-favoritos.mjs
 node scripts/test-tactil.mjs
 node scripts/test-paneles.mjs

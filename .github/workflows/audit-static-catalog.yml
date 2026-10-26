@@ -27,6 +27,7 @@ on:
       - "scripts/test-cabecera-filtros.mjs"
       - "scripts/test-texto-minimo.mjs"
       - "scripts/test-ficha.mjs"
+      - "scripts/test-ficha-mejorada.mjs"
       - "scripts/test-favoritos.mjs"
       - "scripts/test-tactil.mjs"
       - "scripts/test-paneles.mjs"
@@ -104,6 +105,8 @@ jobs:
         run: node scripts/test-mapa-limites.mjs
       - name: Test map view (overview, zone shortcuts, cluster density)
         run: node scripts/test-mapa-vista.mjs
+      - name: Test improved point sheet (mini-map and permit timeline)
+        run: node scripts/test-ficha-mejorada.mjs
       - name: Test list hierarchy (category icon, short title, status pill)
         run: node scripts/test-lista-jerarquia.mjs
       - name: Test summary panel charts (category ring, province bars, empty state)
