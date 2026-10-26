@@ -453,7 +453,7 @@ const T = "2026-10-23";
   const q = rd.cola;
   ok(q.length > 0 && q.every((x, i) => i === 0 || q[i - 1].score >= x.score), "la cola de trabajo va de mayor a menor urgencia");
   ok(q[0].titulo.startsWith("Seguimiento atrasado") && q[0].vista === "seg", "lo más urgente: un seguimiento atrasado");
-  ok(q.some((x) => x.titulo.startsWith("Empieza el periodo solicitado")) && q.some((x) => x.titulo.startsWith("La concesión termina")) && q.some((x) => x.sev === "bloqueante"), "la cola incluye periodos que empiezan sin respuesta, concesiones que terminan y bloqueantes");
+  ok(q.some((x) => /periodo solicitado/.test(x.titulo)) && q.some((x) => x.titulo.startsWith("La concesión termina")) && q.some((x) => x.sev === "bloqueante"), "la cola incluye periodos que empiezan (o ya empezaron) sin respuesta, concesiones que terminan y bloqueantes; una solicitud con varios motivos aparece una sola vez");
   const vacio = R.resumenDatos([], [], t, []);
   ok(vacio.cola.length === 0 && vacio.resolucion.mediana === null && vacio.resolucion.media === null && vacio.vencimientos.length === 0 && vacio.porProvincia.length === 0 && vacio.capacidadDias.every((d) => d.aut === 0 && d.pen === 0), "sin expedientes: sin cola, sin tiempo de resolución y capacidad a cero (no se inventa nada)");
 }

@@ -368,3 +368,9 @@ Según el texto que aportó el titular (no verificado por mí contra su web): el
 
 - Cada selector (provincia, municipio, categoría, estado, cadena y tipo de entidad) muestra cuántos puntos habría al elegir cada opción **con todos los demás filtros aplicados** (búsqueda, conmutadores incluidos); el propio selector no se aplica a sí mismo para poder ver las alternativas. Antes mostraban siempre el total de la base: con «Murcia» elegida, «Hospital» seguía diciendo 200. Se recalculan en cada cambio de filtro (`refreshCounts`).
 
+## Mi jornada (26/10/2026)
+
+- Primera sección del Centro de permisos y entrada tras iniciar sesión. Lista de actuaciones en tarjetas finas (borde de 1 px, radio `--r-card`) con un filo izquierdo de 4 px: `--accent` solo en lo urgente, `--st-solicitado` en lo de hoy y `--line-2` en el resto, para no llenar la pantalla de rojo. La gravedad repite forma (rombo, punto, anillo) y texto (Urgente, Hoy, Atención).
+- Cabecera de la bandeja con título, explicación de una línea y el botón rojo «Ir al mapa» (la única acción principal en rojo de la vista). Vistas rápidas como píldoras con `aria-pressed` (activa en tinta sobre papel, como el conmutador de agrupación del Resumen) y recuento tabular.
+- Fila: punto y lugar (título), tipo y estado con texto, ONG, periodo y captadores (etiqueta), motivo principal en negrita, alertas «También», siguiente acción, fecha y responsable. Acciones a la derecha («Hecho» en verde, «Cambiar fecha», «Abrir»); en móvil bajan bajo el texto y los filtros pasan a dos columnas.
+- Solo tokens (claro y oscuro), foco visible de 2 px en acento, objetivos de 44 px en táctil y sin animaciones.

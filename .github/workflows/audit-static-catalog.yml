@@ -39,6 +39,7 @@ on:
       - "scripts/test-panel-graficas.mjs"
       - "scripts/test-carga-paralela.mjs"
       - "scripts/test-centro-detalles.mjs"
+      - "scripts/test-jornada.mjs"
       - "scripts/test-rendimiento-cliente.mjs"
       - "scripts/test-a11y-fase-d.mjs"
       - "scripts/e2e-centro.mjs"
@@ -130,6 +131,8 @@ jobs:
         run: node scripts/test-contadores-filtros.mjs
       - name: Test Centro details (native checkbox theme, mobile header and batch bar, balanced Panel grid, Calendar title)
         run: node scripts/test-centro-detalles.mjs
+      - name: Test Mi jornada (classification, order, Madrid dates, filters, counts, coherence, performance)
+        run: node scripts/test-jornada.mjs
       - name: Run XSS regression audit
         run: node scripts/audit-xss.mjs index.html
       - name: Check keyboard access to statistics panel rows
