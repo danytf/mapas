@@ -36,7 +36,7 @@ lanza(process.execPath, [join(raiz, "scripts/dev/mock-supabase.mjs")], { MOCK_PO
 await hasta(async () => (await fetch(MOCK + "/__rel")).ok, 15000);
 for (const [nombre, ruta] of variantes) {
   const out = join(tmp, nombre + ".html");
-  await new Promise((res, rej) => spawn(process.execPath, [join(raiz, "scripts/dev/build-mock-site.mjs"), ruta, out], { stdio: "ignore", env: { ...process.env, MOCK_URL: MOCK } }).on("exit", (c) => c === 0 ? res() : rej(new Error("build"))));
+  await new Promise((res, rej) => spawn(process.execPath, [join(raiz, "scripts/dev/build-mock-site.mjs"), ruta, out], { stdio: "ignore", env: { ...process.env, MOCK_PORT: String(MP) } }).on("exit", (c) => c === 0 ? res() : rej(new Error("build"))));
   webs[nombre] = readFileSync(out);
 }
 const srv = createServer((req, res) => { const n = req.url.split("?")[0].slice(1); res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" }); res.end(webs[n]); }).listen(WP, "127.0.0.1");
