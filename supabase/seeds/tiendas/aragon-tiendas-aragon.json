@@ -1,0 +1,59 @@
+{
+ "format_version": 1,
+ "source": "openstreetmap",
+ "source_license": "ODbL 1.0 (c) OpenStreetMap contributors, https://www.openstreetmap.org/copyright",
+ "queried_at": "2026-10-26",
+ "osm_base_timestamp": "2026-10-25T21:21:21Z",
+ "selection_criteria": "Tiendas de mascotas de seis cadenas (Kiwoko, Tiendanimal, Miscota, Guaw, Mundo Animal y Cash Mascota), en la categoria Tiendas con el subtipo Mascotas: shop=pet cuyo nombre, marca u operador es de una de ellas. Alcance elegido por el titular el 26/10/2026 («cadenas tipo Tiendanimal», como en Granada). Se excluyen los elementos en desuso o abandonados y los puntos de recogida o de venta en linea. El nombre se compone con el de OpenStreetMap y, si no contiene el municipio, se le anade; nunca se inventa. Dos puntos del mismo nombre a menos de 150 m se consideran el mismo. Granada queda fuera porque su catalogo esta revisado a mano (7 tiendas de mascotas). OpenStreetMap recoge solo una parte de las tiendas reales de cada cadena: el lote es una base, no el censo completo.",
+ "province": "Andalucía",
+ "establishments": [
+  {
+   "source_ref": "catalogo-aragon:aragon-tiendas:node-4360268091",
+   "name": "Mundo animal Liso Zaragoza – Calle Conde de Aranda",
+   "category": "Tiendas",
+   "subtype": "Mascotas",
+   "municipality": "Zaragoza",
+   "municipality_ine": "50297",
+   "address": "Calle Conde de Aranda 81",
+   "postal_code": "50004",
+   "latitude": 41.65553,
+   "longitude": -0.89105,
+   "location_precision": "address",
+   "location_source": "openstreetmap:node/4360268091",
+   "province": "Zaragoza",
+   "status": "active"
+  },
+  {
+   "source_ref": "catalogo-aragon:aragon-tiendas:node-5615387824",
+   "name": "Kiwoko Zaragoza – Calle Teatro Malibrán",
+   "category": "Tiendas",
+   "subtype": "Mascotas",
+   "municipality": "Zaragoza",
+   "municipality_ine": "50297",
+   "address": "Calle Teatro Malibrán",
+   "postal_code": "50021",
+   "latitude": 41.60898,
+   "longitude": -0.88954,
+   "location_precision": "address",
+   "location_source": "openstreetmap:node/5615387824",
+   "province": "Zaragoza",
+   "status": "active"
+  },
+  {
+   "source_ref": "catalogo-aragon:aragon-tiendas:node-5615463221",
+   "name": "TiendAnimal Zaragoza – Calle Teatro Malibrán",
+   "category": "Tiendas",
+   "subtype": "Mascotas",
+   "municipality": "Zaragoza",
+   "municipality_ine": "50297",
+   "address": "Calle Teatro Malibrán",
+   "postal_code": null,
+   "latitude": 41.61012,
+   "longitude": -0.88912,
+   "location_precision": "address",
+   "location_source": "openstreetmap:node/5615463221",
+   "province": "Zaragoza",
+   "status": "active"
+  }
+ ]
+}

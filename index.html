@@ -60,6 +60,7 @@
     /* Grupos de marcadores por densidad (.cl.n1 a .n4): fondos fijos en claro y oscuro con texto blanco (5,0, 8,8 y 5,9 a 1; los --ch-* se invierten en oscuro y no sirven aquí). */
     --cl-n1: #61708a; --cl-n2: #3d4b66; --cl-n4: #c8102e;
     --t: 160ms;
+    color-scheme: light; /* controles nativos (casillas, fechas, desplegables, barras) con el tema claro */
     --shadow: 0 1px 2px rgba(23,27,35,.06), 0 6px 20px rgba(23,27,35,.09);
     --r: 10px;
     --font: "Figtree", "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
@@ -77,8 +78,10 @@
       --gam-gold-soft: var(--warn-bg); --gam-gold-ink: var(--warn);
       --pin-denegado: #e2e8f0; --res-ok-bg: #12341f; --res-ok-line: #2f6b45; --res-err-bg: #3a121b; --res-err-line: #7a2a36;
       --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.45);
+      color-scheme: dark; /* y con el oscuro: casillas, fechas y desplegables dejan de verse blancos */
     }
   }
+  input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
   * { box-sizing: border-box; }
   html, body { height: 100%; margin: 0; }
   body {
@@ -497,6 +500,11 @@
   li.inactive .num { filter: grayscale(1); }
   li.inactive strong { text-decoration: line-through; text-decoration-thickness: 1px; }
   .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); gap: 10px; margin-bottom: 18px; }
+  #pnBody .kpis { grid-template-columns: repeat(auto-fit, minmax(max(128px, calc((100% - 10px * (var(--cols, 6) - 1)) / var(--cols, 6))), 1fr)); } /* --cols: tope de tarjetas por fila, para repartirlas por igual */
+  @media (max-width: 700px) {
+    #pnBody .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    #pnBody .kpis > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+  }
   .kpi { border: 1px solid var(--line); border-radius: var(--r-card); padding: 12px 14px; background: var(--panel); }
   .kpi b { display: block; font-size: 28px; font-weight: 680; line-height: 1.05; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
   .kpi span { font-size: var(--fs-label); color: var(--muted); }
@@ -926,7 +934,7 @@
   .ce-err { color: var(--err); }
   /* Lotes */
   .ce-lote { background: var(--panel); border: 1px solid var(--line-2); border-left: 4px solid var(--accent); border-radius: var(--r-card); padding: 10px 14px; margin-bottom: 10px; display: grid; gap: 8px; }
-  .ce-lotef { display: inline-flex; gap: 6px; align-items: center; font-size: var(--fs-label); color: var(--muted); }
+  .ce-lotef { display: inline-flex; gap: 6px; align-items: center; font-size: var(--fs-label); color: var(--muted); white-space: nowrap; }
   .ce-res-lote { display: grid; gap: 2px; font-size: var(--fs-label); }
   .ce-res-lote li { display: grid !important; grid-template-columns: minmax(120px, 220px) 1fr; gap: 8px !important; }
   .ce-res-lote li.ok b { color: var(--ok); }
@@ -1030,6 +1038,8 @@
   @media (max-width: 700px) {
     #ceBody { padding: 0 14px 18px; }
     .ce-nav { margin-left: -14px; margin-right: -14px; padding: 0 14px; }
+    .ce-new { flex-wrap: nowrap; gap: 6px; width: 100%; }
+    .ce-new .ce-act { flex: 1 1 auto; padding: 0 8px; } /* las tres acciones de la cabecera caben en una fila a 390 px */
     .ce-dos { grid-template-columns: 1fr; }
     .ce-tabla { border: 0; background: none; overflow: visible; }
     .ce-tabla table, .ce-tabla tbody, .ce-tabla tr, .ce-tabla td { display: block; width: 100%; }
@@ -4288,7 +4298,8 @@ const csvCell = (value) => {
       "Resueltas (aprobadas, denegadas o retiradas): <b>" + ind.resueltas + " de " + ind.solicitudes + "</b> solicitudes (" + ind.tasaResolucion + " %). Las caducadas sin respuesta no cuentan como resueltas. " +
       (ind.diasMedios === null ? "Tiempo medio hasta la decisión: no calculable todavía (ninguna solicitud resuelta tiene fecha de decisión)." : "Tiempo medio hasta la decisión: <b>" + String(ind.diasMedios).replace(".", ",") + " días</b>, sobre " + plural(ind.muestraTiempo, "solicitud resuelta con fecha", "solicitudes resueltas con fecha") + " (las anteriores no guardaban la fecha de decisión).")) + "</p>";
     body.innerHTML = barra(d) + graficas(d.pts) + (d.recs.length ? "" : '<p class="pn-vacio"><b>Todavía no hay permisos que gestionar.</b> Cuando empieces a pedir permisos, aquí verás las solicitudes, las concesiones vigentes y los seguimientos de cada día.</p>') +
-      GRUPOS.map(([g, ts]) => "<h3>" + esc(g) + '</h3><div class="kpis">' + (g === "Concesiones" ? tile("capacidadHoy", d) : "") + ts.map(([k]) => tile(k, d)).join("") + "</div>").join("") +
+      GRUPOS.map(([g, ts]) => { const n = ts.length + (g === "Concesiones" ? 1 : 0); /* reparto equilibrado: como mucho 6 por fila y sin una tarjeta sola en la última (7 = 4 + 3) */
+        return "<h3>" + esc(g) + '</h3><div class="kpis" style="--cols:' + Math.ceil(n / Math.ceil(n / 6)) + '">' + (g === "Concesiones" ? tile("capacidadHoy", d) : "") + ts.map(([k]) => tile(k, d)).join("") + "</div>"; }).join("") +
       analitica + capacidadOng(d) +
       "<h3>Por categoría</h3><div class=\"pn-scroll\"><table>" + thead("Categoría") + "<tbody>" + rowsHtml(byTipo, "tipo") + '<tr class="tot"><td>Total</td><td>' + t.n + "</td><td>" + t.pend + "</td><td>" + t.con + "</td><td>" + t.vig + "</td><td>" + t.capt + "</td></tr></tbody></table></div>" +
       "<h3>" + (multiProv ? "Por provincia" : "Por municipio") + "</h3><div class=\"pn-scroll\"><table>" + thead(multiProv ? "Provincia" : "Municipio") + "<tbody>" + rowsHtml(byTown, multiProv ? "prov" : "town") + "</tbody></table></div>" +
@@ -4440,6 +4451,7 @@ const csvCell = (value) => {
 
   const draw = () => {
     const a = wk, b = addDays(wk, 6), t = today();
+    document.getElementById("calT").textContent = modo === "mes" ? "Calendario mensual" : "Calendario semanal"; /* el título sigue a la vista */
     const { recs: todasRecs, segs: todasSegs } = registros(prov);
     body.querySelector('[data-w="-1"]').setAttribute("aria-label", modo === "mes" ? "Mes anterior" : "Semana anterior"); body.querySelector('[data-w="1"]').setAttribute("aria-label", modo === "mes" ? "Mes siguiente" : "Semana siguiente");
     const semana = calendarioSemana(todasRecs, todasSegs, a, t);
