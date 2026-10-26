@@ -34,6 +34,7 @@ on:
       - "scripts/test-mapa-limites.mjs"
       - "scripts/test-mapa-vista.mjs"
       - "scripts/test-lista-jerarquia.mjs"
+      - "scripts/test-panel-graficas.mjs"
       - "scripts/test-a11y-fase-d.mjs"
       - "scripts/e2e-centro.mjs"
       - "scripts/dev/seed-permits-demo.mjs"
@@ -104,6 +105,8 @@ jobs:
         run: node scripts/test-mapa-vista.mjs
       - name: Test list hierarchy (category icon, short title, status pill)
         run: node scripts/test-lista-jerarquia.mjs
+      - name: Test summary panel charts (category ring, province bars, empty state)
+        run: node scripts/test-panel-graficas.mjs
       - name: Test province outlines
         run: node scripts/test-provincias.mjs
       - name: Test bulk actions guarantees

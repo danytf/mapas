@@ -629,6 +629,28 @@
     .cal-sky { height: 56px; }
   }
   .pn-note { font-size: var(--fs-label); color: var(--muted); margin-top: 10px; }
+  /* El catálogo de un vistazo: anillo por categoría y barras por provincia (SVG y HTML propios, sin librerías). */
+  .pn-graf { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-bottom: 8px; }
+  .kpi.cero b { color: var(--muted); }
+  .pn-vacio { margin: 18px 0 0; padding: 12px 14px; border: 1px dashed var(--line-2); border-radius: var(--r-card); background: var(--ok-bg); color: var(--muted); font-size: var(--fs-label-lg); }
+  .pn-vacio b { color: var(--fg); }
+  .pn-card { border: 1px solid var(--line); border-radius: var(--r-card); padding: 14px 16px; background: var(--panel); }
+  .pn-card h4 { margin: 0 0 10px; font-size: var(--fs-label); font-weight: 650; color: var(--muted); }
+  .pn-anillo { display: flex; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+  .pn-aro { position: relative; width: 132px; height: 132px; flex: none; }
+  .pn-aro svg { width: 100%; height: 100%; display: block; }
+  .pn-centro { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; line-height: 1.15; }
+  .pn-centro b { font-size: var(--fs-title); font-variant-numeric: tabular-nums; }
+  .pn-centro span { font-size: var(--fs-label); color: var(--muted); }
+  .pn-leyenda { list-style: none; margin: 0; padding: 0; flex: 1 1 130px; display: grid; gap: 4px; font-size: var(--fs-label); }
+  .pn-leyenda li { display: flex; align-items: center; gap: 8px; }
+  .pn-leyenda i { width: 10px; height: 10px; border-radius: var(--r-xs); flex: none; }
+  .pn-leyenda b { margin-left: auto; font-variant-numeric: tabular-nums; }
+  .pn-barras { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; font-size: var(--fs-label); }
+  .pn-barras li { display: grid; grid-template-columns: minmax(70px, 38%) 1fr auto; align-items: center; gap: 10px; }
+  .pn-barras .pn-b { height: 10px; border-radius: var(--r-pill); background: var(--ok-bg); overflow: hidden; }
+  .pn-barras .pn-b i { display: block; height: 100%; border-radius: var(--r-pill); background: var(--ch-a3); }
+  .pn-barras b { font-variant-numeric: tabular-nums; min-width: 3ch; text-align: right; }
   .row > .chipbtn { flex: 0 0 auto; height: 38px; border-radius: var(--r-control); }
   .chipbtn { justify-self: start; height: 28px; font-size: var(--fs-label); padding: 0 12px; border-radius: var(--r-pill); border: 1px solid transparent; background: var(--warn-bg); color: var(--warn); cursor: pointer; }
   .chipbtn:hover { border-color: var(--warn); background: var(--warn-bg); }
@@ -4186,7 +4208,7 @@ const csvCell = (value) => {
     const t = TITULO[key], lista = key === "capacidadHoy" ? d.ind.vigentes : d.ind[key];
     const valor = key === "capacidadHoy" ? d.ind.capacidadHoy : lista.length;
     const unidad = key === "capacidadHoy" ? plural(d.ind.vigentes.length, "concesión vigente", "concesiones vigentes") : plural(lista.length, t[2], t[3]);
-    return '<button type="button" class="kpi' + (t[4] && (t[4] !== "al" || lista.length) ? " " + t[4] : "") + '" data-ind="' + key + '"><b>' + valor + "</b><span>" + esc(t[1]) + "</span><small>" + esc(unidad) + (lista.length ? " · " + plural(nPuntos(lista), "punto", "puntos") : "") + "</small></button>";
+    return '<button type="button" class="kpi' + (t[4] && (t[4] !== "al" || lista.length) ? " " + t[4] : "") + (valor === 0 ? " cero" : "") + '" data-ind="' + key + '"><b>' + valor + "</b><span>" + esc(t[1]) + "</span><small>" + esc(unidad) + (lista.length ? " · " + plural(nPuntos(lista), "punto", "puntos") : "") + "</small></button>";
   };
   const capacidadOng = (d) => {
     const aut = capacidadPorOng(d.ind.vigentes), sol = capacidadPorOng(d.ind.pendientes), nombres = [...new Set([...aut.keys(), ...sol.keys()])].sort((x, y) => (x === "Sin ONG") - (y === "Sin ONG") || x.localeCompare(y, "es"));
@@ -4197,6 +4219,32 @@ const csvCell = (value) => {
   };
   const rowsHtml = (map, kind) => map.map(([k, r]) => '<tr data-kind="' + kind + '" data-k="' + esc(k) + '"><td><button type="button" class="pn-rowbtn">' + esc(k) + "</button></td><td>" + r.n + "</td><td>" + r.pend + "</td><td>" + r.con + "</td><td>" + r.vig + "</td><td>" + r.capt + "</td></tr>").join("");
   const thead = (first) => "<thead><tr><th>" + first + "</th><th>Puntos</th><th>Solicitudes pendientes</th><th>Concesiones vigentes hoy</th><th>Puntos con vigencia hoy</th><th>Captadores autorizados hoy</th></tr></thead>";
+  const fmtN = (n) => n.toLocaleString("es-ES");
+  const COLOR_TIPO = Object.fromEntries(TIPOS.map(([, n, v]) => [n, v]));
+  /* El catálogo de un vistazo: reparto por categoría (anillo) y puntos por provincia (barras). Los números van también en texto. */
+  const graficas = (pts) => {
+    if (!pts.length) return "";
+    const total = pts.length, cat = {}, prov = {};
+    pts.forEach((c) => { cat[c.tipo] = (cat[c.tipo] || 0) + 1; const k = c.province || "Sin provincia"; prov[k] = (prov[k] || 0) + 1; });
+    const cats = Object.entries(cat).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "es"));
+    let acc = 0;
+    const arcos = cats.map(([n, v]) => {
+      const pc = v / total * 100, a = '<circle cx="21" cy="21" r="15.9155" fill="none" stroke="' + (COLOR_TIPO[n] || "var(--cat-otra)") + '" stroke-width="6" stroke-dasharray="' + pc.toFixed(3) + " " + (100 - pc).toFixed(3) + '" stroke-dashoffset="' + (25 - acc).toFixed(3) + '"></circle>';
+      acc += pc; return a;
+    }).join("");
+    const aria = "Reparto de " + fmtN(total) + " puntos por categoría: " + cats.slice(0, 5).map(([n, v]) => n + " " + fmtN(v)).join(", ") + (cats.length > 5 ? " y " + (cats.length - 5) + " más" : "");
+    const anillo = '<div class="pn-card"><h4>Por categoría</h4><div class="pn-anillo"><div class="pn-aro"><svg viewBox="0 0 42 42" role="img" aria-label="' + esc(aria) + '"><circle cx="21" cy="21" r="15.9155" fill="none" stroke="var(--ok-bg)" stroke-width="6"></circle>' + arcos +
+      '</svg><div class="pn-centro" aria-hidden="true"><b>' + esc(fmtN(total)) + "</b><span>puntos</span></div></div>" + '<ul class="pn-leyenda">' +
+      cats.map(([n, v]) => '<li><i style="background:' + (COLOR_TIPO[n] || "var(--cat-otra)") + '"></i>' + esc(n) + "<b>" + esc(fmtN(v)) + "</b></li>").join("") + "</ul></div></div>";
+    const provs = Object.entries(prov).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "es"));
+    let barras = "";
+    if (provs.length > 1) {
+      const top = provs.slice(0, 10), max = top[0][1];
+      barras = '<div class="pn-card"><h4>Puntos por provincia' + (provs.length > 10 ? " (las 10 mayores de " + provs.length + ")" : "") + '</h4><ul class="pn-barras">' +
+        top.map(([n, v]) => "<li><span>" + esc(n) + '</span><span class="pn-b" aria-hidden="true"><i style="width:' + (v / max * 100).toFixed(1) + '%"></i></span><b>' + esc(fmtN(v)) + "</b></li>").join("") + "</ul></div>";
+    }
+    return '<h3>El catálogo de un vistazo</h3><div class="pn-graf">' + anillo + barras + "</div>";
+  };
   const render = () => {
     const d = datos(), ind = d.ind;
     const porPunto = new Map(); d.recs.forEach((r) => { const a = porPunto.get(r.c.id) || []; a.push(r); porPunto.set(r.c.id, a); });
@@ -4211,7 +4259,7 @@ const csvCell = (value) => {
     const analitica = '<p class="pn-note">' + (ind.tasaResolucion === null ? "Todavía no hay solicitudes registradas." :
       "Resueltas (aprobadas, denegadas o retiradas): <b>" + ind.resueltas + " de " + ind.solicitudes + "</b> solicitudes (" + ind.tasaResolucion + " %). Las caducadas sin respuesta no cuentan como resueltas. " +
       (ind.diasMedios === null ? "Tiempo medio hasta la decisión: no calculable todavía (ninguna solicitud resuelta tiene fecha de decisión)." : "Tiempo medio hasta la decisión: <b>" + String(ind.diasMedios).replace(".", ",") + " días</b>, sobre " + plural(ind.muestraTiempo, "solicitud resuelta con fecha", "solicitudes resueltas con fecha") + " (las anteriores no guardaban la fecha de decisión).")) + "</p>";
-    body.innerHTML = barra(d) +
+    body.innerHTML = barra(d) + graficas(d.pts) + (d.recs.length ? "" : '<p class="pn-vacio"><b>Todavía no hay permisos que gestionar.</b> Cuando empieces a pedir permisos, aquí verás las solicitudes, las concesiones vigentes y los seguimientos de cada día.</p>') +
       GRUPOS.map(([g, ts]) => "<h3>" + esc(g) + '</h3><div class="kpis">' + (g === "Concesiones" ? tile("capacidadHoy", d) : "") + ts.map(([k]) => tile(k, d)).join("") + "</div>").join("") +
       analitica + capacidadOng(d) +
       "<h3>Por categoría</h3><div class=\"pn-scroll\"><table>" + thead("Categoría") + "<tbody>" + rowsHtml(byTipo, "tipo") + '<tr class="tot"><td>Total</td><td>' + t.n + "</td><td>" + t.pend + "</td><td>" + t.con + "</td><td>" + t.vig + "</td><td>" + t.capt + "</td></tr></tbody></table></div>" +
