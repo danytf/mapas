@@ -39,6 +39,7 @@ on:
       - "scripts/test-panel-graficas.mjs"
       - "scripts/test-carga-paralela.mjs"
       - "scripts/test-centro-detalles.mjs"
+      - "scripts/test-rendimiento-cliente.mjs"
       - "scripts/test-a11y-fase-d.mjs"
       - "scripts/e2e-centro.mjs"
       - "scripts/dev/seed-permits-demo.mjs"
@@ -117,6 +118,8 @@ jobs:
         run: node scripts/test-panel-graficas.mjs
       - name: Test parallel catalogue load (per-province reads, total check, serial fallback)
         run: node scripts/test-carga-paralela.mjs
+      - name: Test client performance with many points (fast paths, no duplicated work on load)
+        run: node scripts/test-rendimiento-cliente.mjs
       - name: Test province outlines
         run: node scripts/test-provincias.mjs
       - name: Test bulk actions guarantees
