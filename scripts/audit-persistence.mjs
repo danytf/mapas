@@ -155,12 +155,14 @@ if (/from\("establishment_app_state"\)\s*\.upsert\(/.test(html)) {
 if (/\.limit\(\d+\)/.test(html.replace(/await query\.limit\(pageSize\)/, "")) ||
     !/const fetchAllRows = async/.test(html) ||
     !/fetchAllRows\(\s*\(opts\) => client\.from\("establishment_app_state"\)\.select\("[^"]+", opts\),\s*"establishment_id"\)/.test(html) ||
-    !/fetchAllRows\(\(opts\) => \{[\s\S]{0,200}\.from\("establishments"\)[\s\S]{0,900}\}, "id"\)/.test(html)) {
+    !/const consultaCatalogo = \(opts\) => \{[\s\S]{0,200}\.from\("establishments"\)[\s\S]{0,900}return query;/.test(html) ||
+    !/fetchAllRowsPorGrupos\(consultaCatalogo, "id", "province_id", grupos\)/.test(html) ||
+    !/fetchAllRows\(consultaCatalogo, "id"\)/.test(html)) {
   failures.push("El catálogo y el estado compartido deben leerse con fetchAllRows (paginado por clave) y sin .limit(N) fijo (H-23).");
 }
 // H-14: el estado de permisos se indexa por una clave estable (ID de Supabase), nunca por el nombre.
 if (/permits\[c\.name\]|permits\[name\]|item\.name === name && item\.databaseId/.test(html) ||
-    !/const permitKey = \(c\) => c\.databaseId \? "id:" \+ c\.databaseId : "custom:" \+ c\.name;/.test(html)) {
+    !/const permitKey = \(c\) => c\.databaseId \? \(c\.pkey \|\| \(c\.pkey = "id:" \+ c\.databaseId\)\) : "custom:" \+ c\.name;/.test(html)) {
   failures.push("El estado de permisos debe indexarse por permitKey (ID de Supabase), no por el nombre del punto (H-14).");
 }
 // H-13: los permisos de un punto personal se guardan en el estado personal; nunca se da por bueno sin escribir.

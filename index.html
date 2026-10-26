@@ -1613,7 +1613,7 @@ const ESTADOS = [["sin", "Sin solicitar", "var(--pin-sin)"], ["solicitado", "Sol
 let permits = {};
 // Clave estable del estado de permisos de un punto (H-14): el ID de Supabase en el catálogo maestro;
 // en los puntos personales, que no tienen ID, su nombre (único por usuario).
-const permitKey = (c) => c.databaseId ? "id:" + c.databaseId : "custom:" + c.name;
+const permitKey = (c) => c.databaseId ? (c.pkey || (c.pkey = "id:" + c.databaseId)) : "custom:" + c.name; /* la clave se guarda en el punto: se pide decenas de miles de veces al cargar */
 // Versión leída de cada fila de establishment_app_state (por ID de establecimiento). La mantiene la base
 // de datos; se guarda solo si nadie la ha cambiado desde que se leyó (H-11).
 let sharedPermitVersions = new Map();
@@ -1656,6 +1656,25 @@ const fetchAllRows = async (buildQuery, keyColumn, pageSize = 1000, maxPages = 5
     throw new Error("La carga está incompleta (" + rows.length + " de " + total + " filas). Recarga la página; si se repite, avisa al administrador.");
   }
   return rows;
+};
+// Lee todas las filas de una consulta por grupos (p. ej. una consulta paginada por provincia) con varias peticiones a la vez.
+// Con la paginación en serie, 40.000 filas son 40 peticiones una detrás de otra (unos 8 s). Cada grupo se lee con fetchAllRows,
+// así que conserva su garantía de no devolver nunca un grupo incompleto; si cualquier grupo falla, lanza la excepción.
+// buildQuery(opts) devuelve la consulta con su select y sus filtros; aquí se le añade el filtro del grupo.
+const fetchAllRowsPorGrupos = async (buildQuery, keyColumn, groupColumn, groupValues, concurrency = 10) => {
+  const grupos = [...new Set(groupValues)].filter((g) => g !== null && g !== undefined && g !== "");
+  const resultados = new Array(grupos.length);
+  let siguiente = 0, abortar = false;
+  const trabajador = async () => {
+    while (!abortar) {
+      const i = siguiente++;
+      if (i >= grupos.length) return;
+      try { resultados[i] = await fetchAllRows((opts) => buildQuery(opts).eq(groupColumn, grupos[i]), keyColumn); }
+      catch (e) { abortar = true; throw e; }
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(concurrency, grupos.length) }, trabajador));
+  return resultados.flat();
 };
 // Guarda una fila del estado compartido solo si nadie la ha cambiado desde que se leyó (H-11):
 // UPDATE condicionado a la versión leída o INSERT si no había fila. Devuelve "ok", "conflict" o "error".
@@ -1935,7 +1954,7 @@ const isFav = (c) => hasPersonalRef(favorites, c);
 const saveInactive = () => typeof window.mapaPersistUserState === "function" ? window.mapaPersistUserState("inactive", [...inactive]) : Promise.resolve(false);
 const saveRemoved = () => typeof window.mapaPersistUserState === "function" ? window.mapaPersistUserState("removed", [...removed]) : Promise.resolve(false);
 const saveCustoms = () => typeof window.mapaPersistUserState === "function" ? window.mapaPersistUserState("customs", customs) : Promise.resolve(false);
-const personalStateKey = (c) => c.databaseId ? "est:" + c.databaseId : "custom:" + c.name;
+const personalStateKey = (c) => c.databaseId ? (c.skey || (c.skey = "est:" + c.databaseId)) : "custom:" + c.name;
 const hasPersonalRef = (set, c) => set.has(personalStateKey(c)) || set.has(c.name);
 const addPersonalRef = (set, c) => { set.delete(c.name); set.add(personalStateKey(c)); };
 const deletePersonalRef = (set, c) => { set.delete(personalStateKey(c)); set.delete(c.name); };
@@ -2054,7 +2073,10 @@ const sanitizeSharedPermitState = (value) => {
    una ampliación o un duplicado) y sí se suman entre ONG distintas. */
 const TZ_NEGOCIO = "Europe/Madrid";
 const fechaMadrid = new Intl.DateTimeFormat("en-CA", { timeZone: TZ_NEGOCIO, year: "numeric", month: "2-digit", day: "2-digit" });
-const today = () => fechaMadrid.format(new Date());
+/* «Hoy» se pide por cada punto al pintar la lista y las agrupaciones (decenas de miles de veces al iniciar sesión): formatear la fecha con Intl cada vez costaba cerca de un tercio de la carga.
+   Se reutiliza el valor durante un segundo; el cambio de día se nota con un segundo de retraso como máximo. */
+let hoyMs = 0, hoyTxt = "";
+const today = () => { const t = Date.now(); if (t - hoyMs > 1000 || t < hoyMs) { hoyTxt = fechaMadrid.format(new Date(t)); hoyMs = t; } return hoyTxt; };
 const addDays = (d, n) => { const t = new Date(d + "T00:00:00Z"); t.setUTCDate(t.getUTCDate() + n); return t.toISOString().slice(0, 10); };
 const mondayOf = (d) => addDays(d, -((new Date(d + "T00:00:00Z").getUTCDay() + 6) % 7));
 const daysBetween = (a, b) => Math.round((Date.parse(b + "T00:00:00Z") - Date.parse(a + "T00:00:00Z")) / 864e5);
@@ -5898,7 +5920,7 @@ renderList();
 
       if (status) status.textContent = "Cargando establecimientos desde Supabase…";
       // Carga paginada (H-23): la API limita cada petición a «Max rows» filas (1.000) sin avisar.
-      const data = await fetchAllRows((opts) => {
+      const consultaCatalogo = (opts) => {
         let query = client
           .from("establishments")
           .select("id,province_id,name,address,latitude,longitude,location_precision,source_ref,status,subtype,categories(name),municipalities(name),provinces(name,code)", opts)
@@ -5907,7 +5929,26 @@ renderList();
           .not("longitude", "is", null);
         if (!isAdmin) query = query.in("province_id", provinceIds);
         return query;
-      }, "id");
+      };
+      // Lectura rápida: una consulta paginada por provincia, varias a la vez, y el resultado solo vale si su total coincide con el recuento
+      // de toda la consulta. Ante cualquier fallo o diferencia se vuelve a la lectura en serie de siempre (más lenta, pero igual de completa).
+      let data;
+      try {
+        let grupos = provinceIds;
+        if (isAdmin) {
+          const lista = await fetchAllRows((opts) => client.from("provinces").select("id", opts), "id");
+          if (!lista.length) throw new Error("No se pudo listar las provincias.");
+          grupos = lista.map((p) => p.id);
+        }
+        // El recuento total (más de un segundo en base de datos) se pide a la vez que los datos, no antes.
+        const [cuenta, filas] = await Promise.all([consultaCatalogo({ count: "exact", head: true }), fetchAllRowsPorGrupos(consultaCatalogo, "id", "province_id", grupos)]);
+        if (cuenta.error || !Number.isFinite(cuenta.count)) throw new Error("No se pudo contar el catálogo.");
+        data = filas;
+        if (data.length !== cuenta.count) throw new Error("El total por provincias (" + data.length + ") no coincide con el recuento (" + cuenta.count + ").");
+        data.sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0)); /* mismo orden que la lectura en serie (por id) */
+      } catch (e) {
+        data = await fetchAllRows(consultaCatalogo, "id");
+      }
 
       const seenIds = new Set();
       const rows = data.filter(row => {

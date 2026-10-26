@@ -29,6 +29,7 @@ node scripts/test-mapa-limites.mjs
 node scripts/test-mapa-vista.mjs
 node scripts/test-lista-jerarquia.mjs
 node scripts/test-panel-graficas.mjs
+node scripts/test-carga-paralela.mjs
 node scripts/test-expedientes.mjs
 node scripts/test-a11y-fase-d.mjs index.html          # contraste WCAG AA claro/oscuro, nombres, aria-live y foco (Fase D)
 ```

@@ -88,6 +88,7 @@ node scripts/test-mapa-limites.mjs
 node scripts/test-mapa-vista.mjs
 node scripts/test-lista-jerarquia.mjs
 node scripts/test-panel-graficas.mjs
+node scripts/test-carga-paralela.mjs
 node scripts/test-expedientes.mjs
 node scripts/test-provincias.mjs
 node scripts/test-acciones-masivas.mjs
