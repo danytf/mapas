@@ -99,11 +99,11 @@ values
 insert into public.permit_applications (id, establishment_id, created_by) values
   (pg_temp.u('e1'), pg_temp.u('d1'), pg_temp.u('b2')), (pg_temp.u('e2'), pg_temp.u('d2'), pg_temp.u('b3')),
   (pg_temp.u('e3'), pg_temp.u('d1'), pg_temp.u('b2')), (pg_temp.u('e4'), pg_temp.u('d2'), pg_temp.u('b3'));
-insert into public.permit_grants (id, establishment_id, created_by) values
-  (pg_temp.u('e1'), pg_temp.u('d1'), pg_temp.u('b2')), (pg_temp.u('e2'), pg_temp.u('d2'), pg_temp.u('b3')),
-  (pg_temp.u('e3'), pg_temp.u('d1'), pg_temp.u('b2')), (pg_temp.u('e4'), pg_temp.u('d2'), pg_temp.u('b3'));
+insert into public.permit_grants (id, establishment_id, valid_from, created_by) values
+  (pg_temp.u('e1'), pg_temp.u('d1'), current_date, pg_temp.u('b2')), (pg_temp.u('e2'), pg_temp.u('d2'), current_date, pg_temp.u('b3')),
+  (pg_temp.u('e3'), pg_temp.u('d1'), current_date, pg_temp.u('b2')), (pg_temp.u('e4'), pg_temp.u('d2'), current_date, pg_temp.u('b3'));
 insert into public.permit_applications (id, establishment_id, created_by) values (pg_temp.u('e5'), pg_temp.u('d1'), pg_temp.u('b2'));
-insert into public.permit_grants (id, establishment_id, created_by) values (pg_temp.u('e5'), pg_temp.u('d1'), pg_temp.u('b2'));
+insert into public.permit_grants (id, establishment_id, valid_from, created_by) values (pg_temp.u('e5'), pg_temp.u('d1'), current_date, pg_temp.u('b2'));
 insert into public.followups (id, establishment_id, due_on, created_by) values
   (pg_temp.u('e1'), pg_temp.u('d1'), current_date, pg_temp.u('b2')), (pg_temp.u('e2'), pg_temp.u('d2'), current_date, pg_temp.u('b3')),
   (pg_temp.u('e3'), pg_temp.u('d1'), current_date, pg_temp.u('b2')), (pg_temp.u('e4'), pg_temp.u('d2'), current_date, pg_temp.u('b3'));
@@ -222,7 +222,7 @@ select t.tbl, o.op, s.scope, s.scope,
   case o.op when 'select' then 'select' else 'dml' end
 from (values
   ('permit_applications', 'insert into public.permit_applications(establishment_id,created_by) values ({%s},{A})'),
-  ('permit_grants',       'insert into public.permit_grants(establishment_id,created_by) values ({%s},{A})'),
+  ('permit_grants',       'insert into public.permit_grants(establishment_id,valid_from,created_by) values ({%s},current_date,{A})'),
   ('followups',           'insert into public.followups(establishment_id,due_on,created_by) values ({%s},current_date,{A})')
 ) t(tbl, insert_tpl)
 cross join (values ('select'),('update'),('delete'),('insert')) o(op)
