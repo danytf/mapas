@@ -67,17 +67,24 @@ const main = async () => {
   const ayudas = `const w=(ms)=>new Promise(r=>setTimeout(r,ms)); const b=()=>document.getElementById('ceBody'); const nav=(v)=>{b().querySelector('#ceNav [data-vista='+v+']').click();};
     const set=(id,v)=>{const e=b().querySelector('#'+id); e.value=v; e.dispatchEvent(new Event('input',{bubbles:true})); e.dispatchEvent(new Event('change',{bubbles:true}));};
     const d=(k)=>new Date(Date.now()+k*864e5).toISOString().slice(0,10);`;
-  const abre = async (usuario, ancho = 1440, alto = 900) => {
-    await fetch(MOCK + "/__reset"); await seed(MOCK);
+  const abre = async (usuario, ancho = 1440, alto = 900, { sinSeed = false, sinCentro = false } = {}) => {
+    await fetch(MOCK + "/__reset"); if (!sinSeed) await seed(MOCK);
     await c.send("Emulation.setDeviceMetricsOverride", { width: ancho, height: alto, deviceScaleFactor: 1, mobile: ancho < 700 });
     await c.send("Page.navigate", { url: WEB + "/?u=" + Date.now() });
     await hasta(() => ev("return document.readyState === 'complete' && !!document.querySelector('#login input') && typeof L === 'object' && typeof window.supabase === 'object';"), 30000, "la pantalla de acceso");
     await esperaMs(800); /* los manejadores de la aplicación se registran al terminar de cargar */
     await ev("const ins=[...document.querySelectorAll('#login input')]; ins[0].value=" + JSON.stringify(usuario) + "; ins[1].value='x'; ins.forEach(i=>i.dispatchEvent(new Event('input',{bubbles:true}))); document.querySelector('#login button[type=submit]').click(); return 1;");
-    try { await hasta(() => ev("return !!window.mapaSession && /cargados/.test(document.getElementById('status').textContent);"), 30000, "el inicio de sesión de " + usuario); }
+    try { await hasta(() => ev("return !!window.mapaSession && /cargados|No hay establecimientos/.test(document.getElementById('status').textContent);"), 30000, "el inicio de sesión de " + usuario); }
     catch (e) { throw new Error(e.message + " (estado: " + JSON.stringify(await ev("return { sesion: !!window.mapaSession, estado: document.getElementById('status').textContent, login: getComputedStyle(document.getElementById('login')).display, leaflet: typeof L, supabase: typeof window.supabase };")) + ")"); }
+    if (sinCentro) { await esperaMs(1500); return; } /* sin abrir el Centro a mano: Mi jornada se abre sola si hay trabajo */
     await ev("document.getElementById('menuBtn').click(); document.getElementById('centroBtn').click(); await new Promise(r=>setTimeout(r,1200)); return 1;");
   };
+  const postAdmin = async (tabla, fila) => {
+    const ses = await (await fetch(MOCK + "/auth/v1/token?grant_type=password", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: "admin@test.es", password: "x" }) })).json();
+    const r = await fetch(MOCK + "/rest/v1/" + tabla, { method: "POST", headers: { "Content-Type": "application/json", Authorization: "Bearer " + ses.access_token, apikey: "x" }, body: JSON.stringify(fila) });
+    if (r.status !== 201) throw new Error("No se pudo crear en " + tabla + ": " + r.status);
+  };
+  const tecla = async (key, code, vk) => { await c.send("Input.dispatchKeyEvent", { type: "keyDown", key, code, windowsVirtualKeyCode: vk, text: key === "Enter" ? String.fromCharCode(13) : undefined }); await c.send("Input.dispatchKeyEvent", { type: "keyUp", key, code, windowsVirtualKeyCode: vk }); };
 
   /* ===== 1. Administrador: recorrido de todas las vistas, estados, órdenes y detalle ===== */
   await abre("admin@test.es");
@@ -86,7 +93,7 @@ const main = async () => {
     const CAP = { res: 'Resumen', sol: 'Solicitudes', con: 'Concesiones', seg: 'Seguimientos', inc: 'Avisos de datos' };
     out.nav = [...b().querySelectorAll('#ceNav button')].map(x => x.innerText.replace(/\\n/g,' '));
     out.ayudaNav = [...b().querySelectorAll('#ceNav button')].filter(x => x.querySelector('.n')).map(x => [x.getAttribute('aria-label'), x.title, x.querySelector('.n').textContent, x.querySelector('.n').hidden]);
-    out.kpis = b().querySelectorAll('.ce-kpis .kpi').length; out.svgs = b().querySelectorAll('svg.ce-svg').length; out.cards = b().querySelectorAll('.ce-card').length;
+    nav('res'); await w(300); out.kpis = b().querySelectorAll('.ce-kpis .kpi').length; out.svgs = b().querySelectorAll('svg.ce-svg').length; out.cards = b().querySelectorAll('.ce-card').length;
     for (const v of ['res','sol','con','seg','inc']) {
       nav(v); await w(250); const info = { caption: b().querySelector('#ceList table caption')?.textContent || null, estados: 0, descuadres: [], detalle: false };
       if (v !== 'res') {
@@ -106,7 +113,7 @@ const main = async () => {
       out.vistas[v] = info;
     }
     return out;`);
-  eq(r1.nav.length, 5, "cinco secciones de navegación"); ok(r1.ayudaNav.length === 4 && r1.ayudaNav.every(([al, ti, n, oculto]) => (oculto ? /^0 / : new RegExp("^" + n + " ")).test(ti) && /^(Solicitudes|Concesiones|Seguimientos|Avisos de datos): /.test(al) && al.endsWith(ti)), "cada número de la navegación dice qué cuenta (ayuda y etiqueta accesible)"); ok(r1.ayudaNav.some(([al]) => /^Concesiones: \d+ vigentes? hoy$/.test(al)), "Concesiones cuenta las vigentes hoy"); ok(r1.kpis === 6 && r1.svgs >= 3 && r1.cards >= 8, "el Resumen tiene sus indicadores, gráficos y tarjetas");
+  eq(r1.nav.length, 6, "seis secciones de navegación (Mi jornada primero)"); ok(r1.nav[0].startsWith("Mi jornada"), "la primera sección es Mi jornada"); ok(r1.ayudaNav.length === 5 && r1.ayudaNav.every(([al, ti, n, oculto]) => (oculto ? /^0 / : new RegExp("^" + n + " ")).test(ti) && /^(Mi jornada|Solicitudes|Concesiones|Seguimientos|Avisos de datos): /.test(al) && al.endsWith(ti)), "cada número de la navegación dice qué cuenta (ayuda y etiqueta accesible)"); ok(r1.ayudaNav.some(([al]) => /^Concesiones: \d+ vigentes? hoy$/.test(al)), "Concesiones cuenta las vigentes hoy"); ok(r1.kpis === 6 && r1.svgs >= 3 && r1.cards >= 8, "el Resumen tiene sus indicadores, gráficos y tarjetas");
   for (const v of ["sol", "con", "seg", "inc"]) { ok(r1.vistas[v].estados >= 4, v + ": se recorrieron sus estados"); ok(r1.vistas[v].detalle, v + ": el detalle se abre"); eq(r1.vistas[v].descuadres, [], v + ": el número de cada estado coincide con las filas"); }
   eq(r1.cabeceras, [], "cada vista dibuja su propia tabla (no la de la vista anterior)");
 
@@ -349,7 +356,7 @@ const main = async () => {
     inf.click(); await w(100); document.getElementById('panelBtn').click(); await w(700); out.accion = [panel.hidden, document.getElementById('dlgPanel').open]; document.getElementById('pnClose').click(); await w(200);
     return out;`);
   eq(r3h.inicial, ["Informes:true", "Progreso:false", "Puntos:false", "Datos:false", "Administración:false", "Ayuda:false"], "el menú muestra seis secciones; solo Informes empieza desplegada");
-  eq(r3h.itemsInicial, ["centroBtn", "panelBtn", "calBtn", "admBtn"].filter((x) => r3h.itemsInicial.includes(x)), "con las demás plegadas solo se ven las opciones de Informes"); ok(r3h.itemsInicial.length >= 3 && !r3h.itemsInicial.includes("csv"), "…y no las de Datos");
+  eq(r3h.itemsInicial, ["jornadaBtn", "centroBtn", "panelBtn", "calBtn", "admBtn"].filter((x) => r3h.itemsInicial.includes(x)), "con las demás plegadas solo se ven las opciones de Informes"); ok(r3h.itemsInicial.length >= 4 && !r3h.itemsInicial.includes("csv"), "…y no las de Datos");
   eq(r3h.tras, [true, "true", true], "pulsar «Datos» despliega su sección sin cerrar el menú"); eq(r3h.pliega, [true, "false", false], "pulsar «Informes» pliega su sección sin cerrar el menú");
   eq(r3h.flecha, "Progreso", "la flecha abajo salta las opciones plegadas y va al título siguiente"); eq(r3h.pliegaDatos, ["false", false], "pulsar otra vez pliega"); ok(r3h.aria, "cada título refleja con aria-expanded si su sección está visible");
   eq(r3h.accion, [true, true], "elegir una opción cierra el menú y abre lo pedido");
@@ -411,6 +418,209 @@ const main = async () => {
   ok(Object.keys(r3d.calPorProv).length >= 2, "el Calendario ofrece varias provincias");
   Object.entries(r3d.calPorProv).forEach(([pv, [nombre, val]]) => eq([nombre, val], [nombre, r3d.autPorProv[pv] || 0], "Calendario de «" + nombre + "»: captadores autorizados hoy = tablas fuente"));
   eq(Object.values(r3d.autPorProv).reduce((x, y) => x + y, 0), e.autorizadosCalendario, "la suma por provincias = el total del Calendario");
+
+  /* ===== 3j. Mi jornada: puerta de entrada, filtros, navegación, tareas, fallos, ámbito, teclado, móvil y oscuro ===== */
+  await abre("admin@test.es", 1440, 900, { sinCentro: true });
+  const j1 = await ev(ayudas + `
+    const out = {}; const dlg = document.getElementById('dlgCentro');
+    out.abierta = [dlg.open, b().dataset.vista, b().querySelector('#ceNav [aria-current=page]')?.textContent.trim().startsWith('Mi jornada'), document.activeElement === b().querySelector('#ceNav [aria-current=page]')];
+    out.mapaAccesible = !!b().querySelector('[data-mapa]');
+    const filas = () => [...b().querySelectorAll('.jo-fila')];
+    out.total = +b().querySelector('.ce-count').textContent.match(/^\\d+/)[0]; out.nav = +b().querySelector('#ceNav [data-vista=jor] .n').textContent;
+    out.claves = new Set(filas().map(f => f.dataset.key)).size; out.filas = filas().length;
+    out.bandas = [...b().querySelectorAll('.jo-banda h3')].map(h => h.textContent.trim());
+    out.chips = [...b().querySelectorAll('.jo-chip')].map(x => [x.dataset.rapida, +x.querySelector('b').textContent, x.getAttribute('aria-pressed')]);
+    /* orden: ninguna fila menos grave antes que una más grave */
+    const orden = { urgente: 0, hoy: 1, atencion: 2 }; out.ordenBandas = filas().map(f => orden[f.className.match(/b-(\\w+)/)[1]]); out.ordenOk = out.ordenBandas.every((v, i) => i === 0 || out.ordenBandas[i - 1] <= v);
+    out.motivos = filas().slice(0, 5).map(f => [f.querySelector('.jo-motivo strong').textContent, !!f.querySelector('.jo-sig'), !!f.querySelector('.jo-meta .ce-badge, .jo-meta .jo-tipo')]);
+    /* cifras frente al Panel y al Centro */
+    const atr = filas().filter(f => /^Seguimiento atrasado/.test(f.querySelector('.jo-motivo strong').textContent)).length, hoy = filas().filter(f => f.querySelector('.jo-motivo strong').textContent === 'Seguimiento para hoy').length;
+    out.atrasadas = atr; out.hoy = hoy;
+    out.menu = (document.getElementById('menuBtn').click(), await w(100), document.getElementById('jornadaBtn').textContent.trim()); document.getElementById('menuBtn').click(); await w(100);
+    document.getElementById('ceClose').click(); await w(200); document.getElementById('menuBtn').click(); document.getElementById('panelBtn').click(); await w(800);
+    const pk = (k) => +document.querySelector('#pnBody [data-ind=' + k + '] b').textContent; out.panel = { atrasados: pk('segVencidos'), hoy: pk('segHoy'), estancadas: pk('estancadas'), sinSeg: pk('sinSeguimiento'), vencen7: pk('vencen7') };
+    document.getElementById('pnClose').click(); await w(200); document.getElementById('menuBtn').click(); document.getElementById('jornadaBtn').click(); await w(800);
+    out.cuentaTipos = {}; for (const o of [...b().querySelector('#ceEst').options]) out.cuentaTipos[o.value] = +o.text.match(/\\((\\d+)\\)\\s*$/)[1];
+    /* para comparar con el Panel, los motivos se cuentan sobre todas las filas (principal o «También») */
+    const textos = filas().map(f => f.textContent); b().querySelector('[data-mas]')?.click();
+    out.estancadas = filas().filter(f => /Solicitud sin respuesta desde hace/.test(f.textContent)).length; out.sinSeg = filas().filter(f => /Solicitud pendiente sin seguimiento programado/.test(f.textContent)).length;
+    out.vencen = filas().filter(f => /La concesión termina (hoy|en [1-7] días?)/.test(f.textContent)).length;
+    /* el Resumen del Centro ofrece las mismas primeras actuaciones */
+    const primeras = filas().slice(0, 8).map(f => f.querySelector('.ce-pt strong').textContent + '|' + f.querySelector('.jo-motivo strong').textContent);
+    b().querySelector('#ceNav [data-vista=res]').click(); await w(400); out.cola = [...b().querySelectorAll('.ce-cola .ce-item')].map(x => x.querySelector('strong').textContent + '|' + x.querySelector('span:last-child').textContent.split(' · ')[0]);
+    out.primeras = primeras; b().querySelector('#ceNav [data-vista=jor]').click(); await w(400);
+    return out;`);
+  eq(j1.abierta, [true, "jor", true, true], "al entrar, Mi jornada se abre sola (hay trabajo) y el foco está en su sección");
+  ok(j1.mapaAccesible, "«Ir al mapa» está a la vista");
+  eq([j1.total, j1.filas, j1.claves], [j1.nav, Math.min(j1.total, 100), Math.min(j1.total, 100)], "el recuento de la lista, la navegación y las filas dibujadas coinciden, sin filas repetidas");
+  ok(j1.ordenOk && /^Urgente/.test(j1.bandas[0]), "las filas van de la banda más urgente a la menos urgente: " + j1.bandas.join(" | "));
+  ok(j1.chips.length === 4 && j1.chips[0][0] === "urgentes" && j1.chips[3][0] === "todas" && j1.chips[3][2] === "true" && j1.chips[3][1] === j1.total, "vistas rápidas Urgentes, Para hoy, Sin seguimiento y Todas; «Todas» marcada con el total");
+  ok(j1.motivos.every(([m, sig, meta]) => m && sig && meta), "cada fila explica el motivo, su siguiente acción y su tipo/estado");
+  eq(j1.menu, "Mi jornada (" + j1.total + ")", "el menú dice cuántas actuaciones hay");
+  eq([j1.atrasadas, j1.hoy], [j1.panel.atrasados, j1.panel.hoy], "seguimientos atrasados y de hoy: Mi jornada = Panel resumen");
+  eq([j1.estancadas, j1.sinSeg, j1.vencen], [j1.panel.estancadas, j1.panel.sinSeg, j1.panel.vencen7], "estancadas, sin seguimiento y concesiones que terminan en 7 días: Mi jornada = Panel resumen (motivos principales y «También»)");
+  ok(j1.cola.length > 0 && j1.cola.every((x, i) => x.split("|")[0] === j1.primeras[i].split("|")[0]), "el Resumen muestra las mismas primeras actuaciones, en el mismo orden");
+  eq(Object.entries(j1.cuentaTipos).filter(([k]) => k !== "todos").reduce((x, [, v]) => x + v, 0), j1.cuentaTipos.todos, "los tipos suman el total");
+
+  /* Filtros combinados */
+  const j2 = await ev(ayudas + `
+    const out = {}; const filas = () => [...b().querySelectorAll('.jo-fila')]; const total = () => +b().querySelector('.ce-count').textContent.match(/^\\d+/)[0];
+    const chip = (k) => b().querySelector('[data-rapida=' + k + ']'); const n = (k) => +chip(k).querySelector('b').textContent;
+    out.antes = { urg: n('urgentes'), hoy: n('hoy'), sin: n('sinseg'), todas: n('todas') };
+    chip('urgentes').click(); await w(300); out.urgentes = [total(), filas().every(f => /b-urgente/.test(f.className)), chip('urgentes').getAttribute('aria-pressed')];
+    chip('sinseg').click(); await w(300); out.sinseg = [total(), filas().every(f => /sin seguimiento programado/.test(f.textContent))];
+    set('ceEst', 'solicitud'); await w(300); const optSol = +b().querySelector('#ceEst').selectedOptions[0].text.match(/\\((\\d+)\\)/)[1]; out.tipoSol = [total(), optSol, chip('sinseg').getAttribute('aria-pressed')];
+    const sel = b().querySelector('#ceResp'); out.opcionesResp = [...sel.options].map(o => o.text);
+    const hayProv = [...b().querySelector('#ceProv').options].find(o => o.value); set('ceProv', hayProv.value); await w(300); out.conProv = [total(), filas().every(f => !f.textContent.includes('Almería') || hayProv.text === 'Almería'), b().querySelector('[data-quita-filtros]')?.textContent];
+    chip('todas').click(); set('ceEst', 'todos'); set('ceProv', ''); await w(300);
+    const q = b().querySelector('#ceQ'); q.value = 'zzzzzz'; q.dispatchEvent(new Event('input', { bubbles: true })); await w(300);
+    out.vacio = [total(), b().querySelector('#ceList .pn-empty')?.textContent.replace(/\\s+/g, ' '), !!b().querySelector('#ceList [data-quita-filtros]'), chip('todas').querySelector('b').textContent];
+    b().querySelector('#ceList [data-quita-filtros]').click(); await w(300);
+    out.quitados = [total(), b().querySelector('#ceQ').value, b().querySelector('#ceEst').value, chip('todas').getAttribute('aria-pressed'), !b().querySelector('[data-quita-filtros]')];
+    return out;`);
+  ok(j2.urgentes[0] === j2.antes.urg && j2.urgentes[1] && j2.urgentes[2] === "true", "«Urgentes» muestra exactamente las urgentes (" + j2.antes.urg + ")");
+  ok(j2.sinseg[0] > 0 && j2.sinseg[1] && j2.sinseg[0] <= j2.antes.sin, "«Sin seguimiento» combinada con «Urgentes» da una intersección coherente");
+  eq(j2.tipoSol[0], j2.tipoSol[1], "el número de la opción de tipo es lo que sale al elegirla con los demás filtros");
+  ok(j2.opcionesResp[0].startsWith("Todos (") && /^Sin responsable \(/.test(j2.opcionesResp[1]), "el filtro de responsable ofrece Todos y Sin responsable con su recuento");
+  ok(/^Quitar filtros \(\d+\)$/.test(j2.conProv[2]), "con filtros activos hay un botón visible para quitarlos, con su número");
+  ok(j2.vacio[0] === 0 && /Ninguna actuación con estos filtros/.test(j2.vacio[1]) && j2.vacio[2], "sin resultados: mensaje útil y botón para quitar filtros");
+  eq(j2.quitados, [j1.total, "", "todos", "true", true], "«Quitar filtros» devuelve la bandeja completa");
+
+  /* Navegación al expediente exacto y detalle */
+  const j3 = await ev(ayudas + `
+    const out = {}; const filas = () => [...b().querySelectorAll('.jo-fila')];
+    const f = filas().find(x => /Solicitud/.test(x.querySelector('.jo-tipo').textContent)); const nombre = f.querySelector('.ce-pt strong').textContent, ong = f.querySelector('.jo-meta').textContent;
+    f.querySelector('.jo-acts [data-sel]').click(); await w(400);
+    out.detalle = [!b().querySelector('#ceSide').hidden, b().querySelector('#ceSide h3').textContent === nombre, /Por qué está en Mi jornada/.test(b().querySelector('#ceSide').textContent), b().dataset.vista, filas().length > 1];
+    b().querySelector('#ceSide [data-ir]').click(); await w(400);
+    out.destino = [b().dataset.vista, b().querySelector('#cePunto').textContent.includes(nombre), !b().querySelector('#ceSide').hidden, b().querySelector('#ceSide h3').textContent === nombre, document.getElementById('ceEst').value];
+    b().querySelector('#ceNav [data-vista=jor]').click(); await w(400); out.vuelve = [b().dataset.vista, filas().length > 1, !b().querySelector('#cePunto').textContent];
+    return out;`);
+  eq(j3.detalle, [true, true, true, "jor", true], "«Abrir» enseña el expediente y por qué está en la bandeja sin salir de ella");
+  eq(j3.destino.slice(0, 4), ["sol", true, true, true], "«Abrir en Solicitudes» lleva al expediente exacto, con su punto filtrado y su detalle abierto"); eq(j3.destino[4], "todas", "…con el estado «Todas» para que se vea");
+  eq(j3.vuelve, ["jor", true, true], "al volver a Mi jornada la bandeja está como estaba (sin el filtro del punto)");
+  await ev(ayudas + "b().querySelector('[data-cierra-lado]')?.click(); await w(100); return 1;");
+
+  /* Completar una tarea: la base cambia, la bandeja se recalcula y el foco pasa a la siguiente */
+  const j4 = await ev(ayudas + `
+    const out = {}; const rel = () => fetch('http://127.0.0.1:8766/__rel').then(r => r.json()); const filas = () => [...b().querySelectorAll('.jo-fila')];
+    const total = () => +b().querySelector('.ce-count').textContent.match(/^\\d+/)[0]; const abiertos = async () => (await rel()).followups.filter(f => !f.completed_at).length;
+    const f0 = filas().find(x => x.querySelector('[data-act=hecho]')); const texto0 = f0.querySelector('.jo-main').textContent; const idx = filas().indexOf(f0), nombre = f0.querySelector('.ce-pt strong').textContent, antes = { total: total(), bd: await abiertos(), nav: +b().querySelector('#ceNav [data-vista=jor] .n').textContent };
+    f0.querySelector('[data-act=hecho]').click(); out.durante = [filas().length > 0, [...b().querySelectorAll('.jo-fila [data-act]')].every(x => x.disabled), b().querySelector('#ceAviso').textContent, filas().some(x => x === f0 || x.dataset.key === f0.dataset.key)];
+    await w(2800);
+    out.despues = { aviso: b().querySelector('#ceAviso').textContent, bd: await abiertos(), total: total(), nav: +b().querySelector('#ceNav [data-vista=jor] .n').textContent, foco: document.activeElement.className, focoEnFila: !!document.activeElement.closest('.jo-fila'), sigueIgual: filas().some(x => x.dataset.key === f0.dataset.key && x.querySelector('.jo-main').textContent === texto0) };
+    out.antes = antes; out.nombre = nombre; out.idx = idx;
+    return out;`);
+  ok(j4.durante[1] && /Guardando/.test(j4.durante[2]) && j4.durante[3], "mientras se guarda, los botones se bloquean y la fila sigue en pantalla: nada aparece resuelto sin confirmar");
+  ok(/Seguimiento cerrado en/.test(j4.despues.aviso) && j4.despues.bd === j4.antes.bd - 1, "«Hecho» cierra el seguimiento en la base y lo confirma [" + j4.despues.aviso + "]");
+  ok(j4.despues.nav <= j4.antes.nav && j4.despues.total <= j4.antes.total && !j4.despues.sigueIgual, "la bandeja y los recuentos se actualizan desde lo confirmado (la fila desaparece o pasa al siguiente seguimiento abierto de ese expediente)");
+  ok(j4.despues.focoEnFila, "el foco pasa a la siguiente tarea para poder seguir sin reconstruir nada");
+
+  /* Fallos: caída del guardado, conflicto y lote con resultado parcial */
+  permitidos = [/\[Mapa\] (Error al guardar expedientes|Supabase rechazó una operación de expedientes|Error inesperado)/];
+  const j5 = await ev(ayudas + `
+    const out = {}; const rel = () => fetch('http://127.0.0.1:8766/__rel').then(r => r.json()); const filas = () => [...b().querySelectorAll('.jo-fila')]; const cli = window.mapaSession.supabase, origFrom = cli.from.bind(cli);
+    const conHecho = () => filas().filter(x => x.querySelector('[data-act=hecho]'));
+    /* a) el servidor no confirma el cierre: la fila sigue, con su aviso, y la base no cambia */
+    const f0 = conHecho()[0], clave0 = f0.dataset.key, bd0 = (await rel()).followups.filter(f => !f.completed_at).length;
+    cli.from = (t) => t === 'followups' ? Object.assign(origFrom(t), { update: () => { throw new TypeError('Failed to fetch'); } }) : origFrom(t);
+    f0.querySelector('[data-act=hecho]').click(); await w(3500); cli.from = origFrom;
+    out.caida = [b().querySelector('#ceAviso').textContent, filas().some(x => x.dataset.key === clave0 && x.querySelector('[data-act=hecho]')), (await rel()).followups.filter(f => !f.completed_at).length === bd0, ![...b().querySelectorAll('[data-act]')].some(x => x.disabled)];
+    /* b) otra persona cambia el seguimiento antes de cerrarlo: conflicto, no se pisa y la bandeja se recarga */
+    const f1 = conHecho()[0], acc = f1.querySelector('.jo-sig').textContent.replace('Siguiente: ', '').replace('Acción prevista: ', '').trim();
+    const objetivo = (await rel()).followups.find(f => !f.completed_at && f.next_action === acc);
+    if (objetivo) { await cli.from('followups').update({ next_action: 'Cambiado por otra persona J' }).eq('id', objetivo.id); await w(300); f1.querySelector('[data-act=hecho]').click(); await w(3500);
+      out.conflicto = [b().querySelector('#ceAviso').textContent, (await rel()).followups.find(f => f.id === objetivo.id)?.completed_at == null]; } else out.conflicto = null;
+    /* c) lote de 2: uno cambiado por otra persona -> 1 guardado y 1 sin guardar, y queda seleccionado */
+    const marca = async (n) => { for (let i = 0; i < n; i++) { const c = b().querySelector('input[data-chk]:not(:checked)'); c.checked = true; c.dispatchEvent(new Event('change', { bubbles: true })); await w(150); } };
+    out.disponibles = b().querySelectorAll('input[data-chk]').length; await marca(Math.min(2, out.disponibles)); out.seleccion = b().querySelectorAll('input[data-chk]:checked').length;
+    const accs = [...b().querySelectorAll('input[data-chk]:checked')].map(i => i.closest('.jo-fila').querySelector('.jo-sig').textContent.replace('Siguiente: ', '').replace('Acción prevista: ', '').trim());
+    const ob2 = (await rel()).followups.find(f => !f.completed_at && f.next_action === accs[0]);
+    if (ob2) await cli.from('followups').update({ next_action: 'Cambiado por otra persona L' }).eq('id', ob2.id); await w(300);
+    b().querySelector('[data-lote=hecho]').click(); await w(300); out.previo = b().querySelector('#ceLote .ce-lote strong').textContent; b().querySelector('[data-lote=ejecutar]').click(); await w(7000);
+    out.lote = b().querySelector('#ceLote .ce-lote strong').textContent; out.lineas = [...b().querySelectorAll('#ceLote .ce-res-lote li')].map(li => li.className); out.quedan = b().querySelectorAll('input[data-chk]:checked').length;
+    b().querySelector('[data-lote=cerrar]').click(); await w(200); b().querySelector('[data-lote=limpiar]')?.click();
+    return out;`);
+  ok(/No se pudo confirmar el guardado/.test(j5.caida[0]) && j5.caida[1] && j5.caida[2] && j5.caida[3], "caída del guardado: se explica, la fila sigue, la base no cambia y la pantalla queda operativa [" + j5.caida[0] + "]");
+  ok(j5.conflicto && /Otra persona ha cambiado/.test(j5.conflicto[0]) && j5.conflicto[1], "conflicto de concurrencia: no se pisa lo de la otra persona [" + (j5.conflicto && j5.conflicto[0]) + "]");
+  eq(j5.seleccion, 2, "se seleccionan 2 seguimientos desde Mi jornada (disponibles: " + j5.disponibles + ")"); ok(/Vas a cerrar 2 seguimientos/.test(j5.previo), "el lote enseña el alcance antes de confirmar");
+  ok(/1 guardados y 1 sin guardar/.test(j5.lote) && j5.lineas.filter((x) => x === "mal").length === 1 && j5.lineas.filter((x) => x === "ok").length === 1 && j5.quedan === 1, "resultado parcial: resultado de cada registro y queda seleccionado el que falló [" + j5.lote + "]");
+  permitidos = [];
+
+  /* Teclado: Tab hasta «Hecho» y Enter lo ejecuta; Escape cierra */
+  const j6 = await ev(ayudas + "b().querySelector('#ceNav [data-vista=jor]').click(); await w(300); const bd = (await (await fetch('http://127.0.0.1:8766/__rel')).json()).followups.filter(f => !f.completed_at).length; b().querySelector('#joT').focus(); window.__bd = bd; return bd;");
+  let alcanzado = null;
+  for (let i = 0; i < 60 && !alcanzado; i++) { await tecla("Tab", "Tab", 9); alcanzado = await ev("const e = document.activeElement; return e && e.matches && e.matches('[data-act=hecho]') ? e.getAttribute('aria-label') : null;"); }
+  ok(!!alcanzado && /^Marcar como hecho el seguimiento de /.test(alcanzado), "con Tab se llega a «Hecho», con nombre accesible que incluye el punto [" + alcanzado + "]");
+  await tecla("Enter", "Enter", 13); await esperaMs(3000);
+  const bd2 = (await rel()).followups.filter((f) => !f.completed_at).length;
+  ok(bd2 === j6 - 1, "Intro sobre «Hecho» cierra el seguimiento (solo teclado)");
+  const j7 = await ev(ayudas + `
+    const out = {}; const filas = [...b().querySelectorAll('.jo-fila')];
+    out.focoFila = !!document.activeElement.closest('.jo-fila') || document.activeElement.id === 'joT';
+    out.sinTabindex = [...b().querySelectorAll('#ceList button, #ceList input')].every(x => x.tabIndex >= 0);
+    out.etiquetas = [...b().querySelectorAll('#ceList button, #ceList input, #ceList select')].filter(x => !(x.textContent.trim() || x.getAttribute('aria-label') || x.title)).length;
+    out.h = [...b().querySelectorAll('#ceList h3')].map(h => h.textContent.trim().length > 0).every(Boolean);
+    out.estados = filas.every(f => f.querySelector('.ce-sev') && f.querySelector('.ce-sev').textContent.trim().length > 0);
+    return out;`);
+  ok(j7.focoFila && j7.sinTabindex && j7.etiquetas === 0 && j7.h && j7.estados, "el foco queda en la lista tras la acción, todo es alcanzable con teclado, con nombre y con la gravedad también en texto");
+
+  /* Modo oscuro: contraste del texto de las filas y cambio real de fondo */
+  const j8claro = await ev(ayudas + "const f = b().querySelector('.jo-fila'); const cs = getComputedStyle(f), cm = getComputedStyle(f.querySelector('.jo-motivo strong')); return { fondo: cs.backgroundColor, texto: cm.color, menor: getComputedStyle(f.querySelector('.jo-meta')).color };");
+  await c.send("Emulation.setEmulatedMedia", { features: [{ name: "prefers-color-scheme", value: "dark" }] }); await esperaMs(400);
+  const j8oscuro = await ev(ayudas + "const f = b().querySelector('.jo-fila'); const cs = getComputedStyle(f), cm = getComputedStyle(f.querySelector('.jo-motivo strong')); return { fondo: cs.backgroundColor, texto: cm.color, menor: getComputedStyle(f.querySelector('.jo-meta')).color };");
+  await c.send("Emulation.setEmulatedMedia", { features: [{ name: "prefers-color-scheme", value: "light" }] });
+  const lum = (rgb) => { const m = rgb.match(/[\d.]+/g).map(Number); const [r, g, b2] = m.slice(0, 3).map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }); return 0.2126 * r + 0.7152 * g + 0.0722 * b2; };
+  const contraste = (x, y) => { const a = lum(x), b3 = lum(y); return (Math.max(a, b3) + 0.05) / (Math.min(a, b3) + 0.05); };
+  ok(j8claro.fondo !== j8oscuro.fondo, "el modo oscuro cambia el fondo de las filas");
+  for (const [nom, t] of [["claro", j8claro], ["oscuro", j8oscuro]]) ok(contraste(t.texto, t.fondo) >= 4.5 && contraste(t.menor, t.fondo) >= 4.5, "contraste del texto de las filas en modo " + nom + " (≥ 4,5:1)");
+
+  /* Usuario de una provincia: solo su ámbito */
+  await abre("alm@test.es", 1440, 900, { sinCentro: true });
+  const j9 = await ev(ayudas + `
+    const out = { abierta: document.getElementById('dlgCentro').open, prov: [...b().querySelectorAll('#ceProv option')].map(o => o.text) };
+    const filas = [...b().querySelectorAll('.jo-fila')]; out.n = filas.length; out.otra = filas.some(f => /Granada|Armilla|Motril/.test(f.textContent));
+    out.provinciaFija = b().querySelector('#ceProv').value !== '' && !b().querySelector('[data-quita-filtros]');
+    return out;`);
+  ok(j9.abierta && j9.n > 0 && !j9.otra && j9.prov.length === 1 && j9.prov[0] === "Almería" && j9.provinciaFija, "un usuario de una provincia ve solo las actuaciones de la suya, y la provincia no cuenta como filtro que quitar");
+
+  /* Estados: sin expedientes, todo al día (y sin abrirse sola) y error de lectura */
+  await abre("vacio@test.es", 1440, 900, { sinSeed: true, sinCentro: true });
+  const j10 = await ev(ayudas + `
+    const out = { abiertaSola: document.getElementById('dlgCentro').open };
+    document.getElementById('menuBtn').click(); await w(100); out.menu = document.getElementById('jornadaBtn').textContent.trim(); document.getElementById('jornadaBtn').click(); await w(600);
+    out.texto = b().querySelector('#ceList .pn-empty')?.textContent.replace(/\\s+/g, ' ');
+    return out;`);
+  ok(!j10.abiertaSola && j10.menu === "Mi jornada", "sin trabajo no se abre sola ni el menú inventa un número");
+  ok(/Todavía no hay solicitudes ni concesiones/.test(j10.texto), "sin expedientes en el ámbito, lo dice");
+  await abre("alm@test.es", 1440, 900, { sinSeed: true, sinCentro: true });
+  await postAdmin("permit_applications", { establishment_id: "00000000-0000-4000-8000-000000000103", organization: "AECC", capturer_count: 2, requested_from: "2026-01-10", requested_until: "2026-01-12", requested_at: "2026-01-02", status: "denied", resolved_at: "2026-01-03T10:00:00Z" });
+  await c.send("Page.reload"); await hasta(() => ev("return document.readyState === 'complete' && !!document.querySelector('#login input') && typeof L === 'object';"), 30000); await esperaMs(800);
+  await ev("const ins=[...document.querySelectorAll('#login input')]; ins[0].value='alm@test.es'; ins[1].value='x'; ins.forEach(i=>i.dispatchEvent(new Event('input',{bubbles:true}))); document.querySelector('#login button[type=submit]').click(); return 1;");
+  await hasta(() => ev("return !!window.mapaSession && /cargados/.test(document.getElementById('status').textContent);"), 30000); await esperaMs(1500);
+  const j11 = await ev(ayudas + `
+    const out = { abiertaSola: document.getElementById('dlgCentro').open };
+    document.getElementById('menuBtn').click(); document.getElementById('jornadaBtn').click(); await w(600);
+    out.texto = b().querySelector('#ceList .pn-empty')?.textContent.replace(/\\s+/g, ' '); out.filas = b().querySelectorAll('.jo-fila').length; out.nav = !!b().querySelector('#ceNav [data-vista=jor] .n:not([hidden])');
+    window.mapaSession.catalogueReady = false; window.mapaSession.catalogueError = 'Error de lectura de prueba'; b().querySelector('#ceNav [data-vista=res]').click(); await w(200); b().querySelector('#ceNav [data-vista=jor]').click(); await w(300);
+    out.error = [b().querySelector('#ceList [role=alert]')?.textContent.replace(/\\s+/g, ' '), /Todo al día/.test(b().querySelector('#ceList').textContent), b().querySelectorAll('.jo-fila').length];
+    window.mapaSession.catalogueReady = true; window.mapaSession.catalogueError = null;
+    return out;`);
+  ok(!j11.abiertaSola && /Todo al día/.test(j11.texto) && j11.filas === 0 && !j11.nav, "con expedientes resueltos y nada pendiente: «Todo al día», sin abrirse sola ni contador");
+  ok(/No se ha podido leer el trabajo pendiente/.test(j11.error[0]) && /Error de lectura de prueba/.test(j11.error[0]) && !j11.error[1] && j11.error[2] === 0, "si la lectura falló, no se presenta una bandeja vacía ni «Todo al día»");
+
+  /* Móvil de 390 px */
+  await abre("admin@test.es", 390, 800, { sinCentro: true });
+  const j12 = await ev(ayudas + `
+    const dlg = document.getElementById('dlgCentro'); const out = { abierta: dlg.open, desborde: dlg.scrollWidth > dlg.clientWidth };
+    out.pequenos = [...b().querySelectorAll('#ceList button, #ceList select, #ceList input:not([type=checkbox]), .ce-filtros select, .ce-filtros input')].filter(e => e.offsetParent !== null && e.getBoundingClientRect().height < 43.5).map(e => (e.id || e.className).toString().slice(0, 24));
+    out.casillas = [...b().querySelectorAll('.jo-fila .ce-chkl')].filter(e => e.getBoundingClientRect().height < 43.5 || e.getBoundingClientRect().width < 43.5).length;
+    b().querySelector('.jo-fila .ce-pt').click(); await w(500); const l = b().querySelector('#ceSide').getBoundingClientRect(); out.detalle = [Math.round(l.width) >= innerWidth - 2, dlg.scrollWidth > dlg.clientWidth]; b().querySelector('.ce-x').click(); await w(300);
+    out.accionesBajan = (() => { const f = b().querySelector('.jo-fila'); const a = f.querySelector('.jo-acts').getBoundingClientRect(), m = f.querySelector('.jo-main').getBoundingClientRect(); return a.top >= m.bottom - 1; })();
+    return out;`);
+  ok(j12.abierta && !j12.desborde && !j12.detalle[1] && j12.detalle[0], "móvil: Mi jornada se abre sin desbordes y el detalle ocupa la pantalla");
+  eq([j12.pequenos, j12.casillas], [[], 0], "móvil: ningún control de Mi jornada por debajo de 44 px"); ok(j12.accionesBajan, "móvil: las acciones pasan debajo del texto de la fila");
+  await c.send("Emulation.setDeviceMetricsOverride", { width: 1440, height: 900, deviceScaleFactor: 1, mobile: false });
 
   /* ===== 4. Calendario, enlaces cruzados y almacenamiento local ===== */
   const r4 = await ev(ayudas + `

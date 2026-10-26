@@ -35,6 +35,7 @@ node scripts/test-carga-paralela.mjs
 node scripts/test-rendimiento-cliente.mjs        # equivalencia de las rutas rápidas y carga sin cálculo duplicado (39.000 puntos)
 node scripts/test-expedientes.mjs
 node scripts/test-centro-detalles.mjs                # casillas con tema oscuro, cabecera y lote del Centro en móvil, rejilla del Panel, título del Calendario
+node scripts/test-jornada.mjs                        # Mi jornada: clasificación, orden, fechas de Madrid, una fila por expediente, 384 combinaciones de filtros, coherencia con Panel/Centro/Calendario, ámbito y rendimiento (39.000 puntos)
 node scripts/test-a11y-fase-d.mjs index.html          # contraste WCAG AA claro/oscuro, nombres, aria-live y foco (Fase D)
 ```
 Cada una devuelve código distinto de cero si falla. `audit-a11y` y `audit-cdn-integrity` fallan en versiones anteriores a #81 y #80 (control negativo).

@@ -17,7 +17,7 @@ ok(/<dialog id="dlgCentro" aria-labelledby="ceT">/.test(html), "dlgCentro sin ar
 ok(/<h2 id="ceT">Centro de permisos<\/h2>/.test(html), "Falta el título del diálogo");
 ok(/id="centroBtn" type="button" role="menuitem">Centro de permisos<\/button>/.test(html), "Falta la opción «Centro de permisos» en el menú");
 ok(html.includes('id="ceClose" aria-label="Cerrar"'), "El botón de cerrar necesita nombre accesible");
-ok(["res", "sol", "con", "seg", "inc"].every((v) => bloque.includes('["' + v + '", "')) && bloque.includes('aria-label="Secciones del Centro de permisos"') && bloque.includes("aria-current"), "Navegación principal: Resumen, Solicitudes, Concesiones, Seguimientos y Avisos, con aria-current");
+ok(["jor", "res", "sol", "con", "seg", "inc"].every((v) => bloque.includes('["' + v + '", "')) && bloque.includes('aria-label="Secciones del Centro de permisos"') && bloque.includes("aria-current"), "Navegación principal: Mi jornada, Resumen, Solicitudes, Concesiones, Seguimientos y Avisos, con aria-current");
 ok(bloque.includes('role="status"') && bloque.includes('<caption class="adm-sr">'), "Recuento en role=status y tabla con título");
 ok(bloque.includes("badge(r.est)") && bloque.includes("esc(TEXTO[e])"), "El estado va también en texto, no solo en color");
 
@@ -183,7 +183,7 @@ ok(html.includes("const mal = verificaOps(ops, relBase.get(key) || { sols: [], h
 ok((bloque.match(/form\.idNuevo \|\| \(form\.idNuevo = newId\(\)\)/g) || []).length === 2, "Las altas del formulario usan un identificador estable entre intentos (el reintento tras un fallo parcial no duplica)");
 
 // Rediseño (25/10/2026): centro de mando, detalle lateral, ordenación y lotes.
-ok(bloque.includes("drawResumen") && bloque.includes("resumenDatos(recsAmb, segsAmb, t, incsAmb)"), "El Resumen se calcula con las funciones compartidas (resumenDatos) y las mismas listas que el Panel");
+ok(bloque.includes("drawResumen") && bloque.includes("resumenDatos(recsAmb, segsAmb, t, incsAmb, filasJ)"), "El Resumen se calcula con las funciones compartidas (resumenDatos) y las mismas listas que el Panel");
 for (const k of ["grafCapacidad", "grafSemanas", "barraSvg", "tablaCapacidad", "tablaSemanas"]) ok(bloque.includes("const " + k + " = "), "Gráfico o tabla alternativa: " + k);
 ok(bloque.includes('data-tabla="') && bloque.includes("Ver como tabla") && bloque.includes("role=\"img\" aria-label="), "Cada gráfico tiene descripción accesible y vista como tabla");
 ok(bloque.includes('<title>') && bloque.includes("captadores autorizados · "), "Cada columna del gráfico lleva su valor (tooltip y lector de pantalla)");

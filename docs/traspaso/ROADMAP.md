@@ -141,6 +141,8 @@ Estado: el Centro es la única vía para solicitudes, concesiones y seguimientos
 
 **Hecho el 25/10/2026 (ya no son pendientes):** filtro por responsable en Seguimientos (#223), exportar CSV de las cuatro listas y crear desde un día del Calendario (#224), logo transparente y nombre «Centro de Gestión de Recursos», menú con secciones desplegables con solo Informes abierta (#225), asignar responsable en bloque (#215), insignias con ayuda (#213).
 
+**Mi jornada (26/10/2026, rama `feat/mi-jornada`):** bandeja de trabajo priorizada como entrada del Centro (`docs/DISENO_MI_JORNADA.md`). Pendiente: revisión del titular con su sesión real, dos usuarios de provincias distintas, móvil físico y lector de pantalla; valorar un enlace por fila al día del Calendario y la actualización en tiempo real (hoy se ve al guardar o al volver a entrar).
+
 **Ideas de mejora tomadas de repositorios abiertos (revisión del 25/10/2026; se leyeron los READMEs y páginas de funciones de Zammad, Plane, Frappe CRM/Helpdesk, EspoCRM, OpenProject y Chapter, no su código; el esfuerzo es estimación propia).** Ideas 1, 2 y 3 hechas (ver arriba). Pendientes, en el orden recomendado:
 - **4. Vistas guardadas y compartidas** (Zammad overviews, Frappe CRM, Plane): guardarlas en Supabase (no en el navegador). Migración + RLS + prueba. Esfuerzo M.
 - **5. Plazos de respuesta configurables / SLA** (Zammad, Frappe): hoy «estancada» son 15 días fijos (`UMBRAL_ESTANCADA`); por provincia u ONG y «vence en N días». Tabla de configuración. M.
