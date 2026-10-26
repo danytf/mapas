@@ -1,0 +1,5 @@
+﻿tipo;osm;subtipo;nombre;municipio;lat;lon;motivo
+descartado;node/1181974884;;Oficina de Correos;Condado de Treviño;42.734191;-2.749214;fuera de las provincias del lote (09)
+descartado;node/2721550576;;Oficina de Correos;;42.994609;-3.008617;fuera de los municipios oficiales cargados
+descartado;node/9243447751;;Postetxea;Lezo;43.320167;-1.89952;texto excluido (express|citypaq|mail boxes|mrw|tipsa|dhl|unipost|abacus|la poste|ups|gls|akropost)
+descartado;way/230884099;;Postetxea;Zestoa;43.239329;-2.258273;duplicado en el lote de node/14094871484 (48 m)
