@@ -1,6 +1,6 @@
-# Carga N2 de Castilla-La Mancha (preparada)
+# Carga N2 de Castilla-La Mancha (cargada)
 
-Estado: **preparada el 26/10/2026, pendiente de carga en producción por el titular con `cargar.sh`**. Decimocuarta comunidad con el mismo procedimiento (ver `docs/CARGA_N2_ARAGON.md` y `docs/CARGA_N2_MADRID.md`). Las cinco provincias (02 Albacete, 13 Ciudad Real, 16 Cuenca, 19 Guadalajara y 45 Toledo) se cargan de una vez.
+Estado: **cargada en producción el 26/10/2026** por el titular con `cargar.sh` y verificada en solo lectura (ver «Cierre»). Decimocuarta comunidad con el mismo procedimiento (ver `docs/CARGA_N2_ARAGON.md` y `docs/CARGA_N2_MADRID.md`). Las cinco provincias (02 Albacete, 13 Ciudad Real, 16 Cuenca, 19 Guadalajara y 45 Toledo) se cargan de una vez.
 
 ## Origen
 - Fichero: `castilla-la-mancha-latest.osm.pbf` (Geofabrik, edición del **25/10/2026 21:21 UTC**, 107.455.262 bytes, MD5 `340e8788836b54719ca5fd6bf3a94d62` verificado contra el `.md5` de Geofabrik; guardado como `clm-latest.osm.pbf`), fuera del repositorio. OpenStreetMap, licencia ODbL.
@@ -30,7 +30,7 @@ Por provincia: Albacete 354, Ciudad Real 306, Cuenca 283, Guadalajara 416 y Tole
 - Carrefour (26) entra completo (Market y Express), por decisión del titular.
 - No probado en el PostgreSQL local (sin la contraseña en esta sesión).
 
-## Cómo cargar (con aprobación)
+## Cómo se cargó (con aprobación)
 Desde la raíz del repositorio, con `main` actualizada (`git pull origin main`), en este orden:
 ```
 bash scripts/catalogue/cargar.sh supabase/seeds/castilla-la-mancha/municipios municipios
@@ -39,4 +39,8 @@ bash scripts/catalogue/cargar.sh supabase/seeds/castilla-la-mancha/estaciones es
 bash scripts/catalogue/cargar.sh supabase/seeds/castilla-la-mancha/grandes-superficies grandes-superficies catalogo-castilla-la-mancha:castilla-la-mancha-grandes-superficies:
 bash scripts/catalogue/cargar.sh supabase/seeds/castilla-la-mancha/resto resto catalogo-castilla-la-mancha:castilla-la-mancha-resto:
 ```
-Después, en solo lectura: 919 municipios nuevos y 1.960 puntos (la base pasaría de 26.670 a 28.630 y los municipios de 4.119 a 5.038). Sin asignar a usuarios hasta terminar toda España (decisión del titular, 23/10/2026).
+Previsto en solo lectura: 919 municipios nuevos y 1.960 puntos (la base pasaría de 26.670 a 28.630 y los municipios de 4.119 a 5.038). Sin asignar a usuarios hasta terminar toda España (decisión del titular, 23/10/2026).
+
+## Cierre (26/10/2026)
+- **Carga verificada en solo lectura:** 919 municipios (Albacete 87, Ciudad Real 102, Cuenca 238, Guadalajara 288, Toledo 204) y 1.960 puntos (354, 306, 283, 416 y 601), 1.960 `source_ref` `catalogo-castilla-la-mancha:` distintos, ninguno sin coordenadas y ningún código postal con formato erróneo. Total de la base 26.670 -> 28.630 y municipios 4.119 -> 5.038.
+- **Pendiente:** 818 códigos postales (Albacete 89, Ciudad Real 119, Cuenca 160, Guadalajara 246, Toledo 204) y 41 calles (7, 4, 5, 7 y 18), por completar con Nominatim por provincia (`completar_cp_desde_base.py --prov NN --con-calle`) y `admin_set_postal_codes`; revisar los dudosos de «Calidad y límites». Sin asignar a usuarios hasta terminar España.
