@@ -4255,7 +4255,10 @@ const csvCell = (value) => {
     };
     const t = stat(d.pts);
     const byTipo = TIPOS.map(([, n]) => [n, stat(d.pts.filter((c) => c.tipo === n))]).filter(([, r]) => r.n);
-    const towns = {}; d.pts.forEach((c) => { const k = townOf(c); (towns[k] = towns[k] || []).push(c); });
+    /* Con varias provincias a la vista (administrador o usuario multiprovincia) la tabla es por provincia: por municipio saldrían miles de filas.
+       Con una sola provincia se mantiene por municipio, que sí es una lista corta y útil. */
+    const multiProv = new Set(d.pts.map((c) => c.province || "Sin provincia")).size > 1;
+    const towns = {}; d.pts.forEach((c) => { const k = multiProv ? (c.province || "Sin provincia") : townOf(c); (towns[k] = towns[k] || []).push(c); });
     const byTown = Object.entries(towns).map(([k, v]) => [k, stat(v)]).sort((a, b) => b[1].capt - a[1].capt || b[1].vig - a[1].vig || b[1].pend - a[1].pend || b[1].n - a[1].n || a[0].localeCompare(b[0]));
     const analitica = '<p class="pn-note">' + (ind.tasaResolucion === null ? "Todavía no hay solicitudes registradas." :
       "Resueltas (aprobadas, denegadas o retiradas): <b>" + ind.resueltas + " de " + ind.solicitudes + "</b> solicitudes (" + ind.tasaResolucion + " %). Las caducadas sin respuesta no cuentan como resueltas. " +
@@ -4264,8 +4267,8 @@ const csvCell = (value) => {
       GRUPOS.map(([g, ts]) => "<h3>" + esc(g) + '</h3><div class="kpis">' + (g === "Concesiones" ? tile("capacidadHoy", d) : "") + ts.map(([k]) => tile(k, d)).join("") + "</div>").join("") +
       analitica + capacidadOng(d) +
       "<h3>Por categoría</h3><div class=\"pn-scroll\"><table>" + thead("Categoría") + "<tbody>" + rowsHtml(byTipo, "tipo") + '<tr class="tot"><td>Total</td><td>' + t.n + "</td><td>" + t.pend + "</td><td>" + t.con + "</td><td>" + t.vig + "</td><td>" + t.capt + "</td></tr></tbody></table></div>" +
-      "<h3>Por municipio</h3><div class=\"pn-scroll\"><table>" + thead("Municipio") + "<tbody>" + rowsHtml(byTown, "town") + "</tbody></table></div>" +
-      '<div class="pn-note">Cada cifra cuenta lo que dice su rótulo: solicitudes, concesiones y seguimientos son registros individuales, y un punto con una concesión vigente y otra solicitud pendiente aparece en las dos. Pulsa una cifra para ver los registros exactos. Pulsa una fila de las tablas para filtrar el mapa por esa categoría o municipio. Los captadores no se suman entre registros de la misma ONG en un mismo punto (se toma el mayor) y sí entre ONG distintas.</div>';
+      "<h3>" + (multiProv ? "Por provincia" : "Por municipio") + "</h3><div class=\"pn-scroll\"><table>" + thead(multiProv ? "Provincia" : "Municipio") + "<tbody>" + rowsHtml(byTown, multiProv ? "prov" : "town") + "</tbody></table></div>" +
+      '<div class="pn-note">Cada cifra cuenta lo que dice su rótulo: solicitudes, concesiones y seguimientos son registros individuales, y un punto con una concesión vigente y otra solicitud pendiente aparece en las dos. Pulsa una cifra para ver los registros exactos. Pulsa una fila de las tablas para filtrar el mapa por esa categoría, provincia o municipio. Los captadores no se suman entre registros de la misma ONG en un mismo punto (se toma el mayor) y sí entre ONG distintas.</div>';
   };
   const detalle = (r) => {
     if (r.k === "sol") return [r.fecha ? "pedida el " + fmtD(r.fecha) : "", r.seg ? "seguimiento " + fmtD(r.seg) : "", r.resFecha ? "resuelta el " + fmtD(r.resFecha) : "", r.motivo ? "motivo: " + r.motivo : ""].filter(Boolean).join(" · ");
@@ -4315,6 +4318,7 @@ const csvCell = (value) => {
     const k = tr.dataset.k;
     if (tr.dataset.kind === "pt") { const c = CENTERS.find((x) => String(x.id) === k); if (c) { dlg.close(); document.dispatchEvent(new CustomEvent("centro:abrir", { detail: { punto: c, vista: tr.dataset.v || "sol", est: "todas" } })); } return; }
     $("#tipo").value = tr.dataset.kind === "tipo" ? k : ""; $("#q").value = tr.dataset.kind === "town" ? k : ""; $("#permiso").value = ""; $("#valor").value = ""; $("#cadena").value = "";
+    if (tr.dataset.kind === "prov") { $("#provincia").value = k; $("#provincia").dispatchEvent(new Event("change")); dlg.close(); return; } /* el cambio de provincia ya refiltra */
     dlg.close(); refilter();
   });
   body.addEventListener("change", (e) => {

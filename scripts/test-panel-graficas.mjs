@@ -54,4 +54,9 @@ assert.ok(!/<text /.test(m[0]), "El número central va como HTML con los tamaño
 assert.ok(/d\.recs\.length \? "" : '<p class="pn-vacio">/.test(html) && html.includes("Todavía no hay permisos que gestionar"), "Falta el estado vacío del panel");
 assert.ok(/\(valor === 0 \? " cero" : ""\)/.test(html) && /\.kpi\.cero b \{ color: var\(--muted\); \}/.test(html), "Las cifras en cero se atenúan");
 
+// 6) La tabla de abajo es por provincia cuando hay varias a la vista (por municipio daría miles de filas) y por municipio con una sola.
+assert.ok(/const multiProv = new Set\(d\.pts\.map\(\(c\) => c\.province \|\| "Sin provincia"\)\)\.size > 1;/.test(html), "Falta el criterio de varias provincias");
+assert.ok(/\(multiProv \? "Por provincia" : "Por municipio"\)/.test(html) && /thead\(multiProv \? "Provincia" : "Municipio"\)/.test(html) && /rowsHtml\(byTown, multiProv \? "prov" : "town"\)/.test(html), "El título, la cabecera y el tipo de fila dependen de multiProv");
+assert.ok(/tr\.dataset\.kind === "prov"\) \{ \$\("#provincia"\)\.value = k; \$\("#provincia"\)\.dispatchEvent\(new Event\("change"\)\)/.test(html), "Pulsar una fila de provincia filtra por esa provincia");
+
 console.log("test-panel-graficas: OK (anillo, leyenda, barras, límites y escapado)");
