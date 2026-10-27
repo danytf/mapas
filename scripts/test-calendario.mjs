@@ -13,7 +13,7 @@ const bloque = html.slice(a, fin + 7);
 assert.match(html, /<dialog id="dlgCal" aria-labelledby="calT">/, "dlgCal sin aria-labelledby");
 assert.match(html, /<h2 id="calT">Calendario semanal<\/h2>/, "Falta el título del diálogo");
 assert.match(html, /id="calBtn" type="button" role="menuitem">Calendario semanal<\/button>/, "Falta la opción «Calendario semanal» en el menú");
-assert.ok(bloque.includes('aria-label="Semana anterior"') && bloque.includes('aria-label="Semana siguiente"'), "Los botones de semana necesitan nombre accesible");
+assert.ok(bloque.includes('aria-label="Anterior"') && bloque.includes('aria-label="Siguiente"') && bloque.includes('"Mes anterior" : "Semana anterior"'), "Los botones de semana necesitan nombre accesible");
 assert.ok(bloque.includes("aria-pressed=\"' + ver.autorizada") && bloque.includes("setAttribute(\"aria-pressed\""), "Los filtros deben exponer aria-pressed");
 assert.ok(bloque.includes('role="status"') && bloque.includes('aria-labelledby="calH'), "Rango en role=status y cada día con su encabezado");
 assert.ok(bloque.includes('<span class="st">'), "Cada tarjeta debe llevar el estado también en texto (no solo color)");
@@ -39,7 +39,7 @@ assert.ok(bloque.includes('data-modo="ong"') && bloque.includes("tablaOng"), "Ha
 assert.ok(bloque.includes("Semana pasada:") && bloque.includes("no registrado"), "La semana pasada avisa de lo que no se puede reconstruir");
 
 // Movimiento: solo con preferencia de movimiento normal.
-assert.ok(/@media \(prefers-reduced-motion: no-preference\) \{ \.cal-stack \{ animation: calGrow/.test(html), "La animación debe respetar prefers-reduced-motion");
+assert.ok(!html.includes("cal-stack") && !html.includes("calGrow") && !html.includes("cal-sky"), "El gráfico de barras de cada día se retiró (la cifra y las tarjetas ya lo dicen) y, con él, su animación");
 
 // La vista semanal ya no está en el panel resumen.
 for (const t of ['id="wkBox"', "Permisos por semana", "data-wkdate", "wkRender"]) assert.ok(!html.includes(t), "Debe haberse quitado del panel resumen: " + t);
@@ -62,7 +62,7 @@ assert.ok(bloque.includes('if (e.target.id === "calProv") { prov = e.target.valu
 
 // Exportar a PDF (impresión del navegador: Imprimir → Guardar como PDF). Sin librerías, sin datos nuevos y sin guardar nada.
 assert.ok(/<button type="button" id="calPdf" class="cal-pdf"[^>]*>Exportar a PDF<\/button>/.test(bloque), "Falta el botón «Exportar a PDF»");
-assert.ok(/const exportaPdf = \(\) => \{[\s\S]*?window\.print\(\);\s*\};/.test(bloque) && bloque.includes('if (e.target.closest("#calPdf")) { exportaPdf(); return; }'), "El botón llama a la impresión del navegador");
+assert.ok(/const exportaPdf = \(\) => \{[\s\S]*?window\.print\(\);\s*\};/.test(bloque) && bloque.includes('if (e.target.closest("#calPdf")) { body.querySelector("details.cal-menu").open = false; exportaPdf(); return; }'), "El botón llama a la impresión del navegador");
 assert.ok(bloque.includes('id="calPrintHead"') && bloque.includes("Generado el ") && bloque.includes('window.addEventListener("afterprint", fin)'), "La hoja lleva su cabecera (rango, provincia, ONG, filtros y fecha) y se restablece al terminar de imprimir");
 assert.ok(bloque.includes('const eraModal = dlg.matches(":modal"); if (eraModal) { dlg.close(); dlg.show(); }') && bloque.includes("dlg.close(); dlg.showModal();"), "Durante la impresión el diálogo se muestra como no modal (en la capa superior no se pagina bien) y se restablece");
 const ini = html.indexOf("@page cal {");
@@ -70,7 +70,7 @@ assert.ok(ini >= 0, "Faltan los estilos de impresión del Calendario");
 const imp = html.slice(ini, html.indexOf("\n  }\n", ini) + 4);
 assert.ok(imp.includes("@page cal { size: A4 landscape;") && imp.includes("body.imprime-cal { page: cal; }"), "La hoja es A4 apaisado");
 assert.ok(imp.includes("body.imprime-cal > :not(#dlgCal) { display: none !important; }"), "Al imprimir solo se ve el Calendario");
-assert.ok(imp.includes("#dlgCal .cal-bar, body.imprime-cal #dlgCal .cal-filters, body.imprime-cal #dlgCal .cal-links { display: none !important; }"), "Los controles no salen en el PDF");
+assert.ok(imp.includes("#dlgCal .cal-top, body.imprime-cal #dlgCal .cal-sub, body.imprime-cal #dlgCal .cal-ayuda { display: none !important; }"), "Los controles no salen en el PDF");
 assert.ok(!/\.cal-card[^{}]*\{[^}]*break-inside/.test(imp), "break-inside en las tarjetas cuelga a Chrome al paginar (cientos de tarjetas): no se usa");
 assert.ok(imp.includes(".cal-wk { min-width: 0; grid-template-columns: repeat(7, minmax(0, 1fr));") && imp.includes(".cal-scroll, body.imprime-cal #dlgCal .pn-scroll, body.imprime-cal #dlgCal .cal-day { overflow: visible; }"), "La semana se ajusta al ancho de la hoja y sin zonas con desplazamiento");
 // La hoja siempre en claro: cada variable que redefine el modo oscuro vuelve a su valor claro en la impresión.
@@ -98,7 +98,7 @@ assert.ok(bloque.includes("const drawDia = (dias, t) =>") && bloque.includes('da
 assert.ok(bloque.includes("const panelAccion = async (a, i) =>") && bloque.includes("api.conceder(r)") && bloque.includes("api.denegar(r, motivo)"), "Conceder y denegar usan la API del Centro");
 assert.ok(/window\.mapaAccionesCalendario = \{\s*conceder: \(r\) => ejecuta\(r\.c, mutadores\.conceder\(r\)/.test(html) && html.includes('denegar: (r, motivo) => ejecuta(r.c, mutadores.resolver(r, "denegada", motivo || ""), '), "El Centro expone conceder y denegar con su misma escritura verificada");
 assert.ok(html.includes("if (!body.firstChild) return; /* el Centro aún no se ha abierto"), "El Centro no repinta si nunca se abrió (se concede desde el Calendario)");
-assert.ok(bloque.includes('<span class="cal-ch \' + (i.e === "pendiente" ? "p" : "a")') && bloque.includes("chips.slice(0, 3)") && bloque.includes('" más</span>"'), "Las celdas del mes llevan chips (hasta 3 y «+n más»)");
+assert.ok(bloque.includes('<span class="cal-ch \' + (i.e === "pendiente" ? "p" : "a")') && bloque.includes("chips.slice(0, 2)") && bloque.includes('<span class="mas-t"> más</span>'), "Las celdas del mes llevan chips (hasta 2 y «+n más»)");
 assert.ok(bloque.includes("const nuevaDesde = (tipo, dia) =>"), "Un solo punto de entrada para abrir el formulario desde el Calendario");
 // Al entrar se abre el Calendario en vista mensual (una vez por sesión, en memoria) y esa es la vista por defecto.
 assert.ok(/ong = "", modo = "mes",/.test(bloque), "La vista por defecto es el mes");
