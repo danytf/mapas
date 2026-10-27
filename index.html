@@ -33,7 +33,7 @@
     /* Categorías (pin, número de la lista y leyenda) */
     --cat-hospital: #c0392b; --cat-salud: #0b7a68; --cat-super: #b83280; --cat-centro: #2b6cb0; --cat-oficial: #475569; --cat-gimnasio: #d9730d;
     --cat-ikea: #e0a800; --cat-leroy: #65a30d; --cat-decathlon: #0891b2; --cat-carrefour: #7c3aed; --cat-correos: #a16207; --cat-eci: #15803d;
-    --cat-bricolaje: #92400e; --cat-mediamarkt: #dc2626; --cat-estaciones: #78716c; --cat-tiendas: #be185d; --cat-eventos: #4f46e5; --cat-otra: #475569; --cat-defecto: #0b7a68;
+    --cat-bricolaje: #92400e; --cat-mediamarkt: #dc2626; --cat-estaciones: #78716c; --cat-tiendas: #701a75; --cat-eventos: #4f46e5; --cat-otra: #475569; --cat-defecto: #0b7a68;
     /* Estado del pin y de la leyenda, confeti, niebla de conquista y cuadro de resultado de la ubicación */
     --pin-sin: #ffffff; --pin-sin-line: #9aa8a4; --pin-solicitado: #fbbf24; --pin-concedido: #22c55e; --pin-denegado: #111827; --pin-caducado: #94a3b8; --pin-cancelado: #dc2626;
     --confetti-1: #22c55e; --confetti-2: #fbbf24; --confetti-3: #ef4444; --confetti-4: #3b82f6; --confetti-5: #a855f7; --confetti-6: #f97316;
@@ -58,7 +58,7 @@
     --st-concedido: #16a34a; --st-solicitado: #d97706; --st-caducado: #7c8aa0; --st-denegado: #475569; --st-cancelado: #dc2626;
     --ch-aut: #16a34a; --ch-dem: #d97706; --ch-1: #3b6fb6; --ch-a1: #8794ab; --ch-a2: #61708a; --ch-a3: #3d4b66;
     /* Grupos de marcadores por densidad (.cl.n1 a .n4): fondos fijos en claro y oscuro con texto blanco (5,0, 8,8 y 5,9 a 1; los --ch-* se invierten en oscuro y no sirven aquí). */
-    --cl-n1: #61708a; --cl-n2: #3d4b66; --cl-n4: #c8102e;
+    --cl-n1: #61708a; --cl-n2: #3d4b66; --cl-n4: #090d15;
     --t: 160ms;
     color-scheme: light; /* controles nativos (casillas, fechas, desplegables, barras) con el tema claro */
     --shadow: 0 1px 2px rgba(23,27,35,.06), 0 6px 20px rgba(23,27,35,.09);
@@ -243,7 +243,7 @@
   .cl { width: 100%; height: 100%; border-radius: 50%; display: grid; place-items: center; background: var(--ink); color: #fff; border: 3px solid #fff; box-sizing: border-box; box-shadow: 0 3px 10px rgba(23,27,35,.38); font: 650 12px var(--font); font-variant-numeric: tabular-nums; }
   .cl span { display: block; }
   .cl.big { font-size: var(--fs-label-lg); }
-  /* Grupos por densidad: del gris azulado (pocos puntos) al rojo de marca (miles), con tamaño creciente. */
+  /* Grupos por densidad: del gris azulado (pocos puntos) a la tinta más oscura (miles), con tamaño creciente. El rojo de marca queda para lo que pide atención, no para una zona con muchos puntos. */
   .cl.n1 { background: var(--cl-n1); }
   .cl.n2 { background: var(--cl-n2); }
   .cl.n3 { background: var(--ink); font-size: var(--fs-label-lg); }
@@ -624,7 +624,7 @@
   .cal-past { padding: 10px 12px; border: 1px solid var(--line-2); border-radius: var(--r-card); background: var(--panel); margin: 0 0 12px; }
   .cal-sum .t b { color: var(--fg); }
   .cal-seg { margin: 0; padding: 0 12px 8px; font-size: var(--fs-label); font-weight: 600; color: var(--fg); }
-  .cal-seg.late { color: var(--warn); }
+  .cal-seg.late { color: var(--err); font-weight: 600; }
   .cal-warn { font-size: var(--fs-label); font-weight: 650; color: var(--warn); }
   .cal-card.s-seguimiento { --st: var(--fg); --st-fg: var(--fg); border-left-style: double; }
   .cal-chip.s-seguimiento { --st: var(--fg); }
@@ -644,7 +644,7 @@
   .cal-m.hoy .d { color: var(--accent); }
   .cal-m .m, .cal-m .sg { font-size: var(--fs-label); font-variant-numeric: tabular-nums; color: var(--fg); }
   .cal-m .sg { color: var(--muted); }
-  .cal-m .sg.late { color: var(--accent); font-weight: 600; }
+  .cal-m .sg.late { color: var(--err); font-weight: 600; }
   .cal-links { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 14px; font-size: var(--fs-label); color: var(--muted); }
   .cal-links button { height: 32px; padding: 0 13px; font-size: var(--fs-label); border-radius: var(--r-pill); }
   .cal-new { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 12px 8px; }
@@ -4667,7 +4667,7 @@ const csvCell = (value) => {
     cancelada: ["Cancelada", "cancelado", true], desconocida: ["Estado ese día no registrado", "caducado", true]
   };
   const mesDe = (d) => MES[+d.slice(5, 7) - 1];
-  const hue = (s) => { let h = 7; for (const ch of s) h = (h * 31 + ch.codePointAt(0)) % 360; return h; };
+  const hue = (s) => { let h = 7; for (const ch of s) h = (h * 31 + ch.codePointAt(0)) % 360; return h >= 70 && h <= 170 ? h + 120 : h; }; /* sin verdes: es el tono de «Concesión» */
   const plural = (n, uno, varios) => n + " " + (n === 1 ? uno : varios);
   let wk = mondayOf(today()), prov = null, ong = "", modo = "dias"; /* prov: null hasta la primera apertura; "" = todas las provincias */
   const ver = { autorizada: true, pendiente: true, seguimiento: true, historico: false }; /* qué se muestra; el histórico va apagado */
