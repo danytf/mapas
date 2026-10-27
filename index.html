@@ -1082,13 +1082,17 @@
   #ceBody .jo-banda h3 { margin: 0 0 6px; font-size: var(--fs-label); font-weight: 650; color: var(--muted); display: flex; align-items: center; gap: 8px; }
   .jo-n { min-width: 22px; height: 22px; padding: 0 6px; border-radius: var(--r-pill); background: var(--line); color: var(--fg); display: inline-grid; place-items: center; font-variant-numeric: tabular-nums; }
   #ceBody .jo-lista { display: grid; gap: 6px; }
-  #ceBody .jo-fila { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 4px 12px; align-items: start; padding: 10px 12px; background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--line-2); border-radius: var(--r-card); cursor: pointer; }
-  #ceBody .jo-fila.b-urgente { border-left-color: var(--accent); }
-  #ceBody .jo-fila.b-hoy { border-left-color: var(--st-solicitado); }
+  #ceBody .jo-fila { display: grid; grid-template-columns: 32px minmax(0, 1fr) auto; gap: 4px 12px; align-items: center; padding: 8px 12px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-card); cursor: pointer; }
   #ceBody .jo-fila:hover { background: var(--ok-bg); }
   #ceBody .jo-fila.is-sel { background: var(--accent-soft); }
   .jo-chk { display: grid; place-items: start center; }
-  .jo-main { min-width: 0; display: grid; gap: 3px; }
+  .jo-main { min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1px 16px; align-items: baseline; }
+  .jo-main > .ce-pt { grid-column: 1; grid-row: 1; }
+  .jo-main > .jo-motivo { grid-column: 2; grid-row: 1; justify-self: end; }
+  .jo-main > .jo-meta, .jo-main > .jo-sig { grid-column: 1 / -1; }
+  #ceBody .jo-main .ce-pt { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 8px; }
+  #ceBody .jo-main .ce-pt span { display: inline; }
+  .jo-main .jo-extra { white-space: nowrap; }
   .jo-main p { margin: 0; }
   .jo-meta { display: flex; flex-wrap: wrap; gap: 2px 12px; align-items: center; color: var(--muted); font-size: var(--fs-label); }
   .jo-tipo { font-weight: 600; color: var(--fg); }
@@ -1123,6 +1127,8 @@
     .ce-tabla tr.ce-confrow td { display: block; }
     .ce-tabla tr.ce-confrow td::before { content: none; }
     #ceBody .jo-fila { grid-template-columns: 36px minmax(0, 1fr); }
+    .jo-main { grid-template-columns: minmax(0, 1fr); }
+    .jo-main > .ce-pt, .jo-main > .jo-motivo { grid-column: 1; grid-row: auto; justify-self: start; }
     #ceBody[data-vista="jor"] .ce-filtros { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     #ceBody[data-vista="jor"] .ce-filtros .cal-f { min-width: 0; }
     #ceBody[data-vista="jor"] .ce-filtros select, #ceBody[data-vista="jor"] .ce-filtros input { min-width: 0 !important; width: 100% !important; }
@@ -5377,16 +5383,17 @@ const csvCell = (value) => {
     const metas = '<span class="jo-tipo">' + esc(sinExp ? "Seguimiento del punto" : x.k === "sol" ? "Solicitud" : "Concesión") + "</span>" +
       (sinExp ? "" : badge(x.r.est) + "<span>" + esc(ongDe(x)) + "</span><span>" + esc(periodo(x.r)) + "</span><span>" + esc(x.r.n ? plural(x.r.n, "captador", "captadores") : "Sin captadores indicados") + "</span>");
     const fr = [x.fecha.v ? x.fecha.et + " " + fmtD(x.fecha.v) : "", x.seg ? "Responsable: " + (x.resp ? quienJ(x.resp) : "sin responsable") : ""].filter(Boolean);
-    const extras = x.extras.length ? '<p class="jo-extra">También: ' + esc(x.extras.slice(0, 3).join(" · ") + (x.extras.length > 3 ? " y " + (x.extras.length - 3) + " más" : "")) + "</p>" : "";
+    const tambien = x.extras.slice(0, 3).join(" · ") + (x.extras.length > 3 ? " y " + (x.extras.length - 3) + " más" : "");
+    const extras = x.extras.length ? '<span class="jo-extra" title="También: ' + esc(tambien) + '">+' + x.extras.length + ' más <span class="adm-sr">También: ' + esc(tambien) + "</span></span>" : "";
     const hecho = x.segDue ? '<button type="button" class="ce-act ok" data-act="hecho" data-key="' + esc(clave(x.seg)) + '" aria-label="Marcar como hecho el seguimiento de ' + esc(nombre) + '"' + dis + ">Hecho</button>" : "";
     const cambia = x.segDue && x.c.databaseId ? '<button type="button" class="ce-act" data-act="edseg" data-key="' + esc(clave(x.seg)) + '" aria-label="Cambiar la fecha del seguimiento de ' + esc(nombre) + '"' + dis + ">Cambiar fecha</button>" : "";
     const abre = '<button type="button" class="ce-act' + (x.segDue ? "" : " pri") + '" data-sel="' + esc(key) + '" aria-label="Abrir el expediente de ' + esc(nombre) + '">Abrir</button>';
     return '<li class="jo-fila b-' + x.banda + (sel === key ? " is-sel" : "") + '" data-key="' + esc(key) + '"><div class="jo-chk">' +
       (x.segDue ? '<label class="ce-chkl"><input type="checkbox" data-chk="' + esc(clave(x.seg)) + '" aria-label="Seleccionar el seguimiento de ' + esc(nombre) + '"' + (multi.has(clave(x.seg)) ? " checked" : "") + dis + "></label>" : "") + "</div>" +
       '<div class="jo-main"><button type="button" class="ce-pt" data-sel="' + esc(key) + '"><strong>' + esc(nombre) + "</strong><span>" + esc(lugar) + "</span></button>" +
-      '<p class="jo-meta">' + metas + "</p>" +
-      '<p class="jo-motivo"><span class="ce-sev ' + banda[2] + '"><i aria-hidden="true"></i>' + esc(banda[3]) + "</span><strong>" + esc(x.principal.texto) + "</strong></p>" + extras +
-      '<p class="jo-sig"><b>Siguiente:</b> ' + esc(x.siguiente) + "</p>" + (fr.length ? '<p class="jo-fr">' + esc(fr.join(" · ")) + "</p>" : "") + "</div>" +
+      '<p class="jo-motivo"><span class="ce-sev ' + banda[2] + '"><i aria-hidden="true"></i>' + esc(banda[3]) + "</span><strong>" + esc(x.principal.texto) + "</strong>" + extras + "</p>" +
+      '<p class="jo-meta">' + metas + (fr.length ? '<span class="jo-fr">' + esc(fr.join(" · ")) + "</span>" : "") + "</p>" +
+      '<p class="jo-sig"><b>Siguiente:</b> ' + esc(x.siguiente) + "</p></div>" +
       '<div class="jo-acts">' + hecho + cambia + abre + "</div></li>";
   };
   const drawJornada = (filasJ, hayExpedientes) => {
@@ -5440,7 +5447,7 @@ const csvCell = (value) => {
         return '<section class="jo-banda" aria-labelledby="joB-' + id + '"><h3 id="joB-' + id + '">' + esc(titulo) + ' <span class="jo-n">' + total + '</span></h3><ul class="jo-lista">' + enPantalla.map(filaJ).join("") + "</ul></section>";
       }).join("") + (vis.length > mostradas.length ? '<p class="ce-more"><button type="button" data-mas="1">Mostrar ' + Math.min(TRAMO, vis.length - mostradas.length) + " más</button></p>" : "");
     }
-    lista.innerHTML = cab + chips + sinVolcar + barra + cuerpo + orden;
+    lista.innerHTML = cab + chips + orden + sinVolcar + barra + cuerpo;
     drawLote(); drawDetalle();
     const mot = body.querySelector("#ceMotivo");
     if (mot) { mot.focus(); return; }
