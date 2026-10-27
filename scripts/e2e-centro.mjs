@@ -662,7 +662,7 @@ const main = async () => {
     document.getElementById('menuBtn').click(); document.getElementById('calBtn').click(); await w(800);
     const cb = () => document.getElementById('calBody'); cb().querySelector('[data-modo=mes]').click(); await w(500);
     out.mes = [cb().querySelector('#calRange').textContent, cb().querySelectorAll('.cal-m').length]; const hoy = cb().querySelector('.cal-m.hoy'); out.aut = hoy.querySelector('.m .a')?.parentElement.textContent.trim() || '0';
-    hoy.click(); await w(400); out.semana = cb().querySelector('.cal-day.today .cal-tot')?.innerText.replace(/\\n/g,' ') || ''; cb().querySelector('[data-centro="seg:todas"]').click(); await w(800);
+    cb().querySelector('[data-modo=dias]').click(); await w(400); out.semana = cb().querySelector('.cal-day.today .cal-tot')?.innerText.replace(/\\n/g,' ') || ''; cb().querySelector('[data-centro="seg:todas"]').click(); await w(800);
     out.desdeCalendario = [document.getElementById('dlgCentro').open, b().dataset.vista];
     document.getElementById('ceClose').click(); await w(200); document.getElementById('menuBtn').click(); document.getElementById('panelBtn').click(); await w(500);
     document.querySelector('#pnBody [data-ind=pendientes]').click(); await w(300); document.getElementById('pnCentro').click(); await w(800); out.desdePanel = [document.getElementById('dlgCentro').open, b().dataset.vista, document.getElementById('ceEst').selectedOptions[0].value];
