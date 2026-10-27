@@ -23,7 +23,7 @@ const orden = ["fi-top", "fi-state", "fi-rate", "fi-contact", "fi-loc", "fi-foot
 assert.ok(orden.every((n, i) => n > 0 && (i === 0 || n > orden[i - 1])), "El orden de la ficha debe ser cabecera, estado, valoración, contacto, ubicación y pie");
 assert.ok(ficha.includes('class="fi-addrrow"') && ficha.includes("Cómo llegar"), "La dirección y «Cómo llegar» van en la cabecera");
 assert.ok(ficha.includes('class="fi-flag"') && ficha.includes("f-rev"), "El aviso de ubicación por revisar y su acción van en la cabecera");
-assert.ok(ficha.includes("Próximo seguimiento") === true && html.includes("(toca ya)"), "El próximo seguimiento debe verse siempre");
+assert.ok(ficha.includes("Próximo seguimiento") === true && html.includes("(atrasado)") && html.includes("(hoy)"), "El próximo seguimiento debe verse siempre");
 
 // Todo lo que usan los manejadores sigue existiendo (se localizan por clase).
 for (const k of ["pform", "ef", "pinfo", "stars", "sv", "f-contacto", "f-notas", "f-centro", "fi-loc", "l-in", "l-address", "l-save-location", "l-mv", "l-cp", "lmsg", "l-gm", "f-save", "f-inact", "f-arch", "f-del", "f-rev", "saved"]) {
