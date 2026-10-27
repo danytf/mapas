@@ -1394,7 +1394,7 @@
     </details>
     <details class="ay-sec"><summary>Mi jornada</summary>
       <ul>
-        <li>Es la bandeja de trabajo: al entrar se abre sola si hay algo que hacer (y una sola vez por sesión). «Ir al mapa» o la × la cierran; vuelve a estar en el menú (Informes → Mi jornada) y como primera sección del Centro de permisos.</li>
+        <li>Es la bandeja de trabajo: se abre desde el menú (Informes → Mi jornada) y es la primera sección del Centro de permisos. «Ir al mapa» o la × la cierran.</li>
         <li>Junta en una lista, de lo más a lo menos urgente: seguimientos atrasados y de hoy, solicitudes pendientes sin seguimiento, estancadas o cuyo periodo empieza en 7 días, concesiones que terminan en 7 días y datos que revisar. Cada expediente sale una sola vez, con su motivo principal y, en «También», los demás.</li>
         <li>«Hecho» y «Cambiar fecha» actúan sobre el seguimiento de esa fila; «Abrir» enseña el expediente al lado, con todas sus acciones y el botón para ir a su sección. Nada se da por hecho hasta que Supabase lo confirma, y el foco pasa a la siguiente tarea.</li>
         <li>Las vistas rápidas (Urgentes, Para hoy, Sin seguimiento, Todas) se combinan con la provincia, la ONG, el responsable, el tipo y la búsqueda; cada número dice lo que saldría al elegirlo. «Quitar filtros» lo deja todo como al principio. La bandeja nunca cambia el estado de un permiso por el paso del tiempo.</li>
@@ -4707,7 +4707,7 @@ const csvCell = (value) => {
   const mesDe = (d) => MES[+d.slice(5, 7) - 1];
   const hue = (s) => { let h = 7; for (const ch of s) h = (h * 31 + ch.codePointAt(0)) % 360; return h >= 70 && h <= 170 ? h + 120 : h; }; /* sin verdes: es el tono de «Concesión» */
   const plural = (n, uno, varios) => n + " " + (n === 1 ? uno : varios);
-  let wk = mondayOf(today()), prov = null, ong = "", modo = "dias"; /* prov: null hasta la primera apertura; "" = todas las provincias */
+  let wk = mondayOf(today()), prov = null, ong = "", modo = "mes"; /* vista por defecto: el mes; prov: null hasta la primera apertura; "" = todas las provincias */
   const ver = { autorizada: true, pendiente: true, seguimiento: true, historico: false }; /* qué se muestra; el histórico va apagado */
 
   const provOpts = () => {
@@ -4927,6 +4927,12 @@ const csvCell = (value) => {
     else if (e.target.id === "calDate" && e.target.value) { wk = mondayOf(e.target.value); draw(); }
   });
   $("#calBtn").addEventListener("click", abrir);
+  /* Al entrar en la aplicación se abre el Calendario, en vista mensual, una vez por sesión (solo en memoria): es el punto de partida de coordinadores y RGR. Si ya hay otro diálogo abierto, no se interpone. */
+  let abiertoAlEntrar = false;
+  document.addEventListener("sesion:lista", () => {
+    if (abiertoAlEntrar) return; abiertoAlEntrar = true;
+    setTimeout(() => { try { if (!document.querySelector("dialog[open]")) abrir(); } catch (e) { console.error("[Mapa] No se pudo abrir el Calendario al entrar:", e); } }, 0);
+  });
   $("#calClose").addEventListener("click", () => dlg.close());
 })();
 
@@ -4967,7 +4973,7 @@ const csvCell = (value) => {
   const corto = (d) => (+d.slice(8)) + " " + MES[+d.slice(5, 7) - 1];
   const diaSem = (d) => DIA[(new Date(d + "T00:00:00Z").getUTCDay() + 6) % 7];
   let vista = "jor", prov = "", ong = "", resp = "", q = "", mostrar = TRAMO, ocupado = false, aviso = ""; /* resp: filtro de responsable en Seguimientos y en Mi jornada ("" todos, "__ninguno" sin responsable, o el id de una persona) */
-  let rapida = "todas", jorFoco = null, jorMapa = new Map(), jorVis = [], jorAbierta = false, jorSnap = null, nProv = 0, volverJor = null; /* Mi jornada: vista rápida; dónde devolver el foco tras una acción; fila de cada clave; filas dibujadas; si ya se abrió sola al entrar; últimas filas confirmadas; cuántas provincias tiene el usuario; filtro de punto que había antes de «Abrir en…» */
+  let rapida = "todas", jorFoco = null, jorMapa = new Map(), jorVis = [], jorSnap = null, nProv = 0, volverJor = null; /* Mi jornada: vista rápida; dónde devolver el foco tras una acción; fila de cada clave; filas dibujadas; si ya se abrió sola al entrar; últimas filas confirmadas; cuántas provincias tiene el usuario; filtro de punto que había antes de «Abrir en…» */
   let punto = null;  /* si se llega desde la ficha, el Panel o el Calendario: solo los expedientes de ese punto */
   let accion = null; /* confirmación en línea de una fila: { a, key } */
   let soloForm = false; /* formulario abierto desde un día del Calendario: el Centro enseña solo el formulario, encima del Calendario */
@@ -5907,11 +5913,7 @@ const csvCell = (value) => {
   };
   $("#jornadaBtn").addEventListener("click", () => abrir({ vista: "jor" }));
   $("#menuBtn").addEventListener("click", () => { let n = null; try { n = cuentaJornada(); } catch (e) { console.error(e); } $("#jornadaBtn").textContent = n ? "Mi jornada (" + n + ")" : "Mi jornada"; }, true);
-  /* Al entrar, Mi jornada se abre sola si hay algo que hacer (una vez por sesión, solo en memoria); el mapa queda detrás, a un clic de «Ir al mapa». */
-  document.addEventListener("sesion:lista", () => {
-    if (jorAbierta) return; jorAbierta = true;
-    setTimeout(() => { try { if (cuentaJornada() > 0 && !dlg.open) abrir({ vista: "jor" }); } catch (e) { console.error("[Mapa] No se pudo abrir Mi jornada:", e); } }, 0);
-  });
+  /* Mi jornada ya no se abre sola al entrar (ahora lo hace el Calendario): se abre desde el menú y desde el Centro. */
   $("#ceClose").addEventListener("click", () => dlg.close());
 })();
 

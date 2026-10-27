@@ -282,7 +282,7 @@ const nombres = (J) => J.map((f) => f.c.name);
   ok((bloque.match(/\bjornada\((recs|recsAmb),/g) || []).length === 2 && bloque.includes("filasJ = (vista") && bloque.includes("resumenDatos(recsAmb, segsAmb, t, incsAmb, filasJ)"), "la bandeja se calcula una vez por dibujo y la comparten navegación, Resumen y lista (sin procesamientos repetidos)");
   ok(!/localStorage|sessionStorage|indexedDB|document\.cookie|caches\./.test(pantalla + trozo("  /* Mi jornada: entrada del menú", "  $(\"#ceClose\")")), "Mi jornada no usa almacenamiento del navegador");
   ok(bloque.includes("let vista = \"jor\"") && bloque.includes('["jor", "Mi jornada"]'), "Mi jornada es la primera sección del Centro");
-  ok(bloque.includes('document.addEventListener("sesion:lista"') && bloque.includes("cuentaJornada() > 0 && !dlg.open") && bloque.includes("if (jorAbierta) return; jorAbierta = true;"), "se abre sola al entrar, una vez por sesión, solo si hay trabajo (el flag vive en memoria)");
+  ok(!bloque.includes('document.addEventListener("sesion:lista"') && !html.includes("jorAbierta"), "Mi jornada ya no se abre sola al entrar: lo hace el Calendario (se abre desde el menú y desde el Centro)");
   ok((html.match(/document\.dispatchEvent\(new CustomEvent\("sesion:lista"\)\)/g) || []).length === 2, "el evento de sesión lista se emite al iniciar sesión y al recuperarla");
   ok(html.includes('id="jornadaBtn" type="button" role="menuitem">Mi jornada</button>') && bloque.includes('"Mi jornada (" + n + ")"'), "entrada de menú con el número de actuaciones");
   ok(bloque.includes("[data-mapa]") && pantalla.includes('data-mapa="1">Ir al mapa'), "acción clara para ir al mapa");

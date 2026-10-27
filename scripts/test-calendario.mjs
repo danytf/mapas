@@ -95,4 +95,7 @@ assert.ok(/<button type="button" class="primary cal-nueva" data-nuevo="sol" data
 // Vista mensual: pinchar un día (desde hoy) crea la solicitud de ese día; un día pasado sigue llevando a su semana.
 assert.ok(bloque.includes('if (dd && modo === "mes" && dd.dataset.dia >= today()) { nuevaDesde("sol", dd.dataset.dia); return; }'), "En el mes, pinchar un día desde hoy crea la solicitud de ese día");
 assert.ok(bloque.includes("const nuevaDesde = (tipo, dia) =>"), "Un solo punto de entrada para abrir el formulario desde el Calendario");
+// Al entrar se abre el Calendario en vista mensual (una vez por sesión, en memoria) y esa es la vista por defecto.
+assert.ok(/prov = null, ong = "", modo = "mes";/.test(bloque), "La vista por defecto es el mes");
+assert.ok(bloque.includes('document.addEventListener("sesion:lista"') && bloque.includes("if (abiertoAlEntrar) return; abiertoAlEntrar = true;") && bloque.includes('if (!document.querySelector("dialog[open]")) abrir();'), "Al entrar se abre el Calendario una vez por sesión, sin interponerse a otro diálogo abierto");
 console.log("Calendario semanal: comprobaciones estáticas correctas.");

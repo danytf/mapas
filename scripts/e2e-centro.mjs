@@ -67,7 +67,7 @@ const main = async () => {
   const ayudas = `const w=(ms)=>new Promise(r=>setTimeout(r,ms)); const b=()=>document.getElementById('ceBody'); const nav=(v)=>{b().querySelector('#ceNav [data-vista='+v+']').click();};
     const set=(id,v)=>{const e=b().querySelector('#'+id); e.value=v; e.dispatchEvent(new Event('input',{bubbles:true})); e.dispatchEvent(new Event('change',{bubbles:true}));};
     const d=(k)=>new Date(Date.now()+k*864e5).toISOString().slice(0,10);`;
-  const abre = async (usuario, ancho = 1440, alto = 900, { sinSeed = false, sinCentro = false } = {}) => {
+  const abre = async (usuario, ancho = 1440, alto = 900, { sinSeed = false, sinCentro = false, deja = false } = {}) => {
     await fetch(MOCK + "/__reset"); if (!sinSeed) await seed(MOCK);
     await c.send("Emulation.setDeviceMetricsOverride", { width: ancho, height: alto, deviceScaleFactor: 1, mobile: ancho < 700 });
     await c.send("Page.navigate", { url: WEB + "/?u=" + Date.now() });
@@ -76,8 +76,9 @@ const main = async () => {
     await ev("const ins=[...document.querySelectorAll('#login input')]; ins[0].value=" + JSON.stringify(usuario) + "; ins[1].value='x'; ins.forEach(i=>i.dispatchEvent(new Event('input',{bubbles:true}))); document.querySelector('#login button[type=submit]').click(); return 1;");
     try { await hasta(() => ev("return !!window.mapaSession && /cargados|No hay establecimientos/.test(document.getElementById('status').textContent);"), 30000, "el inicio de sesión de " + usuario); }
     catch (e) { throw new Error(e.message + " (estado: " + JSON.stringify(await ev("return { sesion: !!window.mapaSession, estado: document.getElementById('status').textContent, login: getComputedStyle(document.getElementById('login')).display, leaflet: typeof L, supabase: typeof window.supabase };")) + ")"); }
-    if (sinCentro) { await esperaMs(1500); return; } /* sin abrir el Centro a mano: Mi jornada se abre sola si hay trabajo */
-    await ev("document.getElementById('menuBtn').click(); document.getElementById('centroBtn').click(); await new Promise(r=>setTimeout(r,1200)); return 1;");
+    /* Al entrar se abre sola el Calendario (mensual). sinCentro: no se abre el Centro a mano; Mi jornada se abre desde el menú, salvo con deja (se deja como entra la aplicación). */
+    if (sinCentro) { await esperaMs(1500); if (!deja) await ev("const k = document.getElementById('dlgCal'); if (k.open) k.close(); document.getElementById('menuBtn').click(); document.getElementById('jornadaBtn').click(); await new Promise(r => setTimeout(r, 900)); return 1;"); return; }
+    await ev("const k = document.getElementById('dlgCal'); if (k && k.open) k.close(); document.getElementById('menuBtn').click(); document.getElementById('centroBtn').click(); await new Promise(r=>setTimeout(r,1200)); return 1;");
   };
   const postAdmin = async (tabla, fila) => {
     const ses = await (await fetch(MOCK + "/auth/v1/token?grant_type=password", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: "admin@test.es", password: "x" }) })).json();
@@ -313,7 +314,7 @@ const main = async () => {
   const r3g = await ev(ayudas + `
     const out = {}; const rel = () => fetch('http://127.0.0.1:8766/__rel').then(r => r.json()); const cb = () => document.getElementById('calBody'); const t = today();
     if (document.getElementById('dlgCentro').open) { document.getElementById('ceClose').click(); await w(200); }
-    document.getElementById('menuBtn').click(); document.getElementById('calBtn').click(); await w(900);
+    document.getElementById('menuBtn').click(); document.getElementById('calBtn').click(); await w(900); document.getElementById('calBody').querySelector('[data-modo=dias]').click(); await w(400); /* el Calendario abre en vista mensual */
     const dias = [...cb().querySelectorAll('.cal-day')].map(d => ({ sol: d.querySelector('[data-nuevo=sol]')?.dataset.nuevoDia || null, con: d.querySelector('[data-nuevo=con]')?.dataset.nuevoDia || null }));
     out.dias = dias.length; out.conSol = dias.filter(d => d.sol).length; out.conCon = dias.filter(d => d.con).length; out.solPasado = dias.some(d => d.sol && d.sol < t);
     const dia = dias.find(d => d.sol && d.sol >= t).sol; out.dia = dia;
@@ -327,7 +328,7 @@ const main = async () => {
     const r = await rel(); const a = r.permit_applications.find(x => x.organization === 'ONG Calendario E2E'); out.guardada = a ? [a.requested_from, a.requested_until, a.status] : null; out.aviso = cb().querySelector('#calAviso').textContent;
     out.volver = [!document.getElementById('dlgCentro').open, document.getElementById('dlgCal').open, !document.getElementById('dlgCentro').classList.contains('solo-form'), document.getElementById('ceT').textContent, !cb().querySelector('#calAviso').hidden && cb().querySelector('#calAviso').textContent.length > 0, cb().textContent.includes('ONG Calendario E2E')];
     /* concesión desde un día, con el filtro de ONG del Calendario */
-    document.getElementById('calClose').click(); await w(200); document.getElementById('menuBtn').click(); document.getElementById('calBtn').click(); await w(900);
+    document.getElementById('calClose').click(); await w(200); document.getElementById('menuBtn').click(); document.getElementById('calBtn').click(); await w(900); document.getElementById('calBody').querySelector('[data-modo=dias]').click(); await w(400); /* el Calendario abre en vista mensual */
     const oc = cb().querySelector('#calOng'); const ong = [...oc.options].find(o => o.value); if (ong) { oc.value = ong.value; oc.dispatchEvent(new Event('change', { bubbles: true })); await w(400); }
     const dCon = cb().querySelector('[data-nuevo=con]').dataset.nuevoDia; cb().querySelector('[data-nuevo=con][data-nuevo-dia="' + dCon + '"]').click(); await w(1200);
     out.con = [b2().querySelector('#cfT')?.textContent, b2().querySelector('#cfDesde')?.value === dCon, b2().querySelector('#cfHasta')?.value === dCon, ong ? b2().querySelector('#cfOng')?.value === ong.value : null];
@@ -434,7 +435,9 @@ const main = async () => {
   eq(Object.values(r3d.autPorProv).reduce((x, y) => x + y, 0), e.autorizadosCalendario, "la suma por provincias = el total del Calendario");
 
   /* ===== 3j. Mi jornada: puerta de entrada, filtros, navegación, tareas, fallos, ámbito, teclado, móvil y oscuro ===== */
-  await abre("admin@test.es", 1440, 900, { sinCentro: true });
+  await abre("admin@test.es", 1440, 900, { sinCentro: true, deja: true });
+  const j0 = await ev("const cal = document.getElementById('dlgCal'); const out = { cal: cal.open, mes: cal.querySelector('[data-modo=mes]')?.getAttribute('aria-pressed'), titulo: document.getElementById('calT').textContent, centro: document.getElementById('dlgCentro').open }; cal.close(); document.getElementById('menuBtn').click(); document.getElementById('jornadaBtn').click(); await new Promise(r => setTimeout(r, 900)); return out;");
+  eq(j0, { cal: true, mes: "true", titulo: "Calendario mensual", centro: false }, "al entrar se abre el Calendario en vista mensual y Mi jornada no se abre sola");
   const j1 = await ev(ayudas + `
     const out = {}; const dlg = document.getElementById('dlgCentro');
     out.abierta = [dlg.open, b().dataset.vista, b().querySelector('#ceNav [aria-current=page]')?.textContent.trim().startsWith('Mi jornada'), document.activeElement === b().querySelector('#ceNav [aria-current=page]')];
@@ -464,7 +467,7 @@ const main = async () => {
     b().querySelector('#ceNav [data-vista=res]').click(); await w(400); out.cola = [...b().querySelectorAll('.ce-cola .ce-item')].map(x => x.querySelector('strong').textContent + '|' + x.querySelector('span:last-child').textContent.split(' · ')[0]);
     out.primeras = primeras; b().querySelector('#ceNav [data-vista=jor]').click(); await w(400);
     return out;`);
-  eq(j1.abierta, [true, "jor", true, true], "al entrar, Mi jornada se abre sola (hay trabajo) y el foco está en su sección");
+  eq(j1.abierta, [true, "jor", true, true], "Mi jornada se abre desde el menú, con el foco en su sección");
   ok(j1.mapaAccesible, "«Ir al mapa» está a la vista");
   eq([j1.total, j1.filas, j1.claves], [j1.nav, Math.min(j1.total, 100), Math.min(j1.total, 100)], "el recuento de la lista, la navegación y las filas dibujadas coinciden, sin filas repetidas");
   ok(j1.ordenOk && /^Urgente/.test(j1.bandas[0]), "las filas van de la banda más urgente a la menos urgente: " + j1.bandas.join(" | "));
@@ -619,7 +622,7 @@ const main = async () => {
   ok(j9.abierta && j9.n > 0 && !j9.otra && j9.prov.length === 1 && j9.prov[0] === "Almería" && j9.provinciaFija, "un usuario de una provincia ve solo las actuaciones de la suya, y la provincia no cuenta como filtro que quitar");
 
   /* Estados: sin expedientes, todo al día (y sin abrirse sola) y error de lectura */
-  await abre("vacio@test.es", 1440, 900, { sinSeed: true, sinCentro: true });
+  await abre("vacio@test.es", 1440, 900, { sinSeed: true, sinCentro: true, deja: true });
   const j10 = await ev(ayudas + `
     const out = { abiertaSola: document.getElementById('dlgCentro').open };
     document.getElementById('menuBtn').click(); await w(100); out.menu = document.getElementById('jornadaBtn').textContent.trim(); document.getElementById('jornadaBtn').click(); await w(600);
