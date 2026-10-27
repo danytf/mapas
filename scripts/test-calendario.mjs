@@ -60,4 +60,27 @@ assert.ok(/prov = opts\.length > 1 \? "" : \(opts\[0\] \? opts\[0\]\[0\] : ""\)/
 assert.ok(/<option value="">Todas las provincias<\/option>/.test(bloque), "«Todas las provincias» sigue en el selector");
 assert.ok(bloque.includes('if (e.target.id === "calProv") { prov = e.target.value;'), "Elegir una provincia en el selector se mantiene durante la sesión");
 
+// Exportar a PDF (impresión del navegador: Imprimir → Guardar como PDF). Sin librerías, sin datos nuevos y sin guardar nada.
+assert.ok(/<button type="button" id="calPdf" class="cal-pdf"[^>]*>Exportar a PDF<\/button>/.test(bloque), "Falta el botón «Exportar a PDF»");
+assert.ok(/const exportaPdf = \(\) => \{[\s\S]*?window\.print\(\);\s*\};/.test(bloque) && bloque.includes('if (e.target.closest("#calPdf")) { exportaPdf(); return; }'), "El botón llama a la impresión del navegador");
+assert.ok(bloque.includes('id="calPrintHead"') && bloque.includes("Generado el ") && bloque.includes('window.addEventListener("afterprint", fin)'), "La hoja lleva su cabecera (rango, provincia, ONG, filtros y fecha) y se restablece al terminar de imprimir");
+assert.ok(bloque.includes('const eraModal = dlg.matches(":modal"); if (eraModal) { dlg.close(); dlg.show(); }') && bloque.includes("dlg.close(); dlg.showModal();"), "Durante la impresión el diálogo se muestra como no modal (en la capa superior no se pagina bien) y se restablece");
+const ini = html.indexOf("@page cal {");
+assert.ok(ini >= 0, "Faltan los estilos de impresión del Calendario");
+const imp = html.slice(ini, html.indexOf("\n  }\n", ini) + 4);
+assert.ok(imp.includes("@page cal { size: A4 landscape;") && imp.includes("body.imprime-cal { page: cal; }"), "La hoja es A4 apaisado");
+assert.ok(imp.includes("body.imprime-cal > :not(#dlgCal) { display: none !important; }"), "Al imprimir solo se ve el Calendario");
+assert.ok(imp.includes("#dlgCal .cal-bar, body.imprime-cal #dlgCal .cal-filters, body.imprime-cal #dlgCal .cal-links { display: none !important; }"), "Los controles no salen en el PDF");
+assert.ok(!/\.cal-card[^{}]*\{[^}]*break-inside/.test(imp), "break-inside en las tarjetas cuelga a Chrome al paginar (cientos de tarjetas): no se usa");
+assert.ok(imp.includes(".cal-wk { min-width: 0; grid-template-columns: repeat(7, minmax(0, 1fr));") && imp.includes(".cal-scroll, body.imprime-cal #dlgCal .pn-scroll, body.imprime-cal #dlgCal .cal-day { overflow: visible; }"), "La semana se ajusta al ancho de la hoja y sin zonas con desplazamiento");
+// La hoja siempre en claro: cada variable que redefine el modo oscuro vuelve a su valor claro en la impresión.
+const raiz = html.match(/:root \{([\s\S]*?)\n  \}\n  @media \(prefers-color-scheme: dark\) \{\n    :root \{([\s\S]*?)\n    \}\n  \}/);
+const impClaro = imp.match(/body\.imprime-cal \{ color-scheme: light; ([^}]*)\}/);
+assert.ok(raiz && impClaro, "Falta el bloque claro de la impresión");
+for (const m of raiz[2].matchAll(/(--[\w-]+):/g)) {
+  if (/^--(gam|hd)-/.test(m[1])) continue; // de la cabecera de la aplicación, que no sale en el PDF
+  const claro = raiz[1].match(new RegExp(m[1] + ":\\s*([^;]+);"));
+  assert.ok(claro && impClaro[1].includes(m[1] + ": " + claro[1].trim() + ";"), m[1] + " no vuelve a su valor claro en la impresión");
+}
+
 console.log("Calendario semanal: comprobaciones estáticas correctas.");
