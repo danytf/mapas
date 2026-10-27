@@ -83,4 +83,10 @@ for (const m of raiz[2].matchAll(/(--[\w-]+):/g)) {
   assert.ok(claro && impClaro[1].includes(m[1] + ": " + claro[1].trim() + ";"), m[1] + " no vuelve a su valor claro en la impresión");
 }
 
+// «+ Solicitud» y «+ Concesión» de un día: el formulario se abre encima del Calendario, que no se cierra, y al terminar se vuelve a la semana.
+assert.ok(/if \(nv\) \{ document\.dispatchEvent\(new CustomEvent\("centro:abrir", \{ detail: \{[^}]*enCalendario: true \} \}\)\); return; \}/.test(bloque), "«+ Solicitud» abre el formulario sin cerrar el Calendario");
+assert.ok(bloque.includes('document.addEventListener("calendario:refresca"') && bloque.includes('id="calAviso"'), "El Calendario se repinta y avisa de lo guardado al volver del formulario");
+assert.ok(html.includes("const cierraSoloForm = (texto) =>") && html.includes("cierraSoloForm(res.texto)") && html.includes('if (e.target.closest("#cfCancelar")) { form = null; dibujaForm(); cierraSoloForm(); return; }'), "Guardar y cancelar cierran el formulario y devuelven al Calendario");
+assert.ok(html.includes("#dlgCentro.solo-form #ceBody .ce-nav"), "En ese modo el Centro enseña solo el formulario");
+
 console.log("Calendario semanal: comprobaciones estáticas correctas.");

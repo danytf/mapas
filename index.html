@@ -891,6 +891,8 @@
   #dlgPanel h2, #dlgAdm h2 { font-size: var(--fs-title); font-weight: 680; letter-spacing: -.02em; line-height: 1.2; }
   #pnBody { padding: 16px 22px 22px; }
   /* Estilos del Centro de permisos: centro de mando y espacio de trabajo. Colores de gráficos validados (guía dataviz) en claro y oscuro. */
+  #dlgCentro.solo-form { width: min(760px, 98vw); }
+  #dlgCentro.solo-form #ceBody .ce-top, #dlgCentro.solo-form #ceBody .ce-nav, #dlgCentro.solo-form #ceBody .ce-filtros, #dlgCentro.solo-form #ceBody #ceRes, #dlgCentro.solo-form #ceBody .ce-work, #dlgCentro.solo-form #ceBody > .cal-note, #dlgCentro.solo-form #ceBody #ceAviso, #dlgCentro.solo-form #ceBody #cfT { display: none; }
   #dlgCentro { width: min(1360px, 98vw); max-height: 95vh; overflow: auto; background: var(--bg); padding: 0; }
   #dlgCentro .pn-head { position: sticky; top: 0; z-index: 4; margin: 0; padding: 12px 18px 12px 22px; background: var(--panel); border-bottom: 1px solid var(--line); }
   #dlgCentro h2 { font-size: var(--fs-title); font-weight: 680; letter-spacing: -.02em; line-height: 1.2; }
@@ -4883,18 +4885,26 @@ const csvCell = (value) => {
       '<span class="cal-modo" role="group" aria-label="Vista"><button type="button" data-modo="dias" aria-pressed="' + (modo === "dias") + '">Por día</button><button type="button" data-modo="mes" aria-pressed="' + (modo === "mes") + '">Mes</button><button type="button" data-modo="ong" aria-pressed="' + (modo === "ong") + '">Por ONG</button></span></div>' +
       '<div class="cal-links" role="group" aria-label="Abrir en el Centro de permisos"><span>Gestionar en el Centro de permisos:</span><button type="button" data-centro="sol:pendiente">Solicitudes pendientes</button><button type="button" data-centro="con:vigente">Concesiones vigentes</button><button type="button" data-centro="seg:todas">Seguimientos</button><button type="button" id="calPdf" class="cal-pdf" title="Abre la impresión del navegador: elige «Guardar como PDF»">Exportar a PDF</button></div>' +
             '<p class="cal-note cal-past" id="calPast" role="note" hidden></p>' +
+      '<p class="cal-note cal-hecho" id="calAviso" role="status" tabindex="-1" hidden></p>' +
       '<div id="calGrid"></div>' +
       '<p class="cal-note">Un permiso aparece cada día entre su fecha de inicio y la de fin, las dos incluidas. Los captadores de un día no se suman entre registros de la misma ONG en un mismo punto (se toma el mayor) y sí entre ONG distintas. Autorizados, por aprobar y seguimientos se cuentan por separado. Pulsa una tarjeta para ver ese punto en el Centro de permisos.</p>';
     draw();
     dlg.showModal();
     body.querySelector("#calProv").focus();
   };
+  /* Al guardar o cancelar el formulario abierto desde un día, se repinta la semana (con la solicitud nueva) y se dice qué se guardó. */
+  document.addEventListener("calendario:refresca", (e) => {
+    if (!dlg.open) return;
+    draw();
+    const av = body.querySelector("#calAviso"), texto = e.detail && e.detail.texto;
+    if (av && texto) { av.textContent = texto; av.hidden = false; av.focus(); } else body.querySelector("[data-nuevo]")?.focus();
+  });
   body.addEventListener("click", (e) => {
     if (e.target.closest("#calPdf")) { exportaPdf(); return; }
     const cc = e.target.closest("[data-centro]");
     if (cc) { const [vista, est] = cc.dataset.centro.split(":"); dlg.close(); document.dispatchEvent(new CustomEvent("centro:abrir", { detail: { vista, est, prov, ong } })); return; }
     const nv = e.target.closest("[data-nuevo]");
-    if (nv) { dlg.close(); document.dispatchEvent(new CustomEvent("centro:abrir", { detail: { vista: nv.dataset.nuevo === "sol" ? "sol" : "con", est: "todas", prov, ong, nuevo: nv.dataset.nuevo, desde: nv.dataset.nuevoDia } })); return; }
+    if (nv) { document.dispatchEvent(new CustomEvent("centro:abrir", { detail: { vista: nv.dataset.nuevo === "sol" ? "sol" : "con", est: "todas", prov, ong, nuevo: nv.dataset.nuevo, desde: nv.dataset.nuevoDia, enCalendario: true } })); return; } /* sin cerrar el Calendario: el formulario se abre encima y al guardar se vuelve a la semana */
     const dd = e.target.closest("[data-dia]");
     if (dd) { wk = mondayOf(dd.dataset.dia); modo = "dias"; body.querySelectorAll("[data-modo]").forEach((b2) => b2.setAttribute("aria-pressed", String(b2.dataset.modo === modo))); draw(); return; }
     const w = e.target.closest("[data-w]");
@@ -4955,6 +4965,7 @@ const csvCell = (value) => {
   let rapida = "todas", jorFoco = null, jorMapa = new Map(), jorVis = [], jorAbierta = false, jorSnap = null, nProv = 0, volverJor = null; /* Mi jornada: vista rápida; dónde devolver el foco tras una acción; fila de cada clave; filas dibujadas; si ya se abrió sola al entrar; últimas filas confirmadas; cuántas provincias tiene el usuario; filtro de punto que había antes de «Abrir en…» */
   let punto = null;  /* si se llega desde la ficha, el Panel o el Calendario: solo los expedientes de ese punto */
   let accion = null; /* confirmación en línea de una fila: { a, key } */
+  let soloForm = false; /* formulario abierto desde un día del Calendario: el Centro enseña solo el formulario, encima del Calendario */
   let form = null;   /* formulario abierto: { tipo: "sol" | "con" | "seg", c, r } (r = registro que se edita; sin r, alta) */
   let sel = "";      /* expediente abierto en el panel de detalle (su clave) */
   let multi = new Set(), lote = null; /* selección múltiple de seguimientos y el lote en curso: { fase: "confirmar" | "resultado", tipo, fecha, res } */
@@ -5689,7 +5700,7 @@ const csvCell = (value) => {
       }
     }
     const res = await ejecuta(c, muta, ok);
-    if (res.ok) { form = null; dibujaForm(); }
+    if (res.ok) { form = null; dibujaForm(); cierraSoloForm(res.texto); }
     else { const m2 = body.querySelector("#cfMsg"); if (m2) { m2.style.color = "var(--err)"; m2.textContent = res.texto + " Lo escrito sigue en el formulario."; } }
   };
   /* Búsqueda de punto: sin tildes ni mayúsculas, por palabras sueltas (todas deben aparecer en el nombre, municipio, provincia, calle o tipo) y los nombres que empiezan por lo escrito primero. */
@@ -5742,6 +5753,9 @@ const csvCell = (value) => {
     nProv = ps.length;
     if (o && o.vista === "jor") { rapida = o.rapida || "todas"; est.jor = o.tipo || "todos"; } /* abrir Mi jornada parte siempre de la bandeja completa */
     jorFoco = null; jorSnap = null; volverJor = null;
+    soloForm = !!(o && o.enCalendario && (o.nuevo === "sol" || o.nuevo === "con") && validIsoDate(o.desde));
+    dlg.classList.toggle("solo-form", soloForm);
+    dlg.querySelector("#ceT").textContent = soloForm ? (o.nuevo === "sol" ? "Nueva solicitud" : "Nueva concesión") : "Centro de permisos";
     body.innerHTML =
       '<div class="ce-top"><div class="ce-ctx"><p id="ceHoy" class="ce-hoy"></p><p id="cePunto" class="ce-chip"></p></div><div class="ce-new"><button type="button" class="ce-act pri" data-new="sol">Nueva solicitud</button><button type="button" class="ce-act" data-new="con">Nueva concesión</button><button type="button" class="ce-act" data-cal="1">Calendario</button></div></div>' +
       '<nav class="ce-nav" id="ceNav" aria-label="Secciones del Centro de permisos">' + NAV.map(([v, n]) => '<button type="button" data-vista="' + v + '" aria-current="false">' + esc(n) + (v === "res" ? "" : ' <span class="n" hidden></span>') + "</button>").join("") + "</nav>" +
@@ -5786,6 +5800,13 @@ const csvCell = (value) => {
     else if (a === "quitC") await ejecuta(c, mutadores.quitarCon(r), "Concesión borrada en «" + c.name + "».");
   };
   const reinicia = () => { mostrar = TRAMO; accion = null; };
+  /* Fin del formulario abierto desde el Calendario: se cierra el Centro y el Calendario se repinta (con el texto de lo guardado, si lo hubo). */
+  const cierraSoloForm = (texto) => {
+    if (!soloForm) return;
+    soloForm = false; dlg.classList.remove("solo-form"); dlg.querySelector("#ceT").textContent = "Centro de permisos";
+    dlg.close();
+    document.dispatchEvent(new CustomEvent("calendario:refresca", { detail: { texto: texto || "" } }));
+  };
   body.addEventListener("click", (e) => {
     const go = e.target.closest("[data-go]");
     if (go) { const [v, k] = go.dataset.go.split(":"); vista = v; if (go.dataset.sev) est[v] = "sev:" + go.dataset.sev; else est[v] = k; reinicia(); draw(); return; }
@@ -5813,7 +5834,7 @@ const csvCell = (value) => {
     const pk = e.target.closest("[data-pick]");
     if (pk && form) { eligePunto(+pk.dataset.pick); return; }
     if (e.target.closest("#cfGuardar")) { guardaForm(); return; }
-    if (e.target.closest("#cfCancelar")) { form = null; dibujaForm(); return; }
+    if (e.target.closest("#cfCancelar")) { form = null; dibujaForm(); cierraSoloForm(); return; }
     const cf = e.target.closest("[data-conf]");
     if (cf) { if (cf.dataset.conf === "ok") confirma(); else { accion = null; draw(); } return; }
     if (e.target.closest("[data-csv]")) { exportaCsv(); return; }
@@ -5867,7 +5888,10 @@ const csvCell = (value) => {
     e.preventDefault();
     if (accion) { accion = null; draw(); enfocaDetalle(); } else cierraDetalle();
   });
-  dlg.addEventListener("close", () => { historial.clear(); });
+  dlg.addEventListener("close", () => {
+    historial.clear();
+    if (soloForm) { soloForm = false; dlg.classList.remove("solo-form"); dlg.querySelector("#ceT").textContent = "Centro de permisos"; document.dispatchEvent(new CustomEvent("calendario:refresca", { detail: { texto: "" } })); } /* Escape o × con el formulario abierto: vuelve al Calendario */
+  });
   $("#centroBtn").addEventListener("click", () => abrir());
   document.addEventListener("centro:abrir", (e) => abrir(e.detail));
   /* Mi jornada: entrada del menú (con cuántas actuaciones hay, calculado al abrir el menú) y apertura automática al entrar. */
