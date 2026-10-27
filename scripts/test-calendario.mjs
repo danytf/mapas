@@ -89,7 +89,7 @@ assert.ok(bloque.includes('document.addEventListener("calendario:refresca"') && 
 assert.ok(html.includes("const cierraSoloForm = (texto) =>") && html.includes("cierraSoloForm(res.texto)") && html.includes('if (e.target.closest("#cfCancelar")) { form = null; dibujaForm(); cierraSoloForm(); return; }'), "Guardar y cancelar cierran el formulario y devuelven al Calendario");
 assert.ok(html.includes("#dlgCentro.solo-form #ceBody .ce-nav"), "En ese modo el Centro enseña solo el formulario");
 
-// «+ Nueva solicitud» fija en la barra: disponible en las tres vistas (por día, mes y por ONG), no solo en los días de «Por día».
+// «+ Nueva solicitud» fija en la barra: disponible en las tres vistas (semana, mes y por ONG), no solo en los días de «Semana».
 assert.ok(/<button type="button" class="primary cal-nueva" data-nuevo="sol" data-nuevo-dia="' \+ today\(\) \+ '">\+ Nueva solicitud<\/button>/.test(bloque), "Falta el botón fijo «Nueva solicitud» en la barra del Calendario");
 
 // Vista mensual como centro de mando: pinchar un día abre su panel (solicitudes por aprobar con Conceder y Denegar, concesiones, seguimientos y «+ Nueva solicitud»).
