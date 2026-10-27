@@ -18,6 +18,8 @@ El móvil es secundario: sirve para consultar un punto o marcar un seguimiento, 
 
 Es el puesto de trabajo del RGR: un mapa de los lugares donde se puede pedir permiso de captación, junto con el Centro de permisos (solicitudes, concesiones, seguimientos y avisos de datos). El Centro es la única vía para gestionar los permisos.
 
+El Calendario mensual es el centro de mando y se abre al entrar. El flujo real: el RP o coordinador crea las solicitudes («por solicitar», naranja); el RGR las mira y manda los correos («solicitada», amarillo); cuando llega la respuesta las pasa a «concedida» (verde) o «denegada» (roja). Una solicitud se pide para un periodo, o para varios (semanas, mes, trimestre o año).
+
 Funciona bien cuando:
 
 - **Ningún seguimiento se escapa:** cada solicitud recibe respuesta o tiene un seguimiento a tiempo, y nada caduca por olvido.
