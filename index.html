@@ -717,9 +717,6 @@
   .cal-modo { display: inline-flex; gap: 6px; }
   .cal-modo button { height: 32px; padding: 0 13px; font-size: var(--fs-label); border-radius: var(--r-pill); }
   .cal-modo button[aria-pressed="true"] { border-color: var(--fg); font-weight: 600; }
-  .cal-ongt { width: 100%; border-collapse: collapse; font-size: var(--fs-label); font-variant-numeric: tabular-nums; }
-  .cal-ongt th, .cal-ongt td { padding: 7px 12px; text-align: left; border-bottom: 1px solid var(--line); }
-  .cal-ongt thead th { color: var(--muted); font-weight: 560; border-bottom-color: var(--line-2); }
   .cal-pp { color: var(--warn); }
   @media (max-width: 900px) {
     #dlgCal { padding: 16px 14px 20px; }
@@ -4822,7 +4819,6 @@ const csvCell = (value) => {
       ? "Semana pasada: las concesiones se muestran con sus fechas. Las solicitudes se reconstruyen con su fecha de alta y de decisión cuando constan; si no constan, aparecen en el histórico como «estado ese día no registrado». Los seguimientos ya hechos no se conservan: solo se ven los que siguen programados."
       : "Semana futura: las solicitudes se muestran tal como están hoy (por aprobar) y los seguimientos programados.";
     const grid = body.querySelector("#calGrid");
-    if (modo === "ong") { grid.innerHTML = tablaOng(sem, t); return; }
     const hayAlgo = sem.some((x) => x.items.some((i) => visible(i.e) && okOng(i.r)) || (ver.seguimiento && x.seg.length));
     if (!hayAlgo) {
       const oculto = semana.some((x) => x.items.length || x.seg.length);
@@ -4896,25 +4892,11 @@ const csvCell = (value) => {
       }).join("")).join("") + '</div></div><aside id="calDia" class="cal-dia" aria-label="Detalle del día"' + (diaSel ? "" : " hidden") + "></aside></div>";
     drawDia(semanas.flat(), t);
   };
-  /* Vista por ONG: captadores autorizados y por aprobar de cada ONG en cada día, en una tabla. */
-  const tablaOng = (sem, t) => {
-    const filas = new Map();
-    sem.forEach((x, k) => {
-      const porOng = (recs) => capacidadPorOng(recs);
-      const aut = porOng(x.items.filter((i) => i.e === "autorizada").map((i) => i.r)), pen = porOng(x.items.filter((i) => i.e === "pendiente").map((i) => i.r));
-      new Set([...aut.keys(), ...pen.keys()]).forEach((o) => { const f = filas.get(o) || [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]; f[k] = [aut.get(o) || 0, pen.get(o) || 0]; filas.set(o, f); });
-    });
-    if (!filas.size) return '<div class="cal-none">Ninguna ONG tiene captadores autorizados ni por aprobar esta semana.</div>';
-    const nombres = [...filas.keys()].sort((x, y) => (x === "Sin ONG") - (y === "Sin ONG") || x.localeCompare(y, "es"));
-    return '<div class="pn-scroll"><table class="cal-ongt"><caption class="adm-sr">Captadores autorizados y por aprobar de cada ONG por día</caption><thead><tr><th scope="col">ONG</th>' +
-      sem.map((x, k) => '<th scope="col"' + (x.d === t ? ' aria-current="date"' : "") + ">" + DIAS[k].slice(0, 3) + " " + (+x.d.slice(8)) + "</th>").join("") + "</tr></thead><tbody>" +
-      nombres.map((o) => "<tr><th scope=\"row\">" + esc(o) + "</th>" + filas.get(o).map(([a2, p2]) => "<td>" + (a2 || p2 ? (a2 ? "<b>" + a2 + "</b>" : "") + (p2 ? '<span class="cal-pp"> +' + p2 + " por aprobar</span>" : "") : "—") + "</td>").join("") + "</tr>").join("") + "</tbody></table></div>";
-  };
 
   /* Exportar a PDF: se imprime lo que se ve (semana, mes o ONG, con los filtros elegidos) con una cabecera propia. El PDF lo crea el navegador (Imprimir, Guardar como PDF): sin librerías, sin datos nuevos y sin guardar nada. */
   const exportaPdf = () => {
     const sel = (id) => { const o = body.querySelector("#" + id + " option:checked"); return o ? o.textContent.trim() : ""; };
-    const MODOS = { dias: "Vista de semana", mes: "Vista de mes", ong: "Vista por ONG" };
+    const MODOS = { dias: "Vista de semana", mes: "Vista de mes" };
     const que = [["autorizada", "Concesiones"], ["pendiente", "Solicitudes por aprobar"], ["seguimiento", "Seguimientos"], ["historico", "Histórico"]].filter(([k]) => ver[k]).map(([, n]) => n).join(", ") || "Nada seleccionado";
     const rango = body.querySelector("#calRange").textContent.trim();
     const gen = new Date().toLocaleString("es-ES", { dateStyle: "short", timeStyle: "short", timeZone: "Europe/Madrid" });
@@ -4937,7 +4919,7 @@ const csvCell = (value) => {
       '<div class="cal-top">' +
       '<div class="cal-nav"><button type="button" data-w="-1" aria-label="Anterior">&#8249;</button><span class="cal-range" id="calRange" role="status"></span>' +
       '<button type="button" data-w="1" aria-label="Siguiente">&#8250;</button><button type="button" data-w="0">Hoy</button></div>' +
-      '<span class="cal-modo" role="group" aria-label="Vista"><button type="button" data-modo="mes" aria-pressed="' + (modo === "mes") + '">Mes</button><button type="button" data-modo="dias" aria-pressed="' + (modo === "dias") + '">Semana</button><button type="button" data-modo="ong" aria-pressed="' + (modo === "ong") + '">Por ONG</button></span>' +
+      '<span class="cal-modo" role="group" aria-label="Vista"><button type="button" data-modo="mes" aria-pressed="' + (modo === "mes") + '">Mes</button><button type="button" data-modo="dias" aria-pressed="' + (modo === "dias") + '">Semana</button></span>' +
       '<div class="cal-acc"><button type="button" class="primary cal-nueva" data-nuevo="sol" data-nuevo-dia="' + today() + '">+ Nueva solicitud</button>' +
       '<details class="cal-menu"><summary>Más</summary><div class="cal-menu-p">' +
       '<label class="cal-f">Ir a la fecha<input type="date" id="calDate"></label>' +
