@@ -25,12 +25,13 @@ const reglas = (ahoraIso) => {
   class Falsa extends Real { constructor(...args) { if (args.length) super(...args); else super(ahoraIso); } static now() { return new Real(ahoraIso).getTime(); } }
   return runInNewContext(
     "const permits = {}; const permitKey = (c) => c.id; const permOf = (c) => permits[permitKey(c)] || {};\n" + reglasCodigo +
-    "\n({ today, addDays, daysBetween, mondayOf, expedientesDe, seguimientosDe, incidencias, indicadores, calendarioSemana, resumenDatos, jornada, jornadaCumple, jornadaConteos, JOR_MOTIVOS, JOR_TIPOS, JOR_RAPIDAS, JOR_DIAS, UMBRAL_ESTANCADA })",
+    "\n({ today, addDays, daysBetween, mondayOf, expedientesDe, seguimientosDe, incidencias, indicadores, calendarioSemana, resumenDatos, jornada, jornadaCumple, jornadaConteos, JOR_MOTIVOS, JOR_TIPOS, JOR_RAPIDAS, JOR_DIAS, UMBRAL_ESTANCADA, subEstado })",
     { Date: Falsa, self: {} }
   );
 };
 const punto = (id, name, prov = "Granada", provinceId = "pr-gr") => ({ id, name, town: "Pueblo", province: prov, provinceId, databaseId: "db-" + id });
-const sol = (o) => Object.assign({ desde: "2026-12-10", hasta: "2026-12-12", ong: "AECC", captadores: 2 }, o);
+/* Una solicitud de estos casos ya está pedida (solicitada) salvo que se diga lo contrario con enviada: ""; sin envío es «por solicitar». */
+const sol = (o) => { const x = Object.assign({ desde: "2026-12-10", hasta: "2026-12-12", ong: "AECC", captadores: 2 }, o); if (x.enviada === undefined) x.enviada = x.fecha || "2026-10-26"; return x; };
 const con = (o) => Object.assign({ desde: "2026-10-01", hasta: "2027-03-01", ong: "AECC", captadores: 2 }, o);
 const entra = (R, puntos) => {
   const recs = [], segs = [];
@@ -116,7 +117,7 @@ const nombres = (J) => J.map((f) => f.c.name);
   ok(J.every((f) => f.c.id === f.r.c.id && (!f.seg || f.seg.c.id === f.c.id)), "cada fila apunta al punto correcto");
 
   /* Orden: el rango sigue el esquema documentado, y dentro de un grado manda la medida de su urgencia. */
-  eq(Object.entries(R.JOR_MOTIVOS).sort((x, y) => x[1].rank - y[1].rank).map(([k]) => k), ["atrasada", "terminaHoy", "bloqueante", "hoy", "inicio", "estancada", "vence", "sinseg", "aviso"], "grados de gravedad");
+  eq(Object.entries(R.JOR_MOTIVOS).sort((x, y) => x[1].rank - y[1].rank).map(([k]) => k), ["atrasada", "terminaHoy", "bloqueante", "hoy", "inicio", "estancada", "vence", "porsolicitar", "sinseg", "aviso"], "grados de gravedad");
   ok(J.every((f, i) => i === 0 || J[i - 1].rank <= f.rank), "nunca un motivo menos grave antes que uno más grave");
   ok(por("16").antig === 9 && por("18").antig === -1, "sin fecha de solicitud, la solicitud va al final de su grupo");
 
@@ -199,7 +200,7 @@ const nombres = (J) => J.map((f) => f.c.name);
     if (rapida === "todas" && tipo === "todos" && resp === "" && txt === "") assert.equal(cn.rapidas.todas, cn.total);
     assert.ok(cn.rapidas.todas >= cn.rapidas.urgentes && cn.rapidas.todas >= cn.rapidas.hoy && cn.rapidas.todas >= cn.rapidas.sinseg, "«Todas» nunca es menos que una vista rápida");
   }
-  n += comb * 5; ok(comb === 4 * 6 * 4 * 4, "384 combinaciones de filtros (4 vistas × 6 tipos × 4 responsables × 4 textos) sin recuentos incoherentes");
+  n += comb * 5; ok(comb === 5 * 6 * 4 * 4, "480 combinaciones de filtros (5 vistas × 6 tipos × 4 responsables × 4 textos) sin recuentos incoherentes");
   /* Cada vista rápida y cada tipo, con su significado. */
   ok(J.filter((x) => R.jornadaCumple(x, Object.assign({}, base, { rapida: "urgentes" }))).every((x) => x.rank <= 3), "«Urgentes»: atrasados, concesiones que terminan hoy y datos bloqueantes");
   ok(J.filter((x) => R.jornadaCumple(x, Object.assign({}, base, { rapida: "hoy" }))).every((x) => x.motivos.some((m) => m.id === "hoy" || m.id === "terminaHoy")), "«Para hoy»: seguimientos de hoy y concesiones que terminan hoy");
@@ -320,6 +321,32 @@ const nombres = (J) => J.map((f) => f.c.name);
   ok(J.length > 500 && recs.length > 5000, "el escenario es realista (miles de expedientes)");
   ok(t3 - t2 < 400 && t4 - t3 < 400 && t1 - t0 < 600, "jornada y recuentos en una fracción de segundo con 39.000 puntos");
   ok(cn.total <= J.length, "recuentos coherentes");
+}
+
+/* ===== Por solicitar y solicitada (flujo del 27/10/2026): el RGR trabaja lo «por solicitar»; «estancada» cuenta desde el envío ===== */
+{
+  const R = reglas("2026-10-26T10:00:00Z"), T = R.today(), d = (k) => R.addDays(T, k);
+  const P = [
+    ["a por solicitar creada hoy", { solicitudes: [sol({ id: "a", fecha: T, enviada: "" })] }],
+    ["b por solicitar hace 4 días", { solicitudes: [sol({ id: "a", fecha: d(-4), enviada: "" })] }],
+    ["c por solicitar muy antigua (no está estancada: nadie ha pedido nada)", { solicitudes: [sol({ id: "a", fecha: d(-40), enviada: "" })] }],
+    ["d solicitada hace 20 días, creada hace 40", { solicitudes: [sol({ id: "a", fecha: d(-40), enviada: d(-20), seg: d(3) })] }],
+    ["e solicitada ayer, creada hace 40 (no está estancada: se pidió ayer)", { solicitudes: [sol({ id: "a", fecha: d(-40), enviada: d(-1) })] }],
+    ["f por solicitar con el periodo a punto de empezar", { solicitudes: [sol({ id: "a", desde: d(3), hasta: d(6), fecha: d(-2), enviada: "" })] }]
+  ].map(([nombre, p], i) => [punto(i + 1, nombre), Object.assign({ solicitudes: [], historial: [] }, p)]);
+  const J = jornadaDe(R, P), de = (c) => J.find((f) => f.c.name.startsWith(c));
+  eq([de("a").principal.id, de("a").principal.texto, de("a").banda, de("a").tipo], ["porsolicitar", "Por solicitar: creada hoy", "atencion", "solicitud"], "una solicitud puesta hoy es «por solicitar»");
+  eq(de("b").principal.texto, "Por solicitar desde hace 4 días", "«por solicitar» dice desde cuándo");
+  eq(de("c").motivos.map((m) => m.id), ["porsolicitar"], "una «por solicitar» antigua no está estancada ni «sin seguimiento»: lo primero es mandar el correo");
+  eq(de("d").motivos.map((m) => m.id), ["estancada"], "una solicitada sin respuesta más de 15 días desde el envío está estancada (aunque se creara mucho antes)");
+  eq(de("d").principal.texto, "Solicitud sin respuesta desde hace 20 días", "los días sin respuesta cuentan desde el envío");
+  eq(de("e").motivos.map((m) => m.id), ["sinseg"], "una solicitada ayer no está estancada; solo falta programar su seguimiento");
+  eq(de("f").motivos.map((m) => m.id), ["inicio", "porsolicitar"], "si el periodo está a punto de empezar y aún no se ha pedido, el periodo manda y «por solicitar» queda debajo");
+  eq(R.jornadaConteos(J, { resp: "", q: "", rapida: "porsolicitar", tipo: "todos", textoDe: (x) => x.c.name }).total, 4, "la vista rápida «Por solicitar» cuenta las filas que el RGR aún no ha pedido (a, b, c y f)");
+  const { recs } = entra(R, P), t = R.today(), ind = R.indicadores(recs, [], t);
+  eq(ind.estancadas.length, 1, "el Panel cuenta como estancada solo la solicitada hace más de 15 días (d)");
+  eq(recs.filter((r) => R.subEstado(r) === "porsolicitar").length, 4, "cuatro solicitudes por solicitar");
+  eq(recs.filter((r) => R.subEstado(r) === "solicitada").length, 2, "dos solicitadas");
 }
 
 console.log("Mi jornada: " + n + " comprobaciones correctas.");

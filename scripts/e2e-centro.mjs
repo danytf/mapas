@@ -62,7 +62,7 @@ const main = async () => {
   const pestana = await hasta(async () => (await (await fetch("http://127.0.0.1:" + CDP + "/json")).json()).find((t) => t.type === "page"), 20000, "Chrome");
   const c = await conectaCdp(pestana.webSocketDebuggerUrl, registra);
   await c.send("Runtime.enable"); await c.send("Page.enable");
-  const ev = async (expresion) => { const r = await c.send("Runtime.evaluate", { expression: "(async()=>{" + expresion + "})()", awaitPromise: true, returnByValue: true }); if (r.exceptionDetails) throw new Error("Fallo en la página: " + (r.exceptionDetails.exception?.description || r.exceptionDetails.text)); return r.result.value; };
+  const ev = async (expresion) => { const r = await c.send("Runtime.evaluate", { expression: "(async()=>{" + expresion + "})()", awaitPromise: true, returnByValue: true }); if (r.exceptionDetails) { const linea = String(expresion.split(String.fromCharCode(10))[r.exceptionDetails.lineNumber] || "").trim().slice(0, 220); throw new Error("Fallo en la página: " + (r.exceptionDetails.exception?.description || r.exceptionDetails.text) + String.fromCharCode(10) + "   en: " + linea); } return r.result.value; };
   const rel = async () => (await fetch(MOCK + "/__rel")).json();
   const ayudas = `const w=(ms)=>new Promise(r=>setTimeout(r,ms)); const b=()=>document.getElementById('ceBody'); const nav=(v)=>{b().querySelector('#ceNav [data-vista='+v+']').click();};
     const set=(id,v)=>{const e=b().querySelector('#'+id); e.value=v; e.dispatchEvent(new Event('input',{bubbles:true})); e.dispatchEvent(new Event('change',{bubbles:true}));};
@@ -133,7 +133,8 @@ const main = async () => {
     nav('sol'); await w(250); set('ceEst','pendiente'); await w(200);
     const a0 = (await rel()).permit_applications.filter(a => a.status === 'approved').length;
     out.porSolicitar = [...b().querySelectorAll('.ce-badge')].filter(x => /Por solicitar/.test(x.textContent)).length;
-    b().querySelector('[data-act=env]').click(); await w(2500); out.marcada = [(await rel()).permit_applications.filter(a => a.sent_on).length, /marcada como solicitada/.test(b().querySelector('#ceAviso').textContent), [...b().querySelectorAll('.ce-badge')].some(x => /^s*Solicitada/.test(x.textContent))];
+    const env0 = (await rel()).permit_applications.filter(a => a.sent_on).length;
+    b().querySelector('[data-act=env]').click(); await w(2500); out.marcada = [(await rel()).permit_applications.filter(a => a.sent_on).length - env0, /marcada como solicitada/.test(b().querySelector('#ceAviso').textContent), [...b().querySelectorAll('.ce-badge')].some(x => /^s*Solicitada/.test(x.textContent))];
     b().querySelector('[data-act=conceder]').click(); await w(2500); out.conceder = b().querySelector('#ceAviso').textContent; let r = await rel(); out.aprobadas = r.permit_applications.filter(a => a.status === 'approved').length - a0; out.enlazada = r.permit_grants.filter(g => g.application_id).length;
     b().querySelector('tr.ce-row .ce-pt').click(); await w(300); b().querySelector('#ceSide [data-act=den]').click(); await w(300); out.motivoEnfocado = document.activeElement.id === 'ceMotivo'; b().querySelector('#ceMotivo').value = 'Prueba E2E'; b().querySelector('#ceSide [data-conf=ok]').click(); await w(2500);
     out.denegar = b().querySelector('#ceAviso').textContent; out.denegadas = (await rel()).permit_applications.filter(a => a.resolution_reason === 'Prueba E2E').length; b().querySelector('[data-cierra-lado]')?.click();
@@ -400,7 +401,7 @@ const main = async () => {
     porEst.forEach(f => visibles.push({ id: f.id, due: f.due_on }));
     const pend = apps.filter(a => estSol(a) === 'pendiente'), vig = grants.filter(g => estCon(g) === 'vigente');
     const conSeg = new Set(visibles.filter(v => v.app).map(v => v.app));
-    const esp = { pendientes: pend.length, sinSeguimiento: pend.filter(a => !conSeg.has(a.id)).length, estancadas: pend.filter(a => a.requested_at && dias(a.requested_at, t) > UMBRAL_ESTANCADA).length,
+    const esp = { pendientes: pend.length, sinSeguimiento: pend.filter(a => a.sent_on && !conSeg.has(a.id)).length, estancadas: pend.filter(a => a.sent_on && dias(a.sent_on, t) > UMBRAL_ESTANCADA).length,
       sinRespuesta: apps.filter(a => estSol(a) === 'caducada').length, aprobadas: apps.filter(a => estSol(a) === 'aprobada').length, denegadas: apps.filter(a => estSol(a) === 'denegada').length, retiradas: apps.filter(a => estSol(a) === 'retirada').length,
       segVencidos: visibles.filter(v => v.due < t).length, segHoy: visibles.filter(v => v.due === t).length, segProximos: visibles.filter(v => v.due > t && v.due <= suma(t, 7)).length,
       vigentes: vig.length, futuras30: grants.filter(g => estCon(g) === 'futura' && g.valid_from <= suma(t, 30)).length, sinFin: vig.filter(g => !g.valid_until).length,
@@ -455,6 +456,7 @@ const main = async () => {
     out.claves = new Set(filas().map(f => f.dataset.key)).size; out.filas = filas().length;
     out.bandas = [...b().querySelectorAll('.jo-banda h3')].map(h => h.textContent.trim());
     out.chips = [...b().querySelectorAll('.jo-chip')].map(x => [x.dataset.rapida, +x.querySelector('b').textContent, x.getAttribute('aria-pressed')]);
+    out.porSol = [...b().querySelectorAll('.jo-fila')].filter(f => /^Por solicitar/.test(f.querySelector('.jo-motivo strong').textContent)).map(f => !!f.querySelector('[data-act=env]'));
     /* orden: ninguna fila menos grave antes que una más grave */
     const orden = { urgente: 0, hoy: 1, atencion: 2 }; out.ordenBandas = filas().map(f => orden[f.className.match(/b-(\\w+)/)[1]]); out.ordenOk = out.ordenBandas.every((v, i) => i === 0 || out.ordenBandas[i - 1] <= v);
     out.motivos = filas().slice(0, 5).map(f => [f.querySelector('.jo-motivo strong').textContent, !!f.querySelector('.jo-sig'), !!f.querySelector('.jo-meta .ce-badge, .jo-meta .jo-tipo')]);
@@ -479,7 +481,8 @@ const main = async () => {
   ok(j1.mapaAccesible, "«Ir al mapa» está a la vista");
   eq([j1.total, j1.filas, j1.claves], [j1.nav, Math.min(j1.total, 100), Math.min(j1.total, 100)], "el recuento de la lista, la navegación y las filas dibujadas coinciden, sin filas repetidas");
   ok(j1.ordenOk && /^Urgente/.test(j1.bandas[0]), "las filas van de la banda más urgente a la menos urgente: " + j1.bandas.join(" | "));
-  ok(j1.chips.length === 4 && j1.chips[0][0] === "urgentes" && j1.chips[3][0] === "todas" && j1.chips[3][2] === "true" && j1.chips[3][1] === j1.total, "vistas rápidas Urgentes, Para hoy, Sin seguimiento y Todas; «Todas» marcada con el total");
+  ok(j1.porSol.length > 0 && j1.porSol.every(Boolean), "las solicitudes «por solicitar» salen en Mi jornada con su botón «Marcar como solicitada» [" + j1.porSol.length + "]");
+  ok(j1.chips.length === 5 && j1.chips.map((x) => x[0]).join() === "urgentes,hoy,porsolicitar,sinseg,todas" && j1.chips[4][2] === "true" && j1.chips[4][1] === j1.total, "vistas rápidas Urgentes, Para hoy, Por solicitar, Sin seguimiento y Todas; «Todas» marcada con el total");
   ok(j1.motivos.every(([m, sig, meta]) => m && sig && meta), "cada fila explica el motivo, su siguiente acción y su tipo/estado");
   eq(j1.menu, "Mi jornada (" + j1.total + ")", "el menú dice cuántas actuaciones hay");
   eq([j1.atrasadas, j1.hoy], [j1.panel.atrasados, j1.panel.hoy], "seguimientos atrasados y de hoy: Mi jornada = Panel resumen");
@@ -717,8 +720,9 @@ const main = async () => {
     out.pendientesDia = cb().querySelectorAll('#calDia [data-pa=conceder]').length;
     out.enfocado = document.activeElement === cb().querySelector('#calDiaT');
     /* marcar como solicitada la primera y conceder esa */
+    const env1 = (await rel()).permit_applications.filter(a => a.sent_on).length;
     cb().querySelector('#calDia [data-pa=env]').click(); await w(3500);
-    out.env = [(await rel()).permit_applications.filter(a => a.sent_on).length, /marcada como solicitada/.test(cb().querySelector('#calAviso').textContent), [...cb().querySelectorAll('#calDia h4')].some(x => /Solicitadas/.test(x.textContent))];
+    out.env = [(await rel()).permit_applications.filter(a => a.sent_on).length - env1, /marcada como solicitada/.test(cb().querySelector('#calAviso').textContent), [...cb().querySelectorAll('#calDia h4')].some(x => /Solicitadas/.test(x.textContent))];
     cb().querySelector('#calDia [data-pa=conceder].ok').click(); await w(3500);
     const d1 = await rel();
     out.conceder = [d1.permit_applications.filter(a => a.status === 'approved').length - apr0, d1.permit_grants.length - g0, /Aprobada y guardada/.test(cb().querySelector('#calAviso').textContent), !cb().querySelector('#calAviso').hidden];
