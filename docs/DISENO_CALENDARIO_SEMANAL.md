@@ -1,5 +1,7 @@
 # Calendario semanal
 
+> **Actualización del 27/10/2026:** este documento describe la primera versión (19/10/2026). Desde entonces el Calendario se abre al entrar en **vista mensual**, es el centro de mando (se crean solicitudes y se pasan a concedidas o denegadas desde el panel del día), la semana es la otra vista (Mes / Semana), se quitó la vista «Por ONG» y los estados son por solicitar, solicitada, concedida y denegada. El resumen está en `docs/traspaso/ESTADO.md`, sección «El Calendario como centro de mando y los estados de la solicitud». Lo que sigue cuenta cómo nació la vista semanal.
+
 Estado: **hecho y desplegado el 19/10/2026** (PR #137, commit `fcde338`). Verificado: el despliegue de Pages terminó con éxito y la URL pública tiene el mismo SHA-256 que `index.html` de `main` (`d1499dbd934330e6`...), con la sección nueva y sin la vista semanal del panel. Pendiente: que el titular lo revise con sus permisos reales. Decisión del titular (19/10/2026): sacar la vista semanal del panel resumen y crear una sección nueva, a pantalla completa y muy visual, con selector de semana y provincia.
 
 ## Qué hace

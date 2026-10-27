@@ -153,3 +153,15 @@ Estado: el Centro es la única vía para solicitudes, concesiones y seguimientos
 - **10. «Novedades desde tu última visita»** (Zammad): guardar la última visita en Supabase. M.
 - **Descartadas por ahora:** tablero kanban con arrastrar (cambios accidentales), columnas a medida (la preferencia no puede ir al navegador), calendario iCal (enlace público con datos), menciones y seguir compañeros, portal de solo lectura para las ONG (decisión de producto).
 - Idea aparte: que el Calendario avise de las concesiones sin fechas que omite (ver punto 6 de arriba).
+
+## Pendientes del flujo Calendario y estados (apuntados el 27/10/2026)
+
+**Del titular**
+1. Texto del correo que manda el RGR (ayuda para redactarlo desde la solicitud): sin definir.
+2. Roles (RP, coordinador, RGR) con permisos distintos en la base: la interfaz no distingue esos roles; lo que cada usuario puede escribir lo fija la RLS por provincia, que no se ha tocado. Distinguir roles es un cambio de esquema y de RLS: requiere decisión y prueba.
+3. Confirmar que la copia de seguridad del 25/10/2026 está fuera de este equipo (sigue sin confirmar; punto 1 de «Pendientes del Centro de permisos»).
+4. Quitar la regla `apply_migration` de `.claude/settings.local.json` (punto 2 de la misma lista).
+
+**Posibles, no hechos**
+5. Población por municipio en el mapa (el titular lo deja de momento); cartografía «shape» (descartada).
+6. Una pasada de pulido (`polish`) y una nueva crítica de diseño (la anterior puntuó 26/40).
