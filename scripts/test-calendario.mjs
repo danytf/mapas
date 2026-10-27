@@ -50,7 +50,7 @@ assert.ok(bloque.includes("const kOng = (x) => ongDe(x).trim().toLowerCase();") 
 // Vista mensual (25/10/2026): mismas reglas que la semana (calendarioSemana), capacidad y demanda por separado, y salto a la semana del día.
 assert.ok(bloque.includes('data-modo="mes"') && bloque.includes("const drawMes = ") && bloque.includes("calendarioSemana(recs, segs, ini, t)"), "La vista mensual usa calendarioSemana");
 assert.ok(bloque.includes("data-dia=") && bloque.includes("wk = mondayOf(dd.dataset.dia); modo = \"dias\""), "Pulsar un día abre su semana");
-assert.ok(bloque.includes("captadores autorizados") && bloque.includes("por aprobar") && bloque.includes('aria-label="' + "' + esc(lbl)"), "Cada día dice sus captadores autorizados y por aprobar por separado, con nombre accesible");
+assert.ok(bloque.includes("captadores autorizados") && bloque.includes("por aprobar") && bloque.includes('esc(lbl + ". Pulsa para ver el día")'), "Cada día dice sus captadores autorizados y por aprobar por separado, con nombre accesible");
 assert.ok(bloque.includes("Mes anterior") && bloque.includes("desplazaMes(+w.dataset.w)"), "La navegación avanza por meses en la vista mensual");
 
 // Provincia por defecto (26/10/2026, decisión del titular): como el Panel y el Centro, abre con todas las provincias del usuario; ya no se elige una sola a mano.
@@ -92,10 +92,15 @@ assert.ok(html.includes("#dlgCentro.solo-form #ceBody .ce-nav"), "En ese modo el
 // «+ Nueva solicitud» fija en la barra: disponible en las tres vistas (por día, mes y por ONG), no solo en los días de «Por día».
 assert.ok(/<button type="button" class="primary cal-nueva" data-nuevo="sol" data-nuevo-dia="' \+ today\(\) \+ '">\+ Nueva solicitud<\/button>/.test(bloque), "Falta el botón fijo «Nueva solicitud» en la barra del Calendario");
 
-// Vista mensual: pinchar un día (desde hoy) crea la solicitud de ese día; un día pasado sigue llevando a su semana.
-assert.ok(bloque.includes('if (dd && modo === "mes" && dd.dataset.dia >= today()) { nuevaDesde("sol", dd.dataset.dia); return; }'), "En el mes, pinchar un día desde hoy crea la solicitud de ese día");
+// Vista mensual como centro de mando: pinchar un día abre su panel (solicitudes por aprobar con Conceder y Denegar, concesiones, seguimientos y «+ Nueva solicitud»).
+assert.ok(bloque.includes('if (dd && modo === "mes") { diaSel = dd.dataset.dia;'), "En el mes, pinchar un día abre su panel");
+assert.ok(bloque.includes("const drawDia = (dias, t) =>") && bloque.includes('data-pa="conceder"') && bloque.includes('data-pa="den-ok"') && bloque.includes('id="calMotivo"'), "El panel del día ofrece Conceder y Denegar (con motivo)");
+assert.ok(bloque.includes("const panelAccion = async (a, i) =>") && bloque.includes("api.conceder(r)") && bloque.includes("api.denegar(r, motivo)"), "Conceder y denegar usan la API del Centro");
+assert.ok(/window\.mapaAccionesCalendario = \{\s*conceder: \(r\) => ejecuta\(r\.c, mutadores\.conceder\(r\)/.test(html) && html.includes('denegar: (r, motivo) => ejecuta(r.c, mutadores.resolver(r, "denegada", motivo || ""), '), "El Centro expone conceder y denegar con su misma escritura verificada");
+assert.ok(html.includes("if (!body.firstChild) return; /* el Centro aún no se ha abierto"), "El Centro no repinta si nunca se abrió (se concede desde el Calendario)");
+assert.ok(bloque.includes('<span class="cal-ch \' + (i.e === "pendiente" ? "p" : "a")') && bloque.includes("chips.slice(0, 3)") && bloque.includes('" más</span>"'), "Las celdas del mes llevan chips (hasta 3 y «+n más»)");
 assert.ok(bloque.includes("const nuevaDesde = (tipo, dia) =>"), "Un solo punto de entrada para abrir el formulario desde el Calendario");
 // Al entrar se abre el Calendario en vista mensual (una vez por sesión, en memoria) y esa es la vista por defecto.
-assert.ok(/prov = null, ong = "", modo = "mes";/.test(bloque), "La vista por defecto es el mes");
+assert.ok(/ong = "", modo = "mes",/.test(bloque), "La vista por defecto es el mes");
 assert.ok(bloque.includes('document.addEventListener("sesion:lista"') && bloque.includes("if (abiertoAlEntrar) return; abiertoAlEntrar = true;") && bloque.includes('if (!document.querySelector("dialog[open]")) abrir();'), "Al entrar se abre el Calendario una vez por sesión, sin interponerse a otro diálogo abierto");
 console.log("Calendario semanal: comprobaciones estáticas correctas.");

@@ -336,11 +336,13 @@ const main = async () => {
     /* vista mensual: pinchar un día (desde hoy) crea la solicitud de ese día; uno pasado sigue llevando a su semana */
     cb().querySelector('[data-modo=mes]').click(); await w(400);
     const fut = [...cb().querySelectorAll('.cal-m')].find(x => x.dataset.dia >= t);
-    fut.click(); await w(1000);
+    fut.click(); await w(500);
+    out.panel = [!cb().querySelector('#calDia').hidden, cb().querySelector('#calDiaT')?.textContent.length > 0, !!cb().querySelector('#calDia [data-nuevo=sol]'), document.getElementById('dlgCentro').open, cb().querySelector('.cal-m.sel')?.getAttribute('aria-pressed')];
+    cb().querySelector('#calDia [data-nuevo=sol]').click(); await w(1000);
     out.mes = [document.getElementById('dlgCal').open, document.getElementById('dlgCentro').classList.contains('solo-form'), b2().querySelector('#cfDesde')?.value === fut.dataset.dia, b2().querySelector('#cfHasta')?.value === fut.dataset.dia, b2().querySelector('#cfT')?.textContent];
     b2().querySelector('#cfCancelar')?.click(); await w(300);
     const pas = [...cb().querySelectorAll('.cal-m')].find(x => x.dataset.dia < t); /* se busca después: el Calendario se repinta al cerrar el formulario */
-    out.mesPasado = null; if (pas) { pas.click(); await w(400); out.mesPasado = [document.getElementById('dlgCentro').open, cb().querySelector('[data-modo=dias]').getAttribute('aria-pressed')]; }
+    out.mesPasado = null; if (pas) { pas.click(); await w(400); out.mesPasado = [document.getElementById('dlgCentro').open, !cb().querySelector('#calDia').hidden, !cb().querySelector('#calDia [data-nuevo]')]; }
     return out;`);
   /* En lunes (primer dia de la semana mostrada) no hay ningun dia pasado y las 7 casillas ofrecen solicitud: conSol puede ser 7. Lo que no puede ocurrir es ofrecerla en un dia pasado (solPasado). */
   ok(r3g.dias === 7 && r3g.conCon === 7 && r3g.conSol >= 1 && r3g.conSol <= 7 && !r3g.solPasado, "cada día del Calendario ofrece «+ Concesión»; «+ Solicitud» solo desde hoy [" + r3g.conSol + "/" + r3g.conCon + "]");
@@ -349,8 +351,9 @@ const main = async () => {
   eq(r3g.encima, [true, true, "Nueva solicitud", true], "el formulario se abre encima del Calendario (que sigue abierto), solo con el formulario y con su título");
   eq(r3g.guardada, [r3g.dia, r3g.dia, "pending"], "la solicitud creada desde el día se guarda con esa fecha [" + r3g.aviso + "]");
   eq(r3g.volver, [true, true, true, "Centro de permisos", true, true], "al guardar se vuelve al Calendario: el Centro se cierra, queda el aviso de lo guardado y la solicitud nueva sale en la semana [" + r3g.aviso + "]");
-  eq(r3g.mes, [true, true, true, true, "Nueva solicitud"], "en la vista mensual, pinchar un día desde hoy abre la nueva solicitud con ese día");
-  if (r3g.mesPasado) eq(r3g.mesPasado, [false, "true"], "…y un día pasado sigue llevando a su semana en «Por día»");
+  eq(r3g.panel, [true, true, true, false, "true"], "en la vista mensual, pinchar un día abre su panel (sin abrir el Centro) y ofrece «+ Nueva solicitud»");
+  eq(r3g.mes, [true, true, true, true, "Nueva solicitud"], "…y desde el panel, «+ Nueva solicitud» abre el formulario con ese día");
+  if (r3g.mesPasado) eq(r3g.mesPasado, [false, true, true], "…y un día pasado también abre su panel, pero sin crear solicitudes nuevas");
   eq(r3g.con.slice(0, 3), ["Nueva concesión", true, true], "«+ Concesión» abre el formulario con la fecha del día"); ok(r3g.con[3] !== false, "…y con la ONG que se estaba filtrando en el Calendario");
 
   /* ===== 3h. Menú con secciones desplegables ===== */
@@ -696,6 +699,39 @@ const main = async () => {
     out.pequenos = [...b().querySelectorAll('button, select, input:not([type=checkbox])')].filter(e => e.offsetParent !== null && e.getBoundingClientRect().height < 43.5).map(e => (e.id || e.className).toString().slice(0, 24));
     b().querySelector('[data-new=sol]').click(); await w(300); mide('formulario'); return out;`);
   eq(r6.desborde, [], "sin desbordamiento horizontal en ninguna vista"); eq(r6.detalle, [true, true], "el detalle ocupa toda la pantalla"); eq(r6.pequenos, [], "ningún control por debajo de 44 px");
+
+  /* ===== 3g2. Calendario mensual como centro de mando: conceder y denegar desde el panel del día ===== */
+  await abre("admin@test.es", 1440, 900, { sinCentro: true, deja: true });
+  const r3p = await ev(ayudas + `
+    const out = {}; const rel = () => fetch('http://127.0.0.1:8766/__rel').then(r => r.json()); const cb = () => document.getElementById('calBody');
+    out.entrada = [document.getElementById('dlgCal').open, cb().querySelector('[data-modo=mes]').getAttribute('aria-pressed'), cb().querySelectorAll('.cal-ch').length > 0, cb().querySelectorAll('.cal-ch.p').length > 0];
+    const celda = () => [...cb().querySelectorAll('.cal-m')].find(x => x.querySelector('.cal-ch.p'));
+    const antes = await rel(); const pend0 = antes.permit_applications.filter(a => a.status === 'pending').length, apr0 = antes.permit_applications.filter(a => a.status === 'approved').length, den0 = antes.permit_applications.filter(a => a.status === 'denied').length, g0 = antes.permit_grants.length;
+    celda().click(); await w(500);
+    const filas = () => [...cb().querySelectorAll('#calDia .cal-dia-f')].filter(f => f.querySelector('[data-pa=conceder],[data-pa=den-ok]'));
+    out.pendientesDia = cb().querySelectorAll('#calDia [data-pa=conceder]').length;
+    out.enfocado = document.activeElement === cb().querySelector('#calDiaT');
+    /* conceder la primera */
+    cb().querySelector('#calDia [data-pa=conceder]').click(); await w(3500);
+    const d1 = await rel();
+    out.conceder = [d1.permit_applications.filter(a => a.status === 'approved').length - apr0, d1.permit_grants.length - g0, /Aprobada y guardada/.test(cb().querySelector('#calAviso').textContent), !cb().querySelector('#calAviso').hidden];
+    out.restantes = cb().querySelectorAll('#calDia [data-pa=conceder]').length;
+    /* denegar otra con motivo, si queda alguna en el día; si no, en otro día */
+    if (!cb().querySelector('#calDia [data-pa=den]')) { celda().click(); await w(500); }
+    cb().querySelector('#calDia [data-pa=den]').click(); await w(300);
+    out.motivoVisible = !!cb().querySelector('#calMotivo'); out.motivoEnfocado = document.activeElement === cb().querySelector('#calMotivo');
+    const m = cb().querySelector('#calMotivo'); m.value = 'Motivo E2E calendario'; m.dispatchEvent(new Event('input', { bubbles: true }));
+    cb().querySelector('#calDia [data-pa=den-ok]').click(); await w(3500);
+    const d2 = await rel();
+    out.denegar = [d2.permit_applications.filter(a => a.status === 'denied').length - den0, d2.permit_applications.some(a => a.status === 'denied' && a.resolution_reason === 'Motivo E2E calendario'), /Denegación guardada/.test(cb().querySelector('#calAviso').textContent)];
+    out.pendientes = [pend0, d2.permit_applications.filter(a => a.status === 'pending').length];
+    return out;`);
+  eq(r3p.entrada, [true, "true", true, true], "al entrar, el Calendario mensual muestra chips (con solicitudes por aprobar) en sus celdas");
+  ok(r3p.pendientesDia >= 1 && r3p.enfocado, "pinchar un día con solicitudes por aprobar abre su panel con Conceder y Denegar y el foco en su título [" + r3p.pendientesDia + "]");
+  eq(r3p.conceder, [1, 1, true, true], "Conceder desde el panel aprueba la solicitud, crea su concesión y lo dice [" + JSON.stringify(r3p.conceder) + "]");
+  ok(r3p.motivoVisible && r3p.motivoEnfocado, "Denegar pide el motivo en el propio panel, con el foco en él");
+  eq(r3p.denegar, [1, true, true], "Denegar desde el panel guarda la denegación con su motivo y lo dice [" + JSON.stringify(r3p.denegar) + "]");
+  eq(r3p.pendientes[0] - r3p.pendientes[1], 2, "las solicitudes por aprobar bajan en dos");
 
   ok(fallos.length === 0, "La página no lanzó excepciones ni errores de consola inesperados:\n  " + fallos.join("\n  "));
   c.close();

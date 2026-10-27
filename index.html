@@ -666,7 +666,8 @@
     body.imprime-cal #dlgCal .cal-scroll, body.imprime-cal #dlgCal .pn-scroll, body.imprime-cal #dlgCal .cal-day { overflow: visible; }
     body.imprime-cal #dlgCal .cal-wk { min-width: 0; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
     body.imprime-cal #dlgCal .cal-stack { animation: none; }
-    body.imprime-cal #dlgCal [data-nuevo], body.imprime-cal #dlgCal .cal-new { display: none !important; }
+    body.imprime-cal #dlgCal [data-nuevo], body.imprime-cal #dlgCal .cal-new, body.imprime-cal #dlgCal .cal-dia { display: none !important; }
+    body.imprime-cal #dlgCal .cal-mesw.con-dia { grid-template-columns: minmax(0, 1fr); }
     body.imprime-cal #dlgCal .cal-hd { flex-wrap: wrap; }
     body.imprime-cal #dlgCal tr { break-inside: avoid; }
     /* la hoja siempre en claro: mismos valores que :root (la prueba test-calendario-pdf comprueba que no falte ninguno del modo oscuro) */
@@ -674,6 +675,27 @@
     body.imprime-cal #dlgCal { --ong-bg-l: 91%; --ong-fg-l: 22%; } /* en las tarjetas NO: break-inside en cientos de tarjetas cuelga a Chrome al paginar */
   }
   .cal-new { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 12px 8px; }
+  .cal-mesw { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; align-items: start; }
+  .cal-mesw.con-dia { grid-template-columns: minmax(0, 1fr) 360px; }
+  .cal-m { min-height: 118px; }
+  .cal-m.sel { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+  .cal-ch { display: flex; align-items: center; gap: 5px; min-width: 0; padding: 1px 6px; font-size: var(--fs-label); border: 1px solid var(--line-2); border-radius: var(--r-xs); background: var(--bg); }
+  .cal-ch.p { border-style: dashed; }
+  .cal-ch i { flex: none; width: 8px; height: 8px; border-radius: 2px; background: var(--ch-aut); }
+  .cal-ch.p i { background: var(--ch-dem); }
+  .cal-ch .t { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .cal-mas { font-size: var(--fs-label); color: var(--muted); }
+  .cal-dia { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-card); padding: 12px 14px; display: grid; gap: 10px; position: sticky; top: 0; }
+  .cal-dia[hidden] { display: none; }
+  .cal-dia-h { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .cal-dia-h h3 { margin: 0; font-size: var(--fs-title); font-weight: 680; }
+  .cal-dia h4 { margin: 0 0 6px; font-size: var(--fs-label); font-weight: 650; color: var(--muted); }
+  .cal-dia-l { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .cal-dia-f { display: grid; gap: 6px; padding: 8px 10px; background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-control); }
+  .cal-dia-f strong { display: block; font-weight: 620; }
+  .cal-dia-f span { color: var(--muted); font-size: var(--fs-label); }
+  .cal-dia-den { display: grid; gap: 8px; }
+  @media (max-width: 1000px) { .cal-mesw.con-dia { grid-template-columns: minmax(0, 1fr); } .cal-dia { position: static; } }
   .cal-nueva { height: 36px; padding: 0 16px; margin-left: auto; }
   .cal-new button { height: 28px; padding: 0 10px; font-size: var(--fs-label); border-radius: var(--r-pill); }
   .cal-modo { display: inline-flex; gap: 6px; margin-left: auto; }
@@ -4707,7 +4729,7 @@ const csvCell = (value) => {
   const mesDe = (d) => MES[+d.slice(5, 7) - 1];
   const hue = (s) => { let h = 7; for (const ch of s) h = (h * 31 + ch.codePointAt(0)) % 360; return h >= 70 && h <= 170 ? h + 120 : h; }; /* sin verdes: es el tono de «Concesión» */
   const plural = (n, uno, varios) => n + " " + (n === 1 ? uno : varios);
-  let wk = mondayOf(today()), prov = null, ong = "", modo = "mes"; /* vista por defecto: el mes; prov: null hasta la primera apertura; "" = todas las provincias */
+  let wk = mondayOf(today()), prov = null, ong = "", modo = "mes", diaSel = "", denegando = -1, ocupadoCal = false, panelPend = []; /* vista por defecto: el mes; día abierto en el panel; solicitud que se está denegando; guardando; solicitudes del panel; prov: null hasta la primera apertura; "" = todas las provincias */
   const ver = { autorizada: true, pendiente: true, seguimiento: true, historico: false }; /* qué se muestra; el histórico va apagado */
 
   const provOpts = () => {
@@ -4810,6 +4832,29 @@ const csvCell = (value) => {
   const MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
   const mesRef = () => addDays(wk, 3).slice(0, 7); /* el mes de la semana mostrada es el de su jueves */
   const desplazaMes = (delta) => { const [y, m] = mesRef().split("-").map(Number); wk = mondayOf(new Date(Date.UTC(y, m - 1 + delta, 15)).toISOString().slice(0, 10)); };
+  /* Panel del día (vista mensual): lo de ese día con sus acciones. Desde aquí se crea una solicitud con el día puesto y se concede o deniega una por aprobar,
+     con la misma escritura y verificación que el Centro (window.mapaAccionesCalendario). Lo demás (editar, retirar, cancelar, seguimientos) sigue en el Centro. */
+  const drawDia = (dias, t) => {
+    const box = body.querySelector("#calDia"); panelPend = [];
+    const d = diaSel && dias.find((x) => x.d === diaSel);
+    if (!d) { diaSel = ""; box.hidden = true; box.innerHTML = ""; return; }
+    const lista = d.items.filter((i) => visible(i.e)), pend = lista.filter((i) => i.e === "pendiente" && i.r.k === "sol" && i.r.est === "pendiente").map((i) => i.r), cons = lista.filter((i) => i.r.k === "con");
+    panelPend = pend;
+    const otras = lista.filter((i) => i.e === "pendiente" && !pend.includes(i.r)).length;
+    const periodoDe = (r) => (r.desde && r.hasta && r.desde !== r.hasta ? fmtD(r.desde).slice(0, 5) + " → " + fmtD(r.hasta).slice(0, 5) : fmtD(r.desde || r.hasta).slice(0, 5));
+    const dis = ocupadoCal ? " disabled" : "";
+    const fila = (r, i) => '<li class="cal-dia-f"><div><strong>' + esc(r.c.name) + "</strong><span>" + esc(townOf(r.c) + " · " + ongDe(r) + " · " + periodoDe(r) + (r.n ? " · " + plural(r.n, "captador", "captadores") : "")) + "</span></div>" +
+      (denegando === i
+        ? '<div class="cal-dia-den"><label class="cal-f">Motivo (opcional)<input id="calMotivo" type="text" maxlength="300" autocomplete="off"></label><div class="ce-btns"><button type="button" class="ce-act riesgo" data-pa="den-ok" data-i="' + i + '"' + dis + '>Confirmar la denegación</button><button type="button" class="ce-act" data-pa="no" data-i="' + i + '"' + dis + ">No, volver</button></div></div>"
+        : '<div class="ce-btns"><button type="button" class="ce-act ok" data-pa="conceder" data-i="' + i + '" aria-label="Conceder la solicitud de ' + esc(r.c.name) + '"' + dis + '>Conceder</button><button type="button" class="ce-act" data-pa="den" data-i="' + i + '" aria-label="Denegar la solicitud de ' + esc(r.c.name) + '"' + dis + ">Denegar</button></div>") + "</li>";
+    box.hidden = false;
+    box.innerHTML = '<div class="cal-dia-h"><h3 id="calDiaT" tabindex="-1">' + esc(DIAS[daysBetween(mondayOf(d.d), d.d)] + " " + (+d.d.slice(8)) + " de " + MESES[+d.d.slice(5, 7) - 1]) + '</h3><button type="button" class="ce-x" data-dia-cierra="1" aria-label="Cerrar el día">&times;</button></div>' +
+      (d.d >= t ? '<p class="cal-new" role="group" aria-label="Crear el ' + esc(fmtD(d.d)) + '"><button type="button" class="primary" data-nuevo="sol" data-nuevo-dia="' + d.d + '">+ Nueva solicitud</button><button type="button" data-nuevo="con" data-nuevo-dia="' + d.d + '">+ Concesión</button></p>' : '<p class="cal-note">Día pasado: no se crean solicitudes nuevas.</p>') +
+      "<section><h4>Solicitudes por aprobar (" + pend.length + ")</h4>" + (pend.length ? '<ul class="cal-dia-l">' + pend.map(fila).join("") + "</ul>" : '<p class="cal-note">Ninguna este día.</p>') + (otras ? '<p class="cal-note">' + esc(plural(otras, "solicitud más se reconstruye", "solicitudes más se reconstruyen") + " con sus fechas pasadas: se ven en el Centro de permisos.") + "</p>" : "") + "</section>" +
+      "<section><h4>Concesiones (" + cons.length + ")</h4>" + (cons.length ? '<ul class="cal-dia-l">' + cons.map((i) => '<li class="cal-dia-f"><div><strong>' + esc(i.r.c.name) + "</strong><span>" + esc(townOf(i.r.c) + " · " + ongDe(i.r) + " · " + periodoDe(i.r) + (i.r.n ? " · " + plural(i.r.n, "captador", "captadores") : "") + " · " + EST[i.e][0]) + "</span></div></li>").join("") + "</ul>" : '<p class="cal-note">Ninguna este día.</p>') + "</section>" +
+      "<section><h4>Seguimientos (" + d.seg.length + ")</h4>" + (d.seg.length ? '<ul class="cal-dia-l">' + d.seg.map((s) => '<li class="cal-dia-f"><div><strong>' + esc(s.c.name) + "</strong><span>" + esc((s.accion || "Seguimiento") + (d.d < t ? " · atrasado" : "")) + "</span></div></li>").join("") + '</ul><p class="cal-note">Se gestionan en el Centro de permisos.</p>' : '<p class="cal-note">Ninguno este día.</p>') + "</section>";
+    if (denegando >= 0) body.querySelector("#calMotivo")?.focus();
+  };
   const drawMes = (recs, segs, t) => {
     const ref = mesRef(), [y, m] = ref.split("-").map(Number), primero = ref + "-01", ultimo = ref + "-" + String(new Date(Date.UTC(y, m, 0)).getUTCDate()).padStart(2, "0");
     const semanas = []; for (let ini = mondayOf(primero); ini <= ultimo; ini = addDays(ini, 7)) semanas.push(calendarioSemana(recs, segs, ini, t));
@@ -4824,13 +4869,17 @@ const csvCell = (value) => {
       '<div class="t"><b>' + nSeg + "</b><span>" + (nSeg === 1 ? "seguimiento" : "seguimientos") + " en el mes" + (nAtr ? " · " + nAtr + " atrasado" + (nAtr === 1 ? "" : "s") : "") + "</span></div>";
     const nota = body.querySelector("#calPast"); nota.hidden = true;
     const ini = ref + "-01" >= t.slice(0, 7) + "-01" ? "" : "Mes pasado: las concesiones se muestran con sus fechas y las solicitudes solo cuando constan sus fechas de alta y de decisión."; if (ini) { nota.hidden = false; nota.textContent = ini; }
-    body.querySelector("#calGrid").innerHTML = '<div class="cal-mleg"><span><i class="a"></i>Autorizados (concesiones)</span><span><i class="p"></i>Por aprobar (solicitudes pendientes)</span><span>seg. = seguimientos</span><span>Pulsa un día desde hoy para crear una solicitud</span></div>' +
+    body.querySelector("#calGrid").innerHTML = '<div class="cal-mesw' + (diaSel ? " con-dia" : "") + '"><div class="cal-mesg"><div class="cal-mleg"><span><i class="a"></i>Autorizados (concesiones)</span><span><i class="p"></i>Por aprobar (solicitudes pendientes)</span><span>seg. = seguimientos</span><span>Pulsa un día para ver sus solicitudes y crear una</span></div>' +
       '<div class="cal-mes" role="group" aria-label="Calendario de ' + esc(MESES[m - 1] + " " + y) + '">' + DIAS.map((n) => '<span class="cal-mh">' + n.slice(0, 3) + "</span>").join("") +
       semanas.map((sem) => sem.map((x, k) => {
         const fuera = x.d < primero || x.d > ultimo, lbl = DIAS[k] + " " + (+x.d.slice(8)) + " de " + MESES[+x.d.slice(5, 7) - 1] + ": " + plural(x.aut, "captador autorizado", "captadores autorizados") + ", " + x.pen + " por aprobar, " + plural(x.seg.length, "seguimiento", "seguimientos") + (x.d >= t ? ". Pulsa para crear una solicitud este día" : "");
-        return '<button type="button" class="cal-m' + (x.d === t ? " hoy" : "") + (fuera ? " fuera" : "") + (k >= 5 ? " we" : "") + '" data-dia="' + x.d + '" aria-label="' + esc(lbl) + '"' + (x.d === t ? ' aria-current="date"' : "") + '><span class="d">' + (+x.d.slice(8)) + "</span>" +
-          (x.aut ? '<span class="m"><i class="a"></i>' + x.aut + "</span>" : "") + (x.pen ? '<span class="m"><i class="p"></i>' + x.pen + "</span>" : "") + (x.seg.length ? '<span class="sg' + (x.d < t ? " late" : "") + '">' + x.seg.length + (x.d < t ? " atr." : " seg.") + "</span>" : "") + "</button>";
-      }).join("")).join("") + "</div>";
+        const chips = x.items.filter((i) => visible(i.e) && (i.e === "pendiente" || i.e === "autorizada")).sort((p, q) => (p.e === "pendiente" ? 0 : 1) - (q.e === "pendiente" ? 0 : 1));
+        const chipH = (i) => '<span class="cal-ch ' + (i.e === "pendiente" ? "p" : "a") + '"><i></i><span class="adm-sr">' + (i.e === "pendiente" ? "Por aprobar: " : "Concesión: ") + "</span><span class=\"t\">" + esc(ongDe(i.r) + " · " + i.r.c.name) + "</span></span>";
+        return '<button type="button" class="cal-m' + (x.d === t ? " hoy" : "") + (fuera ? " fuera" : "") + (k >= 5 ? " we" : "") + (x.d === diaSel ? " sel" : "") + '" data-dia="' + x.d + '" aria-pressed="' + (x.d === diaSel) + '" aria-label="' + esc(lbl + ". Pulsa para ver el día") + '"' + (x.d === t ? ' aria-current="date"' : "") + '><span class="d">' + (+x.d.slice(8)) + "</span>" +
+          chips.slice(0, 3).map(chipH).join("") + (chips.length > 3 ? '<span class="cal-mas">+' + (chips.length - 3) + " más</span>" : "") +
+          (x.seg.length ? '<span class="sg' + (x.d < t ? " late" : "") + '">' + x.seg.length + (x.d < t ? " atr." : " seg.") + "</span>" : "") + "</button>";
+      }).join("")).join("") + '</div></div><aside id="calDia" class="cal-dia" aria-label="Detalle del día"' + (diaSel ? "" : " hidden") + "></aside></div>";
+    drawDia(semanas.flat(), t);
   };
   /* Vista por ONG: captadores autorizados y por aprobar de cada ONG en cada día, en una tabla. */
   const tablaOng = (sem, t) => {
@@ -4901,16 +4950,31 @@ const csvCell = (value) => {
     const av = body.querySelector("#calAviso"), texto = e.detail && e.detail.texto;
     if (av && texto) { av.textContent = texto; av.hidden = false; av.focus(); } else body.querySelector("[data-nuevo]")?.focus();
   });
+  /* Conceder o denegar una solicitud del panel del día. Se lee el motivo antes de repintar; el resultado es el mismo texto verificado que da el Centro. */
+  const panelAccion = async (a, i) => {
+    if (ocupadoCal) return;
+    const r = panelPend[i], api = window.mapaAccionesCalendario; if (!r || !api) return;
+    if (a === "den") { denegando = i; draw(); return; }
+    if (a === "no") { denegando = -1; draw(); body.querySelector('[data-pa="den"][data-i="' + i + '"]')?.focus(); return; }
+    const motivo = a === "den-ok" ? (body.querySelector("#calMotivo")?.value || "").trim() : "";
+    ocupadoCal = true; draw();
+    let res; try { res = a === "conceder" ? await api.conceder(r) : await api.denegar(r, motivo); } catch (e) { console.error("[Mapa] Error al guardar desde el Calendario:", e); res = { ok: false, texto: "No se pudo guardar. Revisa el Centro de permisos." }; }
+    ocupadoCal = false; denegando = -1; draw();
+    const av = body.querySelector("#calAviso"); if (av) { av.textContent = res.texto; av.hidden = false; av.focus(); }
+  };
   /* Formulario nuevo con el día puesto, encima del Calendario (que no se cierra). */
   const nuevaDesde = (tipo, dia) => document.dispatchEvent(new CustomEvent("centro:abrir", { detail: { vista: tipo === "sol" ? "sol" : "con", est: "todas", prov, ong, nuevo: tipo, desde: dia, enCalendario: true } }));
   body.addEventListener("click", (e) => {
     if (e.target.closest("#calPdf")) { exportaPdf(); return; }
     const cc = e.target.closest("[data-centro]");
     if (cc) { const [vista, est] = cc.dataset.centro.split(":"); dlg.close(); document.dispatchEvent(new CustomEvent("centro:abrir", { detail: { vista, est, prov, ong } })); return; }
+    const pa = e.target.closest("[data-pa]");
+    if (pa) { panelAccion(pa.dataset.pa, +pa.dataset.i); return; }
+    if (e.target.closest("[data-dia-cierra]")) { const d0 = diaSel; diaSel = ""; denegando = -1; draw(); body.querySelector('[data-dia="' + d0 + '"]')?.focus(); return; }
     const nv = e.target.closest("[data-nuevo]");
     if (nv) { nuevaDesde(nv.dataset.nuevo, nv.dataset.nuevoDia); return; } /* sin cerrar el Calendario: el formulario se abre encima y al guardar se vuelve a la semana */
     const dd = e.target.closest("[data-dia]");
-    if (dd && modo === "mes" && dd.dataset.dia >= today()) { nuevaDesde("sol", dd.dataset.dia); return; } /* en el mes, pinchar un día desde hoy crea la solicitud de ese día */
+    if (dd && modo === "mes") { diaSel = dd.dataset.dia; denegando = -1; draw(); body.querySelector("#calDiaT")?.focus(); body.querySelector("#calDia")?.scrollIntoView({ block: "nearest" }); return; } /* en el mes, pinchar un día abre su panel */
     if (dd) { wk = mondayOf(dd.dataset.dia); modo = "dias"; body.querySelectorAll("[data-modo]").forEach((b2) => b2.setAttribute("aria-pressed", String(b2.dataset.modo === modo))); draw(); return; }
     const w = e.target.closest("[data-w]");
     if (w) { if (w.dataset.w === "0") wk = mondayOf(today()); else if (modo === "mes") desplazaMes(+w.dataset.w); else wk = addDays(wk, 7 * +w.dataset.w); draw(); return; }
@@ -5542,6 +5606,7 @@ const csvCell = (value) => {
 
   /* === Pantalla principal === */
   const draw = () => {
+    if (!body.firstChild) return; /* el Centro aún no se ha abierto (p. ej. se concede desde el Calendario): no hay nada que repintar */
     try { dibuja(); }
     catch (e) {
       console.error("[Mapa] Error al dibujar el Centro de permisos:", e);
@@ -5799,6 +5864,11 @@ const csvCell = (value) => {
     else if (a === "ed") abreForm(r.k, c, r);
     else if (a === "edseg") abreForm("seg", c, r);
     else if (TEXTOS_CONF[a]) { accion = { a, key: b.dataset.key }; draw(); }
+  };
+  /* Acciones sobre una solicitud desde fuera del Centro (el panel del día del Calendario): misma escritura y misma verificación que en el Centro. */
+  window.mapaAccionesCalendario = {
+    conceder: (r) => ejecuta(r.c, mutadores.conceder(r), "Aprobada y guardada en «" + r.c.name + "»: la solicitud se conserva y se ha creado la concesión. Si te dieron otras fechas o captadores, usa Editar en Concesiones."),
+    denegar: (r, motivo) => ejecuta(r.c, mutadores.resolver(r, "denegada", motivo || ""), "Denegación guardada en «" + r.c.name + "».")
   };
   const confirma = async () => {
     const r = indice.get(accion.key), a = accion.a, mot = body.querySelector("#ceMotivo"), motivo = mot ? mot.value.trim() : "";
