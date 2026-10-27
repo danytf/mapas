@@ -84,7 +84,7 @@ for (const m of raiz[2].matchAll(/(--[\w-]+):/g)) {
 }
 
 // «+ Solicitud» y «+ Concesión» de un día: el formulario se abre encima del Calendario, que no se cierra, y al terminar se vuelve a la semana.
-assert.ok(bloque.includes("if (nv) { nuevaDesde(nv.dataset.nuevo, nv.dataset.nuevoDia); return; }") && /const nuevaDesde = \(tipo, dia\) => document\.dispatchEvent\(new CustomEvent\("centro:abrir", \{ detail: \{[^}]*enCalendario: true \} \}\)\);/.test(bloque), "«+ Solicitud» abre el formulario sin cerrar el Calendario");
+assert.ok(bloque.includes("if (nv) { nuevaDesde(nv.dataset.nuevo, nv.dataset.nuevoDia); return; }") && /const nuevaDesde = \(tipo, dia, hasta\) => document\.dispatchEvent\(new CustomEvent\("centro:abrir", \{ detail: \{[^}]*enCalendario: true \} \}\)\);/.test(bloque), "«+ Solicitud» abre el formulario sin cerrar el Calendario");
 assert.ok(bloque.includes('document.addEventListener("calendario:refresca"') && bloque.includes('id="calAviso"'), "El Calendario se repinta y avisa de lo guardado al volver del formulario");
 assert.ok(html.includes("const cierraSoloForm = (texto) =>") && html.includes("cierraSoloForm(res.texto)") && html.includes('if (e.target.closest("#cfCancelar")) { form = null; dibujaForm(); cierraSoloForm(); return; }'), "Guardar y cancelar cierran el formulario y devuelven al Calendario");
 assert.ok(html.includes("#dlgCentro.solo-form #ceBody .ce-nav"), "En ese modo el Centro enseña solo el formulario");
@@ -93,13 +93,18 @@ assert.ok(html.includes("#dlgCentro.solo-form #ceBody .ce-nav"), "En ese modo el
 assert.ok(/<button type="button" class="primary cal-nueva" data-nuevo="sol" data-nuevo-dia="' \+ today\(\) \+ '">\+ Nueva solicitud<\/button>/.test(bloque), "Falta el botón fijo «Nueva solicitud» en la barra del Calendario");
 
 // Vista mensual como centro de mando: pinchar un día abre su panel (solicitudes por aprobar con Conceder y Denegar, concesiones, seguimientos y «+ Nueva solicitud»).
-assert.ok(bloque.includes('if (dd && modo === "mes") { diaSel = dd.dataset.dia;'), "En el mes, pinchar un día abre su panel");
+assert.ok(bloque.includes('if (dd && modo === "mes") {') && bloque.includes('rangoIni = ""; diaSel = dia; denegando = -1; draw();'), "En el mes, pinchar un día abre su panel");
+// Periodos: inicio y fin marcados en el mes («Hasta otro día…» o Mayús + clic) y formulario con atajos y varios periodos (una solicitud por periodo).
+assert.ok(bloque.includes('const ini = rangoIni || (e.shiftKey && diaSel ? diaSel : "")') && bloque.includes('nuevaDesde("sol", ini < dia ? ini : dia, ini < dia ? dia : ini)') && bloque.includes('data-rango-fin="1"'), "En el mes se marca un periodo con inicio y fin");
+assert.ok(html.includes('hasta: o.hasta && validIsoDate(o.hasta) && o.hasta >= o.desde ? o.hasta : o.desde'), "El formulario nuevo acepta el periodo que trae el Calendario");
+assert.ok(html.includes('<option value="7">1 semana</option><option value="1m">1 mes</option><option value="3m">3 meses</option><option value="1a">1 año</option>') && html.includes("const hastaDe = (desde, k) =>"), "El formulario ofrece atajos de periodo (1 semana, 1 mes, 3 meses, 1 año)");
+assert.ok(html.includes('id="cfMasPer">+ Añadir otro periodo</button>') && html.includes('rangos.map((rg, i) =>') && html.includes("nuevas.forEach((y) => copia.solicitudes.push(y))") && html.includes("Dos periodos se solapan"), "Varios periodos crean una solicitud por periodo en una sola escritura y no se solapan");
 assert.ok(bloque.includes("const drawDia = (dias, t) =>") && bloque.includes('data-pa="conceder"') && bloque.includes('data-pa="den-ok"') && bloque.includes('id="calMotivo"'), "El panel del día ofrece Conceder y Denegar (con motivo)");
 assert.ok(bloque.includes("const panelAccion = async (a, i) =>") && bloque.includes("api.conceder(r)") && bloque.includes("api.denegar(r, motivo)"), "Conceder y denegar usan la API del Centro");
 assert.ok(/window\.mapaAccionesCalendario = \{\s*conceder: \(r\) => ejecuta\(r\.c, mutadores\.conceder\(r\)/.test(html) && html.includes('denegar: (r, motivo) => ejecuta(r.c, mutadores.resolver(r, "denegada", motivo || ""), '), "El Centro expone conceder y denegar con su misma escritura verificada");
 assert.ok(html.includes("if (!body.firstChild) return; /* el Centro aún no se ha abierto"), "El Centro no repinta si nunca se abrió (se concede desde el Calendario)");
 assert.ok(bloque.includes('<span class="cal-ch \' + (i.e === "pendiente" ? "p" : "a")') && bloque.includes("chips.slice(0, 2)") && bloque.includes('<span class="mas-t"> más</span>'), "Las celdas del mes llevan chips (hasta 2 y «+n más»)");
-assert.ok(bloque.includes("const nuevaDesde = (tipo, dia) =>"), "Un solo punto de entrada para abrir el formulario desde el Calendario");
+assert.ok(bloque.includes("const nuevaDesde = (tipo, dia, hasta) =>"), "Un solo punto de entrada para abrir el formulario desde el Calendario");
 // Al entrar se abre el Calendario en vista mensual (una vez por sesión, en memoria) y esa es la vista por defecto.
 assert.ok(/ong = "", modo = "mes",/.test(bloque), "La vista por defecto es el mes");
 assert.ok(bloque.includes('document.addEventListener("sesion:lista"') && bloque.includes("if (abiertoAlEntrar) return; abiertoAlEntrar = true;") && bloque.includes('if (!document.querySelector("dialog[open]")) abrir();'), "Al entrar se abre el Calendario una vez por sesión, sin interponerse a otro diálogo abierto");
