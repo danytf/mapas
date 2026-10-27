@@ -556,21 +556,35 @@
   /* Calendario semanal: la silueta de barras de cada día va sobre su propia columna, así quedan alineadas por construcción. */
   #dlgCal { width: min(1380px, 98vw); max-height: 94vh; overflow: auto; background: var(--bg); padding: 20px 22px 24px; --ong-bg-l: 91%; --ong-fg-l: 22%; }
   @media (prefers-color-scheme: dark) { #dlgCal { --ong-bg-l: 24%; --ong-fg-l: 86%; } }
-  .cal-bar { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: end; margin-bottom: 12px; }
+  .cal-top { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-bottom: 10px; }
+  .cal-top .cal-modo { margin-left: auto; }
+  .cal-acc { display: flex; align-items: center; gap: 8px; }
+  .cal-sub { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin-bottom: 10px; }
+  .cal-menu, .cal-mostrar { position: relative; }
+  .cal-menu > summary, .cal-mostrar > summary { display: inline-flex; align-items: center; height: 36px; padding: 0 14px; font-size: var(--fs-label); color: var(--fg); background: var(--panel); border: 1px solid var(--line-2); border-radius: var(--r-control); cursor: pointer; list-style: none; }
+  .cal-menu > summary::-webkit-details-marker, .cal-mostrar > summary::-webkit-details-marker { display: none; }
+  .cal-menu > summary:hover, .cal-mostrar > summary:hover { border-color: var(--muted); }
+  .cal-menu > summary:focus-visible, .cal-mostrar > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .cal-menu-p, .cal-mostrar .cal-filters { position: absolute; z-index: 6; top: 42px; min-width: 280px; display: grid; gap: 10px; margin: 0; padding: 12px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-card); box-shadow: var(--shadow); }
+  .cal-menu-p { right: 0; }
+  .cal-mostrar .cal-filters { left: 0; }
+  .cal-menu-p .cal-links { display: grid; gap: 6px; margin: 0; }
+  .cal-menu-p .cal-links button, .cal-menu-p .cal-pdf { justify-content: flex-start; text-align: left; margin: 0; }
+  .cal-ayuda { margin-top: 12px; font-size: var(--fs-label); color: var(--muted); }
+  .cal-ayuda summary { cursor: pointer; }
+  .cal-ayuda p { margin: 6px 0 0; }
   .cal-f { display: grid; gap: 4px; font-size: var(--fs-label); font-weight: 560; color: var(--muted); }
   #dlgCal .cal-f select, #dlgCal .cal-f input { width: auto; min-width: 170px; }
-  .cal-nav { display: flex; align-items: center; gap: 6px; margin-left: auto; }
+  .cal-nav { display: flex; align-items: center; gap: 6px; }
   .cal-nav button, .cal-chip { font: inherit; color: var(--fg); background: var(--panel); border: 1px solid var(--line-2); cursor: pointer; }
   .cal-nav button { height: 38px; min-width: 38px; padding: 0 12px; border-radius: var(--r-control); font-size: var(--fs-body); }
   .cal-nav button:hover, .cal-chip:hover { border-color: var(--muted); }
   .cal-nav button:focus-visible, .cal-chip:focus-visible, .cal-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .cal-range { min-width: 15ch; text-align: center; font-size: var(--fs-title); font-weight: 680; letter-spacing: -.015em; font-variant-numeric: tabular-nums; }
-  .cal-sum { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 30px; margin: 4px 0 14px; }
+  .cal-sum { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 18px; margin: 0 0 12px; }
   .cal-sum div { display: flex; align-items: baseline; gap: 8px; }
-  .cal-sum b { font-size: 32px; font-weight: 700; letter-spacing: -.03em; line-height: 1; font-variant-numeric: tabular-nums; }
-  .cal-sum span { font-size: var(--fs-label-lg); color: var(--muted); }
-  .cal-sum .c b { color: var(--ok); }
-  .cal-sum .s b { color: var(--warn); }
+  .cal-sum b { font-size: var(--fs-body); font-weight: 680; font-variant-numeric: tabular-nums; }
+  .cal-sum span { font-size: var(--fs-label); color: var(--muted); }
   .cal-sum .q { font-size: var(--fs-label); color: var(--muted); }
   .cal-filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 14px; }
   .cal-chip { height: 32px; padding: 0 13px; border-radius: var(--r-pill); font-size: var(--fs-label); display: inline-flex; align-items: center; gap: 7px; }
@@ -584,13 +598,6 @@
   .cal-day { display: flex; flex-direction: column; min-width: 0; background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-card); overflow: hidden; }
   .cal-day.we { background: color-mix(in srgb, var(--panel) 92%, var(--muted)); }
   .cal-day.today { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
-  .cal-sky { height: 92px; display: flex; align-items: flex-end; padding: 0 12px; border-bottom: 1px solid var(--line); background: linear-gradient(to top, var(--ok-bg), transparent 70%); }
-  .cal-stack { width: 100%; display: flex; flex-direction: column; justify-content: flex-end; transform-origin: bottom; border-radius: 8px 8px 0 0; overflow: hidden; }
-  .cal-stack i { display: block; min-height: 0; }
-  .cal-stack .c { background: linear-gradient(to top, var(--cal-c-a), var(--cal-c-b)); }
-  .cal-stack .s { background: repeating-linear-gradient(135deg, var(--cal-s-a) 0 6px, var(--cal-s-b) 6px 12px); }
-  @media (prefers-reduced-motion: no-preference) { .cal-stack { animation: calGrow .55s cubic-bezier(.2, .7, .2, 1) both; } }
-  @keyframes calGrow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
   .cal-hd { margin: 0; padding: 10px 12px 2px; display: flex; align-items: baseline; gap: 7px; font-weight: 400; }
   .cal-hd .dn { font-size: var(--fs-label-lg); font-weight: 600; color: var(--muted); }
   .cal-hd .n { font-size: 28px; font-weight: 700; letter-spacing: -.03em; line-height: 1; font-variant-numeric: tabular-nums; }
@@ -648,7 +655,6 @@
   .cal-m .sg.late { color: var(--err); font-weight: 600; }
   .cal-links { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 14px; font-size: var(--fs-label); color: var(--muted); }
   .cal-links button { height: 32px; padding: 0 13px; font-size: var(--fs-label); border-radius: var(--r-pill); }
-  .cal-links .cal-pdf { margin-left: auto; }
   .cal-print-head { display: none; }
   /* Exportar a PDF: el navegador imprime solo el Calendario, en A4 apaisado, tal como se ve (semana, mes u ONG) y con la hoja siempre en claro. */
   @page cal { size: A4 landscape; margin: 10mm; }
@@ -658,14 +664,13 @@
     body.imprime-cal #dlgCal { position: static !important; display: block; width: auto; max-width: none; max-height: none; overflow: visible; margin: 0; padding: 0; border: 0; box-shadow: none; background: #fff; color: #171b23; }
     body.imprime-cal #dlgCal::backdrop { display: none; }
     body.imprime-cal #dlgCal, body.imprime-cal #dlgCal * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    body.imprime-cal #dlgCal .pn-head, body.imprime-cal #dlgCal .cal-bar, body.imprime-cal #dlgCal .cal-filters, body.imprime-cal #dlgCal .cal-links { display: none !important; }
+    body.imprime-cal #dlgCal .pn-head, body.imprime-cal #dlgCal .cal-top, body.imprime-cal #dlgCal .cal-sub, body.imprime-cal #dlgCal .cal-ayuda { display: none !important; }
     body.imprime-cal #dlgCal .cal-print-head { display: block; margin: 0 0 8px; }
     body.imprime-cal #dlgCal .cal-print-head h2 { margin: 0 0 2px; font-size: var(--fs-title); }
     body.imprime-cal #dlgCal .cal-print-head p { margin: 0; font-size: var(--fs-label); color: #596478; }
     /* sin zonas con desplazamiento (se imprimirían recortadas) y con la semana ajustada al ancho de la hoja */
     body.imprime-cal #dlgCal .cal-scroll, body.imprime-cal #dlgCal .pn-scroll, body.imprime-cal #dlgCal .cal-day { overflow: visible; }
     body.imprime-cal #dlgCal .cal-wk { min-width: 0; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
-    body.imprime-cal #dlgCal .cal-stack { animation: none; }
     body.imprime-cal #dlgCal [data-nuevo], body.imprime-cal #dlgCal .cal-new, body.imprime-cal #dlgCal .cal-dia { display: none !important; }
     body.imprime-cal #dlgCal .cal-mesw.con-dia { grid-template-columns: minmax(0, 1fr); }
     body.imprime-cal #dlgCal .cal-hd { flex-wrap: wrap; }
@@ -677,7 +682,7 @@
   .cal-new { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 12px 8px; }
   .cal-mesw { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; align-items: start; }
   .cal-mesw.con-dia { grid-template-columns: minmax(0, 1fr) 360px; }
-  .cal-m { min-height: 118px; }
+  .cal-m { min-height: 104px; }
   .cal-m.sel { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
   .cal-ch { display: flex; align-items: center; gap: 5px; min-width: 0; padding: 1px 6px; font-size: var(--fs-label); border: 1px solid var(--line-2); border-radius: var(--r-xs); background: var(--bg); }
   .cal-ch.p { border-style: dashed; }
@@ -691,14 +696,25 @@
   .cal-dia-h h3 { margin: 0; font-size: var(--fs-title); font-weight: 680; }
   .cal-dia h4 { margin: 0 0 6px; font-size: var(--fs-label); font-weight: 650; color: var(--muted); }
   .cal-dia-l { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-  .cal-dia-f { display: grid; gap: 6px; padding: 8px 10px; background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-control); }
+  .cal-dia-f { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; padding: 8px 10px; background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-control); }
+  .cal-dia-f::before { display: none; }
   .cal-dia-f strong { display: block; font-weight: 620; }
   .cal-dia-f span { color: var(--muted); font-size: var(--fs-label); }
   .cal-dia-den { display: grid; gap: 8px; }
   @media (max-width: 1000px) { .cal-mesw.con-dia { grid-template-columns: minmax(0, 1fr); } .cal-dia { position: static; } }
-  .cal-nueva { height: 36px; padding: 0 16px; margin-left: auto; }
+  @media (max-width: 700px) {
+    .cal-sub { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    .cal-sub .cal-mostrar { grid-column: 1 / -1; }
+    #dlgCal .cal-sub .cal-f select { width: 100%; min-width: 0; }
+    .cal-top .cal-modo { margin-left: 0; }
+    .cal-ch .t, .cal-mas .mas-t { display: none; }
+    .cal-ch { padding: 1px 4px; justify-self: start; }
+    .cal-m { min-height: 78px; padding: 5px 4px; }
+    .cal-ayuda > summary { display: flex; align-items: center; min-height: 44px; }
+  }
+  .cal-nueva { height: 36px; padding: 0 16px; }
   .cal-new button { height: 28px; padding: 0 10px; font-size: var(--fs-label); border-radius: var(--r-pill); }
-  .cal-modo { display: inline-flex; gap: 6px; margin-left: auto; }
+  .cal-modo { display: inline-flex; gap: 6px; }
   .cal-modo button { height: 32px; padding: 0 13px; font-size: var(--fs-label); border-radius: var(--r-pill); }
   .cal-modo button[aria-pressed="true"] { border-color: var(--fg); font-weight: 600; }
   .cal-ongt { width: 100%; border-collapse: collapse; font-size: var(--fs-label); font-variant-numeric: tabular-nums; }
@@ -714,7 +730,6 @@
     .cal-nav > .cal-f { flex: 1 1 140px; }
     #dlgCal .cal-nav > .cal-f input { width: 100%; min-width: 0; }
     .cal-wk { grid-template-columns: 1fr; min-width: 0; }
-    .cal-sky { height: 56px; }
   }
   .pn-note { font-size: var(--fs-label); color: var(--muted); margin-top: 10px; }
   /* El catálogo de un vistazo: anillo por categoría y barras por provincia (SVG y HTML propios, sin librerías). */
@@ -1230,7 +1245,7 @@
     #ficha details.fi-loc > summary { min-height: 44px; }
     .lg-h button { min-height: 44px; }
     dialog input, dialog select, dialog button { min-height: 44px; }
-    .cal-nav button, .cal-chip, .cal-links button, .cal-new button, .cal-nueva { min-height: 44px; }
+    .cal-nav button, .cal-chip, .cal-links button, .cal-new button, .cal-nueva, .cal-menu > summary, .cal-mostrar > summary { min-height: 44px; }
     .cal-m { min-height: 56px; padding: 4px 4px; }
     .cal-m .m, .cal-m .sg { font-size: var(--fs-label); }
     .cal-nav button { min-width: 44px; }
@@ -4797,8 +4812,8 @@ const csvCell = (value) => {
     sem.forEach((x) => x.items.forEach((i) => { if (i.e === "autorizada") regsAut.add(i.r); else if (i.e === "pendiente") regsPen.add(i.r); }));
     const vencen = [...regsAut].filter((r) => r.k === "con" && r.hasta && r.hasta >= t && r.hasta <= b && r.hasta >= a).length;
     body.querySelector("#calSum").innerHTML =
-      '<div class="c"><b>' + pa.n + "</b><span>captadores autorizados como máximo en un día" + (pa.n ? " (" + DIAS[daysBetween(a, pa.d)].toLowerCase() + ") · " + plural(regsAut.size, "concesión", "concesiones") : "") + "</span></div>" +
-      '<div class="s"><b>' + pp.n + "</b><span>captadores por aprobar como máximo en un día" + (pp.n ? " (" + DIAS[daysBetween(a, pp.d)].toLowerCase() + ") · " + plural(regsPen.size, "solicitud", "solicitudes") : "") + "</span></div>" +
+      '<div class="c"><b>' + pa.n + "</b><span>captadores autorizados en el día pico" + (pa.n ? " (" + DIAS[daysBetween(a, pa.d)].toLowerCase() + ") · " + plural(regsAut.size, "concesión", "concesiones") : "") + "</span></div>" +
+      '<div class="s"><b>' + pp.n + "</b><span>captadores por aprobar en el día pico" + (pp.n ? " (" + DIAS[daysBetween(a, pp.d)].toLowerCase() + ") · " + plural(regsPen.size, "solicitud", "solicitudes") : "") + "</span></div>" +
       '<div class="t"><b>' + nSeg + "</b><span>" + (nSeg === 1 ? "seguimiento" : "seguimientos") + " esta semana" + (nAtr ? " · " + nAtr + " atrasado" + (nAtr === 1 ? "" : "s") : "") + "</span></div>" +
       (vencen ? '<div class="q">' + esc(plural(vencen, "concesión vence", "concesiones vencen") + " esta semana") + "</div>" : "");
     const nota = body.querySelector("#calPast");
@@ -4820,7 +4835,6 @@ const csvCell = (value) => {
       const sg = ver.seguimiento ? x.seg.slice().sort((p, q) => p.c.name.localeCompare(q.c.name, "es")) : [];
       const pa2 = ver.autorizada ? x.aut : 0, pp2 = ver.pendiente ? x.pen : 0, pct = pa2 + pp2 ? Math.max(7, Math.round(100 * (pa2 + pp2) / max)) : 0;
       return '<section class="cal-day' + (k >= 5 ? " we" : "") + (x.d === t ? " today" : "") + '" aria-labelledby="calH' + k + '">' +
-        '<div class="cal-sky" aria-hidden="true">' + (pct ? '<div class="cal-stack" style="height:' + pct + '%">' + (pp2 ? '<i class="s" style="flex:' + pp2 + ' 1 0"></i>' : "") + (pa2 ? '<i class="c" style="flex:' + pa2 + ' 1 0"></i>' : "") + "</div>" : "") + "</div>" +
         '<h3 class="cal-hd" id="calH' + k + '"><span class="dn">' + DIAS[k] + '</span><span class="n">' + (+x.d.slice(8)) + '</span><span class="m">' + mesDe(x.d) + "</span>" + (x.d === t ? '<span class="hoy">Hoy</span>' : "") + "</h3>" +
         '<p class="cal-new" role="group" aria-label="Crear el ' + esc(fmtD(x.d)) + '">' + (x.d >= t ? '<button type="button" data-nuevo="sol" data-nuevo-dia="' + x.d + '" aria-label="Nueva solicitud desde el ' + esc(fmtD(x.d)) + '">+ Solicitud</button>' : "") + '<button type="button" data-nuevo="con" data-nuevo-dia="' + x.d + '" aria-label="Nueva concesión desde el ' + esc(fmtD(x.d)) + '">+ Concesión</button></p>' +
         '<p class="cal-tot">' + (pa2 ? "<b>" + pa2 + "</b> autorizados" : "") + (pa2 && pp2 ? " · " : "") + (pp2 ? "<b>" + pp2 + "</b> por aprobar" : "") + (!pa2 && !pp2 ? "Sin captadores" : "") + "</p>" +
@@ -4850,9 +4864,10 @@ const csvCell = (value) => {
     box.hidden = false;
     box.innerHTML = '<div class="cal-dia-h"><h3 id="calDiaT" tabindex="-1">' + esc(DIAS[daysBetween(mondayOf(d.d), d.d)] + " " + (+d.d.slice(8)) + " de " + MESES[+d.d.slice(5, 7) - 1]) + '</h3><button type="button" class="ce-x" data-dia-cierra="1" aria-label="Cerrar el día">&times;</button></div>' +
       (d.d >= t ? '<p class="cal-new" role="group" aria-label="Crear el ' + esc(fmtD(d.d)) + '"><button type="button" class="primary" data-nuevo="sol" data-nuevo-dia="' + d.d + '">+ Nueva solicitud</button><button type="button" data-nuevo="con" data-nuevo-dia="' + d.d + '">+ Concesión</button></p>' : '<p class="cal-note">Día pasado: no se crean solicitudes nuevas.</p>') +
-      "<section><h4>Solicitudes por aprobar (" + pend.length + ")</h4>" + (pend.length ? '<ul class="cal-dia-l">' + pend.map(fila).join("") + "</ul>" : '<p class="cal-note">Ninguna este día.</p>') + (otras ? '<p class="cal-note">' + esc(plural(otras, "solicitud más se reconstruye", "solicitudes más se reconstruyen") + " con sus fechas pasadas: se ven en el Centro de permisos.") + "</p>" : "") + "</section>" +
-      "<section><h4>Concesiones (" + cons.length + ")</h4>" + (cons.length ? '<ul class="cal-dia-l">' + cons.map((i) => '<li class="cal-dia-f"><div><strong>' + esc(i.r.c.name) + "</strong><span>" + esc(townOf(i.r.c) + " · " + ongDe(i.r) + " · " + periodoDe(i.r) + (i.r.n ? " · " + plural(i.r.n, "captador", "captadores") : "") + " · " + EST[i.e][0]) + "</span></div></li>").join("") + "</ul>" : '<p class="cal-note">Ninguna este día.</p>') + "</section>" +
-      "<section><h4>Seguimientos (" + d.seg.length + ")</h4>" + (d.seg.length ? '<ul class="cal-dia-l">' + d.seg.map((s) => '<li class="cal-dia-f"><div><strong>' + esc(s.c.name) + "</strong><span>" + esc((s.accion || "Seguimiento") + (d.d < t ? " · atrasado" : "")) + "</span></div></li>").join("") + '</ul><p class="cal-note">Se gestionan en el Centro de permisos.</p>' : '<p class="cal-note">Ninguno este día.</p>') + "</section>";
+      (pend.length || otras ? "<section>" + (pend.length ? "<h4>Por aprobar (" + pend.length + ")</h4>" : "") + (pend.length ? '<ul class="cal-dia-l">' + pend.map(fila).join("") + "</ul>" : "") + (otras ? '<p class="cal-note">' + esc(plural(otras, "solicitud más se reconstruye", "solicitudes más se reconstruyen") + " con sus fechas pasadas: se ven en el Centro de permisos.") + "</p>" : "") + "</section>" : "") +
+      (cons.length ? "<section><h4>Concesiones (" + cons.length + ")</h4>" + '<ul class="cal-dia-l">' + cons.map((i) => '<li class="cal-dia-f"><div><strong>' + esc(i.r.c.name) + "</strong><span>" + esc(townOf(i.r.c) + " · " + ongDe(i.r) + " · " + periodoDe(i.r) + (i.r.n ? " · " + plural(i.r.n, "captador", "captadores") : "") + " · " + EST[i.e][0]) + "</span></div></li>").join("") + "</ul></section>" : "") +
+      (d.seg.length ? "<section><h4>Seguimientos (" + d.seg.length + ")</h4>" + '<ul class="cal-dia-l">' + d.seg.map((s) => '<li class="cal-dia-f"><div><strong>' + esc(s.c.name) + "</strong><span>" + esc((s.accion || "Seguimiento") + (d.d < t ? " · atrasado" : "")) + "</span></div></li>").join("") + '</ul><p class="cal-note">Se gestionan en el Centro de permisos.</p></section>' : "") +
+      (!pend.length && !otras && !cons.length && !d.seg.length ? '<p class="cal-note">Sin actividad este día.</p>' : "");
     if (denegando >= 0) body.querySelector("#calMotivo")?.focus();
   };
   const drawMes = (recs, segs, t) => {
@@ -4864,20 +4879,20 @@ const csvCell = (value) => {
     const pico = (k) => delMes.reduce((mx, x) => x[k] > mx.n ? { n: x[k], d: x.d } : mx, { n: 0, d: "" }), pa = pico("aut"), pp = pico("pen");
     const nSeg = delMes.reduce((n, x) => n + x.seg.length, 0), nAtr = delMes.reduce((n, x) => n + x.segAtras, 0), cuando = (d) => (+d.slice(8)) + " " + mesDe(d);
     body.querySelector("#calSum").innerHTML =
-      '<div class="c"><b>' + pa.n + "</b><span>captadores autorizados como máximo en un día" + (pa.n ? " (" + cuando(pa.d) + ")" : "") + "</span></div>" +
-      '<div class="s"><b>' + pp.n + "</b><span>captadores por aprobar como máximo en un día" + (pp.n ? " (" + cuando(pp.d) + ")" : "") + "</span></div>" +
+      '<div class="c"><b>' + pa.n + "</b><span>captadores autorizados en el día pico" + (pa.n ? " (" + cuando(pa.d) + ")" : "") + "</span></div>" +
+      '<div class="s"><b>' + pp.n + "</b><span>captadores por aprobar en el día pico" + (pp.n ? " (" + cuando(pp.d) + ")" : "") + "</span></div>" +
       '<div class="t"><b>' + nSeg + "</b><span>" + (nSeg === 1 ? "seguimiento" : "seguimientos") + " en el mes" + (nAtr ? " · " + nAtr + " atrasado" + (nAtr === 1 ? "" : "s") : "") + "</span></div>";
     const nota = body.querySelector("#calPast"); nota.hidden = true;
     const ini = ref + "-01" >= t.slice(0, 7) + "-01" ? "" : "Mes pasado: las concesiones se muestran con sus fechas y las solicitudes solo cuando constan sus fechas de alta y de decisión."; if (ini) { nota.hidden = false; nota.textContent = ini; }
-    body.querySelector("#calGrid").innerHTML = '<div class="cal-mesw' + (diaSel ? " con-dia" : "") + '"><div class="cal-mesg"><div class="cal-mleg"><span><i class="a"></i>Autorizados (concesiones)</span><span><i class="p"></i>Por aprobar (solicitudes pendientes)</span><span>seg. = seguimientos</span><span>Pulsa un día para ver sus solicitudes y crear una</span></div>' +
+    body.querySelector("#calGrid").innerHTML = '<div class="cal-mesw' + (diaSel ? " con-dia" : "") + '"><div class="cal-mesg"><div class="cal-mleg"><span><i class="a"></i>Concesión</span><span><i class="p"></i>Por aprobar</span><span>Pulsa un día para ver y crear solicitudes</span></div>' +
       '<div class="cal-mes" role="group" aria-label="Calendario de ' + esc(MESES[m - 1] + " " + y) + '">' + DIAS.map((n) => '<span class="cal-mh">' + n.slice(0, 3) + "</span>").join("") +
       semanas.map((sem) => sem.map((x, k) => {
         const fuera = x.d < primero || x.d > ultimo, lbl = DIAS[k] + " " + (+x.d.slice(8)) + " de " + MESES[+x.d.slice(5, 7) - 1] + ": " + plural(x.aut, "captador autorizado", "captadores autorizados") + ", " + x.pen + " por aprobar, " + plural(x.seg.length, "seguimiento", "seguimientos") + (x.d >= t ? ". Pulsa para crear una solicitud este día" : "");
         const chips = x.items.filter((i) => visible(i.e) && (i.e === "pendiente" || i.e === "autorizada")).sort((p, q) => (p.e === "pendiente" ? 0 : 1) - (q.e === "pendiente" ? 0 : 1));
         const chipH = (i) => '<span class="cal-ch ' + (i.e === "pendiente" ? "p" : "a") + '"><i></i><span class="adm-sr">' + (i.e === "pendiente" ? "Por aprobar: " : "Concesión: ") + "</span><span class=\"t\">" + esc(ongDe(i.r) + " · " + i.r.c.name) + "</span></span>";
         return '<button type="button" class="cal-m' + (x.d === t ? " hoy" : "") + (fuera ? " fuera" : "") + (k >= 5 ? " we" : "") + (x.d === diaSel ? " sel" : "") + '" data-dia="' + x.d + '" aria-pressed="' + (x.d === diaSel) + '" aria-label="' + esc(lbl + ". Pulsa para ver el día") + '"' + (x.d === t ? ' aria-current="date"' : "") + '><span class="d">' + (+x.d.slice(8)) + "</span>" +
-          chips.slice(0, 3).map(chipH).join("") + (chips.length > 3 ? '<span class="cal-mas">+' + (chips.length - 3) + " más</span>" : "") +
-          (x.seg.length ? '<span class="sg' + (x.d < t ? " late" : "") + '">' + x.seg.length + (x.d < t ? " atr." : " seg.") + "</span>" : "") + "</button>";
+          chips.slice(0, 2).map(chipH).join("") + (chips.length > 2 ? '<span class="cal-mas">+' + (chips.length - 2) + '<span class="mas-t"> más</span></span>' : "") +
+          (x.seg.length && x.d < t ? '<span class="sg late">' + x.seg.length + " atr.</span>" : "") + "</button>";
       }).join("")).join("") + '</div></div><aside id="calDia" class="cal-dia" aria-label="Detalle del día"' + (diaSel ? "" : " hidden") + "></aside></div>";
     drawDia(semanas.flat(), t);
   };
@@ -4919,29 +4934,34 @@ const csvCell = (value) => {
     if (prov === null || (prov === "" ? opts.length < 2 : !opts.some(([id]) => id === prov))) prov = opts.length > 1 ? "" : (opts[0] ? opts[0][0] : "");
     body.innerHTML =
       '<div class="cal-print-head" id="calPrintHead"></div>' +
-      '<div class="cal-bar">' +
-      '<label class="cal-f">Provincia<select id="calProv">' + (opts.length > 1 ? '<option value="">Todas las provincias</option>' : "") +
+      '<div class="cal-top">' +
+      '<div class="cal-nav"><button type="button" data-w="-1" aria-label="Anterior">&#8249;</button><span class="cal-range" id="calRange" role="status"></span>' +
+      '<button type="button" data-w="1" aria-label="Siguiente">&#8250;</button><button type="button" data-w="0">Hoy</button></div>' +
+      '<span class="cal-modo" role="group" aria-label="Vista"><button type="button" data-modo="mes" aria-pressed="' + (modo === "mes") + '">Mes</button><button type="button" data-modo="dias" aria-pressed="' + (modo === "dias") + '">Semana</button><button type="button" data-modo="ong" aria-pressed="' + (modo === "ong") + '">Por ONG</button></span>' +
+      '<div class="cal-acc"><button type="button" class="primary cal-nueva" data-nuevo="sol" data-nuevo-dia="' + today() + '">+ Nueva solicitud</button>' +
+      '<details class="cal-menu"><summary>Más</summary><div class="cal-menu-p">' +
+      '<label class="cal-f">Ir a la fecha<input type="date" id="calDate"></label>' +
+      '<button type="button" id="calPdf" class="cal-pdf" title="Abre la impresión del navegador: elige «Guardar como PDF»">Exportar a PDF</button>' +
+      '<div class="cal-links" role="group" aria-label="Abrir en el Centro de permisos"><span>Abrir en el Centro de permisos</span><button type="button" data-centro="sol:pendiente">Solicitudes pendientes</button><button type="button" data-centro="con:vigente">Concesiones vigentes</button><button type="button" data-centro="seg:todas">Seguimientos</button></div>' +
+      '</div></details></div></div>' +
+      '<div class="cal-sub">' +
+      '<label class="cal-f"><span class="adm-sr">Provincia</span><select id="calProv">' + (opts.length > 1 ? '<option value="">Todas las provincias</option>' : "") +
       opts.map(([id, n]) => '<option value="' + esc(id) + '"' + (id === prov ? " selected" : "") + ">" + esc(n) + "</option>").join("") + "</select></label>" +
-      '<label class="cal-f">ONG<select id="calOng"></select></label>' +
-      '<div class="cal-nav"><button type="button" data-w="-1" aria-label="Semana anterior">&#8249;</button><span class="cal-range" id="calRange" role="status"></span>' +
-      '<button type="button" data-w="1" aria-label="Semana siguiente">&#8250;</button><button type="button" data-w="0">Hoy</button>' +
-      '<label class="cal-f"><span class="adm-sr">Ir a la semana de esta fecha</span><input type="date" id="calDate"></label></div>' +
-      '<button type="button" class="primary cal-nueva" data-nuevo="sol" data-nuevo-dia="' + today() + '">+ Nueva solicitud</button></div>' +
-      '<div class="cal-sum" id="calSum"></div>' +
-      '<div class="cal-filters" role="group" aria-label="Qué se muestra">' +
+      '<label class="cal-f"><span class="adm-sr">ONG</span><select id="calOng"></select></label>' +
+      '<details class="cal-mostrar"><summary>Mostrar</summary><div class="cal-filters" role="group" aria-label="Qué se muestra">' +
       '<button type="button" class="cal-chip s-concedido" data-ver="autorizada" aria-pressed="' + ver.autorizada + '"><i></i>Concesiones</button>' +
       '<button type="button" class="cal-chip s-solicitado" data-ver="pendiente" aria-pressed="' + ver.pendiente + '"><i></i>Solicitudes por aprobar</button>' +
       '<button type="button" class="cal-chip s-seguimiento" data-ver="seguimiento" aria-pressed="' + ver.seguimiento + '"><i></i>Seguimientos</button>' +
       '<button type="button" class="cal-chip s-cancelado" data-ver="historico" aria-pressed="' + ver.historico + '"><i></i>Histórico (denegadas, retiradas, canceladas)</button>' +
-      '<span class="cal-modo" role="group" aria-label="Vista"><button type="button" data-modo="dias" aria-pressed="' + (modo === "dias") + '">Semana</button><button type="button" data-modo="mes" aria-pressed="' + (modo === "mes") + '">Mes</button><button type="button" data-modo="ong" aria-pressed="' + (modo === "ong") + '">Por ONG</button></span></div>' +
-      '<div class="cal-links" role="group" aria-label="Abrir en el Centro de permisos"><span>Gestionar en el Centro de permisos:</span><button type="button" data-centro="sol:pendiente">Solicitudes pendientes</button><button type="button" data-centro="con:vigente">Concesiones vigentes</button><button type="button" data-centro="seg:todas">Seguimientos</button><button type="button" id="calPdf" class="cal-pdf" title="Abre la impresión del navegador: elige «Guardar como PDF»">Exportar a PDF</button></div>' +
-            '<p class="cal-note cal-past" id="calPast" role="note" hidden></p>' +
+      '</div></details></div>' +
+      '<div class="cal-sum" id="calSum"></div>' +
+      '<p class="cal-note cal-past" id="calPast" role="note" hidden></p>' +
       '<p class="cal-note cal-hecho" id="calAviso" role="status" tabindex="-1" hidden></p>' +
       '<div id="calGrid"></div>' +
-      '<p class="cal-note">Un permiso aparece cada día entre su fecha de inicio y la de fin, las dos incluidas. Los captadores de un día no se suman entre registros de la misma ONG en un mismo punto (se toma el mayor) y sí entre ONG distintas. Autorizados, por aprobar y seguimientos se cuentan por separado. Pulsa una tarjeta para ver ese punto en el Centro de permisos.</p>';
+      '<details class="cal-ayuda"><summary>Cómo se cuentan los permisos</summary>' + '<p>Un permiso aparece cada día entre su fecha de inicio y la de fin, las dos incluidas. Los captadores de un día no se suman entre registros de la misma ONG en un mismo punto (se toma el mayor) y sí entre ONG distintas. Autorizados, por aprobar y seguimientos se cuentan por separado. Pulsa una tarjeta para ver ese punto en el Centro de permisos.</p>' + '</details>';
     draw();
     dlg.showModal();
-    body.querySelector("#calProv").focus();
+    body.querySelector("[data-modo][aria-pressed=true]")?.focus();
   };
   /* Al guardar o cancelar el formulario abierto desde un día, se repinta la semana (con la solicitud nueva) y se dice qué se guardó. */
   document.addEventListener("calendario:refresca", (e) => {
@@ -4965,7 +4985,8 @@ const csvCell = (value) => {
   /* Formulario nuevo con el día puesto, encima del Calendario (que no se cierra). */
   const nuevaDesde = (tipo, dia) => document.dispatchEvent(new CustomEvent("centro:abrir", { detail: { vista: tipo === "sol" ? "sol" : "con", est: "todas", prov, ong, nuevo: tipo, desde: dia, enCalendario: true } }));
   body.addEventListener("click", (e) => {
-    if (e.target.closest("#calPdf")) { exportaPdf(); return; }
+    body.querySelectorAll("details.cal-menu[open], details.cal-mostrar[open]").forEach((dt) => { if (!dt.contains(e.target)) dt.open = false; }); /* los desplegables se cierran al pulsar fuera */
+    if (e.target.closest("#calPdf")) { body.querySelector("details.cal-menu").open = false; exportaPdf(); return; }
     const cc = e.target.closest("[data-centro]");
     if (cc) { const [vista, est] = cc.dataset.centro.split(":"); dlg.close(); document.dispatchEvent(new CustomEvent("centro:abrir", { detail: { vista, est, prov, ong } })); return; }
     const pa = e.target.closest("[data-pa]");
@@ -4974,7 +4995,7 @@ const csvCell = (value) => {
     const nv = e.target.closest("[data-nuevo]");
     if (nv) { nuevaDesde(nv.dataset.nuevo, nv.dataset.nuevoDia); return; } /* sin cerrar el Calendario: el formulario se abre encima y al guardar se vuelve a la semana */
     const dd = e.target.closest("[data-dia]");
-    if (dd && modo === "mes") { diaSel = dd.dataset.dia; denegando = -1; draw(); body.querySelector("#calDiaT")?.focus(); body.querySelector("#calDia")?.scrollIntoView({ block: "nearest" }); return; } /* en el mes, pinchar un día abre su panel */
+    if (dd && modo === "mes") { diaSel = dd.dataset.dia; denegando = -1; draw(); body.querySelector("#calDiaT")?.focus({ preventScroll: true }); if (matchMedia("(max-width: 1000px)").matches) body.querySelector("#calDia")?.scrollIntoView({ block: "nearest" }); return; } /* en el mes, pinchar un día abre su panel */
     if (dd) { wk = mondayOf(dd.dataset.dia); modo = "dias"; body.querySelectorAll("[data-modo]").forEach((b2) => b2.setAttribute("aria-pressed", String(b2.dataset.modo === modo))); draw(); return; }
     const w = e.target.closest("[data-w]");
     if (w) { if (w.dataset.w === "0") wk = mondayOf(today()); else if (modo === "mes") desplazaMes(+w.dataset.w); else wk = addDays(wk, 7 * +w.dataset.w); draw(); return; }
