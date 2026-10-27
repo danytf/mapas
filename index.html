@@ -925,6 +925,13 @@
   .ce-act:disabled { opacity: .5; cursor: default; }
   .ce-act:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   .ce-act.ok { color: var(--ok); border-color: var(--ok); }
+  .ce-act.riesgo { color: var(--err); border-color: var(--err); }
+  .ce-mas { flex-basis: 100%; }
+  .ce-mas > summary { display: inline-flex; align-items: center; height: 30px; padding: 0 12px; font-size: var(--fs-label); color: var(--muted); border: 1px solid var(--line-2); border-radius: var(--r-pill); cursor: pointer; list-style: none; }
+  .ce-mas > summary::-webkit-details-marker { display: none; }
+  .ce-mas > summary:hover { border-color: var(--muted); color: var(--fg); }
+  .ce-mas > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .ce-mas[open] > summary { margin-bottom: 6px; }
   .ce-act.pri { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); font-weight: 600; }
   .ce-act.pri:hover:not(:disabled) { background: var(--accent-d); border-color: var(--accent-d); }
   #ceBody td.ce-acts { text-align: right; }
@@ -1165,7 +1172,7 @@
     #menuPanel button { min-height: 44px; }
     #pnClose, #admClose, #calClose, #ceClose, #ayClose { width: 44px; height: 44px; }
     .jo-chip, .jo-todos { min-height: 44px; }
-    .ce-nav button, .ce-act, .cf-opt, .ce-item, .ce-barra, .ce-seg button, .ce-calidad button, .ce-linea button, .ce-x, #ficha .fi-gestion button { min-height: 44px; }
+    .ce-nav button, .ce-act, .ce-mas > summary, .ce-btns .ce-link, .cf-opt, .ce-item, .ce-barra, .ce-seg button, .ce-calidad button, .ce-linea button, .ce-x, #ficha .fi-gestion button { min-height: 44px; }
     .ce-x { min-width: 44px; }
     #ceBody .ce-pt { min-height: 44px; display: flex; flex-direction: column; justify-content: center; }
     .ce-chkl { min-width: 44px; min-height: 44px; }
@@ -1519,6 +1526,7 @@ const saveCache = () => {};
 
 // Recuadro que contiene España entera (península, Baleares, Canarias, Ceuta y Melilla). Al ser un solo rectángulo, deja ver parte de Marruecos, Portugal y Francia; solo evita perderse por el resto del mundo.
 const SPAIN_BOUNDS = L.latLngBounds([27.2, -18.9], [44.4, 5.0]);
+L.Control.Zoom.mergeOptions({ zoomInTitle: "Acercar", zoomOutTitle: "Alejar" }); /* controles del mapa en español (también para lectores de pantalla) */
 const map = L.map("map", { zoomControl: true, maxZoom: 19, minZoom: 5, maxBounds: SPAIN_BOUNDS, maxBoundsViscosity: 1.0 }).setView(SPAIN_CENTER, 6);
 const ATTR = "Tiles © Esri — Source: Esri, HERE, Garmin, OpenStreetMap contributors | Geocodificación: © Instituto Geográfico Nacional de España (CartoCiudad) | Ubicaciones: © colaboradores de OpenStreetMap (ODbL)";
 const esriTiles = (svc, o) => L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/" + svc + "/MapServer/tile/{z}/{y}/{x}", Object.assign({ maxZoom: 19, attribution: ATTR }, o || {}));
@@ -5044,8 +5052,8 @@ const csvCell = (value) => {
 
   /* === Qué se puede hacer con cada registro, y por qué no === */
   const accionesDe = (r) => {
-    if (r.k === "sol") { const abierta = !(r.est === "aprobada" || r.est === "denegada" || r.est === "retirada"); return (abierta ? [["conceder", "Conceder", "ok"], ["den", "Denegar"], ["ret", "Retirar"]] : []).concat([["ed", "Editar"]], esAdmin() || r.c.custom ? [["quitS", "Quitar"]] : []); }
-    if (r.k === "con") return [["ed", "Editar"], r.est === "cancelada" ? ["rea", "Reactivar"] : ["can", "Cancelar"]].concat(esAdmin() || r.c.custom ? [["quitC", "Quitar"]] : []);
+    if (r.k === "sol") { const abierta = !(r.est === "aprobada" || r.est === "denegada" || r.est === "retirada"); return (abierta ? [["conceder", "Conceder", "ok"], ["den", "Denegar"], ["ret", "Retirar"]] : []).concat([["ed", "Editar"]], esAdmin() || r.c.custom ? [["quitS", "Borrar…"]] : []); }
+    if (r.k === "con") return [["ed", "Editar"], r.est === "cancelada" ? ["rea", "Reactivar"] : ["can", "Cancelar"]].concat(esAdmin() || r.c.custom ? [["quitC", "Borrar…"]] : []);
     return [["hecho", "Hecho", "ok"]].concat(r.c.databaseId ? [["edseg", "Cambiar"]] : []);
   };
   const bloqueosDe = (r) => {
@@ -5062,6 +5070,12 @@ const csvCell = (value) => {
     esc(townOf(x.c) + (x.c.province && x.c.province !== townOf(x.c) ? " · " + x.c.province : "")) + "</span></button>";
   const badge = (e) => '<span class="ce-badge s-' + COLOR[e] + '"><i aria-hidden="true"></i>' + esc(TEXTO[e]) + "</span>";
   const btn = (a, key, txt, extra) => '<button type="button" class="ce-act' + (extra ? " " + extra : "") + '" data-act="' + a + '" data-key="' + esc(key) + '"' + (ocupado ? " disabled" : "") + ">" + esc(txt) + "</button>";
+  /* Detalle: las acciones habituales a la vista y las que quitan o retiran, agrupadas aparte y con aire de riesgo. */
+  const EN_MAS = new Set(["ret", "quitS", "quitC"]);
+  const botonesDetalle = (r) => {
+    const todas = accionesDe(r), b = ([a, txt, cls]) => btn(a, clave(r), txt, a === "quitS" || a === "quitC" ? "riesgo" : cls), mas = todas.filter(([a]) => EN_MAS.has(a));
+    return todas.filter(([a]) => !EN_MAS.has(a)).map(b).join("") + (mas.length ? '<details class="ce-mas"><summary>Más acciones</summary><div class="ce-btns">' + mas.map(b).join("") + "</div></details>" : "");
+  };
   const botones = (r, max) => accionesDe(r).slice(0, max || 99).map(([a, txt, cls]) => btn(a, clave(r), txt, cls)).join(""); /* en las filas, las dos acciones principales; el resto, en el detalle */
   const SEVCLASE = { bloqueante: "bl", aviso: "av", recomendacion: "re" };
   const sevBadge = (sev) => '<span class="ce-sev ' + SEVCLASE[sev] + '"><i aria-hidden="true"></i>' + esc(SEV[sev]) + "</span>";
@@ -5073,7 +5087,7 @@ const csvCell = (value) => {
     return fila(r, 0, estancada ? "urg" : "", td("Punto", celdaPunto(r)) + td("ONG", esc(ongDe(r))) + td("Periodo solicitado", esc(periodo(r))) + td("Captadores", r.n || "—", "n") +
       td("Solicitada", r.fecha ? esc(fmtD(r.fecha)) + (r.est === "pendiente" && edad >= 0 ? '<span class="ce-sub">hace ' + esc(plural(edad, "día", "días")) + "</span>" : "") : "No consta") +
       td("Estado", badge(r.est) + (estancada ? '<span class="ce-warn">Estancada</span>' : "")) +
-      td("Seguimiento", r.seg ? esc(fmtD(r.seg)) + (r.seg < t ? '<span class="ce-warn late">Atrasado</span>' : "") : (r.est === "pendiente" ? "Sin seguimiento" : "")) + td("Acciones", botones(r, 2), "ce-acts"));
+      td("Seguimiento", r.seg ? esc(fmtD(r.seg)) + (r.seg < t ? '<span class="ce-warn late">Atrasado</span>' : "") : (r.est === "pendiente" ? "Sin seguimiento" : "")) + td("Acciones", botones(r, 1), "ce-acts"));
   };
   const detalleCon = (r, t) => {
     if (r.est === "vigente") return !r.hasta ? "Sin fecha de fin" : r.hasta === t ? "Termina hoy" : "Termina en " + plural(daysBetween(t, r.hasta), "día", "días");
@@ -5262,7 +5276,7 @@ const csvCell = (value) => {
     }
     const fj = vista === "jor" ? jorMapa.get(key) : null;
     const porQueJ = fj ? '<section class="ce-sec"><h4>Por qué está en Mi jornada</h4><ul class="ce-avisos">' + fj.motivos.map((m) => "<li>" + esc(m.texto) + "</li>").join("") + '</ul><p class="ce-def">' + esc(fj.siguiente) + "</p></section>" : "";
-    const accionesJ = fj ? (fj.segDue && r.k ? btn("hecho", clave(fj.seg), "Hecho (seguimiento)", "ok") + (r.c.databaseId ? btn("edseg", clave(fj.seg), "Cambiar seguimiento") : "") : "") + '<button type="button" class="ce-act" data-ir="' + esc(key) + '">Abrir en ' + esc(TITULO[r.k || "seg"]) + "</button>" : "";
+    const accionesJ = fj ? (fj.segDue && r.k ? btn("hecho", clave(fj.seg), "Hecho (seguimiento)", "ok") + (r.c.databaseId ? btn("edseg", clave(fj.seg), "Cambiar seguimiento") : "") : "") + '<button type="button" class="ce-link" data-ir="' + esc(key) + '">Abrir en ' + esc(TITULO[r.k || "seg"]) + "</button>" : "";
     const bloqueos = bloqueosDe(r), avisos = incidencias(expedientesDe(r.c, p), t).filter((x) => r.k && x.r.k === r.k && ((x.r.id && x.r.id === r.id) || (!x.r.id && x.r.i === r.i)));
     const delPunto = expedientesDe(r.c, p).sort((a, b) => (b.desde || b.fecha || "").localeCompare(a.desde || a.fecha || ""));
     /* El detalle se repinta cuando llega el historial: si el foco estaba dentro, vuelve al mismo elemento (el título es el primero) en vez de perderse. */
@@ -5270,7 +5284,7 @@ const csvCell = (value) => {
     box.innerHTML = '<div class="ce-sidehead"><div><span class="ce-kicker">' + esc(tipo) + '</span><h3 tabindex="-1">' + esc(r.c.name) + '</h3><p>' + esc(townOf(r.c) + (r.c.province && r.c.province !== townOf(r.c) ? " · " + r.c.province : "") + (r.c.tipo ? " · " + r.c.tipo : "")) + '</p></div><button type="button" class="ce-x" data-cierra-lado="1" aria-label="Cerrar el detalle">&times;</button></div>' +
       '<dl class="ce-datos">' + datos + "</dl>" + porQueJ +
       (avisos.length ? '<section class="ce-sec"><h4>Avisos de este expediente</h4><ul class="ce-avisos">' + avisos.map((x) => "<li>" + sevBadge(x.sev) + " " + esc(x.tipo) + "</li>").join("") + "</ul></section>" : "") +
-      '<section class="ce-sec"><h4>Acciones</h4><div class="ce-btns">' + botones(r) + accionesJ + '<button type="button" class="ce-act" data-pt="' + esc(String(r.c.id)) + '">Abrir el punto en el mapa</button></div>' + (bloqueos.length ? '<ul class="ce-razones">' + bloqueos.map((b) => "<li>" + esc(b) + "</li>").join("") + "</ul>" : "") +
+      '<section class="ce-sec"><h4>Acciones</h4><div class="ce-btns">' + botonesDetalle(r) + accionesJ + '<button type="button" class="ce-link" data-pt="' + esc(String(r.c.id)) + '">Abrir el punto en el mapa</button></div>' + (bloqueos.length ? '<ul class="ce-razones">' + bloqueos.map((b) => "<li>" + esc(b) + "</li>").join("") + "</ul>" : "") +
       (accion && accion.key === key ? confirmacion() : "") + "</section>" +
       '<section class="ce-sec"><h4>Expedientes de este punto</h4><ul class="ce-linea">' + (delPunto.length ? delPunto.slice(0, 12).map((x) => "<li><button type=\"button\" data-sel=\"" + esc(clave(x)) + '"' + (clave(x) === key ? ' aria-current="true"' : "") + ">" + badge(x.est) + "<span>" + esc((x.k === "sol" ? "Solicitud" : "Concesión") + " · " + ongDe(x) + " · " + periodo(x)) + "</span></button></li>").join("") : "<li>Este punto no tiene solicitudes ni concesiones.</li>") + "</ul></section>" + historialH(r);
     if (pos >= 0) focos()[pos]?.focus();
