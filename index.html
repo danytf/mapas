@@ -1442,7 +1442,7 @@
     <details class="ay-sec"><summary>Mi jornada</summary>
       <ul>
         <li>Es la bandeja de trabajo: se abre desde el menú (Informes → Mi jornada) y es la primera sección del Centro de permisos. «Ir al mapa» o la × la cierran.</li>
-        <li>Junta en una lista, de lo más a lo menos urgente: seguimientos atrasados y de hoy, solicitudes pendientes sin seguimiento, estancadas o cuyo periodo empieza en 7 días, concesiones que terminan en 7 días y datos que revisar. Cada expediente sale una sola vez, con su motivo principal y, en «También», los demás.</li>
+        <li>Junta en una lista, de lo más a lo menos urgente: seguimientos atrasados y de hoy, solicitudes por solicitar (el correo que aún no se ha mandado), estancadas o cuyo periodo empieza en 7 días, concesiones que terminan en 7 días y datos que revisar. Cada expediente sale una sola vez, con su motivo principal y, en «También», los demás.</li>
         <li>«Hecho» y «Cambiar fecha» actúan sobre el seguimiento de esa fila; «Abrir» enseña el expediente al lado, con todas sus acciones y el botón para ir a su sección. Nada se da por hecho hasta que Supabase lo confirma, y el foco pasa a la siguiente tarea.</li>
         <li>Las vistas rápidas (Urgentes, Para hoy, Sin seguimiento, Todas) se combinan con la provincia, la ONG, el responsable, el tipo y la búsqueda; cada número dice lo que saldría al elegirlo. «Quitar filtros» lo deja todo como al principio. La bandeja nunca cambia el estado de un permiso por el paso del tiempo.</li>
       </ul>
@@ -2274,6 +2274,8 @@ const solsOf = (p) => (p && Array.isArray(p.solicitudes)) ? p.solicitudes : (p &
 const hasSol = (p) => solsOf(p).length > 0;
 /* Fase visible de una solicitud: pendiente sin envío = «por solicitar» (la pone el RP o coordinador); pendiente con envío = «solicitada» (el RGR mandó el correo); el resto, su estado. */
 const subEstado = (r) => (r.k === "sol" && r.est === "pendiente" ? (r.env ? "solicitada" : "porsolicitar") : r.est);
+/* Días sin respuesta de una solicitud pendiente: desde que el RGR mandó el correo. Una «por solicitar» todavía no ha pedido nada: no cuenta (null). */
+const diasSinRespuesta = (r, t) => (r.env ? daysBetween(r.env, t) : null);
 const solEstado = (q, t) => (q.res === "denegada" || q.res === "aprobada" || q.res === "retirada") ? q.res : (q.hasta && q.hasta < (t || today()) ? "caducada" : "pendiente");
 const solValid = (q) => solEstado(q) === "pendiente";
 const concEstado = (h, t) => { t = t || today(); return h.cancelada ? "cancelada" : (h.desde && h.desde > t) ? "futura" : (h.hasta && h.hasta < t) ? "terminada" : "vigente"; };
@@ -2334,7 +2336,7 @@ const incidencias = (recs, t) => {
       if (r.desde && r.hasta && r.desde > r.hasta) add(r, "bloqueante", "Fechas incoherentes: el inicio es posterior al fin");
       if (!r.ong) add(r, "aviso", "Solicitud sin ONG");
       if (!r.n) add(r, "aviso", "Solicitud sin número de captadores");
-      if (r.fecha && daysBetween(r.fecha, t) > UMBRAL_ESTANCADA) add(r, "aviso", "Solicitud estancada: más de " + UMBRAL_ESTANCADA + " días sin respuesta", "estancada");
+      if (diasSinRespuesta(r, t) > UMBRAL_ESTANCADA) add(r, "aviso", "Solicitud estancada: más de " + UMBRAL_ESTANCADA + " días sin respuesta", "estancada");
       if (r.desde && r.desde <= t) add(r, "aviso", "El periodo solicitado ya empezó y la solicitud sigue sin respuesta", "inicio");
       const k = [r.c.id, r.ong.toLowerCase(), r.desde, r.hasta].join("|"), g = pendientes.get(k) || []; g.push(r); pendientes.set(k, g);
     }
@@ -2366,8 +2368,9 @@ const indicadores = (recs, segs, t) => {
   const conTiempo = res.filter((r) => r.fecha && r.resFecha && r.resFecha >= r.fecha);
   return {
     pendientes: pend,
-    sinSeguimiento: pend.filter((r) => !r.seg),
-    estancadas: pend.filter((r) => r.fecha && daysBetween(r.fecha, t) > UMBRAL_ESTANCADA),
+    sinSeguimiento: pend.filter((r) => r.env && !r.seg), /* solicitadas sin seguimiento: una «por solicitar» aún no ha pedido nada, su trabajo es mandar el correo */
+    porSolicitar: pend.filter((r) => !r.env),
+    estancadas: pend.filter((r) => diasSinRespuesta(r, t) > UMBRAL_ESTANCADA),
     sinRespuesta: sol.filter((r) => r.est === "caducada"),
     aprobadas: sol.filter((r) => r.est === "aprobada"), denegadas: sol.filter((r) => r.est === "denegada"), retiradas: sol.filter((r) => r.est === "retirada"),
     segVencidos: segs.filter((s) => s.fecha < t), segHoy: segs.filter((s) => s.fecha === t), segProximos: segs.filter((s) => s.fecha > t && s.fecha <= addDays(t, 7)),
@@ -2387,15 +2390,15 @@ const indicadores = (recs, segs, t) => {
    y, por último, el nombre del punto. La bandeja solo señala: el paso del tiempo no cambia el estado de ningún permiso. */
 const JOR_MOTIVOS = {
   atrasada: { rank: 1, tipo: "atrasada" }, terminaHoy: { rank: 2, tipo: "concesion" }, bloqueante: { rank: 3, tipo: "incidencia" }, hoy: { rank: 4, tipo: "hoy" },
-  inicio: { rank: 5, tipo: "solicitud" }, estancada: { rank: 6, tipo: "solicitud" }, vence: { rank: 7, tipo: "concesion" }, sinseg: { rank: 8, tipo: "solicitud" }, aviso: { rank: 9, tipo: "incidencia" }
+  inicio: { rank: 5, tipo: "solicitud" }, estancada: { rank: 6, tipo: "solicitud" }, vence: { rank: 7, tipo: "concesion" }, porsolicitar: { rank: 7.5, tipo: "solicitud" }, sinseg: { rank: 8, tipo: "solicitud" }, aviso: { rank: 9, tipo: "incidencia" }
 };
 const JOR_TIPOS = ["atrasada", "hoy", "solicitud", "concesion", "incidencia"];
-const JOR_RAPIDAS = ["urgentes", "hoy", "sinseg", "todas"];
+const JOR_RAPIDAS = ["urgentes", "hoy", "porsolicitar", "sinseg", "todas"];
 const JOR_COLL = new Intl.Collator("es"); /* mismo orden que localeCompare("es"), mucho más rápido al ordenar miles de filas */
 const JOR_DIAS = 7; /* una concesión que termina, o un periodo solicitado que empieza, en 7 días o menos */
 const JOR_SIGUIENTE = {
   atrasada: "Hacer el seguimiento y marcarlo como hecho", hoy: "Hacer el seguimiento y marcarlo como hecho", inicio: "Decidir la solicitud: conceder, denegar o retirar", estancada: "Decidir la solicitud: conceder, denegar o retirar",
-  sinseg: "Programar un seguimiento o decidir la solicitud", terminaHoy: "Revisar la concesión y, si debe continuar, crear la siguiente", vence: "Revisar la concesión y, si debe continuar, crear la siguiente",
+  porsolicitar: "Mandar el correo y marcarla como solicitada", sinseg: "Programar un seguimiento o decidir la solicitud", terminaHoy: "Revisar la concesión y, si debe continuar, crear la siguiente", vence: "Revisar la concesión y, si debe continuar, crear la siguiente",
   bloqueante: "Revisar y corregir el dato del expediente", aviso: "Revisar el expediente"
 };
 const jornada = (recs, segs, t, incs) => {
@@ -2416,8 +2419,10 @@ const jornada = (recs, segs, t, incs) => {
     if (r.k === "sol" && r.est === "pendiente") {
       const edad = r.fecha ? daysBetween(r.fecha, t) : null, d = r.desde ? daysBetween(t, r.desde) : null;
       if (d !== null && d <= JOR_DIAS) motivo(fila(key, r.c, r, "sol"), "inicio", d > 0 ? "Empieza el periodo solicitado en " + pl(d, "día", "días") + " y sigue sin respuesta" : d === 0 ? "Empieza el periodo solicitado hoy y sigue sin respuesta" : "El periodo solicitado empezó hace " + pl(-d, "día", "días") + " y sigue sin respuesta", d);
-      if (edad !== null && edad > UMBRAL_ESTANCADA) motivo(fila(key, r.c, r, "sol"), "estancada", "Solicitud sin respuesta desde hace " + pl(edad, "día", "días"), -edad);
-      if (!r.seg) motivo(fila(key, r.c, r, "sol"), "sinseg", "Solicitud pendiente sin seguimiento programado", edad === null ? 1e6 : -edad);
+      const sr = diasSinRespuesta(r, t);
+      if (sr !== null && sr > UMBRAL_ESTANCADA) motivo(fila(key, r.c, r, "sol"), "estancada", "Solicitud sin respuesta desde hace " + pl(sr, "día", "días"), -sr);
+      if (!r.env) motivo(fila(key, r.c, r, "sol"), "porsolicitar", edad === null ? "Por solicitar" : edad > 0 ? "Por solicitar desde hace " + pl(edad, "día", "días") : "Por solicitar: creada hoy", edad === null ? 1e6 : -edad);
+      if (!r.seg && r.env) motivo(fila(key, r.c, r, "sol"), "sinseg", "Solicitud pendiente sin seguimiento programado", edad === null ? 1e6 : -edad);
     }
     if (r.k === "con" && r.est === "vigente" && r.hasta) {
       const d = daysBetween(t, r.hasta);
@@ -2439,7 +2444,7 @@ const jornada = (recs, segs, t, incs) => {
     f.antig = f.k !== "punto" && r.fecha ? daysBetween(r.fecha, t) : -1; /* días desde que se pidió (o se dio de alta); sin fecha, al final */
     f.ong = f.k === "punto" ? "" : (r.ong || ""); f.resp = seg ? (seg.resp || "") : ""; f.segDue = !!seg && seg.fecha <= t;
     f.extras = f.motivos.slice(1).map((m) => m.texto);
-    f.flags = { urgente: f.rank <= 3, hoy: f.motivos.some((m) => m.id === "hoy" || m.id === "terminaHoy"), sinseg: f.motivos.some((m) => m.id === "sinseg") };
+    f.flags = { urgente: f.rank <= 3, hoy: f.motivos.some((m) => m.id === "hoy" || m.id === "terminaHoy"), sinseg: f.motivos.some((m) => m.id === "sinseg"), porsolicitar: f.motivos.some((m) => m.id === "porsolicitar") };
     f.fecha = p.id === "atrasada" || p.id === "hoy" ? { et: "Seguimiento", v: seg.fecha } : p.id === "terminaHoy" || p.id === "vence" ? { et: "Termina", v: r.hasta } : p.id === "inicio" ? { et: "Empieza", v: r.desde }
       : f.k !== "punto" && r.fecha ? { et: f.k === "con" ? "Alta" : "Solicitada", v: r.fecha } : { et: "", v: "" };
     f.siguiente = (p.id === "atrasada" || p.id === "hoy") && seg.accion ? "Acción prevista: " + seg.accion : JOR_SIGUIENTE[p.id];
@@ -2455,6 +2460,7 @@ const jornadaCumple = (x, f) => {
   if (f.rapida === "urgentes" && !x.flags.urgente) return false;
   if (f.rapida === "hoy" && !x.flags.hoy) return false;
   if (f.rapida === "sinseg" && !x.flags.sinseg) return false;
+  if (f.rapida === "porsolicitar" && !x.flags.porsolicitar) return false;
   return !f.tipo || f.tipo === "todos" || x.tipo === f.tipo;
 };
 /* Recuentos: cada filtro cuenta lo que daría al elegirlo con todos los demás aplicados (el suyo propio no se aplica), así que nunca hay cifras que no cuadren con la lista. */
@@ -2481,7 +2487,7 @@ const resumenDatos = (recs, segs, t, incs, jor) => {
   /* Carga por provincia y por ONG. */
   const grupo = (clave, nombre) => {
     const m = new Map(), get = (k, n) => { let g = m.get(k); if (!g) m.set(k, g = { clave: k, nombre: n, pend: [], estanc: [], vig: [], segAtr: 0, segs: 0 }); return g; };
-    recs.forEach((r) => { const g = get(clave(r), nombre(r)); if (r.k === "sol" && r.est === "pendiente") { g.pend.push(r); if (r.fecha && edad(r) > UMBRAL_ESTANCADA) g.estanc.push(r); } if (r.k === "con" && r.est === "vigente") g.vig.push(r); });
+    recs.forEach((r) => { const g = get(clave(r), nombre(r)); if (r.k === "sol" && r.est === "pendiente") { g.pend.push(r); if (diasSinRespuesta(r, t) > UMBRAL_ESTANCADA) g.estanc.push(r); } if (r.k === "con" && r.est === "vigente") g.vig.push(r); });
     segs.forEach((x) => { const g = get(clave(x), nombre(x)); g.segs++; if (x.fecha < t) g.segAtr++; });
     return [...m.values()].map((g) => Object.assign(g, { capt: capacidad(g.vig) })).sort((x, y) => (y.pend.length + y.segAtr) - (x.pend.length + x.segAtr) || y.capt - x.capt || x.nombre.localeCompare(y.nombre, "es"));
   };
@@ -2504,7 +2510,7 @@ const resumenDatos = (recs, segs, t, incs, jor) => {
     return { desde: a, hasta: b, recibidas: sol.filter((r) => r.fecha >= a && r.fecha <= b).length, resueltas: resueltas.filter((r) => r.resFecha && r.resFecha >= a && r.resFecha <= b).length };
   });
   /* Cola de trabajo del Resumen: las actuaciones de Mi jornada, en su mismo orden (no hay una segunda regla de qué requiere atención). */
-  const DESTINO = { atrasada: ["seg", "vencido"], hoy: ["seg", "hoy"], inicio: ["sol", "pendiente"], estancada: ["sol", "estancada"], sinseg: ["sol", "sinseg"], terminaHoy: ["con", "vencen7"], vence: ["con", "vencen7"], bloqueante: ["inc", "todas"], aviso: ["inc", "todas"] };
+  const DESTINO = { atrasada: ["seg", "vencido"], hoy: ["seg", "hoy"], inicio: ["sol", "pendiente"], estancada: ["sol", "estancada"], porsolicitar: ["sol", "porsolicitar"], sinseg: ["sol", "sinseg"], terminaHoy: ["con", "vencen7"], vence: ["con", "vencen7"], bloqueante: ["inc", "todas"], aviso: ["inc", "todas"] };
   const J = jor || jornada(recs, segs, t, incs), cola = J.map((f, i) => ({ c: f.c, score: J.length - i, banda: f.banda, sev: f.principal.id === "bloqueante" ? "bloqueante" : "aviso", titulo: f.principal.texto, detalle: f.segDue && f.seg.accion ? f.seg.accion : f.ong, vista: DESTINO[f.principal.id][0], est: DESTINO[f.principal.id][1] }));
   return { antiguedad, sinFechaSol, capacidadDias, vencimientos, porProvincia, porOng, porResponsable, calidad, resolucion, actividad, cola };
 };
@@ -4547,7 +4553,7 @@ const csvCell = (value) => {
       ["segVencidos", "Seguimientos atrasados", "seguimiento", "seguimientos", "al"],
       ["segHoy", "Seguimientos de hoy", "seguimiento", "seguimientos", ""],
       ["segProximos", "Seguimientos en los próximos 7 días", "seguimiento", "seguimientos", ""],
-      ["sinSeguimiento", "Pendientes sin seguimiento programado", "solicitud", "solicitudes", "al"]
+      ["sinSeguimiento", "Solicitadas sin seguimiento programado", "solicitud", "solicitudes", "al"]
     ]],
     ["Solicitudes", [
       ["pendientes", "Pendientes de decisión", "solicitud", "solicitudes", ""],
@@ -5034,20 +5040,20 @@ const csvCell = (value) => {
   const dlg = $("#dlgCentro"), body = $("#ceBody");
   const TRAMO = 100; /* filas que se dibujan de una vez */
   const OPC = {
-    sol: [["pendiente", "Pendientes (por solicitar y solicitadas)"], ["porsolicitar", "Por solicitar"], ["solicitada", "Solicitadas (esperando respuesta)"], ["sinseg", "Pendientes sin seguimiento"], ["estancada", "Estancadas (más de " + UMBRAL_ESTANCADA + " días)"], ["edad0", "Pendientes de 0–7 días"], ["edad8", "Pendientes de 8–15 días"], ["edad16", "Pendientes de 16–30 días"], ["edad31", "Pendientes de más de 30 días"], ["caducada", "Sin respuesta y caducadas"], ["aprobada", "Aprobadas"], ["denegada", "Denegadas"], ["retirada", "Retiradas"], ["todas", "Todas"]],
+    sol: [["pendiente", "Pendientes (por solicitar y solicitadas)"], ["porsolicitar", "Por solicitar"], ["solicitada", "Solicitadas (esperando respuesta)"], ["sinseg", "Solicitadas sin seguimiento"], ["estancada", "Estancadas (más de " + UMBRAL_ESTANCADA + " días)"], ["edad0", "Pendientes de 0–7 días"], ["edad8", "Pendientes de 8–15 días"], ["edad16", "Pendientes de 16–30 días"], ["edad31", "Pendientes de más de 30 días"], ["caducada", "Sin respuesta y caducadas"], ["aprobada", "Aprobadas"], ["denegada", "Denegadas"], ["retirada", "Retiradas"], ["todas", "Todas"]],
     con: [["vigente", "Vigentes"], ["vencen", "Vencen en 30 días"], ["vencen7", "Vencen en 0–7 días"], ["vencen15", "Vencen en 8–15 días"], ["vencen30", "Vencen en 16–30 días"], ["futura", "Futuras"], ["futuras30", "Empiezan en los próximos 30 días"], ["terminada", "Terminadas"], ["cancelada", "Canceladas"], ["sinfin", "Vigentes sin fecha de fin"], ["todas", "Todas"]],
     seg: [["vencido", "Atrasados"], ["hoy", "Para hoy"], ["proximo", "Próximos 7 días"], ["sinresp", "Sin responsable"], ["todas", "Todos"]]
   };
   /* Mi jornada: tipos de actuación (el de su motivo principal), vistas rápidas y bandas en que se agrupa la lista. */
   const JTIPOS = [["todos", "Todos los tipos"], ["atrasada", "Seguimientos atrasados"], ["hoy", "Seguimientos de hoy"], ["solicitud", "Solicitudes que necesitan atención"], ["concesion", "Concesiones a punto de terminar"], ["incidencia", "Datos por revisar"]];
-  const JRAPIDAS = [["urgentes", "Urgentes"], ["hoy", "Para hoy"], ["sinseg", "Sin seguimiento"], ["todas", "Todas"]];
+  const JRAPIDAS = [["urgentes", "Urgentes"], ["hoy", "Para hoy"], ["porsolicitar", "Por solicitar"], ["sinseg", "Sin seguimiento"], ["todas", "Todas"]];
   const JBANDAS = [["urgente", "Urgente", "bl", "Urgente"], ["hoy", "Seguimientos de hoy", "av", "Hoy"], ["atencion", "Requieren atención", "re", "Atención"]]; /* id, título de la sección, forma de la gravedad, etiqueta de la fila */
-  const JDESCRIPCION = { urgentes: "Seguimientos atrasados, concesiones que terminan hoy y datos bloqueantes", hoy: "Seguimientos previstos para hoy y concesiones que terminan hoy", sinseg: "Solicitudes pendientes sin seguimiento programado", todas: "Todas las actuaciones" };
+  const JDESCRIPCION = { urgentes: "Seguimientos atrasados, concesiones que terminan hoy y datos bloqueantes", hoy: "Seguimientos previstos para hoy y concesiones que terminan hoy", porsolicitar: "Solicitudes que el RP o coordinador ha puesto y el RGR aún no ha pedido por correo", sinseg: "Solicitudes ya pedidas sin seguimiento programado", todas: "Todas las actuaciones" };
   const COLOR = { porsolicitar: "porsolicitar", solicitada: "solicitada", pendiente: "solicitado", caducada: "caducado", aprobada: "concedido", denegada: "denegado", retirada: "caducado", vigente: "concedido", futura: "concedido", terminada: "caducado", cancelada: "cancelado" };
   const TEXTO = { porsolicitar: "Por solicitar", solicitada: "Solicitada", pendiente: "Pendiente", caducada: "Caducada sin respuesta", aprobada: "Aprobada", denegada: "Denegada", retirada: "Retirada", vigente: "Vigente", futura: "Futura", terminada: "Terminada", cancelada: "Cancelada" };
   const edadEn = (r, t, a, b) => !!r.fecha && ((d) => d >= a && d <= b)(daysBetween(r.fecha, t));
   const pred = {
-    sol: (est, r, t) => est === "todas" ? true : est === "porsolicitar" ? subEstado(r) === "porsolicitar" : est === "solicitada" ? subEstado(r) === "solicitada" : est === "sinseg" ? (r.est === "pendiente" && !r.seg) : est === "estancada" ? (r.est === "pendiente" && !!r.fecha && daysBetween(r.fecha, t) > UMBRAL_ESTANCADA)
+    sol: (est, r, t) => est === "todas" ? true : est === "porsolicitar" ? subEstado(r) === "porsolicitar" : est === "solicitada" ? subEstado(r) === "solicitada" : est === "sinseg" ? (r.est === "pendiente" && !!r.env && !r.seg) : est === "estancada" ? (r.est === "pendiente" && diasSinRespuesta(r, t) > UMBRAL_ESTANCADA)
       : est === "edad0" ? (r.est === "pendiente" && edadEn(r, t, 0, 7)) : est === "edad8" ? (r.est === "pendiente" && edadEn(r, t, 8, 15)) : est === "edad16" ? (r.est === "pendiente" && edadEn(r, t, 16, 30)) : est === "edad31" ? (r.est === "pendiente" && edadEn(r, t, 31, Infinity)) : r.est === est,
     con: (est, r, t) => est === "todas" ? true : (est === "vencen7" || est === "vencen15" || est === "vencen30") ? (r.est === "vigente" && !!r.hasta && ((d) => est === "vencen7" ? d <= 7 : est === "vencen15" ? d >= 8 && d <= 15 : d >= 16 && d <= 30)(daysBetween(t, r.hasta))) : est === "futuras30" ? (r.est === "futura" && !!r.desde && daysBetween(t, r.desde) <= 30) : est === "vencen" ? (r.est === "vigente" && !!r.hasta && daysBetween(t, r.hasta) <= 30) : est === "sinfin" ? (r.est === "vigente" && !r.hasta) : r.est === est,
     seg: (est, s, t) => est === "todas" ? true : est === "vencido" ? s.fecha < t : est === "hoy" ? s.fecha === t : est === "proximo" ? (s.fecha > t && s.fecha <= addDays(t, 7)) : !s.resp
@@ -5246,7 +5252,7 @@ const csvCell = (value) => {
   const td = (l, c, cls) => "<td" + (cls ? ' class="' + cls + '"' : "") + ' data-l="' + esc(l) + '">' + c + "</td>";
 
   const filaSol = (r, t) => {
-    const edad = r.fecha ? daysBetween(r.fecha, t) : null, estancada = r.est === "pendiente" && edad !== null && edad > UMBRAL_ESTANCADA;
+    const edad = r.fecha ? daysBetween(r.fecha, t) : null, estancada = r.est === "pendiente" && diasSinRespuesta(r, t) > UMBRAL_ESTANCADA;
     return fila(r, 0, estancada ? "urg" : "", td("Punto", celdaPunto(r)) + td("ONG", esc(ongDe(r))) + td("Periodo solicitado", esc(periodo(r))) + td("Captadores", r.n || "—", "n") +
       td("Creada", r.fecha ? esc(fmtD(r.fecha)) + (r.est === "pendiente" && edad >= 0 ? '<span class="ce-sub">hace ' + esc(plural(edad, "día", "días")) + "</span>" : "") : "No consta") +
       td("Estado", badge(r) + (estancada ? '<span class="ce-warn">Estancada</span>' : "")) +
@@ -5552,14 +5558,15 @@ const csvCell = (value) => {
     const extras = x.extras.length ? '<span class="jo-extra" title="También: ' + esc(tambien) + '">+' + x.extras.length + ' más <span class="adm-sr">También: ' + esc(tambien) + "</span></span>" : "";
     const hecho = x.segDue ? '<button type="button" class="ce-act ok" data-act="hecho" data-key="' + esc(clave(x.seg)) + '" aria-label="Marcar como hecho el seguimiento de ' + esc(nombre) + '"' + dis + ">Hecho</button>" : "";
     const cambia = x.segDue && x.c.databaseId ? '<button type="button" class="ce-act" data-act="edseg" data-key="' + esc(clave(x.seg)) + '" aria-label="Cambiar la fecha del seguimiento de ' + esc(nombre) + '"' + dis + ">Cambiar fecha</button>" : "";
-    const abre = '<button type="button" class="ce-act' + (x.segDue ? "" : " pri") + '" data-sel="' + esc(key) + '" aria-label="Abrir el expediente de ' + esc(nombre) + '">Abrir</button>';
+    const env = !sinExp && x.k === "sol" && x.r.est === "pendiente" && !x.r.env ? '<button type="button" class="ce-act ok" data-act="env" data-key="' + esc(key) + '" aria-label="Marcar como solicitada la solicitud de ' + esc(nombre) + '"' + dis + ">Marcar como solicitada</button>" : "";
+    const abre = '<button type="button" class="ce-act' + (x.segDue || env ? "" : " pri") + '" data-sel="' + esc(key) + '" aria-label="Abrir el expediente de ' + esc(nombre) + '">Abrir</button>';
     return '<li class="jo-fila b-' + x.banda + (sel === key ? " is-sel" : "") + '" data-key="' + esc(key) + '"><div class="jo-chk">' +
       (x.segDue ? '<label class="ce-chkl"><input type="checkbox" data-chk="' + esc(clave(x.seg)) + '" aria-label="Seleccionar el seguimiento de ' + esc(nombre) + '"' + (multi.has(clave(x.seg)) ? " checked" : "") + dis + "></label>" : "") + "</div>" +
       '<div class="jo-main"><button type="button" class="ce-pt" data-sel="' + esc(key) + '"><strong>' + esc(nombre) + "</strong><span>" + esc(lugar) + "</span></button>" +
       '<p class="jo-motivo"><span class="ce-sev ' + banda[2] + '"><i aria-hidden="true"></i>' + esc(banda[3]) + "</span><strong>" + esc(x.principal.texto) + "</strong>" + extras + "</p>" +
       '<p class="jo-meta">' + metas + (fr.length ? '<span class="jo-fr">' + esc(fr.join(" · ")) + "</span>" : "") + "</p>" +
       '<p class="jo-sig"><b>Siguiente:</b> ' + esc(x.siguiente) + "</p></div>" +
-      '<div class="jo-acts">' + hecho + cambia + abre + "</div></li>";
+      '<div class="jo-acts">' + hecho + cambia + env + abre + "</div></li>";
   };
   const drawJornada = (filasJ, hayExpedientes) => {
     const lista = body.querySelector("#ceList"), ses = window.mapaSession;
@@ -5596,7 +5603,7 @@ const csvCell = (value) => {
       (nf ? '<button type="button" class="ce-act" data-quita-filtros="1">Quitar filtros (' + nf + ")</button>" : "") + "</span></div>";
     const orden = '<details class="ce-defs jo-orden"><summary>Cómo se ordena y qué entra en Mi jornada</summary><dl>' + [
       ["Una fila por expediente", "Si un expediente cumple varios criterios, aparece una sola vez con su motivo más grave y los demás en «También»."],
-      ["Orden", "1 seguimientos atrasados (el más retrasado primero) · 2 concesiones que terminan hoy · 3 datos bloqueantes · 4 seguimientos de hoy · 5 solicitudes cuyo periodo empieza en " + JOR_DIAS + " días o ya empezó sin respuesta · 6 solicitudes estancadas (más de " + UMBRAL_ESTANCADA + " días sin respuesta) · 7 concesiones que terminan en 1 a " + JOR_DIAS + " días (la más próxima primero) · 8 solicitudes pendientes sin seguimiento (la más antigua primero) · 9 avisos de datos. Con el mismo motivo y medida, la solicitud más antigua y luego el nombre del punto."],
+      ["Orden", "1 seguimientos atrasados (el más retrasado primero) · 2 concesiones que terminan hoy · 3 datos bloqueantes · 4 seguimientos de hoy · 5 solicitudes cuyo periodo empieza en " + JOR_DIAS + " días o ya empezó sin respuesta · 6 solicitudes estancadas (más de " + UMBRAL_ESTANCADA + " días sin respuesta) · 7 concesiones que terminan en 1 a " + JOR_DIAS + " días (la más próxima primero) · 8 solicitudes por solicitar, es decir, que el RGR aún no ha pedido por correo (la más antigua primero) · 9 solicitudes ya pedidas sin seguimiento · 10 avisos de datos. Una solicitud está estancada cuando lleva más de " + UMBRAL_ESTANCADA + " días pedida sin respuesta. Con el mismo motivo y medida, la solicitud más antigua y luego el nombre del punto."],
       ["Qué no hace", "No cambia el estado de ningún permiso por el paso del tiempo: una solicitud caducada o una concesión terminada siguen como están hasta que alguien las resuelva."],
       ["Filtros", "Se combinan. El número de cada filtro es lo que saldría al elegirlo con todos los demás aplicados. El tipo es el de la actuación principal de cada fila."],
       ["Origen", "Los mismos expedientes, seguimientos y avisos que el Panel resumen, el Calendario y el Centro; no hay copia propia."]

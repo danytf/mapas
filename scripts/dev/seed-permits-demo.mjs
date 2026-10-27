@@ -16,6 +16,7 @@ export const seed = async (base = "http://127.0.0.1:8766", { n = 60 } = {}) => {
   for (let i = 0; i < n; i++) {
     const edad = EDADES[i % EDADES.length], estado = i % 9 === 0 ? "denied" : i % 11 === 0 ? "withdrawn" : "pending";
     const a = { establishment_id: E(i), organization: ONGS[i % 7], capturer_count: 1 + (i % 5), requested_from: d((i % 30) - 3), requested_until: d((i % 30) + 4), requested_at: d(-edad), status: estado };
+    if (estado === "pending" && i % 2 === 0) a.sent_on = d(-edad); /* la mitad de las pendientes ya se ha pedido por correo (solicitada); el resto, por solicitar */
     if (estado !== "pending") { a.resolved_at = d(-Math.max(0, edad - 3)) + "T10:00:00Z"; a.resolution_reason = estado === "denied" ? "Sin cupo" : null; }
     await post("permit_applications", a);
     await post("permit_grants", { establishment_id: E(i + 3), organization: ONGS[(i + 2) % 7], capturer_count: 1 + (i % 6), valid_from: d((i % 40) - 25), valid_until: i % 13 === 0 ? null : d((i % 40) - 8) });

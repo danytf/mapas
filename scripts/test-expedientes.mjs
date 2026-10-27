@@ -195,9 +195,9 @@ const T = "2026-10-23";
 // Estancadas, sin seguimiento, datos incompletos y analítica de resolución.
 {
   const ex = R.expedientesDe(P1, { solicitudes: [
-    { desde: "2026-11-01", hasta: "2026-11-30", ong: "A", captadores: 2, fecha: "2026-10-01" },                       // 22 días: estancada, sin seguimiento
+    { desde: "2026-11-01", hasta: "2026-11-30", ong: "A", captadores: 2, fecha: "2026-10-01", enviada: "2026-10-01" },                     // 22 días: estancada, sin seguimiento
     { desde: "2026-11-01", hasta: "2026-11-30", ong: "B", captadores: 2, fecha: "2026-10-20", seg: "2026-10-25" },    // reciente, con seguimiento
-    { desde: "2026-11-01", hasta: "2026-11-30", captadores: 0 },                                                        // sin ONG ni captadores
+    { desde: "2026-11-01", hasta: "2026-11-30", captadores: 0, enviada: "2026-10-25" },                                                    // sin ONG ni captadores
     { desde: "2026-10-01", ong: "C", captadores: 2, fecha: "2026-10-01", res: "aprobada", resFecha: "2026-10-05" },   // 4 días
     { desde: "2026-10-01", ong: "C", captadores: 2, fecha: "2026-10-01", res: "denegada", resFecha: "2026-10-04" },   // 3 días
     { desde: "2026-10-01", ong: "C", captadores: 2, res: "retirada" }                                                  // sin fechas: no entra en el tiempo medio
@@ -410,7 +410,7 @@ const T = "2026-10-23";
   const p1 = P(1, "Hospital Uno", "pr-1", "Granada"), p2 = P(2, "Super Dos", "pr-2", "Almería");
   const recs = [
     ...R.expedientesDe(p1, { solicitudes: [
-      { id: "s1", desde: "2026-10-27", hasta: "2026-11-02", ong: "AECC", captadores: 2, fecha: "2026-10-01", seg: "2026-10-20" },       /* pendiente, 24 días, empieza en 2 días */
+      { id: "s1", desde: "2026-10-27", hasta: "2026-11-02", ong: "AECC", captadores: 2, fecha: "2026-10-01", enviada: "2026-10-01", seg: "2026-10-20" },       /* pendiente, 24 días, empieza en 2 días */
       { id: "s2", desde: "2026-11-10", hasta: "2026-11-05", ong: "Cruz Roja", captadores: 1, fecha: "2026-10-24" },                 /* fechas incoherentes */
       { id: "s3", desde: "2026-11-10", hasta: "2026-11-12", ong: "WWF", captadores: 1, fecha: "2026-10-20" },
       { id: "s4", desde: "2026-11-10", hasta: "2026-11-12", ong: "wwf", captadores: 1, fecha: "2026-10-21" },                       /* duplicada de s3 (misma ONG sin distinguir mayúsculas) */

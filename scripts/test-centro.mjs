@@ -52,8 +52,8 @@ const punto = (id) => ({ id, name: "P" + id });
 const p = (extra) => Object.assign({ solicitudes: [], historial: [] }, extra);
 const recs = [
   ...ctx.expedientesDe(punto(1), p({ solicitudes: [
-    { id: "s1", desde: "2026-11-01", hasta: "2026-11-10", ong: "A", captadores: 2, fecha: "2026-10-01" },   /* pendiente y estancada */
-    { id: "s2", desde: "2026-11-01", hasta: "2026-11-10", ong: "A", captadores: 2, fecha: "2026-10-20" },   /* pendiente */
+    { id: "s1", desde: "2026-11-01", hasta: "2026-11-10", ong: "A", captadores: 2, fecha: "2026-10-01", enviada: "2026-10-01" },   /* pendiente y estancada */
+    { id: "s2", desde: "2026-11-01", hasta: "2026-11-10", ong: "A", captadores: 2, fecha: "2026-10-20", enviada: "2026-10-20" },   /* pendiente */
     { id: "s3", desde: "2026-09-01", hasta: "2026-09-10", ong: "B", captadores: 1, fecha: "2026-08-01" },   /* caducada */
     { id: "s4", desde: "2026-11-01", hasta: "2026-11-10", ong: "B", captadores: 1, fecha: "2026-10-02", res: "aprobada", resFecha: "2026-10-03" },
     { id: "s5", desde: "2026-11-01", hasta: "2026-11-10", ong: "B", captadores: 1, fecha: "2026-10-02", res: "denegada", resFecha: "2026-10-03" }
