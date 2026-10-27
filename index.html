@@ -4824,10 +4824,10 @@ const csvCell = (value) => {
       '<div class="t"><b>' + nSeg + "</b><span>" + (nSeg === 1 ? "seguimiento" : "seguimientos") + " en el mes" + (nAtr ? " · " + nAtr + " atrasado" + (nAtr === 1 ? "" : "s") : "") + "</span></div>";
     const nota = body.querySelector("#calPast"); nota.hidden = true;
     const ini = ref + "-01" >= t.slice(0, 7) + "-01" ? "" : "Mes pasado: las concesiones se muestran con sus fechas y las solicitudes solo cuando constan sus fechas de alta y de decisión."; if (ini) { nota.hidden = false; nota.textContent = ini; }
-    body.querySelector("#calGrid").innerHTML = '<div class="cal-mleg"><span><i class="a"></i>Autorizados (concesiones)</span><span><i class="p"></i>Por aprobar (solicitudes pendientes)</span><span>seg. = seguimientos</span></div>' +
+    body.querySelector("#calGrid").innerHTML = '<div class="cal-mleg"><span><i class="a"></i>Autorizados (concesiones)</span><span><i class="p"></i>Por aprobar (solicitudes pendientes)</span><span>seg. = seguimientos</span><span>Pulsa un día desde hoy para crear una solicitud</span></div>' +
       '<div class="cal-mes" role="group" aria-label="Calendario de ' + esc(MESES[m - 1] + " " + y) + '">' + DIAS.map((n) => '<span class="cal-mh">' + n.slice(0, 3) + "</span>").join("") +
       semanas.map((sem) => sem.map((x, k) => {
-        const fuera = x.d < primero || x.d > ultimo, lbl = DIAS[k] + " " + (+x.d.slice(8)) + " de " + MESES[+x.d.slice(5, 7) - 1] + ": " + plural(x.aut, "captador autorizado", "captadores autorizados") + ", " + x.pen + " por aprobar, " + plural(x.seg.length, "seguimiento", "seguimientos");
+        const fuera = x.d < primero || x.d > ultimo, lbl = DIAS[k] + " " + (+x.d.slice(8)) + " de " + MESES[+x.d.slice(5, 7) - 1] + ": " + plural(x.aut, "captador autorizado", "captadores autorizados") + ", " + x.pen + " por aprobar, " + plural(x.seg.length, "seguimiento", "seguimientos") + (x.d >= t ? ". Pulsa para crear una solicitud este día" : "");
         return '<button type="button" class="cal-m' + (x.d === t ? " hoy" : "") + (fuera ? " fuera" : "") + (k >= 5 ? " we" : "") + '" data-dia="' + x.d + '" aria-label="' + esc(lbl) + '"' + (x.d === t ? ' aria-current="date"' : "") + '><span class="d">' + (+x.d.slice(8)) + "</span>" +
           (x.aut ? '<span class="m"><i class="a"></i>' + x.aut + "</span>" : "") + (x.pen ? '<span class="m"><i class="p"></i>' + x.pen + "</span>" : "") + (x.seg.length ? '<span class="sg' + (x.d < t ? " late" : "") + '">' + x.seg.length + (x.d < t ? " atr." : " seg.") + "</span>" : "") + "</button>";
       }).join("")).join("") + "</div>";
@@ -4901,13 +4901,16 @@ const csvCell = (value) => {
     const av = body.querySelector("#calAviso"), texto = e.detail && e.detail.texto;
     if (av && texto) { av.textContent = texto; av.hidden = false; av.focus(); } else body.querySelector("[data-nuevo]")?.focus();
   });
+  /* Formulario nuevo con el día puesto, encima del Calendario (que no se cierra). */
+  const nuevaDesde = (tipo, dia) => document.dispatchEvent(new CustomEvent("centro:abrir", { detail: { vista: tipo === "sol" ? "sol" : "con", est: "todas", prov, ong, nuevo: tipo, desde: dia, enCalendario: true } }));
   body.addEventListener("click", (e) => {
     if (e.target.closest("#calPdf")) { exportaPdf(); return; }
     const cc = e.target.closest("[data-centro]");
     if (cc) { const [vista, est] = cc.dataset.centro.split(":"); dlg.close(); document.dispatchEvent(new CustomEvent("centro:abrir", { detail: { vista, est, prov, ong } })); return; }
     const nv = e.target.closest("[data-nuevo]");
-    if (nv) { document.dispatchEvent(new CustomEvent("centro:abrir", { detail: { vista: nv.dataset.nuevo === "sol" ? "sol" : "con", est: "todas", prov, ong, nuevo: nv.dataset.nuevo, desde: nv.dataset.nuevoDia, enCalendario: true } })); return; } /* sin cerrar el Calendario: el formulario se abre encima y al guardar se vuelve a la semana */
+    if (nv) { nuevaDesde(nv.dataset.nuevo, nv.dataset.nuevoDia); return; } /* sin cerrar el Calendario: el formulario se abre encima y al guardar se vuelve a la semana */
     const dd = e.target.closest("[data-dia]");
+    if (dd && modo === "mes" && dd.dataset.dia >= today()) { nuevaDesde("sol", dd.dataset.dia); return; } /* en el mes, pinchar un día desde hoy crea la solicitud de ese día */
     if (dd) { wk = mondayOf(dd.dataset.dia); modo = "dias"; body.querySelectorAll("[data-modo]").forEach((b2) => b2.setAttribute("aria-pressed", String(b2.dataset.modo === modo))); draw(); return; }
     const w = e.target.closest("[data-w]");
     if (w) { if (w.dataset.w === "0") wk = mondayOf(today()); else if (modo === "mes") desplazaMes(+w.dataset.w); else wk = addDays(wk, 7 * +w.dataset.w); draw(); return; }
