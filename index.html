@@ -648,6 +648,31 @@
   .cal-m .sg.late { color: var(--err); font-weight: 600; }
   .cal-links { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 14px; font-size: var(--fs-label); color: var(--muted); }
   .cal-links button { height: 32px; padding: 0 13px; font-size: var(--fs-label); border-radius: var(--r-pill); }
+  .cal-links .cal-pdf { margin-left: auto; }
+  .cal-print-head { display: none; }
+  /* Exportar a PDF: el navegador imprime solo el Calendario, en A4 apaisado, tal como se ve (semana, mes u ONG) y con la hoja siempre en claro. */
+  @page cal { size: A4 landscape; margin: 10mm; }
+  @media print {
+    body.imprime-cal > :not(#dlgCal) { display: none !important; }
+    body.imprime-cal { page: cal; }
+    body.imprime-cal #dlgCal { position: static !important; display: block; width: auto; max-width: none; max-height: none; overflow: visible; margin: 0; padding: 0; border: 0; box-shadow: none; background: #fff; color: #171b23; }
+    body.imprime-cal #dlgCal::backdrop { display: none; }
+    body.imprime-cal #dlgCal, body.imprime-cal #dlgCal * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body.imprime-cal #dlgCal .pn-head, body.imprime-cal #dlgCal .cal-bar, body.imprime-cal #dlgCal .cal-filters, body.imprime-cal #dlgCal .cal-links { display: none !important; }
+    body.imprime-cal #dlgCal .cal-print-head { display: block; margin: 0 0 8px; }
+    body.imprime-cal #dlgCal .cal-print-head h2 { margin: 0 0 2px; font-size: var(--fs-title); }
+    body.imprime-cal #dlgCal .cal-print-head p { margin: 0; font-size: var(--fs-label); color: #596478; }
+    /* sin zonas con desplazamiento (se imprimirían recortadas) y con la semana ajustada al ancho de la hoja */
+    body.imprime-cal #dlgCal .cal-scroll, body.imprime-cal #dlgCal .pn-scroll, body.imprime-cal #dlgCal .cal-day { overflow: visible; }
+    body.imprime-cal #dlgCal .cal-wk { min-width: 0; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+    body.imprime-cal #dlgCal .cal-stack { animation: none; }
+    body.imprime-cal #dlgCal [data-nuevo], body.imprime-cal #dlgCal .cal-new { display: none !important; }
+    body.imprime-cal #dlgCal .cal-hd { flex-wrap: wrap; }
+    body.imprime-cal #dlgCal tr { break-inside: avoid; }
+    /* la hoja siempre en claro: mismos valores que :root (la prueba test-calendario-pdf comprueba que no falte ninguno del modo oscuro) */
+    body.imprime-cal { color-scheme: light; --bg: #f5f6f8; --panel: #ffffff; --fg: #141b26; --muted: #596478; --field-line: #7f8b9d; --line: #e4e7ec; --line-2: #cfd5de; --accent: #c8102e; --accent-d: #9f0c24; --accent-fg: #ffffff; --accent-soft: #fdecef; --warn: #8a5a00; --warn-bg: #fff3d6; --ok-bg: #f3f5f8; --ok: #14532d; --ok-soft: #dcfce7; --ink: #171b23; --ink-2: #222a36; --err: #b3261e; --star-off: #8a94a3; --star-on: #c47a00; --st-concedido: #16a34a; --st-solicitado: #d97706; --st-caducado: #7c8aa0; --st-denegado: #475569; --st-cancelado: #dc2626; --ch-a1: #8794ab; --ch-a2: #61708a; --ch-a3: #3d4b66; --pin-denegado: #111827; --res-ok-bg: #dcfce7; --res-ok-line: #86efac; --res-err-bg: #fee2e2; --res-err-line: #fca5a5; --shadow: 0 1px 2px rgba(23,27,35,.06), 0 6px 20px rgba(23,27,35,.09); }
+    body.imprime-cal #dlgCal { --ong-bg-l: 91%; --ong-fg-l: 22%; } /* en las tarjetas NO: break-inside en cientos de tarjetas cuelga a Chrome al paginar */
+  }
   .cal-new { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 12px 8px; }
   .cal-new button { height: 28px; padding: 0 10px; font-size: var(--fs-label); border-radius: var(--r-pill); }
   .cal-modo { display: inline-flex; gap: 6px; margin-left: auto; }
@@ -4819,12 +4844,29 @@ const csvCell = (value) => {
       nombres.map((o) => "<tr><th scope=\"row\">" + esc(o) + "</th>" + filas.get(o).map(([a2, p2]) => "<td>" + (a2 || p2 ? (a2 ? "<b>" + a2 + "</b>" : "") + (p2 ? '<span class="cal-pp"> +' + p2 + " por aprobar</span>" : "") : "—") + "</td>").join("") + "</tr>").join("") + "</tbody></table></div>";
   };
 
+  /* Exportar a PDF: se imprime lo que se ve (semana, mes o ONG, con los filtros elegidos) con una cabecera propia. El PDF lo crea el navegador (Imprimir, Guardar como PDF): sin librerías, sin datos nuevos y sin guardar nada. */
+  const exportaPdf = () => {
+    const sel = (id) => { const o = body.querySelector("#" + id + " option:checked"); return o ? o.textContent.trim() : ""; };
+    const MODOS = { dias: "Vista por día", mes: "Vista de mes", ong: "Vista por ONG" };
+    const que = [["autorizada", "Concesiones"], ["pendiente", "Solicitudes por aprobar"], ["seguimiento", "Seguimientos"], ["historico", "Histórico"]].filter(([k]) => ver[k]).map(([, n]) => n).join(", ") || "Nada seleccionado";
+    const rango = body.querySelector("#calRange").textContent.trim();
+    const gen = new Date().toLocaleString("es-ES", { dateStyle: "short", timeStyle: "short", timeZone: "Europe/Madrid" });
+    body.querySelector("#calPrintHead").innerHTML = "<h2>Calendario · " + esc(rango) + "</h2><p>" + esc([sel("calProv"), sel("calOng"), MODOS[modo]].filter(Boolean).join(" · ")) + "</p><p>Se muestra: " + esc(que) + ". Generado el " + esc(gen) + ".</p>";
+    const titulo = document.title; document.title = "Calendario " + rango + (sel("calProv") ? " - " + sel("calProv") : "");
+    /* Un diálogo modal vive en la capa superior del navegador y no se pagina bien al imprimir: durante la impresión se muestra como no modal. */
+    const eraModal = dlg.matches(":modal"); if (eraModal) { dlg.close(); dlg.show(); }
+    document.body.classList.add("imprime-cal");
+    const fin = () => { document.body.classList.remove("imprime-cal"); document.title = titulo; window.removeEventListener("afterprint", fin); if (eraModal && dlg.open) { dlg.close(); dlg.showModal(); } };
+    window.addEventListener("afterprint", fin);
+    window.print();
+  };
   const abrir = () => {
     wk = mondayOf(today());
     const opts = provOpts();
     /* Como el Panel y el Centro, abre con todas las provincias del usuario; si solo tiene una, esa. Lo elegido se mantiene mientras siga siendo válido. */
     if (prov === null || (prov === "" ? opts.length < 2 : !opts.some(([id]) => id === prov))) prov = opts.length > 1 ? "" : (opts[0] ? opts[0][0] : "");
     body.innerHTML =
+      '<div class="cal-print-head" id="calPrintHead"></div>' +
       '<div class="cal-bar">' +
       '<label class="cal-f">Provincia<select id="calProv">' + (opts.length > 1 ? '<option value="">Todas las provincias</option>' : "") +
       opts.map(([id, n]) => '<option value="' + esc(id) + '"' + (id === prov ? " selected" : "") + ">" + esc(n) + "</option>").join("") + "</select></label>" +
@@ -4839,8 +4881,8 @@ const csvCell = (value) => {
       '<button type="button" class="cal-chip s-seguimiento" data-ver="seguimiento" aria-pressed="' + ver.seguimiento + '"><i></i>Seguimientos</button>' +
       '<button type="button" class="cal-chip s-cancelado" data-ver="historico" aria-pressed="' + ver.historico + '"><i></i>Histórico (denegadas, retiradas, canceladas)</button>' +
       '<span class="cal-modo" role="group" aria-label="Vista"><button type="button" data-modo="dias" aria-pressed="' + (modo === "dias") + '">Por día</button><button type="button" data-modo="mes" aria-pressed="' + (modo === "mes") + '">Mes</button><button type="button" data-modo="ong" aria-pressed="' + (modo === "ong") + '">Por ONG</button></span></div>' +
-      '<div class="cal-links" role="group" aria-label="Abrir en el Centro de permisos"><span>Gestionar en el Centro de permisos:</span><button type="button" data-centro="sol:pendiente">Solicitudes pendientes</button><button type="button" data-centro="con:vigente">Concesiones vigentes</button><button type="button" data-centro="seg:todas">Seguimientos</button></div>' +
-      '<p class="cal-note cal-past" id="calPast" role="note" hidden></p>' +
+      '<div class="cal-links" role="group" aria-label="Abrir en el Centro de permisos"><span>Gestionar en el Centro de permisos:</span><button type="button" data-centro="sol:pendiente">Solicitudes pendientes</button><button type="button" data-centro="con:vigente">Concesiones vigentes</button><button type="button" data-centro="seg:todas">Seguimientos</button><button type="button" id="calPdf" class="cal-pdf" title="Abre la impresión del navegador: elige «Guardar como PDF»">Exportar a PDF</button></div>' +
+            '<p class="cal-note cal-past" id="calPast" role="note" hidden></p>' +
       '<div id="calGrid"></div>' +
       '<p class="cal-note">Un permiso aparece cada día entre su fecha de inicio y la de fin, las dos incluidas. Los captadores de un día no se suman entre registros de la misma ONG en un mismo punto (se toma el mayor) y sí entre ONG distintas. Autorizados, por aprobar y seguimientos se cuentan por separado. Pulsa una tarjeta para ver ese punto en el Centro de permisos.</p>';
     draw();
@@ -4848,6 +4890,7 @@ const csvCell = (value) => {
     body.querySelector("#calProv").focus();
   };
   body.addEventListener("click", (e) => {
+    if (e.target.closest("#calPdf")) { exportaPdf(); return; }
     const cc = e.target.closest("[data-centro]");
     if (cc) { const [vista, est] = cc.dataset.centro.split(":"); dlg.close(); document.dispatchEvent(new CustomEvent("centro:abrir", { detail: { vista, est, prov, ong } })); return; }
     const nv = e.target.closest("[data-nuevo]");

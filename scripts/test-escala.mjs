@@ -29,7 +29,7 @@ for (const m of st.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
 assert.deepEqual(malos, [], "Valores fuera de la escala (usa los tokens --r-* y --fs-*):\n" + malos.join("\n"));
 
 // Colores de categoría, gamificación y banda de la cabecera: tokens, no literales (solo se definen en :root).
-const fuera = st.replace(/:root\s*\{[^}]*\}/g, "");
+const fuera = st.replace(/:root\s*\{[^}]*\}/g, "").replace(/body\.imprime-cal \{ color-scheme: light;[^}]*\}/g, ""); // la copia clara de las variables para imprimir también es una definición de tokens
 for (const lit of ["#e0a800", "#fff1c2", "#8a5a00", "#22a15a", "#f5c542", "#ffe28a", "#ffd966", "#fbbf24", "#22c55e", "#2b394d", "#3a4c66", "#26354b", "#1f2a3b"]) {
   assert.ok(!fuera.toLowerCase().includes(lit), "El literal " + lit + " debe ser un token (--gam-*, --hd-*), no un valor suelto");
 }
