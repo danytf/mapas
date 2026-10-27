@@ -35,7 +35,7 @@
     --cat-ikea: #e0a800; --cat-leroy: #65a30d; --cat-decathlon: #0891b2; --cat-carrefour: #7c3aed; --cat-correos: #a16207; --cat-eci: #15803d;
     --cat-bricolaje: #92400e; --cat-mediamarkt: #dc2626; --cat-estaciones: #78716c; --cat-tiendas: #701a75; --cat-eventos: #4f46e5; --cat-otra: #475569; --cat-defecto: #0b7a68;
     /* Estado del pin y de la leyenda, confeti, niebla de conquista y cuadro de resultado de la ubicación */
-    --pin-sin: #ffffff; --pin-sin-line: #9aa8a4; --pin-solicitado: #fbbf24; --pin-concedido: #22c55e; --pin-denegado: #111827; --pin-caducado: #94a3b8; --pin-cancelado: #dc2626;
+    --pin-sin: #ffffff; --pin-sin-line: #9aa8a4; --pin-solicitado: #fbbf24; --pin-concedido: #22c55e; --pin-denegado: #dc2626; --pin-caducado: #94a3b8; --pin-cancelado: #111827;
     --confetti-1: #22c55e; --confetti-2: #fbbf24; --confetti-3: #ef4444; --confetti-4: #3b82f6; --confetti-5: #a855f7; --confetti-6: #f97316;
     --fog-0: #64748b; --fog-1: #fbbf24; --fog-2: #22c55e; --fog-3: #e0a800;
     --res-ok-bg: #dcfce7; --res-ok-line: #86efac; --res-err-bg: #fee2e2; --res-err-line: #fca5a5;
@@ -55,7 +55,7 @@
     --err: #b3261e;
     --star-off: #8a94a3;
     --star-on: #c47a00;
-    --st-concedido: #16a34a; --st-solicitado: #d97706; --st-caducado: #7c8aa0; --st-denegado: #475569; --st-cancelado: #dc2626;
+    --st-concedido: #16a34a; --st-solicitado: #d97706; --st-porsolicitar: #ea6f00; --st-solicitada: #d6a000; --st-caducado: #7c8aa0; --st-denegado: #dc2626; --st-cancelado: #475569;
     --ch-aut: #16a34a; --ch-dem: #d97706; --ch-1: #3b6fb6; --ch-a1: #8794ab; --ch-a2: #61708a; --ch-a3: #3d4b66;
     /* Grupos de marcadores por densidad (.cl.n1 a .n4): fondos fijos en claro y oscuro con texto blanco (5,0, 8,8 y 5,9 a 1; los --ch-* se invierten en oscuro y no sirven aquí). */
     --cl-n1: #61708a; --cl-n2: #3d4b66; --cl-n4: #090d15;
@@ -73,10 +73,10 @@
       --warn: #f3c46b; --warn-bg: #33270d; --ok-bg: #19243a; --ok: #86efac; --ok-soft: #12341f;
       --ink: #070b12; --ink-2: #111a29;
       --err: #ff7084; --star-off: #7f8da3; --star-on: #f59e0b;
-      --st-concedido: #4ade80; --st-solicitado: #fbbf24; --st-caducado: #7c8aa0; --st-denegado: #e2e8f0; --st-cancelado: #ff7084;
+      --st-concedido: #4ade80; --st-solicitado: #fbbf24; --st-porsolicitar: #fb923c; --st-solicitada: #facc15; --st-caducado: #7c8aa0; --st-denegado: #ff7084; --st-cancelado: #e2e8f0;
       --ch-a1: #55647e; --ch-a2: #7d8ca6; --ch-a3: #a9b6ca;
       --gam-gold-soft: var(--warn-bg); --gam-gold-ink: var(--warn);
-      --pin-denegado: #e2e8f0; --res-ok-bg: #12341f; --res-ok-line: #2f6b45; --res-err-bg: #3a121b; --res-err-line: #7a2a36;
+      --pin-denegado: #ff7084; --pin-cancelado: #e2e8f0; --res-ok-bg: #12341f; --res-ok-line: #2f6b45; --res-err-bg: #3a121b; --res-err-line: #7a2a36;
       --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.45);
       color-scheme: dark; /* y con el oscuro: casillas, fechas y desplegables dejan de verse blancos */
     }
@@ -621,6 +621,8 @@
   .cal-n svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
   .cal-card.s-concedido { --st: var(--st-concedido); --st-fg: var(--ok); }
   .cal-card.s-solicitado { --st: var(--st-solicitado); --st-fg: var(--warn); border-top-style: dashed; border-right-style: dashed; border-bottom-style: dashed; background-image: repeating-linear-gradient(135deg, transparent 0 10px, rgba(245, 158, 11, .09) 10px 20px); }
+  .cal-card.s-porsolicitar { --st: var(--st-porsolicitar); --st-fg: var(--warn); border-top-style: dashed; border-right-style: dashed; border-bottom-style: dashed; background-image: repeating-linear-gradient(135deg, transparent 0 10px, rgba(234, 111, 0, .09) 10px 20px); }
+  .cal-card.s-solicitada { --st: var(--st-solicitada); --st-fg: var(--warn); border-top-style: dashed; border-right-style: dashed; border-bottom-style: dashed; background-image: repeating-linear-gradient(135deg, transparent 0 10px, rgba(214, 160, 0, .09) 10px 20px); }
   .cal-card.s-caducado { --st: var(--st-caducado); opacity: .82; }
   .cal-card.s-denegado { --st: var(--st-denegado); opacity: .82; }
   .cal-card.s-cancelado { --st: var(--st-cancelado); opacity: .82; }
@@ -676,7 +678,7 @@
     body.imprime-cal #dlgCal .cal-hd { flex-wrap: wrap; }
     body.imprime-cal #dlgCal tr { break-inside: avoid; }
     /* la hoja siempre en claro: mismos valores que :root (la prueba test-calendario-pdf comprueba que no falte ninguno del modo oscuro) */
-    body.imprime-cal { color-scheme: light; --bg: #f5f6f8; --panel: #ffffff; --fg: #141b26; --muted: #596478; --field-line: #7f8b9d; --line: #e4e7ec; --line-2: #cfd5de; --accent: #c8102e; --accent-d: #9f0c24; --accent-fg: #ffffff; --accent-soft: #fdecef; --warn: #8a5a00; --warn-bg: #fff3d6; --ok-bg: #f3f5f8; --ok: #14532d; --ok-soft: #dcfce7; --ink: #171b23; --ink-2: #222a36; --err: #b3261e; --star-off: #8a94a3; --star-on: #c47a00; --st-concedido: #16a34a; --st-solicitado: #d97706; --st-caducado: #7c8aa0; --st-denegado: #475569; --st-cancelado: #dc2626; --ch-a1: #8794ab; --ch-a2: #61708a; --ch-a3: #3d4b66; --pin-denegado: #111827; --res-ok-bg: #dcfce7; --res-ok-line: #86efac; --res-err-bg: #fee2e2; --res-err-line: #fca5a5; --shadow: 0 1px 2px rgba(23,27,35,.06), 0 6px 20px rgba(23,27,35,.09); }
+    body.imprime-cal { color-scheme: light; --pin-cancelado: #111827; --bg: #f5f6f8; --panel: #ffffff; --fg: #141b26; --muted: #596478; --field-line: #7f8b9d; --line: #e4e7ec; --line-2: #cfd5de; --accent: #c8102e; --accent-d: #9f0c24; --accent-fg: #ffffff; --accent-soft: #fdecef; --warn: #8a5a00; --warn-bg: #fff3d6; --ok-bg: #f3f5f8; --ok: #14532d; --ok-soft: #dcfce7; --ink: #171b23; --ink-2: #222a36; --err: #b3261e; --star-off: #8a94a3; --star-on: #c47a00; --st-concedido: #16a34a; --st-solicitado: #d97706; --st-porsolicitar: #ea6f00; --st-solicitada: #d6a000; --st-caducado: #7c8aa0; --st-denegado: #dc2626; --st-cancelado: #475569; --ch-a1: #8794ab; --ch-a2: #61708a; --ch-a3: #3d4b66; --pin-denegado: #dc2626; --res-ok-bg: #dcfce7; --res-ok-line: #86efac; --res-err-bg: #fee2e2; --res-err-line: #fca5a5; --shadow: 0 1px 2px rgba(23,27,35,.06), 0 6px 20px rgba(23,27,35,.09); }
     body.imprime-cal #dlgCal { --ong-bg-l: 91%; --ong-fg-l: 22%; } /* en las tarjetas NO: break-inside en cientos de tarjetas cuelga a Chrome al paginar */
   }
   .cal-new { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 12px 8px; }
@@ -689,8 +691,12 @@
   .cal-ch { display: flex; align-items: center; gap: 5px; min-width: 0; padding: 1px 6px; font-size: var(--fs-label); border: 1px solid var(--line-2); border-radius: var(--r-xs); background: var(--bg); }
   .cal-ch.p { border-style: dashed; }
   .cal-ch i { flex: none; width: 8px; height: 8px; border-radius: 2px; background: var(--ch-aut); }
-  .cal-ch.p i { background: var(--ch-dem); }
-  .cal-ch.env i, .cal-mleg .p.env { background: transparent; border: 2px solid var(--ch-dem); }
+  .cal-ch.p { border-color: var(--st-porsolicitar); }
+  .cal-ch.p.env { border-color: var(--st-solicitada); }
+  .cal-ch.p i { background: var(--st-porsolicitar); }
+  .cal-ch.env i, .cal-mleg .p.env { background: transparent; border: 2px solid var(--st-solicitada); }
+  .cal-mleg .p { background: var(--st-porsolicitar); }
+  .cal-mleg .p.env { background: transparent; }
   .cal-ch .t { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
   .cal-mas { font-size: var(--fs-label); color: var(--muted); }
   .cal-dia { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-card); padding: 12px 14px; display: grid; gap: 10px; position: sticky; top: 0; }
@@ -979,7 +985,7 @@
   .ce-badge, .ce-sev { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
   .ce-badge.env i { background: transparent; border: 2px solid var(--st, var(--muted)); }
   .ce-badge i, .ce-sev i { width: 9px; height: 9px; border-radius: 50%; background: var(--st, var(--sv, var(--muted))); flex: none; }
-  .ce-badge.s-concedido { --st: var(--st-concedido); } .ce-badge.s-solicitado { --st: var(--st-solicitado); } .ce-badge.s-caducado { --st: var(--st-caducado); } .ce-badge.s-denegado { --st: var(--st-denegado); } .ce-badge.s-cancelado { --st: var(--st-cancelado); }
+  .ce-badge.s-concedido { --st: var(--st-concedido); } .ce-badge.s-solicitado { --st: var(--st-solicitado); } .ce-badge.s-porsolicitar { --st: var(--st-porsolicitar); } .ce-badge.s-solicitada { --st: var(--st-solicitada); } .ce-badge.s-caducado { --st: var(--st-caducado); } .ce-badge.s-denegado { --st: var(--st-denegado); } .ce-badge.s-cancelado { --st: var(--st-cancelado); }
   /* Gravedad: color y forma (rombo, punto, anillo), nunca solo color */
   .ce-sev.bl { --sv: var(--err); } .ce-sev.bl i { border-radius: 2px; transform: rotate(45deg); }
   .ce-sev.av { --sv: var(--st-solicitado); }
@@ -4779,7 +4785,7 @@ const csvCell = (value) => {
     const avisos = [];
     if (r.k === "con" && i.e === "autorizada" && r.hasta && r.hasta >= t && daysBetween(t, r.hasta) <= 7 && r.hasta === d) avisos.push("Vence " + (r.hasta === t ? "hoy" : "el " + fmtD(r.hasta).slice(0, 5)));
     if (r.k === "con" && r.desde === d && d > t) avisos.push("Empieza");
-    return '<li><button type="button" class="cal-card s-' + info[1] + '" data-pt="' + esc(String(c.id)) + '" data-v="' + r.k + '">' +
+    return '<li><button type="button" class="cal-card s-' + (r.k === "sol" && i.e === "pendiente" ? (r.env ? "solicitada" : "porsolicitar") : info[1]) + '" data-pt="' + esc(String(c.id)) + '" data-v="' + r.k + '">' +
       '<span class="st">' + esc((r.k === "sol" ? "Solicitud · " : "Concesión · ") + (r.k === "sol" && i.e === "pendiente" ? (r.env ? "Solicitada" : "Por solicitar") : info[0])) + "</span><strong>" + esc(c.name) + "</strong>" +
       '<span class="wh">' + esc(townOf(c)) + (c.tipo ? " · " + esc(c.tipo) : "") + "</span>" +
       (span ? '<span class="sp">' + esc(span) + "</span>" : "") +
@@ -5037,7 +5043,7 @@ const csvCell = (value) => {
   const JRAPIDAS = [["urgentes", "Urgentes"], ["hoy", "Para hoy"], ["sinseg", "Sin seguimiento"], ["todas", "Todas"]];
   const JBANDAS = [["urgente", "Urgente", "bl", "Urgente"], ["hoy", "Seguimientos de hoy", "av", "Hoy"], ["atencion", "Requieren atención", "re", "Atención"]]; /* id, título de la sección, forma de la gravedad, etiqueta de la fila */
   const JDESCRIPCION = { urgentes: "Seguimientos atrasados, concesiones que terminan hoy y datos bloqueantes", hoy: "Seguimientos previstos para hoy y concesiones que terminan hoy", sinseg: "Solicitudes pendientes sin seguimiento programado", todas: "Todas las actuaciones" };
-  const COLOR = { porsolicitar: "solicitado", solicitada: "solicitado", pendiente: "solicitado", caducada: "caducado", aprobada: "concedido", denegada: "denegado", retirada: "caducado", vigente: "concedido", futura: "concedido", terminada: "caducado", cancelada: "cancelado" };
+  const COLOR = { porsolicitar: "porsolicitar", solicitada: "solicitada", pendiente: "solicitado", caducada: "caducado", aprobada: "concedido", denegada: "denegado", retirada: "caducado", vigente: "concedido", futura: "concedido", terminada: "caducado", cancelada: "cancelado" };
   const TEXTO = { porsolicitar: "Por solicitar", solicitada: "Solicitada", pendiente: "Pendiente", caducada: "Caducada sin respuesta", aprobada: "Aprobada", denegada: "Denegada", retirada: "Retirada", vigente: "Vigente", futura: "Futura", terminada: "Terminada", cancelada: "Cancelada" };
   const edadEn = (r, t, a, b) => !!r.fecha && ((d) => d >= a && d <= b)(daysBetween(r.fecha, t));
   const pred = {
