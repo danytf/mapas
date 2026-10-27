@@ -565,6 +565,26 @@ const main = async () => {
     return out;`);
   ok(j7.focoFila && j7.sinTabindex && j7.etiquetas === 0 && j7.h && j7.estados, "el foco queda en la lista tras la acción, todo es alcanzable con teclado, con nombre y con la gravedad también en texto");
 
+  /* Detalle lateral y Escape: el foco entra en el detalle, Escape lo cierra SIN cerrar el Centro y el foco vuelve a su fila (crítica de diseño del 27/10/2026) */
+  const j9a = await ev(ayudas + `
+    const out = {}; const fila = b().querySelector('.jo-fila'); out.key = fila.dataset.key; fila.querySelector('.ce-pt').click(); await w(300);
+    out.abierto = !b().querySelector('#ceSide').hidden; out.focoTitulo = document.activeElement === b().querySelector('#ceSide h3'); out.tituloFocalizable = b().querySelector('#ceSide h3').tabIndex === -1;
+    return out;`);
+  ok(j9a.abierto && j9a.focoTitulo && j9a.tituloFocalizable, "al abrir el detalle el foco pasa a su título (antes se quedaba en la página)");
+  await tecla("Escape", "Escape", 27); await esperaMs(300);
+  const j9b = await ev(ayudas + `
+    const k = ${JSON.stringify(j9a.key)}; const fila = [...b().querySelectorAll('.jo-fila')].find((x) => x.dataset.key === k);
+    return { centroAbierto: document.getElementById('dlgCentro').open, detalleCerrado: b().querySelector('#ceSide').hidden, focoEnFila: !!fila && document.activeElement === fila.querySelector('.ce-pt') };`);
+  ok(j9b.centroAbierto && j9b.detalleCerrado && j9b.focoEnFila, "Escape con el detalle abierto lo cierra, el Centro sigue abierto y el foco vuelve a la fila [" + JSON.stringify(j9b) + "]");
+  /* Con el foco fuera del cuerpo del Centro (tras pulsar en una zona vacía) Escape también cierra solo el detalle */
+  await ev(ayudas + "b().querySelector('.jo-fila .ce-pt').click(); await w(300); document.activeElement.blur(); return 1;");
+  await tecla("Escape", "Escape", 27); await esperaMs(300);
+  const j9c = await ev(ayudas + "return { centroAbierto: document.getElementById('dlgCentro').open, detalleCerrado: b().querySelector('#ceSide').hidden };");
+  ok(j9c.centroAbierto && j9c.detalleCerrado, "Escape con el foco en la página cierra el detalle y no el Centro [" + JSON.stringify(j9c) + "]");
+  await tecla("Escape", "Escape", 27); await esperaMs(300);
+  ok(!(await ev("return document.getElementById('dlgCentro').open;")), "con el detalle ya cerrado, Escape cierra el Centro");
+  await ev(ayudas + "document.getElementById('centroBtn').click(); await w(600); if (!b().querySelector('.jo-fila')) { nav('jor'); await w(400); } return 1;");
+
   /* Modo oscuro: contraste del texto de las filas y cambio real de fondo */
   const j8claro = await ev(ayudas + "const f = b().querySelector('.jo-fila'); const cs = getComputedStyle(f), cm = getComputedStyle(f.querySelector('.jo-motivo strong')); return { fondo: cs.backgroundColor, texto: cm.color, menor: getComputedStyle(f.querySelector('.jo-meta')).color };");
   await c.send("Emulation.setEmulatedMedia", { features: [{ name: "prefers-color-scheme", value: "dark" }] }); await esperaMs(400);

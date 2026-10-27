@@ -944,6 +944,7 @@
   .ce-side[hidden] { display: none; }
   .ce-sidehead { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
   .ce-kicker { color: var(--muted); font-size: var(--fs-label); font-weight: 600; }
+  .ce-sidehead h3:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: var(--r-xs); }
   .ce-sidehead h3 { margin: 2px 0; font-size: var(--fs-title); font-weight: 680; letter-spacing: -.015em; line-height: 1.2; overflow-wrap: anywhere; }
   .ce-sidehead p { margin: 0; color: var(--muted); font-size: var(--fs-label); }
   .ce-x { width: 32px; height: 32px; padding: 0; font-size: var(--fs-title); line-height: 1; flex: none; }
@@ -5256,12 +5257,15 @@ const csvCell = (value) => {
     const accionesJ = fj ? (fj.segDue && r.k ? btn("hecho", clave(fj.seg), "Hecho (seguimiento)", "ok") + (r.c.databaseId ? btn("edseg", clave(fj.seg), "Cambiar seguimiento") : "") : "") + '<button type="button" class="ce-act" data-ir="' + esc(key) + '">Abrir en ' + esc(TITULO[r.k || "seg"]) + "</button>" : "";
     const bloqueos = bloqueosDe(r), avisos = incidencias(expedientesDe(r.c, p), t).filter((x) => r.k && x.r.k === r.k && ((x.r.id && x.r.id === r.id) || (!x.r.id && x.r.i === r.i)));
     const delPunto = expedientesDe(r.c, p).sort((a, b) => (b.desde || b.fecha || "").localeCompare(a.desde || a.fecha || ""));
-    box.innerHTML = '<div class="ce-sidehead"><div><span class="ce-kicker">' + esc(tipo) + "</span><h3>" + esc(r.c.name) + '</h3><p>' + esc(townOf(r.c) + (r.c.province && r.c.province !== townOf(r.c) ? " · " + r.c.province : "") + (r.c.tipo ? " · " + r.c.tipo : "")) + '</p></div><button type="button" class="ce-x" data-cierra-lado="1" aria-label="Cerrar el detalle">&times;</button></div>' +
+    /* El detalle se repinta cuando llega el historial: si el foco estaba dentro, vuelve al mismo elemento (el título es el primero) en vez de perderse. */
+    const focos = () => [...box.querySelectorAll("h3, button")], pos = box.contains(document.activeElement) ? focos().indexOf(document.activeElement) : -1;
+    box.innerHTML = '<div class="ce-sidehead"><div><span class="ce-kicker">' + esc(tipo) + '</span><h3 tabindex="-1">' + esc(r.c.name) + '</h3><p>' + esc(townOf(r.c) + (r.c.province && r.c.province !== townOf(r.c) ? " · " + r.c.province : "") + (r.c.tipo ? " · " + r.c.tipo : "")) + '</p></div><button type="button" class="ce-x" data-cierra-lado="1" aria-label="Cerrar el detalle">&times;</button></div>' +
       '<dl class="ce-datos">' + datos + "</dl>" + porQueJ +
       (avisos.length ? '<section class="ce-sec"><h4>Avisos de este expediente</h4><ul class="ce-avisos">' + avisos.map((x) => "<li>" + sevBadge(x.sev) + " " + esc(x.tipo) + "</li>").join("") + "</ul></section>" : "") +
       '<section class="ce-sec"><h4>Acciones</h4><div class="ce-btns">' + botones(r) + accionesJ + '<button type="button" class="ce-act" data-pt="' + esc(String(r.c.id)) + '">Abrir el punto en el mapa</button></div>' + (bloqueos.length ? '<ul class="ce-razones">' + bloqueos.map((b) => "<li>" + esc(b) + "</li>").join("") + "</ul>" : "") +
       (accion && accion.key === key ? confirmacion() : "") + "</section>" +
       '<section class="ce-sec"><h4>Expedientes de este punto</h4><ul class="ce-linea">' + (delPunto.length ? delPunto.slice(0, 12).map((x) => "<li><button type=\"button\" data-sel=\"" + esc(clave(x)) + '"' + (clave(x) === key ? ' aria-current="true"' : "") + ">" + badge(x.est) + "<span>" + esc((x.k === "sol" ? "Solicitud" : "Concesión") + " · " + ongDe(x) + " · " + periodo(x)) + "</span></button></li>").join("") : "<li>Este punto no tiene solicitudes ni concesiones.</li>") + "</ul></section>" + historialH(r);
+    if (pos >= 0) focos()[pos]?.focus();
     cargaHistorial(r);
   };
 
@@ -5433,6 +5437,19 @@ const csvCell = (value) => {
       const destino = i === "lado" ? body.querySelector("#ceSide:not([hidden]) .ce-x") : filas[Math.min(i, filas.length - 1)]?.querySelector(".ce-pt");
       (destino || body.querySelector("#joT")).focus();
     }
+  };
+
+  /* Foco del detalle lateral: al abrirlo va a su título (en móvil, donde ocupa toda la pantalla, al botón de cerrar) y al cerrarlo vuelve a la fila de la que venía.
+     Sin esto el foco se quedaba en la página y Escape cerraba el Centro entero. */
+  const enfocaDetalle = () => {
+    const lado = body.querySelector("#ceSide"); if (!lado || lado.hidden) return;
+    lado.scrollTop = 0;
+    (matchMedia("(max-width: 900px)").matches ? lado.querySelector(".ce-x") : lado.querySelector(".ce-sidehead h3"))?.focus();
+  };
+  const cierraDetalle = () => {
+    const k = sel; sel = ""; draw();
+    const fila = [...body.querySelectorAll("tr.ce-row, li.jo-fila")].find((x) => x.dataset.key === k);
+    (fila?.querySelector(".ce-pt") || body.querySelector("#ceNav [aria-current=page]") || body.querySelector("#ceNav button"))?.focus();
   };
 
   /* === Pantalla principal === */
@@ -5748,13 +5765,13 @@ const csvCell = (value) => {
     }
     const ac = e.target.closest("[data-act]");
     if (ac) { if (vista === "jor") { const li = ac.closest(".jo-fila"); jorFoco = li ? [...body.querySelectorAll(".jo-fila")].indexOf(li) : ac.closest("#ceSide") ? "lado" : null; } actuar(ac); return; }
-    if (e.target.closest("[data-cierra-lado]")) { sel = ""; draw(); return; }
+    if (e.target.closest("[data-cierra-lado]")) { cierraDetalle(); return; }
     const pt = e.target.closest("[data-pt]");
     if (pt) { const c = CENTERS.find((x) => String(x.id) === pt.dataset.pt); if (c) { dlg.close(); if (markers[c.id]) cluster.zoomToShowLayer(markers[c.id], () => markers[c.id].openPopup()); } return; }
     const se = e.target.closest("[data-sel]");
-    if (se) { sel = se.dataset.sel; accion = null; draw(); const lado = body.querySelector("#ceSide"); if (lado && !lado.hidden) { lado.scrollTop = 0; if (matchMedia("(max-width: 900px)").matches) lado.querySelector(".ce-x")?.focus(); } return; }
+    if (se) { sel = se.dataset.sel; accion = null; draw(); enfocaDetalle(); return; }
     const fr = e.target.closest("tr.ce-row, li.jo-fila");
-    if (fr && !e.target.closest("button, input, select, a, label")) { sel = fr.dataset.key; accion = null; draw(); }
+    if (fr && !e.target.closest("button, input, select, a, label")) { sel = fr.dataset.key; accion = null; draw(); enfocaDetalle(); }
   });
   body.addEventListener("change", (e) => {
     if (e.target.id === "ceProv") { prov = e.target.value; ong = ""; }
@@ -5775,8 +5792,14 @@ const csvCell = (value) => {
   body.addEventListener("keydown", (e) => {
     if (e.key === "Enter" && e.target.id === "cfPunto") { e.preventDefault(); if (form && form.cands && form.cands.length) eligePunto(0); }
     else if (e.key === "Enter" && e.target.id === "ceMotivo") { e.preventDefault(); confirma(); }
-    else if (e.key === "Escape" && accion) { e.stopPropagation(); accion = null; draw(); }
-    else if (e.key === "Escape" && sel && !e.target.closest("input, select, textarea")) { e.preventDefault(); e.stopPropagation(); sel = ""; draw(); }
+    else if (e.key === "Escape" && accion) { e.preventDefault(); e.stopPropagation(); accion = null; draw(); enfocaDetalle(); }
+    else if (e.key === "Escape" && sel && !e.target.closest("input, select, textarea")) { e.preventDefault(); e.stopPropagation(); cierraDetalle(); }
+  });
+  /* Escape con el foco fuera del cuerpo del Centro (tras un clic en una zona vacía, o en un campo): el diálogo no cierra el Centro entero mientras haya algo más pequeño que cerrar (una confirmación o el detalle). */
+  dlg.addEventListener("cancel", (e) => {
+    if (form || !(accion || sel)) return;
+    e.preventDefault();
+    if (accion) { accion = null; draw(); enfocaDetalle(); } else cierraDetalle();
   });
   dlg.addEventListener("close", () => { historial.clear(); });
   $("#centroBtn").addEventListener("click", () => abrir());
