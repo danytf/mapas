@@ -169,6 +169,8 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261025212400_allow_resolver_set_null_on_profile_delete.sql
       - name: Require at least one date on a permit grant (and a clear error when approving without dates)
         run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261026190927_permit_grants_require_date.sql
+      - name: Add the sent date of a permit application (por solicitar / solicitada)
+        run: psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261027180000_permit_application_sent_on.sql
       - name: Verify every migration file is applied by this workflow
         shell: bash
         run: |
@@ -212,5 +214,7 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/permit_backfill.sql
       - name: Run permit grant date requirement tests
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/permit_grant_dates.sql
+      - name: Run permit sent date tests
+        run: psql -v ON_ERROR_STOP=1 -f supabase/tests/permit_sent_on.sql
       - name: Run exhaustive authorization matrix
         run: psql -v ON_ERROR_STOP=1 -f supabase/tests/rls_matrix.sql
