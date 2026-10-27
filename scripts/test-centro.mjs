@@ -227,6 +227,6 @@ ok(bloque.includes('if (selProv.value !== prov) selProv.value = prov;'), "El sel
 
 // Regresión (25/10/2026): «Avisos de datos» lanzaba una excepción al dibujar porque la cabecera de seguimientos evaluaba clave() sobre filas de avisos.
 ok(bloque.includes('(vista === "seg" && vis.length && vis.every((s) => multi.has(clave(s)))'), "La casilla de seleccionar todos solo se evalúa en la vista de seguimientos");
-ok(/const draw = \(\) => \{\s*try \{ dibuja\(\); \}\s*catch \(e\) \{[\s\S]*?No se pudo dibujar esta vista/.test(bloque), "Un fallo al dibujar se registra y se avisa, sin dejar la pantalla a medias");
+ok(/const draw = \(\) => \{\s*if \(!body\.firstChild\) return;[^\n]*\n\s*try \{ dibuja\(\); \}\s*catch \(e\) \{[\s\S]*?No se pudo dibujar esta vista/.test(bloque), "Un fallo al dibujar se registra y se avisa, sin dejar la pantalla a medias");
 
 console.log("Centro de permisos: " + n + " comprobaciones correctas.");
