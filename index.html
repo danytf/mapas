@@ -4899,7 +4899,7 @@ const csvCell = (value) => {
   /* Exportar a PDF: se imprime lo que se ve (semana, mes o ONG, con los filtros elegidos) con una cabecera propia. El PDF lo crea el navegador (Imprimir, Guardar como PDF): sin librerías, sin datos nuevos y sin guardar nada. */
   const exportaPdf = () => {
     const sel = (id) => { const o = body.querySelector("#" + id + " option:checked"); return o ? o.textContent.trim() : ""; };
-    const MODOS = { dias: "Vista por día", mes: "Vista de mes", ong: "Vista por ONG" };
+    const MODOS = { dias: "Vista de semana", mes: "Vista de mes", ong: "Vista por ONG" };
     const que = [["autorizada", "Concesiones"], ["pendiente", "Solicitudes por aprobar"], ["seguimiento", "Seguimientos"], ["historico", "Histórico"]].filter(([k]) => ver[k]).map(([, n]) => n).join(", ") || "Nada seleccionado";
     const rango = body.querySelector("#calRange").textContent.trim();
     const gen = new Date().toLocaleString("es-ES", { dateStyle: "short", timeStyle: "short", timeZone: "Europe/Madrid" });
@@ -4933,7 +4933,7 @@ const csvCell = (value) => {
       '<button type="button" class="cal-chip s-solicitado" data-ver="pendiente" aria-pressed="' + ver.pendiente + '"><i></i>Solicitudes por aprobar</button>' +
       '<button type="button" class="cal-chip s-seguimiento" data-ver="seguimiento" aria-pressed="' + ver.seguimiento + '"><i></i>Seguimientos</button>' +
       '<button type="button" class="cal-chip s-cancelado" data-ver="historico" aria-pressed="' + ver.historico + '"><i></i>Histórico (denegadas, retiradas, canceladas)</button>' +
-      '<span class="cal-modo" role="group" aria-label="Vista"><button type="button" data-modo="dias" aria-pressed="' + (modo === "dias") + '">Por día</button><button type="button" data-modo="mes" aria-pressed="' + (modo === "mes") + '">Mes</button><button type="button" data-modo="ong" aria-pressed="' + (modo === "ong") + '">Por ONG</button></span></div>' +
+      '<span class="cal-modo" role="group" aria-label="Vista"><button type="button" data-modo="dias" aria-pressed="' + (modo === "dias") + '">Semana</button><button type="button" data-modo="mes" aria-pressed="' + (modo === "mes") + '">Mes</button><button type="button" data-modo="ong" aria-pressed="' + (modo === "ong") + '">Por ONG</button></span></div>' +
       '<div class="cal-links" role="group" aria-label="Abrir en el Centro de permisos"><span>Gestionar en el Centro de permisos:</span><button type="button" data-centro="sol:pendiente">Solicitudes pendientes</button><button type="button" data-centro="con:vigente">Concesiones vigentes</button><button type="button" data-centro="seg:todas">Seguimientos</button><button type="button" id="calPdf" class="cal-pdf" title="Abre la impresión del navegador: elige «Guardar como PDF»">Exportar a PDF</button></div>' +
             '<p class="cal-note cal-past" id="calPast" role="note" hidden></p>' +
       '<p class="cal-note cal-hecho" id="calAviso" role="status" tabindex="-1" hidden></p>' +
