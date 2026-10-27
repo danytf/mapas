@@ -1359,7 +1359,7 @@
     </details>
     <details class="ay-sec"><summary>Seguimientos</summary>
       <ul>
-        <li>El indicador «Seguimientos» de la cabecera cuenta los puntos cuyo seguimiento es de hoy o está atrasado. Púlsalo para ver solo esos.</li>
+        <li>El indicador «Seguimientos» de la cabecera cuenta los puntos (no los seguimientos) cuyo seguimiento es de hoy o está atrasado; por eso puede diferir de las cifras del Centro, que cuentan seguimientos. Púlsalo para ver solo esos.</li>
         <li>Los seguimientos se programan al crear o editar una solicitud en el Centro de permisos. En la lista aparecen primero los de hoy o atrasados y luego los permisos que caducan en 30 días.</li>
       </ul>
     </details>
@@ -2792,7 +2792,7 @@ function fichaFor(c, pos) {
     const card = el.querySelector(".ef"); card.className = "ef s-" + ef;
     card.innerHTML = '<span class="st">' + esc(i[1]) + "</span><strong>" + esc(titulo) + "</strong>" + (meta.length ? '<span class="meta">' + meta.join(" · ") + "</span>" : "");
     const fs = fechaCalc(cur), sg = [segCalc(cur), segPunto && segPunto.fecha].filter(Boolean).sort()[0] || "";
-    el.querySelector(".pinfo").innerHTML = '<div class="' + (sg && sg <= t ? "due" : "") + '"><span>Próximo seguimiento</span><b>' + (sg ? esc(fmtD(sg)) + (sg <= t ? " (toca ya)" : "") : "—") + '</b></div><div><span>Solicitado el</span><b>' + (fs ? esc(fmtD(fs)) : "—") + '</b></div><div><span>Pendientes</span><b>' + pend + '</b></div><div><span>Concesiones</span><b>' + hist.filter((h) => !h.cancelada).length + "</b></div>" + (segPunto ? '<div class="segp"><span>Seguimiento del punto: ' + esc(fmtD(segPunto.fecha)) + (segPunto.accion ? " (" + esc(segPunto.accion) + ")" : "") + (segPunto.resp ? " · responsable: " + esc(nombreResp(segPunto.resp)) : "") + '</span></div>' : "");
+    el.querySelector(".pinfo").innerHTML = '<div class="' + (sg && sg <= t ? "due" : "") + '"><span>Próximo seguimiento</span><b>' + (sg ? esc(fmtD(sg)) + (sg < t ? " (atrasado)" : sg === t ? " (hoy)" : "") : "—") + '</b></div><div><span>Solicitado el</span><b>' + (fs ? esc(fmtD(fs)) : "—") + '</b></div><div><span>Pendientes</span><b>' + pend + '</b></div><div><span>Concesiones</span><b>' + hist.filter((h) => !h.cancelada).length + "</b></div>" + (segPunto ? '<div class="segp"><span>Seguimiento del punto: ' + esc(fmtD(segPunto.fecha)) + (segPunto.accion ? " (" + esc(segPunto.accion) + ")" : "") + (segPunto.resp ? " · responsable: " + esc(nombreResp(segPunto.resp)) : "") + '</span></div>' : "");
     paintTime(cur);
     if (miniFicha && miniFicha.c === c) miniFicha.marker.setIcon(makeIcon(c));
   };
@@ -2803,7 +2803,7 @@ function fichaFor(c, pos) {
     if (!ev.length) { box.replaceChildren(); return; }
     const li = (e) => {
       const fut = e.f > t, venc = e.tipo === "seg" && e.f < t;
-      return '<li class="tl-i tl-' + e.tipo + (fut ? " fut" : "") + (venc ? " venc" : "") + '"><time datetime="' + e.f + '">' + esc(fmtD(e.f)) + (fut ? " · próximo" : venc ? " · vencido" : e.f === t ? " · hoy" : "") + '</time><span class="tl-t">' + esc(e.txt) + "</span>" + (e.meta.length ? '<span class="tl-m">' + e.meta.map(esc).join(" · ") + "</span>" : "") + "</li>";
+      return '<li class="tl-i tl-' + e.tipo + (fut ? " fut" : "") + (venc ? " venc" : "") + '"><time datetime="' + e.f + '">' + esc(fmtD(e.f)) + (fut ? " · próximo" : venc ? " · atrasado" : e.f === t ? " · hoy" : "") + '</time><span class="tl-t">' + esc(e.txt) + "</span>" + (e.meta.length ? '<span class="tl-m">' + e.meta.map(esc).join(" · ") + "</span>" : "") + "</li>";
     };
     const hoy = '<li class="tl-hoy"><span>Hoy · ' + esc(fmtD(t)) + "</span></li>";
     /* Con muchos hechos se ve lo más cercano a hoy (los 3 próximos y los 4 últimos) y el resto queda plegado. */
@@ -4242,7 +4242,7 @@ function refreshSelects() {
       '<div class="k"><b>' + vis.length + "</b><span>Puntos</span></div>" +
       '<div class="k"><b>' + con + "</b><span>Permisos vigentes</span></div>" +
       '<div class="k"><b>' + capt + "</b><span>Captadores hoy</span></div>" +
-      '<button type="button" id="segBtn" class="k' + (seg ? " hot" : "") + '" aria-pressed="' + onlySeg + '" title="Mostrar solo los seguimientos de hoy o atrasados"><b>' + seg + "</b><span>Seguimientos</span></button></div>" +
+      '<button type="button" id="segBtn" class="k' + (seg ? " hot" : "") + '" aria-pressed="' + onlySeg + '" title="Puntos con un seguimiento de hoy o atrasado (' + seg + '). Púlsalo para ver solo esos."><b>' + seg + "</b><span>Seguimientos</span></button></div>" +
       '<div class="kg kg-gam" role="group" aria-label="Mi progreso">' + gamTileHTML() +
       '<button type="button" id="logrosK" class="k" title="Ver mis insignias"><b>' + Object.keys(logros.n).filter((k) => logros.n[k] > 0).length + "</b><span>Insignias</span></button></div>";
     $("#logrosK").addEventListener("click", openLogros);
@@ -4450,7 +4450,7 @@ const csvCell = (value) => {
   const plural = (n, uno, varios) => n + " " + (n === 1 ? uno : varios);
   const GRUPOS = [
     ["Tareas de hoy", [
-      ["segVencidos", "Seguimientos vencidos", "seguimiento", "seguimientos", "al"],
+      ["segVencidos", "Seguimientos atrasados", "seguimiento", "seguimientos", "al"],
       ["segHoy", "Seguimientos de hoy", "seguimiento", "seguimientos", ""],
       ["segProximos", "Seguimientos en los próximos 7 días", "seguimiento", "seguimientos", ""],
       ["sinSeguimiento", "Pendientes sin seguimiento programado", "solicitud", "solicitudes", "al"]
@@ -5489,7 +5489,7 @@ const csvCell = (value) => {
     /* Navegación con el número que pide atención en cada sección (con los filtros de provincia, ONG y punto) */
     const cnt = { jor: filasJ.length, sol: ind.pendientes.length, con: ind.vigentes.length, seg: ind.segVencidos.length, inc: incsAmb.filter((x) => x.sev !== "recomendacion").length };
     /* Cada número dice qué cuenta (también para lectores de pantalla); el nombre visible va primero. */
-    const QUE = { jor: ["actuación", "actuaciones"], sol: ["pendiente", "pendientes"], con: ["vigente hoy", "vigentes hoy"], seg: ["vencido", "vencidos"], inc: ["aviso que revisar", "avisos que revisar"] };
+    const QUE = { jor: ["actuación", "actuaciones"], sol: ["pendiente", "pendientes"], con: ["vigente hoy", "vigentes hoy"], seg: ["atrasado", "atrasados"], inc: ["aviso que revisar", "avisos que revisar"] };
     body.querySelectorAll("#ceNav button").forEach((b) => { const v = b.dataset.vista; b.setAttribute("aria-current", v === vista ? "page" : "false"); const c = b.querySelector(".n"); if (c) { c.textContent = cnt[v]; c.classList.toggle("al", v === "jor" ? filasJ.some((x) => x.flags.urgente) : v === "seg" ? cnt[v] > 0 : v === "inc" ? incsAmb.some((x) => x.sev === "bloqueante") : false); c.hidden = !cnt[v];
       const ayuda = plural(cnt[v], QUE[v][0], QUE[v][1]); b.title = ayuda; b.setAttribute("aria-label", b.firstChild.textContent.trim() + ": " + ayuda); } });
     body.querySelector("#ceHoy").textContent = "Hoy, " + fmtD(t).slice(0, 5) + " · " + plural(new Set(recsAmb.map((x) => x.c.id)).size, "punto con expedientes", "puntos con expedientes");

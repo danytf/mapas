@@ -101,7 +101,7 @@ assert.ok(orden.every((n, i) => n > 0 && (i === 0 || n > orden[i - 1])), "Orden:
 assert.ok(/paintTime\(cur\);/.test(ficha) && ficha.includes("miniFicha.marker.setIcon(makeIcon(c))"), "Al cambiar el permiso se repinta la línea temporal y el color del pin");
 assert.ok(/const paintTime = \(cur\) => \{[\s\S]*?sec\.hidden = !ev\.length;/.test(ficha), "Sin hechos, la sección se oculta");
 assert.ok(/<time datetime="' \+ e\.f/.test(ficha) && ficha.includes("e.meta.map(esc)") && ficha.includes("esc(e.txt)"), "Fechas en <time> y todo el texto escapado");
-assert.ok(ficha.includes(" · próximo") && ficha.includes(" · vencido"), "Lo próximo y lo vencido se dicen con texto, no solo con color");
+assert.ok(ficha.includes(" · próximo") && ficha.includes(" · atrasado"), "Lo próximo y lo atrasado se dicen con texto, no solo con color");
 
 // 10) Estilo: solo tokens (sin colores, radios ni tamaños de letra sueltos), aislado del menú «Más acciones» y objetivo táctil de 44 px.
 const css = html.slice(html.indexOf("  .fi-mini { isolation: isolate; }"), html.indexOf("  .fi-state { display: grid; gap: 8px; }"));

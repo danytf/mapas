@@ -20,7 +20,7 @@ assert.ok(/@media \(max-width: 900px\), \(pointer: coarse\) \{ \.adm-chk \{ min-
 // Cada cifra del panel dice qué cuenta y abre la lista exacta de registros.
 const pa = html.indexOf("/* Panel resumen */"), pb = html.indexOf("/* Ayuda y atajos");
 const panel = html.slice(pa, pb);
-for (const t of ["Seguimientos vencidos", "Pendientes de decisión", "Vigentes hoy", "Vencen en 0–7 días", "Vencen en 8–15 días", "Vencen en 16–30 días", "Empiezan en los próximos 30 días", "Posibles incoherencias o datos incompletos", "Capacidad por ONG"]) assert.ok(panel.includes(t), "Falta en el panel: " + t);
+for (const t of ["Seguimientos atrasados", "Pendientes de decisión", "Vigentes hoy", "Vencen en 0–7 días", "Vencen en 8–15 días", "Vencen en 16–30 días", "Empiezan en los próximos 30 días", "Posibles incoherencias o datos incompletos", "Capacidad por ONG"]) assert.ok(panel.includes(t), "Falta en el panel: " + t);
 assert.ok(panel.includes("button[data-ind]") && panel.includes("renderLista") && panel.includes('id="pnBack"'), "Cada cifra abre su lista y se puede volver");
 assert.ok(panel.includes('id="pnProv"') && panel.includes('id="pnOng"') && panel.includes("fProv") && panel.includes("fOng"), "Filtros de provincia y ONG que se mantienen al navegar");
 assert.ok(panel.includes("indicadores(recs, segs, t)") && !panel.includes("estadoOf("), "Los totales salen de cada expediente, no del estado resumido del punto");
