@@ -132,6 +132,8 @@ const main = async () => {
     const out = {}; const rel = () => fetch('http://127.0.0.1:8766/__rel').then(r => r.json());
     nav('sol'); await w(250); set('ceEst','pendiente'); await w(200);
     const a0 = (await rel()).permit_applications.filter(a => a.status === 'approved').length;
+    out.porSolicitar = [...b().querySelectorAll('.ce-badge')].filter(x => /Por solicitar/.test(x.textContent)).length;
+    b().querySelector('[data-act=env]').click(); await w(2500); out.marcada = [(await rel()).permit_applications.filter(a => a.sent_on).length, /marcada como solicitada/.test(b().querySelector('#ceAviso').textContent), [...b().querySelectorAll('.ce-badge')].some(x => /^s*Solicitada/.test(x.textContent))];
     b().querySelector('[data-act=conceder]').click(); await w(2500); out.conceder = b().querySelector('#ceAviso').textContent; let r = await rel(); out.aprobadas = r.permit_applications.filter(a => a.status === 'approved').length - a0; out.enlazada = r.permit_grants.filter(g => g.application_id).length;
     b().querySelector('tr.ce-row .ce-pt').click(); await w(300); b().querySelector('#ceSide [data-act=den]').click(); await w(300); out.motivoEnfocado = document.activeElement.id === 'ceMotivo'; b().querySelector('#ceMotivo').value = 'Prueba E2E'; b().querySelector('#ceSide [data-conf=ok]').click(); await w(2500);
     out.denegar = b().querySelector('#ceAviso').textContent; out.denegadas = (await rel()).permit_applications.filter(a => a.resolution_reason === 'Prueba E2E').length; b().querySelector('[data-cierra-lado]')?.click();
@@ -156,6 +158,8 @@ const main = async () => {
     nav('sol'); await w(250); set('ceEst','aprobada'); await w(300); b().querySelector('#ceList tr.ce-row .ce-pt').click(); await w(300); b().querySelector('#ceSide [data-act=ed]').click(); await w(400);
     out.resuelta = [!!b().querySelector('#cfSeg'), !!b().querySelector('#cfSinSeg'), !!b().querySelector('#cfDesde')]; b().querySelector('#cfCancelar').click(); await w(200);
     return out;`);
+  ok(r2.porSolicitar >= 1, "las solicitudes nuevas salen como «Por solicitar» [" + r2.porSolicitar + "]");
+  eq(r2.marcada, [1, true, true], "«Marcar como solicitada» guarda la fecha de envío, lo dice y la solicitud pasa a «Solicitada»");
   eq([r2.aprobadas, r2.enlazada >= 1], [1, true], "conceder aprueba la solicitud y crea su concesión enlazada"); ok(/Aprobada y guardada/.test(r2.conceder), "conceder confirma tras verificar");
   ok(r2.motivoEnfocado && r2.denegadas === 1 && /Denegación guardada/.test(r2.denegar), "denegar con motivo desde el detalle");
   eq([r2.cancelada, r2.reactivada], [1, 1], "cancelar con motivo y reactivar una concesión"); eq(r2.alta, [1, 1], "alta de solicitud con su seguimiento (una sola solicitud)"); ok(r2.formCerrado, "el formulario se cierra al guardar"); eq(r2.sinSeg, [true, 0], "una solicitud sin seguimiento no crea ninguno"); ok(r2.filaSinSeg, "la solicitud sin seguimiento aparece en la lista"); eq(r2.trasEditar, 1, "añadir un seguimiento a una solicitud ya guardada lo crea en la base ["+r2.avisoSinSeg+"]"); eq(r2.enLista, 1, "…y aparece en la lista de Seguimientos"); eq(r2.resuelta, [false, true, true], "editar una solicitud resuelta no ofrece seguimiento y lo explica");
@@ -188,6 +192,7 @@ const main = async () => {
     nav('sol'); await w(250); set('ceEst','pendiente'); await w(250);
     const cli = window.mapaSession.supabase, orig = cli.rpc.bind(cli); cli.rpc = () => ({ abortSignal: async () => { throw new TypeError('Failed to fetch'); } });
     const antes = (await rel()).permit_applications.filter(a => a.status === 'approved').length;
+    cli.rpc = orig; b().querySelector('[data-act=env]').click(); await w(2500); cli.rpc = () => ({ abortSignal: async () => { throw new TypeError('Failed to fetch'); } });
     b().querySelector('[data-act=conceder]').click(); await w(2500); cli.rpc = orig;
     out.caida = b().querySelector('#ceAviso').textContent; out.sinCambios = (await rel()).permit_applications.filter(a => a.status === 'approved').length === antes; out.libre = ![...b().querySelectorAll('[data-act]')].some(x => x.disabled);
     /* alta que falla en la base de datos (create_permit_application es atómica): no queda nada a medias; el reintento crea una sola solicitud y un solo seguimiento */
@@ -711,8 +716,10 @@ const main = async () => {
     const filas = () => [...cb().querySelectorAll('#calDia .cal-dia-f')].filter(f => f.querySelector('[data-pa=conceder],[data-pa=den-ok]'));
     out.pendientesDia = cb().querySelectorAll('#calDia [data-pa=conceder]').length;
     out.enfocado = document.activeElement === cb().querySelector('#calDiaT');
-    /* conceder la primera */
-    cb().querySelector('#calDia [data-pa=conceder]').click(); await w(3500);
+    /* marcar como solicitada la primera y conceder esa */
+    cb().querySelector('#calDia [data-pa=env]').click(); await w(3500);
+    out.env = [(await rel()).permit_applications.filter(a => a.sent_on).length, /marcada como solicitada/.test(cb().querySelector('#calAviso').textContent), [...cb().querySelectorAll('#calDia h4')].some(x => /Solicitadas/.test(x.textContent))];
+    cb().querySelector('#calDia [data-pa=conceder].ok').click(); await w(3500);
     const d1 = await rel();
     out.conceder = [d1.permit_applications.filter(a => a.status === 'approved').length - apr0, d1.permit_grants.length - g0, /Aprobada y guardada/.test(cb().querySelector('#calAviso').textContent), !cb().querySelector('#calAviso').hidden];
     out.restantes = cb().querySelectorAll('#calDia [data-pa=conceder]').length;
@@ -728,6 +735,7 @@ const main = async () => {
     return out;`);
   eq(r3p.entrada, [true, "true", true, true], "al entrar, el Calendario mensual muestra chips (con solicitudes por aprobar) en sus celdas");
   ok(r3p.pendientesDia >= 1 && r3p.enfocado, "pinchar un día con solicitudes por aprobar abre su panel con Conceder y Denegar y el foco en su título [" + r3p.pendientesDia + "]");
+  eq(r3p.env, [1, true, true], "«Marcar como solicitada» desde el panel guarda la fecha de envío, lo dice y la pasa al grupo «Solicitadas»");
   eq(r3p.conceder, [1, 1, true, true], "Conceder desde el panel aprueba la solicitud, crea su concesión y lo dice [" + JSON.stringify(r3p.conceder) + "]");
   ok(r3p.motivoVisible && r3p.motivoEnfocado, "Denegar pide el motivo en el propio panel, con el foco en él");
   eq(r3p.denegar, [1, true, true], "Denegar desde el panel guarda la denegación con su motivo y lo dice [" + JSON.stringify(r3p.denegar) + "]");

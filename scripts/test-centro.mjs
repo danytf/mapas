@@ -19,7 +19,7 @@ ok(/id="centroBtn" type="button" role="menuitem">Centro de permisos<\/button>/.t
 ok(html.includes('id="ceClose" aria-label="Cerrar"'), "El botón de cerrar necesita nombre accesible");
 ok(["jor", "res", "sol", "con", "seg", "inc"].every((v) => bloque.includes('["' + v + '", "')) && bloque.includes('aria-label="Secciones del Centro de permisos"') && bloque.includes("aria-current"), "Navegación principal: Mi jornada, Resumen, Solicitudes, Concesiones, Seguimientos y Avisos, con aria-current");
 ok(bloque.includes('role="status"') && bloque.includes('<caption class="adm-sr">'), "Recuento en role=status y tabla con título");
-ok(bloque.includes("badge(r.est)") && bloque.includes("esc(TEXTO[e])"), "El estado va también en texto, no solo en color");
+ok(bloque.includes("badge(r)") && bloque.includes("esc(TEXTO[k])"), "El estado va también en texto, no solo en color");
 
 // No toca la red ni el navegador; lo único que guarda es «Hecho» en un seguimiento, por guardaPunto (guardado verificable con control de conflictos).
 const sinHistorial = bloque.replace(/const \{ data, error \} = await window\.mapaSession\.supabase\.from\("audit_log"\)[^\n]*\n/, "");

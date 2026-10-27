@@ -690,6 +690,7 @@
   .cal-ch.p { border-style: dashed; }
   .cal-ch i { flex: none; width: 8px; height: 8px; border-radius: 2px; background: var(--ch-aut); }
   .cal-ch.p i { background: var(--ch-dem); }
+  .cal-ch.env i, .cal-mleg .p.env { background: transparent; border: 2px solid var(--ch-dem); }
   .cal-ch .t { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
   .cal-mas { font-size: var(--fs-label); color: var(--muted); }
   .cal-dia { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-card); padding: 12px 14px; display: grid; gap: 10px; position: sticky; top: 0; }
@@ -976,6 +977,7 @@
   .ce-chkl { display: grid; place-items: center; min-width: 32px; min-height: 32px; cursor: pointer; }
   #ceBody input[type="checkbox"] { width: 18px; height: 18px; min-height: 0; accent-color: var(--accent); }
   .ce-badge, .ce-sev { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+  .ce-badge.env i { background: transparent; border: 2px solid var(--st, var(--muted)); }
   .ce-badge i, .ce-sev i { width: 9px; height: 9px; border-radius: 50%; background: var(--st, var(--sv, var(--muted))); flex: none; }
   .ce-badge.s-concedido { --st: var(--st-concedido); } .ce-badge.s-solicitado { --st: var(--st-solicitado); } .ce-badge.s-caducado { --st: var(--st-caducado); } .ce-badge.s-denegado { --st: var(--st-denegado); } .ce-badge.s-cancelado { --st: var(--st-cancelado); }
   /* Gravedad: color y forma (rombo, punto, anillo), nunca solo color */
@@ -1971,7 +1973,7 @@ const conTiempoLimite = (ms = 15000) => { const ac = new AbortController(); setT
 // Ejecuta las operaciones de diffRel una a una. Devuelve «ok», «conflict» (otra persona cambió el registro) o «error».
 const ejecutaOpsRel = async (client, userId, c, ops, estado) => {
   const est = c.databaseId, hoy = today();
-  const filaApp = (x) => ({ organization: x.ong || null, capturer_count: x.captadores || null, requested_from: x.desde || null, requested_until: x.hasta || null, contact_details: x.contacto || null, notes: x.notas || null });
+  const filaApp = (x) => ({ organization: x.ong || null, capturer_count: x.captadores || null, requested_from: x.desde || null, requested_until: x.hasta || null, contact_details: x.contacto || null, notes: x.notas || null, sent_on: x.enviada || null });
   const filaGrant = (h) => ({ organization: h.ong || null, capturer_count: h.captadores || null, valid_from: h.desde || null, valid_until: h.hasta || null, contact_details: h.contacto || null, notes: h.notas || null });
   let hechas = 0;
   try {
@@ -2264,6 +2266,8 @@ const UMBRAL_ESTANCADA = 15; /* días sin respuesta a partir de los cuales una s
 const newId = () => (self.crypto && typeof self.crypto.randomUUID === "function") ? self.crypto.randomUUID() : "x" + Date.now().toString(36) + Math.random().toString(36).slice(2, 12);
 const solsOf = (p) => (p && Array.isArray(p.solicitudes)) ? p.solicitudes : (p && p.solicitud && (p.solicitud.desde || p.solicitud.hasta || p.solicitud.ong || p.solicitud.captadores) ? [p.solicitud] : []);
 const hasSol = (p) => solsOf(p).length > 0;
+/* Fase visible de una solicitud: pendiente sin envío = «por solicitar» (la pone el RP o coordinador); pendiente con envío = «solicitada» (el RGR mandó el correo); el resto, su estado. */
+const subEstado = (r) => (r.k === "sol" && r.est === "pendiente" ? (r.env ? "solicitada" : "porsolicitar") : r.est);
 const solEstado = (q, t) => (q.res === "denegada" || q.res === "aprobada" || q.res === "retirada") ? q.res : (q.hasta && q.hasta < (t || today()) ? "caducada" : "pendiente");
 const solValid = (q) => solEstado(q) === "pendiente";
 const concEstado = (h, t) => { t = t || today(); return h.cancelada ? "cancelada" : (h.desde && h.desde > t) ? "futura" : (h.hasta && h.hasta < t) ? "terminada" : "vigente"; };
@@ -2294,7 +2298,7 @@ const seguimientoDue = (c) => { const p = permits[permitKey(c)]; if (!p) return 
 /* Expedientes de un punto en forma uniforme (k: «sol» o «con»; est: estado de su ciclo de vida). */
 const expedientesDe = (c, p) => {
   const t = today(), out = [];
-  solsOf(p).forEach((q, i) => out.push({ k: "sol", c, i, id: q.id || "", est: solEstado(q, t), desde: q.desde || "", hasta: q.hasta || "", ong: (q.ong || "").trim(), n: safeCount(q.captadores), seg: q.res ? "" : (q.seg || ""), fecha: q.fecha || "", resFecha: q.resFecha || "", motivo: q.motivo || "", conc: q.conc || "" }));
+  solsOf(p).forEach((q, i) => out.push({ k: "sol", c, i, id: q.id || "", est: solEstado(q, t), desde: q.desde || "", hasta: q.hasta || "", ong: (q.ong || "").trim(), n: safeCount(q.captadores), seg: q.res ? "" : (q.seg || ""), fecha: q.fecha || "", resFecha: q.resFecha || "", motivo: q.motivo || "", conc: q.conc || "", env: q.res ? "" : (q.enviada || "") }));
   ((p && p.historial) || []).forEach((h, i) => out.push({ k: "con", c, i, id: h.id || "", est: concEstado(h, t), desde: h.desde || "", hasta: h.hasta || "", ong: (h.ong || "").trim(), n: safeCount(h.captadores), seg: "", fecha: h.alta || "", resFecha: h.resFecha || "", motivo: h.motivo || "", sol: h.sol || "" }));
   return out;
 };
@@ -2529,7 +2533,7 @@ const calendarioSemana = (recs, segs, wk, t) => Array.from({ length: 7 }, (_, k)
    ficha, el panel y el calendario usen las mismas reglas. Estas funciones convierten filas en listas y calculan, comparando lo último
    confirmado con lo editado, qué operaciones hay que enviar a Supabase. No hacen llamadas de red. */
 const REL_COLS = {
-  permit_applications: "id,establishment_id,status,requested_from,requested_until,organization,capturer_count,requested_at,contact_details,notes,resolved_at,resolution_reason,updated_at",
+  permit_applications: "id,establishment_id,status,requested_from,requested_until,organization,capturer_count,requested_at,contact_details,notes,resolved_at,resolution_reason,sent_on,updated_at",
   permit_grants: "id,establishment_id,application_id,status,valid_from,valid_until,organization,capturer_count,contact_details,notes,cancelled_at,cancelled_reason,created_at,updated_at",
   followups: "id,establishment_id,application_id,grant_id,due_on,completed_at,assigned_to,next_action,updated_at"
 };
@@ -2548,6 +2552,7 @@ const relListas = (apps, grants, fups) => {
     const res = APP_RES[a.status] || "", fs = (fuPorApp.get(a.id) || []).slice().sort((x, y) => String(x.due_on).localeCompare(String(y.due_on)));
     const abierto = fs.find((f) => !f.completed_at), ultimo = abierto || fs[fs.length - 1];
     const x = { id: a.id, ver: a.updated_at, desde: a.requested_from || "", hasta: a.requested_until || "", ong: a.organization || "", captadores: a.capturer_count || 0, fecha: a.requested_at || "" };
+    if (a.sent_on) x.enviada = a.sent_on; /* día en que el RGR mandó el correo: sin él, «por solicitar»; con él, «solicitada» */
     if (res) { x.res = res; x.resFecha = diaMadrid(a.resolved_at); }
     if (a.resolution_reason) x.motivo = a.resolution_reason;
     if (a.contact_details) x.contacto = a.contact_details;
@@ -2575,7 +2580,7 @@ const relListas = (apps, grants, fups) => {
   });
   return out;
 };
-const CAMPOS_REL = ["desde", "hasta", "ong", "contacto", "notas"];
+const CAMPOS_REL = ["desde", "hasta", "ong", "contacto", "notas", "enviada"];
 const cambiaRel = (x, b) => CAMPOS_REL.some((k) => (x[k] || "") !== (b[k] || "")) || (Number(x.captadores) || 0) !== (Number(b.captadores) || 0);
 /* Operaciones necesarias para pasar de lo último confirmado (base) a lo editado (cur). Aprobar, denegar, retirar y cancelar van por las funciones
    atómicas de la base de datos; el resto son altas, cambios con control de versión y bajas. */
@@ -4775,7 +4780,7 @@ const csvCell = (value) => {
     if (r.k === "con" && i.e === "autorizada" && r.hasta && r.hasta >= t && daysBetween(t, r.hasta) <= 7 && r.hasta === d) avisos.push("Vence " + (r.hasta === t ? "hoy" : "el " + fmtD(r.hasta).slice(0, 5)));
     if (r.k === "con" && r.desde === d && d > t) avisos.push("Empieza");
     return '<li><button type="button" class="cal-card s-' + info[1] + '" data-pt="' + esc(String(c.id)) + '" data-v="' + r.k + '">' +
-      '<span class="st">' + esc((r.k === "sol" ? "Solicitud · " : "Concesión · ") + info[0]) + "</span><strong>" + esc(c.name) + "</strong>" +
+      '<span class="st">' + esc((r.k === "sol" ? "Solicitud · " : "Concesión · ") + (r.k === "sol" && i.e === "pendiente" ? (r.env ? "Solicitada" : "Por solicitar") : info[0])) + "</span><strong>" + esc(c.name) + "</strong>" +
       '<span class="wh">' + esc(townOf(c)) + (c.tipo ? " · " + esc(c.tipo) : "") + "</span>" +
       (span ? '<span class="sp">' + esc(span) + "</span>" : "") +
       (avisos.length ? '<span class="cal-warn">' + esc(avisos.join(" · ")) + "</span>" : "") +
@@ -4815,7 +4820,7 @@ const csvCell = (value) => {
     const vencen = [...regsAut].filter((r) => r.k === "con" && r.hasta && r.hasta >= t && r.hasta <= b && r.hasta >= a).length;
     body.querySelector("#calSum").innerHTML =
       '<div class="c"><b>' + pa.n + "</b><span>captadores autorizados en el día pico" + (pa.n ? " (" + DIAS[daysBetween(a, pa.d)].toLowerCase() + ") · " + plural(regsAut.size, "concesión", "concesiones") : "") + "</span></div>" +
-      '<div class="s"><b>' + pp.n + "</b><span>captadores por aprobar en el día pico" + (pp.n ? " (" + DIAS[daysBetween(a, pp.d)].toLowerCase() + ") · " + plural(regsPen.size, "solicitud", "solicitudes") : "") + "</span></div>" +
+      '<div class="s"><b>' + pp.n + "</b><span>captadores pendientes en el día pico" + (pp.n ? " (" + DIAS[daysBetween(a, pp.d)].toLowerCase() + ") · " + plural(regsPen.size, "solicitud", "solicitudes") : "") + "</span></div>" +
       '<div class="t"><b>' + nSeg + "</b><span>" + (nSeg === 1 ? "seguimiento" : "seguimientos") + " esta semana" + (nAtr ? " · " + nAtr + " atrasado" + (nAtr === 1 ? "" : "s") : "") + "</span></div>" +
       (vencen ? '<div class="q">' + esc(plural(vencen, "concesión vence", "concesiones vencen") + " esta semana") + "</div>" : "");
     const nota = body.querySelector("#calPast");
@@ -4853,19 +4858,20 @@ const csvCell = (value) => {
     const box = body.querySelector("#calDia"); panelPend = [];
     const d = diaSel && dias.find((x) => x.d === diaSel);
     if (!d) { diaSel = ""; box.hidden = true; box.innerHTML = ""; return; }
-    const lista = d.items.filter((i) => visible(i.e)), pend = lista.filter((i) => i.e === "pendiente" && i.r.k === "sol" && i.r.est === "pendiente").map((i) => i.r), cons = lista.filter((i) => i.r.k === "con");
+    const lista = d.items.filter((i) => visible(i.e)), pend = lista.filter((i) => i.e === "pendiente" && i.r.k === "sol" && i.r.est === "pendiente").map((i) => i.r).sort((a, b) => (a.env ? 1 : 0) - (b.env ? 1 : 0)), cons = lista.filter((i) => i.r.k === "con");
     panelPend = pend;
+    const porSol = pend.filter((r) => !r.env), enviadas = pend.filter((r) => r.env);
     const otras = lista.filter((i) => i.e === "pendiente" && !pend.includes(i.r)).length;
     const periodoDe = (r) => (r.desde && r.hasta && r.desde !== r.hasta ? fmtD(r.desde).slice(0, 5) + " → " + fmtD(r.hasta).slice(0, 5) : fmtD(r.desde || r.hasta).slice(0, 5));
     const dis = ocupadoCal ? " disabled" : "";
     const fila = (r, i) => '<li class="cal-dia-f"><div><strong>' + esc(r.c.name) + "</strong><span>" + esc(townOf(r.c) + " · " + ongDe(r) + " · " + periodoDe(r) + (r.n ? " · " + plural(r.n, "captador", "captadores") : "")) + "</span></div>" +
       (denegando === i
         ? '<div class="cal-dia-den"><label class="cal-f">Motivo (opcional)<input id="calMotivo" type="text" maxlength="300" autocomplete="off"></label><div class="ce-btns"><button type="button" class="ce-act riesgo" data-pa="den-ok" data-i="' + i + '"' + dis + '>Confirmar la denegación</button><button type="button" class="ce-act" data-pa="no" data-i="' + i + '"' + dis + ">No, volver</button></div></div>"
-        : '<div class="ce-btns"><button type="button" class="ce-act ok" data-pa="conceder" data-i="' + i + '" aria-label="Conceder la solicitud de ' + esc(r.c.name) + '"' + dis + '>Conceder</button><button type="button" class="ce-act" data-pa="den" data-i="' + i + '" aria-label="Denegar la solicitud de ' + esc(r.c.name) + '"' + dis + ">Denegar</button></div>") + "</li>";
+        : '<div class="ce-btns">' + (r.env ? "" : '<button type="button" class="ce-act ok" data-pa="env" data-i="' + i + '" aria-label="Marcar como solicitada la solicitud de ' + esc(r.c.name) + '"' + dis + '>Marcar como solicitada</button>') + '<button type="button" class="ce-act' + (r.env ? " ok" : "") + '" data-pa="conceder" data-i="' + i + '" aria-label="Conceder la solicitud de ' + esc(r.c.name) + '"' + dis + '>Conceder</button><button type="button" class="ce-act" data-pa="den" data-i="' + i + '" aria-label="Denegar la solicitud de ' + esc(r.c.name) + '"' + dis + ">Denegar</button></div>") + "</li>";
     box.hidden = false;
     box.innerHTML = (rangoIni ? '<p class="cal-note cal-rango" role="status">Elige en el mes el último día del periodo (empieza el ' + esc(fmtD(rangoIni)) + '). <button type="button" class="ce-link" data-rango-no="1">Cancelar</button></p>' : "") + '<div class="cal-dia-h"><h3 id="calDiaT" tabindex="-1">' + esc(DIAS[daysBetween(mondayOf(d.d), d.d)] + " " + (+d.d.slice(8)) + " de " + MESES[+d.d.slice(5, 7) - 1]) + '</h3><button type="button" class="ce-x" data-dia-cierra="1" aria-label="Cerrar el día">&times;</button></div>' +
       (d.d >= t ? '<p class="cal-new" role="group" aria-label="Crear el ' + esc(fmtD(d.d)) + '"><button type="button" class="primary" data-nuevo="sol" data-nuevo-dia="' + d.d + '">+ Nueva solicitud</button><button type="button" data-rango-fin="1" title="Pide un periodo: elige después el último día en el mes">Hasta otro día…</button><button type="button" data-nuevo="con" data-nuevo-dia="' + d.d + '">+ Concesión</button></p>' : '<p class="cal-note">Día pasado: no se crean solicitudes nuevas.</p>') +
-      (pend.length || otras ? "<section>" + (pend.length ? "<h4>Por aprobar (" + pend.length + ")</h4>" : "") + (pend.length ? '<ul class="cal-dia-l">' + pend.map(fila).join("") + "</ul>" : "") + (otras ? '<p class="cal-note">' + esc(plural(otras, "solicitud más se reconstruye", "solicitudes más se reconstruyen") + " con sus fechas pasadas: se ven en el Centro de permisos.") + "</p>" : "") + "</section>" : "") +
+      (pend.length || otras ? "<section>" + (porSol.length ? "<h4>Por solicitar (" + porSol.length + ")</h4>" + '<ul class="cal-dia-l">' + porSol.map((r) => fila(r, pend.indexOf(r))).join("") + "</ul>" : "") + (enviadas.length ? "<h4>Solicitadas (" + enviadas.length + "), esperando respuesta</h4>" + '<ul class="cal-dia-l">' + enviadas.map((r) => fila(r, pend.indexOf(r))).join("") + "</ul>" : "") + (otras ? '<p class="cal-note">' + esc(plural(otras, "solicitud más se reconstruye", "solicitudes más se reconstruyen") + " con sus fechas pasadas: se ven en el Centro de permisos.") + "</p>" : "") + "</section>" : "") +
       (cons.length ? "<section><h4>Concesiones (" + cons.length + ")</h4>" + '<ul class="cal-dia-l">' + cons.map((i) => '<li class="cal-dia-f"><div><strong>' + esc(i.r.c.name) + "</strong><span>" + esc(townOf(i.r.c) + " · " + ongDe(i.r) + " · " + periodoDe(i.r) + (i.r.n ? " · " + plural(i.r.n, "captador", "captadores") : "") + " · " + EST[i.e][0]) + "</span></div></li>").join("") + "</ul></section>" : "") +
       (d.seg.length ? "<section><h4>Seguimientos (" + d.seg.length + ")</h4>" + '<ul class="cal-dia-l">' + d.seg.map((s) => '<li class="cal-dia-f"><div><strong>' + esc(s.c.name) + "</strong><span>" + esc((s.accion || "Seguimiento") + (d.d < t ? " · atrasado" : "")) + "</span></div></li>").join("") + '</ul><p class="cal-note">Se gestionan en el Centro de permisos.</p></section>' : "") +
       (!pend.length && !otras && !cons.length && !d.seg.length ? '<p class="cal-note">Sin actividad este día.</p>' : "");
@@ -4881,16 +4887,16 @@ const csvCell = (value) => {
     const nSeg = delMes.reduce((n, x) => n + x.seg.length, 0), nAtr = delMes.reduce((n, x) => n + x.segAtras, 0), cuando = (d) => (+d.slice(8)) + " " + mesDe(d);
     body.querySelector("#calSum").innerHTML =
       '<div class="c"><b>' + pa.n + "</b><span>captadores autorizados en el día pico" + (pa.n ? " (" + cuando(pa.d) + ")" : "") + "</span></div>" +
-      '<div class="s"><b>' + pp.n + "</b><span>captadores por aprobar en el día pico" + (pp.n ? " (" + cuando(pp.d) + ")" : "") + "</span></div>" +
+      '<div class="s"><b>' + pp.n + "</b><span>captadores pendientes en el día pico" + (pp.n ? " (" + cuando(pp.d) + ")" : "") + "</span></div>" +
       '<div class="t"><b>' + nSeg + "</b><span>" + (nSeg === 1 ? "seguimiento" : "seguimientos") + " en el mes" + (nAtr ? " · " + nAtr + " atrasado" + (nAtr === 1 ? "" : "s") : "") + "</span></div>";
     const nota = body.querySelector("#calPast"); nota.hidden = true;
     const ini = ref + "-01" >= t.slice(0, 7) + "-01" ? "" : "Mes pasado: las concesiones se muestran con sus fechas y las solicitudes solo cuando constan sus fechas de alta y de decisión."; if (ini) { nota.hidden = false; nota.textContent = ini; }
-    body.querySelector("#calGrid").innerHTML = '<div class="cal-mesw' + (diaSel ? " con-dia" : "") + '"><div class="cal-mesg"><div class="cal-mleg"><span><i class="a"></i>Concesión</span><span><i class="p"></i>Por aprobar</span><span>Pulsa un día para ver y crear solicitudes; para un periodo, «Hasta otro día…» o Mayús + otro día</span></div>' +
+    body.querySelector("#calGrid").innerHTML = '<div class="cal-mesw' + (diaSel ? " con-dia" : "") + '"><div class="cal-mesg"><div class="cal-mleg"><span><i class="a"></i>Concesión</span><span><i class="p"></i>Por solicitar</span><span><i class="p env"></i>Solicitada</span><span>Pulsa un día para ver y crear solicitudes; para un periodo, «Hasta otro día…» o Mayús + otro día</span></div>' +
       '<div class="cal-mes" role="group" aria-label="Calendario de ' + esc(MESES[m - 1] + " " + y) + '">' + DIAS.map((n) => '<span class="cal-mh">' + n.slice(0, 3) + "</span>").join("") +
       semanas.map((sem) => sem.map((x, k) => {
         const fuera = x.d < primero || x.d > ultimo, lbl = DIAS[k] + " " + (+x.d.slice(8)) + " de " + MESES[+x.d.slice(5, 7) - 1] + ": " + plural(x.aut, "captador autorizado", "captadores autorizados") + ", " + x.pen + " por aprobar, " + plural(x.seg.length, "seguimiento", "seguimientos") + (x.d >= t ? ". Pulsa para crear una solicitud este día" : "");
         const chips = x.items.filter((i) => visible(i.e) && (i.e === "pendiente" || i.e === "autorizada")).sort((p, q) => (p.e === "pendiente" ? 0 : 1) - (q.e === "pendiente" ? 0 : 1));
-        const chipH = (i) => '<span class="cal-ch ' + (i.e === "pendiente" ? "p" : "a") + '"><i></i><span class="adm-sr">' + (i.e === "pendiente" ? "Por aprobar: " : "Concesión: ") + "</span><span class=\"t\">" + esc(ongDe(i.r) + " · " + i.r.c.name) + "</span></span>";
+        const chipH = (i) => '<span class="cal-ch ' + (i.e === "pendiente" ? "p" + (i.r.env ? " env" : "") : "a") + '"><i></i><span class="adm-sr">' + (i.e === "pendiente" ? (i.r.env ? "Solicitada: " : "Por solicitar: ") : "Concesión: ") + "</span><span class=\"t\">" + esc(ongDe(i.r) + " · " + i.r.c.name) + "</span></span>";
         return '<button type="button" class="cal-m' + (x.d === t ? " hoy" : "") + (fuera ? " fuera" : "") + (k >= 5 ? " we" : "") + (x.d === diaSel ? " sel" : "") + (x.d === rangoIni ? " ini" : "") + '" data-dia="' + x.d + '" aria-pressed="' + (x.d === diaSel) + '" aria-label="' + esc(lbl + ". Pulsa para ver el día") + '"' + (x.d === t ? ' aria-current="date"' : "") + '><span class="d">' + (+x.d.slice(8)) + "</span>" +
           chips.slice(0, 2).map(chipH).join("") + (chips.length > 2 ? '<span class="cal-mas">+' + (chips.length - 2) + '<span class="mas-t"> más</span></span>' : "") +
           (x.seg.length && x.d < t ? '<span class="sg late">' + x.seg.length + " atr.</span>" : "") + "</button>";
@@ -4937,7 +4943,7 @@ const csvCell = (value) => {
       '<label class="cal-f"><span class="adm-sr">ONG</span><select id="calOng"></select></label>' +
       '<details class="cal-mostrar"><summary>Mostrar</summary><div class="cal-filters" role="group" aria-label="Qué se muestra">' +
       '<button type="button" class="cal-chip s-concedido" data-ver="autorizada" aria-pressed="' + ver.autorizada + '"><i></i>Concesiones</button>' +
-      '<button type="button" class="cal-chip s-solicitado" data-ver="pendiente" aria-pressed="' + ver.pendiente + '"><i></i>Solicitudes por aprobar</button>' +
+      '<button type="button" class="cal-chip s-solicitado" data-ver="pendiente" aria-pressed="' + ver.pendiente + '"><i></i>Solicitudes pendientes</button>' +
       '<button type="button" class="cal-chip s-seguimiento" data-ver="seguimiento" aria-pressed="' + ver.seguimiento + '"><i></i>Seguimientos</button>' +
       '<button type="button" class="cal-chip s-cancelado" data-ver="historico" aria-pressed="' + ver.historico + '"><i></i>Histórico (denegadas, retiradas, canceladas)</button>' +
       '</div></details></div>' +
@@ -4965,7 +4971,7 @@ const csvCell = (value) => {
     if (a === "no") { denegando = -1; draw(); body.querySelector('[data-pa="den"][data-i="' + i + '"]')?.focus(); return; }
     const motivo = a === "den-ok" ? (body.querySelector("#calMotivo")?.value || "").trim() : "";
     ocupadoCal = true; draw();
-    let res; try { res = a === "conceder" ? await api.conceder(r) : await api.denegar(r, motivo); } catch (e) { console.error("[Mapa] Error al guardar desde el Calendario:", e); res = { ok: false, texto: "No se pudo guardar. Revisa el Centro de permisos." }; }
+    let res; try { res = a === "conceder" ? await api.conceder(r) : a === "env" ? await api.solicitada(r) : await api.denegar(r, motivo); } catch (e) { console.error("[Mapa] Error al guardar desde el Calendario:", e); res = { ok: false, texto: "No se pudo guardar. Revisa el Centro de permisos." }; }
     ocupadoCal = false; denegando = -1; draw();
     const av = body.querySelector("#calAviso"); if (av) { av.textContent = res.texto; av.hidden = false; av.focus(); }
   };
@@ -5022,7 +5028,7 @@ const csvCell = (value) => {
   const dlg = $("#dlgCentro"), body = $("#ceBody");
   const TRAMO = 100; /* filas que se dibujan de una vez */
   const OPC = {
-    sol: [["pendiente", "Pendientes"], ["sinseg", "Pendientes sin seguimiento"], ["estancada", "Estancadas (más de " + UMBRAL_ESTANCADA + " días)"], ["edad0", "Pendientes de 0–7 días"], ["edad8", "Pendientes de 8–15 días"], ["edad16", "Pendientes de 16–30 días"], ["edad31", "Pendientes de más de 30 días"], ["caducada", "Sin respuesta y caducadas"], ["aprobada", "Aprobadas"], ["denegada", "Denegadas"], ["retirada", "Retiradas"], ["todas", "Todas"]],
+    sol: [["pendiente", "Pendientes (por solicitar y solicitadas)"], ["porsolicitar", "Por solicitar"], ["solicitada", "Solicitadas (esperando respuesta)"], ["sinseg", "Pendientes sin seguimiento"], ["estancada", "Estancadas (más de " + UMBRAL_ESTANCADA + " días)"], ["edad0", "Pendientes de 0–7 días"], ["edad8", "Pendientes de 8–15 días"], ["edad16", "Pendientes de 16–30 días"], ["edad31", "Pendientes de más de 30 días"], ["caducada", "Sin respuesta y caducadas"], ["aprobada", "Aprobadas"], ["denegada", "Denegadas"], ["retirada", "Retiradas"], ["todas", "Todas"]],
     con: [["vigente", "Vigentes"], ["vencen", "Vencen en 30 días"], ["vencen7", "Vencen en 0–7 días"], ["vencen15", "Vencen en 8–15 días"], ["vencen30", "Vencen en 16–30 días"], ["futura", "Futuras"], ["futuras30", "Empiezan en los próximos 30 días"], ["terminada", "Terminadas"], ["cancelada", "Canceladas"], ["sinfin", "Vigentes sin fecha de fin"], ["todas", "Todas"]],
     seg: [["vencido", "Atrasados"], ["hoy", "Para hoy"], ["proximo", "Próximos 7 días"], ["sinresp", "Sin responsable"], ["todas", "Todos"]]
   };
@@ -5031,11 +5037,11 @@ const csvCell = (value) => {
   const JRAPIDAS = [["urgentes", "Urgentes"], ["hoy", "Para hoy"], ["sinseg", "Sin seguimiento"], ["todas", "Todas"]];
   const JBANDAS = [["urgente", "Urgente", "bl", "Urgente"], ["hoy", "Seguimientos de hoy", "av", "Hoy"], ["atencion", "Requieren atención", "re", "Atención"]]; /* id, título de la sección, forma de la gravedad, etiqueta de la fila */
   const JDESCRIPCION = { urgentes: "Seguimientos atrasados, concesiones que terminan hoy y datos bloqueantes", hoy: "Seguimientos previstos para hoy y concesiones que terminan hoy", sinseg: "Solicitudes pendientes sin seguimiento programado", todas: "Todas las actuaciones" };
-  const COLOR = { pendiente: "solicitado", caducada: "caducado", aprobada: "concedido", denegada: "denegado", retirada: "caducado", vigente: "concedido", futura: "concedido", terminada: "caducado", cancelada: "cancelado" };
-  const TEXTO = { pendiente: "Pendiente", caducada: "Caducada sin respuesta", aprobada: "Aprobada", denegada: "Denegada", retirada: "Retirada", vigente: "Vigente", futura: "Futura", terminada: "Terminada", cancelada: "Cancelada" };
+  const COLOR = { porsolicitar: "solicitado", solicitada: "solicitado", pendiente: "solicitado", caducada: "caducado", aprobada: "concedido", denegada: "denegado", retirada: "caducado", vigente: "concedido", futura: "concedido", terminada: "caducado", cancelada: "cancelado" };
+  const TEXTO = { porsolicitar: "Por solicitar", solicitada: "Solicitada", pendiente: "Pendiente", caducada: "Caducada sin respuesta", aprobada: "Aprobada", denegada: "Denegada", retirada: "Retirada", vigente: "Vigente", futura: "Futura", terminada: "Terminada", cancelada: "Cancelada" };
   const edadEn = (r, t, a, b) => !!r.fecha && ((d) => d >= a && d <= b)(daysBetween(r.fecha, t));
   const pred = {
-    sol: (est, r, t) => est === "todas" ? true : est === "sinseg" ? (r.est === "pendiente" && !r.seg) : est === "estancada" ? (r.est === "pendiente" && !!r.fecha && daysBetween(r.fecha, t) > UMBRAL_ESTANCADA)
+    sol: (est, r, t) => est === "todas" ? true : est === "porsolicitar" ? subEstado(r) === "porsolicitar" : est === "solicitada" ? subEstado(r) === "solicitada" : est === "sinseg" ? (r.est === "pendiente" && !r.seg) : est === "estancada" ? (r.est === "pendiente" && !!r.fecha && daysBetween(r.fecha, t) > UMBRAL_ESTANCADA)
       : est === "edad0" ? (r.est === "pendiente" && edadEn(r, t, 0, 7)) : est === "edad8" ? (r.est === "pendiente" && edadEn(r, t, 8, 15)) : est === "edad16" ? (r.est === "pendiente" && edadEn(r, t, 16, 30)) : est === "edad31" ? (r.est === "pendiente" && edadEn(r, t, 31, Infinity)) : r.est === est,
     con: (est, r, t) => est === "todas" ? true : (est === "vencen7" || est === "vencen15" || est === "vencen30") ? (r.est === "vigente" && !!r.hasta && ((d) => est === "vencen7" ? d <= 7 : est === "vencen15" ? d >= 8 && d <= 15 : d >= 16 && d <= 30)(daysBetween(t, r.hasta))) : est === "futuras30" ? (r.est === "futura" && !!r.desde && daysBetween(t, r.desde) <= 30) : est === "vencen" ? (r.est === "vigente" && !!r.hasta && daysBetween(t, r.hasta) <= 30) : est === "sinfin" ? (r.est === "vigente" && !r.hasta) : r.est === est,
     seg: (est, s, t) => est === "todas" ? true : est === "vencido" ? s.fecha < t : est === "hoy" ? s.fecha === t : est === "proximo" ? (s.fecha > t && s.fecha <= addDays(t, 7)) : !s.resp
@@ -5149,6 +5155,14 @@ const csvCell = (value) => {
   const NOEXISTE = "No se encuentra ese registro: ya no está como lo viste. Revisa la lista y repite.";
   const YA_ASIGNADO = "Ya tenía ese responsable: sin cambios.";
   const mutadores = {
+    enviar: (r, fecha) => (copia) => {
+      const x = copia.solicitudes[ubica(copia.solicitudes, r)]; if (!x) return NOEXISTE; if (x.res) return "Esa solicitud ya está resuelta.";
+      x.enviada = fecha;
+    },
+    desenviar: (r) => (copia) => {
+      const x = copia.solicitudes[ubica(copia.solicitudes, r)]; if (!x) return NOEXISTE; if (x.res) return "Esa solicitud ya está resuelta.";
+      delete x.enviada;
+    },
     conceder: (r) => (copia) => {
       const x = copia.solicitudes[ubica(copia.solicitudes, r)]; if (!x) return NOEXISTE; if (x.res) return "Esa solicitud ya está resuelta.";
       if (!x.id) x.id = newId();
@@ -5195,7 +5209,7 @@ const csvCell = (value) => {
 
   /* === Qué se puede hacer con cada registro, y por qué no === */
   const accionesDe = (r) => {
-    if (r.k === "sol") { const abierta = !(r.est === "aprobada" || r.est === "denegada" || r.est === "retirada"); return (abierta ? [["conceder", "Conceder", "ok"], ["den", "Denegar"], ["ret", "Retirar"]] : []).concat([["ed", "Editar"]], esAdmin() || r.c.custom ? [["quitS", "Borrar…"]] : []); }
+    if (r.k === "sol") { const abierta = !(r.est === "aprobada" || r.est === "denegada" || r.est === "retirada"); return (abierta ? (r.env ? [["conceder", "Conceder", "ok"], ["den", "Denegar"], ["desenv", "Quitar el envío"], ["ret", "Retirar"]] : [["env", "Marcar como solicitada", "ok"], ["conceder", "Conceder"], ["den", "Denegar"], ["ret", "Retirar"]]) : []).concat([["ed", "Editar"]], esAdmin() || r.c.custom ? [["quitS", "Borrar…"]] : []); }
     if (r.k === "con") return [["ed", "Editar"], r.est === "cancelada" ? ["rea", "Reactivar"] : ["can", "Cancelar"]].concat(esAdmin() || r.c.custom ? [["quitC", "Borrar…"]] : []);
     return [["hecho", "Hecho", "ok"]].concat(r.c.databaseId ? [["edseg", "Cambiar"]] : []);
   };
@@ -5211,10 +5225,10 @@ const csvCell = (value) => {
   /* === Filas === */
   const celdaPunto = (x) => '<button type="button" class="ce-pt" data-sel="' + esc(clave(x)) + '"><strong>' + esc(x.c.name) + "</strong><span>" +
     esc(townOf(x.c) + (x.c.province && x.c.province !== townOf(x.c) ? " · " + x.c.province : "")) + "</span></button>";
-  const badge = (e) => '<span class="ce-badge s-' + COLOR[e] + '"><i aria-hidden="true"></i>' + esc(TEXTO[e]) + "</span>";
+  const badge = (e) => { const k = e && typeof e === "object" ? subEstado(e) : e; return '<span class="ce-badge s-' + COLOR[k] + (k === "solicitada" ? " env" : "") + '"><i aria-hidden="true"></i>' + esc(TEXTO[k]) + "</span>"; };
   const btn = (a, key, txt, extra) => '<button type="button" class="ce-act' + (extra ? " " + extra : "") + '" data-act="' + a + '" data-key="' + esc(key) + '"' + (ocupado ? " disabled" : "") + ">" + esc(txt) + "</button>";
   /* Detalle: las acciones habituales a la vista y las que quitan o retiran, agrupadas aparte y con aire de riesgo. */
-  const EN_MAS = new Set(["ret", "quitS", "quitC"]);
+  const EN_MAS = new Set(["ret", "quitS", "quitC", "desenv"]);
   const botonesDetalle = (r) => {
     const todas = accionesDe(r), b = ([a, txt, cls]) => btn(a, clave(r), txt, a === "quitS" || a === "quitC" ? "riesgo" : cls), mas = todas.filter(([a]) => EN_MAS.has(a));
     return todas.filter(([a]) => !EN_MAS.has(a)).map(b).join("") + (mas.length ? '<details class="ce-mas"><summary>Más acciones</summary><div class="ce-btns">' + mas.map(b).join("") + "</div></details>" : "");
@@ -5228,8 +5242,8 @@ const csvCell = (value) => {
   const filaSol = (r, t) => {
     const edad = r.fecha ? daysBetween(r.fecha, t) : null, estancada = r.est === "pendiente" && edad !== null && edad > UMBRAL_ESTANCADA;
     return fila(r, 0, estancada ? "urg" : "", td("Punto", celdaPunto(r)) + td("ONG", esc(ongDe(r))) + td("Periodo solicitado", esc(periodo(r))) + td("Captadores", r.n || "—", "n") +
-      td("Solicitada", r.fecha ? esc(fmtD(r.fecha)) + (r.est === "pendiente" && edad >= 0 ? '<span class="ce-sub">hace ' + esc(plural(edad, "día", "días")) + "</span>" : "") : "No consta") +
-      td("Estado", badge(r.est) + (estancada ? '<span class="ce-warn">Estancada</span>' : "")) +
+      td("Creada", r.fecha ? esc(fmtD(r.fecha)) + (r.est === "pendiente" && edad >= 0 ? '<span class="ce-sub">hace ' + esc(plural(edad, "día", "días")) + "</span>" : "") : "No consta") +
+      td("Estado", badge(r) + (estancada ? '<span class="ce-warn">Estancada</span>' : "")) +
       td("Seguimiento", r.seg ? esc(fmtD(r.seg)) + (r.seg < t ? '<span class="ce-warn late">Atrasado</span>' : "") : (r.est === "pendiente" ? "Sin seguimiento" : "")) + td("Acciones", botones(r, 1), "ce-acts"));
   };
   const detalleCon = (r, t) => {
@@ -5370,7 +5384,7 @@ const csvCell = (value) => {
 
   /* === Panel de detalle del expediente === */
   const dato = (l, v) => v ? "<dt>" + esc(l) + "</dt><dd>" + v + "</dd>" : "";
-  const NOMBRE_CAMPO = { status: "estado", organization: "ONG", capturer_count: "captadores", requested_from: "inicio solicitado", requested_until: "fin solicitado", requested_at: "fecha de solicitud", valid_from: "inicio", valid_until: "fin", due_on: "fecha", assigned_to: "responsable", next_action: "acción", completed_at: "completado", resolution_reason: "motivo de la decisión", cancelled_reason: "motivo de la cancelación", contact_details: "contacto", notes: "notas", application_id: "solicitud enlazada", grant_id: "concesión enlazada" };
+  const NOMBRE_CAMPO = { status: "estado", organization: "ONG", capturer_count: "captadores", requested_from: "inicio solicitado", requested_until: "fin solicitado", requested_at: "fecha de alta", sent_on: "envío del correo", valid_from: "inicio", valid_until: "fin", due_on: "fecha", assigned_to: "responsable", next_action: "acción", completed_at: "completado", resolution_reason: "motivo de la decisión", cancelled_reason: "motivo de la cancelación", contact_details: "contacto", notes: "notas", application_id: "solicitud enlazada", grant_id: "concesión enlazada" };
   const OCULTOS = new Set(["updated_by", "created_by", "resolved_by", "resolved_at", "cancelled_at", "legacy_ref", "id", "establishment_id", "created_at", "outcome"]);
   const idsHistorial = (r) => { const w = rawDe(r); return [...new Set([w.id, w.conc, w.sol, w.fu].filter(Boolean))]; };
   const cargaHistorial = async (r) => {
@@ -5402,10 +5416,10 @@ const csvCell = (value) => {
     const t = today(), w = rawDe(r), p = permits[permitKey(r.c)] || {}, key = clave(r);
     grid.classList.add("con-lado"); box.hidden = false;
     const tipo = r.k === "sol" ? "Solicitud" : r.k === "con" ? "Concesión" : "Seguimiento";
-    const estado = r.k ? badge(r.est) : "";
+    const estado = r.k ? badge(r) : "";
     let datos = "";
     if (r.k === "sol") {
-      datos = dato("Estado", estado) + dato("ONG", esc(ongDe(r))) + dato("Periodo solicitado", esc(periodo(r))) + dato("Captadores", r.n ? String(r.n) : "") + dato("Solicitada", r.fecha ? esc(fmtD(r.fecha) + " (hace " + plural(daysBetween(r.fecha, t), "día", "días") + ")") : "No consta") +
+      datos = dato("Estado", estado) + dato("ONG", esc(ongDe(r))) + dato("Periodo solicitado", esc(periodo(r))) + dato("Captadores", r.n ? String(r.n) : "") + dato("Creada", r.fecha ? esc(fmtD(r.fecha) + " (hace " + plural(daysBetween(r.fecha, t), "día", "días") + ")") : "No consta") + dato("Correo enviado", r.env ? esc(fmtD(r.env)) : "Todavía no") +
         dato("Decisión", r.resFecha && (r.est === "aprobada" || r.est === "denegada" || r.est === "retirada") ? esc(TEXTO[r.est] + " el " + fmtD(r.resFecha) + (r.motivo ? " · " + r.motivo : "")) : "") + dato("Seguimiento", r.seg ? esc(fmtD(r.seg) + (w.accion ? " · " + w.accion : "") + (w.resp ? " · " + nombreResp(w.resp) : " · sin responsable")) : r.est === "pendiente" ? "Sin seguimiento programado" : "") +
         dato("Contacto", w.contacto ? esc(w.contacto) : "") + dato("Notas", w.notas ? esc(w.notas) : "") + (r.conc ? dato("Concesión enlazada", '<button type="button" class="ce-link" data-sel="' + esc(String(r.c.id) + "|con|" + r.conc) + '">Ver la concesión</button>') : "");
     } else if (r.k === "con") {
@@ -5526,7 +5540,7 @@ const csvCell = (value) => {
     const key = clave(x.r), nombre = x.c.name, banda = JBANDAS.find((b) => b[0] === x.banda), dis = ocupado ? " disabled" : "", sinExp = x.k === "punto";
     const lugar = townOf(x.c) + (x.c.province && x.c.province !== townOf(x.c) ? " · " + x.c.province : "");
     const metas = '<span class="jo-tipo">' + esc(sinExp ? "Seguimiento del punto" : x.k === "sol" ? "Solicitud" : "Concesión") + "</span>" +
-      (sinExp ? "" : badge(x.r.est) + "<span>" + esc(ongDe(x)) + "</span><span>" + esc(periodo(x.r)) + "</span><span>" + esc(x.r.n ? plural(x.r.n, "captador", "captadores") : "Sin captadores indicados") + "</span>");
+      (sinExp ? "" : badge(x.r) + "<span>" + esc(ongDe(x)) + "</span><span>" + esc(periodo(x.r)) + "</span><span>" + esc(x.r.n ? plural(x.r.n, "captador", "captadores") : "Sin captadores indicados") + "</span>");
     const fr = [x.fecha.v ? x.fecha.et + " " + fmtD(x.fecha.v) : "", x.seg ? "Responsable: " + (x.resp ? quienJ(x.resp) : "sin responsable") : ""].filter(Boolean);
     const tambien = x.extras.slice(0, 3).join(" · ") + (x.extras.length > 3 ? " y " + (x.extras.length - 3) + " más" : "");
     const extras = x.extras.length ? '<span class="jo-extra" title="También: ' + esc(tambien) + '">+' + x.extras.length + ' más <span class="adm-sr">También: ' + esc(tambien) + "</span></span>" : "";
@@ -5688,7 +5702,7 @@ const csvCell = (value) => {
     }
     const vis = filasVis;
     const cabs = {
-      sol: '<th>Punto</th><th>ONG</th><th>Periodo solicitado</th><th class="n">Captadores</th><th>Solicitada</th><th>Estado</th><th>Seguimiento</th><th><span class="adm-sr">Acciones</span></th>',
+      sol: '<th>Punto</th><th>ONG</th><th>Periodo solicitado</th><th class="n">Captadores</th><th>Creada</th><th>Estado</th><th>Seguimiento</th><th><span class="adm-sr">Acciones</span></th>',
       con: '<th>Punto</th><th>ONG</th><th>Periodo</th><th class="n">Captadores</th><th>Estado</th><th>Detalle</th><th><span class="adm-sr">Acciones</span></th>',
       seg: '<th class="ce-chk"><label class="ce-chkl"><input type="checkbox" id="ceChkTodos" aria-label="Seleccionar todos los seguimientos que se ven"' + (vista === "seg" && vis.length && vis.every((s) => multi.has(clave(s))) ? " checked" : "") + '></label></th><th>Punto</th><th>ONG</th><th>Fecha</th><th>Acción prevista</th><th>Responsable</th><th>Origen</th><th><span class="adm-sr">Acciones</span></th>',
       inc: "<th>Punto</th><th>Gravedad</th><th>Qué revisar</th><th>ONG</th><th>Expediente</th>"
@@ -5804,7 +5818,7 @@ const csvCell = (value) => {
         muta = (copia) => {
           if (!r) { nuevas.forEach((y) => copia.solicitudes.push(y)); return; }
           const i = ubica(copia.solicitudes, r); if (i < 0) return NOEXISTE;
-          const o = copia.solicitudes[i]; x.fecha = o.fecha || x.fecha; ["id", "res", "resFecha", "motivo", "conc"].forEach((k) => { if (o[k]) x[k] = o[k]; });
+          const o = copia.solicitudes[i]; x.fecha = o.fecha || x.fecha; ["id", "res", "resFecha", "motivo", "conc", "enviada"].forEach((k) => { if (o[k]) x[k] = o[k]; });
           copia.solicitudes[i] = x;
         };
         ok = (r ? "Solicitud guardada" : rangos.length > 1 ? rangos.length + " solicitudes creadas" : "Solicitud creada") + " en «" + c.name + "»" + ((!og || !cn.n) && !r ? ". Falta indicar: " + [!og && "ONG", !cn.n && "captadores"].filter(Boolean).join(" y ") : "") + ".";
@@ -5904,7 +5918,9 @@ const csvCell = (value) => {
   const actuar = (b) => {
     const r = indice.get(b.dataset.key); if (!r || ocupado) return;
     const a = b.dataset.act, c = r.c;
-    if (a === "conceder") ejecuta(c, mutadores.conceder(r), "Aprobada y guardada en «" + c.name + "»: la solicitud se conserva y se ha creado la concesión. Si te dieron otras fechas o captadores, usa Editar en Concesiones.");
+    if (a === "env") ejecuta(c, mutadores.enviar(r, today()), "«" + c.name + "» marcada como solicitada: queda esperando la respuesta.");
+    else if (a === "desenv") ejecuta(c, mutadores.desenviar(r), "Quitado el envío de «" + c.name + "»: vuelve a «por solicitar».");
+    else if (a === "conceder") ejecuta(c, mutadores.conceder(r), "Aprobada y guardada en «" + c.name + "»: la solicitud se conserva y se ha creado la concesión. Si te dieron otras fechas o captadores, usa Editar en Concesiones.");
     else if (a === "rea") ejecuta(c, mutadores.reactivar(r), "Concesión reactivada en «" + c.name + "».");
     else if (a === "hecho") ejecuta(c, mutadores.cerrarSeg(r), "Seguimiento cerrado en «" + c.name + "».");
     else if (a === "ed") abreForm(r.k, c, r);
@@ -5913,6 +5929,7 @@ const csvCell = (value) => {
   };
   /* Acciones sobre una solicitud desde fuera del Centro (el panel del día del Calendario): misma escritura y misma verificación que en el Centro. */
   window.mapaAccionesCalendario = {
+    solicitada: (r) => ejecuta(r.c, mutadores.enviar(r, today()), "«" + r.c.name + "» marcada como solicitada: queda esperando la respuesta."),
     conceder: (r) => ejecuta(r.c, mutadores.conceder(r), "Aprobada y guardada en «" + r.c.name + "»: la solicitud se conserva y se ha creado la concesión. Si te dieron otras fechas o captadores, usa Editar en Concesiones."),
     denegar: (r, motivo) => ejecuta(r.c, mutadores.resolver(r, "denegada", motivo || ""), "Denegación guardada en «" + r.c.name + "».")
   };

@@ -23,7 +23,7 @@ assert.ok(bloque.includes('aria-hidden="true"'), "La silueta de barras es decora
 assert.ok(!/localStorage|sessionStorage|indexedDB|document\.cookie|caches\.|fetch\(|\.from\(|\.rpc\(|supabase/.test(bloque), "El calendario no puede guardar en el navegador ni llamar a la red");
 
 // Los textos que vienen de los datos pasan por esc().
-for (const t of ["esc(c.name)", "esc(townOf(c))", "esc(og)", "+ info[0])", "esc(o)", "esc(ongDe(s))"]) {
+for (const t of ["esc(c.name)", "esc(townOf(c))", "esc(og)", ": info[0])) + \"</span><strong>\"", "esc(o)", "esc(ongDe(s))"]) {
   assert.ok(bloque.includes(t), "Falta escapar con esc(): " + t);
 }
 
@@ -101,11 +101,17 @@ assert.ok(html.includes('<option value="7">1 semana</option><option value="1m">1
 assert.ok(html.includes('id="cfMasPer">+ Añadir otro periodo</button>') && html.includes('rangos.map((rg, i) =>') && html.includes("nuevas.forEach((y) => copia.solicitudes.push(y))") && html.includes("Dos periodos se solapan"), "Varios periodos crean una solicitud por periodo en una sola escritura y no se solapan");
 assert.ok(bloque.includes("const drawDia = (dias, t) =>") && bloque.includes('data-pa="conceder"') && bloque.includes('data-pa="den-ok"') && bloque.includes('id="calMotivo"'), "El panel del día ofrece Conceder y Denegar (con motivo)");
 assert.ok(bloque.includes("const panelAccion = async (a, i) =>") && bloque.includes("api.conceder(r)") && bloque.includes("api.denegar(r, motivo)"), "Conceder y denegar usan la API del Centro");
-assert.ok(/window\.mapaAccionesCalendario = \{\s*conceder: \(r\) => ejecuta\(r\.c, mutadores\.conceder\(r\)/.test(html) && html.includes('denegar: (r, motivo) => ejecuta(r.c, mutadores.resolver(r, "denegada", motivo || ""), '), "El Centro expone conceder y denegar con su misma escritura verificada");
+assert.ok(/window\.mapaAccionesCalendario = \{\s*solicitada: \(r\) => ejecuta\(r\.c, mutadores\.enviar\(r, today\(\)\)[^\n]*\n\s*conceder: \(r\) => ejecuta\(r\.c, mutadores\.conceder\(r\)/.test(html) && html.includes('denegar: (r, motivo) => ejecuta(r.c, mutadores.resolver(r, "denegada", motivo || ""), '), "El Centro expone conceder y denegar con su misma escritura verificada");
 assert.ok(html.includes("if (!body.firstChild) return; /* el Centro aún no se ha abierto"), "El Centro no repinta si nunca se abrió (se concede desde el Calendario)");
-assert.ok(bloque.includes('<span class="cal-ch \' + (i.e === "pendiente" ? "p" : "a")') && bloque.includes("chips.slice(0, 2)") && bloque.includes('<span class="mas-t"> más</span>'), "Las celdas del mes llevan chips (hasta 2 y «+n más»)");
+assert.ok(bloque.includes('<span class="cal-ch \' + (i.e === "pendiente" ? "p" + (i.r.env ? " env" : "") : "a")') && bloque.includes("chips.slice(0, 2)") && bloque.includes('<span class="mas-t"> más</span>'), "Las celdas del mes llevan chips (hasta 2 y «+n más»)");
 assert.ok(bloque.includes("const nuevaDesde = (tipo, dia, hasta) =>"), "Un solo punto de entrada para abrir el formulario desde el Calendario");
 // Al entrar se abre el Calendario en vista mensual (una vez por sesión, en memoria) y esa es la vista por defecto.
 assert.ok(/ong = "", modo = "mes",/.test(bloque), "La vista por defecto es el mes");
 assert.ok(bloque.includes('document.addEventListener("sesion:lista"') && bloque.includes("if (abiertoAlEntrar) return; abiertoAlEntrar = true;") && bloque.includes('if (!document.querySelector("dialog[open]")) abrir();'), "Al entrar se abre el Calendario una vez por sesión, sin interponerse a otro diálogo abierto");
+// Estados de una solicitud (flujo del titular, 27/10/2026): por solicitar (pendiente sin envío) → solicitada (pendiente con envío) → concedida / denegada.
+assert.ok(html.includes('const subEstado = (r) => (r.k === "sol" && r.est === "pendiente" ? (r.env ? "solicitada" : "porsolicitar") : r.est);'), "Una solicitud pendiente es «por solicitar» o «solicitada» según tenga fecha de envío");
+assert.ok(html.includes("if (a.sent_on) x.enviada = a.sent_on;") && html.includes("sent_on: x.enviada || null") && html.includes('"conc", "enviada"]'), "La fecha de envío viaja con la solicitud, se escribe y no se pierde al editarla");
+assert.ok(html.includes('data-pa="env"') && html.includes("Marcar como solicitada") && html.includes("a === \"env\" ? await api.solicitada(r)"), "El panel del día permite marcar una solicitud como solicitada");
+assert.ok(bloque.includes('(i.r.env ? "Solicitada: " : "Por solicitar: ")') && bloque.includes("<h4>Por solicitar (") && bloque.includes("Solicitadas ("), "Chips y panel distinguen «por solicitar» y «solicitada»");
+
 console.log("Calendario semanal: comprobaciones estáticas correctas.");
