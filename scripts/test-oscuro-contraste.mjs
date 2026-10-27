@@ -68,7 +68,7 @@ for (const [modo, T] of [["claro", claro], ["oscuro", oscuro]]) {
   exige(modo, "--gam-dn sobre --panel", c("var(--gam-dn)"), panel, 4.5);
 
   // Etiqueta de estado de la lista: texto --fg sobre la mezcla del estado (14 %) con el panel, y punto de color (elemento gráfico, 3:1) sobre el panel.
-  for (const e of ["concedido", "solicitado", "caducado", "denegado", "cancelado"]) {
+  for (const e of ["concedido", "solicitado", "porsolicitar", "solicitada", "caducado", "denegado", "cancelado"]) {
     const s = c("var(--st-" + e + ")");
     exige(modo, "texto de la etiqueta de estado «" + e + "» (--fg sobre 14 % de --st)", c("var(--fg)"), mezcla(s, 0.14, panel), 4.5);
     exige(modo, "punto del estado «" + e + "» sobre --panel", s, panel, 3);

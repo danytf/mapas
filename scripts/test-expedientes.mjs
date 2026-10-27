@@ -64,6 +64,10 @@ eq(R.concEstado({ desde: "2026-10-01" }), "vigente", "sin fecha de fin sigue vig
 eq(R.estadoCalc({ historial: [{ desde: "2026-10-01", hasta: "2026-10-30", ong: "A" }], solicitudes: [{ desde: "2026-11-01", hasta: "2026-11-30", ong: "B" }] }), "concedido");
 eq(R.estadoCalc({ solicitudes: [{ desde: "2026-10-01", hasta: "2026-10-30", res: "retirada" }] }), "sin", "retirada no es denegada");
 eq(R.estadoCalc({ solicitudes: [{ desde: "2026-10-01", hasta: "2026-10-30", res: "denegada" }] }), "denegado");
+eq(R.estadoCalc({ solicitudes: [{ desde: "2099-10-01", hasta: "2099-10-30" }] }), "porsolicitar", "pendiente sin correo enviado: por solicitar");
+eq(R.estadoCalc({ solicitudes: [{ desde: "2099-10-01", hasta: "2099-10-30", enviada: "2026-10-20" }] }), "solicitada", "pendiente con correo enviado: solicitada");
+eq(R.estadoCalc({ solicitudes: [{ desde: "2099-10-01", hasta: "2099-10-30", enviada: "2026-10-20" }, { desde: "2099-11-01", hasta: "2099-11-30" }] }), "porsolicitar", "si alguna aún no se ha pedido, manda por solicitar");
+eq(R.sanitizeSharedPermitState({ estado: "solicitado" }).estado, "solicitada", "el valor antiguo «solicitado» pasa a solicitada");
 eq(R.estadoCalc({ solicitudes: [{ desde: "2026-10-01", hasta: "2026-10-30", res: "aprobada" }], historial: [{ desde: "2026-10-01", hasta: "2026-10-30", cancelada: true }] }), "cancelado");
 
 // Datos de partida de los escenarios (los puntos distinguen por id).
