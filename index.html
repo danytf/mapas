@@ -889,7 +889,8 @@
   dialog h2 { margin: 0; font-size: var(--fs-title); font-weight: 680; letter-spacing: -.015em; }
   dialog label { display: grid; gap: 4px; font-size: var(--fs-label); font-weight: 560; color: var(--muted); }
   dialog input, dialog select { font: inherit; font-weight: 400; height: 38px; padding: 0 12px; border: 1px solid var(--field-line); border-radius: var(--r-control); background: var(--panel); color: var(--fg); width: 100%; }
-  dialog input:focus, dialog select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); outline: 0; }
+  dialog textarea { font: inherit; font-weight: 400; padding: 8px 12px; min-height: 64px; border: 1px solid var(--field-line); border-radius: var(--r-control); background: var(--panel); color: var(--fg); width: 100%; resize: vertical; }
+  dialog input:focus, dialog select:focus, dialog textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); outline: 0; }
   dialog .msg { font-size: var(--fs-label); color: var(--warn); min-height: 16px; }
   .placing #map { cursor: crosshair; }
   .legend-box { background: var(--panel); color: var(--fg); border: 0; border-radius: var(--r-card); padding: 8px 12px; font-size: var(--fs-label); max-width: 240px; box-shadow: var(--shadow); }
