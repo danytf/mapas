@@ -715,7 +715,8 @@ const main = async () => {
     out.entrada = [document.getElementById('dlgCal').open, cb().querySelector('[data-modo=mes]').getAttribute('aria-pressed'), cb().querySelectorAll('.cal-ch').length > 0, cb().querySelectorAll('.cal-ch.p').length > 0];
     const celda = () => [...cb().querySelectorAll('.cal-m')].find(x => x.querySelector('.cal-ch.p'));
     const antes = await rel(); const pend0 = antes.permit_applications.filter(a => a.status === 'pending').length, apr0 = antes.permit_applications.filter(a => a.status === 'approved').length, den0 = antes.permit_applications.filter(a => a.status === 'denied').length, g0 = antes.permit_grants.length;
-    celda().click(); await w(500);
+    /* un día con alguna solicitud «por solicitar» (parte de las pendientes ya están solicitadas) */
+    out.conEnvio = false; for (const c of [...cb().querySelectorAll('.cal-m')].filter(x => x.querySelector('.cal-ch.p'))) { c.click(); await w(250); if (cb().querySelector('#calDia [data-pa=env]')) { out.conEnvio = true; break; } }
     const filas = () => [...cb().querySelectorAll('#calDia .cal-dia-f')].filter(f => f.querySelector('[data-pa=conceder],[data-pa=den-ok]'));
     out.pendientesDia = cb().querySelectorAll('#calDia [data-pa=conceder]').length;
     out.enfocado = document.activeElement === cb().querySelector('#calDiaT');
