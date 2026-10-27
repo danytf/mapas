@@ -197,6 +197,7 @@
   @supports (background: color-mix(in srgb, red 10%, white)) { .rs-st { background: color-mix(in srgb, var(--st) 14%, var(--panel)); border-color: color-mix(in srgb, var(--st) 40%, var(--panel)); } }
   .rs-st i { width: 8px; height: 8px; border-radius: 50%; flex: none; }
   .rs-w { color: var(--warn); font-weight: 640; }
+  .rs-w.late { color: var(--err); }
   .rs-ok { color: var(--ok); font-weight: 640; }
   .rs-f { color: var(--warn); font-weight: 500; }
   li.active strong { font-weight: 680; }
@@ -918,6 +919,7 @@
   .ce-sev.av { --sv: var(--st-solicitado); }
   .ce-sev.re { --sv: var(--st-caducado); } .ce-sev.re i { background: transparent; border: 2px solid var(--sv); }
   .ce-warn { display: block; color: var(--warn); font-weight: 600; }
+  .ce-warn.late { color: var(--err); }
   .ce-act { font: inherit; font-size: var(--fs-label); color: var(--fg); background: var(--panel); border: 1px solid var(--line-2); border-radius: var(--r-pill); height: 30px; padding: 0 12px; cursor: pointer; white-space: nowrap; }
   .ce-act:hover:not(:disabled) { border-color: var(--muted); }
   .ce-act:disabled { opacity: .5; cursor: default; }
@@ -2418,7 +2420,7 @@ const resumenDatos = (recs, segs, t, incs, jor) => {
   });
   /* Cola de trabajo del Resumen: las actuaciones de Mi jornada, en su mismo orden (no hay una segunda regla de qué requiere atención). */
   const DESTINO = { atrasada: ["seg", "vencido"], hoy: ["seg", "hoy"], inicio: ["sol", "pendiente"], estancada: ["sol", "estancada"], sinseg: ["sol", "sinseg"], terminaHoy: ["con", "vencen7"], vence: ["con", "vencen7"], bloqueante: ["inc", "todas"], aviso: ["inc", "todas"] };
-  const J = jor || jornada(recs, segs, t, incs), cola = J.map((f, i) => ({ c: f.c, score: J.length - i, sev: f.principal.id === "bloqueante" ? "bloqueante" : "aviso", titulo: f.principal.texto, detalle: f.segDue && f.seg.accion ? f.seg.accion : f.ong, vista: DESTINO[f.principal.id][0], est: DESTINO[f.principal.id][1] }));
+  const J = jor || jornada(recs, segs, t, incs), cola = J.map((f, i) => ({ c: f.c, score: J.length - i, banda: f.banda, sev: f.principal.id === "bloqueante" ? "bloqueante" : "aviso", titulo: f.principal.texto, detalle: f.segDue && f.seg.accion ? f.seg.accion : f.ong, vista: DESTINO[f.principal.id][0], est: DESTINO[f.principal.id][1] }));
   return { antiguedad, sinFechaSol, capacidadDias, vencimientos, porProvincia, porOng, porResponsable, calidad, resolucion, actividad, cola };
 };
 /* Estado de un expediente en un día concreto, solo con lo que consta en los registros (no se inventa el pasado).
@@ -3354,7 +3356,7 @@ function listItemFor(c) {
     '<span class="tag tt">' + esc(c.tipo + (c.sub ? " · " + c.sub : "")) + '</span><div class="rs">' +
     (permOf(c).valoracion ? '<span class="rs-w">' + stars(permOf(c).valoracion) + "</span>" : "") +
     (estadoOf(c) !== "sin" ? '<span class="rs-st" style="--st:' + estadoInfo(estadoOf(c))[2] + '"><i style="background:' + estadoInfo(estadoOf(c))[2] + '"></i>' + estadoInfo(estadoOf(c))[1] + (permOf(c).fecha && estadoOf(c) !== "concedido" && estadoOf(c) !== "caducado" ? " · " + esc(fmtD(permOf(c).fecha)) : "") + "</span>" : "") +
-    (seguimientoDue(c) ? '<span class="rs-w">Seguimiento ' + (seguimientoDue(c) === today() ? "hoy" : "atrasado " + esc(fmtD(seguimientoDue(c)))) + "</span>" : "") +
+    (seguimientoDue(c) ? '<span class="rs-w' + (seguimientoDue(c) === today() ? "" : " late") + '">Seguimiento ' + (seguimientoDue(c) === today() ? "hoy" : "atrasado " + esc(fmtD(seguimientoDue(c)))) + "</span>" : "") +
     (DUPS.has(c.name) && !hasPersonalRef(reviewed, c) ? '<span class="rs-f">Posible duplicado</span>' : "") +
     (estadoOf(c) === "solicitado" && solTxt(c) ? '<span class="rs-t">Pedido: ' + esc(solTxt(c)) + "</span>" : "") +
     (vigente(c) ? '<span class="rs-ok">Vigente hasta ' + fmtD(vigente(c).hasta) + (vigente(c).ong ? " · " + esc(vigente(c).ong) : "") + (safeCount(vigente(c).captadores) ? " · " + safeCount(vigente(c).captadores) + " capt." : "") + "</span>" : (futura(c) ? '<span class="rs-ok">Concedido del ' + esc(fmtD(futura(c).desde)) + " al " + esc(fmtD(futura(c).hasta)) + (futura(c).ong ? " · " + esc(futura(c).ong) : "") + (safeCount(futura(c).captadores) ? " · " + safeCount(futura(c).captadores) + " capt." : "") + "</span>" : "")) +
@@ -5071,7 +5073,7 @@ const csvCell = (value) => {
     return fila(r, 0, estancada ? "urg" : "", td("Punto", celdaPunto(r)) + td("ONG", esc(ongDe(r))) + td("Periodo solicitado", esc(periodo(r))) + td("Captadores", r.n || "—", "n") +
       td("Solicitada", r.fecha ? esc(fmtD(r.fecha)) + (r.est === "pendiente" && edad >= 0 ? '<span class="ce-sub">hace ' + esc(plural(edad, "día", "días")) + "</span>" : "") : "No consta") +
       td("Estado", badge(r.est) + (estancada ? '<span class="ce-warn">Estancada</span>' : "")) +
-      td("Seguimiento", r.seg ? esc(fmtD(r.seg)) + (r.seg < t ? '<span class="ce-warn">Atrasado</span>' : "") : (r.est === "pendiente" ? "Sin seguimiento" : "")) + td("Acciones", botones(r, 2), "ce-acts"));
+      td("Seguimiento", r.seg ? esc(fmtD(r.seg)) + (r.seg < t ? '<span class="ce-warn late">Atrasado</span>' : "") : (r.est === "pendiente" ? "Sin seguimiento" : "")) + td("Acciones", botones(r, 2), "ce-acts"));
   };
   const detalleCon = (r, t) => {
     if (r.est === "vigente") return !r.hasta ? "Sin fecha de fin" : r.hasta === t ? "Termina hoy" : "Termina en " + plural(daysBetween(t, r.hasta), "día", "días");
@@ -5084,7 +5086,7 @@ const csvCell = (value) => {
   const filaSeg = (s, t) => {
     const dias = daysBetween(s.fecha, t), origen = s.con ? "Concesión" : s.i >= 0 && !s.punto ? "Solicitud pendiente" : "Seguimiento del punto", k = clave(s);
     return fila(s, 0, dias > 0 ? "urg" : "", td("", '<label class="ce-chkl"><input type="checkbox" data-chk="' + esc(k) + '" aria-label="Seleccionar el seguimiento de ' + esc(s.c.name) + '"' + (multi.has(k) ? " checked" : "") + (ocupado ? " disabled" : "") + "></label>", "ce-chk") + td("Punto", celdaPunto(s)) + td("ONG", esc(ongDe(s))) +
-      td("Fecha", esc(fmtD(s.fecha)) + (dias > 0 ? '<span class="ce-warn">Atrasado ' + esc(plural(dias, "día", "días")) + "</span>" : dias === 0 ? '<span class="ce-sub">Hoy</span>' : "")) + td("Acción prevista", s.accion ? esc(s.accion) : "—") +
+      td("Fecha", esc(fmtD(s.fecha)) + (dias > 0 ? '<span class="ce-warn late">Atrasado ' + esc(plural(dias, "día", "días")) + "</span>" : dias === 0 ? '<span class="ce-sub">Hoy</span>' : "")) + td("Acción prevista", s.accion ? esc(s.accion) : "—") +
       td("Responsable", s.resp ? esc(nombreResp(s.resp)) : "Sin responsable") + td("Origen", esc(origen)) + td("Acciones", botones(s, 2), "ce-acts"));
   };
   const filaInc = (x) => fila(x.r, 0, x.sev === "bloqueante" ? "urg" : "", td("Punto", celdaPunto(x.r)) + td("Gravedad", sevBadge(x.sev)) + td("Qué revisar", esc(x.tipo)) + td("ONG", esc(ongDe(x.r))) + td("Expediente", esc(x.r.k === "sol" ? "Solicitud" : "Concesión") + " · " + esc(periodo(x.r))));
@@ -5172,7 +5174,7 @@ const csvCell = (value) => {
       tile("con", "vigente", ind.vigentes.length, "Concesiones vigentes", "hl", plural(ind.capacidadHoy, "captador autorizado hoy", "captadores autorizados hoy")) + tile("con", "vencen", venc, "Vencen en 30 días", "al", ind.vencen7.length + " en los próximos 7") +
       tile("seg", "vencido", ind.segVencidos.length, "Seguimientos atrasados", "al", plural(ind.segHoy.length, "para hoy", "para hoy")) + tile("inc", "todas", rd.calidad.bloqueante + rd.calidad.aviso, "Avisos de datos", rd.calidad.bloqueante ? "al" : "", (rd.calidad.bloqueante ? plural(rd.calidad.bloqueante, "bloqueante", "bloqueantes") : "ninguno bloqueante") + (rd.calidad.recomendacion ? " · " + plural(rd.calidad.recomendacion, "recomendación", "recomendaciones") : "")) + "</div>";
     /* Cola de trabajo */
-    const cola = rd.cola.slice(0, 8), colaH = cola.length ? '<ol class="ce-cola">' + cola.map((x) => '<li><button type="button" class="ce-item" data-abre="' + esc(x.c.id) + "|" + x.vista + "|" + x.est + '"><span class="ce-sev ' + SEVCLASE[x.sev] + '"><i aria-hidden="true"></i><span class="adm-sr">' + esc(SEV[x.sev]) + '</span></span><strong>' + esc(x.c.name) + "</strong><span>" + esc(x.titulo) + (x.detalle ? " · " + esc(x.detalle) : "") + "</span></button></li>").join("") + "</ol>" + (rd.cola.length > cola.length ? '<p class="ce-def">Y ' + (rd.cola.length - cola.length) + " más; usa las bandejas para verlas todas.</p>" : "")
+    const cola = rd.cola.slice(0, 8), colaH = cola.length ? '<ol class="ce-cola">' + cola.map((x) => '<li><button type="button" class="ce-item" data-abre="' + esc(x.c.id) + "|" + x.vista + "|" + x.est + '"><span class="ce-sev ' + (JBANDAS.find((b) => b[0] === x.banda) || [0, 0, SEVCLASE[x.sev], SEV[x.sev]])[2] + '"><i aria-hidden="true"></i><span class="adm-sr">' + esc((JBANDAS.find((b) => b[0] === x.banda) || [0, 0, 0, SEV[x.sev]])[3]) + '</span></span><strong>' + esc(x.c.name) + "</strong><span>" + esc(x.titulo) + (x.detalle ? " · " + esc(x.detalle) : "") + "</span></button></li>").join("") + "</ol>" + (rd.cola.length > cola.length ? '<p class="ce-def">Y ' + (rd.cola.length - cola.length) + " más; usa las bandejas para verlas todas.</p>" : "")
       : '<p class="ce-vacio">No hay nada urgente: ningún seguimiento atrasado, solicitud estancada o concesión a punto de terminar.</p>';
     /* Capacidad frente a demanda */
     const leyenda = '<div class="ce-ley"><span><i class="aut"></i>Autorizados (concesiones)</span><span><i class="dem"></i>Por aprobar (solicitudes pendientes)</span></div>';
