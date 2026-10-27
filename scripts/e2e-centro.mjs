@@ -332,6 +332,14 @@ const main = async () => {
     const dCon = cb().querySelector('[data-nuevo=con]').dataset.nuevoDia; cb().querySelector('[data-nuevo=con][data-nuevo-dia="' + dCon + '"]').click(); await w(1200);
     out.con = [b2().querySelector('#cfT')?.textContent, b2().querySelector('#cfDesde')?.value === dCon, b2().querySelector('#cfHasta')?.value === dCon, ong ? b2().querySelector('#cfOng')?.value === ong.value : null];
     b2().querySelector('#cfCancelar')?.click(); await w(200);
+    /* vista mensual: pinchar un día (desde hoy) crea la solicitud de ese día; uno pasado sigue llevando a su semana */
+    cb().querySelector('[data-modo=mes]').click(); await w(400);
+    const fut = [...cb().querySelectorAll('.cal-m')].find(x => x.dataset.dia >= t);
+    fut.click(); await w(1000);
+    out.mes = [document.getElementById('dlgCal').open, document.getElementById('dlgCentro').classList.contains('solo-form'), b2().querySelector('#cfDesde')?.value === fut.dataset.dia, b2().querySelector('#cfHasta')?.value === fut.dataset.dia, b2().querySelector('#cfT')?.textContent];
+    b2().querySelector('#cfCancelar')?.click(); await w(300);
+    const pas = [...cb().querySelectorAll('.cal-m')].find(x => x.dataset.dia < t); /* se busca después: el Calendario se repinta al cerrar el formulario */
+    out.mesPasado = null; if (pas) { pas.click(); await w(400); out.mesPasado = [document.getElementById('dlgCentro').open, cb().querySelector('[data-modo=dias]').getAttribute('aria-pressed')]; }
     return out;`);
   /* En lunes (primer dia de la semana mostrada) no hay ningun dia pasado y las 7 casillas ofrecen solicitud: conSol puede ser 7. Lo que no puede ocurrir es ofrecerla en un dia pasado (solPasado). */
   ok(r3g.dias === 7 && r3g.conCon === 7 && r3g.conSol >= 1 && r3g.conSol <= 7 && !r3g.solPasado, "cada día del Calendario ofrece «+ Concesión»; «+ Solicitud» solo desde hoy [" + r3g.conSol + "/" + r3g.conCon + "]");
@@ -340,6 +348,8 @@ const main = async () => {
   eq(r3g.encima, [true, true, "Nueva solicitud", true], "el formulario se abre encima del Calendario (que sigue abierto), solo con el formulario y con su título");
   eq(r3g.guardada, [r3g.dia, r3g.dia, "pending"], "la solicitud creada desde el día se guarda con esa fecha [" + r3g.aviso + "]");
   eq(r3g.volver, [true, true, true, "Centro de permisos", true, true], "al guardar se vuelve al Calendario: el Centro se cierra, queda el aviso de lo guardado y la solicitud nueva sale en la semana [" + r3g.aviso + "]");
+  eq(r3g.mes, [true, true, true, true, "Nueva solicitud"], "en la vista mensual, pinchar un día desde hoy abre la nueva solicitud con ese día");
+  if (r3g.mesPasado) eq(r3g.mesPasado, [false, "true"], "…y un día pasado sigue llevando a su semana en «Por día»");
   eq(r3g.con.slice(0, 3), ["Nueva concesión", true, true], "«+ Concesión» abre el formulario con la fecha del día"); ok(r3g.con[3] !== false, "…y con la ONG que se estaba filtrando en el Calendario");
 
   /* ===== 3h. Menú con secciones desplegables ===== */
@@ -406,7 +416,7 @@ const main = async () => {
     /* Calendario: captadores autorizados hoy */
     document.getElementById('menuBtn').click(); document.getElementById('calBtn').click(); await w(800); const cb = () => document.getElementById('calBody');
     const selP = cb().querySelector('#calProv'); out.calProvDefecto = selP.selectedOptions[0].textContent; const provs = [...selP.options].map(o => [o.value, o.textContent]);
-    const leeCal = async (valor) => { selP.value = valor; selP.dispatchEvent(new Event('change', { bubbles: true })); await w(400); cb().querySelector('[data-modo=mes]').click(); await w(400); cb().querySelector('.cal-m.hoy').click(); await w(400); const tt = cb().querySelector('.cal-day.today .cal-tot')?.innerText || ''; return +((tt.match(/(\\d+)\\s*autorizad/) || [])[1] || 0); };
+    const leeCal = async (valor) => { selP.value = valor; selP.dispatchEvent(new Event('change', { bubbles: true })); await w(400); cb().querySelector('[data-modo=mes]').click(); await w(400); cb().querySelector('[data-modo=dias]').click(); await w(400); const tt = cb().querySelector('.cal-day.today .cal-tot')?.innerText || ''; return +((tt.match(/(\\d+)\\s*autorizad/) || [])[1] || 0); };
     out.calPorProv = {}; for (const [v, n] of provs) if (v) out.calPorProv[v] = [n, await leeCal(v)];
     await leeCal('');
     const tot = cb().querySelector('.cal-day.today .cal-tot')?.innerText || ''; out.calendario = { texto: tot.replace(/\\n/g, ' '), autorizados: +((tot.match(/(\\d+)\\s*autorizad/) || [])[1] || 0) };
@@ -652,7 +662,7 @@ const main = async () => {
     document.getElementById('menuBtn').click(); document.getElementById('calBtn').click(); await w(800);
     const cb = () => document.getElementById('calBody'); cb().querySelector('[data-modo=mes]').click(); await w(500);
     out.mes = [cb().querySelector('#calRange').textContent, cb().querySelectorAll('.cal-m').length]; const hoy = cb().querySelector('.cal-m.hoy'); out.aut = hoy.querySelector('.m .a')?.parentElement.textContent.trim() || '0';
-    hoy.click(); await w(400); out.semana = cb().querySelector('.cal-day.today .cal-tot')?.innerText.replace(/\\n/g,' ') || ''; cb().querySelector('[data-centro="seg:todas"]').click(); await w(800);
+    cb().querySelector('[data-modo=dias]').click(); await w(400); out.semana = cb().querySelector('.cal-day.today .cal-tot')?.innerText.replace(/\\n/g,' ') || ''; cb().querySelector('[data-centro="seg:todas"]').click(); await w(800);
     out.desdeCalendario = [document.getElementById('dlgCentro').open, b().dataset.vista];
     document.getElementById('ceClose').click(); await w(200); document.getElementById('menuBtn').click(); document.getElementById('panelBtn').click(); await w(500);
     document.querySelector('#pnBody [data-ind=pendientes]').click(); await w(300); document.getElementById('pnCentro').click(); await w(800); out.desdePanel = [document.getElementById('dlgCentro').open, b().dataset.vista, document.getElementById('ceEst').selectedOptions[0].value];

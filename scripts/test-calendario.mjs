@@ -84,7 +84,7 @@ for (const m of raiz[2].matchAll(/(--[\w-]+):/g)) {
 }
 
 // «+ Solicitud» y «+ Concesión» de un día: el formulario se abre encima del Calendario, que no se cierra, y al terminar se vuelve a la semana.
-assert.ok(/if \(nv\) \{ document\.dispatchEvent\(new CustomEvent\("centro:abrir", \{ detail: \{[^}]*enCalendario: true \} \}\)\); return; \}/.test(bloque), "«+ Solicitud» abre el formulario sin cerrar el Calendario");
+assert.ok(bloque.includes("if (nv) { nuevaDesde(nv.dataset.nuevo, nv.dataset.nuevoDia); return; }") && /const nuevaDesde = \(tipo, dia\) => document\.dispatchEvent\(new CustomEvent\("centro:abrir", \{ detail: \{[^}]*enCalendario: true \} \}\)\);/.test(bloque), "«+ Solicitud» abre el formulario sin cerrar el Calendario");
 assert.ok(bloque.includes('document.addEventListener("calendario:refresca"') && bloque.includes('id="calAviso"'), "El Calendario se repinta y avisa de lo guardado al volver del formulario");
 assert.ok(html.includes("const cierraSoloForm = (texto) =>") && html.includes("cierraSoloForm(res.texto)") && html.includes('if (e.target.closest("#cfCancelar")) { form = null; dibujaForm(); cierraSoloForm(); return; }'), "Guardar y cancelar cierran el formulario y devuelven al Calendario");
 assert.ok(html.includes("#dlgCentro.solo-form #ceBody .ce-nav"), "En ese modo el Centro enseña solo el formulario");
@@ -92,4 +92,7 @@ assert.ok(html.includes("#dlgCentro.solo-form #ceBody .ce-nav"), "En ese modo el
 // «+ Nueva solicitud» fija en la barra: disponible en las tres vistas (por día, mes y por ONG), no solo en los días de «Por día».
 assert.ok(/<button type="button" class="primary cal-nueva" data-nuevo="sol" data-nuevo-dia="' \+ today\(\) \+ '">\+ Nueva solicitud<\/button>/.test(bloque), "Falta el botón fijo «Nueva solicitud» en la barra del Calendario");
 
+// Vista mensual: pinchar un día (desde hoy) crea la solicitud de ese día; un día pasado sigue llevando a su semana.
+assert.ok(bloque.includes('if (dd && modo === "mes" && dd.dataset.dia >= today()) { nuevaDesde("sol", dd.dataset.dia); return; }'), "En el mes, pinchar un día desde hoy crea la solicitud de ese día");
+assert.ok(bloque.includes("const nuevaDesde = (tipo, dia) =>"), "Un solo punto de entrada para abrir el formulario desde el Calendario");
 console.log("Calendario semanal: comprobaciones estáticas correctas.");
