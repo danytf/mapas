@@ -35,7 +35,7 @@ assert.ok(bloque.includes("calendarioSemana(") && bloque.includes("expedientesDe
 // Concesiones, solicitudes y seguimientos no se mezclan en un único total.
 assert.ok(bloque.includes("captadores autorizados") && bloque.includes("captadores por aprobar") && bloque.includes("seguimiento"), "El resumen distingue autorizados, por aprobar y seguimientos");
 assert.ok(bloque.includes("ver = { autorizada: true, pendiente: true, seguimiento: true, historico: false }"), "El histórico (denegadas, retiradas, canceladas) va oculto por defecto");
-assert.ok(bloque.includes('data-modo="ong"') && bloque.includes("tablaOng"), "Hay vista por ONG");
+assert.ok(!bloque.includes('data-modo="ong"') && !bloque.includes("tablaOng") && !html.includes("cal-ongt") && bloque.includes('id="calOng"'), "No hay vista «Por ONG»: el filtro de ONG la sustituye");
 assert.ok(bloque.includes("Semana pasada:") && bloque.includes("no registrado"), "La semana pasada avisa de lo que no se puede reconstruir");
 
 // Movimiento: solo con preferencia de movimiento normal.
