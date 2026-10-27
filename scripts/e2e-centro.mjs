@@ -334,10 +334,11 @@ const main = async () => {
     b2().querySelector('#cfCancelar')?.click(); await w(200);
     /* vista mensual: pinchar un día (desde hoy) crea la solicitud de ese día; uno pasado sigue llevando a su semana */
     cb().querySelector('[data-modo=mes]').click(); await w(400);
-    const fut = [...cb().querySelectorAll('.cal-m')].find(x => x.dataset.dia >= t), pas = [...cb().querySelectorAll('.cal-m')].find(x => x.dataset.dia < t);
+    const fut = [...cb().querySelectorAll('.cal-m')].find(x => x.dataset.dia >= t);
     fut.click(); await w(1000);
     out.mes = [document.getElementById('dlgCal').open, document.getElementById('dlgCentro').classList.contains('solo-form'), b2().querySelector('#cfDesde')?.value === fut.dataset.dia, b2().querySelector('#cfHasta')?.value === fut.dataset.dia, b2().querySelector('#cfT')?.textContent];
     b2().querySelector('#cfCancelar')?.click(); await w(300);
+    const pas = [...cb().querySelectorAll('.cal-m')].find(x => x.dataset.dia < t); /* se busca después: el Calendario se repinta al cerrar el formulario */
     out.mesPasado = null; if (pas) { pas.click(); await w(400); out.mesPasado = [document.getElementById('dlgCentro').open, cb().querySelector('[data-modo=dias]').getAttribute('aria-pressed')]; }
     return out;`);
   /* En lunes (primer dia de la semana mostrada) no hay ningun dia pasado y las 7 casillas ofrecen solicitud: conSol puede ser 7. Lo que no puede ocurrir es ofrecerla en un dia pasado (solPasado). */
