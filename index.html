@@ -674,6 +674,7 @@
     body.imprime-cal #dlgCal { --ong-bg-l: 91%; --ong-fg-l: 22%; } /* en las tarjetas NO: break-inside en cientos de tarjetas cuelga a Chrome al paginar */
   }
   .cal-new { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 12px 8px; }
+  .cal-nueva { height: 36px; padding: 0 16px; margin-left: auto; }
   .cal-new button { height: 28px; padding: 0 10px; font-size: var(--fs-label); border-radius: var(--r-pill); }
   .cal-modo { display: inline-flex; gap: 6px; margin-left: auto; }
   .cal-modo button { height: 32px; padding: 0 13px; font-size: var(--fs-label); border-radius: var(--r-pill); }
@@ -1207,7 +1208,7 @@
     #ficha details.fi-loc > summary { min-height: 44px; }
     .lg-h button { min-height: 44px; }
     dialog input, dialog select, dialog button { min-height: 44px; }
-    .cal-nav button, .cal-chip, .cal-links button, .cal-new button { min-height: 44px; }
+    .cal-nav button, .cal-chip, .cal-links button, .cal-new button, .cal-nueva { min-height: 44px; }
     .cal-m { min-height: 56px; padding: 4px 4px; }
     .cal-m .m, .cal-m .sg { font-size: var(--fs-label); }
     .cal-nav button { min-width: 44px; }
@@ -4875,7 +4876,8 @@ const csvCell = (value) => {
       '<label class="cal-f">ONG<select id="calOng"></select></label>' +
       '<div class="cal-nav"><button type="button" data-w="-1" aria-label="Semana anterior">&#8249;</button><span class="cal-range" id="calRange" role="status"></span>' +
       '<button type="button" data-w="1" aria-label="Semana siguiente">&#8250;</button><button type="button" data-w="0">Hoy</button>' +
-      '<label class="cal-f"><span class="adm-sr">Ir a la semana de esta fecha</span><input type="date" id="calDate"></label></div></div>' +
+      '<label class="cal-f"><span class="adm-sr">Ir a la semana de esta fecha</span><input type="date" id="calDate"></label></div>' +
+      '<button type="button" class="primary cal-nueva" data-nuevo="sol" data-nuevo-dia="' + today() + '">+ Nueva solicitud</button></div>' +
       '<div class="cal-sum" id="calSum"></div>' +
       '<div class="cal-filters" role="group" aria-label="Qué se muestra">' +
       '<button type="button" class="cal-chip s-concedido" data-ver="autorizada" aria-pressed="' + ver.autorizada + '"><i></i>Concesiones</button>' +
