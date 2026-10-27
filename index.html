@@ -683,6 +683,8 @@
   .cal-mesw { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; align-items: start; }
   .cal-mesw.con-dia { grid-template-columns: minmax(0, 1fr) 360px; }
   .cal-m { min-height: 104px; }
+  .cal-m.ini { border-color: var(--accent); border-style: dashed; }
+  .cal-rango { margin: 0 0 8px; padding: 8px 10px; background: var(--accent-soft); border-radius: var(--r-control); color: var(--fg); }
   .cal-m.sel { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
   .cal-ch { display: flex; align-items: center; gap: 5px; min-width: 0; padding: 1px 6px; font-size: var(--fs-label); border: 1px solid var(--line-2); border-radius: var(--r-xs); background: var(--bg); }
   .cal-ch.p { border-style: dashed; }
@@ -1113,6 +1115,9 @@
   .ce-form[hidden] { display: none; }
   .ce-form h3 { margin: 0; font-size: var(--fs-body); font-weight: 650; }
   .cf-row { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: end; }
+  .cf-per { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 8px 0 0; }
+  .cf-ayuda { font-size: var(--fs-label); color: var(--muted); }
+  .cf-extra { margin-top: 8px; }
   .cf-f { display: grid; gap: 4px; font-size: var(--fs-label); font-weight: 560; color: var(--muted); }
   .cf-f input, .cf-f select, .cf-f textarea { min-width: 150px; }
   .cf-pt { margin: 0; font-size: var(--fs-label); color: var(--muted); }
@@ -4741,7 +4746,7 @@ const csvCell = (value) => {
   const mesDe = (d) => MES[+d.slice(5, 7) - 1];
   const hue = (s) => { let h = 7; for (const ch of s) h = (h * 31 + ch.codePointAt(0)) % 360; return h >= 70 && h <= 170 ? h + 120 : h; }; /* sin verdes: es el tono de «Concesión» */
   const plural = (n, uno, varios) => n + " " + (n === 1 ? uno : varios);
-  let wk = mondayOf(today()), prov = null, ong = "", modo = "mes", diaSel = "", denegando = -1, ocupadoCal = false, panelPend = []; /* vista por defecto: el mes; día abierto en el panel; solicitud que se está denegando; guardando; solicitudes del panel; prov: null hasta la primera apertura; "" = todas las provincias */
+  let wk = mondayOf(today()), prov = null, ong = "", modo = "mes", diaSel = "", rangoIni = "", denegando = -1, ocupadoCal = false, panelPend = []; /* vista por defecto: el mes; día abierto en el panel; solicitud que se está denegando; guardando; solicitudes del panel; prov: null hasta la primera apertura; "" = todas las provincias */
   const ver = { autorizada: true, pendiente: true, seguimiento: true, historico: false }; /* qué se muestra; el histórico va apagado */
 
   const provOpts = () => {
@@ -4858,8 +4863,8 @@ const csvCell = (value) => {
         ? '<div class="cal-dia-den"><label class="cal-f">Motivo (opcional)<input id="calMotivo" type="text" maxlength="300" autocomplete="off"></label><div class="ce-btns"><button type="button" class="ce-act riesgo" data-pa="den-ok" data-i="' + i + '"' + dis + '>Confirmar la denegación</button><button type="button" class="ce-act" data-pa="no" data-i="' + i + '"' + dis + ">No, volver</button></div></div>"
         : '<div class="ce-btns"><button type="button" class="ce-act ok" data-pa="conceder" data-i="' + i + '" aria-label="Conceder la solicitud de ' + esc(r.c.name) + '"' + dis + '>Conceder</button><button type="button" class="ce-act" data-pa="den" data-i="' + i + '" aria-label="Denegar la solicitud de ' + esc(r.c.name) + '"' + dis + ">Denegar</button></div>") + "</li>";
     box.hidden = false;
-    box.innerHTML = '<div class="cal-dia-h"><h3 id="calDiaT" tabindex="-1">' + esc(DIAS[daysBetween(mondayOf(d.d), d.d)] + " " + (+d.d.slice(8)) + " de " + MESES[+d.d.slice(5, 7) - 1]) + '</h3><button type="button" class="ce-x" data-dia-cierra="1" aria-label="Cerrar el día">&times;</button></div>' +
-      (d.d >= t ? '<p class="cal-new" role="group" aria-label="Crear el ' + esc(fmtD(d.d)) + '"><button type="button" class="primary" data-nuevo="sol" data-nuevo-dia="' + d.d + '">+ Nueva solicitud</button><button type="button" data-nuevo="con" data-nuevo-dia="' + d.d + '">+ Concesión</button></p>' : '<p class="cal-note">Día pasado: no se crean solicitudes nuevas.</p>') +
+    box.innerHTML = (rangoIni ? '<p class="cal-note cal-rango" role="status">Elige en el mes el último día del periodo (empieza el ' + esc(fmtD(rangoIni)) + '). <button type="button" class="ce-link" data-rango-no="1">Cancelar</button></p>' : "") + '<div class="cal-dia-h"><h3 id="calDiaT" tabindex="-1">' + esc(DIAS[daysBetween(mondayOf(d.d), d.d)] + " " + (+d.d.slice(8)) + " de " + MESES[+d.d.slice(5, 7) - 1]) + '</h3><button type="button" class="ce-x" data-dia-cierra="1" aria-label="Cerrar el día">&times;</button></div>' +
+      (d.d >= t ? '<p class="cal-new" role="group" aria-label="Crear el ' + esc(fmtD(d.d)) + '"><button type="button" class="primary" data-nuevo="sol" data-nuevo-dia="' + d.d + '">+ Nueva solicitud</button><button type="button" data-rango-fin="1" title="Pide un periodo: elige después el último día en el mes">Hasta otro día…</button><button type="button" data-nuevo="con" data-nuevo-dia="' + d.d + '">+ Concesión</button></p>' : '<p class="cal-note">Día pasado: no se crean solicitudes nuevas.</p>') +
       (pend.length || otras ? "<section>" + (pend.length ? "<h4>Por aprobar (" + pend.length + ")</h4>" : "") + (pend.length ? '<ul class="cal-dia-l">' + pend.map(fila).join("") + "</ul>" : "") + (otras ? '<p class="cal-note">' + esc(plural(otras, "solicitud más se reconstruye", "solicitudes más se reconstruyen") + " con sus fechas pasadas: se ven en el Centro de permisos.") + "</p>" : "") + "</section>" : "") +
       (cons.length ? "<section><h4>Concesiones (" + cons.length + ")</h4>" + '<ul class="cal-dia-l">' + cons.map((i) => '<li class="cal-dia-f"><div><strong>' + esc(i.r.c.name) + "</strong><span>" + esc(townOf(i.r.c) + " · " + ongDe(i.r) + " · " + periodoDe(i.r) + (i.r.n ? " · " + plural(i.r.n, "captador", "captadores") : "") + " · " + EST[i.e][0]) + "</span></div></li>").join("") + "</ul></section>" : "") +
       (d.seg.length ? "<section><h4>Seguimientos (" + d.seg.length + ")</h4>" + '<ul class="cal-dia-l">' + d.seg.map((s) => '<li class="cal-dia-f"><div><strong>' + esc(s.c.name) + "</strong><span>" + esc((s.accion || "Seguimiento") + (d.d < t ? " · atrasado" : "")) + "</span></div></li>").join("") + '</ul><p class="cal-note">Se gestionan en el Centro de permisos.</p></section>' : "") +
@@ -4880,13 +4885,13 @@ const csvCell = (value) => {
       '<div class="t"><b>' + nSeg + "</b><span>" + (nSeg === 1 ? "seguimiento" : "seguimientos") + " en el mes" + (nAtr ? " · " + nAtr + " atrasado" + (nAtr === 1 ? "" : "s") : "") + "</span></div>";
     const nota = body.querySelector("#calPast"); nota.hidden = true;
     const ini = ref + "-01" >= t.slice(0, 7) + "-01" ? "" : "Mes pasado: las concesiones se muestran con sus fechas y las solicitudes solo cuando constan sus fechas de alta y de decisión."; if (ini) { nota.hidden = false; nota.textContent = ini; }
-    body.querySelector("#calGrid").innerHTML = '<div class="cal-mesw' + (diaSel ? " con-dia" : "") + '"><div class="cal-mesg"><div class="cal-mleg"><span><i class="a"></i>Concesión</span><span><i class="p"></i>Por aprobar</span><span>Pulsa un día para ver y crear solicitudes</span></div>' +
+    body.querySelector("#calGrid").innerHTML = '<div class="cal-mesw' + (diaSel ? " con-dia" : "") + '"><div class="cal-mesg"><div class="cal-mleg"><span><i class="a"></i>Concesión</span><span><i class="p"></i>Por aprobar</span><span>Pulsa un día para ver y crear solicitudes; para un periodo, «Hasta otro día…» o Mayús + otro día</span></div>' +
       '<div class="cal-mes" role="group" aria-label="Calendario de ' + esc(MESES[m - 1] + " " + y) + '">' + DIAS.map((n) => '<span class="cal-mh">' + n.slice(0, 3) + "</span>").join("") +
       semanas.map((sem) => sem.map((x, k) => {
         const fuera = x.d < primero || x.d > ultimo, lbl = DIAS[k] + " " + (+x.d.slice(8)) + " de " + MESES[+x.d.slice(5, 7) - 1] + ": " + plural(x.aut, "captador autorizado", "captadores autorizados") + ", " + x.pen + " por aprobar, " + plural(x.seg.length, "seguimiento", "seguimientos") + (x.d >= t ? ". Pulsa para crear una solicitud este día" : "");
         const chips = x.items.filter((i) => visible(i.e) && (i.e === "pendiente" || i.e === "autorizada")).sort((p, q) => (p.e === "pendiente" ? 0 : 1) - (q.e === "pendiente" ? 0 : 1));
         const chipH = (i) => '<span class="cal-ch ' + (i.e === "pendiente" ? "p" : "a") + '"><i></i><span class="adm-sr">' + (i.e === "pendiente" ? "Por aprobar: " : "Concesión: ") + "</span><span class=\"t\">" + esc(ongDe(i.r) + " · " + i.r.c.name) + "</span></span>";
-        return '<button type="button" class="cal-m' + (x.d === t ? " hoy" : "") + (fuera ? " fuera" : "") + (k >= 5 ? " we" : "") + (x.d === diaSel ? " sel" : "") + '" data-dia="' + x.d + '" aria-pressed="' + (x.d === diaSel) + '" aria-label="' + esc(lbl + ". Pulsa para ver el día") + '"' + (x.d === t ? ' aria-current="date"' : "") + '><span class="d">' + (+x.d.slice(8)) + "</span>" +
+        return '<button type="button" class="cal-m' + (x.d === t ? " hoy" : "") + (fuera ? " fuera" : "") + (k >= 5 ? " we" : "") + (x.d === diaSel ? " sel" : "") + (x.d === rangoIni ? " ini" : "") + '" data-dia="' + x.d + '" aria-pressed="' + (x.d === diaSel) + '" aria-label="' + esc(lbl + ". Pulsa para ver el día") + '"' + (x.d === t ? ' aria-current="date"' : "") + '><span class="d">' + (+x.d.slice(8)) + "</span>" +
           chips.slice(0, 2).map(chipH).join("") + (chips.length > 2 ? '<span class="cal-mas">+' + (chips.length - 2) + '<span class="mas-t"> más</span></span>' : "") +
           (x.seg.length && x.d < t ? '<span class="sg late">' + x.seg.length + " atr.</span>" : "") + "</button>";
       }).join("")).join("") + '</div></div><aside id="calDia" class="cal-dia" aria-label="Detalle del día"' + (diaSel ? "" : " hidden") + "></aside></div>";
@@ -4965,19 +4970,25 @@ const csvCell = (value) => {
     const av = body.querySelector("#calAviso"); if (av) { av.textContent = res.texto; av.hidden = false; av.focus(); }
   };
   /* Formulario nuevo con el día puesto, encima del Calendario (que no se cierra). */
-  const nuevaDesde = (tipo, dia) => document.dispatchEvent(new CustomEvent("centro:abrir", { detail: { vista: tipo === "sol" ? "sol" : "con", est: "todas", prov, ong, nuevo: tipo, desde: dia, enCalendario: true } }));
+  const nuevaDesde = (tipo, dia, hasta) => document.dispatchEvent(new CustomEvent("centro:abrir", { detail: { vista: tipo === "sol" ? "sol" : "con", est: "todas", prov, ong, nuevo: tipo, desde: dia, hasta: hasta || dia, enCalendario: true } }));
   body.addEventListener("click", (e) => {
     body.querySelectorAll("details.cal-menu[open], details.cal-mostrar[open]").forEach((dt) => { if (!dt.contains(e.target)) dt.open = false; }); /* los desplegables se cierran al pulsar fuera */
     if (e.target.closest("#calPdf")) { body.querySelector("details.cal-menu").open = false; exportaPdf(); return; }
     const cc = e.target.closest("[data-centro]");
     if (cc) { const [vista, est] = cc.dataset.centro.split(":"); dlg.close(); document.dispatchEvent(new CustomEvent("centro:abrir", { detail: { vista, est, prov, ong } })); return; }
+    if (e.target.closest("[data-rango-fin]")) { rangoIni = diaSel; draw(); body.querySelector("#calDiaT")?.focus({ preventScroll: true }); return; }
+    if (e.target.closest("[data-rango-no]")) { rangoIni = ""; draw(); body.querySelector("#calDiaT")?.focus({ preventScroll: true }); return; }
     const pa = e.target.closest("[data-pa]");
     if (pa) { panelAccion(pa.dataset.pa, +pa.dataset.i); return; }
     if (e.target.closest("[data-dia-cierra]")) { const d0 = diaSel; diaSel = ""; denegando = -1; draw(); body.querySelector('[data-dia="' + d0 + '"]')?.focus(); return; }
     const nv = e.target.closest("[data-nuevo]");
     if (nv) { nuevaDesde(nv.dataset.nuevo, nv.dataset.nuevoDia); return; } /* sin cerrar el Calendario: el formulario se abre encima y al guardar se vuelve a la semana */
     const dd = e.target.closest("[data-dia]");
-    if (dd && modo === "mes") { diaSel = dd.dataset.dia; denegando = -1; draw(); body.querySelector("#calDiaT")?.focus({ preventScroll: true }); if (matchMedia("(max-width: 1000px)").matches) body.querySelector("#calDia")?.scrollIntoView({ block: "nearest" }); return; } /* en el mes, pinchar un día abre su panel */
+    if (dd && modo === "mes") {
+      const ini = rangoIni || (e.shiftKey && diaSel ? diaSel : ""), dia = dd.dataset.dia; /* inicio ya elegido («Hasta otro día…») o Mayús + clic: el rango va del uno al otro */
+      if (ini && ini !== dia) { rangoIni = ""; nuevaDesde("sol", ini < dia ? ini : dia, ini < dia ? dia : ini); return; }
+      rangoIni = ""; diaSel = dia; denegando = -1; draw(); body.querySelector("#calDiaT")?.focus({ preventScroll: true }); if (matchMedia("(max-width: 1000px)").matches) body.querySelector("#calDia")?.scrollIntoView({ block: "nearest" }); return;
+    } /* en el mes, pinchar un día abre su panel */
     if (dd) { wk = mondayOf(dd.dataset.dia); modo = "dias"; body.querySelectorAll("[data-modo]").forEach((b2) => b2.setAttribute("aria-pressed", String(b2.dataset.modo === modo))); draw(); return; }
     const w = e.target.closest("[data-w]");
     if (w) { if (w.dataset.w === "0") wk = mondayOf(today()); else if (modo === "mes") desplazaMes(+w.dataset.w); else wk = addDays(wk, 7 * +w.dataset.w); draw(); return; }
@@ -5702,6 +5713,23 @@ const csvCell = (value) => {
     sel2.value = actual || "";
   };
   const campo = (id, etiqueta, tipo, valor, extra) => '<label class="cf-f">' + esc(etiqueta) + '<input id="' + id + '" type="' + tipo + '" value="' + esc(valor == null ? "" : String(valor)) + '"' + (extra || "") + "></label>";
+  /* Periodos: atajo que rellena «Hasta» desde «Desde» y filas para pedir varios periodos de una vez. */
+  const ATAJO_HTML = (attrs) => '<label class="cf-f">Periodo rápido<select ' + attrs + '><option value="">Elegir…</option><option value="7">1 semana</option><option value="1m">1 mes</option><option value="3m">3 meses</option><option value="1a">1 año</option></select></label>';
+  const hastaDe = (desde, k) => {
+    if (!validIsoDate(desde)) return "";
+    if (k === "7") return addDays(desde, 6);
+    const [y, m, d] = desde.split("-").map(Number), meses = k === "1m" ? 1 : k === "3m" ? 3 : 12, ult = new Date(Date.UTC(y, m - 1 + meses + 1, 0)).getUTCDate();
+    const t0 = new Date(Date.UTC(y, m - 1 + meses, Math.min(d, ult))); t0.setUTCDate(t0.getUTCDate() - 1); /* un mes (o 3, o 12) después, menos un día: del 1 al 31 son 31 días, no 32 */
+    return t0.toISOString().slice(0, 10);
+  };
+  const aplicaAtajo = (sel) => {
+    const fila = sel.closest(".cf-extra"), desde = fila ? fila.querySelector(".cf-xd").value : val("cfDesde"), hasta = fila ? fila.querySelector(".cf-xh") : body.querySelector("#cfHasta"), msg = body.querySelector("#cfMsg");
+    const k = sel.value; sel.value = "";
+    if (!k) return;
+    if (!validIsoDate(desde)) { msg.style.color = "var(--err)"; msg.textContent = "Indica primero la fecha de inicio del periodo."; return; }
+    msg.textContent = ""; hasta.value = hastaDe(desde, k);
+  };
+  const filaExtra = () => '<div class="cf-row cf-extra"><label class="cf-f">Desde<input type="date" class="cf-xd"></label><label class="cf-f">Hasta<input type="date" class="cf-xh"></label>' + ATAJO_HTML('class="cf-xa"') + '<button type="button" class="ce-act" data-quita-per="1">Quitar</button></div>';
   const dibujaForm = () => {
     const box = body.querySelector("#ceForm");
     if (!form) { box.hidden = true; box.innerHTML = ""; return; }
@@ -5716,7 +5744,8 @@ const csvCell = (value) => {
       (tipo === "seg"
         ? '<div class="cf-row">' + campo("cfSeg", "Fecha del seguimiento", "date", sg.fecha) + campo("cfAccion", "Siguiente acción", "text", sg.accion || "", ' maxlength="200" autocomplete="off"') + '<label class="cf-f">Responsable<select id="cfResp"><option value="">Sin asignar</option></select></label></div>'
         : '<div class="cf-row">' + campo("cfDesde", "Desde", "date", o.desde || pre.desde) + campo("cfHasta", "Hasta", "date", o.hasta || pre.hasta) + campo("cfN", "Captadores", "number", o.captadores || "", ' min="1" step="1"') +
-          campo("cfOng", "ONG", "text", o.ong || pre.ong || "", ' list="ceOngList" autocomplete="off"') + "</div>" +
+          campo("cfOng", "ONG", "text", o.ong || pre.ong || "", ' list="ceOngList" autocomplete="off"') + (tipo === "sol" && !editar ? ATAJO_HTML('id="cfAtajo"') : "") + "</div>" +
+          (tipo === "sol" && !editar ? '<div id="cfExtra"></div><p class="cf-per"><button type="button" class="ce-act" id="cfMasPer">+ Añadir otro periodo</button><span class="cf-ayuda">Una solicitud por cada periodo, con el mismo punto, ONG y captadores.</span></p>' : "") +
           (tipo === "sol" && editar && o.res ? '<p class="cf-pt" id="cfSinSeg">Esta solicitud ya está resuelta (' + esc(o.res) + "): no tiene seguimiento pendiente. Los seguimientos de una concesión se gestionan desde Seguimientos.</p>" : "") +
           (tipo === "sol" && !(editar && o.res) ? '<div class="cf-row">' + campo("cfSeg", "Próximo seguimiento", "date", o.seg || "") + campo("cfAccion", "Siguiente acción", "text", o.accion || "", ' maxlength="200" autocomplete="off"') + '<label class="cf-f">Responsable del seguimiento<select id="cfResp"><option value="">Sin asignar</option></select></label></div>' : "") +
           '<div class="cf-row">' + campo("cfContacto", "Contacto de " + (tipo === "sol" ? "esta solicitud" : "esta concesión"), "text", o.contacto || "", ' maxlength="500" autocomplete="off"') +
@@ -5750,6 +5779,19 @@ const csvCell = (value) => {
       if (cn.err) { msg.textContent = cn.err; return; }
       if (tipo === "sol" && !r && h && h < t) { msg.textContent = "La fecha de fin ya pasó: una solicitud nueva no puede acabar antes de hoy."; return; }
       const contacto = val("cfContacto").trim(), notas = val("cfNotas").trim();
+      const rangos = [{ d, h }];
+      if (tipo === "sol" && !r) {
+        for (const fila of body.querySelectorAll(".cf-extra")) {
+          const d2 = fila.querySelector(".cf-xd").value, h2 = fila.querySelector(".cf-xh").value;
+          if (!d2 && !h2) continue; /* una fila sin rellenar se ignora */
+          if (!validIsoDate(d2) || !validIsoDate(h2)) { msg.textContent = "Cada periodo adicional necesita su fecha de inicio y la de fin."; return; }
+          if (d2 > h2) { msg.textContent = "En un periodo adicional, la fecha de inicio es posterior a la de fin."; return; }
+          if (h2 < t) { msg.textContent = "Un periodo adicional ya pasó: una solicitud nueva no puede acabar antes de hoy."; return; }
+          rangos.push({ d: d2, h: h2 });
+        }
+        const completos = rangos.filter((x) => x.d && x.h).sort((p, q) => p.d.localeCompare(q.d));
+        for (let i = 1; i < completos.length; i++) if (completos[i].d <= completos[i - 1].h) { msg.textContent = "Dos periodos se solapan (" + fmtD(completos[i - 1].d) + " – " + fmtD(completos[i - 1].h) + " y " + fmtD(completos[i].d) + " – " + fmtD(completos[i].h) + "): júntalos en uno."; return; }
+      }
       if (tipo === "sol") {
         const x = { fecha: t, desde: d, hasta: h, captadores: cn.n, ong: og, seg: val("cfSeg") }, ac = val("cfAccion").trim(), rs = val("cfResp");
         if (x.seg && !validIsoDate(x.seg)) { msg.textContent = "La fecha del seguimiento no es válida."; return; }
@@ -5758,13 +5800,14 @@ const csvCell = (value) => {
         if (!r) x.id = form.idNuevo || (form.idNuevo = newId()); /* el mismo identificador en cada intento: un reintento tras un fallo parcial no duplica la solicitud */
         if (contacto) x.contacto = contacto;
         if (notas) x.notas = notas;
+        const nuevas = !r ? rangos.map((rg, i) => { const y = Object.assign({}, x, { desde: rg.d, hasta: rg.h }); y.id = i === 0 ? x.id : ((form.idsExtra || (form.idsExtra = []))[i] || (form.idsExtra[i] = newId())); return y; }) : [];
         muta = (copia) => {
-          if (!r) { copia.solicitudes.push(x); return; }
+          if (!r) { nuevas.forEach((y) => copia.solicitudes.push(y)); return; }
           const i = ubica(copia.solicitudes, r); if (i < 0) return NOEXISTE;
           const o = copia.solicitudes[i]; x.fecha = o.fecha || x.fecha; ["id", "res", "resFecha", "motivo", "conc"].forEach((k) => { if (o[k]) x[k] = o[k]; });
           copia.solicitudes[i] = x;
         };
-        ok = (r ? "Solicitud guardada" : "Solicitud creada") + " en «" + c.name + "»" + ((!og || !cn.n) && !r ? ". Falta indicar: " + [!og && "ONG", !cn.n && "captadores"].filter(Boolean).join(" y ") : "") + ".";
+        ok = (r ? "Solicitud guardada" : rangos.length > 1 ? rangos.length + " solicitudes creadas" : "Solicitud creada") + " en «" + c.name + "»" + ((!og || !cn.n) && !r ? ". Falta indicar: " + [!og && "ONG", !cn.n && "captadores"].filter(Boolean).join(" y ") : "") + ".";
       } else {
         const g = { desde: d, hasta: h, captadores: cn.n, ong: og };
         if (contacto) g.contacto = contacto;
@@ -5854,7 +5897,7 @@ const csvCell = (value) => {
     draw();
     if (!dlg.open) dlg.showModal();
     /* Desde un día del Calendario: formulario nuevo con la fecha de ese día ya puesta (y la ONG que se estaba filtrando). */
-    if (o && (o.nuevo === "sol" || o.nuevo === "con") && validIsoDate(o.desde)) { form = { tipo: o.nuevo, c: null, r: null, pre: { desde: o.desde, hasta: o.desde, ong: o.ong || "" } }; dibujaForm(); }
+    if (o && (o.nuevo === "sol" || o.nuevo === "con") && validIsoDate(o.desde)) { form = { tipo: o.nuevo, c: null, r: null, pre: { desde: o.desde, hasta: o.hasta && validIsoDate(o.hasta) && o.hasta >= o.desde ? o.hasta : o.desde, ong: o.ong || "" } }; dibujaForm(); }
     else body.querySelector("#ceNav [aria-current=page]").focus();
     precargaNombres();
   };
@@ -5918,6 +5961,9 @@ const csvCell = (value) => {
     const pk = e.target.closest("[data-pick]");
     if (pk && form) { eligePunto(+pk.dataset.pick); return; }
     if (e.target.closest("#cfGuardar")) { guardaForm(); return; }
+    if (e.target.closest("#cfMasPer")) { const tmp = document.createElement("div"); tmp.innerHTML = filaExtra(); /* marcado fijo, sin datos del usuario */ body.querySelector("#cfExtra").append(tmp.firstElementChild); body.querySelector("#cfExtra .cf-extra:last-child .cf-xd")?.focus(); return; }
+    const qp = e.target.closest("[data-quita-per]");
+    if (qp) { const fila = qp.closest(".cf-extra"), sig = fila.nextElementSibling || fila.previousElementSibling; fila.remove(); (sig?.querySelector(".cf-xd") || body.querySelector("#cfMasPer"))?.focus(); return; }
     if (e.target.closest("#cfCancelar")) { form = null; dibujaForm(); cierraSoloForm(); return; }
     const cf = e.target.closest("[data-conf]");
     if (cf) { if (cf.dataset.conf === "ok") confirma(); else { accion = null; draw(); } return; }
@@ -5945,6 +5991,7 @@ const csvCell = (value) => {
     if (fr && !e.target.closest("button, input, select, a, label")) { sel = fr.dataset.key; accion = null; draw(); enfocaDetalle(); }
   });
   body.addEventListener("change", (e) => {
+    if (e.target.id === "cfAtajo" || e.target.classList.contains("cf-xa")) { aplicaAtajo(e.target); return; }
     if (e.target.id === "ceProv") { prov = e.target.value; ong = ""; }
     else if (e.target.id === "ceOng") ong = e.target.value;
     else if (e.target.id === "ceResp") resp = e.target.value;

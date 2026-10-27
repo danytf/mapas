@@ -733,6 +733,49 @@ const main = async () => {
   eq(r3p.denegar, [1, true, true], "Denegar desde el panel guarda la denegación con su motivo y lo dice [" + JSON.stringify(r3p.denegar) + "]");
   eq(r3p.pendientes[0] - r3p.pendientes[1], 2, "las solicitudes por aprobar bajan en dos");
 
+  /* ===== 3g3. Periodos: marcar inicio y fin en el mes, atajos y varios periodos en una sola petición ===== */
+  const r3r = await ev(ayudas + `
+    const out = {}; const rel = () => fetch('http://127.0.0.1:8766/__rel').then(r => r.json()); const cb = () => document.getElementById('calBody'); const b2 = () => document.getElementById('ceBody'); const t = today();
+    const sumaD = (x, n) => { const q = new Date(x + 'T00:00:00Z'); q.setUTCDate(q.getUTCDate() + n); return q.toISOString().slice(0, 10); };
+    const set2 = (id, v) => { const e = b2().querySelector('#' + id); e.value = v; e.dispatchEvent(new Event('input', { bubbles: true })); e.dispatchEvent(new Event('change', { bubbles: true })); };
+    const delMes = () => [...cb().querySelectorAll('.cal-m:not(.fuera)')].map(x => x.dataset.dia).filter(x => x >= t);
+    let dias = delMes(); if (dias.length < 4) { cb().querySelector('[data-w="1"]').click(); await w(400); dias = delMes(); } /* a final de mes, el mes siguiente */
+    const A = dias[0], B = dias[Math.min(dias.length - 1, 9)]; out.A = A; out.B = B;
+    cb().querySelector('[data-dia="' + A + '"]').click(); await w(300);
+    cb().querySelector('#calDia [data-rango-fin]').click(); await w(300);
+    out.marca = [!!cb().querySelector('#calDia .cal-rango'), cb().querySelector('[data-dia="' + A + '"]').classList.contains('ini')];
+    cb().querySelector('[data-dia="' + B + '"]').click(); await w(1000);
+    out.form = [document.getElementById('dlgCentro').classList.contains('solo-form'), b2().querySelector('#cfDesde').value === A, b2().querySelector('#cfHasta').value === B];
+    const sel = b2().querySelector('#cfAtajo'); sel.value = '7'; sel.dispatchEvent(new Event('change', { bubbles: true })); await w(200);
+    out.atajo = [b2().querySelector('#cfHasta').value, sumaD(A, 6), sel.value === ''];
+    b2().querySelector('#cfMasPer').click(); await w(200);
+    const D2 = sumaD(t, 30), fila2 = b2().querySelector('.cf-extra'); fila2.querySelector('.cf-xd').value = D2;
+    const a2 = fila2.querySelector('.cf-xa'); a2.value = '1m'; a2.dispatchEvent(new Event('change', { bubbles: true })); await w(200);
+    const x2 = new Date(D2 + 'T00:00:00Z'); x2.setUTCMonth(x2.getUTCMonth() + 1); x2.setUTCDate(x2.getUTCDate() - 1);
+    out.atajo2 = [fila2.querySelector('.cf-xh').value, x2.toISOString().slice(0, 10)];
+    set2('cfPunto', 'roquetas'); await w(300); b2().querySelector('[data-pick="0"]').click(); await w(300); set2('cfN', '2'); set2('cfOng', 'ONG Periodos E2E');
+    /* un tercer periodo que se solapa con el primero no se guarda */
+    b2().querySelector('#cfMasPer').click(); await w(200);
+    const fila3 = b2().querySelectorAll('.cf-extra')[1]; fila3.querySelector('.cf-xd').value = sumaD(A, 2); fila3.querySelector('.cf-xh').value = sumaD(A, 3);
+    const antes = (await rel()).permit_applications.filter(a => a.organization === 'ONG Periodos E2E').length;
+    b2().querySelector('#cfGuardar').click(); await w(500);
+    out.solape = [/se solapan/.test(b2().querySelector('#cfMsg').textContent), (await rel()).permit_applications.filter(a => a.organization === 'ONG Periodos E2E').length === antes];
+    fila3.querySelector('[data-quita-per]').click(); await w(200);
+    out.quedan = b2().querySelectorAll('.cf-extra').length;
+    b2().querySelector('#cfGuardar').click(); await w(3500);
+    const guardadas = (await rel()).permit_applications.filter(a => a.organization === 'ONG Periodos E2E').map(a => [a.requested_from, a.requested_until, a.status]).sort((p, q) => p[0].localeCompare(q[0]));
+    out.guardadas = guardadas; out.esperadas = [[A, sumaD(A, 6), 'pending'], [D2, x2.toISOString().slice(0, 10), 'pending']];
+    out.aviso = cb().querySelector('#calAviso').textContent;
+    return out;`);
+  eq(r3r.marca, [true, true], "«Hasta otro día…» marca el inicio del periodo y avisa de que se elija el final");
+  eq(r3r.form, [true, true, true], "pinchar el día final abre el formulario con el periodo completo (desde y hasta)");
+  eq(r3r.atajo, [r3r.atajo[1], r3r.atajo[1], true], "el atajo «1 semana» rellena «Hasta» (desde + 6 días)");
+  eq(r3r.atajo2[0], r3r.atajo2[1], "el atajo «1 mes» de un periodo adicional termina un día antes del mismo día del mes siguiente");
+  eq(r3r.solape, [true, true], "dos periodos que se solapan no se guardan y se explica");
+  eq(r3r.quedan, 1, "se puede quitar un periodo adicional");
+  eq(r3r.guardadas, r3r.esperadas, "varios periodos crean una solicitud por cada uno, con sus fechas [" + r3r.aviso + "]");
+  ok(/2 solicitudes creadas/.test(r3r.aviso), "el aviso dice cuántas solicitudes se han creado");
+
   ok(fallos.length === 0, "La página no lanzó excepciones ni errores de consola inesperados:\n  " + fallos.join("\n  "));
   c.close();
   console.log("E2E del Centro de permisos: " + comprobaciones + " comprobaciones correctas (administrador, usuario de una provincia y móvil; 0 excepciones).");
