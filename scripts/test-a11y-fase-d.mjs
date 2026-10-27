@@ -83,7 +83,7 @@ for (const [mode, v] of [["claro", light], ["oscuro", dark]]) {
   add(`estrella marcada sobre --panel (gráfico, ${mode})`, v["star-on"], v.panel, G);
   add(`--err (errores de la ficha) sobre --panel (${mode})`, v.err, v.panel);
   // Color de estado del permiso en la ficha, el calendario y sus chips (borde o punto, 3:1; el estado también va en texto).
-  for (const k of ["concedido", "solicitado", "caducado", "denegado", "cancelado"]) {
+  for (const k of ["concedido", "solicitado", "porsolicitar", "solicitada", "caducado", "denegado", "cancelado"]) {
     if (!v["st-" + k]) { fail(`falta --st-${k} en modo ${mode}`); continue; }
     add(`--st-${k} sobre --panel (gráfico, ${mode})`, v["st-" + k], v.panel, G);
   }
@@ -130,7 +130,7 @@ if (inkSrc && tiposSrc) {
     }
     // Estados de permiso (etiqueta de la lista): la tinta se calcula con inkOn a partir del color resuelto.
     const estados = [...(html.match(/const ESTADOS = \[([^\n]*)\];/)?.[1] || "").matchAll(/\["(\w+)", "([^"]+)", "(var\(--pin-[a-z-]+\))"\]/gi)];
-    if (estados.length < 6) fail("no se leyeron los 6 estados de ESTADOS con tokens");
+    if (estados.length < 7) fail("no se leyeron los 7 estados de ESTADOS con tokens");
     for (const [, k, nombre, tok] of estados) {
       if (k === "sin") continue;
       const col = resolve(tok), ink = inkOn(tok);

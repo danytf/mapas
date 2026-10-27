@@ -35,7 +35,7 @@
     --cat-ikea: #e0a800; --cat-leroy: #65a30d; --cat-decathlon: #0891b2; --cat-carrefour: #7c3aed; --cat-correos: #a16207; --cat-eci: #15803d;
     --cat-bricolaje: #92400e; --cat-mediamarkt: #dc2626; --cat-estaciones: #78716c; --cat-tiendas: #701a75; --cat-eventos: #4f46e5; --cat-otra: #475569; --cat-defecto: #0b7a68;
     /* Estado del pin y de la leyenda, confeti, niebla de conquista y cuadro de resultado de la ubicación */
-    --pin-sin: #ffffff; --pin-sin-line: #9aa8a4; --pin-solicitado: #fbbf24; --pin-concedido: #22c55e; --pin-denegado: #dc2626; --pin-caducado: #94a3b8; --pin-cancelado: #111827;
+    --pin-sin: #ffffff; --pin-sin-line: #9aa8a4; --pin-solicitado: #fbbf24; --pin-porsolicitar: #f97316; --pin-solicitada: #fbbf24; --pin-concedido: #22c55e; --pin-denegado: #dc2626; --pin-caducado: #94a3b8; --pin-cancelado: #111827;
     --confetti-1: #22c55e; --confetti-2: #fbbf24; --confetti-3: #ef4444; --confetti-4: #3b82f6; --confetti-5: #a855f7; --confetti-6: #f97316;
     --fog-0: #64748b; --fog-1: #fbbf24; --fog-2: #22c55e; --fog-3: #e0a800;
     --res-ok-bg: #dcfce7; --res-ok-line: #86efac; --res-err-bg: #fee2e2; --res-err-line: #fca5a5;
@@ -55,7 +55,7 @@
     --err: #b3261e;
     --star-off: #8a94a3;
     --star-on: #c47a00;
-    --st-concedido: #16a34a; --st-solicitado: #d97706; --st-porsolicitar: #ea6f00; --st-solicitada: #d6a000; --st-caducado: #7c8aa0; --st-denegado: #dc2626; --st-cancelado: #475569;
+    --st-concedido: #16a34a; --st-solicitado: #d97706; --st-porsolicitar: #ea6f00; --st-solicitada: #b88700; --st-caducado: #7c8aa0; --st-denegado: #dc2626; --st-cancelado: #475569;
     --ch-aut: #16a34a; --ch-dem: #d97706; --ch-1: #3b6fb6; --ch-a1: #8794ab; --ch-a2: #61708a; --ch-a3: #3d4b66;
     /* Grupos de marcadores por densidad (.cl.n1 a .n4): fondos fijos en claro y oscuro con texto blanco (5,0, 8,8 y 5,9 a 1; los --ch-* se invierten en oscuro y no sirven aquí). */
     --cl-n1: #61708a; --cl-n2: #3d4b66; --cl-n4: #090d15;
@@ -348,7 +348,8 @@
   #ficha .ef strong { font-size: var(--fs-title); font-weight: 680; letter-spacing: -.015em; line-height: 1.25; }
   #ficha .ef .meta { font-size: var(--fs-body); color: var(--muted); }
   #ficha .ef.s-concedido { --st: var(--st-concedido); --st-fg: var(--ok); }
-  #ficha .ef.s-solicitado { --st: var(--st-solicitado); --st-fg: var(--warn); border-top-style: dashed; border-right-style: dashed; border-bottom-style: dashed; background-image: repeating-linear-gradient(135deg, transparent 0 10px, rgba(245, 158, 11, .09) 10px 20px); }
+  #ficha .ef.s-porsolicitar, #ficha .ef.s-solicitada { --st: var(--st-solicitada); --st-fg: var(--warn); border-top-style: dashed; border-right-style: dashed; border-bottom-style: dashed; background-image: repeating-linear-gradient(135deg, transparent 0 10px, rgba(245, 158, 11, .09) 10px 20px); }
+  #ficha .ef.s-porsolicitar { --st: var(--st-porsolicitar); background-image: repeating-linear-gradient(135deg, transparent 0 10px, rgba(234, 111, 0, .09) 10px 20px); }
   #ficha .ef.s-caducado { --st: var(--st-caducado); }
   #ficha .ef.s-denegado { --st: var(--st-denegado); }
   #ficha .ef.s-cancelado { --st: var(--st-cancelado); }
@@ -678,7 +679,7 @@
     body.imprime-cal #dlgCal .cal-hd { flex-wrap: wrap; }
     body.imprime-cal #dlgCal tr { break-inside: avoid; }
     /* la hoja siempre en claro: mismos valores que :root (la prueba test-calendario-pdf comprueba que no falte ninguno del modo oscuro) */
-    body.imprime-cal { color-scheme: light; --pin-cancelado: #111827; --bg: #f5f6f8; --panel: #ffffff; --fg: #141b26; --muted: #596478; --field-line: #7f8b9d; --line: #e4e7ec; --line-2: #cfd5de; --accent: #c8102e; --accent-d: #9f0c24; --accent-fg: #ffffff; --accent-soft: #fdecef; --warn: #8a5a00; --warn-bg: #fff3d6; --ok-bg: #f3f5f8; --ok: #14532d; --ok-soft: #dcfce7; --ink: #171b23; --ink-2: #222a36; --err: #b3261e; --star-off: #8a94a3; --star-on: #c47a00; --st-concedido: #16a34a; --st-solicitado: #d97706; --st-porsolicitar: #ea6f00; --st-solicitada: #d6a000; --st-caducado: #7c8aa0; --st-denegado: #dc2626; --st-cancelado: #475569; --ch-a1: #8794ab; --ch-a2: #61708a; --ch-a3: #3d4b66; --pin-denegado: #dc2626; --res-ok-bg: #dcfce7; --res-ok-line: #86efac; --res-err-bg: #fee2e2; --res-err-line: #fca5a5; --shadow: 0 1px 2px rgba(23,27,35,.06), 0 6px 20px rgba(23,27,35,.09); }
+    body.imprime-cal { color-scheme: light; --pin-cancelado: #111827; --bg: #f5f6f8; --panel: #ffffff; --fg: #141b26; --muted: #596478; --field-line: #7f8b9d; --line: #e4e7ec; --line-2: #cfd5de; --accent: #c8102e; --accent-d: #9f0c24; --accent-fg: #ffffff; --accent-soft: #fdecef; --warn: #8a5a00; --warn-bg: #fff3d6; --ok-bg: #f3f5f8; --ok: #14532d; --ok-soft: #dcfce7; --ink: #171b23; --ink-2: #222a36; --err: #b3261e; --star-off: #8a94a3; --star-on: #c47a00; --st-concedido: #16a34a; --st-solicitado: #d97706; --st-porsolicitar: #ea6f00; --st-solicitada: #b88700; --st-caducado: #7c8aa0; --st-denegado: #dc2626; --st-cancelado: #475569; --ch-a1: #8794ab; --ch-a2: #61708a; --ch-a3: #3d4b66; --pin-denegado: #dc2626; --res-ok-bg: #dcfce7; --res-ok-line: #86efac; --res-err-bg: #fee2e2; --res-err-line: #fca5a5; --shadow: 0 1px 2px rgba(23,27,35,.06), 0 6px 20px rgba(23,27,35,.09); }
     body.imprime-cal #dlgCal { --ong-bg-l: 91%; --ong-fg-l: 22%; } /* en las tarjetas NO: break-inside en cientos de tarjetas cuelga a Chrome al paginar */
   }
   .cal-new { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 12px 8px; }
@@ -888,7 +889,8 @@
   dialog h2 { margin: 0; font-size: var(--fs-title); font-weight: 680; letter-spacing: -.015em; }
   dialog label { display: grid; gap: 4px; font-size: var(--fs-label); font-weight: 560; color: var(--muted); }
   dialog input, dialog select { font: inherit; font-weight: 400; height: 38px; padding: 0 12px; border: 1px solid var(--field-line); border-radius: var(--r-control); background: var(--panel); color: var(--fg); width: 100%; }
-  dialog input:focus, dialog select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); outline: 0; }
+  dialog textarea { font: inherit; font-weight: 400; padding: 8px 12px; min-height: 64px; border: 1px solid var(--field-line); border-radius: var(--r-control); background: var(--panel); color: var(--fg); width: 100%; resize: vertical; }
+  dialog input:focus, dialog select:focus, dialog textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); outline: 0; }
   dialog .msg { font-size: var(--fs-label); color: var(--warn); min-height: 16px; }
   .placing #map { cursor: crosshair; }
   .legend-box { background: var(--panel); color: var(--fg); border: 0; border-radius: var(--r-card); padding: 8px 12px; font-size: var(--fs-label); max-width: 240px; box-shadow: var(--shadow); }
@@ -1789,7 +1791,7 @@ const chainOf = (c) => { const k = rawChain(c); return smallChains.has(k) ? "Ind
 
 /* Estado operativo del usuario: persistencia remota en Supabase. */
 // Colores de estado del pin y de la leyenda: tokens CSS (--pin-*), con versión oscura.
-const ESTADOS = [["sin", "Sin solicitar", "var(--pin-sin)"], ["solicitado", "Solicitado", "var(--pin-solicitado)"], ["concedido", "Concedido", "var(--pin-concedido)"], ["denegado", "Denegado", "var(--pin-denegado)"], ["caducado", "Caducado", "var(--pin-caducado)"], ["cancelado", "Cancelado", "var(--pin-cancelado)"]];
+const ESTADOS = [["sin", "Sin solicitar", "var(--pin-sin)"], ["porsolicitar", "Por solicitar", "var(--pin-porsolicitar)"], ["solicitada", "Solicitada", "var(--pin-solicitada)"], ["concedido", "Concedido", "var(--pin-concedido)"], ["denegado", "Denegado", "var(--pin-denegado)"], ["caducado", "Caducado", "var(--pin-caducado)"], ["cancelado", "Cancelado", "var(--pin-cancelado)"]];
 let permits = {};
 // Clave estable del estado de permisos de un punto (H-14): el ID de Supabase en el catálogo maestro;
 // en los puntos personales, que no tienen ID, su nombre (único por usuario).
@@ -2227,8 +2229,9 @@ const sanitizePermitEntry = (value, kind) => {
 const sanitizeSharedPermitState = (value) => {
   if (!value || typeof value !== "object" || Array.isArray(value)) return null;
   const result = {};
-  const allowedStates = new Set(["sin", "solicitado", "concedido", "denegado", "caducado", "cancelado"]);
+  const allowedStates = new Set(["sin", "porsolicitar", "solicitada", "concedido", "denegado", "caducado", "cancelado"]);
   if (allowedStates.has(value.estado)) result.estado = value.estado;
+  else if (value.estado === "solicitado") result.estado = "solicitada"; /* valor anterior a separar «por solicitar» de «solicitada» */
   const fecha = validIsoDate(value.fecha), seguimiento = validIsoDate(value.seguimiento);
   if (fecha) result.fecha = fecha;
   if (seguimiento) result.seguimiento = seguimiento;
@@ -2294,7 +2297,7 @@ const estadoCalc = (p) => {
   if (!sols.length && !hs.length) return p.estado || "sin"; /* datos antiguos sin fechas */
   if (hs.some((h) => !h.cancelada && (!h.desde || h.desde <= t) && (!h.hasta || h.hasta >= t))) return "concedido";
   if (hs.some((h) => !h.cancelada && h.desde && h.desde > t)) return "concedido";
-  if (pend.some(solValid)) return "solicitado";
+  if (pend.some(solValid)) return pend.some((x) => solValid(x) && !x.enviada) ? "porsolicitar" : "solicitada"; /* si alguna aún no se ha pedido por correo, manda esa: es la que pide acción */
   if (pend.length) return "caducado"; /* solicitudes sin respuesta cuyas fechas ya pasaron */
   if (hs.length) return hs[0].cancelada ? "cancelado" : "sin"; /* última concesión cancelada / terminada */
   return sols.some((x) => x.res === "denegada") ? "denegado" : "sin";
@@ -2885,7 +2888,7 @@ function fichaFor(c, pos) {
     if (vg) { titulo = vg.hasta ? "Vigente hasta " + fmtD(vg.hasta) : "Vigente, sin fecha de fin"; meta = (vg.ong ? [esc(vg.ong)] : []).concat(cap(vg)); }
     else if (fu) { titulo = "Concedido del " + fmtD(fu.desde) + " al " + fmtD(fu.hasta); meta = (fu.ong ? [esc(fu.ong)] : []).concat(cap(fu)); }
     else if (ef === "caducado") { titulo = "Solicitudes sin respuesta"; meta = ["Las fechas pedidas ya pasaron"]; }
-    else if (ef === "solicitado") { titulo = pend + (pend === 1 ? " solicitud pendiente" : " solicitudes pendientes"); }
+    else if (ef === "porsolicitar" || ef === "solicitada") { titulo = pend + (pend === 1 ? " solicitud pendiente" : " solicitudes pendientes"); }
     else if (ef !== "sin") { titulo = i[1]; }
     /* El estado del punto es un resumen: si además hay solicitudes pendientes se dice aunque haya una concesión. */
     if ((vg || fu) && pend) meta.push(pend + (pend === 1 ? " solicitud pendiente" : " solicitudes pendientes"));
@@ -3450,7 +3453,7 @@ function listItemFor(c) {
     (estadoOf(c) !== "sin" ? '<span class="rs-st" style="--st:' + estadoInfo(estadoOf(c))[2] + '"><i style="background:' + estadoInfo(estadoOf(c))[2] + '"></i>' + estadoInfo(estadoOf(c))[1] + (permOf(c).fecha && estadoOf(c) !== "concedido" && estadoOf(c) !== "caducado" ? " · " + esc(fmtD(permOf(c).fecha)) : "") + "</span>" : "") +
     (seguimientoDue(c) ? '<span class="rs-w' + (seguimientoDue(c) === today() ? "" : " late") + '">Seguimiento ' + (seguimientoDue(c) === today() ? "hoy" : "atrasado " + esc(fmtD(seguimientoDue(c)))) + "</span>" : "") +
     (DUPS.has(c.name) && !hasPersonalRef(reviewed, c) ? '<span class="rs-f">Posible duplicado</span>' : "") +
-    (estadoOf(c) === "solicitado" && solTxt(c) ? '<span class="rs-t">Pedido: ' + esc(solTxt(c)) + "</span>" : "") +
+    (["porsolicitar", "solicitada"].includes(estadoOf(c)) && solTxt(c) ? '<span class="rs-t">Pedido: ' + esc(solTxt(c)) + "</span>" : "") +
     (vigente(c) ? '<span class="rs-ok">Vigente hasta ' + fmtD(vigente(c).hasta) + (vigente(c).ong ? " · " + esc(vigente(c).ong) : "") + (safeCount(vigente(c).captadores) ? " · " + safeCount(vigente(c).captadores) + " capt." : "") + "</span>" : (futura(c) ? '<span class="rs-ok">Concedido del ' + esc(fmtD(futura(c).desde)) + " al " + esc(fmtD(futura(c).hasta)) + (futura(c).ong ? " · " + esc(futura(c).ong) : "") + (safeCount(futura(c).captadores) ? " · " + safeCount(futura(c).captadores) + " capt." : "") + "</span>" : "")) +
     (isApprox(c) ? '<span class="rs-f">Ubicación aproximada</span>' : "") +
     (c.conf ? "" : '<span class="rs-f">Por confirmar</span>') +
@@ -4112,7 +4115,7 @@ function townStats() {
   CENTERS.forEach((c) => {
     if (isOut(c)) return;
     const t = townOf(c), o = m[t] || (m[t] = { t, n: 0, con: 0, sol: 0, pts: [] }), e = estadoOf(c);
-    o.n++; if (e === "concedido") o.con++; else if (e === "solicitado") o.sol++;
+    o.n++; if (e === "concedido") o.con++; else if (e === "porsolicitar" || e === "solicitada") o.sol++;
     const q = cache[c.id]; if (q && q.lat) o.pts.push([q.lat, q.lon]);
   });
   return Object.values(m).map((o) => { o.st = o.con === 0 ? (o.sol ? 1 : 0) : (o.n >= 3 && o.con / o.n >= .5 ? 3 : 2); return o; });
@@ -4161,7 +4164,7 @@ function albumData() {
     if (isOut(c)) return;
     const k = albumKey(c); if (!k) return;
     const o = g[k] || (g[k] = { k, t: c.tipo, n: 0, con: 0, sol: 0 }), e = estadoOf(c);
-    o.n++; if (e === "concedido") o.con++; else if (e === "solicitado") o.sol++;
+    o.n++; if (e === "concedido") o.con++; else if (e === "porsolicitar" || e === "solicitada") o.sol++;
   });
   return Object.values(g).filter((o) => o.n >= 2);
 }
