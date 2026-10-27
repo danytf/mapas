@@ -716,7 +716,7 @@ const main = async () => {
     const celda = () => [...cb().querySelectorAll('.cal-m')].find(x => x.querySelector('.cal-ch.p'));
     const antes = await rel(); const pend0 = antes.permit_applications.filter(a => a.status === 'pending').length, apr0 = antes.permit_applications.filter(a => a.status === 'approved').length, den0 = antes.permit_applications.filter(a => a.status === 'denied').length, g0 = antes.permit_grants.length;
     /* un día con alguna solicitud «por solicitar» (parte de las pendientes ya están solicitadas) */
-    out.conEnvio = false; for (const c of [...cb().querySelectorAll('.cal-m')].filter(x => x.querySelector('.cal-ch.p'))) { c.click(); await w(250); if (cb().querySelector('#calDia [data-pa=env]')) { out.conEnvio = true; break; } }
+    out.conEnvio = false; for (const dia of [...cb().querySelectorAll('.cal-m')].filter(x => x.querySelector('.cal-ch.p')).map(x => x.dataset.dia)) { cb().querySelector('[data-dia="' + dia + '"]').click(); await w(250); if (cb().querySelector('#calDia [data-pa=env]')) { out.conEnvio = true; break; } } /* se busca cada día de nuevo: el Calendario se repinta en cada clic */
     const filas = () => [...cb().querySelectorAll('#calDia .cal-dia-f')].filter(f => f.querySelector('[data-pa=conceder],[data-pa=den-ok]'));
     out.pendientesDia = cb().querySelectorAll('#calDia [data-pa=conceder]').length;
     out.enfocado = document.activeElement === cb().querySelector('#calDiaT');
